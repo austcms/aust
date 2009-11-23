@@ -1,0 +1,32 @@
+AUSTCMS 0.1.5
+
+O AustCMS foi fundado por Alexandre de Oliveira em set/2008. Sua arquitetura
+foi criada na seguinte estrutura:
+
+      CORE ----- Módulo
+       | \
+       |  \
+       |   \
+       |    --- Módulo --- Módulo-Embed
+       |           \
+     Módulo         ------ Módulo-Embed
+
+O Core do AustCMS é o responsável pela leitura dos diversos módulos, de forma
+que se torna fácil a manutenção do sistema.
+
+
+MÓDULOS e MÓDULOS-EMBED
+---------------------------------------
+Módulos são partes do sistema que desempenham determinadas funções. Eles são os
+responsáveis por todas as funcionalidades do CMS. O Aust, com seu core, faz a
+leitura destes módulos, chamando suas funções e métodos.
+
+Módulos-Embed são módulos que têm a capacidade de fazer parte de outros
+módulos.
+
+Exemplo:
+*   O módulo Textos não tem capacidade de lidar com imagens. O Módulo-Embed
+    'galeriadeimagens' sim. Como ele é embed, ele pode se encaixar no formulário
+    do módulo Textos, dando então a sua funcionalidade para o módulo Textos.
+
+
