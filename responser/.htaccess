@@ -1,0 +1,19 @@
+Options +FollowSymlinks
+RewriteEngine On
+
+RewriteRule ^(.*)/(.*)$ responser.php?qstr=$1/$2 [NC]
+RewriteRule ^$ responser.php [NC]
+
+
+RewriteRule ^site/(.*)/(.*)/(.*)/(.*)/(.*)/$ responser.php?aust_node=$1&area=$2&action=$3&w=$4&o=$5 [NC]
+RewriteRule ^site/(.*)/(.*)/(.*)/(.*)/$ responser.php?aust_node=$1&area=$2&action=$3&w=$4 [NC]
+RewriteRule ^site/(.*)/(.*)/(.*)/$ responser.php?aust_node=$1&area=$2&action=$3 [NC]
+RewriteRule ^site/(.*)/(.*)/$ responser.php?aust_node=$1&area=$2 [NC]
+RewriteRule ^site/(.*)/$ responser.php?aust_node=$1 [NC]
+RewriteRule ^site/$ responser.php?site=index [NC]
+
+RewriteRule ^area/(.*)/(.*)/(.*)/(.*)/$ responser.php?area=$1&action=$2&w=$3&o=$4 [NC]
+RewriteRule ^area/(.*)/(.*)/(.*)/$ responser.php?area=$1&action=$2&w=$3 [NC]
+RewriteRule ^area/(.*)/(.*)/$ responser.php?area=$1&action=$2 [NC]
+RewriteRule ^area/(.*)/$ responser.php?area=$1 [NC]
+

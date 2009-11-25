@@ -1,0 +1,34 @@
+/* CSS Document */
+
+
+body { 
+	margin: 0;
+	background: #ededed;
+	font-family: 'Trebuchet MS', Helvetica, Arial, sans-serif;
+	font-size: 76%;
+	height: 100%;
+	text-align: center;
+
+}
+
+a { color: blue; }
+p { margin: 0; font-size: 1.0em; margin-bottom: 22px; }
+h1 { font-size: 2.5em; color: navy; } 
+h2 { font-size: 1.6em; } 
+
+
+#outer {
+	width: 600px;
+	background: white;
+	text-align: left;
+	margin: 0 auto;
+	margin-top: 20px;
+}
+
+#conteudo { margin: 20px; display: table; }
+	
+form.simples label { display: block; font-size: 1.3em; }
+form.simples input { font-size: 1.2em; height: 20px; margin-bottom: 20px; }
+form.simples input.submit { display: block; font-size: 1.2em; height: 46px; padding: 10px; margin-bottom: 15px; }
+form .campo { display: block; padding-bottom: 10px; }
+

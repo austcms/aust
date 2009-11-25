@@ -1,0 +1,18 @@
+v0.1.7
+
+
+
+v0.1.6 (25/06/2009)
+
+Revision 24
+    - MVC em módulos Completo
+Revision 22
+    - Classe UserInterface (UI) criada
+Revision 21
+    - Módulo GaleriaImagens criado com PDO
+    - Configuração de Módulos funcionando com PDO
+Revision 1
+    - Início da refatoração do código para uso de PDO
+
+v0.1.5 (15/05/2009)
+    - Classe dbSchema funcionando. Instalador de tabelas automático.

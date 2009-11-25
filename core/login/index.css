@@ -1,0 +1,49 @@
+/* CSS Document */
+* {
+    margin: 0;
+    padding: 0;
+}
+
+HTML, BODY {
+	background: #ededed;
+	font-family: Arial, Tahoma, 'Trebuchet MS', sans-serif;
+	height: 100%;
+}
+
+BODY {
+    font-size: 76%;
+}
+
+p { margin-bottom: 15px; font-size: 1em; line-height: 18px; }
+h1 { margin-bottom: 15px; font-size: 1.8em; }
+
+
+#outer { width: 100%; text-align: center; height: 100%; overflow: hidden; position: relative; }
+	#outer[id] { display: table; position: static; }
+      
+    #middle { width: 400px; position: absolute; top: 50%; } /* para o IE */
+    #middle[id] { display: table-cell; vertical-align: middle; position: static; }
+      
+    #inner { width: 400px; margin: 0 auto; position: relative; left: -50%; top: -50% } /* para o IE */
+	#inner[id] { position: static; left: -50%; } 
+	
+	#inner #top {
+		background: url(img/login_top.jpg);
+		height: 26px;
+		font-size:1px;
+	}
+	
+	#inner #body {
+		background: url(img/login_body.jpg);
+        font-size: 1em;
+		padding: 2px 30px 0 30px;
+        margin: 0;
+	}
+	
+	#inner #bottom {
+		background: url(img/login_bottom.jpg) no-repeat;
+		height: 22px;
+		font-size:1px;
+	}
+	
+
