@@ -199,9 +199,22 @@ else {
                     <br />
                     <div class="campo">
                         <label>Módulo: </label>
+                            <?php
+                            $modulosList = $modulos->LeModulos();
+                            //pr($modulosList);
+                            ?>
                             <select name="modulo">
                                 <?php
-                                $modulos->LeModulos('<option value="&%pasta">&%nome</option>', '', '');
+                                foreach( $modulosList  as $moduloDB ){
+
+                                    ?>
+                                    <option value="<?php echo $moduloDB["valor"] ?>">
+                                        <?php echo $moduloDB["nome"] ?>
+                                    </option>
+                                    <?
+                                }
+
+                                unset($moduloDB);
                                 ?>
                             </select>
                     </div>
@@ -305,7 +318,9 @@ else {
                      * Chama função InstalarTabelas para criação oficial do módulo
                      */
                     $tmp = $thisDbSchema->instalarSchema();
-                    if($tmp == 1){
+                    if( $tmp == 1
+                        OR $modulo->verificaInstalacaoTabelas() )
+                    {
                         $param = array(
                             'tipo' => 'módulo',
                             'chave' => 'dir',
@@ -325,8 +340,16 @@ else {
                         $conteudo.= '<div style="color: red;">Não foi possível instalar o módulo</div>';
                     }
                 } else {
-                    if( $modulo->VerificaInstalacao() ){
-                        $conteudo.= '<div style="color: green;">(Instalado)</div>';
+                    if( $modulo->verificaInstalacaoTabelas()
+                        AND $modulo->verificaInstalacaoRegistro(array("pasta"=>$pastas)) )
+                    {
+                        $conteudo.= '<div style="color: green;">Instalado</div>';
+
+                    } else if( $modulo->verificaInstalacaoTabelas() ){
+                        $conteudo.= '<div style="color: orange;">Tabela instalada, registro no DB não.<br />';
+                        $conteudo.= '<a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&instalar_modulo='.$pastas.'">Tentar instalar</a></div>';
+                    } else if( $modulo->verificaInstalacaoRegistro(array("pasta"=>$pastas)) ){
+                        $conteudo.= '<div style="color: orange;">Tabela não instalada, registro no DB sim.</div>';
                     } else {
                         $conteudo.= '<div style="color: red;">Não Instalado, ';
                         $conteudo.= '<a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&instalar_modulo='.$pastas.'">clique para instalar</a></div>';

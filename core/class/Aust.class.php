@@ -243,7 +243,6 @@ class Aust
                 WHERE
                     ".$where."
                 ".$orderby." ".$limit;
-
         $query = $this->conexao->query($sql);
 
         //pr($mysql);

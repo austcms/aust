@@ -136,7 +136,7 @@ class Conexao extends SQLObject {
      * @param string $sql
      * @return array Resultado em formato array
      */
-    public function query($sql, $type = ""){
+    public function query($sql, $type = "ASSOC"){
         /**
          * Se a extensão PDO está ativada
          */

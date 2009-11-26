@@ -214,16 +214,14 @@ class dbSchema
          */
         //while( $dados = mysql_fetch_array($mysql) ){
         foreach($mysql as $chave=>$dados){
-
             /**
              * Carrega todos os campos das tabelas e então grava em $this->tabelasAtuais
              */
-            $describeSql = 'DESCRIBE '.$dados[0];
-            
+            $describeSql = 'DESCRIBE '.reset($dados);
 
 
             foreach($this->conexao->query($describeSql) as $tabela=>$info){
-                $this->tabelasAtuais[$dados[0]][$info['Field']] = $info;
+                $this->tabelasAtuais[ reset($dados) ][$info['Field']] = $info;
             }
         }
 

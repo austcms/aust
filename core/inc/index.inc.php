@@ -56,7 +56,10 @@
                         /**
                          * Inclui módulo apropriado
                          */
-                        include(THIS_TO_BASEURL.'modulos/'.$valor['tipo'].'/'.MOD_CONFIG);
+                        //echo $valor["tipo"];
+                        //if( is_file(THIS_TO_BASEURL.'modulos/'.$valor['tipo'].'/'.MOD_CONFIG) ){
+                            include(THIS_TO_BASEURL.'modulos/'.$valor['tipo'].'/'.MOD_CONFIG);
+                        //}
                         echo '<tr>';
                         echo '<td valign="top">';
                         echo '<a href="#" class="link_pai_do_est_options" onmouseover="javascript: est_options('.$valor['id'].')">'.$valor['nome'].'</a>';

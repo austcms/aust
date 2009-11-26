@@ -11,18 +11,17 @@
  * @version 0.1.1
  * @since v0.1.5, 30/05/2009
  */
-class Modulos
-{
-    /**
-     * TABELAS
-     */
-	// TABELA
-	protected $db_tabelas;
-	protected $sql_das_tabelas;
-	protected $sql_registros;
-	public $tabela_criar;
+class Modulos {
+/**
+ * TABELAS
+ */
+// TABELA
+    protected $db_tabelas;
+    protected $sql_das_tabelas;
+    protected $sql_registros;
+    public $tabela_criar;
 
-	protected $modDbSchema;
+    protected $modDbSchema;
     /**
      * VARIÁVEIS DE AMBIENTE
      *
@@ -53,7 +52,7 @@ class Modulos
      * @param array $param:
      *      'conexao': Contém a conexão universal
      */
-    function __construct($param){
+    function __construct($param) {
         global $aust;
         $this->aust = $aust;
 
@@ -65,21 +64,21 @@ class Modulos
         /**
          * Ajusta a conexao para o módulo
          */
-        if( !empty($param['conexao']) ){
+        if( !empty($param['conexao']) ) {
             $this->conexao = $param['conexao'];
         }
-        
+
         /**
          * Grava configurações do módulo no objeto
          */
-        if( !empty($param['config']) ){
+        if( !empty($param['config']) ) {
             $this->config = $param['config'];
         }
-        
+
         /**
          * modDbSchema: Grava o schema se for passado como argumento
          */
-        if( !empty($param['modDbSchema']) ){
+        if( !empty($param['modDbSchema']) ) {
             $this->modDbSchema = $param['modDbSchema'];
 
         }
@@ -92,7 +91,7 @@ class Modulos
 
     /**
      * trataImagem
-     * 
+     *
      * Trata uma imagem
      *
      * @param array $files O mesmo $_FILE vindo de um formulário
@@ -100,7 +99,7 @@ class Modulos
      * @param string $height Valor padrão de altura
      * @return array
      */
-    function trataImagem($files, $width = "1024", $height = "768"){
+    function trataImagem($files, $width = "1024", $height = "768") {
 
         /*
          * Toma dados de $files
@@ -160,16 +159,44 @@ class Modulos
     /**
      * VERIFICAÇÕES
      */
-    public function VerificaInstalacao(){
+
+    /**
+     * verificaInstalacaoTabelas()
+     *
+     * @return <bool>
+     */
+    public function verificaInstalacaoTabelas() {
         $schema = $this->modDbSchema;
-        foreach( $schema as $tabela=>$valor ){
+        foreach( $schema as $tabela=>$valor ) {
             $sql = "DESCRIBE ". $tabela;
             $query = $this->conexao->query($sql);
-            if(!$query){
-                return FALSE; // se não existe alguma tabela, retorna FALSE
+            if(!$query) {
+                return false;
+                //$erro[] = $tabela;
             } else {
-                return TRUE; // se está tudo ok, retorna TRUE
+                return true;
+                //$sucesso[] = $tabela;
             }
+        }
+    }
+
+    /**
+     * verificaInstalacaoRegistro()
+     *
+     * @return <bool>
+     */
+    public function verificaInstalacaoRegistro($options = array()) {
+
+        if( !empty($options["pasta"]) ){
+            $where = "pasta='".$options["pasta"]."'";
+        }
+
+        $sql = "SELECT id FROM modulos WHERE ".$where;
+        $query = $this->conexao->query($sql);
+        if( !$query ){
+            return false;
+        } else {
+            return true;
         }
     }
 
@@ -183,7 +210,7 @@ class Modulos
      * @param array $params
      * @return bool
      */
-    public function saveModConf($params){
+    public function saveModConf($params) {
 
         global $administrador;
 
@@ -193,21 +220,20 @@ class Modulos
         if( !empty($params['conf_type'])
             AND $params['conf_type'] == "mod_conf"
             AND !empty($params['data'])
-            AND !empty($params['aust_node']) )
-        {
+            AND !empty($params['aust_node']) ) {
 
             $data = $params["data"];
             $this->conexao->exec("DELETE FROM config WHERE tipo='mod_conf' AND local='".$params["aust_node"]."'");
-            foreach( $data as $propriedade=>$valor ){
+            foreach( $data as $propriedade=>$valor ) {
 
                 $paramsToSave = array(
                     "table" => "config",
                     "data" => array(
-                        "tipo" => "mod_conf",
-                        "local" => $params["aust_node"],
-                        "autor" => $administrador->LeRegistro("id"),
-                        "propriedade" => $propriedade,
-                        "valor" => $valor
+                    "tipo" => "mod_conf",
+                    "local" => $params["aust_node"],
+                    "autor" => $administrador->LeRegistro("id"),
+                    "propriedade" => $propriedade,
+                    "valor" => $valor
                     )
                 );
                 $this->conexao->exec($this->conexao->saveSql($paramsToSave));
@@ -216,12 +242,12 @@ class Modulos
         return true;
     }
 
-    function loadModConf($params){
+    function loadModConf($params) {
         $sql = "SELECT * FROM config WHERE tipo='mod_conf' AND local='".$params["aust_node"]."' LIMIT 200";
-        
+
         $queryTmp = $this->conexao->query($sql, "ASSOC");
 
-        foreach($queryTmp as $valor){
+        foreach($queryTmp as $valor) {
             $query[$valor["propriedade"]] = $valor;
         }
         return $query;
@@ -235,7 +261,7 @@ class Modulos
      * @global Aust $aust
      * @return array
      */
-    public function retornaResumo(){
+    public function retornaResumo() {
         global $aust;
 
         /**
@@ -250,39 +276,39 @@ class Modulos
         $param = array(
             "where" => "tipo='textos' and classe='estrutura'"
         );
-        
+
         $estruturas = $aust->LeEstruturasParaArray($param);
         /**
          * Se há estruturas instaladas, rodará uma por uma tomando os conteúdos
          */
-        if(!empty($estruturas)){
-        
-            /**
-             * Se o retorno estiver configurado para array ou vazio, retorna array.
-             * Alguns módulos retornam textos diretamente
-             */
-            if( empty($moduloConf['returnTipo'])
-                OR $moduloConf['returnTipo'] == 'array' ){
+        if(!empty($estruturas)) {
 
-                /**
-                 * Cada estrutura possui várias categorias.
-                 *
-                 * Vamos:
-                 *      - um loop por cada estrutura
-                 *      - um loop por cada categoria de cada estrutura
-                 *
-                 * O resultado será todo guardado em $conteudo
-                 */
-                foreach($estruturas as $chave=>$valor){
+        /**
+         * Se o retorno estiver configurado para array ou vazio, retorna array.
+         * Alguns módulos retornam textos diretamente
+         */
+            if( empty($moduloConf['returnTipo'])
+                OR $moduloConf['returnTipo'] == 'array' ) {
+
+            /**
+             * Cada estrutura possui várias categorias.
+             *
+             * Vamos:
+             *      - um loop por cada estrutura
+             *      - um loop por cada categoria de cada estrutura
+             *
+             * O resultado será todo guardado em $conteudo
+             */
+                foreach($estruturas as $chave=>$valor) {
 
                     $response['intro'] = 'A seguir, os últimos conteúdos.';
                     $categorias = $aust->categoriasFilhas( array( 'pai' => $valor['id'] ) );
 
-                    if(!empty($categorias)){
-                        /**
-                         * Pega cada índice contendo id das categorias da respectiva estrutura
-                         */
-                        foreach($categorias as $cChave=>$cValor){
+                    if(!empty($categorias)) {
+                    /**
+                     * Pega cada índice contendo id das categorias da respectiva estrutura
+                     */
+                        foreach($categorias as $cChave=>$cValor) {
                             $tempCategorias[] = $cChave;
                         }
 
@@ -303,10 +329,10 @@ class Modulos
 
                         $result = $this->conexao->query($sql);
 
-                        foreach($result as $dados){
-                            /**
-                             * Toma os dados do DB e os guarda
-                             */
+                        foreach($result as $dados) {
+                        /**
+                         * Toma os dados do DB e os guarda
+                         */
                             $tempResponse[] = $dados;
                         }
 
@@ -335,45 +361,45 @@ class Modulos
      * @param string $type 'Alias' representando o que é necessário carregar
      * @return string
      */
-    public function loadInterface($aust_node = '0', $type = ''){
-		$modDir = $this->aust->LeModuloDaEstrutura($aust_node);
+    public function loadInterface($aust_node = '0', $type = '') {
+        $modDir = $this->aust->LeModuloDaEstrutura($aust_node);
 
-        if( $type == 'list' ){
-            if ( is_file( self::MOD_DIR . $modDir . '/view/listar.php' ) ){
+        if( $type == 'list' ) {
+            if ( is_file( self::MOD_DIR . $modDir . '/view/listar.php' ) ) {
                 return self::MOD_DIR . $modDir . '/view/listar.php';
             } else {
                 return 'conteudo.inc/listar.inc.php';
             }
         }
 
-        elseif( $type == 'new' ){
-            if ( is_file( self::MOD_DIR . $modDir . '/view/form.php' ) ){
+        elseif( $type == 'new' ) {
+            if ( is_file( self::MOD_DIR . $modDir . '/view/form.php' ) ) {
                 return self::MOD_DIR . $modDir . '/view/form.php';
             } else {
-                /**
-                 * @todo - o que fazer se o arquivo não for encontrado
-                 */
+            /**
+             * @todo - o que fazer se o arquivo não for encontrado
+             */
                 return 'conteudo.inc/editar.inc.php';
             }
         }
 
-        elseif( $type == 'edit' ){
-            if ( is_file( self::MOD_DIR . $modDir . '/view/edit.php' ) ){
+        elseif( $type == 'edit' ) {
+            if ( is_file( self::MOD_DIR . $modDir . '/view/edit.php' ) ) {
                 return self::MOD_DIR . $modDir . '/view/edit.php';
-            } elseif ( is_file( self::MOD_DIR . $modDir . '/view/form.php' ) ){
+            } elseif ( is_file( self::MOD_DIR . $modDir . '/view/form.php' ) ) {
                 return self::MOD_DIR . $modDir . '/view/form.php';
             } else {
                 return 'conteudo.inc/edit.inc.php';
             }
         }
 
-        elseif( $type == 'save' ){
-            if ( is_file( self::MOD_DIR . $modDir . '/view/save.php' ) ){
+        elseif( $type == 'save' ) {
+            if ( is_file( self::MOD_DIR . $modDir . '/view/save.php' ) ) {
                 return self::MOD_DIR . $modDir . '/view/save.php';
             } else {
-                /**
-                 * @todo - o que fazer se o arquivo não for encontrado
-                 */
+            /**
+             * @todo - o que fazer se o arquivo não for encontrado
+             */
                 return 'conteudo.inc/edit.inc.php';
             }
         }
@@ -398,7 +424,7 @@ class Modulos
     /**
      * @todo - ajustar código para baixo
      */
-	/**
+    /**
      * Salva dados sobre o módulo na base de dados.
      *
      * Usado após a criação das tabelas do módulo.
@@ -406,14 +432,14 @@ class Modulos
      * @param array $param
      * @return bool
      */
-	function configuraModulo($param){
+    function configuraModulo($param) {
 
-        /**
-         * Ajusta cada variável enviada como parâmetro
-         */
-        /**
-         * $tipo:
-         */
+    /**
+     * Ajusta cada variável enviada como parâmetro
+     */
+    /**
+     * $tipo:
+     */
         $tipo = (empty($param['tipo'])) ? '' : $param['tipo'];
         /**
          * $chave:
@@ -436,66 +462,70 @@ class Modulos
          */
         $autor = (empty($param['autor'])) ? '' : $param['autor'];
 
-        
+
 
         $sql = "INSERT INTO
                     modulos
                         (tipo,chave,valor,pasta,nome,descricao,embed,embedownform,somenteestrutura,autor)
                 VALUES
                     ('$tipo','$chave','$valor','$pasta','".$modInfo['nome']."','".$modInfo['descricao']."','".$modInfo['embed']."','".$modInfo['embedownform']."','".$modInfo['somenteestrutura']."','$autor')
-                ";
-        if($this->conexao->exec($sql, 'CREATE_TABLE')){
+            ";
+        if($this->conexao->exec($sql, 'CREATE_TABLE')) {
             return TRUE;
         } else {
             return FALSE;
         }
-	}
-    
-	/*********************************
-	*
-	*	funÃ§Ãµes de verificaÃ§Ã£o ou leitura
-	*
-	*********************************/
-	function LeModulos($result_format, $chardivisor = '', $charend = ''){
+    }
 
-		$diretorio = 'modulos/'; // pega o endereÃ§o do diretÃ³rio
-		foreach (glob($diretorio."*", GLOB_ONLYDIR) as $pastas) {
-			if (is_dir ($pastas)) {
-				if( is_file($pastas.'/'.MOD_CONFIG )){
-					if( include($pastas.'/'.MOD_CONFIG )){
-                        //include_once($pastas.'/index.php');
-						if(!empty($modInfo['nome'])){
-							$str = $result_format;
-							$str = str_replace("&%nome", $modInfo['nome'] , $str);
-							$str = str_replace("&%descricao", $modInfo['descricao'], $str);
-							$str = str_replace("&%pasta", str_replace($diretorio,"",$pastas), $str);
-							$str = str_replace("&%diretorio", str_replace($diretorio,"",$pastas), $str);
-							echo $str;
-							if($c < $t-1){
-								echo $chardivisor;
-							} else {
-								echo $charend;
-							}
-							$c++;
-						}
+    /*
+     *
+     *	funções de verificação ou leitura
+     *
+     */
+    function leModulos() {
+
+        $modulos = $this->conexao->query("SELECT * FROM modulos");
+        //pr($modulos);
+        return $modulos;
+
+        $diretorio = 'modulos/'; // pega o endereço do diretório
+        foreach (glob($diretorio."*", GLOB_ONLYDIR) as $pastas) {
+            if (is_dir ($pastas)) {
+                if( is_file($pastas.'/'.MOD_CONFIG )) {
+                    if( include($pastas.'/'.MOD_CONFIG )) {
+                    //include_once($pastas.'/index.php');
+                        if(!empty($modInfo['nome'])) {
+                            $str = $result_format;
+                            $str = str_replace("&%nome", $modInfo['nome'] , $str);
+                            $str = str_replace("&%descricao", $modInfo['descricao'], $str);
+                            $str = str_replace("&%pasta", str_replace($diretorio,"",$pastas), $str);
+                            $str = str_replace("&%diretorio", str_replace($diretorio,"",$pastas), $str);
+                            echo $str;
+                            if($c < $t-1) {
+                                echo $chardivisor;
+                            } else {
+                                echo $charend;
+                            }
+                            $c++;
+                        }
                         unset($modulo);
-					}
-                    
-				}
-			}
-		} 
-	}
+                    }
+
+                }
+            }
+        }
+    }
 
 
     // retorna o nome da tabela da estrutura
-    function LeTabelaDaEstrutura($param=''){
+    function LeTabelaDaEstrutura($param='') {
         return $this->tabela_criar;
     }
 
     /*
      * Retorna os módulos que tem a propriedade Embed como TRUE
      */
-    function LeModulosEmbed(){
+    function LeModulosEmbed() {
         $sql = "SELECT
                     DISTINCT pasta, nome, chave, valor
                 FROM
@@ -507,7 +537,7 @@ class Modulos
         $i = 0;
         $return = '';
 
-        foreach($query as $dados){
+        foreach($query as $dados) {
             $return[$i]['pasta'] = $dados['pasta'];
             $return[$i]['nome'] = $dados['nome'];
             $return[$i]['chave'] = $dados['chave'];
@@ -525,8 +555,8 @@ class Modulos
      *
      * @return array Todos os módulos com habilidade Embed
      */
-     
-    function LeModulosEmbedOwnForm(){
+
+    function LeModulosEmbedOwnForm() {
         $sql = "SELECT
                     DISTINCT pasta, nome, chave, valor
                 FROM
@@ -538,7 +568,7 @@ class Modulos
 
         $return = '';
         $i = 0;
-        foreach($query as $dados){
+        foreach($query as $dados) {
             $return[$i]['pasta'] = $dados['pasta'];
             $return[$i]['nome'] = $dados['nome'];
             $return[$i]['chave'] = $dados['chave'];
@@ -554,7 +584,7 @@ class Modulos
      *
      * @return array
      */
-    function leModulosEmbedOwnFormLiberados($estrutura){
+    function leModulosEmbedOwnFormLiberados($estrutura) {
         $sql = "SELECT
                     id, nome
                 FROM
@@ -565,7 +595,7 @@ class Modulos
         $query = $this->conexao->query($sql);
 
         $return = '';
-        foreach($query as $dados){
+        foreach($query as $dados) {
             $return[] = $dados['nome'];
         }
         return $return;
@@ -574,7 +604,7 @@ class Modulos
     /*
      * retorna o nome de cada módulo e suas informações em formato array
      */
-    function LeModulosParaArray(){
+    function LeModulosParaArray() {
         $sql = "SELECT
                     DISTINCT pasta, nome, chave, valor
                 FROM
@@ -582,7 +612,7 @@ class Modulos
                 ";
         $query = $this->conexao->query($sql);
         $i = 0;
-        foreach($query as $dados){
+        foreach($query as $dados) {
             $return[$i]['pasta'] = $dados['pasta'];
             $return[$i]['nome'] = $dados['nome'];
             $return[$i]['chave'] = $dados['chave'];

@@ -8,7 +8,7 @@
  */
     $dbConn = array(
         'server' => 'localhost',
-        'database' => 'fvt',
+        'database' => 'aust',
         'username' => 'root',
         'password' => '',
         'encoding' => 'utf8',
