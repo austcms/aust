@@ -288,6 +288,7 @@
                 <label for="<?php echo $pid; ?>">Arquivo:</label>&nbsp;
                 <input type="file" id="<?php echo $pid; ?>" name="frmarquivo[<?php echo $pid; ?>]" />
                 </div>
+                <br />
                 <?php
             }
             ?>
