@@ -7,11 +7,9 @@
 /*
  * Carrega configurações automáticas do DB
  */
-
     $params = array(
         "aust_node" => $_GET["aust_node"],
     );
-
     $moduloConfig = $modulo->loadModConf($params);
 
 
@@ -59,6 +57,7 @@
 
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?section=<?php echo $_GET["section"] ?>&action=save" enctype="multipart/form-data" >
 <input type="hidden" name="metodo" value="<?php echo $_GET['action'];?>">
+
 <?php if($_GET['action'] == 'criar'){ ?>
     <input type="hidden" name="frmadddate" value="<?php echo date("Y-m-d H:i:s"); ?>">
     <input type="hidden" name="frmautor" value="<?php echo $_SESSION['loginid'];?>">
@@ -68,6 +67,7 @@
     <input type="hidden" name="frmautor" value="<?php ifisset( $dados['autor'] );?>">
 
 <?php }?>
+
 <input type="hidden" name="w" value="<?php ifisset( $dados['id'] );?>">
 <input type="hidden" name="aust_node" value="<?php echo $austNode; ?>">
 <table width="670" border=0 cellpadding=0 cellspacing=0>

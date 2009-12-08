@@ -20,7 +20,6 @@ $(document).ready(function(){
 });
 
 var arquivoAjax = "core/libs/ajax.php";
-var privilegio_escolhido = false;
 
 /**
  * Responsável pelo gerenciamento das configurações de permissões de usuários
@@ -116,15 +115,6 @@ function form_verifyresumo(valor){
 	
 }
 
-function form_privilegio(este){
-    if(este == 0){
-        $('#categoriacontainer_priv').html('<div id="categoriacontainer"><input type="hidden" name="frmcategorias_id" value="" /></div>');
-        $('#categoriacontainer_priv').slideUp();
-    } else {
-        $('#categoriacontainer_priv').html('<div id="categoriacontainer">'+$('#categoriaselect').html()+'</div>');
-        $('#categoriacontainer_priv').slideDown();
-    }
-}
 
 function verifytwovars(var1, var2){
 	if(var1 == var2)

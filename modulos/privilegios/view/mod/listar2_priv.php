@@ -9,9 +9,9 @@
 $tabela = $modulo->LeTabelaDeDados($_GET['aust_node']);
 ?>
 
-<p><a href="adm_main.php?section=<?=$_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a></p>
-<h1>Listando conteúdo: <?=$aust->leNomeDaEstrutura($_GET['aust_node']);?></h1>
-<p>A seguir você vê a lista de registros sob o cadastro "<?=$aust->leNomeDaEstrutura($_GET['aust_node'])?>".</p>
+<p><a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a></p>
+<h1>Listando conteúdo: <?php echo $aust->leNomeDaEstrutura($_GET['aust_node']);?></h1>
+<p>A seguir você vê a lista de registros sob o cadastro "<?php echo $aust->leNomeDaEstrutura($_GET['aust_node'])?>".</p>
 
 <?
 /*
@@ -48,7 +48,7 @@ $fields = mysql_num_fields($mysql);
  */
 
 ?>
-<form method="post" action="<?=$_SERVER['PHP_SELF']?>?section=<?=$_GET['section'];?>&action=actions&aust_node=<?=$_GET['aust_node'];?>">
+<form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?section=<?php echo $_GET['section'];?>&action=actions&aust_node=<?php echo $_GET['aust_node'];?>">
     <a name="list">&nbsp;</a>
 
     <? // Painel de controle ?>
@@ -101,11 +101,11 @@ $fields = mysql_num_fields($mysql);
                     </td>
                 <?php } ?>
                 <td align="center">
-                    <? if($dados['classe'] <> 'padrão'){ ?><input type='checkbox' name='itens[]' value='<?=$dados['id'];?>'>
+                    <? if($dados['classe'] <> 'padrão'){ ?><input type='checkbox' name='itens[]' value='<?php echo $dados['id'];?>'>
                     <? } ?>
-                    <!-- <a href="adm_main.php?section=<?=$_GET['section']?>&action=see_info&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;"><img src="img/layoutv1/lupa.jpg" alt="Ver Informações" border="0" /></a> -->
+                    <!-- <a href="adm_main.php?section=<?php echo $_GET['section']?>&action=see_info&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;"><img src="img/layoutv1/lupa.jpg" alt="Ver Informações" border="0" /></a> -->
                 <!--
-                    <a href="adm_main.php?section=<?=$_GET['section']?>&action=edit_form&aust_node=<?=$aust_node;?>&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;"><img src="img/layoutv1/edit.jpg" alt="Editar" border="0" /></a>
+                    <a href="adm_main.php?section=<?php echo $_GET['section']?>&action=edit_form&aust_node=<?php echo $aust_node;?>&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;"><img src="img/layoutv1/edit.jpg" alt="Editar" border="0" /></a>
                     <?php
                     if($escala == "administrador"
                     OR $escala == "moderador"
@@ -116,14 +116,14 @@ $fields = mysql_num_fields($mysql);
                             $addurl = "&filter=$filter&filterw=" . urlencode($filterw);
                         }
                         ?>
-                        <a href="adm_main.php?section=<?=$_GET['section']?>&action=<?=$action;?>&block=delete&aust_node=<?=$aust_node;?>&w=<?php echo $dados["id"]; ?><?php echo $addurl;?>" style="text-decoration: none;"><img src="img/layoutv1/delete.jpg" alt="Deletar" border="0" /></a>
+                        <a href="adm_main.php?section=<?php echo $_GET['section']?>&action=<?php echo $action;?>&block=delete&aust_node=<?php echo $aust_node;?>&w=<?php echo $dados["id"]; ?><?php echo $addurl;?>" style="text-decoration: none;"><img src="img/layoutv1/delete.jpg" alt="Deletar" border="0" /></a>
                         <?php
                     }
                     ?>
                     <?php
                     // Verifica se tipo conteúdo atual está configurado para usar galeria de fotos
                     if(in_array($cat, $aust_conf['where_gallery'])){ ?>
-                        <a href="adm_main.php?section=<?=$_GET['section']?>&action=photo_content_manage&w=<?php echo $dados["id"]; ?>#add" style="text-decoration: none;"><img src="img/layoutv1/fotos.jpg" alt="Adicionar fotos a este conteúdo" border="0" /></a>
+                        <a href="adm_main.php?section=<?php echo $_GET['section']?>&action=photo_content_manage&w=<?php echo $dados["id"]; ?>#add" style="text-decoration: none;"><img src="img/layoutv1/fotos.jpg" alt="Adicionar fotos a este conteúdo" border="0" /></a>
                     <?php } ?>
                    -->
                 </td>
@@ -133,7 +133,7 @@ $fields = mysql_num_fields($mysql);
     } else {
         ?>
         <tr>
-            <td colspan="<?=count($content_header)+1;?>">
+            <td colspan="<?php echo count($content_header)+1;?>">
             <strong>Não há arquivos cadastrados.</strong>
             </td>
         </tr>
@@ -144,5 +144,5 @@ $fields = mysql_num_fields($mysql);
 </form>
 
 <p style="margin-top: 15px;">
-	<a href="adm_main.php?section=<?=$_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+	<a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
 </p>

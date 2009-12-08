@@ -340,6 +340,7 @@ else {
                         $conteudo.= '<div style="color: red;">Não foi possível instalar o módulo</div>';
                     }
                 } else {
+                    
                     if( $modulo->verificaInstalacaoTabelas()
                         AND $modulo->verificaInstalacaoRegistro(array("pasta"=>$pastas)) )
                     {
