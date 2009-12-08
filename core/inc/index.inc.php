@@ -4,13 +4,18 @@
  */
 ?>
 
-<h1>Bem-vindo!</h1>
-<p>Com este gerenciador, você pode administrar todo o conteúdo do seu site.</p>
+<h1>Painel Principal</h1>
+<p>Este é o sistema onde você gerencia o conteúdo do seu site.</p>
 
 <div class="painel-metade">
+<?php
+ /*
+  * PAINEL INÍCIO RÁPIDO
+  */
+?>
     <div class="painel">
         <div class="titulo">
-            <h2>Opções rápidas</h2>
+            <h2>Início rápido</h2>
         </div>
         <div class="corpo">
 
@@ -30,17 +35,10 @@
             
             if(count($est) > 0){
                 ?>
-                <p>Abaixo, as estruturas instaladas. Passe o mouse.</p>
 
                 <table width="100%" summary="Lista de estruturas do site">
                 <col width="160"/>
                 <col />
-                <thead>
-                <tr>
-                    <th>Estrutura</th>
-                    <th>Tipo</th>
-                </tr>
-                </thead>
                 <tbody>
 
                 <?php
@@ -74,7 +72,170 @@
                         }
                         echo '</div>';
                         echo '</td>';
-                        echo '<td valign="top"><span class="est_options_info" id="est_options_info_'.$valor['id'].'">('.$valor['tipo'].')</span>'.'</td>';
+                        echo '</tr>';
+                    }
+                }
+                ?>
+                </tbody>
+                </table>
+                <?php
+            } else {
+                ?>
+                <p>Não há estruturas cadastradas. Contacte seu administrador.</p>
+                <?php
+            }
+            ?>
+
+        </div>
+        <div class="rodape"></div>
+    </div>
+
+<?php
+ /*
+  * PAINEL PESSOAS
+  */
+?>
+    <div class="painel">
+        <div class="titulo">
+            <h2>Pessoas</h2>
+        </div>
+        <div class="corpo">
+
+            <?php
+            /**
+             * Listagem das estruturas cadastradas no sistema na tela inicial
+             *
+             * Contém o atalho para as estrutura
+             */
+            $param = array(
+                        'orderby' => 'ORDER BY tipo'
+                        );
+            $est = $aust->LeEstruturasParaArray($param);
+
+            //pr($est);
+            //pr($categoriasPermitidas);
+
+            if(count($est) > 0){
+                ?>
+
+                <table width="100%" summary="Lista de estruturas do site">
+                <col width="160"/>
+                <col />
+                <tbody>
+
+                <?php
+                foreach($est as $key=>$valor){
+
+                    /**
+                     * Verifica se usuário tem permissão de acesso a esta
+                     * estrutura
+                     */
+                    //pr( $categoriasPermitidas);
+                    if($permissoes->verify( array( 'estrutura' => $valor['id'], 'permissoes' => $categoriasPermitidas ))){
+
+                        /**
+                         * Inclui módulo apropriado
+                         */
+                        //echo $valor["tipo"];
+                        //if( is_file(THIS_TO_BASEURL.'modulos/'.$valor['tipo'].'/'.MOD_CONFIG) ){
+                            include(THIS_TO_BASEURL.'modulos/'.$valor['tipo'].'/'.MOD_CONFIG);
+                        //}
+                        echo '<tr>';
+                        echo '<td valign="top">';
+                        echo '<a href="#" class="link_pai_do_est_options" onmouseover="javascript: est_options('.$valor['id'].')">'.$valor['nome'].'</a>';
+                        echo '<div class="est_options" id="est_options_'.$valor['id'].'">';
+                        if(is_array($modInfo['opcoes'])){
+                            $i = 0;
+                            foreach($modInfo['opcoes'] as $opcao=>$opcaonome){
+                                if($i > 0) echo ', ';
+                                echo '<a href="adm_main.php?section=conteudo&action='.$opcao.'&aust_node='.$valor['id'].'">'.$opcaonome.'</a>';
+                                $i++;
+                            }
+                        }
+                        echo '</div>';
+                        echo '</td>';
+                        echo '</tr>';
+                    }
+                }
+                ?>
+                </tbody>
+                </table>
+                <?php
+            } else {
+                ?>
+                <p>Não há estruturas cadastradas. Contacte seu administrador.</p>
+                <?php
+            }
+            ?>
+
+        </div>
+        <div class="rodape"></div>
+    </div>
+
+<?php
+ /*
+  * ESTATÍSTICAS
+  */
+?>
+    <div class="painel">
+        <div class="titulo">
+            <h2>Estatísticas</h2>
+        </div>
+        <div class="corpo">
+
+            <?php
+            /**
+             * Listagem das estruturas cadastradas no sistema na tela inicial
+             *
+             * Contém o atalho para as estrutura
+             */
+            $param = array(
+                        'orderby' => 'ORDER BY tipo'
+                        );
+            $est = $aust->LeEstruturasParaArray($param);
+
+            //pr($est);
+            //pr($categoriasPermitidas);
+
+            if(count($est) > 0){
+                ?>
+
+                <table width="100%" summary="Lista de estruturas do site">
+                <col width="160"/>
+                <col />
+                <tbody>
+
+                <?php
+                foreach($est as $key=>$valor){
+
+                    /**
+                     * Verifica se usuário tem permissão de acesso a esta
+                     * estrutura
+                     */
+                    //pr( $categoriasPermitidas);
+                    if($permissoes->verify( array( 'estrutura' => $valor['id'], 'permissoes' => $categoriasPermitidas ))){
+
+                        /**
+                         * Inclui módulo apropriado
+                         */
+                        //echo $valor["tipo"];
+                        //if( is_file(THIS_TO_BASEURL.'modulos/'.$valor['tipo'].'/'.MOD_CONFIG) ){
+                            include(THIS_TO_BASEURL.'modulos/'.$valor['tipo'].'/'.MOD_CONFIG);
+                        //}
+                        echo '<tr>';
+                        echo '<td valign="top">';
+                        echo '<a href="#" class="link_pai_do_est_options" onmouseover="javascript: est_options('.$valor['id'].')">'.$valor['nome'].'</a>';
+                        echo '<div class="est_options" id="est_options_'.$valor['id'].'">';
+                        if(is_array($modInfo['opcoes'])){
+                            $i = 0;
+                            foreach($modInfo['opcoes'] as $opcao=>$opcaonome){
+                                if($i > 0) echo ', ';
+                                echo '<a href="adm_main.php?section=conteudo&action='.$opcao.'&aust_node='.$valor['id'].'">'.$opcaonome.'</a>';
+                                $i++;
+                            }
+                        }
+                        echo '</div>';
+                        echo '</td>';
                         echo '</tr>';
                     }
                 }
