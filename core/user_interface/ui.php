@@ -3,7 +3,8 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Aust - Gerenciador de sites<?php /* ifisset($config->LeOpcao('sitename'), 'Aust'); */ ?></title>
-    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>style.css" type="text/css" />
+    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>style01.css" type="text/css" />
+    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>standard.css" type="text/css" />
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>forms.css" type="text/css" />
 
 
@@ -32,21 +33,48 @@
         <div class="border">
         </div>
         <div class="title">
+            <?php
+            /*
+             * NOME DO SITE - EDITÁVEL
+             */
+            ?>
         	<div class="logotipo">
-            	<a href="adm_main.php"><h1 style="margin: 0;"><img border="0" src="<?php echo THIS_TO_BASEURL; ?>core/user_interface/img/layoutv1/logo/logo.png" /></h1></a>
+            	<h1>AC Informática</h1>
+                <p>
+                    Conectado como <strong><?php echo $administrador->LeRegistro('nome');?></strong>.
+                    Seu n&iacute;vel de acesso &eacute; <strong><?php echo $administrador->LeRegistro('tipo');?></strong>.
+                </p>
             </div>
-            <div class="inicializacaorapida">
-                <span>
-				<br />
-                Conectado como <strong><?php echo $administrador->LeRegistro('nome');?></strong>.
-                Seu n&iacute;vel de acesso &eacute; <strong><?php echo $administrador->LeRegistro('tipo');?></strong>.
-				<br />
-				<br />
-                <div style="color: black; font-weight: bold;">Atalhos rápidos:</div>
 
-				<a href="adm_main.php?section=admins&action=passw">Minha senha</a>
-				| <a href="adm_main.php?section=admins&action=form&fm=editar">Editar meu perfil</a>
+            <div class="inicializacaorapida">
+                <div class="logout">
+                    <a href="logout.php">Sair</a>
+                </div>
                 <?php
+                /*
+                 * LINK PARA ALTERAR DADOS OU SENHA
+                 */
+                ?>
+                <div class="altera_dados">
+                    <a href="adm_main.php?section=admins">Alterar meus dados/senha</a>
+                    <?php
+                        /*
+                         * INFORMAÇÕES QUE IRÃO DENTRO DE ALTERAR MEUS DADOS
+                         *
+                          <a href="adm_main.php?section=admins&action=passw">Minha senha</a>
+                        | <a href="adm_main.php?section=admins&action=form&fm=editar">Editar meu perfil</a>
+                         *
+                         */
+                    ?>
+                    
+                </div>
+                
+                <span>
+                <br />
+                
+
+                <?php
+                /*
                 if($administrador->LeRegistro('tipo') == 'Webmaster'){
                     ?>
                     | <a href="adm_main.php?section=conf_modulos" class="restrito">Configurar Módulos</a>
@@ -54,10 +82,11 @@
                 }
                 if(in_array( $administrador->LeRegistro('tipo'), array('Webmaster', 'Administrador') )){ ?>
                     | <a href="adm_main.php?section=permissoes" class="restrito">Permissões</a>
-                <?php }?>
+                <?php }
+                 */ ?>
 
                 </span>
-			</div>
+            </div>
         </div>
     </div>
     <div id="navegacao">
