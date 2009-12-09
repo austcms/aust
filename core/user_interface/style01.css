@@ -229,6 +229,7 @@ div.body {
                 div.body div.content div.painel-metade div.front_painel h3 { margin-bottom: 0; color: black; }
                 div.body div.content div.painel-metade div.front_painel div.corpo ul li.titulo { font-weight: bold; }
                 div.body div.content div.painel-metade div.front_painel div.corpo ul li.conteudo { list-style: none; }
+
 /*
  * PAINEL GERENCIAR DA PÁGINA DE GERENCIAR CONTEUDO
  */
@@ -238,12 +239,68 @@ div.body {
         float: left;
         width: 950px;
     }
-        div.body div.content div.painel_gerenciar div.titulo_gerenc {
-            background: url(img/painel_titulo.png) no-repeat;
-            width: 922px;
-            height: 29px;
-            display: table;
+
+        div.body div.content div.painel_gerenciar div.esquerda {
+            padding-left: 6px;
         }
+        div.body div.content div.painel_gerenciar div.direita {
+            /*background: center url(img/direita_tab.png) no-repeat ;
+            width: 14px;
+            height: 31px;
+            padding: 18px 0 0 0;
+            margin-left: 69px;*/
+        }
+            div.body div.content div.painel_gerenciar div.titulo_site {
+                background: #2d88cf;
+                display: table;
+                margin: 10px 0 0 14px;
+            }
+                div.body div.content div.painel_gerenciar div.titulo_site h3 {
+                    color: white;
+                    margin-bottom: 0;
+                }
+                div.body div.content div.painel_gerenciar div.titulo_site a {
+                    height: 70px;
+                    background: #2d88cf;
+                    padding: 8px 8px 11px 8px;
+                    color: white;
+                    text-decoration: none;
+                }
+                div.body div.content div.painel_gerenciar div.titulo_site a:hover {
+                    height: 70px;
+                    background: #2d88cf;
+                    color: white;
+                }
+                div.body div.content div.painel_gerenciar div.titulo_site a.selecionado {
+                    background: url(img/marcador_ger.png) no-repeat bottom #2d88cf;
+                    font-weight: bold;
+                }
+                
+        div.body div.content div.painel_gerenciar div.titulo_gerenc {
+            background: url(img/painelgerenc_titulo.png) no-repeat;
+            width: 911px;
+            height: 39px;
+            display: table;
+            margin-top: 11px;
+        }
+            div.body div.content div.painel_gerenciar div.titulo_gerenc ul li {
+                float: left;
+                display: table;
+                list-style: none;
+            }
+                div.body div.content div.painel_gerenciar div.titulo_gerenc ul li.secoes {
+                    padding: 12px 250px 0 0;
+                }
+                div.body div.content div.painel_gerenciar div.titulo_gerenc ul li.acoes {
+                    padding: 12px 140px 0 0;
+                }
+                div.body div.content div.painel_gerenciar div.titulo_gerenc ul li.tipo {
+                    padding: 12px 170px 0 0;
+                }
+                div.body div.content div.painel_gerenciar div.titulo_gerenc ul li.acesso {
+                    padding: 12px 100px 0 0;
+                }
+
         div.body div.content div.painel_gerenciar div.titulo h2 {
             font-size: 0.9em;
             display: table;
@@ -253,14 +310,83 @@ div.body {
         }
         div.body div.content div.painel_gerenciar div.corpo_gerenc {
             background: url(img/painelgerenc_meio.png) repeat-y;
-            width: 922px;
+            width: 911px;
             padding-bottom: 1px;
+            display: table;
         }
+            div.body div.content div.painel_gerenciar div.corpo_gerenc ul.listagem {
+                float: left;
+                margin-top: 6px;
+            }
+            div.body div.content div.painel_gerenciar div.corpo_gerenc ul.listagem li {
+                list-style: none;
+                
+            }
+                div.body div.content div.painel_gerenciar div.corpo_gerenc ul.listagem li a {
+                    color: #888888;
+                    text-decoration: none;
+                    
+                }
+                div.body div.content div.painel_gerenciar div.corpo_gerenc ul.listagem li a:hover {
+                    color: #181818;
+                    text-decoration: none;
+                    font-weight: bold;
+                }
+            /*
+             * SEÇÕES
+             */
+            div.body div.content div.painel_gerenciar div.corpo_gerenc ul.secoes {
+                width: 250px;
+            }
+                div.body div.content div.painel_gerenciar div.corpo_gerenc ul.secoes li a {
+                    line-height: 2.3em;
+                }
+            /*
+             * NOVA E LISTAR
+             */
+            div.body div.content div.painel_gerenciar div.corpo_gerenc ul.editar {
+                margin-left: 44px;
+                width: 100px;
+            }
+            div.body div.content div.painel_gerenciar div.corpo_gerenc ul.editar li a {
+                text-decoration: underline;
+                line-height: 2.3em;
+            }
+            div.body div.content div.painel_gerenciar div.corpo_gerenc ul.editar li a:hover {
+                color: #181818;
+                text-decoration: underline;
+            }
+            /*
+             * TIPO
+             */
+            div.body div.content div.painel_gerenciar div.corpo_gerenc ul.tipo {
+                width: 150px;
+                margin-left: 79px;
+                
+            }
+                div.body div.content div.painel_gerenciar div.corpo_gerenc ul.tipo li {
+                    font-size: 0.8em;
+                    line-height: 2.9em;
+                }
+               
+            /*
+             * ÚLTIMO ACESSO - PESSOA
+             */
+            div.body div.content div.painel_gerenciar div.corpo_gerenc ul.pessoa {
+                width: 205px;
+                margin-left: 45px;
+            }
+                div.body div.content div.painel_gerenciar div.corpo_gerenc ul.pessoa li {
+                    font-size: 0.8em;
+                    line-height: 2.9em;
+                }
+
+
 
         div.body div.content .painel_gerenciar div.rodape_gerenc {
             background: url(img/rodape_gerenciar.png) no-repeat;
-            width: 922px;
-            height: 15px;
+            width: 911px;
+            height: 14px;
         }
 
     /********* CATEGORIAS *********/

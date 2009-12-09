@@ -204,10 +204,50 @@ else {
 		Use esta tela para gerenciar seu conteúdo. Passe o mouse sobre o conteúdo para mais opções.
 	</p>
     <div class="painel_gerenciar">
+
+        <div class="esquerda"></div>
+        <div class="titulo_site">
+            <h3><a <?php MenuSelecionado($_GET['section'], "conteudo"); ?> href="adm_main.php?section=conteudo">Ecobiologia</a></h3>
+        </div>
+        <div class="direita"></div>
+        
         <div class="titulo_gerenc">
-            <h2>Site_1</h2>
+            <ul>
+                <li class="secoes">Seções</li>
+                <li class="acoes">Ações</li>
+                <li class="tipo">Tipo</li>
+                <li class="acesso">Último acesso por</li>
+            </ul>
         </div>
         <div class="corpo_gerenc">
+            <ul class="listagem secoes">
+                <li><a href="">ARTIGOS</a></li>
+                <li><a href="">ENQUETE</a></li>
+                <li><a href="">GALERIA DE FOTOS</a></li>
+                <li><a href="">NOTÍCIAS</a></li>
+                <li><a href="">PESQUISA PARA PAIS E ALUNOS</a></li>
+            </ul>
+            <ul class="listagem editar">
+                <li><a href="">Nova</a>&nbsp;&nbsp;&nbsp;<a href="">Listar</a></li>
+                <li><a href="">Nova</a>&nbsp;&nbsp;&nbsp;<a href="">Listar</a></li>
+                <li><a href="">Nova</a>&nbsp;&nbsp;&nbsp;<a href="">Listar</a></li>
+                <li><a href="">Nova</a>&nbsp;&nbsp;&nbsp;<a href="">Listar</a></li>
+                <li><a href="">Nova</a>&nbsp;&nbsp;&nbsp;<a href="">Listar</a></li>
+            </ul>
+            <ul class="listagem tipo">
+                <li><a href="">Conteúdo</a></li>
+                <li><a href="">Pesquisa</a></li>
+                <li><a href="">Galeria de Fotos</a></li>
+                <li><a href="">Conteúdos</a></li>
+                <li><a href="">Pesquisa</a></li>
+            </ul>
+            <ul class="listagem pessoa">
+                <li><a href="">Acácio Neimar de Oliveira</a></li>
+                <li><a href="">Andréia de Oliveira</a></li>
+                <li><a href="">Alexandre de Oliveira</a></li>
+                <li><a href="">Andréia de Oliveira</a></li>
+                <li><a href="">Alexandre de Oliveira</a></li>
+            </ul>
         </div>
         <div class="rodape_gerenc">
         </div>
