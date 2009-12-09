@@ -199,11 +199,20 @@ if(!empty($_GET['action'])){
  */
 else {
 ?>
-    <h1>Gerenciar conteúdo</h1>
+    <h2>Gerenciar conteúdo</h2>
 	<p>
-		Olá. Nesta página você pode <strong>gerenciar todo o conteúdo</strong> do site.
-		Selecione abaixo o que você deseja fazer:
+		Use esta tela para gerenciar seu conteúdo. Passe o mouse sobre o conteúdo para mais opções.
 	</p>
+    <div class="painel_gerenciar">
+        <div class="titulo_gerenc">
+            <h2>Site_1</h2>
+        </div>
+        <div class="corpo_gerenc">
+        </div>
+        <div class="rodape_gerenc">
+        </div>
+    </div>
+    <br clear="all" />
 	<div class="action_options">
         <?php
         include(INC_DIR.'conteudo.inc/user_menu.php');

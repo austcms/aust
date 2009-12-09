@@ -229,7 +229,39 @@ div.body {
                 div.body div.content div.painel-metade div.front_painel h3 { margin-bottom: 0; color: black; }
                 div.body div.content div.painel-metade div.front_painel div.corpo ul li.titulo { font-weight: bold; }
                 div.body div.content div.painel-metade div.front_painel div.corpo ul li.conteudo { list-style: none; }
+/*
+ * PAINEL GERENCIAR DA PÁGINA DE GERENCIAR CONTEUDO
+ */
+    div.body div.content div.painel_gerenciar {
+        padding-bottom: 1px;
+        padding-bottom: 10px;
+        float: left;
+        width: 950px;
+    }
+        div.body div.content div.painel_gerenciar div.titulo_gerenc {
+            background: url(img/painel_titulo.png) no-repeat;
+            width: 922px;
+            height: 29px;
+            display: table;
+        }
+        div.body div.content div.painel_gerenciar div.titulo h2 {
+            font-size: 0.9em;
+            display: table;
+            margin: 0;
+            margin-top: 10px;
+            margin-left: 10px;
+        }
+        div.body div.content div.painel_gerenciar div.corpo_gerenc {
+            background: url(img/painelgerenc_meio.png) repeat-y;
+            width: 922px;
+            padding-bottom: 1px;
+        }
 
+        div.body div.content .painel_gerenciar div.rodape_gerenc {
+            background: url(img/rodape_gerenciar.png) no-repeat;
+            width: 922px;
+            height: 15px;
+        }
 
     /********* CATEGORIAS *********/
             div.body div.content div.structure {  }
