@@ -40,10 +40,7 @@
             ?>
         	<div class="logotipo">
             	<h1>AC Informática</h1>
-                <p>
-                    Conectado como <strong><?php echo $administrador->LeRegistro('nome');?></strong>.
-                    Seu n&iacute;vel de acesso &eacute; <strong><?php echo $administrador->LeRegistro('tipo');?></strong>.
-                </p>
+                <p style="font-size: 0.9em; color: #004b85;">Gerencie o seu conteúdo</p>
             </div>
 
             <div class="inicializacaorapida">
@@ -68,7 +65,12 @@
                     ?>
                     
                 </div>
-                
+                <div class="conectado_como">
+                    <p>
+                        Conectado como <strong><?php echo $administrador->LeRegistro('nome');?></strong>.<br />
+                        N&iacute;vel de acesso  <strong><?php echo $administrador->LeRegistro('tipo');?></strong>.
+                    </p>
+                </div>
                 <span>
                 <br />
                 
