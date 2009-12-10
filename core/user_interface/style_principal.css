@@ -335,23 +335,36 @@ div.body {
                 div.body div.content div.painel_gerenciar div.corpo_gerenc ul.listagem li a:hover {
                     color: #181818;
                     text-decoration: none;
-                    font-weight: bold;
                 }
             /*
              * SEÇÕES
              */
-            div.body div.content div.painel_gerenciar div.corpo_gerenc ul.secoes {
-                width: 250px;
+            div.body div.content div.painel_gerenciar div.corpo_gerenc div.secoes_interrogacao {
+                width: 300px;
+                display: block;
             }
-                div.body div.content div.painel_gerenciar div.corpo_gerenc ul.secoes li a {
+            div.body div.content div.painel_gerenciar div.corpo_gerenc div.secoes_interrogacao ul.secoes {
+            }
+                div.body div.content div.painel_gerenciar div.corpo_gerenc div.secoes_interrogacao ul.secoes li a {
                     line-height: 2.3em;
+                }
+            /*
+             * INTERROGAÇÃO
+             */
+            div.body div.content div.painel_gerenciar div.corpo_gerenc div.secoes_interrogacao div.interrogacao {
+                width: 20px;
+                float: left;
+                margin: 10px 0 0 0;
+            }
+                div.body div.content div.painel_gerenciar div.corpo_gerenc div.secoes_interrogacao div.interrogacao a img {
+                    border: none;
                 }
             /*
              * NOVA E LISTAR
              */
             div.body div.content div.painel_gerenciar div.corpo_gerenc ul.editar {
-                margin-left: 44px;
-                width: 100px;
+                margin-left: 70px;
+                width: 80px;
             }
             div.body div.content div.painel_gerenciar div.corpo_gerenc ul.editar li a {
                 text-decoration: underline;
@@ -367,7 +380,7 @@ div.body {
             div.body div.content div.painel_gerenciar div.corpo_gerenc ul.tipo {
                 width: 150px;
                 margin-left: 79px;
-                
+             
             }
                 div.body div.content div.painel_gerenciar div.corpo_gerenc ul.tipo li {
                     font-size: 0.8em;
@@ -378,7 +391,7 @@ div.body {
              * ÚLTIMO ACESSO - PESSOA
              */
             div.body div.content div.painel_gerenciar div.corpo_gerenc ul.pessoa {
-                width: 205px;
+                width: 200px;
                 margin-left: 45px;
             }
                 div.body div.content div.painel_gerenciar div.corpo_gerenc ul.pessoa li {

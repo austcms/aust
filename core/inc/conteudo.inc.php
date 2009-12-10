@@ -235,13 +235,21 @@ else {
             </ul>
         </div>
         <div class="corpo_gerenc">
-            <ul class="listagem secoes">
-                <li><a href="">ARTIGOS</a></li>
-                <li><a href="">ENQUETE</a></li>
-                <li><a href="">GALERIA DE FOTOS</a></li>
-                <li><a href="">NOTÍCIAS</a></li>
-                <li><a href="">PESQUISA PARA PAIS E ALUNOS</a></li>
-            </ul>
+            <div class="secoes_interrogacao">
+                <ul class="listagem secoes">
+                    <li><a href="">ARTIGOS</a></li>
+                    <li><a href="">ENQUETE</a></li>
+                    <li><a href="">GALERIA DE FOTOS</a></li>
+                    <li><a href="">NOTÍCIAS</a></li>
+                    <li><a href="">PESQUISA PARA PAIS E ALUNOS</a></li>
+                </ul>
+                <div class="interrogacao">
+                    <a href="#"> <img src="core/user_interface/img/interrogacao_cinza.png" /></a>
+                </div>
+                
+            </div>
+            
+            
             <ul class="listagem editar">
                 <li><a href="">Nova</a>&nbsp;&nbsp;&nbsp;<a href="">Listar</a></li>
                 <li><a href="">Nova</a>&nbsp;&nbsp;&nbsp;<a href="">Listar</a></li>
