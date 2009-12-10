@@ -6,7 +6,7 @@ if(!empty($_GET['action'])){
 } else {
 
     ?>
-    <h1>Usuários</h1>
+    <h2>Usuários</h2>
     <p>
         Nesta página você pode gerenciar todos os usuários que administram o site.
     </p>

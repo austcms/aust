@@ -95,16 +95,16 @@ if(!empty($_POST['inserirmodulo'])){
     </div>
     <div class="corpo_config">
         <ul class="listagem nome">
-            <li>NOME DO SITE</li>
-            <li>NOME DO CAMPO</li>
+            <li>DAR ACESSO ÀS CATEGORIAS</li>
+            <li>USUÁRIOS ACESSAM PERMISSÕES</li>
         </ul>
         <ul class="listagem input">
             <li><input type="text" name="nome_site" /></li>
             <li><input type="text" name="nome_site" /></li>
         </ul>
         <ul class="listagem dica">
-            <li>Entre o nome do seu site neste campo.</li>
-            <li>Campo de teste.</li>
+            <li>Você deseja que o usuário possa configurar as categorias.</li>
+            <li>Usuários podem configurar permissões.</li>
         </ul>
         
     </div>

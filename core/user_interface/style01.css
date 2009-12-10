@@ -239,21 +239,26 @@ div.body {
         float: left;
         width: 950px;
     }
-
-        div.body div.content div.painel_gerenciar div.esquerda {
-            padding-left: 6px;
+        div.body div.content div.painel_gerenciar div.tab {
         }
-        div.body div.content div.painel_gerenciar div.direita {
-            /*background: center url(img/direita_tab.png) no-repeat ;
-            width: 14px;
-            height: 31px;
-            padding: 18px 0 0 0;
-            margin-left: 69px;*/
+        div.body div.content div.painel_gerenciar div.tab div.esquerda {
+            background:  url(img/esquerda_tab.png) no-repeat;
+            width: 13px;
+            height: 33px;
+            float: left;
+            margin: 2px 0 0 6px;
         }
-            div.body div.content div.painel_gerenciar div.titulo_site {
-                background: #2d88cf;
+        div.body div.content div.painel_gerenciar div.tab div.direita {
+            background:  url(img/direita_tab.png) no-repeat;
+            width: 13px;
+            height: 33px;
+            float: left;
+            margin: 2px 0 0 0;
+        }
+            div.body div.content div.painel_gerenciar div.tab div.titulo_site {
                 display: table;
-                margin: 10px 0 0 14px;
+                margin: 10px 0 0 0px;
+                float: left;
             }
                 div.body div.content div.painel_gerenciar div.titulo_site h3 {
                     color: white;
@@ -262,7 +267,7 @@ div.body {
                 div.body div.content div.painel_gerenciar div.titulo_site a {
                     height: 70px;
                     background: #2d88cf;
-                    padding: 8px 8px 11px 8px;
+                    padding: 8px 0px 11px 0px;
                     color: white;
                     text-decoration: none;
                 }
@@ -281,7 +286,7 @@ div.body {
             width: 911px;
             height: 39px;
             display: table;
-            margin-top: 11px;
+            margin-top: 0px;
         }
             div.body div.content div.painel_gerenciar div.titulo_gerenc ul li {
                 float: left;
@@ -384,6 +389,144 @@ div.body {
 
 
         div.body div.content .painel_gerenciar div.rodape_gerenc {
+            background: url(img/rodape_gerenciar.png) no-repeat;
+            width: 911px;
+            height: 14px;
+        }
+
+
+/*
+ * PAINEL DE CONFIGURAÇÕES
+ */
+    div.body div.content div.painel_config {
+        padding-bottom: 1px;
+        padding-bottom: 10px;
+        float: left;
+        width: 950px;
+    }
+
+        div.body div.content div.painel_config div.tab div.esquerda {
+            background:  url(img/esquerda_tab.png) no-repeat;
+            width: 13px;
+            height: 33px;
+            float: left;
+            margin: 2px 0 0 6px;
+        }
+        div.body div.content div.painel_config div.tab div.direita {
+            background:  url(img/direita_tab.png) no-repeat;
+            width: 13px;
+            height: 33px;
+            float: left;
+            margin: 2px 0 0 0;
+        }
+            div.body div.content div.painel_config div.tab div.titulo_site {
+                display: table;
+                margin: 10px 0 0 0px;
+                float: left;
+            }
+                div.body div.content div.painel_config div.titulo_site h3 {
+                    color: white;
+                    margin-bottom: 0;
+                }
+                div.body div.content div.painel_config div.titulo_site a {
+                    height: 70px;
+                    background: #2d88cf;
+                    padding: 8px 0px 11px 0px;
+                    color: white;
+                    text-decoration: none;
+                }
+                div.body div.content div.painel_config div.titulo_site a:hover {
+                    height: 70px;
+                    background: #2d88cf;
+                    color: white;
+                }
+                div.body div.content div.painel_config div.titulo_site a.selecionado {
+                    background: url(img/marcador_ger.png) no-repeat bottom #2d88cf;
+                    font-weight: bold;
+                }
+
+        div.body div.content div.painel_config div.titulo_config {
+            background: url(img/painelgerenc_titulo.png) no-repeat;
+            width: 911px;
+            height: 39px;
+            display: table;
+            margin-top: 0px;
+        }
+            div.body div.content div.painel_config div.titulo_config ul li {
+                float: left;
+                display: table;
+                list-style: none;
+            }
+                div.body div.content div.painel_config div.titulo_config ul li.opcao {
+                    padding: 12px 250px 0 0;
+                }
+
+
+        div.body div.content div.painel_config div.titulo h2 {
+            font-size: 0.9em;
+            display: table;
+            margin: 0;
+            margin-top: 10px;
+            margin-left: 10px;
+        }
+        div.body div.content div.painel_config div.corpo_config {
+            background: url(img/painelgerenc_meio.png) repeat-y;
+            width: 911px;
+            padding-bottom: 1px;
+            display: table;
+        }
+            div.body div.content div.painel_config div.corpo_config ul.listagem {
+                float: left;
+                margin-top: 6px;
+            }
+            div.body div.content div.painel_config div.corpo_config ul.listagem li {
+                list-style: none;
+
+            }
+                div.body div.content div.painel_config div.corpo_config ul.listagem li a {
+                    color: #888888;
+                    text-decoration: none;
+
+                }
+                div.body div.content div.painel_config div.corpo_config ul.listagem li a:hover {
+                    color: #181818;
+                    text-decoration: none;
+                    font-weight: bold;
+                }
+            /*
+             * INPUT
+             */
+            div.body div.content div.painel_config div.corpo_config ul.input {
+                width: 150px;
+                line-height: 1.9em;
+                margin-left: 70px;
+            }
+               
+            /*
+             * NOME
+             */
+            div.body div.content div.painel_config div.corpo_config ul.nome {
+                margin-left: 20px;
+                width: 220px;
+            }
+            div.body div.content div.painel_config div.corpo_config ul.nome li {
+                line-height: 2.0em;
+            }
+
+            /*
+             * DICA
+             */
+            div.body div.content div.painel_config div.corpo_config ul.dica {
+                width: 400px;
+                margin-left: 5px;
+
+            }
+                div.body div.content div.painel_config div.corpo_config ul.dica li {
+                    font-size: 0.9em;
+                    line-height: 2.2em;
+                    color: #484848;
+                }
+        div.body div.content .painel_config div.rodape_config {
             background: url(img/rodape_gerenciar.png) no-repeat;
             width: 911px;
             height: 14px;

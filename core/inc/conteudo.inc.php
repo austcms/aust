@@ -204,12 +204,27 @@ else {
 		Use esta tela para gerenciar seu conteúdo. Passe o mouse sobre o conteúdo para mais opções.
 	</p>
     <div class="painel_gerenciar">
-
-        <div class="esquerda"></div>
-        <div class="titulo_site">
-            <h3><a <?php MenuSelecionado($_GET['section'], "conteudo"); ?> href="adm_main.php?section=conteudo">Ecobiologia</a></h3>
+        <div class="tab">
+            <div class="esquerda"></div>
+            <div class="titulo_site">
+                <h3><a <?php MenuSelecionado($_GET['section'], "conteudo"); ?> href="adm_main.php?section=conteudo">Ecobiologia</a></h3>
+            </div>
+            <div class="direita"></div>
         </div>
-        <div class="direita"></div>
+        
+        <?php
+        /*
+         * EXEMPLO DE COMO SERÁ SE TIVER MAIS DE UMA TAB
+         */
+        ?>
+        <div class="tab">
+            <div class="esquerda"></div>
+            <div class="titulo_site">
+                <h3><a <?php MenuSelecionado($_GET['section'], ""); ?> href="adm_main.php?section=">Área Restrita</a></h3>
+            </div>
+            <div class="direita"></div>
+        </div>
+        
         
         <div class="titulo_gerenc">
             <ul>
