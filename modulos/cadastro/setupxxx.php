@@ -13,7 +13,7 @@
  * Este arquivo contém a configuração necessária para instalar a estrutura que depende deste modulo.
  * Não e necessário criar uma nova tag <form>
  */
-
+echo 'oijoi';
 // se não está completo o setup e não foi escolhida a quantidade de campos ainda
 if(empty($_POST['setup_ready']) and empty($_POST['qtd_campos'])){
 ?>
@@ -253,7 +253,6 @@ if(empty($_POST['setup_ready']) and empty($_POST['qtd_campos'])){
                     ) ".$cur_charset;
         }
         //echo '<br><br><br>'.$sql_arquivos;
-
         /*
          * Executa QUERY no MySQL
          *

@@ -11,14 +11,42 @@
 
     $tempmodulo = $modulo;
     $embed = $modulo->LeModulosEmbed();
-    //unset($modulo);
+    
+
+    foreach( $embed as $valor ){
+        $embedIds[] = $valor["id"];
+    }
+
+    /*
+     * Contém quais as outras estruturas (nodes) que são relacionadas à
+     * estrutura atual.
+     */
+    $embedRelatedNodes = $modulo->getRelatedEmbed($_GET["aust_node"]);
+
+
+
     if( !empty($embed) AND count($embed)){
         ?>
         <tr>
+            <td colspan="2">
+                <input type="hidden" name="contentTable" value="<?php
+                echo $modulo->getContentTable();
+                ?>" />
+                <br /></td>
+        </tr>
+
+        <?php
+        /*
+        <tr>
             <td colspan="2"><h1>Outras opções</h1></td>
         </tr>
+        
         <?php
+         * 
+         */
+    
         foreach($embed AS $chave=>$valor){
+            if( in_array( $valor["id"], $embedRelatedNodes ) ){
 
                 // Inicializa algumas variáveis
                     $embed_form = array();
@@ -29,8 +57,9 @@
                 }
 
                 // Em quais actions este módulo deve ser embed?
-                if(!empty($embed_form) AND in_array($_GET['action'], $embed_form['actions'])){
 
+                //pr($embed_form);
+                if(!empty($embed_form) AND in_array($_GET['action'], $embed_form['actions'])){
                     if(is_file($valor['pasta'].'/embed/form.php')){
                         include($valor['pasta'].'/embed/form.php');
                         //include($valor['pasta'].'/index.php');
@@ -53,7 +82,8 @@
                         }
                     }
                 }
-        }
+            } // fim if( pode ser embed )
+        } // fim for()
     }
     //unset($embed);
     //unset($modulo);

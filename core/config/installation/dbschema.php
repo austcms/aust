@@ -129,11 +129,12 @@ $dbSchema['modulos'] = array(
 );
 $dbSchema['modulos_conf'] = array(
     'id' => 'int NOT NULL auto_increment',
-    'tipo' => 'varchar(50)',
+    'categoria_id' => 'int COMMENT "O id da categoria que recebe esta configuração."',
+    'tipo' => 'varchar(50) COMMENT "Tipo de conf. Ex.: relacionamento"',
     'local' => 'varchar(50)',
-    'nome' => 'text',
-    'propriedade' => 'varchar(100)',
-    'valor' => 'text',
+    'nome' => 'text COMMENT "Um nome humano para esta configuração, se necessário"',
+    'propriedade' => 'varchar(100) COMMENT "O nome da propriedade."',
+    'valor' => 'text COMMENT "O valor da conf propriamente dita"',
     'observacao' => 'text',
     'autor' => 'varchar(120)',
     'dbSchemaTableProperties' => array(

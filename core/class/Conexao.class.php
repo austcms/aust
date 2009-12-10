@@ -302,11 +302,12 @@ class Conexao extends SQLObject {
          * Carrega as tabelas, verifica a quantidade e ajusta uma array com elas
          * para retornar.
          */
+        $arraytmp = array();
         $query = $this->query($sql);
         $qntd_tabelas = count($query);
         if($qntd_tabelas > 0){
             foreach ( $query as $chave=>$valor ){
-                $arraytmp[] = $valor[0];
+                $arraytmp[] = reset($valor);
             }
         }
         return $arraytmp;

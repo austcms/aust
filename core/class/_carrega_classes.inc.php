@@ -43,6 +43,7 @@ include(THIS_TO_BASEURL.CLASS_DIR."ModsSetup"      .CLASS_FILE_SUFIX.".php");
  * HELPERS
  */
 include(THIS_TO_BASEURL.CLASS_DIR."Helpers"         .CLASS_FILE_SUFIX.".php");
+include(THIS_TO_BASEURL.CLASS_DIR."helpers/EmbedForms".CLASS_FILE_SUFIX.".php");
 //include(THIS_TO_BASEURL.HELPERS_DIR."Form"          .CLASS_FILE_SUFIX.".php");
 
 /**

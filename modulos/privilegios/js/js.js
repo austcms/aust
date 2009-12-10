@@ -18,3 +18,19 @@ function form_privilegio(este){
 }
 
 
+function alteraRelacionamentos(posted, este){
+    //alert('soijargrser ' + arquivoAjax);
+    $.ajax({
+        url: include_baseurl+"/js/ajax.php",
+        data: posted+'&value='+este.checked+'&action=altera_relacionamentos',
+        complete: function(response){
+            //alert(response.responseText);
+            //$('#permissoesAtuais').html(response.responseText);
+        },
+
+        type: "post",
+        dataType: "html"
+    });
+    return false;
+}
+

@@ -183,6 +183,7 @@ if($_GET['action'] == 'criar') {
     ?>
     <?php
     if( !empty($moduloConfig["has_description"])
+        AND $moduloConfig["has_description"]["valor"] == 1
         AND $moduloConfig["only_content"]["valor"] == 1 )
     {
         ?>

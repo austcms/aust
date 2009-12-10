@@ -1,3 +1,4 @@
+
 <?php
 
 /*
@@ -11,16 +12,17 @@
             $temp_w = $_GET['w'];
             
             $sql = "SELECT
-                        privilegios_conf_id
+                        privilegio_id
                     FROM
-                        privilegios_de_conteudos
+                        privilegio_target
                     WHERE
-                        conteudo_tabela='".$conteudo_tabela."' AND
-                        conteudo_id='".$temp_w."'
+                        target_table='".$conteudo_tabela."' AND
+                        target_id='".$temp_w."'
                     ";
-            $result = mysql_query($sql);
-            while($dados_priv = mysql_fetch_array($result)){
-                $privid_result[] = $dados_priv['privilegios_conf_id'];
+            $result = $conexao->query($sql);
+
+            foreach($result as $dados_priv){
+                $privid_result[] = $dados_priv['privilegio_id'];
             }
         }
 
@@ -29,20 +31,19 @@
 
         // pega todos os privilégios
         $sql = "SELECT
-                    id, valor
+                    id, titulo
                 FROM
-                    privilegios_conf AS pc
-                WHERE
-                    especie='' OR
-                    especie IS NULL
+                    privilegios AS pc
                 ";
-        $result = mysql_query($sql);
-        while($dados = mysql_fetch_array($result)){
+        $result = $conexao->query($sql);
+        //pr($result);
+        //$result = $result[0];
+        foreach($result as $dados){
             $temp_act = '';
             if(in_array($dados['id'], $privid_result)){
                 $temp_act = 'checked="checked"';
             }
-            $temp = $temp.'<input type="checkbox" name="privid[]" '.$temp_act.' value="'.$dados['id'].'" /> '.$dados['valor'].'<br />';
+            $temp = $temp.'<input type="checkbox" name="privid[]" '.$temp_act.' value="'.$dados['id'].'" /> '.$dados['titulo'].'<br />';
         }
 
         // guarda o parágrafo de introdução, explicativo

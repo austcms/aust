@@ -227,7 +227,7 @@ if(!empty($_GET['function'])){
                 array(
                     "propriedade" => "only_content", // nome da propriedade
                     "value" => "",
-                    "label" => "Privilégios se aplicam somente a conteúdos",
+                    "label" => "Privilégios se aplicam somente a conteúdos específicos",
                     "inputType" => "checkbox",
                 ),
                 /*
@@ -341,11 +341,64 @@ if(!empty($_GET['function'])){
     ?>
     <div class="painel">
         <div class="titulo">
-            <h2></h2>
+            <h2>Relacionamento entre Módulos</h2>
         </div>
         <div class="corpo">
-            <p></p>
+            <p>
+                A quais módulos estes privilégios se aplicam?
+            </p>
 
+            <?php
+
+            $categorias = $conexao->find(array(
+                                            'table' => 'categorias',
+                                            'conditions' => array(
+                                                //'id' => $_POST['id'],
+                                                'classe' => 'estrutura',
+                                            ),
+                                            'fields' => array('id', 'nome', 'classe', 'tipo'),
+                                        ), 'all'
+            );
+
+            /**
+             * Carrega dados
+             */
+                $condition = array('admins_tipos_id' => $_POST['id']);
+
+            $sql = "SELECT
+                        valor
+                    FROM
+                        modulos_conf
+                    WHERE
+                        categoria_id='".$_GET['aust_node']."' AND
+                        tipo='relacionamentos'
+                    ";
+
+
+            $relacionamentos = $conexao->query($sql);
+            //pr($sql);
+            $categoriasChecked = array();
+            foreach($relacionamentos as $valor){
+                $categoriasChecked[] = $valor['valor'];
+            }
+
+
+            foreach($categorias as $valor){
+
+                /**
+                 * Se for estrutura, deixa negrito
+                 */
+                if($valor['classe'] == 'estrutura'){
+                    //echo '<strong>';
+                }
+                ?>
+                <input type="checkbox" id="<?php echo $valor['nome']; ?>" <?php if(in_array($valor['id'], $categoriasChecked)) echo 'checked="true"'; ?> onchange="alteraRelacionamentos('categoria=<?php echo $_GET['aust_node']; ?>&target=<?php echo $valor['id']; ?>', this)" value="<?php echo $valor['nome']; ?>" /> <?php echo $valor['nome']; ?> (<?php echo $valor['tipo']; ?>)<br />
+                <?php
+                if($valor['classe'] == 'estrutura'){
+                    //echo '</strong>';
+                }
+            }
+            ?>
         </div>
         <div class="rodape"></div>
     </div>

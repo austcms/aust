@@ -7,6 +7,7 @@
  * @author nome do autor <email>
  * @since v1.6 25/06/2009
  */
+            //echo $_SESSION['exPOST']['nome'];
 ?>
 
 <h1>Setup de cadastro: configuração inicial</h1>

@@ -59,8 +59,9 @@ class SetupController extends ModsSetup
             /**
              * Trata o nome da tabela para poder criar no db
              */
+             
             $tabela = RetiraAcentos(strtolower(str_replace(' ', '_', $_SESSION['exPOST']['nome'])));
-
+            
             /**
              * TRATAMENTO DE CAMPOS
              *
@@ -234,9 +235,10 @@ class SetupController extends ModsSetup
             $sql = 'CREATE TABLE '.$tabela.'(
                         id int auto_increment,
                         '.$campos.',
-                        bloqueado varchar(120) '.$cur_charset.',
-                        aprovado int,
-                        adddate datetime,
+                        blocked varchar(120) '.$cur_charset.',
+                        approved int,
+                        created_on datetime,
+                        updated_on datetime,
                         PRIMARY KEY (id), UNIQUE id (id)
 
                     ) '.$cur_charset;
@@ -268,6 +270,8 @@ class SetupController extends ModsSetup
                 ) ".$cur_charset;
             }
             //echo '<br><br><br>'.$sql_arquivos;
+
+            //exit();
 
             /**
              * TABELA FÍSICA

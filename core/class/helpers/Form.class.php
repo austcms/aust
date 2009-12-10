@@ -79,6 +79,8 @@ class FormHelper
      * @return array Código HTML para o form input pedido.
      */
     public function input($fieldName, $options = ''){
+
+
         $conteudo ='';
 
         $conteudo.= '<div class="input">';
@@ -173,6 +175,8 @@ class FormHelper
          */
         else if( $inputType == "select" ){
             $select = $options["select"];
+            //pr($select);
+
             /**
              * <option> selecionado
              */

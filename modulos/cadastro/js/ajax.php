@@ -78,7 +78,9 @@ if($_POST['action'] == 'LeCadastros'){
                 categorias
             WHERE
                 tipo='cadastro'";
+    //echo $sql;
     $arraytmp = $conexao->listaTabelasDoDBParaArray();
+    //pr($arraytmp);
     foreach($arraytmp AS $valor){
         echo '<option value="'.$valor.'">'.$valor.'</option>';
     }

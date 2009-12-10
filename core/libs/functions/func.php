@@ -116,25 +116,30 @@ $ssegundo = PegaData("segundo");
 
 //função que tira todos os acentos
 function RetiraAcentos($a){
-	$a = eregi_replace("[àáâäã]","a",$a);
-	$a = eregi_replace("[èéêë]","e",$a);
-	$a = eregi_replace("[ìíîï]","i",$a);
-	$a = eregi_replace("[òóôöõ]","o",$a);
-	$a = eregi_replace("[ùúûü]","u",$a);
-	$a = eregi_replace("[ÀÁÂÄÃ]","A",$a);
-	$a = eregi_replace("[ÈÉÊË]","E",$a);
-	$a = eregi_replace("[ÌÍÎÏ]","I",$a);
-	$a = eregi_replace("[ÒÓÔÖÕ]","O",$a);
-	$a = eregi_replace("[ÙÚÛÜ]","U",$a);
-	$a = eregi_replace("ç","c",$a);
-	$a = eregi_replace("Ç","C",$a);
-	$a = eregi_replace("ñ","n",$a);
-	$a = eregi_replace("Ñ","N",$a);
-	$a = str_replace("´","",$a);
-	$a = str_replace("`","",$a);
-	$a = str_replace("¨","",$a);
-	$a = str_replace("^","",$a);
-	$a = str_replace("~","",$a);
+    //$a = utf8_decode($a);
+    //echo $current_encoding = mb_detect_encoding($a, 'auto');
+        //echo $a."<br>";
+        $a = str_replace(array('à','á','â','ã','ä'), "a", $a);
+        $a = str_replace(array('è','é','ê','ë'), "e", $a);
+        $a = str_replace(array('ì','í','î','ï'), "i", $a);
+        $a = str_replace(array('ò','ó','ô','ö','õ'), "o", $a);
+        $a = str_replace(array('ú','ù','û','ü'), "u", $a);
+
+        $a = str_replace(array('À','Á','Â','Ä','Ã'), "A", $a);
+        $a = str_replace(array('È','É','Ê','Ë'), "E", $a);
+        $a = str_replace(array('Ì','Í','Î','Ï'), "I", $a);
+        $a = str_replace(array('Ò','Ó','Ô','Ö','Õ'), "O", $a);
+        $a = str_replace(array('Ù','Ú','Û','Ü'), "U", $a);
+        $a = str_replace(array('ç'), "c", $a);
+        $a = str_replace(array('Ç'), "C", $a);
+        $a = str_replace(array('ñ'), "n", $a);
+        $a = str_replace(array('Ñ'), "N", $a);
+
+	$a = str_replace("´", "", $a);
+	$a = str_replace("`", "", $a);
+	$a = str_replace("¨", "", $a);
+	$a = str_replace("^", "", $a);
+	$a = str_replace("~", "", $a);
 	return $a;
 }
 

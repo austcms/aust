@@ -87,7 +87,9 @@ class Modulos {
     /*
      * MÈTODOS DE SUPORTE
      */
-
+    public function getContentTable(){
+        return $this->tabela_criar;
+    }
 
     /**
      * trataImagem
@@ -514,8 +516,38 @@ class Modulos {
                 }
             }
         }
-    }
+    } // fim leModulos()
 
+    /**
+     * getRelatedEmbed()
+     *
+     * Dado uma estrutura, verifica quais outras estruturas sao associadas a ele
+     * para fazer um embed.
+     *
+     * Se a estrutura é Notícias, verifica quais outras podem fazer embed nos
+     * seus formulários.
+     *
+     * Retorna array com ids das estruturas relacionadas
+     *
+     * @param int $austNode
+     * @return array
+     */
+    public function getRelatedEmbed($austNode){
+        $sql = "SELECT
+                    categoria_id
+                FROM
+                    modulos_conf as m
+                WHERE
+                    m.tipo='relacionamentos' AND
+                    m.valor='".$austNode."'
+                ";
+        $query = $this->conexao->query($sql);
+        $tmp = array();
+        foreach( $query as $valor ){
+            $tmp[] = $valor["categoria_id"];
+        }
+        return $tmp;
+    }
 
     // retorna o nome da tabela da estrutura
     function LeTabelaDaEstrutura($param='') {
@@ -527,21 +559,29 @@ class Modulos {
      */
     function LeModulosEmbed() {
         $sql = "SELECT
-                    DISTINCT pasta, nome, chave, valor
+                    DISTINCT m.pasta, m.nome, m.chave, m.valor, c.id, c.nome
                 FROM
-                    modulos
+                    modulos as m
+                INNER JOIN
+                    categorias as c
+                ON
+                    m.valor=c.tipo
                 WHERE
-                    embed='1'
+                    m.embed='1'
                 ";
         $query = $this->conexao->query($sql);
         $i = 0;
         $return = '';
 
         foreach($query as $dados) {
+            /*
             $return[$i]['pasta'] = $dados['pasta'];
             $return[$i]['nome'] = $dados['nome'];
             $return[$i]['chave'] = $dados['chave'];
             $return[$i]['valor'] = $dados['valor'];
+             *
+             */
+            $return[$i] = $dados;
             $i++;
         }
         return $return;
