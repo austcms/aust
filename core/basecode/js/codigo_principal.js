@@ -11,12 +11,24 @@
  * Função de Start
  */
 $(document).ready(function(){
+
     if($('div.campooptions').length > 0){ $('div.campooptions').hide(); }
     if($('div.est_options').length > 0){ $('div.est_options').hide(); }
     if($('div#categoriacontainer_priv').length > 0) { $('div#categoriacontainer_priv').hide(); }
     if(privilegio_escolhido != ''){
         form_privilegio('1')
     }
+
+
+    // Hints
+    $("div.hint a[title]").tooltip({
+        tip: '#caixa_tooltip',
+        effect: 'fade',
+        events: {
+            def: 'click,mouseout'
+        }
+    });
+
 });
 
 var arquivoAjax = "core/libs/ajax.php";

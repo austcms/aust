@@ -408,14 +408,44 @@ div.body {
             /*
              * INTERROGAÇÃO
              */
-            div.body div.content div.painel_gerenciar div.corpo_gerenc div.listagem div.interrogacao {
-                width: 20px;
+            div.body div.content div.painel_gerenciar div.corpo_gerenc div.listagem div.secoes div.hint {
                 float: left;
-                margin: 4px 0 0 5px;
+                display: table;
             }
-                div.body div.content div.painel_gerenciar div.corpo_gerenc div.listagem div.interrogacao a img {
-                    border: none;
+                div.body div.content div.painel_gerenciar div.corpo_gerenc div.listagem div.secoes div.hint a {
+                    background: url(img/interrogacao.png) no-repeat top;
+                    width: 20px;
+                    height: 20px;
+                    padding: 0 13px 5px 8px;
+                    display: block;
+                    text-decoration: none;
+                    margin-top: 3px;
                 }
+                div.body div.content div.painel_gerenciar div.corpo_gerenc div.listagem div.secoes div.hint a:hover {
+                    background: url(img/interrogacao.png) no-repeat;
+                    width: 20px;
+                    height: 20px;
+                    padding: 0 13px 5px 8px;
+                    display: block;
+                    background-position: 10px -27px;
+                }
+
+                div.body div.content div.painel_gerenciar div.corpo_gerenc div.listagem div.secoes div.hint a:focus {
+                    outline: none;
+                }
+
+            #caixa_tooltip {
+                display:none;
+                background:red;
+                font-size:12px;
+                height:70px;
+                width:160px;
+                padding:25px;
+                color:#fff;
+            }
+
+
+
 
         div.body div.content .painel_gerenciar div.rodape_gerenc {
             background: url(img/rodape_gerenciar.png) no-repeat;

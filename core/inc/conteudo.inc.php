@@ -235,14 +235,15 @@ else {
             </ul>
         </div>
         <div class="corpo_gerenc">
+            <div id="caixa_tooltip">&nbsp;</div>
             <div class="listagem">
 
                 <div class="secoes">
                     <div class="nome_secoes">
-                        <a href="">ARTIGOS</a>
+                        <a href="#">ARTIGOS</a>
                     </div>
-                    <div class="interrogacao">
-                        <a href="#"> <img src="core/user_interface/img/interrogacao_cinza.png" /></a>
+                    <div class="hint">
+                        <a href="#" title= "Olá tudo bem?222" ></a>
                     </div>
                 </div>
 
@@ -250,8 +251,8 @@ else {
                     <div class="nome_secoes">
                         <a href="">ENQUETE</a>
                     </div>
-                    <div class="interrogacao">
-                        <a href="#"> <img src="core/user_interface/img/interrogacao_cinza.png" /></a>
+                    <div class="hint">
+                        <a href="#" title= "Olá tudo bem?222" ></a>
                     </div>
                 </div>
 
@@ -259,8 +260,8 @@ else {
                     <div class="nome_secoes">
                         <a href="">GALERIA DE FOTOS</a>
                     </div>
-                    <div class="interrogacao">
-                        <a href="#"> <img src="core/user_interface/img/interrogacao_cinza.png" /></a>
+                    <div class="hint">
+                        <a href="#" title= "Olá tudo bem?222" ></a>
                     </div>
                 </div>
 
@@ -268,8 +269,8 @@ else {
                     <div class="nome_secoes">
                         <a href="">NOTÍCIAS</a>
                     </div>
-                    <div class="interrogacao">
-                        <a href="#"> <img src="core/user_interface/img/interrogacao_cinza.png" /></a>
+                    <div class="hint">
+                        <a href="#" title= "Olá tudo bem?222" ></a>
                     </div>
                 </div>
                 
@@ -277,8 +278,8 @@ else {
                     <div class="nome_secoes">
                         <a href="">PESQUISA PARA PAIS E ALUNOS</a>
                     </div>
-                    <div class="interrogacao">
-                        <a href="#"> <img src="core/user_interface/img/interrogacao_cinza.png" /></a>
+                    <div class="hint">
+                        <a href="#" title= "Olá tudo bem?222" ></a>
                     </div>
                 </div>
                 
