@@ -57,35 +57,75 @@ echo $form->create( $infoCadastro["estrutura"]["tabela"]["valor"] );
 /**
  * Campos
  */
- //pr($camposForm);
+//pr($camposForm);
+
+$tabelaCadastro = $infoCadastro["estrutura"]["valor"];
+
 foreach( $camposForm as $chave=>$valor ){
 
     unset($select);
+    unset($checkbox);
 
     /**
-     * CONFIGURA CAMPOS RELACIONAIS
+     * RELACIONAL UM PARA UM
      */
     if( $valor["tipo"]["especie"] == "relacional_umparaum" ){
         $sql = "SELECT id,".$valor["tipo"]["tabelaReferenciaCampo"]." FROM ".$valor["tipo"]["tabelaReferencia"];
         $selectValues = $conexao->query($sql);
         //pr($sql);
-        $select["selected"] = "3";
+        //$select["selected"] = "3";
+        $inputType = "select";
         foreach($selectValues as $tabelaReferenciaResult){
             $select["options"][ $tabelaReferenciaResult["id"] ] = $tabelaReferenciaResult[ $valor["tipo"]["tabelaReferenciaCampo"] ];
         }
+
+    }
+    /*
+     * RELACIONAL UM PARA MUITOS
+     */
+    else if($valor["tipo"]["especie"] == "relacional_umparamuitos") {
+        //".$tabelaCadastro $valor["tipo"]["tabelaReferenciaCampo"]."
+
+        $referencia = $valor["tipo"]["tabelaReferencia"];
+        $tabelaRelacional = $valor["tipo"]["referencia"];
+        $campo = $valor["tipo"]["tabelaReferenciaCampo"];
+        $sql = "SELECT
+                    t.id, t.$campo
+                FROM
+                    ".$referencia." AS t
+                ORDER BY t.$campo ASC
+                ";
+
+        $values = $conexao->query($sql);
+        //pr($sql);
+        //$checkbox["selected"] = "3";
+        $inputType = "checkbox";
+        foreach($values as $tabelaReferenciaResult){
+            $checkbox["options"][ $tabelaReferenciaResult["id"] ] = $tabelaReferenciaResult[ $campo ];
+        }
+
+        //echo $sql;
+        //pr($checkbox);
 
     }
 
     if( empty($valor["valor"]) ){
         $valor["valor"] = "";
     }
+
+    if( empty($inputType) ){
+        $inputType = "";
+    }
+
     /**
      * Cria INPUT
      */
     echo $form->input( $chave, array(
                                     "label" => $valor["label"],
                                     "select" => $select,
+                                    "checkbox" => $checkbox,
                                     "value" => $valor["valor"],
+                                    "type" => $inputType,
                                 )
                         );
     ?>

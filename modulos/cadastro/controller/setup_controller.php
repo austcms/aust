@@ -26,8 +26,9 @@ class SetupController extends ModsSetup
      * @global array $aust_charset Contém o charset global do sistema
      */
     function setuppronto(){
-
+        
         //pr($_POST);
+        
 
         global $aust_charset;
 
@@ -112,6 +113,9 @@ class SetupController extends ModsSetup
                         "pw" => "varchar(180)",
                         "arquivo" => "varchar(240)",
                         "relacional_umparaum" => array(
+                            "tipo" => "int",
+                        ),
+                        "relacional_umparamuitos" => array(
                             "tipo" => "int",
                         )
                     );
@@ -215,6 +219,114 @@ class SetupController extends ModsSetup
                                         ('campo','".$campo."','".$_POST['campo'][$i]."','".$_POST['campo_descricao'][$i]."',".$status_insert.", ".$this->administrador->LeRegistro('id').",0,0,1,0,1, 'relacional_umparaum',".$ordem.", '".$_POST['relacionado_tabela_'.($i+1)]."', '".$_POST['relacionado_campo_'.($i+1)]."')";
                     }
                     /**
+                     * Campo relacional um-para-um
+                     */
+                    elseif($_POST['campo_tipo'][$i] == 'relacional_umparamuitos'){
+                        /*
+                         * CRIA TABELA RELACIONAL
+                         *
+                         * Será criada agora uma tabela relacional.
+                         *
+                         * O nome da nova tabela será no formato
+                         * tabelacadastro_camporelacional_tabelareferenciada
+                         *
+                         */
+
+                        $tabelaReferencia = $tabela;
+                        $tabelaRelacionada = $_POST['relacionado_tabela_'.($i+1)];
+                        /*
+                         * verifica tamanho total do nome da nova tabela
+                         * MYSQL máximo 64 caracteres
+                         */
+                        $tMySQL = 63;
+
+                        /*
+                         * Fora o tamanho do nome das tabelas, leva-se em consideração os sublinhados
+                         */
+                        $tamanhoRestante = $tMySQL - strlen($tabelaReferencia) - strlen($tabelaRelacionada) - 2;
+
+                        /*
+                         * Se só o nome das tabelas já foi maior que o total
+                         * de 64 caracteres aceitos no MySQL, cria tabela sem
+                         * o nome do campo, somente tabela_tabela
+                         */
+                        if($tamanhoRestante == 0){
+                            $tabelasRelacionadasNome = RetiraAcentos(strtolower(str_replace(' ', '_', $tabela."_".$tabelaRelacionada )));
+                        }
+                        /*
+                         * Se só o nome das tabelas já foi maior que 64
+                         * caracteres, cria a string tabela_tabela e retira
+                         * caracteres do final da string até ficar com 64
+                         * caracteres.
+                         */
+                        else if($tamanhoRestante < 0){
+                            $tabelasRelacionadasNome = RetiraAcentos(strtolower(str_replace(' ', '_', $tabela."_".$tabelaRelacionada )));
+                            $tabelasRelacionadasNome = substr($tabelasRelacionadasNome, 0, strlen($tabelasRelacionadasNome)-$tamanhoRestante);
+                        }
+                        /*
+                         * Se tem espaço para o nome da tabela, mas o tamanho
+                         * do nome do cmpo é maior que o possível, diminui
+                         * o tamanho doo nome do campo.
+                         */
+                        else if( strlen($campo) > $tamanhoRestante ) {
+                            $campoRelacionado = substr($campo, 0, $tamanhoRestante);
+                            $tabelasRelacionadasNome = RetiraAcentos(strtolower(str_replace(' ', '_', $tabela."_".$campoRelacionado."_".$tabelaRelacionada )));
+                        }
+                        /*
+                         * Tudo está normal. Cria o nome da tabela sem
+                         * problemas.
+                         */
+                        else {
+                            $tabelasRelacionadasNome = RetiraAcentos(strtolower(str_replace(' ', '_', $tabela."_".$campo."_".$tabelaRelacionada )));
+                        }
+
+                        /**
+                         * CREATE TABLE
+                         *
+                         * Tabela Relacional Um para Muitos
+                         */
+                        $sql = 'CREATE TABLE '.$tabelasRelacionadasNome.'(
+                                    id int auto_increment,
+                                    '.$tabela.'_id int,
+                                    '.$tabelaRelacionada.'_id int,
+                                    blocked varchar(120),
+                                    approved int,
+                                    created_on datetime,
+                                    updated_on datetime,
+                                    PRIMARY KEY (id), UNIQUE id (id)
+
+                                ) ';
+
+                        $createdRelational = $this->conexao->exec($sql, 'CREATE_TABLE');
+                        //var_dump($createdRelational);
+                        if($createdRelational){
+                            $status_setup[] = 'Criação da tabela relacional um-para-muitos \''.$tabelasRelacionadasNome.'\' efetuada com sucesso.';
+                        } else {
+                            $status_setup[] = 'Erro ao criar tabela relacional um-para-muitos \''.$tabelasRelacionadasNome.'\' do campo <em>'.$campo.'</em>';
+                        }
+                        unset($sql);
+
+                        $sql_campos[] =
+                                    "INSERT INTO cadastros_conf
+                                        (tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem,ref_tabela,ref_campo,referencia)
+                                    VALUES
+                                        ('campo','".$campo."','".$_POST['campo'][$i]."','".$_POST['campo_descricao'][$i]."',".$status_insert.", ".$this->administrador->LeRegistro('id').",0,0,1,0,1, 'relacional_umparamuitos',".$ordem.", '".$_POST['relacionado_tabela_'.($i+1)]."', '".$_POST['relacionado_campo_'.($i+1)]."', '$tabelasRelacionadasNome')";
+
+
+
+                        //$comentarios = 'Tabela relacional para as tabelas '.$tabela.' e '.$tabelaRelacionada;
+                        /*
+                        $sql_campos[] =
+                                    "INSERT INTO cadastros_conf
+                                        (tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem,ref_tabela,ref_campo)
+                                    VALUES
+                                        ('tabela_relacional','".$campo."','".$tabelasRelacionadasNome."','$comentarios',".$status_insert.", ".$this->administrador->LeRegistro('id').",0,0,1,0,1, 'relacional_umparamuitos',".$ordem.", '".$_POST['relacionado_tabela_'.($i+1)]."', '".$_POST['relacionado_campo_'.($i+1)]."')";
+                         *
+                         */
+                        //unset($comentarios);
+
+                    }
+                    /**
                      * Campo normal, grava suas informações
                      */
                     else {
@@ -226,6 +338,7 @@ class SetupController extends ModsSetup
                     }
                 }
             }
+
             //pr($sql_campos);
             /**
              * SQL
@@ -281,7 +394,8 @@ class SetupController extends ModsSetup
              *
              * Se retornar sucesso, salva configurações gerais sobre o cadastro na tabela cadastros_conf
              */
-            //pr( addslashes( $sql) );
+            //pr( $sql );
+
             if( $this->conexao->exec( $sql, 'CREATE_TABLE') ){
                 $status_setup[] = "Tabela '".$tabela."' criada com sucesso!";
 

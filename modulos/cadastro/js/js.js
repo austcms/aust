@@ -12,7 +12,8 @@
 // Função que mostra os cadastros no formato <select>
 function SetupCampoRelacionalTabelas(este, id, inc){
     // se for relacional um-para-um
-    if(este.value == 'relacional_umparaum'){
+    //alert(este.value);
+    if( este.value == 'relacional_umparaum' || este.value == 'relacional_umparamuitos' ){
         
         
         

@@ -1,4 +1,5 @@
 <?php
+
 if($resultado){
     $status['classe'] = 'sucesso';
     $status['mensagem'] = '<strong>Sucesso: </strong> As informações foram salvas com sucesso.';
@@ -10,5 +11,5 @@ EscreveBoxMensagem($status);
 ?>
 <br />
 <p>
-	<a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+    <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
 </p>

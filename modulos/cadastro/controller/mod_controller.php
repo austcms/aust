@@ -30,7 +30,6 @@ class ModController extends ModsController
      * FORMULÁRIO DE INSERÇÃO
      */
     public function criar($params = array() ){
-
         /**
          * Verifica se há parâmetros
          */
@@ -50,6 +49,7 @@ class ModController extends ModsController
          * Pega informações sobre o cadastro na tabela cadastro_conf
          */
         $infoCadastro = $this->modulo->pegaInformacoesCadastro( $this->austNode );
+        //pr($infoCadastro);
         /**
          * Toma informações sobre a tabela física do cadastro
          */
@@ -81,7 +81,6 @@ class ModController extends ModsController
                 $dados = $dados[0];
             }
             
-
         $i = 0;
         /**
          * Loop para organizar a disposição dos campos
@@ -122,6 +121,7 @@ class ModController extends ModsController
                 $camposForm[ $valor["chave"] ]["nomeFisico"] = $valor['chave'];
                 $camposForm[ $valor["chave"] ]["comentario"] = $valor['comentario'];
                 $camposForm[ $valor["chave"] ]["tipo"]["especie"] = $valor["especie"];
+                $camposForm[ $valor["chave"] ]["tipo"]["referencia"] = $valor["referencia"];
                 $camposForm[ $valor["chave"] ]["tipo"]["tabelaReferencia"] = $valor["ref_tabela"];
                 $camposForm[ $valor["chave"] ]["tipo"]["tabelaReferenciaCampo"] = $valor["ref_campo"];
                 $camposForm[ $valor["chave"] ]["tipo"]["tipoFisico"] = $infoTabelaFisica[ $valor["chave"] ]["Type"];
@@ -158,12 +158,128 @@ class ModController extends ModsController
 
     public function save(){
 
+        $infoCadastro = $this->modulo->pegaInformacoesCadastro( $this->austNode );
+        //pr($infoCadastro);
+        /**
+         * Toma informações sobre a tabela física do cadastro
+         */
+        $infoTabelaFisica = $this->modulo->pegaInformacoesTabelaFisica(
+            array(
+                "tabela" => $infoCadastro["estrutura"]["tabela"]["valor"],
+                "by" => "Field",
+            )
+        );
 
+        $campos = $infoCadastro["campo"];
 
         //pr($_POST);
-
+        //pr($this->data);
+        $relational = array();
+        
         if( $this->data ){
+            //pr($campos);
+
+            /*
+             * LOOP POR CADA TABELA
+             */
+            foreach( $this->data as $tabela=>$dados ){
+
+
+                /*
+                 * LOOP POR CADA CAMPO
+                 */
+                foreach( $dados as $campo=>$valor ){
+                    //pr($campo );
+                    //pr( $campos[$campo] );
+                    //$valor["especie"]." --- ";
+                    /*
+                     * RELACIONAL UM PARA MUITOS
+                     */
+                    if( $campos[$campo]["especie"] == "relacional_umparamuitos" ){
+                        //echo $campos[$campo]["chave"];
+                        //echo $tabela;
+                        unset($this->data[$tabela][$campo]);
+                        
+                        $i = 0;
+                        //pr($infoCadastro);
+                        foreach( $valor as $subArray ){
+                            $relational[$campos[$campo]["referencia"]][$i][$campos[$campo]["ref_tabela"]."_id"] = $subArray;
+                            $relational[$campos[$campo]["referencia"]][$i]["created_on"] = date("Y-m-d H:i:s");
+                            $i++;
+                        }
+                        
+                    }
+
+                }
+
+            }
+            //pr($this->data);
+
             $resultado = $this->model->save($this->data);
+            $lastInsertId = $this->model->conexao->lastInsertId();
+            /*
+             * Insere dados relacionais
+             */
+            if( !empty($relational) AND !empty($lastInsertId) ){
+                //pr($relational);
+
+                unset($sql);
+                //pr($infoCadastro);
+                foreach( $relational as $tabela => $dados ){
+                    foreach($dados as $campo=>$valor){
+                        $relational[$tabela][$campo][$infoCadastro["estrutura"]["tabela"]["valor"]."_id"] = $lastInsertId;
+                    }
+
+                }
+                //pr($relational);
+
+                foreach( $relational as $tabela => $dados ){
+
+                    foreach( $dados as $campo=>$valor ){
+                        //echo ".".$campo."<br>";
+
+                        /*
+                         * Múltiplos Inserts
+                         */
+                        if( is_int($campo) ){
+
+                            foreach( $valor as $multipleInsertsCampo=>$multipleInsertsValor ){
+                                $camposStrMultiplo[] = $multipleInsertsCampo;
+                                echo $multipleInsertsCampo;
+                                $valorStrMultiplo[] = $multipleInsertsValor;
+                            }
+                            
+                            $tempSql = "INSERT INTO
+                                            ".$tabela."
+                                                (".implode(",", $camposStrMultiplo).")
+                                        VALUES
+                                            ('".implode("','", $valorStrMultiplo)."')
+                                        ";
+                            /**
+                             * SQL deste campo
+                             */
+                            $sql[] = $tempSql;
+
+                            unset($valorStrMultiplo);
+                            unset($camposStrMultiplo);
+                            unset($tempSql);
+
+                        }
+                    }
+                }
+            }
+
+            if( !empty($sql) ){
+                if( is_array($sql) ){
+                    foreach( $sql as $uniqueSql ){
+                        $this->model->conexao->exec($uniqueSql);
+                        pr($uniqueSql);
+                    }
+                }
+            }
+            //pr($sql);
+            //pr($relational);
+            
         }
 
         $this->set('resultado', $resultado);

@@ -125,7 +125,7 @@ class FormHelper
         /**
          * Se um tipo de campo foi configurado
          */
-        else {
+        else if ( !empty($options["type"]) ) {
             $inputType = $options["type"];
         }
         
@@ -147,9 +147,12 @@ class FormHelper
         /**
          * Analisa qual é o tipo de campo
          */
-        if( !empty($options["select"]) ){
-            $inputType = "select";
-        }
+        //if( !empty($options["select"]) ){
+//            $inputType = "select";
+//        } else if( !empty($options["checkbox"]) ){
+//            $inputType = "checkbox";
+//        }
+        
         /**
          * Mostra inputs de acordo com o especificado
          */
@@ -208,9 +211,58 @@ class FormHelper
                 }
                 $conteudo.= '<option '.$selectThis.' value="'.$chave.'">'.$valor.'</option>';
             }
-            
+
             $conteudo.= '</select>';
-        } else {
+        } // fim <select>
+        /**
+         * INPUT <CHECKBOX>
+         *
+         * Pega as informações de $options["checkbox"] e cria
+         * vários <checkbox>
+         */
+        else if( $inputType == "checkbox" ){
+            $select = $options["checkbox"];
+            //pr($select);
+
+            /**
+             * <option> selecionado
+             */
+            if( empty($select["checked"]) )
+                $selectSelected = array();
+            else
+                $selectSelected = $select["checked"];
+                /**
+                 * Se um valor padrão foi passado
+                 */
+                if( !empty($value) )
+                $selectSelected = $value;
+
+            /**
+             * Opções a serem mostradas
+             */
+            $selectOptions = $select["options"];
+            $conteudo.= '<div class="input_field input_checkbox input_'.$fieldName.'">';
+            //$conteudo.= '<input type="checkbox" name="'.$inputName.'" />';
+            /**
+             * Loop pelo select criando <options>
+             */
+            foreach($selectOptions as $chave=>$valor){
+                /**
+                 * Verifica se o <option> atual deve ser selecionado por
+                 * padrão
+                 */
+                if( !empty($selectSelected) AND in_array($chave, $selectSelected) ){
+                    $selectThis = 'checked="checked"';
+                } else {
+                    $selectThis = false;
+                }
+                $conteudo.= '<div class="input_checkbox_each"><input type="checkbox" name="'.$inputName.'[]" '.$selectThis.' value="'.$chave.'" />'.$valor.'</div>';
+            }
+
+            $conteudo.= '</select>';
+        } // fim checkbox
+
+        else {
             $conteudo.= '<div class="input_field input_text">';
             $conteudo.= '<input type="text" name="'.$inputName.'" value="ERRO NO TIPO DE CAMPO" id="input-'.$fieldName.'">';
         }

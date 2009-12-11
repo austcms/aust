@@ -65,7 +65,7 @@ elseif( !empty($_POST['inserirestrutura'])
             ( is_file( 'modulos/'.$_POST['modulo'].'/'.MOD_SETUP_CONTROLLER ) )
             OR ( is_file( 'modulos/'.$_POST['modulo'].'/setup.php' ) )
         )
-){
+){ 
 
     /**
      * MVC ON

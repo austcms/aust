@@ -19,6 +19,8 @@ class Model extends Aust
              */
             foreach($data as $tabela=>$campos){
 
+                unset($camposStr);
+                unset($valorStr);
                 /**
                  * INSERT
                  */
@@ -27,20 +29,58 @@ class Model extends Aust
                      * Loop por cada campo e seus valores
                      */
                     foreach( $campos as $campo=>$valor ){
-                        $camposStr[] = $campo;
-                        $valorStr[] = $valor;
+
+                        /*
+                         * Múltiplos Inserts
+                         */
+                        if( is_int($campo) ){
+                            
+                            foreach( $valor as $multipleInsertsCampo=>$multipleInsertsValor ){
+                                //pr($valor);
+                                $camposStrMultiplo[] = $multipleInsertsCampo;
+                                $valorStrMultiplo[] = $multipleInsertsValor;
+                                $tempSql = "INSERT INTO
+                                                ".$tabela."
+                                                    (".implode(",", $camposStrMultiplo).")
+                                            VALUES
+                                                ('".implode("','", $valorStrMultiplo)."')
+                                            ";
+                                /**
+                                 * SQL deste campo
+                                 */
+                                $sql[] = $tempSql;
+
+                                unset($valorStrMultiplo);
+                                unset($camposStrMultiplo);
+                                unset($tempSql);
+                            }
+
+                        }
+                        /*
+                         * Inclusão normal única
+                         */
+                        else if( is_string($campo) ){
+                            $camposStr[] = $campo;
+                            $valorStr[] = $valor;
+                        }
                     }
 
-                    $tempSql = "INSERT INTO
-                                    ".$tabela."
-                                        (".implode(",", $camposStr).")
-                                VALUES
-                                    ('".implode("','", $valorStr)."')
-                                ";
-                    /**
-                     * SQL deste campo
-                     */
-                    $sql[] = $tempSql;
+                    if( !empty($camposStr)
+                        AND !empty($valorStr) )
+                    {
+
+                        $tempSql = "INSERT INTO
+                                        ".$tabela."
+                                            (".implode(",", $camposStr).")
+                                    VALUES
+                                        ('".implode("','", $valorStr)."')
+                                    ";
+                        /**
+                         * SQL deste campo
+                         */
+                        $sql[] = $tempSql;
+                        unset($tempSql);
+                    }
                 }
                 /**
                  * UPDATE
@@ -72,9 +112,11 @@ class Model extends Aust
                     $sql[] = $tempSql;
                 }
             }
-
+            
+            //pr($sql);
             if( count($sql) > 0 ){
                 foreach( $sql as $instrucao ){
+
                     $this->conexao->exec($instrucao);
                 }
                 

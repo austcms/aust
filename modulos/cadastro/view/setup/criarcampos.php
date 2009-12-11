@@ -56,6 +56,7 @@ foreach($exPOST as $chave=>$valor){
                     <option value="pw">Senha</option>
                     <option value="arquivo">Arquivo</option>
                     <option value="relacional_umparaum">Relacional Um-para-um (tabela)</option>
+                    <option value="relacional_umparamuitos">Relacional Um-para-muitos (tabela)</option>
                 </select>
             <div class="campooptions" id="<?php echo 'campooption'.$i?>">
                 <?

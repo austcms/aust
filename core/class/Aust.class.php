@@ -26,9 +26,9 @@ class Aust
      */
     protected $conexao;
 
-	function __construct($conexao){
-        $this->conexao = $conexao;
-		unset($this->AustCategorias);
+	function __construct(&$conexao){
+            $this->conexao = &$conexao;
+            unset($this->AustCategorias);
 	}
 
 	/**
