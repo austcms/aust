@@ -235,7 +235,9 @@ else {
             </ul>
         </div>
         <div class="corpo_gerenc">
-            <div id="caixa_tooltip">&nbsp;</div>
+            <div id="caixa_tooltip">
+                &nbsp;
+            </div>
             <div class="listagem">
 
                 <div class="secoes">
@@ -261,7 +263,8 @@ else {
                         <a href="">GALERIA DE FOTOS</a>
                     </div>
                     <div class="hint">
-                        <a href="#" title= "Olá tudo bem?222" ></a>
+                        <a href="#" title= "Com a Galeria de Fotos você pode inserir imagens no seu site com facilidade. Crie uma galeria e faça o upload de várias fotos para ela.
+                        Ex: “Aniversário”, “Eventos”" ></a>
                     </div>
                 </div>
 

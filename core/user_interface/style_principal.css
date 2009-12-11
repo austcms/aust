@@ -411,38 +411,57 @@ div.body {
             div.body div.content div.painel_gerenciar div.corpo_gerenc div.listagem div.secoes div.hint {
                 float: left;
                 display: table;
+                color: black;
             }
                 div.body div.content div.painel_gerenciar div.corpo_gerenc div.listagem div.secoes div.hint a {
                     background: url(img/interrogacao.png) no-repeat top;
                     width: 20px;
                     height: 20px;
-                    padding: 0 13px 5px 8px;
+                    padding: 0 13px 0px 8px;
                     display: block;
                     text-decoration: none;
                     margin-top: 3px;
+                    
                 }
                 div.body div.content div.painel_gerenciar div.corpo_gerenc div.listagem div.secoes div.hint a:hover {
                     background: url(img/interrogacao.png) no-repeat;
                     width: 20px;
                     height: 20px;
-                    padding: 0 13px 5px 8px;
+                    padding: 0 13px 0px 8px;
                     display: block;
                     background-position: 10px -27px;
                 }
-
+               
                 div.body div.content div.painel_gerenciar div.corpo_gerenc div.listagem div.secoes div.hint a:focus {
                     outline: none;
                 }
 
             #caixa_tooltip {
-                display:none;
-                background:red;
-                font-size:12px;
-                height:70px;
-                width:160px;
-                padding:25px;
-                color:#fff;
+                display: none;
+                background: transparent url(img/tooltip.png) no-repeat;
+                font-size: 12px;
+                width: 255px;
+                height: 150px;
+                padding: 10px 0 0 0px;
+                margin-left: 131px;
+                color: #646464;
             }
+
+                #caixa_tooltip div.top {
+                    /*background: url(img/top_tooltip.png) no-repeat;
+                    width: 255px;
+                    height: 25px;
+                }
+                #caixa_tooltip div.meio {
+                    background: url(img/meio_tooltip.png) repeat-y;
+                    width: 257px;
+                }
+                #caixa_tooltip div.bottom {
+                    background: url(img/bottom_tooltip.png) no-repeat;
+                    width: 255px;
+                    height: 25px;
+                    display: table;*/
+                }
 
 
 
