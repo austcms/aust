@@ -339,31 +339,13 @@ div.body {
             /*
              * SEÇÕES
              */
-            div.body div.content div.painel_gerenciar div.corpo_gerenc div.secoes_interrogacao {
-                width: 300px;
-                display: block;
-            }
-            div.body div.content div.painel_gerenciar div.corpo_gerenc div.secoes_interrogacao ul.secoes {
-            }
-                div.body div.content div.painel_gerenciar div.corpo_gerenc div.secoes_interrogacao ul.secoes li a {
-                    line-height: 2.3em;
-                }
-            /*
-             * INTERROGAÇÃO
-             */
-            div.body div.content div.painel_gerenciar div.corpo_gerenc div.secoes_interrogacao div.interrogacao {
-                width: 20px;
-                float: left;
-                margin: 10px 0 0 0;
-            }
-                div.body div.content div.painel_gerenciar div.corpo_gerenc div.secoes_interrogacao div.interrogacao a img {
-                    border: none;
-                }
+            
+            
             /*
              * NOVA E LISTAR
              */
             div.body div.content div.painel_gerenciar div.corpo_gerenc ul.editar {
-                margin-left: 70px;
+                margin-left: 10px;
                 width: 80px;
             }
             div.body div.content div.painel_gerenciar div.corpo_gerenc ul.editar li a {
@@ -379,7 +361,7 @@ div.body {
              */
             div.body div.content div.painel_gerenciar div.corpo_gerenc ul.tipo {
                 width: 150px;
-                margin-left: 79px;
+                margin-left: 100px;
              
             }
                 div.body div.content div.painel_gerenciar div.corpo_gerenc ul.tipo li {
@@ -398,8 +380,42 @@ div.body {
                     font-size: 0.8em;
                     line-height: 2.9em;
                 }
-
-
+                /*
+                 * DIV CLASS SEÇÕES COM INTERROGAÇÃO
+                 */
+            div.body div.content div.painel_gerenciar div.corpo_gerenc div.listagem {
+                float: left;
+                margin-top: 6px;
+                display: table;
+                margin-left: 20px;
+                
+            }
+            div.body div.content div.painel_gerenciar div.corpo_gerenc div.listagem {
+                width: 300px;
+                display: block;
+            }
+                div.body div.content div.painel_gerenciar div.corpo_gerenc div.listagem div.secoes {
+                    display: table;
+                }
+                    div.body div.content div.painel_gerenciar div.corpo_gerenc div.listagem div.secoes a {
+                        line-height: 2.3em;
+                        color: #888888;
+                    }
+                div.body div.content div.painel_gerenciar div.corpo_gerenc div.listagem div.secoes div.nome_secoes {
+                    display: table;
+                    float: left;
+                }
+            /*
+             * INTERROGAÇÃO
+             */
+            div.body div.content div.painel_gerenciar div.corpo_gerenc div.listagem div.interrogacao {
+                width: 20px;
+                float: left;
+                margin: 4px 0 0 5px;
+            }
+                div.body div.content div.painel_gerenciar div.corpo_gerenc div.listagem div.interrogacao a img {
+                    border: none;
+                }
 
         div.body div.content .painel_gerenciar div.rodape_gerenc {
             background: url(img/rodape_gerenciar.png) no-repeat;
