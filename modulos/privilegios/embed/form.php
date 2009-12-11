@@ -31,9 +31,11 @@
 
         // pega todos os privilégios
         $sql = "SELECT
-                    id, titulo
+                    pc.id, pc.titulo
                 FROM
                     privilegios AS pc
+                WHERE
+                    pc.type='content'
                 ";
         $result = $conexao->query($sql);
         //pr($result);

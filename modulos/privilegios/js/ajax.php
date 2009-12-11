@@ -68,7 +68,7 @@ include('../index.php');
  */
 header("Content-Type: text/html; charset=".$aust_charset['view'],true);
 
-    pr($_POST);
+   // pr($_POST);
 
 if($_POST['action'] == 'altera_relacionamentos'){
 

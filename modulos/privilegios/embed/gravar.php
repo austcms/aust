@@ -39,9 +39,9 @@ if(is_array($_POST['privid'])){
     foreach($itens as $chave=>$valor){
         $embed_sql[] = "INSERT INTO
                     privilegio_target
-                    (privilegio_id, target_table,target_id, created_on, admin_id)
+                    (privilegio_id, target_table,target_id, created_on, admin_id, type)
                 VALUES
-                    ('$valor','$conteudo_tabela','$insert_id','".date("Y-m-d")."','".$_POST['frmautor']."')
+                    ('$valor','$conteudo_tabela','$insert_id','".date("Y-m-d")."','".$_POST['frmautor']."', 'content')
                 ";
         
     }

@@ -59,8 +59,11 @@ if($_GET['action'] == 'criar') {
 <h1><?php echo $tagh1;?></h1>
 <p><?php echo $tagp;?></p>
 
-<?
+<?php
 /*
+ *
+ * CATEGORIAS (hidden pode default)
+ *
  * Div contendo <select>. Está no início escondido para que possa ser mostrado posteriormente.
  */
 ?>
@@ -72,7 +75,7 @@ if($_GET['action'] == 'criar') {
         $current_node = $dados['categorias_id'];
 
     // escreve <select>
-    echo BuildDDList( CoreConfig::read('austTable'),'frmcategorias_id',$escala,'',$current_node);
+    echo BuildDDList( CoreConfig::read('austTable'),'categoria_id',$escala,'',$current_node);
     ?>
     <p class="explanation">
         Selecione a estrutura a qual este privilégio se aplica.
@@ -95,6 +98,7 @@ if($_GET['action'] == 'criar') {
 
 <input type="hidden" name="w" value="<?php ifisset( $dados['id'] );?>">
 <input type="hidden" name="aust_node" value="<?php echo $austNode; ?>">
+<input type="hidden" name="frmcategoria_id" value="<?php echo $austNode; ?>">
 
 
 <table width="100%" border="0" cellpadding="0" cellspacing="3">
@@ -104,12 +108,12 @@ if($_GET['action'] == 'criar') {
     <tr>
         <td valign="top">Nome para este privilégio: </td>
         <td>
-            <? if($dados['classe'] == "padrão"){ ?>
+            <?php if($dados['classe'] == "padrão"){ ?>
                 <INPUT TYPE="text" NAME="frmtitulo" value="<?php ifisset($dados['titulo']);?>" disabled="disabled" SIZE="65">
                 <p class="explanation">
                     "<strong><?php echo $dados['valor']?></strong>" é um privilégio padrão do sistema, sendo este concedido a todos novos cadastrados. Não é possível alterar seu nome.
                 </p>
-            <? } else { ?>
+            <?php } else { ?>
                 <INPUT TYPE="text" NAME="frmtitulo" value="<?php ifisset($dados['titulo']);?>" SIZE="65">
                 <p class="explanation">
                     Digite um nome curto para este privilégio.
@@ -117,11 +121,10 @@ if($_GET['action'] == 'criar') {
                 <p class="explanation_example">
                     Exemplo: <em>Curso Online 02</em>
                 </p>
-            <? } ?>
+            <?php } ?>
         </td>
     </tr>
-    <?php
-    /*
+    
     <tr>
         <td valign="top">Opções: </td>
         <td>
@@ -132,7 +135,7 @@ if($_GET['action'] == 'criar') {
                     <?php
                     /*
                      * Tipos de restrições
-                     *
+                     */
                     if( !empty($moduloConfig["only_content"]) 
                         AND $moduloConfig["only_content"]["valor"] == 1 )
                     {
@@ -151,21 +154,15 @@ if($_GET['action'] == 'criar') {
                         <?php
                     } else { ?>
                         <p>
-                            Há basicamente duas formas de criar este privilégio:
-                        <ul>
-                            <li>relacionado a uma categoria, assim os usuários precisarão deste privilégio para acessar qualquer item da categoria selecionada;</li>
-                            <li>não relacionado, deixando para relacionar posteriormente com conteúdos separadamente</li>
-                        </ul>
-                        </p>
-                        <p>
-                            <strong>Criar este grupo privilégio relacionado a algum grupo?</strong><br />
-                            <input type="radio" name="privilegio_existe" value="0" <?if($dados['categorias_id']==0 or empty($dados['categorias_id'])) echo 'checked="checked"';?> onclick="javascript: form_privilegio(this.value);" /> Não, desejo simplesmente criar este privilégio e depois configurar cada conteúdo que desejar <br/>
-                            <input type="radio" name="privilegio_existe" value="1" <?if($dados['categorias_id']>0 or !empty($dados['categorias_id'])) echo 'checked="checked"';?> onclick="javascript: form_privilegio(this.value);" /> Sim, desejo escolher uma categoria
+                            <strong>Selecione uma opção para este privilégio:</strong><br />
+                            <input type="radio" name="privilegio_tipo" value="especifico" <?php if($dados['categorias_id']==0 or empty($dados['categorias_id'])) echo 'checked="checked"'; ?> onclick="javascript: form_privilegio(0);" /> Relacionar cada conteúdo a este privilégio <br/>
+                            <input type="radio" name="privilegio_tipo" value="categoria" <?php if($dados['categorias_id']>0 or !empty($dados['categorias_id'])) echo 'checked="checked"'; ?> onclick="javascript: form_privilegio(1);" /> Este privilégio bloqueia uma categoria inteira
                         </p>
                     </div>
                     <div id="categoriacontainer_priv" style="border-top: 1px dashed silver; padding-top: 20px;">
                     </div>
-                        <?if($dados['categorias_id']>0 or !empty($dados['categorias_id'])){?>
+                        <?php
+                        if($dados['categorias_id']>0 or !empty($dados['categorias_id'])){ ?>
 
                         <script language="JavaScript">
                             var privilegio_escolhido = true;
@@ -178,9 +175,6 @@ if($_GET['action'] == 'criar') {
             </div>
         </td>
     </tr>
-     *
-     */
-    ?>
     <?php
     if( !empty($moduloConfig["has_description"])
         AND $moduloConfig["has_description"]["valor"] == 1
