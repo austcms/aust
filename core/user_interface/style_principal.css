@@ -244,22 +244,97 @@ div.body {
         div.body div.content div.painel_gerenciar div.tab div.esquerda {
             background:  url(img/esquerda_tab.png) no-repeat;
             width: 13px;
-            height: 33px;
+            height: 30px;
             float: left;
-            margin: 2px 0 0 6px;
+            margin: 1px 0 0 6px;
         }
         div.body div.content div.painel_gerenciar div.tab div.direita {
             background:  url(img/direita_tab.png) no-repeat;
             width: 13px;
-            height: 33px;
+            height: 30px;
             float: left;
-            margin: 2px 0 0 0;
+            margin: 1px 0 0 0;
         }
             div.body div.content div.painel_gerenciar div.tab div.titulo_site {
                 display: table;
-                margin: 10px 0 0 0px;
+                margin: 0 0 0 0px;
                 float: left;
             }
+                /*
+                 * TABS
+                 */
+
+                /* root element for tabs  */
+                div.body div.content div.painel_gerenciar div.tab div.titulo_site ul.tabs {
+                    list-style:none;
+                    margin:0 !important;
+                    padding:0;
+                    height: 30px;
+                }
+
+                /* single tab */
+                div.body div.content div.painel_gerenciar div.tab div.titulo_site ul.tabs li {
+                    float:left;
+                    text-indent:0;
+                    padding:0;
+                    margin:0 !important;
+                    list-style-image:none !important;
+                }
+
+                /* link inside the tab. uses a background image */
+                div.body div.content div.painel_gerenciar div.tab div.titulo_site ul.tabs a {
+                    background: #2d88cf;
+                    font-size: 11px;
+                    display: block;
+                    height: 30px;
+                    line-height: 30px;
+                    text-align: center;
+                    text-decoration: none;
+                    color: white;
+                    padding: 0px;
+                    margin: 0px;
+                    position: relative;
+                    top: 1px;
+                }
+
+                div.body div.content div.painel_gerenciar div.tab div.titulo_site ul.tabs a:active {
+                    font-weight: bold;
+                }
+                div.body div.content div.painel_gerenciar div.tab div.titulo_site ul.tabs a:focus {
+                    outline: none;
+                }
+                /* when mouse enters the tab move the background image */
+                div.body div.content div.painel_gerenciar div.tab div.titulo_site ul.tabs a:hover {
+                    background-position: -420px -31px;
+                    color: white;
+                }
+
+                /* active tab uses a class name "current". it's highlight is also done by moving the background image. */
+               div.body div.content div.painel_gerenciar div.tab div.titulo_site ul.tabs a.current, ul.tabs a.current:hover, ul.tabs li.current a {
+                    background-position: -420px -62px;
+                    cursor: default !important;
+                    color: white !important;
+                    background: url(img/marcador_ger.png) no-repeat bottom #2d88cf;
+                    font-weight: bold;
+                }
+
+                /* Different widths for tabs: use a class name: w1, w2, w3 or w2 */
+
+
+                /* width 1 */
+                ul.tabs a.s 			{ background-position: -553px 0; width:81px; }
+                ul.tabs a.s:hover 	{ background-position: -553px -31px; }
+                ul.tabs a.s.current  { background-position: -553px -62px; }
+
+                /* width 2 */
+                ul.tabs a.l 			{ background-position: -248px -0px; width:174px; }
+                ul.tabs a.l:hover 	{ background-position: -248px -31px; }
+                ul.tabs a.l.current  { background-position: -248px -62px; }
+
+
+                /* initially all panes are hidden */
+
+
                 div.body div.content div.painel_gerenciar div.titulo_site h3 {
                     color: white;
                     margin-bottom: 0;
@@ -280,93 +355,90 @@ div.body {
                     background: url(img/marcador_ger.png) no-repeat bottom #2d88cf;
                     font-weight: bold;
                 }
-                
-        div.body div.content div.painel_gerenciar div.titulo_gerenc {
-            background: url(img/painelgerenc_titulo.png) no-repeat;
-            width: 911px;
-            height: 39px;
-            display: table;
-            margin-top: 0px;
-            float: left;
-        }
-            div.body div.content div.painel_gerenciar div.titulo_gerenc ul li {
-                float: left;
-                display: table;
-                list-style: none;
-            }
-                div.body div.content div.painel_gerenciar div.titulo_gerenc ul li.secoes {
-                    padding: 12px 250px 0 0;
-                }
-                div.body div.content div.painel_gerenciar div.titulo_gerenc ul li.acoes {
-                    padding: 12px 140px 0 0;
-                }
-                div.body div.content div.painel_gerenciar div.titulo_gerenc ul li.tipo {
-                    padding: 12px 170px 0 0;
-                }
-                div.body div.content div.painel_gerenciar div.titulo_gerenc ul li.acesso {
-                    padding: 12px 100px 0 0;
-                }
 
-        div.body div.content div.painel_gerenciar div.titulo h2 {
-            font-size: 0.9em;
-            display: table;
-            margin: 0;
-            margin-top: 10px;
-            margin-left: 10px;
-        }
-        div.body div.content div.painel_gerenciar div.corpo_gerenc {
-            background: url(img/painelgerenc_meio.png) repeat-y;
-            width: 911px;
-            padding-bottom: 1px;
-            display: table;
-            float: left;
-        }
-            div.body div.content div.painel_gerenciar div.corpo_gerenc ul.listagem {
-                float: left;
-                margin-top: 6px;
-            }
-            div.body div.content div.painel_gerenciar div.corpo_gerenc ul.listagem li {
-                list-style: none;
-                
-            }
-                div.body div.content div.painel_gerenciar div.corpo_gerenc ul.listagem li a {
+                /*
+                 * INÍCIO DO CONTEÚDO DAS TABS
+                 */
+                div.body div.content div.painel_gerenciar div.panes div.pane {
+                    display:none;
+                }
+                div.body div.content div.painel_gerenciar div.panes div {
                     color: #888888;
-                    text-decoration: none;
-                    
                 }
-                div.body div.content div.painel_gerenciar div.corpo_gerenc ul.listagem li a:hover {
-                    color: #181818;
-                    text-decoration: none;
-                }
-            /*
-             * SEÇÕES
-             */
-            
+                    div.body div.content div.painel_gerenciar div.panes div div.titulo_gerenc {
+                        background: url(img/painelgerenc_titulo.png) no-repeat;
+                        height: 39px;
+                        display: table;
+                        margin-top: 0px;
+                        float: left;
+                    }
+                        div.body div.content div.painel_gerenciar div.panes div div.titulo_gerenc ul li {
+                            float: left;
+                            display: table;
+                            list-style: none;
+                        }
+                            div.body div.content div.painel_gerenciar div.panes div div.titulo_gerenc ul li.secoes {
+                                padding: 12px 250px 0 0;
+                            }
+                            div.body div.content div.painel_gerenciar div.panes div div.titulo_gerenc ul li.acoes {
+                                padding: 12px 140px 0 0;
+                            }
+                            div.body div.content div.painel_gerenciar div.panes div div.titulo_gerenc ul li.tipo {
+                                padding: 12px 170px 0 0;
+                            }
+                            div.body div.content div.painel_gerenciar div.panes div div.titulo_gerenc ul li.acesso {
+                                padding: 12px 100px 0 0;
+                            }
+
+                    div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc {
+                        background: url(img/painelgerenc_meio.png) repeat-y;
+                        width: 911px;
+                        padding-bottom: 1px;
+                        display: table;
+                        float: left;
+                    }
+                        div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc ul.listagem {
+                            float: left;
+                            margin-top: 6px;
+                        }
+                        div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc ul.listagem li {
+                            list-style: none;
+
+                        }
+                            div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc ul.listagem li a {
+                                color: #888888;
+                                text-decoration: none;
+
+                            }
+                            div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc ul.listagem li a:hover {
+                                color: #181818;
+                                text-decoration: none;
+                            }
             
             /*
              * NOVA E LISTAR
              */
-            div.body div.content div.painel_gerenciar div.corpo_gerenc ul.editar {
+            div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc ul.editar {
                 margin-left: 10px;
                 width: 80px;
             }
-            div.body div.content div.painel_gerenciar div.corpo_gerenc ul.editar li a {
+            div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc ul.editar li a {
                 text-decoration: underline;
                 line-height: 2.3em;
             }
-            div.body div.content div.painel_gerenciar div.corpo_gerenc ul.editar li a:hover {
+            div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc ul.editar li a:hover {
                 color: #181818;
                 text-decoration: underline;
             }
             /*
              * TIPO
              */
-            div.body div.content div.painel_gerenciar div.corpo_gerenc ul.tipo {
+            div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc ul.tipo {
                 width: 150px;
                 margin-left: 100px;
              
             }
-                div.body div.content div.painel_gerenciar div.corpo_gerenc ul.tipo li {
+                div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc ul.tipo li {
                     font-size: 0.8em;
                     line-height: 2.9em;
                 }
@@ -374,48 +446,48 @@ div.body {
             /*
              * ÚLTIMO ACESSO - PESSOA
              */
-            div.body div.content div.painel_gerenciar div.corpo_gerenc ul.pessoa {
+            div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc ul.pessoa {
                 width: 200px;
                 margin-left: 45px;
             }
-                div.body div.content div.painel_gerenciar div.corpo_gerenc ul.pessoa li {
+                div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc ul.pessoa li {
                     font-size: 0.8em;
                     line-height: 2.9em;
                 }
                 /*
                  * DIV CLASS SEÇÕES COM INTERROGAÇÃO
                  */
-            div.body div.content div.painel_gerenciar div.corpo_gerenc div.listagem {
+            div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc div.listagem {
                 float: left;
                 margin-top: 6px;
                 display: table;
                 margin-left: 20px;
                 
             }
-            div.body div.content div.painel_gerenciar div.corpo_gerenc div.listagem {
+            div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc div.listagem {
                 width: 300px;
                 display: block;
             }
-                div.body div.content div.painel_gerenciar div.corpo_gerenc div.listagem div.secoes {
+                div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc div.listagem div.secoes {
                     display: table;
                 }
-                    div.body div.content div.painel_gerenciar div.corpo_gerenc div.listagem div.secoes a {
+                    div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc div.listagem div.secoes a {
                         line-height: 2.3em;
                         color: #888888;
                     }
-                div.body div.content div.painel_gerenciar div.corpo_gerenc div.listagem div.secoes div.nome_secoes {
+                div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc div.listagem div.secoes div.nome_secoes {
                     display: table;
                     float: left;
                 }
             /*
              * INTERROGAÇÃO
              */
-            div.body div.content div.painel_gerenciar div.corpo_gerenc div.listagem div.secoes div.hint {
+            div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc div.listagem div.secoes div.hint {
                 float: left;
                 display: table;
                 color: black;
             }
-                div.body div.content div.painel_gerenciar div.corpo_gerenc div.listagem div.secoes div.hint a {
+                div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc div.listagem div.secoes div.hint a {
                     background: url(img/interrogacao.png) no-repeat top;
                     width: 20px;
                     height: 20px;
@@ -425,7 +497,7 @@ div.body {
                     margin-top: 3px;
                     
                 }
-                div.body div.content div.painel_gerenciar div.corpo_gerenc div.listagem div.secoes div.hint a:hover {
+                div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc div.listagem div.secoes div.hint a:hover {
                     background: url(img/interrogacao.png) no-repeat;
                     width: 20px;
                     height: 20px;
@@ -434,11 +506,13 @@ div.body {
                     background-position: 10px -27px;
                 }
                
-                div.body div.content div.painel_gerenciar div.corpo_gerenc div.listagem div.secoes div.hint a:focus {
+                div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc div.listagem div.secoes div.hint a:focus {
                     outline: none;
                 }
-
-            div.tooltip {
+            /*
+             * TOOLTIP
+             */
+            div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc div.listagem div.secoes div.hint div.tooltip {
                 display: none;
                 background: transparent;
                 margin: 0 0 0 80px;
@@ -446,7 +520,7 @@ div.body {
                 color: #646464;
                 padding: 0;
             }
-                div.tooltip div.top {
+                div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc div.listagem div.secoes div.hint div.tooltip div.top {
                     background: url(img/top_tooltip.png);
                     margin: 0px;
                     width: 255px;
@@ -454,20 +528,20 @@ div.body {
                     margin-left: 1px;
                 }
 
-                div.tooltip div.text {
+                div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc div.listagem div.secoes div.hint div.tooltip div.text {
                     background: url(img/meio_tooltip.png) repeat-y;
                     margin: 0;
                     width: 257px;
                     padding: 10px;
                     color: #646464;
                 }
-                    div.tooltip div.text p {
+                    div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc div.listagem div.secoes div.hint div.tooltip div.text p {
                         width: 206px;
                         margin: 0 5px 0 15px;
                         padding-top: 0;
                     }
 
-                div.tooltip div.bottom {
+                div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc div.listagem div.secoes div.hint div.tooltip div.bottom {
                     background: url(img/bottom_tooltip.png);
                     margin: 0px;
                     width: 255px;
@@ -482,6 +556,11 @@ div.body {
             height: 14px;
             float: left;
         }
+
+       /*
+        * FIM DO CONTEÚDO DAS TABS
+        */
+
 
 
 /*
