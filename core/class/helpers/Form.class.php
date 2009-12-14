@@ -92,9 +92,9 @@ class FormHelper
          * Se value não foi especificado
          */
         if( !empty($options["value"]) ){
-            $value = $options["value"];
+            $inputValue = $options["value"];
         } else {
-            $value = "";
+            $inputValue = "";
         }
 
 
@@ -161,14 +161,14 @@ class FormHelper
          */
         if( $inputType == "text" ){
             $conteudo.= '<div class="input_field input_text">';
-            $conteudo.= '<input type="text" name="'.$inputName.'" value="'.$value.'" id="input-'.$fieldName.'" />';
+            $conteudo.= '<input type="text" name="'.$inputName.'" value="'.$inputValue.'" id="input-'.$fieldName.'" />';
         }
         /**
          * INPUT HIDDEN
          */
         else if( $inputType == "hidden" ){
             $conteudo.= '<div class="input_field input_hidden">';
-            $conteudo.= '<input type="hidden" name="'.$inputName.'" value="'.$value.'" id="input-'.$fieldName.'" />';
+            $conteudo.= '<input type="hidden" name="'.$inputName.'" value="'.$inputValue.'" id="input-'.$fieldName.'" />';
         }
         /**
          * INPUT <SELECT>
@@ -183,12 +183,12 @@ class FormHelper
             /**
              * <option> selecionado
              */
-            $selectSelected = $select["selected"];
+            $selectSelected = array();//$select["selected"];
                 /**
                  * Se um valor padrão foi passado
                  */
-                if( !empty($value) )
-                $selectSelected = $value;
+                if( !empty($inputValue) )
+                $selectSelected = $inputValue;
 
             /**
              * Opções a serem mostradas
@@ -221,37 +221,32 @@ class FormHelper
          * vários <checkbox>
          */
         else if( $inputType == "checkbox" ){
-            $select = $options["checkbox"];
-            //pr($select);
-
+            $checkbox = $options["checkbox"];
+            
             /**
-             * <option> selecionado
+             * VALORES ATUAIS PARA EDIÇÃO
              */
-            if( empty($select["checked"]) )
-                $selectSelected = array();
-            else
-                $selectSelected = $select["checked"];
-                /**
-                 * Se um valor padrão foi passado
-                 */
-                if( !empty($value) )
-                $selectSelected = $value;
+            if( !empty($inputValue) )
+                $values = $inputValue;
 
             /**
              * Opções a serem mostradas
              */
-            $selectOptions = $select["options"];
+            $selectOptions = $checkbox["options"];
             $conteudo.= '<div class="input_field input_checkbox input_'.$fieldName.'">';
-            //$conteudo.= '<input type="checkbox" name="'.$inputName.'" />';
+            
             /**
-             * Loop pelo select criando <options>
+             * Loop para criar checkboxes
              */
             foreach($selectOptions as $chave=>$valor){
+                
                 /**
-                 * Verifica se o <option> atual deve ser selecionado por
-                 * padrão
+                 * Verifica se o valor atual está salvo no DB
                  */
-                if( !empty($selectSelected) AND in_array($chave, $selectSelected) ){
+                if( !empty($values)
+                    AND is_array($values)
+                    AND in_array($chave, $values) )
+                {
                     $selectThis = 'checked="checked"';
                 } else {
                     $selectThis = false;
@@ -259,7 +254,6 @@ class FormHelper
                 $conteudo.= '<div class="input_checkbox_each"><input type="checkbox" name="'.$inputName.'[]" '.$selectThis.' value="'.$chave.'" />'.$valor.'</div>';
             }
 
-            $conteudo.= '</select>';
         } // fim checkbox
 
         else {

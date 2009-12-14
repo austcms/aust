@@ -74,4 +74,5 @@ form.formHelper {
 
     form.formHelper label { width: 120px; }
     form.formHelper div.input_field {  }
+    form.formHelper div.input_checkbox { display: table; }
 

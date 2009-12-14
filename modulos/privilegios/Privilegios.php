@@ -99,6 +99,25 @@ class Privilegios extends Modulos {
 
     }
 
+    public function getRelatedCategories($austNode){
+        $sql = "
+                SELECT
+                    valor
+                FROM
+                    modulos_conf
+                WHERE
+                    categoria_id='$austNode' AND
+                    tipo='relacionamentos'
+                ";
+        //echo $sql;
+        $result = $this->conexao->query($sql);
+        $return = array();
+        foreach( $result as $key=>$valor ){
+            $return[] = reset($valor);
+        }
+        return $return;
+    }
+
     /*
      * funções de verificação ou leitura automática do DB
      */
@@ -154,80 +173,7 @@ class Privilegios extends Modulos {
         return $this->tabela_criar;
     }
 
-    /*
-     * Cria tabela responsável por guardar arquivos
-     */
-    function CriaTabelaArquivo($param) {
-        global $aust_charset;
-        if (!empty($aust_charset['db']) and !empty($aust_charset['db_collate'])) {
-            $charset = 'CHARACTER SET '.$aust_charset['db'].' COLLATE '.$aust_charset['db_collate'];
-        }
 
-        $sql = "SELECT
-                    id
-                FROM
-                    ".$param['tabela']."_arquivos
-                LIMIT 0,1
-                ";
-        $result = mysql_query($sql);
-        if(mysql_num_row == 0) {
-            $sql_arquivos =
-                "CREATE TABLE ".$param['tabela']."_arquivos(
-                            id int auto_increment,
-                            titulo varchar(120) {$charset},
-                            descricao text {$charset},
-                            local varchar(80) {$charset},
-                            url text {$charset},
-                            arquivo_nome varchar(250) {$charset},
-                            arquivo_tipo varchar(250) {$charset},
-                            arquivo_tamanho varchar(250) {$charset},
-                            arquivo_extensao varchar(10) {$charset},
-                            tipo varchar(80) {$charset},
-                            referencia varchar(120) {$charset},
-                            categorias_id int,
-                            adddate datetime,
-                            autor int,
-                            PRIMARY KEY (id),
-                            UNIQUE id (id)
-                        ) ".$charset;
-            if(mysql_query($sql_arquivos)) {
-                return TRUE;
-            } else {
-                return FALSE;
-            }
-        } else {
-            return 0;
-        }
-        return 0;
-    }
-
-    /*
-     * Le informações do db
-     */
-    function LeDadosDoDB($tabela, $campo, $valor_condicao, $campo_condicao='') {
-
-        if(empty($campo_condicao)) {
-            $where = "WHERE id='".$valor_condicao."'";
-        } else {
-            $where = "WHERE ".$campo_condicao."='".$valor_condicao."'";
-        }
-        $sql = "SELECT
-                    ".$campo."
-                FROM
-                    ".$tabela."
-                ".$where."
-                LIMIT 0,1
-                ";
-        //echo $sql;
-        $result = mysql_query($sql);
-        if(mysql_num_row > 0) {
-            $dados = mysql_fetch_array($result);
-            return $dados[$campo];
-        } else {
-            return 0;
-        }
-        return 0;
-    }
 
 }
 

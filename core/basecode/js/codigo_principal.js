@@ -7,6 +7,7 @@
  * @version 0.1
  * @since 01/01/2009
  */
+
 /**
  * Função de Start
  */
@@ -14,12 +15,19 @@ $(document).ready(function(){
     if($('div.campooptions').length > 0){ $('div.campooptions').hide(); }
     if($('div.est_options').length > 0){ $('div.est_options').hide(); }
     if($('div#categoriacontainer_priv').length > 0) { $('div#categoriacontainer_priv').hide(); }
+
+    // Mod privilégios - formulário
     if(privilegio_escolhido != ''){
         form_privilegio('1')
     }
 });
 
 var arquivoAjax = "core/libs/ajax.php";
+
+/*
+ * MÓDULOS
+ */
+//var privilegio_escolhido = false;
 
 /**
  * Responsável pelo gerenciamento das configurações de permissões de usuários

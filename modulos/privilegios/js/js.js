@@ -3,10 +3,6 @@
  *
  *
  */
-
-var privilegio_escolhido = false;
-
-
 function form_privilegio(este){
     if(este == 0){
         $('#categoriacontainer_priv').html('<div id="categoriacontainer"><input type="hidden" name="categorias_id" value="" /></div>');
@@ -19,7 +15,6 @@ function form_privilegio(este){
 
 
 function alteraRelacionamentos(posted, este){
-    //alert('soijargrser ' + arquivoAjax);
     $.ajax({
         url: include_baseurl+"/js/ajax.php",
         data: posted+'&value='+este.checked+'&action=altera_relacionamentos',

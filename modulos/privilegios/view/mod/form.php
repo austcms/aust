@@ -69,17 +69,79 @@ if($_GET['action'] == 'criar') {
 ?>
 <div id="categoriaselect" style="visibility: hidden; height: 1px; font-size: 0px;">
     <?php
-    // @todo = opção de criar privilégio mas não adicionar e nenhuma estrutura. Opção via <input radio>. Se selecionar que sim, mostra via JS BuildDDList
+    // @todo = opção de criar privilégio mas não adicionar e nenhuma estrutura.
+    // Opção via <input radio>. Se selecionar que sim, mostra via JS BuildDDList
 
-    if($_GET[action] == "editar")
-        $current_node = $dados['categorias_id'];
+    $current_node = false;
+    if($_GET['action'] == "editar"){
+
+        /*
+         * Verifica quais categorias este módulo está associado
+         */
+        $categorias = $modulo->getRelatedCategories($aust_node);
+
+        if( !empty($categorias) ){
+
+            /*
+             * Descobre qual a categoria o privilégio atual está relacionado
+             */
+            $sql = "
+                    SELECT
+                        target_id
+                    FROM
+                        privilegio_target
+                    WHERE
+                        privilegio_id='$w'
+                    ";
+            $query = $modulo->conexao->query($sql);
+            $node = $query[0];
+            if( is_array($node) )
+                $current_node = reset($node);
+
+            /*
+             * Pega categorias para criar select
+             */
+            $sql = "
+                    SELECT
+                        id, nome
+                    FROM
+                        ".CoreConfig::read('austTable')."
+                    WHERE
+                        id IN ('".implode("','", $categorias)."')
+                    ";
+            $query = $modulo->conexao->query($sql);
+
+            /*
+             * Cria <select>
+             *
+             * @todo - deve ser melhorado para múltiplos sites. Atualmente,
+             * só mostra listagem plana, sem diferenciação de sites.
+             */
+            if( !empty($query) ){
+                ?>
+                <select name="categoria_id">
+                <?php
+                foreach( $query as $valor ){
+                    ?>
+                    <option value="<?php echo $valor["id"]?>" <?php if($current_node == $valor["id"]) echo 'selected="selected"'; ?>><?php echo $valor["nome"]?></option>
+                    <?php
+                }
+                ?>
+                </select>
+                <p class="explanation">
+                    Selecione a estrutura a qual este privilégio se aplica.
+                </p>
+                <?php
+            }
+
+        } // fim getRelatedCategories
+
+
+    }
 
     // escreve <select>
-    echo BuildDDList( CoreConfig::read('austTable'),'categoria_id',$escala,'',$current_node);
+    //echo BuildDDList( CoreConfig::read('austTable'),'categoria_id',$escala,'',$current_node);
     ?>
-    <p class="explanation">
-        Selecione a estrutura a qual este privilégio se aplica.
-    </p>
 </div>
 
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?<?php echo $_SERVER['QUERY_STRING'];?>&action=gravar">
@@ -111,7 +173,9 @@ if($_GET['action'] == 'criar') {
             <?php if($dados['classe'] == "padrão"){ ?>
                 <INPUT TYPE="text" NAME="frmtitulo" value="<?php ifisset($dados['titulo']);?>" disabled="disabled" SIZE="65">
                 <p class="explanation">
-                    "<strong><?php echo $dados['valor']?></strong>" é um privilégio padrão do sistema, sendo este concedido a todos novos cadastrados. Não é possível alterar seu nome.
+                    "<strong><?php echo $dados['valor']?></strong>"
+                    é um privilégio padrão do sistema, sendo este concedido a
+                    todos novos cadastrados. Não é possível alterar seu nome.
                 </p>
             <?php } else { ?>
                 <INPUT TYPE="text" NAME="frmtitulo" value="<?php ifisset($dados['titulo']);?>" SIZE="65">
@@ -152,22 +216,26 @@ if($_GET['action'] == 'criar') {
                         </p>
 
                         <?php
-                    } else { ?>
+                    } else {
+
+                        ?>
                         <p>
                             <strong>Selecione uma opção para este privilégio:</strong><br />
-                            <input type="radio" name="privilegio_tipo" value="especifico" <?php if($dados['categorias_id']==0 or empty($dados['categorias_id'])) echo 'checked="checked"'; ?> onclick="javascript: form_privilegio(0);" /> Relacionar cada conteúdo a este privilégio <br/>
-                            <input type="radio" name="privilegio_tipo" value="categoria" <?php if($dados['categorias_id']>0 or !empty($dados['categorias_id'])) echo 'checked="checked"'; ?> onclick="javascript: form_privilegio(1);" /> Este privilégio bloqueia uma categoria inteira
+                            <input type="radio" name="privilegio_tipo" value="especifico" <?php if($dados['type']=='content' or empty($dados['type']) ) echo 'checked="checked"'; ?> onclick="javascript: form_privilegio(0);" /> Relacionar cada conteúdo a este privilégio <br/>
+                            <input type="radio" name="privilegio_tipo" value="categoria" <?php if($dados['type']=='structure' ) echo 'checked="checked"'; ?> onclick="javascript: form_privilegio(1);" /> Este privilégio bloqueia uma categoria inteira
                         </p>
                     </div>
                     <div id="categoriacontainer_priv" style="border-top: 1px dashed silver; padding-top: 20px;">
                     </div>
+                        <script type="text/javascript">
                         <?php
-                        if($dados['categorias_id']>0 or !empty($dados['categorias_id'])){ ?>
-
-                        <script language="JavaScript">
-                            var privilegio_escolhido = true;
-                        </script>
+                        if( $dados['type']=='structure' ){
+                            ?>
+                                var privilegio_escolhido = true;
+                        <? } else { ?>
+                                var privilegio_escolhido = false;
                         <? } ?>
+                        </script>
                     <?php
                     }
                     ?>

@@ -13,15 +13,39 @@
 
 $c = 0;
 
-
 if(!empty($_POST)) {
 
-    if( !empty($_POST["privilegio_tipo"])
+    /*
+     * TIPO DE PRIVILÉGIO
+     */
+    /*
+     * Não Especificado
+     *
+     * Não foi especificado um tipo de privilégio, assume como sendo este
+     * a ser especificado em cada conteúdo
+     */
+    if( empty($_POST["privilegio_tipo"]) ){
+        $_POST["frmtype"] = "content";
+    }
+    /*
+     * Específico por conteúdo
+     *
+     * A ser especificado em cada conteúdo
+     */
+    else if( !empty($_POST["privilegio_tipo"])
         AND $_POST["privilegio_tipo"] == "especifico" )
     {
         $_POST["frmtype"] = "content";
-    } else if( empty($_POST["privilegio_tipo"]) ){
-        $_POST["frmtype"] = "content";
+    }
+    /*
+     * Estrutural
+     *
+     * Define que determinada estrutura está bloqueada
+     */
+    else if( !empty($_POST["privilegio_tipo"])
+        AND $_POST["privilegio_tipo"] == "categoria" )
+    {
+        $_POST["frmtype"] = "structure";
     }
 
     foreach($_POST as $key=>$valor) {
@@ -74,10 +98,15 @@ if(!empty($_POST)) {
             $h1 = 'Editando: '.$aust->leNomeDaEstrutura($_GET['aust_node']);
         }
 
-    //echo $sql;
-    if( $this->modulo->conexao->exec($sql) ) {
 
+    $success = $this->modulo->conexao->exec($sql);
+    if( $success !== false ) {
         $insert_id = $this->modulo->conexao->lastInsertId();
+
+        if( !empty($_POST['w']) ){
+            $insert_id = $_POST['w'];
+        }
+
         /*
          *
          * TIPO DE PRIVILÉGIO
@@ -86,11 +115,12 @@ if(!empty($_POST)) {
         /*
          * 'Categoria' significa que uma estrutura inteira está bloqueada.
          */
+            $sql_delete = "DELETE FROM privilegio_target WHERE privilegio_id='".$insert_id."'";
+            $this->modulo->conexao->exec($sql_delete);
 
         if( $_POST["privilegio_tipo"] == "categoria" 
             AND !empty($_POST["categoria_id"]) )
         {
-            $sql_delete = "DELETE FROM privilegio_target WHERE privilegio_id='".$insert_id."'";
 
             $sql_tipo = "INSERT INTO
                                 privilegio_target
@@ -98,16 +128,8 @@ if(!empty($_POST)) {
                             VALUES
                                 ('".$insert_id."','".CoreConfig::read('austTable')."','".$_POST["categoria_id"]."', 'structure','".$_POST['frmadmin_id']."','".date("Y-m-d")."')
                             ";
-            
-            $this->modulo->conexao->exec($sql_delete);
             $this->modulo->conexao->exec($sql_tipo);
-
-
-
         }
-
-
-
 
         $resultado = TRUE;
     } else {

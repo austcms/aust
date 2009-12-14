@@ -11,6 +11,11 @@
  * Informações deste cadastro
  */
 $infoCadastro = $modulo->pegaInformacoesCadastro($austNode);
+
+if( !empty($_GET["w"]) ){
+    $w = $_GET['w'];
+}
+
 //pr($infoCadastro);
 ?>
 <h1>Cadastro: <?php echo $this->aust->leNomeDaEstrutura($_GET['aust_node'])?></h1>
@@ -61,6 +66,13 @@ echo $form->create( $infoCadastro["estrutura"]["tabela"]["valor"] );
 
 $tabelaCadastro = $infoCadastro["estrutura"]["valor"];
 
+/*
+ *
+ * FORMULÁRIO DE CADASTRO
+ *
+ * O formulário é criado automaticamente
+ *
+ */
 foreach( $camposForm as $chave=>$valor ){
 
     unset($select);
@@ -82,10 +94,13 @@ foreach( $camposForm as $chave=>$valor ){
     }
     /*
      * RELACIONAL UM PARA MUITOS
+     *
+     * Monta checkboxes do campo que é do tipo relacional um-para-muitos
      */
     else if($valor["tipo"]["especie"] == "relacional_umparamuitos") {
         //".$tabelaCadastro $valor["tipo"]["tabelaReferenciaCampo"]."
-
+        //pr($valor);
+        
         $referencia = $valor["tipo"]["tabelaReferencia"];
         $tabelaRelacional = $valor["tipo"]["referencia"];
         $campo = $valor["tipo"]["tabelaReferenciaCampo"];
@@ -96,16 +111,36 @@ foreach( $camposForm as $chave=>$valor ){
                 ORDER BY t.$campo ASC
                 ";
 
-        $values = $conexao->query($sql);
-        //pr($sql);
-        //$checkbox["selected"] = "3";
+        $checkboxes = $conexao->query($sql);
+
         $inputType = "checkbox";
-        foreach($values as $tabelaReferenciaResult){
+        foreach($checkboxes as $tabelaReferenciaResult){
             $checkbox["options"][ $tabelaReferenciaResult["id"] ] = $tabelaReferenciaResult[ $campo ];
         }
 
-        //echo $sql;
-        //pr($checkbox);
+        /*
+         * Se for edição, pega os dados que estão salvos neste campo
+         */
+
+        if( !empty($w) ){
+            $sql = "SELECT
+                        t.id, t.".$referencia."_id AS referencia
+                    FROM
+                        ".$tabelaRelacional." AS t
+                    ORDER BY
+                        t.id ASC
+                    ";
+
+            $values = $conexao->query($sql);
+            if( empty($values)){
+                $values = array();
+            } else {
+                foreach( $values as $id ){
+                    $valor["valor"][] = $id["referencia"];
+                }
+            }
+        }
+
 
     }
 

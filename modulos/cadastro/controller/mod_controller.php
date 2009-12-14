@@ -156,10 +156,24 @@ class ModController extends ModsController
         //$this->render('form');
     }
 
+    /**
+     * save()
+     *
+     * Salva os dados enviados de um formulário do módulo Cadastro
+     */
     public function save(){
 
         $infoCadastro = $this->modulo->pegaInformacoesCadastro( $this->austNode );
         //pr($infoCadastro);
+
+        /*
+         * UPDATE?
+         */
+        //pr($this->data);
+        if( !empty($this->data[ $infoCadastro["estrutura"]["tabela"]["valor"] ]["id"] ) ){
+            $w = $this->data[ $infoCadastro["estrutura"]["tabela"]["valor"]] [ "id"];
+        }
+
         /**
          * Toma informações sobre a tabela física do cadastro
          */
@@ -192,6 +206,7 @@ class ModController extends ModsController
                     //pr($campo );
                     //pr( $campos[$campo] );
                     //$valor["especie"]." --- ";
+                    
                     /*
                      * RELACIONAL UM PARA MUITOS
                      */
@@ -216,10 +231,20 @@ class ModController extends ModsController
             //pr($this->data);
 
             $resultado = $this->model->save($this->data);
-            $lastInsertId = $this->model->conexao->lastInsertId();
+            if( !empty($w) AND $w > 0 )
+                $lastInsertId = $w;
+            else
+                $lastInsertId = $this->model->conexao->lastInsertId();
+
             /*
-             * Insere dados relacionais
+             * DADOS RELACIONAIS
+             *
+             * Insere dados nas tabelas relacionais.
+             *
+             * Exemplo: campos relacionais um-para-muitos
              */
+            //echo $w."<br>";
+            //echo $lastInsertId;
             if( !empty($relational) AND !empty($lastInsertId) ){
                 //pr($relational);
 
@@ -231,12 +256,21 @@ class ModController extends ModsController
                     }
 
                 }
-                //pr($relational);
 
+                /*
+                 * Exclui todos os registro
+                 */
+                $deleteSql = "DELETE FROM
+                                $tabela
+                            WHERE
+                                ".$infoCadastro["estrutura"]["tabela"]["valor"]."_id='$w'
+                            ";
+
+                $this->model->conexao->exec($deleteSql);
+                
                 foreach( $relational as $tabela => $dados ){
 
                     foreach( $dados as $campo=>$valor ){
-                        //echo ".".$campo."<br>";
 
                         /*
                          * Múltiplos Inserts
@@ -245,10 +279,13 @@ class ModController extends ModsController
 
                             foreach( $valor as $multipleInsertsCampo=>$multipleInsertsValor ){
                                 $camposStrMultiplo[] = $multipleInsertsCampo;
-                                echo $multipleInsertsCampo;
                                 $valorStrMultiplo[] = $multipleInsertsValor;
                             }
-                            
+
+
+                            /*
+                             * Insere no DB os Checkboxes marcados
+                             */
                             $tempSql = "INSERT INTO
                                             ".$tabela."
                                                 (".implode(",", $camposStrMultiplo).")
@@ -273,7 +310,7 @@ class ModController extends ModsController
                 if( is_array($sql) ){
                     foreach( $sql as $uniqueSql ){
                         $this->model->conexao->exec($uniqueSql);
-                        pr($uniqueSql);
+                        //pr($uniqueSql);
                     }
                 }
             }
