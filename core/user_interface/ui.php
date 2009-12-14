@@ -112,7 +112,7 @@
 
         </div>
     </div>
-    <div class="bottom">
+    <div id="bottom">
 
     </div>
 

@@ -1,3 +1,5 @@
+
+
 <?php
 /**
  * Conteúdos Bootstrap
@@ -235,55 +237,50 @@ else {
             </ul>
         </div>
         <div class="corpo_gerenc">
-            <div id="caixa_tooltip">
-                &nbsp;
-            </div>
+        
             <div class="listagem">
 
                 <div class="secoes">
                     <div class="nome_secoes">
                         <a href="#">ARTIGOS</a>
                     </div>
-                    <div class="hint">
-                        <a href="#" title= "Olá tudo bem?222" ></a>
-                    </div>
+                    <?php tt('Para criar um novo texto, basta clicar em "Novo texto"
+                              e você já tem na sua tela um editor que permitirá você redigir qualquer tipo de conteúdo.
+                              Com o auxílio de categorias, você organiza tudo da forma que você desejar. ')
+                    ?>
                 </div>
 
                 <div class="secoes">
                     <div class="nome_secoes">
                         <a href="">ENQUETE</a>
                     </div>
-                    <div class="hint">
-                        <a href="#" title= "Olá tudo bem?222" ></a>
-                    </div>
+                    <?php tt('Este é o nosso primeiro tooltip dinâmico') ?>
+
                 </div>
 
                 <div class="secoes">
                     <div class="nome_secoes">
                         <a href="">GALERIA DE FOTOS</a>
                     </div>
-                    <div class="hint">
-                        <a href="#" title= "Com a Galeria de Fotos você pode inserir imagens no seu site com facilidade. Crie uma galeria e faça o upload de várias fotos para ela.
-                        Ex: “Aniversário”, “Eventos”" ></a>
-                    </div>
+                    <?php tt('Com a Galeria de Fotos você pode inserir imagens no seu site com facilidade. Crie uma galeria e faça o upload de várias fotos para ela.
+                        Ex: “Aniversário”, “Eventos”') ?>
                 </div>
 
                 <div class="secoes">
                     <div class="nome_secoes">
                         <a href="">NOTÍCIAS</a>
                     </div>
-                    <div class="hint">
-                        <a href="#" title= "Olá tudo bem?222" ></a>
-                    </div>
+                    <?php tt('Para criar um novo texto, basta clicar em "Novo texto"
+                              e você já tem na sua tela um editor que permitirá você redigir qualquer tipo de conteúdo.
+                              Com o auxílio de categorias, você organiza tudo da forma que você desejar.')
+                    ?>
                 </div>
                 
                 <div class="secoes">
                     <div class="nome_secoes">
                         <a href="">PESQUISA PARA PAIS E ALUNOS</a>
                     </div>
-                    <div class="hint">
-                        <a href="#" title= "Olá tudo bem?222" ></a>
-                    </div>
+                    <?php tt('Este é o nosso primeiro tooltip dinâmico') ?>
                 </div>
                 
             </div>

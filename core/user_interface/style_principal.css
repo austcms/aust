@@ -287,6 +287,7 @@ div.body {
             height: 39px;
             display: table;
             margin-top: 0px;
+            float: left;
         }
             div.body div.content div.painel_gerenciar div.titulo_gerenc ul li {
                 float: left;
@@ -318,6 +319,7 @@ div.body {
             width: 911px;
             padding-bottom: 1px;
             display: table;
+            float: left;
         }
             div.body div.content div.painel_gerenciar div.corpo_gerenc ul.listagem {
                 float: left;
@@ -436,40 +438,49 @@ div.body {
                     outline: none;
                 }
 
-            #caixa_tooltip {
+            div.tooltip {
                 display: none;
-                background: transparent url(img/tooltip.png) no-repeat;
-                font-size: 12px;
-                width: 255px;
-                height: 150px;
-                padding: 10px 0 0 0px;
-                margin-left: 131px;
+                background: transparent;
+                margin: 0 0 0 80px;
+                width: 235px;
                 color: #646464;
+                padding: 0;
             }
-
-                #caixa_tooltip div.top {
-                    /*background: url(img/top_tooltip.png) no-repeat;
+                div.tooltip div.top {
+                    background: url(img/top_tooltip.png);
+                    margin: 0px;
                     width: 255px;
-                    height: 25px;
+                    height: 20px;
+                    margin-left: 1px;
                 }
-                #caixa_tooltip div.meio {
+
+                div.tooltip div.text {
                     background: url(img/meio_tooltip.png) repeat-y;
+                    margin: 0;
                     width: 257px;
+                    padding: 10px;
+                    color: #646464;
                 }
-                #caixa_tooltip div.bottom {
-                    background: url(img/bottom_tooltip.png) no-repeat;
+                    div.tooltip div.text p {
+                        width: 206px;
+                        margin: 0 5px 0 15px;
+                        padding-top: 0;
+                    }
+
+                div.tooltip div.bottom {
+                    background: url(img/bottom_tooltip.png);
+                    margin: 0px;
                     width: 255px;
                     height: 25px;
-                    display: table;*/
+                    margin-left: 1px;
                 }
-
-
 
 
         div.body div.content .painel_gerenciar div.rodape_gerenc {
             background: url(img/rodape_gerenciar.png) no-repeat;
             width: 911px;
             height: 14px;
+            float: left;
         }
 
 
@@ -529,6 +540,7 @@ div.body {
             height: 39px;
             display: table;
             margin-top: 0px;
+            float: left;
         }
             div.body div.content div.painel_config div.titulo_config ul li {
                 float: left;
@@ -552,6 +564,7 @@ div.body {
             width: 911px;
             padding-bottom: 1px;
             display: table;
+            float: left;
         }
             div.body div.content div.painel_config div.corpo_config ul.listagem {
                 float: left;
@@ -608,6 +621,7 @@ div.body {
             background: url(img/rodape_gerenciar.png) no-repeat;
             width: 911px;
             height: 14px;
+            float: left;
         }
 
     /********* CATEGORIAS *********/
@@ -644,7 +658,7 @@ div.body {
 *
 ***************************/
 
-div.bottom {
+div#bottom {
 	width: 952px;
 	height: 13px;
 	background: url(img/rodape.png);

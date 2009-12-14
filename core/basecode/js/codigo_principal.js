@@ -21,9 +21,9 @@ $(document).ready(function(){
 
 
     // Hints
-    $("div.hint a[title]").tooltip({
-        tip: '#caixa_tooltip',
-        effect: 'fade',
+    $("div.hint a").tooltip({
+        //tip: '#caixa_tooltip',
+        //effect: 'fade',
         events: {
             def: 'click,mouseout'
         }
