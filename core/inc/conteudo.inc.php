@@ -213,9 +213,20 @@ else {
             <div class="titulo_site">
                 <!-- the tabs -->
                 <ul class="tabs">
+                    <?php
+                    /*
+                     * NOME DA PRIMEIRA TAB - ECOBIOLOGIA
+                     */
+                    ?>
                     <div class="esquerda"></div>
                     <li><a href="#">Ecobiologia</a></li>
                     <div class="direita"></div>
+
+                    <?php
+                    /*
+                     * NOME DA PRIMEIRA TAB - OUTRO SITE
+                     */
+                    ?>
                     <div class="esquerda"></div>
                     <li><a href="#">Outro site</a></li>
                     <div class="direita"></div>
@@ -225,7 +236,7 @@ else {
 
         <?php
         /*
-         * TAB SITE 1
+         * CONTEÚDO DA PRIMEIRA TAB - ECOBIOLOGIA
          */
         ?>
         <div class="panes">
@@ -314,11 +325,11 @@ else {
             </div>
         </div>
 
-    <?php
-    /*
-     * TAB SITE 2
-     */
-    ?>
+        <?php
+        /*
+         * CONTEÚDO DA SEGUNDA TAB - OUTRO SITE
+         */
+        ?>
         <div class="panes">
             <div>
                 <div class="titulo_gerenc">

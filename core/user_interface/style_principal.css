@@ -244,14 +244,14 @@ div.body {
         div.body div.content div.painel_gerenciar div.tab div.esquerda {
             background:  url(img/esquerda_tab.png) no-repeat;
             width: 13px;
-            height: 30px;
+            height: 33px;
             float: left;
             margin: 1px 0 0 6px;
         }
         div.body div.content div.painel_gerenciar div.tab div.direita {
             background:  url(img/direita_tab.png) no-repeat;
             width: 13px;
-            height: 30px;
+            height: 33px;
             float: left;
             margin: 1px 0 0 0;
         }
@@ -269,7 +269,7 @@ div.body {
                     list-style:none;
                     margin:0 !important;
                     padding:0;
-                    height: 30px;
+                    height: 33px;
                 }
 
                 /* single tab */
@@ -285,9 +285,9 @@ div.body {
                 div.body div.content div.painel_gerenciar div.tab div.titulo_site ul.tabs a {
                     background: #2d88cf;
                     /*background: url(img/blue.png) no-repeat -420px 0;*/
-                    font-size: 11px;
+                    font-size: 1.0em;
                     display: block;
-                    height: 30px;
+                    height: 33px;
                     line-height: 30px;
                     text-align: center;
                     text-decoration: none;
@@ -319,27 +319,8 @@ div.body {
                     font-weight: bold;
                 }
 
-                /* Different widths for tabs: use a class name: w1, w2, w3 or w2 */
-
-
-                /* width 1 */
-                div.body div.content div.painel_gerenciar div.tab div.titulo_site ul.tabs a.s 			{ background-position: -553px 0; width:81px; }
-                div.body div.content div.painel_gerenciar div.tab div.titulo_site ul.tabs a.s:hover 	{ background-position: -553px -31px; }
-                div.body div.content div.painel_gerenciar div.tab div.titulo_site ul.tabs a.s.current  { background-position: -553px -62px; }
-
-                /* width 2 */
-                div.body div.content div.painel_gerenciar div.tab div.titulo_site ul.tabs a.l 			{ background-position: -248px -0px; width:174px; }
-                div.body div.content div.painel_gerenciar div.tab div.titulo_site ul.tabs a.l:hover 	{ background-position: -248px -31px; }
-                div.body div.content div.painel_gerenciar div.tab div.titulo_site ul.tabs a.l.current  { background-position: -248px -62px; }
-
-
                 /* initially all panes are hidden */
-
-
-                div.body div.content div.painel_gerenciar div.titulo_site h3 {
-                    color: white;
-                    margin-bottom: 0;
-                }
+                
                 div.body div.content div.painel_gerenciar div.titulo_site a {
                     height: 70px;
                     background: #2d88cf;
@@ -574,47 +555,112 @@ div.body {
         width: 950px;
     }
 
-        div.body div.content div.painel_config div.tab div.esquerda {
+        div.body div.content div.painel_config div.tab ul.tabs div.esquerda {
             background:  url(img/esquerda_tab.png) no-repeat;
             width: 13px;
             height: 33px;
             float: left;
             margin: 2px 0 0 6px;
         }
-        div.body div.content div.painel_config div.tab div.direita {
+        div.body div.content div.painel_config div.tab ul.tabs div.direita {
             background:  url(img/direita_tab.png) no-repeat;
             width: 13px;
             height: 33px;
             float: left;
             margin: 2px 0 0 0;
         }
-            div.body div.content div.painel_config div.tab div.titulo_site {
-                display: table;
-                margin: 10px 0 0 0px;
-                float: left;
-            }
-                div.body div.content div.painel_config div.titulo_site h3 {
-                    color: white;
-                    margin-bottom: 0;
-                }
-                div.body div.content div.painel_config div.titulo_site a {
-                    height: 70px;
-                    background: #2d88cf;
-                    padding: 8px 0px 11px 0px;
-                    color: white;
-                    text-decoration: none;
-                }
-                div.body div.content div.painel_config div.titulo_site a:hover {
-                    height: 70px;
-                    background: #2d88cf;
-                    color: white;
-                }
-                div.body div.content div.painel_config div.titulo_site a.selecionado {
-                    background: url(img/marcador_ger.png) no-repeat bottom #2d88cf;
-                    font-weight: bold;
-                }
 
-        div.body div.content div.painel_config div.titulo_config {
+        /*
+         * TABS
+         */
+
+        /* root element for tabs  */
+        div.body div.content div.painel_config div.tab ul.tabs {
+            list-style:none;
+            margin:0 !important;
+            padding:0;
+            height: 30px;
+        }
+
+        /* single tab */
+        div.body div.content div.painel_config div.tab ul.tabs li {
+            float:left;
+            text-indent:0;
+            padding:0;
+            margin:0 !important;
+            list-style-image:none !important;
+        }
+
+        /* link inside the tab. uses a background image */
+        div.body div.content div.painel_config div.tab ul.tabs a {
+            background: #2d88cf;
+            /*background: url(img/blue.png) no-repeat -420px 0;*/
+            font-size: 1.0em;
+            display: block;
+            height: 33px;
+            line-height: 30px;
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            padding: 0 10px 0 10px;
+            margin: 0px;
+            position: relative;
+            top: 2px;
+
+        }
+
+        div.body div.content div.painel_config div.tab ul.tabs a:active {
+            font-weight: bold;
+        }
+        div.body div.content div.painel_config div.tab ul.tabs a:focus {
+            outline: none;
+        }
+        /* when mouse enters the tab move the background image */
+        div.body div.content div.painel_config div.tab ul.tabs a:hover {
+            background-position: -420px -31px;
+            color: white;
+        }
+
+        /* active tab uses a class name "current". it's highlight is also done by moving the background image. */
+       div.body div.content div.painel_config div.tab ul.tabs a.current, ul.tabs a.current:hover, ul.tabs li.current a {
+            background-position: -420px -62px;
+            cursor: default !important;
+            color: white !important;
+            background: url(img/marcador_ger.png) no-repeat bottom #2d88cf;
+            font-weight: bold;
+        }
+        /*
+         * FIM TABS
+         */
+
+
+        /* initially all panes are hidden */
+        div.body div.content div.painel_config a {
+            height: 70px;
+            background: #2d88cf;
+            padding: 8px 0px 11px 0px;
+            color: white;
+            text-decoration: none;
+        }
+        div.body div.content div.painel_config a:hover {
+            height: 70px;
+            background: #2d88cf;
+            color: white;
+        }
+        div.body div.content div.painel_config a.selecionado {
+            background: url(img/marcador_ger.png) no-repeat bottom #2d88cf;
+            font-weight: bold;
+        }
+
+        div.body div.content div.painel_config div.tab ul.tabs li {
+            list-style: none;
+        }
+
+
+        /*
+         * PAINEL GERENCIAR
+         */
+        div.body div.content div.painel_config div.panes div div.titulo_config {
             background: url(img/painelgerenc_titulo.png) no-repeat;
             width: 911px;
             height: 39px;
@@ -622,12 +668,12 @@ div.body {
             margin-top: 0px;
             float: left;
         }
-            div.body div.content div.painel_config div.titulo_config ul li {
+            div.body div.content div.painel_config div.panes div div.titulo_config ul li {
                 float: left;
                 display: table;
                 list-style: none;
             }
-                div.body div.content div.painel_config div.titulo_config ul li.opcao {
+                div.body div.content div.painel_config div.panes div div.titulo_config ul li.opcao {
                     padding: 12px 250px 0 0;
                 }
 
@@ -639,27 +685,26 @@ div.body {
             margin-top: 10px;
             margin-left: 10px;
         }
-        div.body div.content div.painel_config div.corpo_config {
+        div.body div.content div.painel_config div.panes div div.corpo_config {
             background: url(img/painelgerenc_meio.png) repeat-y;
             width: 911px;
             padding-bottom: 1px;
             display: table;
             float: left;
         }
-            div.body div.content div.painel_config div.corpo_config ul.listagem {
+            div.body div.content div.painel_config div.panes div div.corpo_config ul.listagem {
                 float: left;
                 margin-top: 6px;
             }
-            div.body div.content div.painel_config div.corpo_config ul.listagem li {
+            div.body div.content div.painel_config div.panes div div.corpo_config ul.listagem li {
                 list-style: none;
-
             }
-                div.body div.content div.painel_config div.corpo_config ul.listagem li a {
+                div.body div.content div.painel_config div.panes div div.corpo_config ul.listagem li a {
                     color: #888888;
                     text-decoration: none;
 
                 }
-                div.body div.content div.painel_config div.corpo_config ul.listagem li a:hover {
+                div.body div.content div.painel_config div.panes div div.corpo_config ul.listagem li a:hover {
                     color: #181818;
                     text-decoration: none;
                     font-weight: bold;
@@ -667,7 +712,7 @@ div.body {
             /*
              * INPUT
              */
-            div.body div.content div.painel_config div.corpo_config ul.input {
+            div.body div.content div.painel_config div.panes div div.corpo_config ul.input {
                 width: 150px;
                 line-height: 1.9em;
                 margin-left: 70px;
@@ -676,28 +721,28 @@ div.body {
             /*
              * NOME
              */
-            div.body div.content div.painel_config div.corpo_config ul.nome {
+            div.body div.content div.painel_config div.panes div div.corpo_config ul.nome {
                 margin-left: 20px;
                 width: 220px;
             }
-            div.body div.content div.painel_config div.corpo_config ul.nome li {
+            div.body div.content div.painel_config div.panes div div.corpo_config ul.nome li {
                 line-height: 2.0em;
             }
 
             /*
              * DICA
              */
-            div.body div.content div.painel_config div.corpo_config ul.dica {
+            div.body div.content div.painel_config div.panes div div.corpo_config ul.dica {
                 width: 400px;
                 margin-left: 5px;
 
             }
-                div.body div.content div.painel_config div.corpo_config ul.dica li {
+                div.body div.content div.painel_config div.panes div div.corpo_config ul.dica li {
                     font-size: 0.9em;
                     line-height: 2.2em;
                     color: #484848;
                 }
-        div.body div.content .painel_config div.rodape_config {
+        div.body div.content .painel_config div.panes div div.rodape_config {
             background: url(img/rodape_gerenciar.png) no-repeat;
             width: 911px;
             height: 14px;
