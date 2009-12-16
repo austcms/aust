@@ -1,4 +1,4 @@
-/* 
+/*
     Document   : forms.css
     Created on : 17/07/2009, 10:28:20
     Author     : Alexandre
@@ -6,7 +6,7 @@
         Purpose of the stylesheet follows.
 */
 
-/* 
+/*
    TODO customize this sample style
    Syntax recommendation http://www.w3.org/TR/REC-CSS2/
 */
@@ -74,5 +74,6 @@ form.formHelper {
 
     form.formHelper label { width: 120px; }
     form.formHelper div.input_field {  }
+    form.formHelper div.input_textarea textarea { width: 300px; height: 50px; }
     form.formHelper div.input_checkbox { display: table; }
 

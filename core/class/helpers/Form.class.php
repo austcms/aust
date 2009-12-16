@@ -164,6 +164,29 @@ class FormHelper
             $conteudo.= '<input type="text" name="'.$inputName.'" value="'.$inputValue.'" id="input-'.$fieldName.'" />';
         }
         /**
+         * <TEXTAREA>
+         *
+         * Quando o tipo de dados do DB for text, blog, etc, o campo será
+         * textarea.
+         */
+        else if( $inputType == "textarea"){
+            $conteudo.= '<div class="input_field input_textarea">';
+
+            if( empty($extraOptions) )
+                $extraOptions = array();
+
+            $rows = '';
+            $cols = '';
+            //if( !array_key_exists("row", $extraOptions) )
+                //$rows = 'rows="4"';
+            if( !array_key_exists("cols", $extraOptions) )
+                $cols = 'cols="20"';
+
+            $conteudo.= '<textarea name="'.$inputName.'" '.$standardAtrib.' '.$rows.' '.$cols.'>';
+            $conteudo.= $fieldTextValue;
+            $conteudo.= '</textarea>';
+        }
+        /**
          * INPUT HIDDEN
          */
         else if( $inputType == "hidden" ){

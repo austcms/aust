@@ -140,7 +140,11 @@ foreach( $camposForm as $chave=>$valor ){
                 }
             }
         }
+    } else {
 
+        if( $valor['tipo']['tipoFisico'] == 'text' ){
+            $inputType = "textarea";
+        }
 
     }
 
@@ -148,9 +152,11 @@ foreach( $camposForm as $chave=>$valor ){
         $valor["valor"] = "";
     }
 
+
     if( empty($inputType) ){
         $inputType = "";
     }
+    //pr($valor);
 
     /**
      * Cria INPUT
