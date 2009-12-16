@@ -23,7 +23,7 @@ $(document).ready(function(){
 });
 
 var arquivoAjax = "core/libs/ajax.php";
-
+var privilegio_escolhido = false;
 /*
  * MÓDULOS
  */
