@@ -408,14 +408,59 @@ if(!empty($_GET['function'])){
         <div class="rodape"></div>
     </div>
 
+    <?php
+    /*
+     * FILTROS ESPECIAIS
+     */
+    ?>
     <div class="painel">
         <div class="titulo">
-            <h2>Instalar Estrutura</h2>
+            <h2>Opções de Filtragem</h2>
         </div>
         <div class="corpo">
             <p>
-                Selecione abaixo a categoria-chefe, o nome da estrutura (ex.: Notícias, Artigos, Arquivos) e o módulo adequado.
+                Se você especificar o campo de email abaixo, será mostrado um input
+                na listagem para que o usuário possa ver os emails dos usuários
+                cadastrados e copiá-los.
             </p>
+            <?php
+            if( !empty($_POST["filtro_especial_campo_email"])
+                AND $_POST["filtro_especial_campo_email"] == "Salvar" ){
+
+                $sql = "DELETE FROM cadastros_conf WHERE tipo='filtros_especiais'";
+                $modulo->conexao->exec($sql);
+
+                if( !empty($_POST['email']) ){
+                    $sql = "INSERT INTO
+                                cadastros_conf
+                                (tipo, chave, valor, categorias_id)
+                            VALUES
+                                ('filtros_especiais', 'email', '".$_POST['email']."', '".$_GET["aust_node"]."')
+                            ";
+                    $modulo->conexao->exec($sql);
+                }
+            }
+
+            $sql = "SELECT valor
+                    FROM
+                        cadastros_conf
+                    WHERE
+                        tipo='filtros_especiais' AND
+                        chave='email' AND
+                        categorias_id='".$_GET["aust_node"]."'
+                    ";
+            $dados = $modulo->conexao->query($sql);
+            $dados = $dados[0]["valor"];
+
+            ?>
+            <form method="post" action="<?=$config->self;?>" class="simples pequeno">
+                <input type="hidden" name="tabela" value="<?php echo $tabela_da_estrutura ?>" />
+                Campo de email? <input type="text" name="email" value="<?php echo $dados ?>" />
+                <br />
+                <input type="submit" name="filtro_especial_campo_email" value="Salvar" />
+            </form>
+
+           
 
         </div>
         <div class="rodape"></div>

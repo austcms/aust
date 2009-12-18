@@ -183,7 +183,7 @@ class FormHelper
                 $cols = 'cols="20"';
 
             $conteudo.= '<textarea name="'.$inputName.'" '.$standardAtrib.' '.$rows.' '.$cols.'>';
-            $conteudo.= $fieldTextValue;
+            $conteudo.= $inputValue;//$fieldTextValue;
             $conteudo.= '</textarea>';
         }
         /**

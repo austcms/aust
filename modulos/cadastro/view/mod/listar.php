@@ -31,8 +31,8 @@ if($precisa_aprovacao['valor'] == '1'){
 
 <?php
 
-$categorias = $aust->LeCategoriasFilhas('',$_GET[aust_node]);
-$categorias[$_GET[aust_node]] = 'Estrutura';
+$categorias = $aust->LeCategoriasFilhas('',$_GET['aust_node']);
+$categorias[$_GET['aust_node']] = 'Estrutura';
 $param = Array(
                 'categorias' => $categorias,
                 'metodo' => 'listar',
@@ -45,6 +45,42 @@ $fields = count($resultado);
 //print_r($precisa_aprovacao);
 
 //pr($resultado);
+
+
+/*
+ * FILTROS ESPECIAIS
+ */
+if( $fields > 0 ){
+    $sql = "SELECT valor
+            FROM
+                cadastros_conf
+            WHERE
+                tipo='filtros_especiais' AND
+                chave='email' AND
+                categorias_id='".$_GET["aust_node"]."'
+            ";
+    $filtroEspecial = $modulo->conexao->query($sql);
+    $filtroEspecial = $filtroEspecial[0]["valor"];
+
+    if( !empty($filtroEspecial) ){
+        $sql = "SELECT
+                    t.".$filtroEspecial."
+                FROM
+                    ".$tabela." as t
+                ORDER BY t.".$filtroEspecial." ASC
+                ";
+        $email = $modulo->conexao->query($sql);
+        foreach( $email as $valor ){
+            $emails[] = $valor['email'];
+        }
+
+        ?>
+        Emails: <input type="text" size="25" value="<?php echo implode("; ", $emails) ?>" />
+        <br clear="all" />
+        <?php
+
+    }
+}
 
 /*
  * Começa a listagem
