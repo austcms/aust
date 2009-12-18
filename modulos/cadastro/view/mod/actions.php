@@ -4,6 +4,7 @@
  * DELETAR, APROVAR
  */
 
+
 // para deletar
 if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
     /*
@@ -58,7 +59,7 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
                 WHERE
                     $where
                     ";
-        if($modulo->conexao->exec){
+        if($modulo->conexao->exec($sql)){
             $resultado = TRUE;
         } else {
             $resultado = FALSE;
@@ -116,7 +117,6 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
             $c++;
         }
 
-
         
         $sql = "UPDATE
                     ".$modulo->LeTabelaDaEstrutura($_GET['aust_node'])."
@@ -125,6 +125,7 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
                 WHERE
                     $where
                     ";
+        //echo $sql;
         if($modulo->conexao->exec($sql)){
             $resultado = TRUE;
         } else {

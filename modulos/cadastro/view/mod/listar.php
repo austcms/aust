@@ -19,12 +19,10 @@ $precisa_aprovacao = $modulo->PegaConfig(Array('estrutura'=>$_GET['aust_node'], 
  * Verifica se há a necessidade de aprovação de cadastro e se há alguém necessitando aprovação
  */
 if($precisa_aprovacao['valor'] == '1'){
-    $sql = "SELECT id FROM ".$tabela." WHERE aprovado=0";
-    $result = mysql_query($sql);
-    if(mysql_num_rows($result) == 1){
-        echo '<p>Há, atualmente, <strong>1</strong> usuário precisando de aprovação.</p>';
-    } else if(mysql_num_rows($result) > 1){
-        echo '<p>Há <strong>'.mysql_num_rows($result).'</strong> usuário precisando de aprovação.</p>';
+    $sql = "SELECT id FROM ".$tabela." WHERE approved=0 or approved IS NULL";
+    $result = $modulo->conexao->query($sql);
+    if( count($result) > 0 ){
+        echo '<p>Há cadastros para serem aprovados.</p>';
     }
 }
 ?>
@@ -67,6 +65,8 @@ if( $fields > 0 ){
                     t.".$filtroEspecial."
                 FROM
                     ".$tabela." as t
+                GROUP BY
+                    t.".$filtroEspecial."
                 ORDER BY t.".$filtroEspecial." ASC
                 ";
         $email = $modulo->conexao->query($sql);
@@ -134,7 +134,11 @@ if( $fields > 0 ){
                             }
 
                     }
-                    ?>
+
+                /*
+                 * Necessita aprovação?
+                 */
+                ?>
                 <td bgcolor="#333333" width="80" align="center">
                     Opções
                 </td>
@@ -153,21 +157,30 @@ if( $fields > 0 ){
                     <?php
                     $total_td = 0;
                     foreach($dados as $campo=>$valor) {
+                        //$campo = 'teste';
                         if(strpos($campo, 'des_') === 0){
-
+                            //echo $campo;
                         } else {
                             ?>
                             <td>
                                 <?php
                                 $total_td++;
-
-                                if($i == 1){
+                                //echo $total_td;
+                                if($total_td == 1){
                                     echo '<a href="adm_main.php?section='.$_GET['section'].'&action=editar&aust_node='.$_GET['aust_node'].'&w='.$dados["id"].'">';
-                                    echo $campo;
+                                    echo $dados[$campo];
                                     echo '</a>';
-                                    if(($precisa_aprovacao['valor'] == '1' and $dados['des_aprovado'] == 0) or $dados['des_aprovado'] == 0){
-                                        echo ' (necessita aprovação)';
+                                    if( ($precisa_aprovacao['valor'] == '1'
+                                         AND (
+                                                 $dados['des_aprovado'] == 0
+                                                 OR empty($dados['des_aprovado'])
+                                             )
+                                        )
+                                        OR $dados['des_aprovado'] == 0)
+                                    {
+                                        echo '<span style="font-size: 10px;"> (necessita aprovação)</span>';
                                     }
+                                    
                                 } else {
 
                                     /**
