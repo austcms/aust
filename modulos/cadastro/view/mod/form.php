@@ -77,6 +77,9 @@ foreach( $camposForm as $chave=>$valor ){
 
     unset($select);
     unset($checkbox);
+    unset($inputType);
+
+    //pr($valor);
 
     /**
      * RELACIONAL UM PARA UM
@@ -110,10 +113,11 @@ foreach( $camposForm as $chave=>$valor ){
                     ".$referencia." AS t
                 ORDER BY t.$campo ASC
                 ";
-
+                //echo $sql;
         $checkboxes = $conexao->query($sql);
 
         $inputType = "checkbox";
+        //pr($checkboxes);
         foreach($checkboxes as $tabelaReferenciaResult){
             $checkbox["options"][ $tabelaReferenciaResult["id"] ] = $tabelaReferenciaResult[ $campo ];
         }
@@ -145,7 +149,7 @@ foreach( $camposForm as $chave=>$valor ){
         if( $valor['tipo']['tipoFisico'] == 'text' ){
             $inputType = "textarea";
         }
-
+        echo $inputType;
     }
 
     if( empty($valor["valor"]) ){
@@ -156,7 +160,8 @@ foreach( $camposForm as $chave=>$valor ){
     if( empty($inputType) ){
         $inputType = "";
     }
-    //pr($valor);
+
+    //pr($inputType);
 
     /**
      * Cria INPUT
