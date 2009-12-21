@@ -67,7 +67,7 @@ if( $fields > 0 ){
                     ".$tabela." as t
                 GROUP BY
                     t.".$filtroEspecial."
-                ORDER BY t.".$filtroEspecial." ASC
+                ORDER BY t.id DESC
                 ";
         $email = $modulo->conexao->query($sql);
         foreach( $email as $valor ){
