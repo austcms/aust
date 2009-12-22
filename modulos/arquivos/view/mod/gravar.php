@@ -20,11 +20,12 @@ if(!empty($_POST)){
         $erro = array();
 
         // Prepara a variável do arquivo
+        //pr($_FILES);
         $arquivo = isset($_FILES["arquivo"]) ? $_FILES["arquivo"] : FALSE;
         echo '<p style="color: orange;">Arquivo: '.$arquivo['name'].'</p>';
 
         // Tamanho máximo do arquivo (em bytes)
-        $conf["tamanho"] = 50000000;
+        $conf["tamanho"] = 500000000;
 
         // Formulário postado... executa as ações
         $extinvalido = 'php|php3|html|htm|css|js';
@@ -52,7 +53,7 @@ if(!empty($_POST)){
                 $porIsso    = array('a','a','a','a','a','a','c','e','e','e','e','i','i','i','i','n','o','o','o','o','o','u','u','u','y','A','A','A','A','A','A','C','E','E','E','E','I','I','I','I','N','O','O','O','O','O','U','U','U','_','_','_');
 
                 $frmarquivo_nome = str_replace($trocarIsso, $porIsso, $arquivo['name']);
-                $frmarquivo_nome = strtolower( $frmarquivo_nome );
+                $frmarquivo_nome = substr( sha1(strtolower( $frmarquivo_nome ) ), 0, 6 ).'_'.strtolower( $frmarquivo_nome );
                 $frmarquivo_tipo = $arquivo['type'];
                 $frmarquivo_tamanho = $arquivo['size'];
 
@@ -69,8 +70,8 @@ if(!empty($_POST)){
 //                $imagem_nome = stri ($imagem_nome);
 
                 // Caminho de onde a imagem ficará
-                $imagem_dir = 'uploads/'.$config->PegaData('ano').'/'.$config->PegaData('mes');
-
+                $imagem_dir = 'uploads/'.date('Y').'/'.date('m');
+                //pr($imagem_dir);
                 if(!is_dir('../'.$imagem_dir)){
                     mkdir('../'.$imagem_dir, 0777, true); // a permissão só vai funcionar para linux
                     chmod('../'.$imagem_dir, 0777);
@@ -79,8 +80,11 @@ if(!empty($_POST)){
                 // Faz o upload da imagem
                 $frmurl = ''.$imagem_dir .'/';
                 $_POST['frmurl'] = $frmurl;
-                $_POST['frmlocal'] = 'local';
+
+                //$_POST['frmlocal'] = 'local';
                 //if(copy($_FILES["arquivo"]["tmp_name"], '..'.$frmurl.$frmarquivo_nome)){
+                //pr($frmurl.$frmarquivo_nome);
+                //pr( $arquivo["tmp_name"] );
                 if(move_uploaded_file($arquivo["tmp_name"], '../'.$frmurl.$frmarquivo_nome)){
                     echo "<p>Arquivo enviado com sucesso!</p>";
                 } else {
@@ -135,13 +139,14 @@ if(!empty($_POST)){
                         adddate='".$_POST['frmadddate']."' AND
                         arquivo_nome='".$_POST['frmarquivo_nome']."'
                     ";
-            $mysql = mysql_query($sql);
-            $total = mysql_num_rows($mysql);
+            
+            $mysql = $this->modulo->conexao->exec($sql);
+            $total = count($mysql);
             if($total == 0)
                 $w = 'NULL';
             else {
-                $dados = mysql_fetch_array($mysql);
-                $w = $dados['id'];
+                $dados = $mysql;
+                $w = $dados[0]['id'];
             }
 
             $sql = "REPLACE INTO
@@ -165,24 +170,19 @@ if(!empty($_POST)){
             $h1 = 'Editando: '.$aust->leNomeDaEstrutura($_GET[aust_node]);
         }
         //echo $sql.'<br>';
+        //
         // verifica se dados do arquivo estão no DB
-        if(mysql_query($sql)){
+        if( $this->modulo->conexao->exec($sql) ){
             $resultado = TRUE;
+
+
             /*
-             * carrega módulos que contenham propriedade embed
+             *
+             * EMBED SAVE
+             *
              */
-            $embed = $modulo->LeModulosEmbed();
-            if(count($embed)){
-                foreach($embed AS $chave=>$valor){
-                    foreach($valor AS $chave2=>$valor2){
-                        if($chave2 == 'pasta'){
-                            if(is_file($valor2.'/embed/gravar.php')){
-                                include($valor2.'/embed/gravar.php');
-                            }
-                        }
-                    }
-                }
-            } // fim do embed
+           include(INC_DIR.'conteudo.inc/embed_save.php');
+
 
         } else {
             $resultado = FALSE;

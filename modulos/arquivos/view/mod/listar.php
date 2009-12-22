@@ -1,35 +1,37 @@
 <?php
-$h1 = 'Listando arquivos: '.$aust->leNomeDaEstrutura($_GET[aust_node]);
+$h1 = 'Listando conteúdo: '.$this->aust->leNomeDaEstrutura($_GET['aust_node']);
+$nome_modulo = $this->aust->LeModuloDaEstrutura($_GET['aust_node']);
 $sql = "SELECT
-			id,nome
-		FROM
-			$aust_table
-		WHERE
-			id='".$_GET['aust_node']."'";
+            id,nome
+        FROM
+            ".Aust::$austTable."
+        WHERE
+            id='".$_GET['aust_node']."'";
 
 
-$mysql = mysql_query($sql);
-$dados = mysql_fetch_array($mysql);
-$cat = $dados[nome];
-?>
+$query = $this->aust->conexao->query($sql);
+
+$cat = $query[0]['nome'];?>
 <p>
-	<a href="adm_main.php?section=<?=$_GET['section'];?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+    <a href="adm_main.php?section=<?=$_GET['section'];?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
 </p>
-<h1><?=$h1;?></h1>
-<p>Abaixo você encontra a listagem dos últimos textos desta categoria.</p>
+<h1><?php echo $h1; ?></h1>
+<p>Abaixo você encontra a listagem dos últimos itens desta categoria.</p>
 <?php
+
 if((!empty($filter)) AND ($filter <> 'off')){
 	$addurl = "&filter=$filter&filterw=" . urlencode($filterw);
 }
 
 $categorias = $aust->LeCategoriasFilhas('',$_GET['aust_node']);
-$categorias[$_GET[aust_node]] = 'Estrutura';
+$categorias[$_GET['aust_node']] = 'Estrutura';
 //print_r($categorias);
 $sql = $modulo->SQLParaListagem($categorias);
 	//	echo '<br><br>'.$sql .'<br>';
 
 
-$mysql = mysql_query($sql);
+$query = $modulo->conexao->query($sql);
+//pr($sql);
 
 /*********************************
 *
@@ -44,10 +46,10 @@ $mysql = mysql_query($sql);
 <table width="680" cellspacing="0" cellpadding="10" class="listagem">
     <tr class="titulo">
 
-        <?php for($i=0; $i< count($content_header[campos]); $i++) { ?>
-                <td class="<? echo $content_header[campos][$i]; ?>">
+        <?php for($i=0; $i< count($modulo->config['contentHeader']['campos']); $i++) { ?>
+                <td class="<? echo $modulo->config['contentHeader']['campos'][$i]; ?>">
                     <?php
-                        echo $content_header[campos_nome][$i];
+                        echo $modulo->config['contentHeader']['camposNome'][$i];
                     ?>
                 </td>
         <?php } ?>
@@ -56,8 +58,8 @@ $mysql = mysql_query($sql);
         </td>
     </tr>
 <?
-if(mysql_num_rows($mysql) > 0){
-    while($dados = mysql_fetch_array($mysql)){
+if(count($query) > 0){
+    foreach($query as $dados){
     ?>
         <tr class="conteudo">
             <?php
@@ -68,15 +70,15 @@ if(mysql_num_rows($mysql) > 0){
             *
             *
             *******************************/
-            for($i=0; $i< count($content_header[campos]); $i++) { ?>
+            for($i=0; $i< count($modulo->config['contentHeader']['campos']); $i++) { ?>
                 <td>
                     <?php
                     if($i == 1){
                         echo '<a href="adm_main.php?section='.$_GET['section'].'&action=editar&aust_node='.$_GET['aust_node'].'&w='.$dados["id"].'">';
-                        echo $dados[$content_header[campos][$i]];
+                        echo $dados[$modulo->config['contentHeader']['campos'][$i]];
                         echo '</a>';
                     } else {
-                        echo $dados[$content_header[campos][$i]];
+                        echo $dados[$modulo->config['contentHeader']['campos'][$i]];
                     }
                     ?>
                 </td>

@@ -16,11 +16,11 @@
 $h1 = 'Listando conteúdo: '.$this->aust->leNomeDaEstrutura($_GET['aust_node']);
 $nome_modulo = $this->aust->LeModuloDaEstrutura($_GET['aust_node']);
 $sql = "SELECT
-			id,nome
-		FROM
-			".Aust::$austTable."
-		WHERE
-			id='".$_GET['aust_node']."'";
+            id,nome
+        FROM
+            ".Aust::$austTable."
+        WHERE
+            id='".$_GET['aust_node']."'";
 
             
 $query = $this->aust->conexao->query($sql);
@@ -28,7 +28,7 @@ $query = $this->aust->conexao->query($sql);
 $cat = $query[0]['nome'];
 ?>
 <p>
-	<a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+    <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
 </p>
 <h1><?php echo $h1;?></h1>
 <p>Abaixo você encontra a listagem dos últimos textos desta categoria.</p>

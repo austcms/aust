@@ -67,7 +67,7 @@ if(!empty($_POST)){
     $query = $this->modulo->conexao->exec($sql);
     
     if($query !== false){
-		$resultado = TRUE;
+        $resultado = TRUE;
 
         // se estiver criando um registro, guarda seu id para ser usado por módulos embed a seguir
         if($_POST['metodo'] == 'criar'){
