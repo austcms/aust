@@ -217,6 +217,10 @@ class FormHelper
              * Opções a serem mostradas
              */
             $selectOptions = $select["options"];
+
+            if( !is_array($selectOptions) )
+                $selectOptions = array();
+
             $conteudo.= '<div class="input_field input_select">';
             $conteudo.= '<select name="'.$inputName.'" id="input-'.$fieldName.'">';
             /**
@@ -256,6 +260,8 @@ class FormHelper
              * Opções a serem mostradas
              */
             $selectOptions = $checkbox["options"];
+            if( !is_array($selectOptions) )
+                $selectOptions = array();
             $conteudo.= '<div class="input_field input_checkbox input_'.$fieldName.'">';
             
             /**
@@ -274,6 +280,7 @@ class FormHelper
                 } else {
                     $selectThis = false;
                 }
+                $conteudo.= '<input type="hidden" name="'.$inputName.'[]" value="0" />';
                 $conteudo.= '<div class="input_checkbox_each"><input type="checkbox" name="'.$inputName.'[]" '.$selectThis.' value="'.$chave.'" />'.$valor.'</div>';
             }
 

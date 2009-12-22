@@ -62,6 +62,6 @@ if(is_array($_POST['privid'])){
                         target_id='".$insert_id."'
                     ";
 
-    mysql_query($sql_delete);
+    $modulo->conexao->exec($sql_delete);
 }
 ?>

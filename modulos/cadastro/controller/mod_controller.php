@@ -216,11 +216,15 @@ class ModController extends ModsController
                         unset($this->data[$tabela][$campo]);
                         
                         $i = 0;
-                        //pr($infoCadastro);
+                        //pr($valor);
                         foreach( $valor as $subArray ){
-                            $relational[$campos[$campo]["referencia"]][$i][$campos[$campo]["ref_tabela"]."_id"] = $subArray;
-                            $relational[$campos[$campo]["referencia"]][$i]["created_on"] = date("Y-m-d H:i:s");
-                            $i++;
+                            if( $subArray != 0 ){
+                                //echo $subArray;
+                                $relational[$campos[$campo]["referencia"]][$i][$campos[$campo]["ref_tabela"]."_id"] = $subArray;
+                                $relational[$campos[$campo]["referencia"]][$i]["created_on"] = date("Y-m-d H:i:s");
+                                $i++;
+                            }
+                            $toDeleteTables[$campos[$campo]["referencia"]] = 1;
                         }
                         
                     }
@@ -228,7 +232,8 @@ class ModController extends ModsController
                 }
 
             }
-            //pr($this->data);
+            //pr($relational);
+            //pr($toDeleteTables);
 
             $resultado = $this->model->save($this->data);
             if( !empty($w) AND $w > 0 )
@@ -260,13 +265,22 @@ class ModController extends ModsController
                 /*
                  * Exclui todos os registro
                  */
-                $deleteSql = "DELETE FROM
-                                $tabela
+                foreach( $toDeleteTables as $key=>$value ){
+                    $sql = "DELETE FROM
+                                $key
                             WHERE
                                 ".$infoCadastro["estrutura"]["tabela"]["valor"]."_id='$w'
-                            ";
+                                ";
+                    //echo $sql;
+                    $this->model->conexao->exec($sql);
+                    unset($sql);
+                }
 
-                $this->model->conexao->exec($deleteSql);
+
+                //pr($campos);
+
+
+
                 
                 foreach( $relational as $tabela => $dados ){
 
@@ -276,7 +290,7 @@ class ModController extends ModsController
                          * Múltiplos Inserts
                          */
                         if( is_int($campo) ){
-
+                            //pr($valor);
                             foreach( $valor as $multipleInsertsCampo=>$multipleInsertsValor ){
                                 $camposStrMultiplo[] = $multipleInsertsCampo;
                                 $valorStrMultiplo[] = $multipleInsertsValor;
