@@ -46,7 +46,7 @@ class Conexao extends SQLObject {
      *
      * @param array $conexao Contém parâmetros de conexão ao DB
      */
-	function __construct($dbConfig){
+    function __construct($dbConfig){
             
         $this->dbConfig = $dbConfig;
 
@@ -65,7 +65,7 @@ class Conexao extends SQLObject {
         else {
             $this->DbConnect($dbConfig);
         }
-	}
+    }
 
     /**
      * Efetua conexão via PDO.
@@ -92,6 +92,8 @@ class Conexao extends SQLObject {
 
         ){
             $this->DBExiste = true;
+        } else {
+            return false;
         }
 
         if( !empty($dbConfig["encoding"]) ){
@@ -102,6 +104,8 @@ class Conexao extends SQLObject {
         }
 
         $this->pdo = $this->conn;
+        return true;
+
 
         //$this->con = $dbConfig[]':host=localhost;dbname=test';
     }
