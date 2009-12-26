@@ -11,11 +11,11 @@
  * @version 0.1.1
  * @since v0.1.5, 30/05/2009
  */
-class Modulos {
-/**
- * TABELAS
- */
-// TABELA
+class Modulos
+{
+    /**
+     * TABELAS
+     */
     protected $db_tabelas;
     protected $sql_das_tabelas;
     protected $sql_registros;
@@ -55,11 +55,6 @@ class Modulos {
     function __construct($param) {
         global $aust;
         $this->aust = $aust;
-
-        /**
-         * Pega a string global que diz qual é o charset do projeto
-         */
-        global $aust_charset;
 
         /**
          * Ajusta a conexao para o módulo
@@ -174,10 +169,8 @@ class Modulos {
             $query = $this->conexao->query($sql);
             if(!$query) {
                 return false;
-                //$erro[] = $tabela;
             } else {
                 return true;
-                //$sucesso[] = $tabela;
             }
         }
     }
@@ -574,13 +567,6 @@ class Modulos {
         $return = '';
 
         foreach($query as $dados) {
-            /*
-            $return[$i]['pasta'] = $dados['pasta'];
-            $return[$i]['nome'] = $dados['nome'];
-            $return[$i]['chave'] = $dados['chave'];
-            $return[$i]['valor'] = $dados['valor'];
-             *
-             */
             $return[$i] = $dados;
             $i++;
         }

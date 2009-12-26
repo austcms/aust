@@ -29,7 +29,7 @@ class dbSchema
      *
      * @var array Possui o schema das tabelas do DB
      */
-    protected $dbSchema;
+    public $dbSchema;
     /**
      *
      * @var class Classe responsável pela conexão com o banco de dados
@@ -202,7 +202,14 @@ class dbSchema
         
     }
 
-    protected function tabelasAtuais(){
+    /**
+     * tabelasAtuais()
+     *
+     * Verifica quais as tabelas estão instaladas atualmente
+     *
+     * @return <array>
+     */
+    public function tabelasAtuais(){
         /**
          * Carrega todas as tabelas do DB
          */
@@ -224,6 +231,8 @@ class dbSchema
                 $this->tabelasAtuais[ reset($dados) ][$info['Field']] = $info;
             }
         }
+
+        return $this->tabelasAtuais;
 
     }
 
@@ -295,7 +304,7 @@ class dbSchema
         $checkedSchema = $this->verificaSchema();
         //var_dump($checkedSchema);
         //echo '<strong>--->'.$this->verificaSchema().'<----</strong>';
-        if($checkedSchema != 1 AND $this->isDbSchemaFormatOk() ){
+        if($checkedSchema != 1 AND $this->_isDbSchemaFormatOk() ){
             //echo 'diferente de 1 e não falso';
             /**
              * Tabela por tabela do Schema
@@ -401,8 +410,20 @@ class dbSchema
         }
     }
 
-    protected function isDbSchemaFormatOk($dbSchema = ''){
-        if ( is_array($this->dbSchema)) {
+    /**
+     * isDbSchemaFormatOk()
+     *
+     * Verifica se o formato do schema está correto
+     *
+     * @param <array> [opcional] $dbSchema
+     * @return <bool>
+     */
+    public function _isDbSchemaFormatOk($dbSchema = ''){
+
+        if( empty($dbSchema) )
+            $dbSchema = $this->dbSchema;
+
+        if ( is_array($dbSchema)) {
             return true;
         }
 

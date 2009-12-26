@@ -243,6 +243,16 @@ class ModsController extends Controller
             $param['action'] = 'index';
         }
 
+        /*
+         * CLASSE DO MÓDULO
+         *
+         * A classe do módulo pode ser a
+         */
+        /*
+         * $modulo pode ser acessível via $this->modulo
+         */
+        
+
         /**
          * $this->beforeFilter() é chamado sempre antes de qualquer ação
          */
