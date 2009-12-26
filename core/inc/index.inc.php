@@ -4,22 +4,41 @@
  */
 ?>
 
-<h1>Bem-vindo!</h1>
-<p>Com este gerenciador, você pode administrar todo o conteúdo do seu site.</p>
+<h2>Painel Principal</h2>
+<p>Este é o sistema onde você gerencia o conteúdo do seu site.</p>
 
 <div class="painel-metade">
+<?php
+ /*
+  * PAINEL INÍCIO RÁPIDO
+  */
+?>
     <div class="painel">
         <div class="titulo">
-            <h2>Opções rápidas</h2>
+            <h2>Início rápido</h2>
         </div>
         <div class="corpo">
+            <div class="listagem">
+                <ul>
+                    <li>Notícias</li>
+                    <li>Galeria de fotos</li>
+                    <li>Pesquisa</li>
+                    <li>Enquete</li>
+                    <li>Artigos</li>
+                    <li>Comunicados</li>
+                    <li>Teste</li>
+
+                </ul>
+            </div>
+
 
             <?php
             /**
+             *
              * Listagem das estruturas cadastradas no sistema na tela inicial
              *
              * Contém o atalho para as estrutura
-             */
+             * "FECHA BARRA"
             $param = array(
                         'orderby' => 'ORDER BY tipo'
                         );
@@ -30,17 +49,10 @@
             
             if(count($est) > 0){
                 ?>
-                <p>Abaixo, as estruturas instaladas. Passe o mouse.</p>
 
                 <table width="100%" summary="Lista de estruturas do site">
                 <col width="160"/>
                 <col />
-                <thead>
-                <tr>
-                    <th>Estrutura</th>
-                    <th>Tipo</th>
-                </tr>
-                </thead>
                 <tbody>
 
                 <?php
@@ -49,13 +61,13 @@
                     /**
                      * Verifica se usuário tem permissão de acesso a esta
                      * estrutura
-                     */
+                     * "FECHA BARRA"
                     //pr( $categoriasPermitidas);
                     if($permissoes->verify( array( 'estrutura' => $valor['id'], 'permissoes' => $categoriasPermitidas ))){
 
                         /**
                          * Inclui módulo apropriado
-                         */
+                         *
                         //echo $valor["tipo"];
                         //if( is_file(THIS_TO_BASEURL.'modulos/'.$valor['tipo'].'/'.MOD_CONFIG) ){
                             include(THIS_TO_BASEURL.'modulos/'.$valor['tipo'].'/'.MOD_CONFIG);
@@ -74,7 +86,6 @@
                         }
                         echo '</div>';
                         echo '</td>';
-                        echo '<td valign="top"><span class="est_options_info" id="est_options_info_'.$valor['id'].'">('.$valor['tipo'].')</span>'.'</td>';
                         echo '</tr>';
                     }
                 }
@@ -87,8 +98,55 @@
                 <p>Não há estruturas cadastradas. Contacte seu administrador.</p>
                 <?php
             }
-            ?>
+            */?>
+        </div>
+        <div class="rodape"></div>
+    </div>
 
+<?php
+ /*
+  * PAINEL PESSOAS
+  */
+?>
+    <div class="painel">
+        <div class="titulo">
+            <h2>Pessoas</h2>
+        </div>
+        <div class="corpo">
+            <div class="listagem">
+                <ul>
+                    <li>Alexandre de Oliveira de Oliveira de Oliveira de Oliveira</li>
+                    <li>Andréia de Oliveira</li>
+                    <li>Acácio Neimar de Oliveira</li>
+                    <li>Arthur de Oliveira</li>
+
+                </ul>
+            </div>
+        </div>
+        <div class="rodape"></div>
+    </div>
+
+<?php
+ /*
+  * ESTATÍSTICAS
+  */
+?>
+    <div class="painel">
+        <div class="titulo">
+            <h2>Estatísticas</h2>
+        </div>
+        <div class="corpo">
+            <div class="listagem">
+                <ul>
+                    <li>Notícias</li>
+                    <li>Galeria de fotos</li>
+                    <li>Pesquisa</li>
+                    <li>Enquete</li>
+                    <li>Artigos</li>
+                    <li>Comunicados</li>
+                    <li>Teste</li>
+                </ul>
+            </div>
         </div>
         <div class="rodape"></div>
     </div>

@@ -1,3 +1,5 @@
+
+
 <?php
 /**
  * Conteúdos Bootstrap
@@ -199,15 +201,211 @@ if(!empty($_GET['action'])){
  */
 else {
 ?>
-    <h1>Gerenciar conteúdo</h1>
+
+
+    <h2>Gerenciar conteúdo</h2>
 	<p>
-		Olá. Nesta página você pode <strong>gerenciar todo o conteúdo</strong> do site.
-		Selecione abaixo o que você deseja fazer:
+		Use esta tela para gerenciar seu conteúdo. Passe o mouse sobre o conteúdo para mais opções.
 	</p>
+    <div class="painel_gerenciar"> <?php // INICIO DO DIV PAINEL GERENCIAR  - É GLOBAL?>
+        <div class="tab">
+            
+            <div class="titulo_site">
+                <!-- the tabs -->
+                <ul class="tabs">
+                    <?php
+                    /*
+                     * NOME DA PRIMEIRA TAB - ECOBIOLOGIA
+                     */
+                    ?>
+                    <div class="esquerda"></div>
+                    <li><a href="#">Ecobiologia</a></li>
+                    <div class="direita"></div>
+
+                    <?php
+                    /*
+                     * NOME DA PRIMEIRA TAB - OUTRO SITE
+                     */
+                    ?>
+                    <div class="esquerda"></div>
+                    <li><a href="#">Outro site</a></li>
+                    <div class="direita"></div>
+                </ul>
+            </div>
+        </div>
+
+        <?php
+        /*
+         * CONTEÚDO DA PRIMEIRA TAB - ECOBIOLOGIA
+         */
+        ?>
+        <div class="panes">
+            <div>
+                <div class="titulo_gerenc">
+                    <ul>
+                        <li class="secoes">Seções</li>
+                        <li class="acoes">Ações</li>
+                        <li class="tipo">Tipo</li>
+                        <li class="acesso">Último acesso por</li>
+                    </ul>
+                </div>
+                <div class="corpo_gerenc">
+
+                    <div class="listagem">
+
+                        <div class="secoes">
+                            <div class="nome_secoes">
+                                <a href="#">ARTIGOS</a>
+                            </div>
+                            <?php tt('Para criar um novo texto, basta clicar em "Novo texto"
+                                      e você já tem na sua tela um editor que permitirá você redigir qualquer tipo de conteúdo.
+                                      Com o auxílio de categorias, você organiza tudo da forma que você desejar. ')
+                            ?>
+                        </div>
+
+                        <div class="secoes">
+                            <div class="nome_secoes">
+                                <a href="">ENQUETE</a>
+                            </div>
+                            <?php tt('Este é o nosso primeiro tooltip dinâmico') ?>
+
+                        </div>
+
+                        <div class="secoes">
+                            <div class="nome_secoes">
+                                <a href="">GALERIA DE FOTOS</a>
+                            </div>
+                            <?php tt('Com a Galeria de Fotos você pode inserir imagens no seu site com facilidade. Crie uma galeria e faça o upload de várias fotos para ela.
+                                Ex: “Aniversário”, “Eventos”') ?>
+                        </div>
+
+                        <div class="secoes">
+                            <div class="nome_secoes">
+                                <a href="">NOTÍCIAS</a>
+                            </div>
+                            <?php tt('Para criar um novo texto, basta clicar em "Novo texto"
+                                      e você já tem na sua tela um editor que permitirá você redigir qualquer tipo de conteúdo.
+                                      Com o auxílio de categorias, você organiza tudo da forma que você desejar.')
+                            ?>
+                        </div>
+
+                        <div class="secoes">
+                            <div class="nome_secoes">
+                                <a href="">PESQUISA PARA PAIS E ALUNOS</a>
+                            </div>
+                            <?php tt('Este é o nosso primeiro tooltip dinâmico') ?>
+                        </div>
+
+                    </div>
+
+                    <ul class="listagem editar">
+                        <li><a href="">Nova</a>&nbsp;&nbsp;&nbsp;<a href="">Listar</a></li>
+                        <li><a href="">Nova</a>&nbsp;&nbsp;&nbsp;<a href="">Listar</a></li>
+                        <li><a href="">Nova</a>&nbsp;&nbsp;&nbsp;<a href="">Listar</a></li>
+                        <li><a href="">Nova</a>&nbsp;&nbsp;&nbsp;<a href="">Listar</a></li>
+                        <li><a href="">Nova</a>&nbsp;&nbsp;&nbsp;<a href="">Listar</a></li>
+                    </ul>
+                    <ul class="listagem tipo">
+                        <li><a href="">Conteúdo</a></li>
+                        <li><a href="">Pesquisa</a></li>
+                        <li><a href="">Galeria de Fotos</a></li>
+                        <li><a href="">Conteúdos</a></li>
+                        <li><a href="">Pesquisa</a></li>
+                    </ul>
+                    <ul class="listagem pessoa">
+                        <li><a href="">Acácio Neimar de Oliveira</a></li>
+                        <li><a href="">Andréia de Oliveira</a></li>
+                        <li><a href="">Alexandre de Oliveira</a></li>
+                        <li><a href="">Andréia de Oliveira</a></li>
+                        <li><a href="">Alexandre de Oliveira</a></li>
+                    </ul>
+                </div>
+                <div class="rodape_gerenc">
+                </div>
+            </div>
+        </div>
+
+        <?php
+        /*
+         * CONTEÚDO DA SEGUNDA TAB - OUTRO SITE
+         */
+        ?>
+        <div class="panes">
+            <div>
+                <div class="titulo_gerenc">
+                    <ul>
+                        <li class="secoes">Seções</li>
+                        <li class="acoes">Ações</li>
+                        <li class="tipo">Tipo</li>
+                        <li class="acesso">Último acesso por</li>
+                    </ul>
+                </div>
+                <div class="corpo_gerenc">
+
+                    <div class="listagem">
+
+                        <div class="secoes">
+                            <div class="nome_secoes">
+                                <a href="#">ARTIGOS</a>
+                            </div>
+                            <?php tt('Para criar um novo texto, basta clicar em "Novo texto"
+                                      e você já tem na sua tela um editor que permitirá você redigir qualquer tipo de conteúdo.
+                                      Com o auxílio de categorias, você organiza tudo da forma que você desejar. ')
+                            ?>
+                        </div>
+
+                        <div class="secoes">
+                            <div class="nome_secoes">
+                                <a href="">GALERIA DE FOTOS</a>
+                            </div>
+                            <?php tt('Com a Galeria de Fotos você pode inserir imagens no seu site com facilidade. Crie uma galeria e faça o upload de várias fotos para ela.
+                                Ex: “Aniversário”, “Eventos”') ?>
+                        </div>
+
+                        <div class="secoes">
+                            <div class="nome_secoes">
+                                <a href="">NOTÍCIAS</a>
+                            </div>
+                            <?php tt('Para criar um novo texto, basta clicar em "Novo texto"
+                                      e você já tem na sua tela um editor que permitirá você redigir qualquer tipo de conteúdo.
+                                      Com o auxílio de categorias, você organiza tudo da forma que você desejar.')
+                            ?>
+                        </div>
+
+                    </div>
+
+                    <ul class="listagem editar">
+                        <li><a href="">Nova</a>&nbsp;&nbsp;&nbsp;<a href="">Listar</a></li>
+                        <li><a href="">Nova</a>&nbsp;&nbsp;&nbsp;<a href="">Listar</a></li>
+                        <li><a href="">Nova</a>&nbsp;&nbsp;&nbsp;<a href="">Listar</a></li>
+                    </ul>
+                    <ul class="listagem tipo">
+                        <li><a href="">Conteúdo</a></li>
+                        <li><a href="">Galeria de Fotos</a></li>
+                        <li><a href="">Conteúdos</a></li>
+                    </ul>
+                    <ul class="listagem pessoa">
+                        <li><a href="">Acácio Neimar de Oliveira</a></li>
+                        <li><a href="">Andréia de Oliveira</a></li>
+                        <li><a href="">Alexandre de Oliveira</a></li>
+                    </ul>
+                </div>
+                <div class="rodape_gerenc">
+                </div>
+            </div>
+
+            </div>
+    </div> <?php // FIM DO DIV PAINEL GERENCIAR ?>
+
+    <br clear="all" />
 	<div class="action_options">
         <?php
-        include(INC_DIR.'conteudo.inc/user_menu.php');
+       // include(INC_DIR.'conteudo.inc/user_menu.php');
         ?>
 
 	</div>
 <?php } ?>
+
+
+
+

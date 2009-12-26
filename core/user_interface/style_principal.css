@@ -1,0 +1,864 @@
+/*
+ * TOPO DO SITE - NOME DO SITE, ALTERAR DADOS E LOGOUT
+ */
+div#top {
+    width: 952px;
+    display: table;
+    margin: 0 auto;
+    background: url(img/meio_topo.png) repeat-y;
+}
+	div#top div.border {
+        width: 952px;
+        height: 20px;
+        font-size: 0em;
+        background: url(img/borda_topo.png) no-repeat;
+    }
+	div#top div.title div.logotipo {
+        width: 400px;
+        float: left;
+        text-align: left;
+        padding: 0 0 0 40px;
+    }
+        div#top div.title div.logotipo h1 {
+            margin-top: 0;
+        }
+	div#top div.title div.inicializacaorapida {
+        width: 500px;
+        text-align: left;
+        float: right;
+    }
+        div#top div.title div.inicializacaorapida div.altera_dados {
+            float: right;
+            margin-right: 20px;
+            margin-top: 10px;
+        }
+        div#top div.title div.inicializacaorapida div.logout {
+            float: right;
+            margin-right: 20px;
+            margin-top: 10px;
+        }
+        div#top div.title div.inicializacaorapida div.conectado_como {
+            float: right;
+            margin-right: 18px;
+            margin-top: 20px;
+            width: 300px;
+        }
+            div#top div.title div.inicializacaorapida div.conectado_como p {
+                font-size: 0.8em;
+                color: #727273;
+                text-align: right;
+            }
+
+/*
+ * NAVEGAÇÃO DO SITE
+ */
+div#navegacao { 
+	width: 952px;
+	height: 42px;
+	background: url(img/bottom_topo.png) no-repeat;
+	/*padding-left: 1px;*/
+    margin: 0 auto;
+    
+}
+	div#navegacao div.containner { 
+		width: 940px;
+		margin: 0 auto;
+        text-align: left;
+	}
+	div#navegacao div.containner div#menu ul {
+        list-style: none;
+        padding-top: 17px;
+    }
+	div#navegacao div.containner div#menu ul li {
+        display: inline;
+        height: 31px;
+    }
+	div#navegacao div.containner div#menu ul li a {
+        text-decoration: none;
+        color: white;
+        padding: 10px;
+        background: #0f61a1;
+
+    }
+        div#navegacao div.containner div#menu ul li a:hover {
+            text-decoration: none;
+            background: #1170b9;
+        }
+	div#navegacao div.containner div#menu ul li a.selecionado {
+        background: url(img/marcador.png) no-repeat bottom #2d88cf;
+        padding: 10px;
+        font-weight: bold;
+    }
+    div#navegacao div.containner div#menu ul li.opcao_direita {
+        margin-left: 413px;
+    }
+    
+	
+
+/***************************
+*
+*	BODY = CORPO
+*
+***************************/
+div.body {
+	width: 952px;
+	background: url(img/body_meio.png) repeat-y;
+	text-align: left;
+	margin: 0 auto;
+	font-size: 1.0em;
+}
+	div.body div.content {
+		padding: 20px 20px 20px 20px;
+		margin: 0px;
+		display: block;
+	}
+	
+	div.body div.content:after{
+        content:".";
+        clear:both;
+        display:block;
+		font-size: 0;
+        visibility:hidden;
+    }
+ 
+ 	div.body div.content h1 { margin-top: 0px; }
+ 	div.body div.content p { line-height: 20px; }
+
+    /*
+     * HIGHLIGHTS: painel com informações importantes
+     */
+
+        div.highlights_painel {
+            background: #f0f0f0;
+            min-height: 80px;
+            width: 100%;
+            border: 1px solid silver;
+            padding: 0px;
+            margin-bottom: 20px;
+            display: table;
+        }
+
+        div.highlights_painel div.containner {
+            margin: 10px;
+            display: table;
+        }
+
+
+    /*
+     * BOX DE MENSAGENS
+     *
+     * Painel onde encontram-se opções
+     */
+		div.body div.content div.box-metade {
+			width: 340px;
+			background: white;
+			margin-right: 10px;
+			float: left;
+		}
+		div.body div.content div.box-dois { margin: 0; }
+
+		div.body div.content div.box-full {
+			width: 690px;
+			background: white;
+			margin-right: 10px;
+		}
+		div.body div.content div.box { background: #dddddd; padding-bottom: 1px; margin-bottom: 10px; }
+		div.body div.content div.box div.titulo { padding: 5px; }
+		div.body div.content div.box div.titulo h2 { font-size: 1.2em; margin: 0; }
+		div.body div.content div.box div.corpo { margin: 1px; margin-bottom: 0; padding: 10px; background: white; }
+		div.body div.content div.box div.rodape { margin: 10px; padding: 10px; background: white; }
+		div.body div.content div.alerta { background: #ffee60; padding: 5px; border: 1px solid orange; margin-bottom: 10px; }
+		div.body div.content div.pergunta { background: yellow; padding: 15px; border: 1px solid orange; text-align: center; }
+		div.body div.content div.sucesso { background: #D9FFD9; padding: 5px; border: 1px solid #009900 }
+		div.body div.content div.insucesso { background: #f68585; padding: 5px; border: 1px solid #db4343 }
+
+
+    /*
+     * PAINEL DE OPÇÕES DA PÁGINA INICIAL
+     *
+     * Painel onde encontram-se opções rápidas de atalho
+     */
+            div.body div.content div.painel-metade {
+                width: 950px;
+                display: table;
+            }
+            div.body div.content div.painel-dois { margin: 0; }
+
+            div.body div.content div.painel-full {
+                width: 950px;
+                /*margin-right: 10px;*/
+            }
+            div.body div.content div.painel-metade div.painel {
+                padding-bottom: 1px;
+                padding-bottom: 10px;
+                float: left;
+                width: 285px;
+                padding-right: 25px;
+            }
+            div.body div.content div.painel-metade div.painel div.titulo {
+                background: url(img/painel_titulo.png) no-repeat;
+                width: 290px;
+                height: 29px;
+                display: table;
+            }
+            div.body div.content div.painel-metade div.painel div.titulo h2 {
+                font-size: 0.9em;
+                display: table;
+                margin: 0;
+                margin-top: 10px;
+                margin-left: 10px;
+            }
+            div.body div.content div.painel-metade div.painel div.corpo {
+                background: url(img/painel_meio.png) repeat-y;
+                width: 290px;
+                padding-bottom: 1px;
+            }
+                div.body div.content div.painel-metade div.painel div.corpo div.listagem {
+                    padding: 10px 0 0 5px;
+                }
+                    div.body div.content div.painel-metade div.painel div.corpo div.listagem ul li {
+                        list-style: circle;
+                        line-height: 18px;
+                    }
+            div.body div.content div.painel-metade .painel div.rodape {
+                background: url(img/painel_rodape.png) no-repeat;
+                width: 290px;
+                height: 13px;
+            }
+            /* Quanto aos front_painel, amostragem dos dados dos módulos */
+                div.body div.content div.painel-metade div.front_painel h3 { margin-bottom: 0; color: black; }
+                div.body div.content div.painel-metade div.front_painel div.corpo ul li.titulo { font-weight: bold; }
+                div.body div.content div.painel-metade div.front_painel div.corpo ul li.conteudo { list-style: none; }
+
+/*
+ * PAINEL GERENCIAR DA PÁGINA DE GERENCIAR CONTEUDO
+ */
+    div.body div.content div.painel_gerenciar {
+        padding-bottom: 1px;
+        padding-bottom: 10px;
+        float: left;
+        width: 950px;
+    }
+        div.body div.content div.painel_gerenciar div.tab {
+        }
+        div.body div.content div.painel_gerenciar div.tab div.esquerda {
+            background:  url(img/esquerda_tab.png) no-repeat;
+            width: 13px;
+            height: 33px;
+            float: left;
+            margin: 1px 0 0 6px;
+        }
+        div.body div.content div.painel_gerenciar div.tab div.direita {
+            background:  url(img/direita_tab.png) no-repeat;
+            width: 13px;
+            height: 33px;
+            float: left;
+            margin: 1px 0 0 0;
+        }
+            div.body div.content div.painel_gerenciar div.tab div.titulo_site {
+                display: table;
+                margin: 0 0 0 0px;
+                float: left;
+            }
+                /*
+                 * TABS
+                 */
+
+                /* root element for tabs  */
+                div.body div.content div.painel_gerenciar div.tab div.titulo_site ul.tabs {
+                    list-style:none;
+                    margin:0 !important;
+                    padding:0;
+                    height: 33px;
+                }
+
+                /* single tab */
+                div.body div.content div.painel_gerenciar div.tab div.titulo_site ul.tabs li {
+                    float:left;
+                    text-indent:0;
+                    padding:0;
+                    margin:0 !important;
+                    list-style-image:none !important;
+                }
+
+                /* link inside the tab. uses a background image */
+                div.body div.content div.painel_gerenciar div.tab div.titulo_site ul.tabs a {
+                    background: #2d88cf;
+                    /*background: url(img/blue.png) no-repeat -420px 0;*/
+                    font-size: 1.0em;
+                    display: block;
+                    height: 33px;
+                    line-height: 30px;
+                    text-align: center;
+                    text-decoration: none;
+                    color: white;
+                    padding: 0 10px 0 10px;
+                    margin: 0px;
+                    position: relative;
+                    top: 1px;
+                }
+
+                div.body div.content div.painel_gerenciar div.tab div.titulo_site ul.tabs a:active {
+                    font-weight: bold;
+                }
+                div.body div.content div.painel_gerenciar div.tab div.titulo_site ul.tabs a:focus {
+                    outline: none;
+                }
+                /* when mouse enters the tab move the background image */
+                div.body div.content div.painel_gerenciar div.tab div.titulo_site ul.tabs a:hover {
+                    background-position: -420px -31px;
+                    color: white;
+                }
+
+                /* active tab uses a class name "current". it's highlight is also done by moving the background image. */
+               div.body div.content div.painel_gerenciar div.tab div.titulo_site ul.tabs a.current, ul.tabs a.current:hover, ul.tabs li.current a {
+                    background-position: -420px -62px;
+                    cursor: default !important;
+                    color: white !important;
+                    background: url(img/marcador_ger.png) no-repeat bottom #2d88cf;
+                    font-weight: bold;
+                }
+
+                /* initially all panes are hidden */
+                
+                div.body div.content div.painel_gerenciar div.titulo_site a {
+                    height: 70px;
+                    background: #2d88cf;
+                    padding: 8px 0px 11px 0px;
+                    color: white;
+                    text-decoration: none;
+                }
+                div.body div.content div.painel_gerenciar div.titulo_site a:hover {
+                    height: 70px;
+                    background: #2d88cf;
+                    color: white;
+                }
+                div.body div.content div.painel_gerenciar div.titulo_site a.selecionado {
+                    background: url(img/marcador_ger.png) no-repeat bottom #2d88cf;
+                    font-weight: bold;
+                }
+
+                /*
+                 * INÍCIO DO CONTEÚDO DAS TABS
+                 */
+                div.body div.content div.painel_gerenciar div.panes div.pane {
+                    display:none;
+                }
+                div.body div.content div.painel_gerenciar div.panes div {
+                    color: #888888;
+                }
+                    div.body div.content div.painel_gerenciar div.panes div div.titulo_gerenc {
+                        background: url(img/painelgerenc_titulo.png) no-repeat;
+                        height: 39px;
+                        display: table;
+                        margin-top: 0px;
+                        float: left;
+                    }
+                        div.body div.content div.painel_gerenciar div.panes div div.titulo_gerenc ul li {
+                            float: left;
+                            display: table;
+                            list-style: none;
+                        }
+                            div.body div.content div.painel_gerenciar div.panes div div.titulo_gerenc ul li.secoes {
+                                padding: 12px 250px 0 0;
+                            }
+                            div.body div.content div.painel_gerenciar div.panes div div.titulo_gerenc ul li.acoes {
+                                padding: 12px 140px 0 0;
+                            }
+                            div.body div.content div.painel_gerenciar div.panes div div.titulo_gerenc ul li.tipo {
+                                padding: 12px 170px 0 0;
+                            }
+                            div.body div.content div.painel_gerenciar div.panes div div.titulo_gerenc ul li.acesso {
+                                padding: 12px 100px 0 0;
+                            }
+
+                    div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc {
+                        background: url(img/painelgerenc_meio.png) repeat-y;
+                        width: 911px;
+                        padding-bottom: 1px;
+                        display: table;
+                        float: left;
+                    }
+                        div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc ul.listagem {
+                            float: left;
+                            margin-top: 6px;
+                        }
+                        div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc ul.listagem li {
+                            list-style: none;
+
+                        }
+                            div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc ul.listagem li a {
+                                color: #888888;
+                                text-decoration: none;
+
+                            }
+                            div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc ul.listagem li a:hover {
+                                color: #181818;
+                                text-decoration: none;
+                            }
+            
+            /*
+             * NOVA E LISTAR
+             */
+            div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc ul.editar {
+                margin-left: 10px;
+                width: 80px;
+            }
+            div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc ul.editar li a {
+                text-decoration: underline;
+                line-height: 2.3em;
+            }
+            div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc ul.editar li a:hover {
+                color: #181818;
+                text-decoration: underline;
+            }
+            /*
+             * TIPO
+             */
+            div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc ul.tipo {
+                width: 150px;
+                margin-left: 100px;
+             
+            }
+                div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc ul.tipo li {
+                    font-size: 0.8em;
+                    line-height: 2.9em;
+                }
+               
+            /*
+             * ÚLTIMO ACESSO - PESSOA
+             */
+            div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc ul.pessoa {
+                width: 200px;
+                margin-left: 45px;
+            }
+                div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc ul.pessoa li {
+                    font-size: 0.8em;
+                    line-height: 2.9em;
+                }
+                /*
+                 * DIV CLASS SEÇÕES COM INTERROGAÇÃO
+                 */
+            div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc div.listagem {
+                float: left;
+                margin-top: 6px;
+                display: table;
+                margin-left: 20px;
+                
+            }
+            div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc div.listagem {
+                width: 300px;
+                display: block;
+            }
+                div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc div.listagem div.secoes {
+                    display: table;
+                }
+                    div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc div.listagem div.secoes a {
+                        line-height: 2.3em;
+                        color: #888888;
+                    }
+                div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc div.listagem div.secoes div.nome_secoes {
+                    display: table;
+                    float: left;
+                }
+            /*
+             * INTERROGAÇÃO
+             */
+            div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc div.listagem div.secoes div.hint {
+                float: left;
+                display: table;
+                color: black;
+            }
+                div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc div.listagem div.secoes div.hint a {
+                    background: url(img/interrogacao.png) no-repeat top;
+                    width: 20px;
+                    height: 20px;
+                    padding: 0 13px 0px 8px;
+                    display: block;
+                    text-decoration: none;
+                    margin-top: 3px;
+                    
+                }
+                div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc div.listagem div.secoes div.hint a:hover {
+                    background: url(img/interrogacao.png) no-repeat;
+                    width: 20px;
+                    height: 20px;
+                    padding: 0 13px 0px 8px;
+                    display: block;
+                    background-position: 10px -27px;
+                }
+               
+                div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc div.listagem div.secoes div.hint a:focus {
+                    outline: none;
+                }
+            /*
+             * TOOLTIP
+             */
+            div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc div.listagem div.secoes div.hint div.tooltip {
+                display: none;
+                background: transparent;
+                margin: 0 0 0 80px;
+                width: 235px;
+                color: #646464;
+                padding: 0;
+            }
+                div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc div.listagem div.secoes div.hint div.tooltip div.top {
+                    background: url(img/top_tooltip.png);
+                    margin: 0px;
+                    width: 255px;
+                    height: 20px;
+                    margin-left: 1px;
+                }
+
+                div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc div.listagem div.secoes div.hint div.tooltip div.text {
+                    background: url(img/meio_tooltip.png) repeat-y;
+                    margin: 0;
+                    width: 257px;
+                    padding: 10px;
+                    color: #646464;
+                }
+                    div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc div.listagem div.secoes div.hint div.tooltip div.text p {
+                        width: 206px;
+                        margin: 0 5px 0 15px;
+                        padding-top: 0;
+                    }
+
+                div.body div.content div.painel_gerenciar div.panes div div.corpo_gerenc div.listagem div.secoes div.hint div.tooltip div.bottom {
+                    background: url(img/bottom_tooltip.png);
+                    margin: 0px;
+                    width: 255px;
+                    height: 25px;
+                    margin-left: 1px;
+                }
+
+
+        div.body div.content .painel_gerenciar div.rodape_gerenc {
+            background: url(img/rodape_gerenciar.png) no-repeat;
+            width: 911px;
+            height: 14px;
+            float: left;
+        }
+
+       /*
+        * FIM DO CONTEÚDO DAS TABS
+        */
+
+
+
+/*
+ * PAINEL DE CONFIGURAÇÕES
+ */
+    div.body div.content div.painel_config {
+        padding-bottom: 1px;
+        padding-bottom: 10px;
+        float: left;
+        width: 950px;
+    }
+
+        div.body div.content div.painel_config div.tab ul.tabs div.esquerda {
+            background:  url(img/esquerda_tab.png) no-repeat;
+            width: 13px;
+            height: 33px;
+            float: left;
+            margin: 2px 0 0 6px;
+        }
+        div.body div.content div.painel_config div.tab ul.tabs div.direita {
+            background:  url(img/direita_tab.png) no-repeat;
+            width: 13px;
+            height: 33px;
+            float: left;
+            margin: 2px 0 0 0;
+        }
+
+        /*
+         * TABS
+         */
+
+        /* root element for tabs  */
+        div.body div.content div.painel_config div.tab ul.tabs {
+            list-style:none;
+            margin:0 !important;
+            padding:0;
+            height: 30px;
+        }
+
+        /* single tab */
+        div.body div.content div.painel_config div.tab ul.tabs li {
+            float:left;
+            text-indent:0;
+            padding:0;
+            margin:0 !important;
+            list-style-image:none !important;
+        }
+
+        /* link inside the tab. uses a background image */
+        div.body div.content div.painel_config div.tab ul.tabs a {
+            background: #2d88cf;
+            /*background: url(img/blue.png) no-repeat -420px 0;*/
+            font-size: 1.0em;
+            display: block;
+            height: 33px;
+            line-height: 30px;
+            text-align: center;
+            text-decoration: none;
+            color: white;
+            padding: 0 10px 0 10px;
+            margin: 0px;
+            position: relative;
+            top: 2px;
+
+        }
+
+        div.body div.content div.painel_config div.tab ul.tabs a:active {
+            font-weight: bold;
+        }
+        div.body div.content div.painel_config div.tab ul.tabs a:focus {
+            outline: none;
+        }
+        /* when mouse enters the tab move the background image */
+        div.body div.content div.painel_config div.tab ul.tabs a:hover {
+            background-position: -420px -31px;
+            color: white;
+        }
+
+        /* active tab uses a class name "current". it's highlight is also done by moving the background image. */
+       div.body div.content div.painel_config div.tab ul.tabs a.current, ul.tabs a.current:hover, ul.tabs li.current a {
+            background-position: -420px -62px;
+            cursor: default !important;
+            color: white !important;
+            background: url(img/marcador_ger.png) no-repeat bottom #2d88cf;
+            font-weight: bold;
+        }
+        /*
+         * FIM TABS
+         */
+
+
+        /* initially all panes are hidden */
+        div.body div.content div.painel_config a {
+            height: 70px;
+            background: #2d88cf;
+            padding: 8px 0px 11px 0px;
+            color: white;
+            text-decoration: none;
+        }
+        div.body div.content div.painel_config a:hover {
+            height: 70px;
+            background: #2d88cf;
+            color: white;
+        }
+        div.body div.content div.painel_config a.selecionado {
+            background: url(img/marcador_ger.png) no-repeat bottom #2d88cf;
+            font-weight: bold;
+        }
+
+        div.body div.content div.painel_config div.tab ul.tabs li {
+            list-style: none;
+        }
+
+
+        /*
+         * PAINEL GERENCIAR
+         */
+        div.body div.content div.painel_config div.panes div div.titulo_config {
+            background: url(img/painelgerenc_titulo.png) no-repeat;
+            width: 911px;
+            height: 39px;
+            display: table;
+            margin-top: 0px;
+            float: left;
+        }
+            div.body div.content div.painel_config div.panes div div.titulo_config ul li {
+                float: left;
+                display: table;
+                list-style: none;
+            }
+                div.body div.content div.painel_config div.panes div div.titulo_config ul li.opcao {
+                    padding: 12px 250px 0 0;
+                }
+
+
+        div.body div.content div.painel_config div.titulo h2 {
+            font-size: 0.9em;
+            display: table;
+            margin: 0;
+            margin-top: 10px;
+            margin-left: 10px;
+        }
+        div.body div.content div.painel_config div.panes div div.corpo_config {
+            background: url(img/painelgerenc_meio.png) repeat-y;
+            width: 911px;
+            padding-bottom: 1px;
+            display: table;
+            float: left;
+        }
+            div.body div.content div.painel_config div.panes div div.corpo_config ul.listagem {
+                float: left;
+                margin-top: 6px;
+            }
+            div.body div.content div.painel_config div.panes div div.corpo_config ul.listagem li {
+                list-style: none;
+            }
+                div.body div.content div.painel_config div.panes div div.corpo_config ul.listagem li a {
+                    color: #888888;
+                    text-decoration: none;
+
+                }
+                div.body div.content div.painel_config div.panes div div.corpo_config ul.listagem li a:hover {
+                    color: #181818;
+                    text-decoration: none;
+                    font-weight: bold;
+                }
+            /*
+             * INPUT
+             */
+            div.body div.content div.painel_config div.panes div div.corpo_config ul.input {
+                width: 150px;
+                line-height: 1.9em;
+                margin-left: 70px;
+            }
+               
+            /*
+             * NOME
+             */
+            div.body div.content div.painel_config div.panes div div.corpo_config ul.nome {
+                margin-left: 20px;
+                width: 220px;
+            }
+            div.body div.content div.painel_config div.panes div div.corpo_config ul.nome li {
+                line-height: 2.0em;
+            }
+
+            /*
+             * DICA
+             */
+            div.body div.content div.painel_config div.panes div div.corpo_config ul.dica {
+                width: 400px;
+                margin-left: 5px;
+
+            }
+                div.body div.content div.painel_config div.panes div div.corpo_config ul.dica li {
+                    font-size: 0.9em;
+                    line-height: 2.2em;
+                    color: #484848;
+                }
+        div.body div.content .painel_config div.panes div div.rodape_config {
+            background: url(img/rodape_gerenciar.png) no-repeat;
+            width: 911px;
+            height: 14px;
+            float: left;
+        }
+
+    /********* CATEGORIAS *********/
+            div.body div.content div.structure {  }
+            div#categoriacontainer select{ font-size: 1.0em }
+            div#categoriacontainer select option.node{ color: #990000; font-weight:normal; background-color: #D9ECFF; }
+            div.structure0 { font-weight: bold; text-transform: uppercase; color: #006600; }
+            div.structure1 { font-weight: normal; text-transform: uppercase; color:#009900; }
+            div.structure2 { font-weight: bold; color: #000099; }
+            div.structure3 { font-weight: normal; color: #0066FF; }
+            div.structure4, div.structure5, div.structure6, div.structure7, div.structure8 { font-weight: normal; font-style: italic; }
+
+
+
+/* Paginação ao final da lista de conteúdos ou usuários */
+			div.body div.content div.paginacao { margin: 0 auto; text-align: center; margin-top: 15px; margin-bottom: 15px; }
+
+
+	/* SEE-INFO */
+			div.body div.content div.detalhes { display: block; }
+						div.body div.content div.detalhes div.campo { float: left; display: inline; font-weight: bold; }
+						div.body div.content div.detalhes div.detalhe { float: left; display: inline; margin-left: 5px; }
+
+	/* Resultado de uma açao */
+			div.body div.content div.alert_box { text-align: center; width: 680px; display: table; }
+			div.body div.content div.alert_box div.containner { margin:0 auto; text-align: center; padding: 15px; background: #FFFF99; }
+				div.body div.content div.alert_box div.containner p {  }
+
+
+	
+/***************************
+*
+*	RODAPÉ
+*
+***************************/
+
+div#bottom {
+	width: 952px;
+	height: 13px;
+	background: url(img/rodape.png);
+	font-size: 1px;
+	margin: 0 auto;
+}
+
+	
+	
+/*******************************
+*** RSS BOX ***
+*******************************/
+
+.rssclass {
+	font-size: 12px;
+	float:left;
+	display: inline;
+	filter: progid:DXImageTransform.Microsoft.alpha(opacity=80); /*Specify fade effect in IE. Remove if desired.*/
+	-moz-opacity: 0.8; /*Specify fade effect in Firefox. Remove if desired.*/
+}
+	.rssclass a { color: green; text-decoration: underline; }
+	.rssclass a:hover { color: green; text-decoration: none; }
+
+
+div#categoriacontainer{
+	margin: 0 auto;
+	padding-bottom: 10px;
+	padding-left: 0;
+	border: solid 0.0em #3F4C6B;
+	text-align: left;
+}
+ 
+/*******************************
+*
+*	LISTAGEM DE CONTEÚDO AUST
+*
+*******************************/
+
+    /* acima de cada listagem há um painel de controle para excluir, bloquear itens, etc */
+    div.painel_de_controle { margin-bottom: 10px; padding: 0; float: right; }
+    /* tabela para listagem, seja de conteúdo ou usuários */
+    table.listagem { margin: 0px; border-collapse: collapse; }
+    table.listagem tr td { padding: 5px; }
+    table.listagem tr td { padding: 5px; margin: 0px;}
+
+    table.listagem tr.titulo {
+            color: #cccccc;
+            font-weight: bold;
+            background: #333333;
+        }
+    table.listagem tr.conteudo { height: 20px; }
+    table.listagem tr.conteudo td { background: #FFF0E1; border-top: 2px solid white; }
+    table.listagem tr.conteudo td a {  }
+
+    /* CAMPOOPTION
+     * Campos de opções Ajax em formulários de setup
+     */
+        table.listagem tr.conteudo td div.campooptions { background: #f1f1f1; padding: 10px; margin-top: 3px; border: 1px solid silver; }
+        table.listagem tr.conteudo td div.campooptions div.campooptions_tabela {  }
+        table.listagem tr.conteudo td div.campooptions div.campooptions_campo {  }
+
+    /* EST_OPTIONS
+     * Campos de opções rápidas
+     */
+        table tr td a.link_pai_do_est_options { text-decoration: none; }
+        table tr td a.link_pai_do_est_options:hover { text-decoration: none; }
+
+        table tr td div.est_options { margin-left: 10px; }
+        table tr td div.est_options a { color: orange; text-decoration: underline; }
+        table tr td div.est_options a:hover { color: #00b53c; text-decoration: none; }
+        table tr td div.est_options div.campooptions_tabela {  }
+        table tr td div.est_options div.campooptions_campo {  }
+        table tr td span.est_options_info { color: #666666; }
+
+
+table.listagem td.adddate { width: 120px; }
+
+

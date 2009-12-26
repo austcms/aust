@@ -12,6 +12,7 @@
  * Função de Start
  */
 $(document).ready(function(){
+
     if($('div.campooptions').length > 0){ $('div.campooptions').hide(); }
     if($('div.est_options').length > 0){ $('div.est_options').hide(); }
     if($('div#categoriacontainer_priv').length > 0) { $('div#categoriacontainer_priv').hide(); }
@@ -20,6 +21,24 @@ $(document).ready(function(){
     if(privilegio_escolhido != ''){
         form_privilegio('1')
     }
+
+
+    // Hints
+    $("div.hint a").tooltip({
+        //tip: '#caixa_tooltip',
+        //effect: 'fade',
+        events: {
+            def: 'click,mouseout'
+        }
+    });
+
+    // Panes
+    // perform JavaScript after the document is scriptable.
+    $(function() {
+        // setup ul.tabs to work as tabs for each div directly under div.panes
+        $("ul.tabs").tabs("div.panes > div");
+    });
+
 });
 
 var arquivoAjax = "core/libs/ajax.php";
