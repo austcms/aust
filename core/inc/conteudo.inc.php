@@ -202,40 +202,31 @@ else {
     <p>
         Use esta tela para gerenciar seu conteúdo. Passe o mouse sobre o conteúdo para mais opções.
     </p>
+    <?php
+    $sites = $aust->getStructures();
+    //pr($sites);
+    ?>
     <?php // INICIO DO DIV PAINEL GERENCIAR  - É GLOBAL?>
     <div id="painel_gerenciar">
 
+        <?php /* TABS */ ?>
         <div class="tabs_area">
             <!-- the tabs -->
             <ul class="tabs">
-                <?php
-                /*
-                 * NOME DA PRIMEIRA TAB - ECOBIOLOGIA
-                 */
-                ?>
-                <div class="tab_esquerda"></div>
+                <?php foreach( $sites as $site ): ?>
                 <li><a href="#">Ecobiologia</a></li>
-                <div class="tab_direita"></div>
-
-                <?php
-                /*
-                 * NOME DA PRIMEIRA TAB - OUTRO SITE
-                 */
-                ?>
-                <div class="tab_esquerda"></div>
-                <li><a href="#">Outro site</a></li>
-                <div class="tab_direita"></div>
+                <?php endforeach; ?>
             </ul>
                 
         </div>
-        <?php
-        /*
-         * CONTEÚDO DA PRIMEIRA TAB - ECOBIOLOGIA
-         */
-        ?>
+        <?php /* PANES */ ?>
         <div class="panes">
+            <?php
+            /*
+             * LOOP POR CADA SITE
+             */
+            foreach( $sites as $site ): ?>
             <div>
-
                 <table border="0" class="pane_listing">
                 <tr class="header">
                     <td class="secoes">Conteúdos</td>
@@ -243,116 +234,63 @@ else {
                     <td class="tipo">Tipo</td>
                     <td class="acesso">Último acesso por</td>
                 </tr>
-                <tr class="list">
-                    <td>
-                        ARTIGOS
-                        <?php tt('Teste') ?>
-                    </td>
-                    <td>
-                        <a href="">Nova</a>
-                        <a href="">Listar</a>
-                    </td>
-                    <td class="tipo">
-                        Conteúdo
-                    </td>
-                    <td class="acesso">
-                        Alexandre de Oliveira
-                    </td>
-                </tr>
-                <tr class="list">
-                    <td>
-                        <a href="#">ARTIGOS</a>
-                        <?php //tt('Teste')
-                        ?>
+                <?php
+                /*
+                 * LOOP POR CADA ESTRUTURA
+                 */
+                foreach( $site['Structures'] as $structure ):
 
-                    </td>
-                    <td>
-                        <a href="">Nova</a>
-                        <a href="">Listar</a>
-                    </td>
-                    <td>
-                        <a href="">Nova</a>
-                        <a href="">Listar</a>
-                    </td>
-                    <td>
-                        <a href="">Nova</a>
-                        <a href="">Listar</a>
-                    </td>
-                </tr>
-                </table>
+                    /*
+                     * Use o comando 'continue' para pular o resto do loop atual
+                     */
+                    unset($modInfo);
+                    if(is_file('modulos/'.$structure['tipo'].'/'.MOD_CONFIG)){
+                        /*
+                         * Pega dados do módulo. $modInfo existe.
+                         */
+                        include('modulos/'.$structure['tipo'].'/'.MOD_CONFIG);
 
-
-            </div>
-            <?php
-            /*
-             * CONTEÚDO DA SEGUNDA TAB - OUTRO SITE
-             *
-            />
-            <div>
-                <div class="titulo_gerenc">
-                    <ul>
-                        <li class="secoes">Seções</li>
-                        <li class="acoes">Ações</li>
-                        <li class="tipo">Tipo</li>
-                        <li class="acesso">Último acesso por</li>
-                    </ul>
-                </div>
-                <div class="corpo_gerenc">
-
-                    <div class="listagem">
-
-                        <div class="secoes">
-                            <div class="nome_secoes">
-                                <a href="#">ARTIGOS</a>
-                            </div>
-                            <?php tt('Para criar um novo texto, basta clicar em "Novo texto"
-                                      e você já tem na sua tela um editor que permitirá você redigir qualquer tipo de conteúdo.
-                                      Com o auxílio de categorias, você organiza tudo da forma que você desejar. ')
+                        $type = $modInfo['nome'];
+                    } else {
+                        $type = $structure['tipo'];
+                    }
+                    ?>
+                    <tr class="list">
+                        <td class="title">
+                            <span><?php echo $structure['nome'] ?></span>
+                            <?php //tt('Teste') ?>
+                        </td>
+                        <td class="options">
+                            <ul>
+                            <?php
+                            $options = (is_array($modInfo['opcoes'])) ? $modInfo['opcoes'] : Array();
+                            foreach ($options as $chave=>$valor) {
+                                echo '<li><a href="adm_main.php?section='.$_GET['section'].'&action='.$chave.'&aust_node='.$structure['id'].'">'.$valor.'</a></li>';
+                            }
                             ?>
-                        </div>
-
-                        <div class="secoes">
-                            <div class="nome_secoes">
-                                <a href="">GALERIA DE FOTOS</a>
-                            </div>
-                            <?php tt('Com a Galeria de Fotos você pode inserir imagens no seu site com facilidade. Crie uma galeria e faça o upload de várias fotos para ela.
-                                Ex: “Aniversário”, “Eventos”') ?>
-                        </div>
-
-                        <div class="secoes">
-                            <div class="nome_secoes">
-                                <a href="">NOTÍCIAS</a>
-                            </div>
-                            <?php tt('Para criar um novo texto, basta clicar em "Novo texto"
-                                      e você já tem na sua tela um editor que permitirá você redigir qualquer tipo de conteúdo.
-                                      Com o auxílio de categorias, você organiza tudo da forma que você desejar.')
+                            </ul>
+                        </td>
+                        <td class="tipo">
+                            <?php
+                            /*
+                             * TIPO
+                             */
+                            echo $type;
                             ?>
-                        </div>
+                        </td>
+                        <td class="acesso">
+                            Alexandre de Oliveira
+                        </td>
+                    </tr>
+                    <?php endforeach; ?>
+                    <tr class="footer">
+                        <td colspan="4"></td>
+                    </tr>
+                    </table>
 
-                    </div>
 
-                    <ul class="listagem editar">
-                        <li><a href="">Nova</a>&nbsp;&nbsp;&nbsp;<a href="">Listar</a></li>
-                        <li><a href="">Nova</a>&nbsp;&nbsp;&nbsp;<a href="">Listar</a></li>
-                        <li><a href="">Nova</a>&nbsp;&nbsp;&nbsp;<a href="">Listar</a></li>
-                    </ul>
-                    <ul class="listagem tipo">
-                        <li><a href="">Conteúdo</a></li>
-                        <li><a href="">Galeria de Fotos</a></li>
-                        <li><a href="">Conteúdos</a></li>
-                    </ul>
-                    <ul class="listagem pessoa">
-                        <li><a href="">Acácio Neimar de Oliveira</a></li>
-                        <li><a href="">Andréia de Oliveira</a></li>
-                        <li><a href="">Alexandre de Oliveira</a></li>
-                    </ul>
                 </div>
-                <div class="rodape_gerenc">
-                </div>
-            </div>
-             *
-             */
-            ?>
+            <?php endforeach; ?>
         </div>
 
     </div><?php // FIM DO DIV PAINEL GERENCIAR ?>
@@ -360,7 +298,8 @@ else {
     <br clear="all" />
 	<div class="action_options">
         <?php
-       // include(INC_DIR.'conteudo.inc/user_menu.php');
+        //pr($aust->getStructures());
+        //include(INC_DIR.'conteudo.inc/user_menu.php');
         ?>
 
 	</div>

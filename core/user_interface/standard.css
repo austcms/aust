@@ -1,4 +1,4 @@
-* { margin: 0; padding: 0; }
+* { margin: 0px; padding: 0px; }
 
 body {
     font-family: Verdana, Arial, Tahoma, Helvetica, sans-serif;
@@ -31,6 +31,6 @@ h3 { font-size: 1.0em; }
 
 ul { margin-left: 20px; }
 
-table { border-spacing: 0; }
+table { border-spacing: 0px; padding: 0px; border-collapse: collapse; }
 
 div#global { width: 960px; margin: 0 auto; }

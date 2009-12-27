@@ -234,34 +234,20 @@ div.body {
  * PAINEL GERENCIAR DA PÁGINA DE GERENCIAR CONTEUDO
  */
 
-div.tabs_area { display: table; margin: 0 0 0 5px; } /* div contendo tabs */
+div.tabs_area { display: table; margin: 0 0 0 0px; } /* div contendo tabs */
 ul.tabs {
     display: table;
     list-style:none;
     margin: 0 !important; padding: 0;
-    height: 33px;
-}
-
-ul.tabs div.tab_esquerda {
-    background:  url(img/esquerda_tab.png) no-repeat;
-    width: 13px;
-    height: 33px;
-    float: left;
-    margin: 1px 0 0 1px;
-}
-ul.tabs div.tab_direita {
-    background:  url(img/direita_tab.png) no-repeat;
-    width: 13px;
-    height: 33px;
-    float: left;
-    margin: 1px 0 0 0;
+    height: auto;
+    width: auto;
 }
 
     /* Cada Tab */
     ul.tabs li {
         float:left;
         text-indent:0;
-        padding:0; margin:0 !important;
+        padding:0; margin: 0 3px 0 0;
     }
 
     /*
@@ -269,19 +255,19 @@ ul.tabs div.tab_direita {
      */
     ul.tabs a {
         background: #2d88cf;
+        background: #edf6ff;
+        border-bottom: 1px solid #dddddd;
+        /* background: #edf6ff; */
         /*background: url(img/blue.png) no-repeat -420px 0;*/
-        display: block;
-        height: 33px;
-        line-height: 30px;
-        text-align: center;
+        display: inline-block;
+        height: auto;
+        width: auto;
         text-decoration: none;
-        color: white;
-        padding: 0 10px 0 10px;
+        color: #444444;
+        font-size: 1.2em;
+        padding: 5px 8px 8px 8px;
         margin: 0px;
-        position: relative;
-        top: 1px;
     }
-
     /* Comportamento das Tabs */
         ul.tabs a:active { font-weight: bold; }
         ul.tabs a:focus { outline: none; }
@@ -291,10 +277,13 @@ ul.tabs div.tab_direita {
         ul.tabs a.current, ul.tabs a.current:hover, ul.tabs li.current a {
             background-position: -420px -62px;
             cursor: default !important;
-            color: white !important;
-            background: url(img/marcador_ger.png) no-repeat bottom #2d88cf;
-            font-weight: bold;
+            color: #2d88cf;
+            background: url(img/marcador_ger.png) no-repeat bottom #edf6ff;
+            background: #edf6ff;
+            border-bottom: 1px solid #edf6ff;
         }
+
+
 
 /*
  * TAB PANES - CONTEÚDO
@@ -302,36 +291,53 @@ ul.tabs div.tab_direita {
 table.pane_listing {
     border: 0px solid;
     width: 911px;
+    padding: 0;
 }
-    table.pane_listing .header {
-        background: url(img/painelgerenc_titulo.png) no-repeat;
-        height: 39px;
-        margin: 0px;
-        padding: 0;
+    table.pane_listing tr.header {
+        background: #edf6ff;
+        border-bottom: 1px solid #eeeeee;
+        height: 30px;
+        margin: 0px; padding: 0;
     }
 
-    table.pane_listing tr td:first-child { padding: 0 0 1px 15px; }
-    table.pane_listing tr.header td {
-        color: #888888; text-transform: uppercase;
-        font-size: 0.9em;
-    }
+        table.pane_listing tr td:first-child {  }
+        table.pane_listing tr.header td {
+            color: #888888; text-transform: uppercase;
+            font-size: 0.9em;
+            padding: 0 0 0px 10px;
+        }
         table.pane_listing tr.header td.tipo { font-size: 0.7em; }
         table.pane_listing tr.header td.acesso { font-size: 0.7em; }
     
     table.pane_listing tr.list {
-        background: url(img/painelgerenc_meio.png) repeat-y;
+        background: #fafafa;
         width: 911px;
+    }
+        table.pane_listing tr.list td {
+            color: #888888; text-transform: uppercase;
+            font-size: 0.9em;
+            padding: 10px 0 0px 10px;
 
-    }
-    table.pane_listing tr.list td {
-        color: #888888; text-transform: uppercase;
-        font-size: 0.9em;
-        padding-top: 7px; /* override td:first-child padding */
-        padding-bottom: 7px;
-    }
+        }
+        /* Colunas de conteúdos */
+        table.pane_listing tr.list td.title span {
+            font-weight: bold;
+            display: inline;
+            float: left;
+        }
+        table.pane_listing tr.list td.options ul { list-style: none; margin: 0; }
+        table.pane_listing tr.list td.options ul li {
+            display: inline; margin-right: 4px;
+            font-size: 0.8em;
+        }
         table.pane_listing tr.list td.tipo { font-size: 0.7em; }
         table.pane_listing tr.list td.acesso { font-size: 0.7em; }
 
+    table.pane_listing tr.footer {
+        height: 10px;
+        background: #fafafa;
+        border-bottom: 1px solid #efefef;
+    }
 
 /* fim tab panes <<<<<<<<<*/
 
@@ -395,32 +401,7 @@ table.pane_listing {
             list-style-image:none !important;
         }
 
-        /*
-         * TABS
-         */
-        ul.tabs a {
-            background: #2d88cf;
-            color: white;
-            height: 33px;
-            line-height: 30px;
-            text-align: center;
-            text-decoration: none;
-            padding: 0 10px 0 10px;
-            margin: 0px;
-        }
-
-        ul.tabs a:active { font-weight: bold; }
-        ul.tabs a:focus { outline: none; }
-        ul.tabs a:hover { background-position: -420px -31px; color: white; }
-
-        /* active tab uses a class name "current". it's highlight is also done by moving the background image. */
-       ul.tabs a.current, ul.tabs a.current:hover, ul.tabs li.current a {
-            background-position: -420px -62px;
-            cursor: default !important;
-            color: white !important;
-            background: url(img/marcador_ger.png) no-repeat bottom #2d88cf;
-            font-weight: bold;
-        }
+        
         /*
          * FIM TABS
          */
