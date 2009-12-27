@@ -45,9 +45,9 @@
              * NOME DO SITE - EDITÁVEL
              */
             ?>
-        	<div class="logotipo">
+            <div class="logotipo">
             	<h1>AC Informática</h1>
-                <p style="font-size: 0.9em; color: #004b85;">Gerencie o seu conteúdo</p>
+                <p>Gerencie o seu conteúdo</p>
             </div>
 
             <div class="inicializacaorapida">
@@ -137,5 +137,5 @@
     </div>
 </div>
 
-</BODY>
-</HTML>
+</body>
+</html>

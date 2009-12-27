@@ -35,13 +35,6 @@ table { border-spacing: 0; }
 
 div#global { width: 770px; margin: 0 auto; }
 
-div#top { width: 770px; display: table; margin: 0 auto; background: url(img/layoutv1/body.jpg) repeat-y; }
-	div#top div.border { width: 770px; height: 13px; font-size: 0em; background: url(img/layoutv1/bottom_top.png) no-repeat; }
-	div#top div.title { width: 770px; background: url(img/layoutv1/body.jpg) repeat-y; }
-	div#top div.title div.logotipo { width: 220px; height: 140px; float: left; }
-	div#top div.title div.inicializacaorapida { width: 550px; text-align: left; float: left; }
-	div#top div.title div.inicializacaorapida span { font-size: 1em; color: #999999; }
-
 
 div#navegacao { 
 	width: 770px;
