@@ -206,27 +206,26 @@ else {
     <div id="painel_gerenciar">
 
         <div class="tabs_area">
-            
-                <!-- the tabs -->
-                <ul class="tabs">
-                    <?php
-                    /*
-                     * NOME DA PRIMEIRA TAB - ECOBIOLOGIA
-                     */
-                    ?>
-                    <div class="esquerda"></div>
-                    <li><a href="#">Ecobiologia</a></li>
-                    <div class="direita"></div>
+            <!-- the tabs -->
+            <ul class="tabs">
+                <?php
+                /*
+                 * NOME DA PRIMEIRA TAB - ECOBIOLOGIA
+                 */
+                ?>
+                <div class="tab_esquerda"></div>
+                <li><a href="#">Ecobiologia</a></li>
+                <div class="tab_direita"></div>
 
-                    <?php
-                    /*
-                     * NOME DA PRIMEIRA TAB - OUTRO SITE
-                     */
-                    ?>
-                    <div class="esquerda"></div>
-                    <li><a href="#">Outro site</a></li>
-                    <div class="direita"></div>
-                </ul>
+                <?php
+                /*
+                 * NOME DA PRIMEIRA TAB - OUTRO SITE
+                 */
+                ?>
+                <div class="tab_esquerda"></div>
+                <li><a href="#">Outro site</a></li>
+                <div class="tab_direita"></div>
+            </ul>
                 
         </div>
         <?php
@@ -239,10 +238,26 @@ else {
 
                 <table border="0" class="pane_listing">
                 <tr class="header">
-                    <td class="secoes">Seções</td>
-                    <td class="acoes">Ações</td>
+                    <td class="secoes">Conteúdos</td>
+                    <td class="acao">Opções</td>
                     <td class="tipo">Tipo</td>
                     <td class="acesso">Último acesso por</td>
+                </tr>
+                <tr class="list">
+                    <td>
+                        ARTIGOS
+                        <?php tt('Teste') ?>
+                    </td>
+                    <td>
+                        <a href="">Nova</a>
+                        <a href="">Listar</a>
+                    </td>
+                    <td class="tipo">
+                        Conteúdo
+                    </td>
+                    <td class="acesso">
+                        Alexandre de Oliveira
+                    </td>
                 </tr>
                 <tr class="list">
                     <td>
@@ -252,15 +267,16 @@ else {
 
                     </td>
                     <td>
-                        <a href="">Nova</a>&nbsp;&nbsp;&nbsp;<a href="">Listar</a>
+                        <a href="">Nova</a>
+                        <a href="">Listar</a>
                     </td>
                     <td>
-                        <a href="">Nova</a>&nbsp;&nbsp;&nbsp;<a href="">Listar</a>
-
+                        <a href="">Nova</a>
+                        <a href="">Listar</a>
                     </td>
                     <td>
-                        <a href="">Nova</a>&nbsp;&nbsp;&nbsp;<a href="">Listar</a>
-
+                        <a href="">Nova</a>
+                        <a href="">Listar</a>
                     </td>
                 </tr>
                 </table>

@@ -233,106 +233,107 @@ div.body {
 /*
  * PAINEL GERENCIAR DA PÁGINA DE GERENCIAR CONTEUDO
  */
-#painel_gerenciar {
-    padding-bottom: 10px;
-    float: left;
-    width: 950px;
+
+div.tabs_area { display: table; margin: 0 0 0 5px; } /* div contendo tabs */
+ul.tabs {
+    display: table;
+    list-style:none;
+    margin: 0 !important; padding: 0;
+    height: 33px;
 }
-    #painel_gerenciar div.tabs_area {
-        display: table;
+
+ul.tabs div.tab_esquerda {
+    background:  url(img/esquerda_tab.png) no-repeat;
+    width: 13px;
+    height: 33px;
+    float: left;
+    margin: 1px 0 0 1px;
+}
+ul.tabs div.tab_direita {
+    background:  url(img/direita_tab.png) no-repeat;
+    width: 13px;
+    height: 33px;
+    float: left;
+    margin: 1px 0 0 0;
+}
+
+    /* Cada Tab */
+    ul.tabs li {
+        float:left;
+        text-indent:0;
+        padding:0; margin:0 !important;
     }
-    #painel_gerenciar div.tabs_area div.esquerda {
-        background:  url(img/esquerda_tab.png) no-repeat;
-        width: 13px;
+
+    /*
+     * TABS - anchors
+     */
+    ul.tabs a {
+        background: #2d88cf;
+        /*background: url(img/blue.png) no-repeat -420px 0;*/
+        display: block;
         height: 33px;
-        float: left;
-        margin: 1px 0 0 6px;
+        line-height: 30px;
+        text-align: center;
+        text-decoration: none;
+        color: white;
+        padding: 0 10px 0 10px;
+        margin: 0px;
+        position: relative;
+        top: 1px;
     }
-    #painel_gerenciar div.tabs_area div.direita {
-        background:  url(img/direita_tab.png) no-repeat;
-        width: 13px;
-        height: 33px;
-        float: left;
-        margin: 1px 0 0 0;
+
+    /* Comportamento das Tabs */
+        ul.tabs a:active { font-weight: bold; }
+        ul.tabs a:focus { outline: none; }
+        ul.tabs a:hover { background-position: -420px -31px; color: white; }
+
+    /* Tabs selecionada atualmente. */
+        ul.tabs a.current, ul.tabs a.current:hover, ul.tabs li.current a {
+            background-position: -420px -62px;
+            cursor: default !important;
+            color: white !important;
+            background: url(img/marcador_ger.png) no-repeat bottom #2d88cf;
+            font-weight: bold;
+        }
+
+/*
+ * TAB PANES - CONTEÚDO
+ */
+table.pane_listing {
+    border: 0px solid;
+    width: 911px;
+}
+    table.pane_listing .header {
+        background: url(img/painelgerenc_titulo.png) no-repeat;
+        height: 39px;
+        margin: 0px;
+        padding: 0;
     }
-            /*
-             * TABS
-             */
 
-            /* root element for tabs  */
-            #painel_gerenciar div.tabs_area ul.tabs {
-                list-style:none;
-                margin:0 !important;
-                padding:0;
-                height: 33px;
-            }
+    table.pane_listing tr td:first-child { padding: 0 0 1px 15px; }
+    table.pane_listing tr.header td {
+        color: #888888; text-transform: uppercase;
+        font-size: 0.9em;
+    }
+        table.pane_listing tr.header td.tipo { font-size: 0.7em; }
+        table.pane_listing tr.header td.acesso { font-size: 0.7em; }
+    
+    table.pane_listing tr.list {
+        background: url(img/painelgerenc_meio.png) repeat-y;
+        width: 911px;
 
-            /* single tab */
-            #painel_gerenciar div.tabs_area ul.tabs li {
-                float:left;
-                text-indent:0;
-                padding:0;
-                margin:0 !important;
-                list-style-image:none !important;
-            }
-
-            /* link inside the tab. uses a background image */
-            #painel_gerenciar div.tabs_area ul.tabs a {
-                background: #2d88cf;
-                /*background: url(img/blue.png) no-repeat -420px 0;*/
-                font-size: 1.0em;
-                display: block;
-                height: 33px;
-                line-height: 30px;
-                text-align: center;
-                text-decoration: none;
-                color: white;
-                padding: 0 10px 0 10px;
-                margin: 0px;
-                position: relative;
-                top: 1px;
-            }
-
-            #painel_gerenciar div.tabs_area ul.tabs a:active {
-                font-weight: bold;
-            }
-            #painel_gerenciar div.tabs_area ul.tabs a:focus {
-                outline: none;
-            }
-            /* when mouse enters the tab move the background image */
-            #painel_gerenciar div.tabs_area ul.tabs a:hover {
-                background-position: -420px -31px;
-                color: white;
-            }
-
-            /* active tab uses a class name "current". it's highlight is also done by moving the background image. */
-           #painel_gerenciar div.tabs_area ul.tabs a.current, ul.tabs a.current:hover, ul.tabs li.current a {
-                background-position: -420px -62px;
-                cursor: default !important;
-                color: white !important;
-                background: url(img/marcador_ger.png) no-repeat bottom #2d88cf;
-                font-weight: bold;
-            }
+    }
+    table.pane_listing tr.list td {
+        color: #888888; text-transform: uppercase;
+        font-size: 0.9em;
+        padding-top: 7px; /* override td:first-child padding */
+        padding-bottom: 7px;
+    }
+        table.pane_listing tr.list td.tipo { font-size: 0.7em; }
+        table.pane_listing tr.list td.acesso { font-size: 0.7em; }
 
 
-            /*
-             * CONTEÚDO PANES
-             */
-
-            table.pane_listing {
-                border: 0px solid;
-                width: 911px;
-            }
-                table.pane_listing .header {
-                    background: url(img/painelgerenc_titulo.png) no-repeat;
-                    height: 39px;
-                    margin: 0px;
-                    padding: 0;
-                }
-                table.pane_listing tr.list td {
-                    color: #888888;
-                }
-
+/* fim tab panes <<<<<<<<<*/
 
 
     div.body div.content .painel_gerenciar div.rodape_gerenc {
@@ -394,38 +395,26 @@ div.body {
             list-style-image:none !important;
         }
 
-        /* link inside the tab. uses a background image */
-        div.body div.content div.painel_config div.tab ul.tabs a {
+        /*
+         * TABS
+         */
+        ul.tabs a {
             background: #2d88cf;
-            /*background: url(img/blue.png) no-repeat -420px 0;*/
-            font-size: 1.0em;
-            display: block;
+            color: white;
             height: 33px;
             line-height: 30px;
             text-align: center;
             text-decoration: none;
-            color: white;
             padding: 0 10px 0 10px;
             margin: 0px;
-            position: relative;
-            top: 2px;
-
         }
 
-        div.body div.content div.painel_config div.tab ul.tabs a:active {
-            font-weight: bold;
-        }
-        div.body div.content div.painel_config div.tab ul.tabs a:focus {
-            outline: none;
-        }
-        /* when mouse enters the tab move the background image */
-        div.body div.content div.painel_config div.tab ul.tabs a:hover {
-            background-position: -420px -31px;
-            color: white;
-        }
+        ul.tabs a:active { font-weight: bold; }
+        ul.tabs a:focus { outline: none; }
+        ul.tabs a:hover { background-position: -420px -31px; color: white; }
 
         /* active tab uses a class name "current". it's highlight is also done by moving the background image. */
-       div.body div.content div.painel_config div.tab ul.tabs a.current, ul.tabs a.current:hover, ul.tabs li.current a {
+       ul.tabs a.current, ul.tabs a.current:hover, ul.tabs li.current a {
             background-position: -420px -62px;
             cursor: default !important;
             color: white !important;
@@ -679,37 +668,33 @@ table.listagem td.adddate { width: 120px; }
 /*
  * INTERROGAÇÃO
  */
-div.hint {
-    float: left;
-    display: table;
-    color: black;
+span.hint {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
 }
-    div.hint a {
+    span.hint a {
         background: url(img/interrogacao.png) no-repeat top;
+        display: inline-block;
         width: 20px;
         height: 20px;
-        padding: 0 13px 0px 8px;
-        display: block;
         text-decoration: none;
-        margin-top: 3px;
+        padding: 0; margin: 0;
 
     }
-    div.hint a:hover {
+    
+    span.hint a:hover {
         background: url(img/interrogacao.png) no-repeat;
-        width: 20px;
-        height: 20px;
-        padding: 0 13px 0px 8px;
-        display: block;
-        background-position: 10px -27px;
+        background-position: 0px -27px;
     }
 
-    div.hint a:focus {
+    span.hint a:focus {
         outline: none;
     }
 /*
  * TOOLTIP
  */
-div.hint div.tooltip {
+span.hint div.tooltip {
     display: none;
     background: transparent;
     margin: 0 0 0 80px;
@@ -717,7 +702,7 @@ div.hint div.tooltip {
     color: #646464;
     padding: 0;
 }
-    div.hint div.tooltip div.top {
+    span.hint div.tooltip div.top {
         background: url(img/top_tooltip.png);
         margin: 0px;
         width: 255px;
@@ -725,23 +710,24 @@ div.hint div.tooltip {
         margin-left: 1px;
     }
 
-    div.hint div.tooltip div.text {
+    span.hint div.tooltip div.text {
         background: url(img/meio_tooltip.png) repeat-y;
         margin: 0;
         width: 257px;
         padding: 10px;
         color: #646464;
     }
-        div.hint div.tooltip div.text p {
+        span.hint div.tooltip div.text p {
             width: 206px;
             margin: 0 5px 0 15px;
             padding-top: 0;
         }
 
-    div.hint div.tooltip div.bottom {
+    span.hint div.tooltip div.bottom {
         background: url(img/bottom_tooltip.png);
         margin: 0px;
         width: 255px;
         height: 25px;
         margin-left: 1px;
     }
+    

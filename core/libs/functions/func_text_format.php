@@ -27,15 +27,15 @@
 function tooltip($str = ''){
     if( !empty($str) ){
         ?>
-        <div class="hint">
-            <a href="#" title="Saiba mais"></a>
+        <span class="hint">
+            <a href="javascript: void(0)" title="Saiba mais">&nbsp;</a>
 
             <div class="tooltip">
                 <div class="top"></div>
                 <div class="text"><p><?php echo $str ?></p></div>
                 <div class="bottom"></div>
             </div>
-        </div>
+        </span>
         <?php
         return true;
     }
