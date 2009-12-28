@@ -1,5 +1,5 @@
 /*
- * TOPO DO SITE - NOME DO SITE, ALTERAR DADOS E LOGOUT
+ * CABEÇALHO DO SITE
  */
 div#top {
     width: 952px;
@@ -107,17 +107,17 @@ div.body {
 	margin: 0 auto;
 	font-size: 1.0em;
 }
-	div.body div.content {
-		padding: 20px 20px 20px 20px;
-		margin: 0px;
-		display: block;
-	}
-	
-	div.body div.content:after{
+    div.body div.content {
+            padding: 20px 20px 20px 20px;
+            margin: 0px;
+            display: block;
+    }
+
+    div.body div.content:after{
         content:".";
         clear:both;
         display:block;
-		font-size: 0;
+        font-size: 0;
         visibility:hidden;
     }
  
@@ -149,28 +149,28 @@ div.body {
      *
      * Painel onde encontram-se opções
      */
-		div.body div.content div.box-metade {
-			width: 340px;
-			background: white;
-			margin-right: 10px;
-			float: left;
-		}
-		div.body div.content div.box-dois { margin: 0; }
+            div.body div.content div.box-metade {
+                    width: 340px;
+                    background: white;
+                    margin-right: 10px;
+                    float: left;
+            }
+            div.body div.content div.box-dois { margin: 0; }
 
-		div.body div.content div.box-full {
-			width: 690px;
-			background: white;
-			margin-right: 10px;
-		}
-		div.body div.content div.box { background: #dddddd; padding-bottom: 1px; margin-bottom: 10px; }
-		div.body div.content div.box div.titulo { padding: 5px; }
-		div.body div.content div.box div.titulo h2 { font-size: 1.2em; margin: 0; }
-		div.body div.content div.box div.corpo { margin: 1px; margin-bottom: 0; padding: 10px; background: white; }
-		div.body div.content div.box div.rodape { margin: 10px; padding: 10px; background: white; }
-		div.body div.content div.alerta { background: #ffee60; padding: 5px; border: 1px solid orange; margin-bottom: 10px; }
-		div.body div.content div.pergunta { background: yellow; padding: 15px; border: 1px solid orange; text-align: center; }
-		div.body div.content div.sucesso { background: #D9FFD9; padding: 5px; border: 1px solid #009900 }
-		div.body div.content div.insucesso { background: #f68585; padding: 5px; border: 1px solid #db4343 }
+            div.body div.content div.box-full {
+                    width: 690px;
+                    background: white;
+                    margin-right: 10px;
+            }
+            div.body div.content div.box { background: #dddddd; padding-bottom: 1px; margin-bottom: 10px; }
+            div.body div.content div.box div.titulo { padding: 5px; }
+            div.body div.content div.box div.titulo h2 { font-size: 1.2em; margin: 0; }
+            div.body div.content div.box div.corpo { margin: 1px; margin-bottom: 0; padding: 10px; background: white; }
+            div.body div.content div.box div.rodape { margin: 10px; padding: 10px; background: white; }
+            div.body div.content div.alerta { background: #ffee60; padding: 5px; border: 1px solid orange; margin-bottom: 10px; }
+            div.body div.content div.pergunta { background: yellow; padding: 15px; border: 1px solid orange; text-align: center; }
+            div.body div.content div.sucesso { background: #D9FFD9; padding: 5px; border: 1px solid #009900 }
+            div.body div.content div.insucesso { background: #f68585; padding: 5px; border: 1px solid #db4343 }
 
 
     /*
@@ -234,13 +234,14 @@ div.body {
  * PAINEL GERENCIAR DA PÁGINA DE GERENCIAR CONTEUDO
  */
 
-div.tabs_area { display: table; margin: 0 0 0 0px; } /* div contendo tabs */
+div.tabs_area { display: block; margin: 0 0 20px 0px; } /* div contendo tabs */
 ul.tabs {
-    display: table;
+    display: block;
     list-style:none;
     margin: 0 !important; padding: 0;
     height: auto;
     width: auto;
+    background: red;
 }
 
     /* Cada Tab */
@@ -287,7 +288,18 @@ ul.tabs {
 
 /*
  * TAB PANES - CONTEÚDO
+ *
+ * - table.pane_listing - Quando há uma listagem, esta é a classe
+ *
+ * - .background - Quando o contéudo é simples, .background no div filho de
+ *                 div.pane
  */
+
+/* TAB PANE -> table.pane_listing */
+div.panes div.background { background: #fafafa; padding: 0px; }
+    div.panes div.background .header { background: #edf6ff; padding: 10px; }
+
+/* TAB PANE -> table.pane_listing */
 table.pane_listing {
     border: 0px solid;
     width: 911px;
@@ -318,6 +330,10 @@ table.pane_listing {
             font-size: 0.9em;
             padding: 10px 0 0px 10px;
 
+        }
+        /* Pane sem conteúdo */
+        div.panes .sem_conteudo {
+            display: inline-block; margin: 0 10px 10px 10px;
         }
         /* Colunas de conteúdos */
         table.pane_listing tr.list td.title span {

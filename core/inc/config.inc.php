@@ -66,14 +66,14 @@ if(!empty($_POST['inserirmodulo'])){
 </p>
 
 
-<div class="painel_config">
+<div class="painel_config2">
     <?php
     /*
      * NOME DAS TABS - GERAL E SISTEMA
      */
     ?>
 
-    <div class="tab">
+    <div class="tabs_area">
 
         <!-- the tabs -->
         <ul class="tabs">
@@ -83,27 +83,20 @@ if(!empty($_POST['inserirmodulo'])){
              * NOME DA PRIMEIRA TAB - GERAL
              */
             ?>
-            <div class="esquerda"></div>
             <li><a href="#">Geral</a></li>
-            <div class="direita"></div>
-
             <?php
             /*
              * NOME DA SEGUNDA TAB - SISTEMA
              */
             ?>
-            <div class="esquerda"></div>
             <li><a href="#">Sistema</a></li>
-            <div class="direita"></div>
 
             <?php
             /*
              * NOME DA TERCEIRA TAB - EXEMPLO
              */
             ?>
-            <div class="esquerda"></div>
             <li><a href="#">Exemplo</a></li>
-            <div class="direita"></div>
 
         </ul>
 
@@ -115,7 +108,10 @@ if(!empty($_POST['inserirmodulo'])){
      */
     ?>
     <div class="panes">
-        <div>
+        <div class="background">
+            <div class="header">
+                Há
+            </div>
             <div class="titulo_config">
                 <ul>
                     <li class="opcao">Opção</li>
@@ -136,17 +132,7 @@ if(!empty($_POST['inserirmodulo'])){
                 </ul>
 
             </div>
-            <div class="rodape_config">
-            </div>
         </div>
-    </div>
-    
-    <?php
-    /*
-     * CONTEÚDO DA SEGUNDA TAB - SISTEMAS
-     */
-    ?>
-    <div class="panes">
         <div>
             <div class="titulo_config">
                 <ul>
@@ -171,14 +157,6 @@ if(!empty($_POST['inserirmodulo'])){
             <div class="rodape_config">
             </div>
         </div>
-    </div>
-
-    <?php
-    /*
-     * CONTEÚDO DA TERCEIRA TAB - EXEMPLO
-     */
-    ?>
-    <div class="panes">
         <div>
             <div class="titulo_config">
                 <ul>

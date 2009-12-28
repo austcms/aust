@@ -214,7 +214,7 @@ else {
             <!-- the tabs -->
             <ul class="tabs">
                 <?php foreach( $sites as $site ): ?>
-                <li><a href="#">Ecobiologia</a></li>
+                <li><a href="#"><?php echo $site['Site']['name'] ?></a></li>
                 <?php endforeach; ?>
             </ul>
                 
@@ -228,12 +228,21 @@ else {
             foreach( $sites as $site ): ?>
             <div>
                 <table border="0" class="pane_listing">
-                <tr class="header">
-                    <td class="secoes">Conteúdos</td>
-                    <td class="acao">Opções</td>
-                    <td class="tipo">Tipo</td>
-                    <td class="acesso">Último acesso por</td>
-                </tr>
+                <?php if( count($site['Structures']) ): ?>
+                    <tr class="header">
+                        <td class="secoes">Conteúdos</td>
+                        <td class="acao">Opções</td>
+                        <td class="tipo">Tipo</td>
+                        <td class="acesso">Último acesso por</td>
+                    </tr>
+                <?php else: ?>
+                    <tr class="list">
+                        <td class="sem_conteudo">Não há conteúdos nesta área.</td>
+                    </tr>
+                    </table>
+                    <?php
+                    continue;
+                endif; ?>
                 <?php
                 /*
                  * LOOP POR CADA ESTRUTURA
