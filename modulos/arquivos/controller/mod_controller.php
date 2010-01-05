@@ -32,6 +32,13 @@ class ModController extends ModsController
     public function criar($params = array() ){
         $this->render('form');
     }
-    
+
+    /**
+     * FORMULÁRIO DE INSERÇÃO
+     */
+    public function editar($params = array() ){
+        $this->render('form');
+    }
+
 }
 ?>

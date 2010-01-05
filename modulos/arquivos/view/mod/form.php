@@ -18,8 +18,8 @@ if($_GET['action'] == 'editar'){
             WHERE
                 id='".$_GET['w']."'
             ";
-    $mysql = mysql_query($sql);
-    $dados = mysql_fetch_array($mysql);
+    $mysql = $modulo->conexao->query($sql);
+    $dados = $mysql[0];
     $fm = "editar";
 } else {
     $h1 = 'Novo arquivo';
