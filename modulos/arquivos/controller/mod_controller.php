@@ -13,6 +13,9 @@ class ModController extends ModsController
 
     var $helpers = array('Form');
 
+    public function actions(){
+    }
+
     public function listar(){
         //$this->render('listar');
         //$this->autoRender= false;

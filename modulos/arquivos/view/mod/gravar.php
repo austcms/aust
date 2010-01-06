@@ -62,7 +62,7 @@ if(!empty($_POST)){
                 $porIsso    = array('a','a','a','a','a','a','c','e','e','e','e','i','i','i','i','n','o','o','o','o','o','u','u','u','y','A','A','A','A','A','A','C','E','E','E','E','I','I','I','I','N','O','O','O','O','O','U','U','U','_','_','_');
 
                 $frmarquivo_nome = str_replace($trocarIsso, $porIsso, $arquivo['name']);
-                $frmarquivo_nome = substr( sha1(strtolower( $frmarquivo_nome ) ), 0, 6 ).'_'.strtolower( $frmarquivo_nome );
+                $frmarquivo_nome = substr( sha1(strtolower( $frmarquivo_nome.date('Ymdhis') ) ), 0, 6 ).'_'.strtolower( $frmarquivo_nome );
                 $frmarquivo_tipo = $arquivo['type'];
                 $frmarquivo_tamanho = $arquivo['size'];
 

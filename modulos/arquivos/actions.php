@@ -1,4 +1,5 @@
 <?php
+        echo 'oijoij';
 if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
     /*
      * Identificar tabela que deve ser excluida
@@ -37,6 +38,7 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
             }
             $c++;
         }
+
 
         $sql = "SELECT
                     id, url, arquivo_nome
