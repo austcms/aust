@@ -10,6 +10,15 @@
 
 
 $c = 0;
+
+/*
+ * Carrega configurações automáticas do DB
+ */
+$params = array(
+    "aust_node" => $_POST["aust_node"],
+);
+$moduloConfig = $modulo->loadModConf($params);
+
 if(!empty($_POST)){
     if($_POST['metodo'] == 'criar'){
         set_time_limit(0);
@@ -71,30 +80,49 @@ if(!empty($_POST)){
 
                 // Caminho de onde a imagem ficará
                 $imagem_dir = 'uploads/'.date('Y').'/'.date('m');
-                //pr($imagem_dir);
-                if(!is_dir('../'.$imagem_dir)){
-                    mkdir('../'.$imagem_dir, 0777, true); // a permissão só vai funcionar para linux
-                    chmod('../'.$imagem_dir, 0777);
+
+                if( !empty($moduloConfig["upload_path"]["valor"]) )
+                    $rel_dir = $moduloConfig["upload_path"]["valor"];
+                else
+                    $rel_dir = '';
+
+                
+                if(!is_dir($rel_dir.$imagem_dir)){
+                    /*
+                     * A permissão só vai funcionar para linux
+                     */
+                    mkdir($rel_dir.$imagem_dir, 0777, true); 
+                    chmod($rel_dir.$imagem_dir, 0777);
                 }
 
-                // Faz o upload da imagem
-                $frmurl = ''.$imagem_dir .'/';
+                /*
+                 * Retorna os endereços do novo arquivo
+                 */
+                $urlBaseDir = str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
+                $frmurl = $urlBaseDir.$imagem_dir .'/'.$frmarquivo_nome;
                 $_POST['frmurl'] = $frmurl;
 
-                //$_POST['frmlocal'] = 'local';
-                //if(copy($_FILES["arquivo"]["tmp_name"], '..'.$frmurl.$frmarquivo_nome)){
-                //pr($frmurl.$frmarquivo_nome);
-                //pr( $arquivo["tmp_name"] );
-                if(move_uploaded_file($arquivo["tmp_name"], '../'.$frmurl.$frmarquivo_nome)){
+                /*
+                 * Pega $systemurl
+                 */
+                $current_dir = getcwd();
+                chdir($rel_dir);
+                $_POST['frmsystemurl'] = getcwd().'/'.$imagem_dir .'/'.$frmarquivo_nome;
+                chdir($current_dir);
+
+                /*
+                 * Faz o upload da imagem
+                 */
+                if(move_uploaded_file($arquivo["tmp_name"], $_POST["frmsystemurl"])){
                     echo "<p>Arquivo enviado com sucesso!</p>";
                 } else {
                     $erro[] = '<p>Erro ao inserir arquivo.</p>';
                     $erro[] = '<p>Outros possíveis erros: upload_max_filesize='.ini_get(upload_max_filesize).' - post_max_size='.ini_get(post_max_filesize);
                 }
-                
             }
         }
     }
+
     if(count($erro) == 0){
         foreach($_POST as $key=>$valor){
             // se o argumento $_POST contém 'frm' no início

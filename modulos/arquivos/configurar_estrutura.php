@@ -225,6 +225,15 @@ if(!empty($_GET['function'])){
                  * Ordenate
                  */
                 array(
+                    "propriedade" => "upload_path", // nome da propriedade
+                    "value" => "",
+                    "label" => "Qual path destino do upload?",
+                    "inputType" => "input",
+                ),
+                /*
+                 * Ordenate
+                 */
+                array(
                     "propriedade" => "semcategoria", // nome da propriedade
                     "value" => "",
                     "label" => "Sem seleção de categoria",
@@ -303,8 +312,13 @@ if(!empty($_GET['function'])){
                                 }
 
                                 else {
+
+                                    $valor = "";
+                                    if( !empty($query[$options["propriedade"]]["valor"]) ){
+                                        $valor = $query[$options["propriedade"]]["valor"];
+                                    }
                                     ?>
-                                    <input type="text" name="nome" class="input" />
+                                    <input type="text" name="data[<?php echo $options["propriedade"]; ?>]" value="<?php echo $valor ?>" class="input" />
                                     <?php
                                 }
                                 ?>
