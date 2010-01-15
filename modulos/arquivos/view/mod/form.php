@@ -8,6 +8,15 @@
 // $fm = form_method = gravar, editar, etc, pois é o mesmo formulário para fins diferentes
 $aust_node = (!empty($_GET['aust_node'])) ? $_GET['aust_node'] : '';
 
+/*
+ * Carrega configurações automáticas do DB
+ */
+    $params = array(
+        "aust_node" => $_GET["aust_node"],
+    );
+    $moduloConfig = $modulo->loadModConf($params);
+
+
 if($_GET['action'] == 'editar'){
     $h1 = 'Edite informações do arquivo';
     $sql = "
@@ -51,20 +60,43 @@ if($_GET['action'] == 'editar'){
     <table width="670" border=0 cellpadding=0 cellspacing=0>
     <col width="200">
     <col>
-    <tr>
-        <td valign="top">Selecione a categoria: </td>
-        <td>
-            <div id="categoriacontainer">
-            <?php
-            if($fm == "editar"){
-                $current_node = $dados['categoria_id'];
-            }
-            echo BuildDDList( CoreConfig::read('austTable'), 'frmcategoria_id', $escala, $aust_node, $current_node );
-            ?>
-            </div>
+    <?php
+    /*
+     * CATEGORIA
+     */
+    $showCategoria = true; // por padrão, não mostra
+    if( !empty($moduloConfig["semcategoria"]) ){
+        if( $moduloConfig["semcategoria"]["valor"] == "1" )
+            $showCategoria = false;
+    }
+    if( $showCategoria ){
+        ?>
+        <tr>
+            <td valign="top">Selecione a categoria: </td>
+            <td>
+                <div id="categoriacontainer">
+                <?php
+                if($fm == "editar"){
+                    $current_node = $dados['categoria_id'];
+                }
+                echo BuildDDList( CoreConfig::read('austTable'), 'frmcategoria_id', $escala, $aust_node, $current_node );
+                ?>
+                </div>
+            </td>
+        </tr>
+    <?php
+    } else {
+        if($fm == "editar"){
+            $current_node = $dados['categoria_id'];
+        } else {
+            $current_node = $aust_node;
+        }
+        ?>
+        <input type="hidden" name="frmcategoria_id" value="<?php echo $current_node; ?>">
+        <?php
+    }
+    ?>
 
-        </td>
-    </tr>
     <tr>
         <td valign="top">
             <?php if($fm == "editar"){ ?>
@@ -76,7 +108,7 @@ if($_GET['action'] == 'editar'){
         <td>
             <?php if($fm == "editar"){ ?>
                 <p style="font-weight: bold;">
-                    <?php echo $dados['url'].$dados['arquivo_nome'] ?>
+                    <?php echo $dados['arquivo_nome'] ?>
                 </p>
             <?php }else{ ?>
                 <INPUT TYPE="file" NAME="arquivo">
@@ -102,15 +134,29 @@ if($_GET['action'] == 'editar'){
             </p>
         </td>
     </tr>
-    <tr>
-        <td valign="top">Descrição: </td>
-        <td>
-            <textarea name="frmdescricao" id="jseditor" rows="8" cols="45" style="font-size: 11px; font-family: verdana;"><?php ifisset( str_replace("\n","<br>",$dados['descricao']) ); // Para TinyMCE ?></textarea>
-            <p class="explanation">
-                Digite uma descrição para este arquivo.
-            </p>
-        </td>
-    </tr>
+    <?php
+    /*
+     * DESCRICAO
+     */
+    $showDescricao = false; // por padrão, não mostra
+    if( !empty($moduloConfig["descricao"]) ){
+        if( $moduloConfig["descricao"]["valor"] == "1" )
+            $showDescricao = true;
+    }
+    if( $showDescricao ){
+        ?>
+        <tr>
+            <td valign="top">Descrição: </td>
+            <td>
+                <textarea name="frmdescricao" id="jseditor" rows="8" cols="45" style="font-size: 11px; font-family: verdana;"><?php ifisset( str_replace("\n","<br>",$dados['descricao']) ); // Para TinyMCE ?></textarea>
+                <p class="explanation">
+                    Digite uma descrição para este arquivo.
+                </p>
+            </td>
+        </tr>
+        <?php
+    }
+    ?>
 
     <?php
     /*

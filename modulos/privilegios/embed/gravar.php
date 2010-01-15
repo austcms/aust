@@ -16,10 +16,12 @@ if(empty($_POST['w']) AND $_POST['metodo'] == 'criar'){
      * seguro pegar este valor aqui, mas sim que o conteúdo
      * principal já tenha salvo o valor em $_POST['w']
      */
-    $insert_id = $modulo->conexao->lastInsertId;
+    $insert_id = $this->modulo->conexao->lastInsertId();
 } elseif(!empty($_POST['w'])) {
     $insert_id = $_POST['w'];
 }
+
+
 
 // se foi clicado algum item no form de inclusão
 if(is_array($_POST['privid'])){

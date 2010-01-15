@@ -98,7 +98,8 @@ if(!empty($_POST)){
                 /*
                  * Retorna os endereços do novo arquivo
                  */
-                $urlBaseDir = str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
+                $urlBaseDir = str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']).$rel_dir;
+                //echo basename( $_SERVER['SCRIPT_NAME'] );
                 $frmurl = $urlBaseDir.$imagem_dir .'/'.$frmarquivo_nome;
                 $_POST['frmurl'] = $frmurl;
 
@@ -109,7 +110,8 @@ if(!empty($_POST)){
                 chdir($rel_dir);
                 $_POST['frmsystemurl'] = getcwd().'/'.$imagem_dir .'/'.$frmarquivo_nome;
                 chdir($current_dir);
-
+                //pr($_POST);
+                //exit(0);
                 /*
                  * Faz o upload da imagem
                  */
