@@ -168,4 +168,9 @@ define('MOD_CONTROLLER', MOD_CONTROLLER_DIR.'mod_controller.php');
 define('MOD_CONTROLLER_NAME', 'ModController');
 define('MOD_VIEW_DIR', 'view/');
 
+
+/*
+ * MIGRATIONS
+ */
+    define('MIGRATION_MOD_DIR', 'core/migrations/');
 ?>

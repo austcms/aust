@@ -4,6 +4,14 @@
  */
 if($administrador->LeRegistro('tipo') == 'Webmaster'){
 
+/*
+ * MIGRATIONS
+ *
+ * Verificações de Migrations de módulos
+ */
+    $migrationsMods = new MigrationsMods( $conexao );
+    $migrationsStatus = $migrationsMods->status();
+
 
 /*
  * JS DO MÓDULO
@@ -384,6 +392,38 @@ else {
             </div>
             <div class="rodape"></div>
         </div>
+
+        <div class="painel">
+            <div class="titulo">
+                <h2>Versões dos Módulos</h2>
+            </div>
+            <div class="corpo">
+
+                <div style="margin-bottom: 10px;">
+                    <ul>
+                    <?php
+                    foreach( $migrationsStatus as $modName=>$status ){
+                        ?>
+                        <li>
+                        <?php
+                        if( $status ){
+                            echo $modName.': Ok.';
+                        } else {
+                            echo $modName.': Requer atualização.';
+                        }
+                        ?>
+                        </li>
+                        <?php
+                    }
+                    ?>
+                    </ul>
+                </div>
+
+
+            </div>
+            <div class="rodape"></div>
+        </div>
+
     </div>
 
 
