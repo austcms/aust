@@ -1,101 +1,3 @@
-/*
- * CABEÇALHO DO SITE
- */
-div#top {
-    width: 100%;
-    display: table;
-    margin: 0 auto;
-    /*background: url(img/meio_topo.png) repeat-y;*/
-    background: #e0efff;
-}
-    div#top div.title {
-        width: 760px;
-        display: table;
-        margin: 0 auto;
-        /*background: url(img/meio_topo.png) repeat-y;*/
-    }
-	
-	div#top div.title div.logotipo {
-        width: 400px;
-        float: left;
-        text-align: left;
-        margin: 0 0 0 0;
-        
-    }
-        div#top div.title div.logotipo h1 { margin-top: 0; }
-        div#top div.title div.logotipo p { font-size: 0.8em; color: #004b85; }
-
-	div#top div.title div.inicializacaorapida {
-        width: 250px;
-        text-align: left;
-        float: left;
-        margin-left: 110px;
-    }
-        div#top div.title div.inicializacaorapida div.altera_dados {
-            float: right;
-            margin-top: 10px;
-        }
-        div#top div.title div.inicializacaorapida div.logout {
-            float: right;
-            margin-top: 10px;
-        }
-        div#top div.title div.inicializacaorapida div.conectado_como {
-            float: right;
-            margin-top: 20px;
-            width: 250px;
-        }
-            div#top div.title div.inicializacaorapida div.conectado_como p {
-                font-size: 0.8em;
-                color: #727273;
-                text-align: right;
-            }
-
-/*
- * NAVEGAÇÃO DO SITE 
- */
-div#navegacao { 
-    width: 100%;
-    height: 34px;
-    background: #e0efff;
-    margin: 0 auto;
-    text-align: left;
-    
-}
-    div#navegacao div.containner {
-        width: 760px;
-        margin: 0 auto;
-        text-align: left;
-    }
-    div#navegacao div.containner div#menu ul {
-        list-style: none;
-        padding-top: 0px;
-    }
-    div#navegacao div.containner div#menu ul li {
-        display: inline;
-        height: 31px;
-    }
-    div#navegacao div.containner div#menu ul li a {
-        display: inline-block;
-        text-decoration: none;
-        color: white;
-        padding: 10px;
-        background: silver;
-
-    }
-        div#navegacao div.containner div#menu ul li a:hover {
-            text-decoration: none;
-            background: #1170b9;
-        }
-	div#navegacao div.containner div#menu ul li a.selecionado {
-        background: url(img/marcador.png) no-repeat bottom #2d88cf;
-        padding: 10px;
-        font-weight: bold;
-    }
-    div#navegacao div.containner div#menu ul li.opcao_direita {
-        margin-left: 228px;
-    }
-    
-	
 
 /***************************
 *
@@ -178,17 +80,20 @@ div.body {
 
     
 /*
- * PAINEL GERENCIAR DA PÁGINA DE GERENCIAR CONTEUDO
+ * PAINEL GERENCIAR e CONFIGURAÇÕES
  */
+#painel_gerenciar {
+    width: 760px;
+    float: left;
+}
 
-div.tabs_area { display: block; margin: 0 0 20px 0px; } /* div contendo tabs */
+div.tabs_area { display: block; margin: 0 0 00px 0px;} /* div contendo tabs */
 ul.tabs {
     display: block;
     list-style:none;
     margin: 0 !important; padding: 0;
     height: auto;
-    width: auto;
-    background: red;
+    width: 760px;
 }
 
     /* Cada Tab */
@@ -204,7 +109,7 @@ ul.tabs {
     ul.tabs a {
         background: #2d88cf;
         background: #edf6ff;
-        border-bottom: 1px solid #dddddd;
+        /*border-bottom: 1px solid #dddddd;*/
         /* background: #edf6ff; */
         /*background: url(img/blue.png) no-repeat -420px 0;*/
         display: inline-block;
@@ -215,6 +120,7 @@ ul.tabs {
         font-size: 1.2em;
         padding: 5px 8px 8px 8px;
         margin: 0px;
+        float: left;
     }
     /* Comportamento das Tabs */
         ul.tabs a:active { font-weight: bold; }
@@ -249,8 +155,9 @@ div.panes div.background { background: #fafafa; padding: 0px; }
 /* TAB PANE -> table.pane_listing */
 table.pane_listing {
     border: 0px solid;
-    width: 911px;
+    width: 720px;
     padding: 0;
+    float: left;
 }
     table.pane_listing tr.header {
         background: #edf6ff;
@@ -265,12 +172,12 @@ table.pane_listing {
             font-size: 0.9em;
             padding: 0 0 0px 10px;
         }
-        table.pane_listing tr.header td.tipo { font-size: 0.7em; }
-        table.pane_listing tr.header td.acesso { font-size: 0.7em; }
+        table.pane_listing tr.header td.tipo { font-size: 0.9em; }
+        table.pane_listing tr.header td.acesso { font-size: 0.9em; }
     
     table.pane_listing tr.list {
         background: #fafafa;
-        width: 911px;
+        width: 720px;
     }
         table.pane_listing tr.list td {
             color: #888888; text-transform: uppercase;
@@ -287,14 +194,16 @@ table.pane_listing {
             font-weight: bold;
             display: inline;
             float: left;
+            line-height: 20px;
+            margin-right: 5px;
         }
         table.pane_listing tr.list td.options ul { list-style: none; margin: 0; }
         table.pane_listing tr.list td.options ul li {
             display: inline; margin-right: 4px;
             font-size: 0.8em;
         }
-        table.pane_listing tr.list td.tipo { font-size: 0.7em; }
-        table.pane_listing tr.list td.acesso { font-size: 0.7em; }
+        table.pane_listing tr.list td.tipo { font-size: 0.8em; }
+        table.pane_listing tr.list td.acesso { font-size: 0.8em; }
 
     table.pane_listing tr.footer {
         height: 10px;
@@ -305,185 +214,6 @@ table.pane_listing {
 /* fim tab panes <<<<<<<<<*/
 
 
-    div.body div.content .painel_gerenciar div.rodape_gerenc {
-        background: url(img/rodape_gerenciar.png) no-repeat;
-        width: 911px;
-        height: 14px;
-        float: left;
-    }
-
-   /*
-    * FIM DO CONTEÚDO DAS TABS
-    */
-
-
-
-/*
- * PAINEL DE CONFIGURAÇÕES
- */
-    div.body div.content div.painel_config {
-        padding-bottom: 1px;
-        padding-bottom: 10px;
-        float: left;
-        width: 950px;
-    }
-
-        div.body div.content div.painel_config div.tab ul.tabs div.esquerda {
-            background:  url(img/esquerda_tab.png) no-repeat;
-            width: 13px;
-            height: 33px;
-            float: left;
-            margin: 2px 0 0 6px;
-        }
-        div.body div.content div.painel_config div.tab ul.tabs div.direita {
-            background:  url(img/direita_tab.png) no-repeat;
-            width: 13px;
-            height: 33px;
-            float: left;
-            margin: 2px 0 0 0;
-        }
-
-        /*
-         * TABS
-         */
-
-        /* root element for tabs  */
-        div.body div.content div.painel_config div.tab ul.tabs {
-            list-style:none;
-            margin:0 !important;
-            padding:0;
-            height: 30px;
-        }
-
-        /* single tab */
-        div.body div.content div.painel_config div.tab ul.tabs li {
-            float:left;
-            text-indent:0;
-            padding:0;
-            margin:0 !important;
-            list-style-image:none !important;
-        }
-
-        
-        /*
-         * FIM TABS
-         */
-
-
-        /* initially all panes are hidden */
-        div.body div.content div.painel_config a {
-            height: 70px;
-            background: #2d88cf;
-            padding: 8px 0px 11px 0px;
-            color: white;
-            text-decoration: none;
-        }
-        div.body div.content div.painel_config a:hover {
-            height: 70px;
-            background: #2d88cf;
-            color: white;
-        }
-        div.body div.content div.painel_config a.selecionado {
-            background: url(img/marcador_ger.png) no-repeat bottom #2d88cf;
-            font-weight: bold;
-        }
-
-        div.body div.content div.painel_config div.tab ul.tabs li {
-            list-style: none;
-        }
-
-
-        /*
-         * PAINEL GERENCIAR
-         */
-        div.body div.content div.painel_config div.panes div div.titulo_config {
-            background: url(img/painelgerenc_titulo.png) no-repeat;
-            width: 911px;
-            height: 39px;
-            display: table;
-            margin-top: 0px;
-            float: left;
-        }
-            div.body div.content div.painel_config div.panes div div.titulo_config ul li {
-                float: left;
-                display: table;
-                list-style: none;
-            }
-                div.body div.content div.painel_config div.panes div div.titulo_config ul li.opcao {
-                    padding: 12px 250px 0 0;
-                }
-
-
-        div.body div.content div.painel_config div.titulo h2 {
-            font-size: 0.9em;
-            display: table;
-            margin: 0;
-            margin-top: 10px;
-            margin-left: 10px;
-        }
-        div.body div.content div.painel_config div.panes div div.corpo_config {
-            background: url(img/painelgerenc_meio.png) repeat-y;
-            width: 911px;
-            padding-bottom: 1px;
-            display: table;
-            float: left;
-        }
-            div.body div.content div.painel_config div.panes div div.corpo_config ul.listagem {
-                float: left;
-                margin-top: 6px;
-            }
-            div.body div.content div.painel_config div.panes div div.corpo_config ul.listagem li {
-                list-style: none;
-            }
-                div.body div.content div.painel_config div.panes div div.corpo_config ul.listagem li a {
-                    color: #888888;
-                    text-decoration: none;
-
-                }
-                div.body div.content div.painel_config div.panes div div.corpo_config ul.listagem li a:hover {
-                    color: #181818;
-                    text-decoration: none;
-                    font-weight: bold;
-                }
-            /*
-             * INPUT
-             */
-            div.body div.content div.painel_config div.panes div div.corpo_config ul.input {
-                width: 150px;
-                line-height: 1.9em;
-                margin-left: 70px;
-            }
-               
-            /*
-             * NOME
-             */
-            div.body div.content div.painel_config div.panes div div.corpo_config ul.nome {
-                margin-left: 20px;
-                width: 220px;
-            }
-            div.body div.content div.painel_config div.panes div div.corpo_config ul.nome li {
-                line-height: 2.0em;
-            }
-
-            /*
-             * DICA
-             */
-            div.body div.content div.painel_config div.panes div div.corpo_config ul.dica {
-                width: 400px;
-                margin-left: 5px;
-
-            }
-                div.body div.content div.painel_config div.panes div div.corpo_config ul.dica li {
-                    font-size: 0.9em;
-                    line-height: 2.2em;
-                    color: #484848;
-                }
-        div.body div.content .painel_config div.panes div div.rodape_config {
-            background: url(img/rodape_gerenciar.png) no-repeat;
-            width: 911px;
-            height: 14px;
-            float: left;
-        }
 
     /********* CATEGORIAS *********/
             div.body div.content div.structure {  }

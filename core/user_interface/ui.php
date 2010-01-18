@@ -5,14 +5,17 @@
     <title>Aust - Gerenciador de sites<?php /* ifisset($config->LeOpcao('sitename'), 'Aust'); */ ?></title>
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>standard.css" type="text/css" />
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>style_principal.css" type="text/css" />
+    
+    <?php /* Estilo do cabeçalho - Topo e Navegação */ ?>
+    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>style_topo.css" type="text/css" />
 
     <?php /* Estilo dos Widgets */ ?>
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>style_widget.css" type="text/css" />
 
-    <?php /* Estilo dos hints (Tooltips, e interrogação) */ ?>
+    <?php /* Estilo dos hints - Tooltips, e interrogação */ ?>
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>style_hint.css" type="text/css" />
 
-    <?php /* Estilo dos forms (Formulários) */ ?>
+    <?php /* Estilo dos forms - Formulários */ ?>
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>forms.css" type="text/css" />
 
 

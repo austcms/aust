@@ -221,85 +221,87 @@ else {
         </div>
         <?php /* PANES */ ?>
         <div class="panes">
-            <?php
-            /*
-             * LOOP POR CADA SITE
-             */
-            foreach( $sites as $site ): ?>
-            <div>
-                <table border="0" class="pane_listing">
-                <?php if( count($site['Structures']) ): ?>
-                    <tr class="header">
-                        <td class="secoes">Conteúdos</td>
-                        <td class="acao">Opções</td>
-                        <td class="tipo">Tipo</td>
-                        <td class="acesso">Último acesso por</td>
-                    </tr>
-                <?php else: ?>
-                    <tr class="list">
-                        <td class="sem_conteudo">Não há conteúdos nesta área.</td>
-                    </tr>
-                    </table>
-                    <?php
-                    continue;
-                endif; ?>
+            <div class="background">
                 <?php
                 /*
-                 * LOOP POR CADA ESTRUTURA
+                 * LOOP POR CADA SITE
                  */
-                foreach( $site['Structures'] as $structure ):
-
+                foreach( $sites as $site ): ?>
+                <div>
+                    <table border="0" class="pane_listing">
+                    <?php if( count($site['Structures']) ): ?>
+                        <tr class="header">
+                            <td class="secoes">Conteúdos</td>
+                            <td class="acao">Opções</td>
+                            <td class="tipo">Tipo</td>
+                            <td class="acesso">Último acesso por</td>
+                        </tr>
+                    <?php else: ?>
+                        <tr class="list">
+                            <td class="sem_conteudo">Não há conteúdos nesta área.</td>
+                        </tr>
+                        </table>
+                        <?php
+                        continue;
+                    endif; ?>
+                    <?php
                     /*
-                     * Use o comando 'continue' para pular o resto do loop atual
+                     * LOOP POR CADA ESTRUTURA
                      */
-                    unset($modInfo);
-                    if(is_file('modulos/'.$structure['tipo'].'/'.MOD_CONFIG)){
+                    foreach( $site['Structures'] as $structure ):
+
                         /*
-                         * Pega dados do módulo. $modInfo existe.
+                         * Use o comando 'continue' para pular o resto do loop atual
                          */
-                        include('modulos/'.$structure['tipo'].'/'.MOD_CONFIG);
-
-                        $type = $modInfo['nome'];
-                    } else {
-                        $type = $structure['tipo'];
-                    }
-                    ?>
-                    <tr class="list">
-                        <td class="title">
-                            <span><?php echo $structure['nome'] ?></span>
-                            <?php //tt('Teste') ?>
-                        </td>
-                        <td class="options">
-                            <ul>
-                            <?php
-                            $options = (is_array($modInfo['opcoes'])) ? $modInfo['opcoes'] : Array();
-                            foreach ($options as $chave=>$valor) {
-                                echo '<li><a href="adm_main.php?section='.$_GET['section'].'&action='.$chave.'&aust_node='.$structure['id'].'">'.$valor.'</a></li>';
-                            }
-                            ?>
-                            </ul>
-                        </td>
-                        <td class="tipo">
-                            <?php
+                        unset($modInfo);
+                        if(is_file('modulos/'.$structure['tipo'].'/'.MOD_CONFIG)){
                             /*
-                             * TIPO
+                             * Pega dados do módulo. $modInfo existe.
                              */
-                            echo $type;
-                            ?>
-                        </td>
-                        <td class="acesso">
-                            Alexandre de Oliveira
-                        </td>
-                    </tr>
-                    <?php endforeach; ?>
-                    <tr class="footer">
-                        <td colspan="4"></td>
-                    </tr>
-                    </table>
+                            include('modulos/'.$structure['tipo'].'/'.MOD_CONFIG);
+
+                            $type = $modInfo['nome'];
+                        } else {
+                            $type = $structure['tipo'];
+                        }
+                        ?>
+                        <tr class="list">
+                            <td class="title">
+                                <span><?php echo $structure['nome'] ?></span>
+                                <?php tt('Teste') ?>
+                            </td>
+                            <td class="options">
+                                <ul>
+                                <?php
+                                $options = (is_array($modInfo['opcoes'])) ? $modInfo['opcoes'] : Array();
+                                foreach ($options as $chave=>$valor) {
+                                    echo '<li><a href="adm_main.php?section='.$_GET['section'].'&action='.$chave.'&aust_node='.$structure['id'].'">'.$valor.'</a></li>';
+                                }
+                                ?>
+                                </ul>
+                            </td>
+                            <td class="tipo">
+                                <?php
+                                /*
+                                 * TIPO
+                                 */
+                                echo $type;
+                                ?>
+                            </td>
+                            <td class="acesso">
+                                Alexandre de Oliveira
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                        <tr class="footer">
+                            <td colspan="4"></td>
+                        </tr>
+                        </table>
 
 
-                </div>
-            <?php endforeach; ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
         </div>
 
     </div><?php // FIM DO DIV PAINEL GERENCIAR ?>

@@ -1,0 +1,97 @@
+/*
+ * CABEÇALHO DO SITE
+ */
+div#top {
+    width: 100%;
+    display: table;
+    margin: 0 auto;
+    /*background: url(img/meio_topo.png) repeat-y;*/
+    background: #e0efff;
+}
+    div#top div.title {
+        width: 760px;
+        display: table;
+        margin: 0 auto;
+        /*background: url(img/meio_topo.png) repeat-y;*/
+    }
+	
+	div#top div.title div.logotipo {
+        width: 400px;
+        float: left;
+        text-align: left;
+        margin: 0 0 0 0;
+        
+    }
+        div#top div.title div.logotipo h1 { margin-top: 0; }
+        div#top div.title div.logotipo p { font-size: 0.8em; color: #004b85; }
+
+	div#top div.title div.inicializacaorapida {
+        width: 250px;
+        text-align: left;
+        float: left;
+        margin-left: 110px;
+    }
+        div#top div.title div.inicializacaorapida div.altera_dados {
+            float: right;
+            margin-top: 10px;
+        }
+        div#top div.title div.inicializacaorapida div.logout {
+            float: right;
+            margin-top: 10px;
+        }
+        div#top div.title div.inicializacaorapida div.conectado_como {
+            float: right;
+            margin-top: 20px;
+            width: 250px;
+        }
+            div#top div.title div.inicializacaorapida div.conectado_como p {
+                font-size: 0.8em;
+                color: #727273;
+                text-align: right;
+            }
+
+/*
+ * NAVEGAÇÃO DO SITE 
+ */
+div#navegacao { 
+    width: 100%;
+    height: 34px;
+    background: #e0efff;
+    margin: 0 auto;
+    text-align: left;
+    
+}
+    div#navegacao div.containner {
+        width: 760px;
+        margin: 0 auto;
+        text-align: left;
+    }
+    div#navegacao div.containner div#menu ul {
+        list-style: none;
+        padding-top: 0px;
+    }
+    div#navegacao div.containner div#menu ul li {
+        display: inline;
+        height: 31px;
+    }
+    div#navegacao div.containner div#menu ul li a {
+        display: inline-block;
+        text-decoration: none;
+        color: white;
+        padding: 10px;
+        background: silver;
+
+    }
+        div#navegacao div.containner div#menu ul li a:hover {
+            text-decoration: none;
+            background: #1170b9;
+        }
+	div#navegacao div.containner div#menu ul li a.selecionado {
+        background: url(img/marcador.png) no-repeat bottom #2d88cf;
+        padding: 10px;
+        font-weight: bold;
+    }
+    div#navegacao div.containner div#menu ul li.opcao_direita {
+        margin-left: 228px;
+    }
+    
