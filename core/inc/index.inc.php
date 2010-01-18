@@ -7,18 +7,20 @@
 <h2>Painel Principal</h2>
 <p>Este é o sistema onde você gerencia o conteúdo do seu site.</p>
 
-<div class="painel-metade">
+<div id="painel">
 <?php
  /*
   * PAINEL INÍCIO RÁPIDO
   */
 ?>
-    <div class="painel">
+    <?php
+    /*
+    <div class="widget">
         <div class="titulo">
             <h2>Início rápido</h2>
         </div>
         <div class="corpo">
-            <div class="listagem">
+            <div class="inside">
                 <ul>
                     <li>Notícias</li>
                     <li>Galeria de fotos</li>
@@ -98,22 +100,17 @@
                 <p>Não há estruturas cadastradas. Contacte seu administrador.</p>
                 <?php
             }
-            */?>
+            *?>
         </div>
         <div class="rodape"></div>
     </div>
 
-<?php
- /*
-  * PAINEL PESSOAS
-  */
-?>
-    <div class="painel">
+    <div class="widget">
         <div class="titulo">
             <h2>Pessoas</h2>
         </div>
         <div class="corpo">
-            <div class="listagem">
+            <div class="inside">
                 <ul>
                     <li>Alexandre de Oliveira de Oliveira de Oliveira de Oliveira</li>
                     <li>Andréia de Oliveira</li>
@@ -125,18 +122,46 @@
         </div>
         <div class="rodape"></div>
     </div>
+    <div class="widget">
+        <div class="titulo">
+            <h2>Pessoas</h2>
+        </div>
+        <div class="corpo">
+            <div class="inside">
+                <ul>
+                    <li>Alexandre de Oliveira de Oliveira de Oliveira de Oliveira</li>
+                    <li>Andréia de Oliveira</li>
+                    <li>Acácio Neimar de Oliveira</li>
+                    <li>Arthur de Oliveira</li>
 
-<?php
- /*
-  * ESTATÍSTICAS
-  */
-?>
-    <div class="painel">
+                </ul>
+            </div>
+        </div>
+        <div class="rodape"></div>
+    </div>
+    <div class="widget">
+        <div class="titulo">
+            <h2>Pessoas</h2>
+        </div>
+        <div class="corpo">
+            <div class="inside">
+                <ul>
+                    <li>Alexandre de Oliveira de Oliveira de Oliveira de Oliveira</li>
+                    <li>Andréia de Oliveira</li>
+                    <li>Acácio Neimar de Oliveira</li>
+                    <li>Arthur de Oliveira</li>
+
+                </ul>
+            </div>
+        </div>
+        <div class="rodape"></div>
+    </div>
+    <div class="widget">
         <div class="titulo">
             <h2>Estatísticas</h2>
         </div>
         <div class="corpo">
-            <div class="listagem">
+            <div class="inside">
                 <ul>
                     <li>Notícias</li>
                     <li>Galeria de fotos</li>
@@ -151,19 +176,51 @@
         <div class="rodape"></div>
     </div>
 
-    <?php /*<div class="painel">
+    <div class="widget">
         <div class="titulo">
-            <h2>Últimos conteúdos</h2>
+            <h2>Pessoas</h2>
         </div>
         <div class="corpo">
-            <p>
-                Selecione abaixo a categoria-chefe, o nome da estrutura (ex.: Notícias, Artigos, Arquivos) e o módulo adequado.
-            </p>
+            <div class="inside">
+                <ul>
+                    <li>Alexandre de Oliveira de Oliveira de Oliveira de Oliveira</li>
+                    <li>Andréia de Oliveira</li>
+                    <li>Acácio Neimar de Oliveira</li>
+                    <li>Arthur de Oliveira</li>
+
+                </ul>
+            </div>
         </div>
         <div class="rodape"></div>
-    </div>*/?>
+    </div>
+     *
+     */
+    ?>
+    <div class="widget">
+        1oij
+        <br>
+        nova linha
+    </div>
+    <div class="widget">
+        2oij
+    </div>
+    <div class="widget">
+        3oij
+        <br>
+        nova linha
+        <br>
+        nova linha
+    </div>
+    <div class="widget">
+        4oij
+    </div>
+    <div class="widget">
+        5oij
+    </div>
+    <div class="widget">
+        6oij
+    </div>
 </div>
-
 
 
 <div class="painel-metade painel-dois">
