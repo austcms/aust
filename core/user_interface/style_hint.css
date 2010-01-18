@@ -1,0 +1,66 @@
+/*
+ * INTERROGAÇÃO
+ */
+span.hint {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+}
+    span.hint a {
+        background: url(img/interrogacao.png) no-repeat top;
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        text-decoration: none;
+        padding: 0; margin: 0;
+
+    }
+    
+    span.hint a:hover {
+        background: url(img/interrogacao.png) no-repeat;
+        background-position: 0px -27px;
+    }
+
+    span.hint a:focus {
+        outline: none;
+    }
+/*
+ * TOOLTIP
+ */
+span.hint div.tooltip {
+    display: none;
+    background: transparent;
+    margin: 0 0 0 80px;
+    width: 235px;
+    color: #646464;
+    padding: 0;
+}
+    span.hint div.tooltip div.top {
+        background: url(img/top_tooltip.png);
+        margin: 0px;
+        width: 255px;
+        height: 20px;
+        margin-left: 1px;
+    }
+
+    span.hint div.tooltip div.text {
+        background: url(img/meio_tooltip.png) repeat-y;
+        margin: 0;
+        width: 257px;
+        padding: 10px;
+        color: #646464;
+    }
+        span.hint div.tooltip div.text p {
+            width: 206px;
+            margin: 0 5px 0 15px;
+            padding-top: 0;
+        }
+
+    span.hint div.tooltip div.bottom {
+        background: url(img/bottom_tooltip.png);
+        margin: 0px;
+        width: 255px;
+        height: 25px;
+        margin-left: 1px;
+    }
+    

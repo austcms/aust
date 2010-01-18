@@ -2,46 +2,47 @@
  * CABEÇALHO DO SITE
  */
 div#top {
-    width: 952px;
+    width: 100%;
     display: table;
     margin: 0 auto;
-    background: url(img/meio_topo.png) repeat-y;
+    /*background: url(img/meio_topo.png) repeat-y;*/
+    background: #e0efff;
 }
-	div#top div.border {
-        width: 952px;
-        height: 20px;
-        font-size: 0em;
-        background: url(img/borda_topo.png) no-repeat;
+    div#top div.title {
+        width: 760px;
+        display: table;
+        margin: 0 auto;
+        /*background: url(img/meio_topo.png) repeat-y;*/
     }
+	
 	div#top div.title div.logotipo {
         width: 400px;
         float: left;
         text-align: left;
-        padding: 0 0 0 40px;
+        margin: 0 0 0 0;
+        
     }
         div#top div.title div.logotipo h1 { margin-top: 0; }
         div#top div.title div.logotipo p { font-size: 0.8em; color: #004b85; }
 
 	div#top div.title div.inicializacaorapida {
-        width: 500px;
+        width: 250px;
         text-align: left;
-        float: right;
+        float: left;
+        margin-left: 110px;
     }
         div#top div.title div.inicializacaorapida div.altera_dados {
             float: right;
-            margin-right: 20px;
             margin-top: 10px;
         }
         div#top div.title div.inicializacaorapida div.logout {
             float: right;
-            margin-right: 20px;
             margin-top: 10px;
         }
         div#top div.title div.inicializacaorapida div.conectado_como {
             float: right;
-            margin-right: 18px;
             margin-top: 20px;
-            width: 300px;
+            width: 250px;
         }
             div#top div.title div.inicializacaorapida div.conectado_como p {
                 font-size: 0.8em;
@@ -50,22 +51,20 @@ div#top {
             }
 
 /*
- * NAVEGAÇÃO DO SITE
+ * NAVEGAÇÃO DO SITE 
  */
 div#navegacao { 
-    width: 952px;
-    height: 42px;
-    background: url(img/bottom_topo.png) no-repeat;
-
-    /*padding-left: 1px;*/
+    width: 100%;
+    height: 34px;
+    background: #e0efff;
     margin: 0 auto;
     text-align: left;
     
 }
     div#navegacao div.containner {
-        width: 940px;
-        /* margin: 0 auto;
-        text-align: left; */
+        width: 760px;
+        margin: 0 auto;
+        text-align: left;
     }
     div#navegacao div.containner div#menu ul {
         list-style: none;
@@ -79,8 +78,8 @@ div#navegacao {
         display: inline-block;
         text-decoration: none;
         color: white;
-        padding: 0px;
-        background: red;
+        padding: 10px;
+        background: silver;
 
     }
         div#navegacao div.containner div#menu ul li a:hover {
@@ -93,7 +92,7 @@ div#navegacao {
         font-weight: bold;
     }
     div#navegacao div.containner div#menu ul li.opcao_direita {
-        margin-left: 413px;
+        margin-left: 228px;
     }
     
 	
@@ -104,8 +103,9 @@ div#navegacao {
 *
 ***************************/
 div.body {
-	width: 952px;
-	background: url(img/body_meio.png) repeat-y;
+	width: 760px;
+	/*background: url(img/body_meio.png) repeat-y;*/
+    background: white;
 	text-align: left;
 	margin: 0 auto;
 	font-size: 1.0em;
@@ -117,11 +117,11 @@ div.body {
     }
 
     div.body div.content:after{
-        content:".";
-        clear:both;
-        display:block;
+        content: ".";
+        clear: both;
+        display: block;
         font-size: 0;
-        visibility:hidden;
+        visibility: hidden;
     }
  
  	div.body div.content h1 { margin-top: 0px; }
@@ -176,52 +176,7 @@ div.body {
             div.body div.content div.insucesso { background: #f68585; padding: 5px; border: 1px solid #db4343 }
 
 
-    /*
-     * PAINEL - PÁGINA INICIAL
-     */
-            #painel {
-                width: 910px;
-                display: table;
-            }
-            
-            #painel div.widget {
-                float: left;
-                width: 270px;
-                display: inline;
-                margin: 0 6px 10px 7px;
-                clear: none;
-                background: red;
-            }
-            #painel div.widget div.titulo {
-                background: url(img/painel_titulo.png) no-repeat;
-                width: 270px; height: 29px;
-                display: table;
-            }
-            #painel div.widget div.titulo h2 {
-                font-size: 0.9em;
-                display: table;
-                margin: 10px 0 0 10px;
-            }
-            #painel div.widget div.corpo {
-                background: url(img/painel_meio.png) repeat-y;
-                width: 270px;
-                background: pink;
-                padding-bottom: 1px;
-            }
-                #painel div.widget div.corpo div.inside {
-                    padding: 10px 0 0 5px;
-                }
-                    #painel div.widget div.corpo div.inside ul li {
-                        list-style: circle;
-                        line-height: 18px;
-                    }
-            #painel div.widget div.rodape {
-                background: url(img/painel_rodape.png) no-repeat;
-                width: 270px;
-                height: 13px;
-                display: inline;
-            }
-
+    
 /*
  * PAINEL GERENCIAR DA PÁGINA DE GERENCIAR CONTEUDO
  */
@@ -565,9 +520,10 @@ table.pane_listing {
 ***************************/
 
 div#bottom {
-	width: 952px;
+	width: 760px;
 	height: 13px;
-	background: url(img/rodape.png);
+	/*background: url(img/rodape.png);*/
+    background: white;
 	font-size: 1px;
 	margin: 0 auto;
 }
@@ -641,82 +597,3 @@ div#categoriacontainer{
 
 
 table.listagem td.adddate { width: 120px; }
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*
- * INTERROGAÇÃO
- */
-span.hint {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-}
-    span.hint a {
-        background: url(img/interrogacao.png) no-repeat top;
-        display: inline-block;
-        width: 20px;
-        height: 20px;
-        text-decoration: none;
-        padding: 0; margin: 0;
-
-    }
-    
-    span.hint a:hover {
-        background: url(img/interrogacao.png) no-repeat;
-        background-position: 0px -27px;
-    }
-
-    span.hint a:focus {
-        outline: none;
-    }
-/*
- * TOOLTIP
- */
-span.hint div.tooltip {
-    display: none;
-    background: transparent;
-    margin: 0 0 0 80px;
-    width: 235px;
-    color: #646464;
-    padding: 0;
-}
-    span.hint div.tooltip div.top {
-        background: url(img/top_tooltip.png);
-        margin: 0px;
-        width: 255px;
-        height: 20px;
-        margin-left: 1px;
-    }
-
-    span.hint div.tooltip div.text {
-        background: url(img/meio_tooltip.png) repeat-y;
-        margin: 0;
-        width: 257px;
-        padding: 10px;
-        color: #646464;
-    }
-        span.hint div.tooltip div.text p {
-            width: 206px;
-            margin: 0 5px 0 15px;
-            padding-top: 0;
-        }
-
-    span.hint div.tooltip div.bottom {
-        background: url(img/bottom_tooltip.png);
-        margin: 0px;
-        width: 255px;
-        height: 25px;
-        margin-left: 1px;
-    }
-    

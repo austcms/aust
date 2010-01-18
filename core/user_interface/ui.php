@@ -5,6 +5,14 @@
     <title>Aust - Gerenciador de sites<?php /* ifisset($config->LeOpcao('sitename'), 'Aust'); */ ?></title>
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>standard.css" type="text/css" />
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>style_principal.css" type="text/css" />
+
+    <?php /* Estilo dos Widgets */ ?>
+    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>style_widget.css" type="text/css" />
+
+    <?php /* Estilo dos hints (Tooltips, e interrogação) */ ?>
+    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>style_hint.css" type="text/css" />
+
+    <?php /* Estilo dos forms (Formulários) */ ?>
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>forms.css" type="text/css" />
 
 
@@ -34,75 +42,77 @@
 
 <body bgcolor="white" topmargin=0 leftmargin=0 rightmargin=0>
 
-<div id="global">
-    <noscript>Seu navegador não suporta JavaScript ou ele não está ativado. Por favor ative para ter uma melhor experiência neste site.</noscript>
-    <div id="top">
-        <div class="border">
+<div id="top">
+
+    <div class="title">
+        <?php
+        /*
+         * NOME DO SITE - EDITÁVEL
+         */
+        ?>
+        <div class="logotipo">
+            <h1>AC Informática</h1>
+            <p>Gerencie o seu conteúdo</p>
         </div>
-        <div class="title">
+
+        <div class="inicializacaorapida">
+            <div class="logout">
+                <a href="logout.php">Sair</a>
+            </div>
             <?php
             /*
-             * NOME DO SITE - EDITÁVEL
+             * LINK PARA ALTERAR DADOS OU SENHA
              */
             ?>
-            <div class="logotipo">
-            	<h1>AC Informática</h1>
-                <p>Gerencie o seu conteúdo</p>
-            </div>
-
-            <div class="inicializacaorapida">
-                <div class="logout">
-                    <a href="logout.php">Sair</a>
-                </div>
+            <div class="altera_dados">
+                <a href="adm_main.php?section=admins">Alterar meus dados/senha</a>
                 <?php
-                /*
-                 * LINK PARA ALTERAR DADOS OU SENHA
-                 */
+                    /*
+                     * INFORMAÇÕES QUE IRÃO DENTRO DE ALTERAR MEUS DADOS
+                     *
+                      <a href="adm_main.php?section=admins&action=passw">Minha senha</a>
+                    | <a href="adm_main.php?section=admins&action=form&fm=editar">Editar meu perfil</a>
+                     *
+                     */
                 ?>
-                <div class="altera_dados">
-                    <a href="adm_main.php?section=admins">Alterar meus dados/senha</a>
-                    <?php
-                        /*
-                         * INFORMAÇÕES QUE IRÃO DENTRO DE ALTERAR MEUS DADOS
-                         *
-                          <a href="adm_main.php?section=admins&action=passw">Minha senha</a>
-                        | <a href="adm_main.php?section=admins&action=form&fm=editar">Editar meu perfil</a>
-                         *
-                         */
-                    ?>
-                    
-                </div>
-                <div class="conectado_como">
-                    <p>
-                        Conectado como <strong><?php echo $administrador->LeRegistro('nome');?></strong>.<br />
-                        N&iacute;vel de acesso  <strong><?php echo $administrador->LeRegistro('tipo');?></strong>.
-                    </p>
-                </div>
-                <span>
-                <br />
-                
 
-                <?php
-                /*
-                if($administrador->LeRegistro('tipo') == 'Webmaster'){
-                    ?>
-                    | <a href="adm_main.php?section=conf_modulos" class="restrito">Configurar Módulos</a>
-                    <?php
-                }
-                if(in_array( $administrador->LeRegistro('tipo'), array('Webmaster', 'Administrador') )){ ?>
-                    | <a href="adm_main.php?section=permissoes" class="restrito">Permissões</a>
-                <?php }
-                 */ ?>
-
-                </span>
             </div>
+            <div class="conectado_como">
+                <p>
+                    Conectado como <strong><?php echo $administrador->LeRegistro('nome');?></strong>.<br />
+                    N&iacute;vel de acesso  <strong><?php echo $administrador->LeRegistro('tipo');?></strong>.
+                </p>
+            </div>
+            <span>
+            <br />
+
+
+            <?php
+            /*
+            if($administrador->LeRegistro('tipo') == 'Webmaster'){
+                ?>
+                | <a href="adm_main.php?section=conf_modulos" class="restrito">Configurar Módulos</a>
+                <?php
+            }
+            if(in_array( $administrador->LeRegistro('tipo'), array('Webmaster', 'Administrador') )){ ?>
+                | <a href="adm_main.php?section=permissoes" class="restrito">Permissões</a>
+            <?php }
+             */ ?>
+
+            </span>
         </div>
     </div>
-    <div id="navegacao">
-    	<div class="containner">
-	        <?php include(THIS_TO_BASEURL.INC_DIR.'menu.inc.php'); ?>
-        </div>
+</div>
+<div id="navegacao">
+    <div class="containner">
+        <?php include(THIS_TO_BASEURL.INC_DIR.'menu.inc.php'); ?>
     </div>
+</div>
+
+<div id="global">
+    <noscript>Seu navegador não suporta JavaScript ou ele não está ativado. Por favor ative para ter uma melhor experiência neste site.</noscript>
+
+
     <div class="body">
         <div class="content">
 
