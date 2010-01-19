@@ -2,6 +2,8 @@
 /**
  * MIGRATIONS
  *
+ * Contém os métodos para executar os migrations, seja do Core ou dos módulos.
+ *
  * @package Migrations
  * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @version 0.1
@@ -9,9 +11,9 @@
  */
 class Migrations
 {
-    var $helpers = array('Form');
+    var $conexao;
 
-    function __construct(){
+    function __construct($conexao){
         
     }
 
@@ -23,7 +25,9 @@ class Migrations
 
     }
 
-
+    function createTable($table, $schema){
+        echo $table;
+    }
     
 }
 

@@ -316,19 +316,36 @@ else {
 
                     /**
                      * DBSCHEMA
+                     *
+                     * A partir será criado o banco de dados
                      */
                     include($pastas.'/'.MOD_DBSCHEMA);
-                    $thisDbSchema = new dbSchema($modDbSchema, $conexao);
+                    
+                    $migrationsMod = new MigrationsMods($conexao);
 
-                    /**
-                     * Guarda configurações do módulo na base de dados
-                     *
-                     * Chama função InstalarTabelas para criação oficial do módulo
+                    /*
+                     * Caso o módulo não tenha migrations, faz a verificação normal das tabelas
+                     * a partir de schemas, o que não é recomendado.
                      */
-                    $tmp = $thisDbSchema->instalarSchema();
-                    if( $tmp == 1
-                        OR $modulo->verificaInstalacaoTabelas() )
+                    if( $migrationsMod->hasMigration($pastas) ){
+                        $installStatus = $migrationsMods->updateMigration($pastas);
+                        $isInstalled = $migrationsMods->isActualVersion($pastas);
+                    } else {
+                        $installStatus = $thisDbSchema->instalarSchema();
+                        $isInstalled = $modulo->verificaInstalacaoTabelas();
+                    }
+
+                    /*
+                     * Instalou?
+                     */
+                    if( $installStatus == true
+                        OR $isInstalled )
                     {
+                        /**
+                         * Guarda configurações do módulo na base de dados
+                         *
+                         * Chama função InstalarTabelas para criação oficial do módulo
+                         */
                         $param = array(
                             'tipo' => 'módulo',
                             'chave' => 'dir',
@@ -402,6 +419,7 @@ else {
                 <div style="margin-bottom: 10px;">
                     <ul>
                     <?php
+                    pr($migrationsStatus);
                     foreach( $migrationsStatus as $modName=>$status ){
                         ?>
                         <li>
