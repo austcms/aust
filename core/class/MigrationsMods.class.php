@@ -11,6 +11,10 @@
  */
 class MigrationsMods
 {
+    /**
+     *
+     * @var <object> Conexão principal com o DB
+     */
     var $conexao;
 
     function  __construct($conexaoClass) {
@@ -23,8 +27,55 @@ class MigrationsMods
      *
      */
 
-    function updateMigration($modName){
+    function updateMigration($path){
+        //if($this->isActualVersion($path))
+            //return false;
+
+        $missingMigrations = $this->getMissingMigrations($path);
+
+        /*
+         * Roda cada um dos migrations que estão faltando
+         */
+        $modName = $this->getModNameFromPath($path);
+        foreach( $missingMigrations as $name ){
+
+            require $path.'/'.MIGRATION_MOD_DIR.$name.'.php';
+
+            $migration = new $name($modName, $this->conexao);
+            
+            //$migration->up();
+
+            //var_dump( $migration->wasUpped() );
+            if( !$migration->goUp() ){
+                echo 'ERRO! Migration '.$name.' com erro!';
+                return false;
+                break;
+            }
+            unset($migration);
+        }
+
         return false;
+    }
+
+    public function getMissingMigrations($path){
+        
+        $actualVersion = $this->getActualVersion($path);
+        $missingMigrations = array();
+        $i = 0;
+
+        $modMigrationsDir = $path.'/'.MIGRATION_MOD_DIR;
+        foreach (glob($modMigrationsDir."Migration_*.php") as $filename) {
+            $regexp = "/([0-9]{14})/";
+
+            if( preg_match( $regexp, $filename, $matches)
+                AND $matches[0] > $actualVersion )
+            {
+                $missingMigrations[] = basename( $filename, '.php' );
+            }
+        }
+        sort($missingMigrations);
+        return $missingMigrations;
+
     }
 
     /*
@@ -62,12 +113,22 @@ class MigrationsMods
         else
             return false;
 
-        $actualVersion = $this->_checkModActualVersion( $this->getModNameFromPath($path) );
+        $actualVersion = $this->getActualVersion( $this->getModNameFromPath($path) );
 
         if( $actualVersion < $mV )
             return false;
 
         return true;
+    }
+
+    public function hasSomeVersion($path){
+
+        $actualVersion = $this->getActualVersion( $path );
+
+        if( $actualVersion > 0 )
+            return true;
+
+        return false;
     }
 
     /**
@@ -151,7 +212,7 @@ class MigrationsMods
         $modName = key($mod);
         $mod = reset($mod);
         if( !empty($mod['migrationVersion']) ){
-            if( $mod['migrationVersion'] <= $this->_checkModActualVersion($modName) ){
+            if( $mod['migrationVersion'] <= $this->getActualVersion($modName) ){
                 $result = true;
             } else {
                 $result = false;
@@ -171,14 +232,22 @@ class MigrationsMods
      * @param <string> $name Nome do diretório do módulo
      * @return <string>
      */
-    function _checkModActualVersion($name){
+    function getActualVersion($name){
+          if ( preg_match( "/\//", $name) ){
+            $name = $this->getModNameFromPath($name);
+        }
+
         $sql = 'SELECT version
                 FROM migrations_mods
                 WHERE module_name="'.$name.'"
-                ORDER BY version ASC
+                ORDER BY version DESC
                 LIMIT 1';
         $result = reset( $this->conexao->query($sql) );
-        return $result['version'];
+
+        if( $result['version'] > 0 )
+            return $result['version'];
+        
+        return '0';
     }
 
     /*
