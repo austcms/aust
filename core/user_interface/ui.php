@@ -65,7 +65,7 @@
         </div>
 
         <div class="inicializacaorapida">
-            <div class="logout">
+            <div id="logout">
                 <a href="logout.php">Sair</a>
             </div>
             <?php
@@ -73,7 +73,7 @@
              * LINK PARA ALTERAR DADOS OU SENHA
              */
             ?>
-            <div class="altera_dados">
+            <div id="altera_dados">
                 <a href="adm_main.php?section=admins">Alterar meus dados/senha</a>
                 <?php
                     /*
@@ -86,7 +86,7 @@
                 ?>
 
             </div>
-            <div class="conectado_como">
+            <div id="conectado_como">
                 <p>
                     Conectado como <strong><?php echo $administrador->LeRegistro('nome');?></strong>.<br />
                     N&iacute;vel de acesso  <strong><?php echo $administrador->LeRegistro('tipo');?></strong>.

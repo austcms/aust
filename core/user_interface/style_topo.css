@@ -30,22 +30,21 @@ div#top {
         text-align: left;
         float: left;
         margin-left: 110px;
+        margin-top:10px;
     }
-        div#top div.title div.inicializacaorapida div.altera_dados {
+        #logout a {
             float: right;
-            margin-top: 10px;
-        }
-        div#top div.title div.inicializacaorapida div.logout a {
-            float: right;
-            margin-top: 10px;
             margin-left: 10px;
         }
-        div#top div.title div.inicializacaorapida div.conectado_como {
+        #altera_dados a {
             float: right;
+        }
+        #conectado_como {
             margin-top: 20px;
             width: 250px;
+            float: right;
         }
-            div#top div.title div.inicializacaorapida div.conectado_como p {
+            #conectado_como p {
                 font-size: 0.8em;
                 color: #727273;
                 text-align: right;
