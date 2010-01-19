@@ -58,7 +58,7 @@ table.pane_listing {
         }
         table.pane_listing tr.list td.options ul { list-style: none; margin: 0; }
         table.pane_listing tr.list td.options ul li {
-            display: inline; margin-right: 4px;
+            display: inline; margin-right: 15px;
             font-size: 0.8em;
         }
         table.pane_listing tr.list td.tipo { font-size: 0.8em; }
@@ -100,5 +100,3 @@ div.panes .background div.list {
     div.panes .background div.list div.input ul li input {
         margin-bottom: 5px;
     }
-
-

@@ -35,9 +35,10 @@ div#top {
             float: right;
             margin-top: 10px;
         }
-        div#top div.title div.inicializacaorapida div.logout {
+        div#top div.title div.inicializacaorapida div.logout a {
             float: right;
             margin-top: 10px;
+            margin-left: 10px;
         }
         div#top div.title div.inicializacaorapida div.conectado_como {
             float: right;

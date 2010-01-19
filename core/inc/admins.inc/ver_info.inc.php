@@ -19,7 +19,7 @@
 <p>
     <a href="javascript: history.go(-1);"><img src="img/layoutv1/voltar.gif" border="0" /></a>
 </p>
-<h1>Ver informações</h1>
+<h2>Ver informações</h2>
 <p>
     A seguir, informações de <em><?php echo $dados["nome"];?></em>.
 </p>

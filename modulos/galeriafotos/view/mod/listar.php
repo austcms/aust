@@ -13,7 +13,7 @@
 ?>
 <div class="listagem">
 <?php
-$h1 = 'Listando conteúdo: '.$this->aust->leNomeDaEstrutura($_GET['aust_node']);
+$h2 = 'Listando conteúdo: '.$this->aust->leNomeDaEstrutura($_GET['aust_node']);
 $nome_modulo = $this->aust->LeModuloDaEstrutura($_GET['aust_node']);
 
 $sql = "SELECT
@@ -31,7 +31,7 @@ $cat = $query[0]['nome'];
 <p>
     <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
 </p>
-<h1><?php echo $h1;?></h1>
+<h2><?php echo $h2;?></h2>
 <p>Abaixo você encontra a listagem dos últimos itens desta categoria.</p>
 <?php
 if((!empty($filter)) AND ($filter <> 'off')){

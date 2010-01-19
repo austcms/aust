@@ -180,7 +180,7 @@ if(!empty($_GET['action'])){
                 if(count(glob($diretorio.'/'.$_GET['action'].'.php')) == 1){
                     include($diretorio.'/'.$_GET['action'].'.php');
                 } else {
-                    echo '<h1>Ops... Erro nesta ação!</h1>';
+                    echo '<h2>Ops... Erro nesta ação!</h2>';
                     echo '<p>O arquivo requisitado não existe. Entre em contato com o responsável pelo sistema.</p>';
                     echo '<p><a href="adm_main.php?section='.$_GET['section'].'"><img src="img/layoutv1/voltar.gif" border="0" /></a></p>';
                 }

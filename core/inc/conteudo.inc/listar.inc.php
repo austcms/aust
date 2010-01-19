@@ -34,7 +34,7 @@ $specsection['list_content_description'] =
     $dados = mysql_fetch_array($mysql);
     $cat = $dados[nome];
 ?>
-<h1><?=$h1;?></h1>
+<h2><?=$h1;?></h2>
 <p>
     <a href="adm_main.php?section=<?=$section;?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
 </p>
