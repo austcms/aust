@@ -207,7 +207,7 @@ else {
     //pr($sites);
     ?>
     <?php // INICIO DO DIV PAINEL GERENCIAR  - É GLOBAL?>
-    <div id="painel_gerenciar">
+    <div class="painel">
 
         <?php /* TABS */ ?>
         <div class="tabs_area">
@@ -265,6 +265,7 @@ else {
                             $type = $structure['tipo'];
                         }
                         ?>
+                        
                         <tr class="list">
                             <td class="title">
                                 <span><?php echo $structure['nome'] ?></span>

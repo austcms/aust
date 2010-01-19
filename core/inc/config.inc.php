@@ -66,7 +66,7 @@ if(!empty($_POST['inserirmodulo'])){
 </p>
 
 
-<div class="painel_config2">
+<div class="painel">
     <?php
     /*
      * NOME DAS TABS - GERAL E SISTEMA
@@ -91,102 +91,77 @@ if(!empty($_POST['inserirmodulo'])){
             ?>
             <li><a href="#">Sistema</a></li>
 
-            <?php
-            /*
-             * NOME DA TERCEIRA TAB - EXEMPLO
-             */
-            ?>
-            <li><a href="#">Exemplo</a></li>
 
         </ul>
 
     </div>
     
+    
+    <div class="panes">
+
+    <?php /* TR Header igual para todas as panes */ ?>
+        <table border="0" class="pane_listing">
+            <tr class="header">
+                <td class="opcoes">Opções</td>
+            </tr>
+        </table>
+        <br clear="all" />
+    <?php /***** Até aqui ******/ ?>
+
+
     <?php
     /*
-     * CONTEÚDO DA PRIMEIRA TAB - GERAL
+     * Background - CONTEÚDO DA PRIMEIRA TAB - GERAL
      */
     ?>
-    <div class="panes">
         <div class="background">
-            <div class="header">
-                Há
-            </div>
-            <div class="titulo_config">
-                <ul>
-                    <li class="opcao">Opção</li>
-                </ul>
-            </div>
-            <div class="corpo_config">
-                <ul class="listagem nome">
-                    <li>NOME DO SITE</li>
-                    <li>NOME DO CAMPO</li>
-                </ul>
-                <ul class="listagem input">
-                    <li><input type="text" name="nome_site" /></li>
-                    <li><input type="text" name="nome_site" /></li>
-                </ul>
-                <ul class="listagem dica">
+            <div class="list">
+                <td class="title">
+                    <span>NOME DO SITE</span>
+                    <span>NOME DO SITE</span>
+                </td>
+
+                <div class="input">
+                    <ul>
+                        <li><input type="text" name="nome_site" /></li>
+                        <li><input type="text" name="nome_site" /></li>
+                    </ul>
+                </div>
+                
+                <div class="dica">
                     <li>Entre o nome do seu site neste campo.</li>
                     <li>Campo de teste.</li>
-                </ul>
+                </div>
+            </div>
 
-            </div>
         </div>
-        <div>
-            <div class="titulo_config">
-                <ul>
-                    <li class="opcao">Opção</li>
-                </ul>
-            </div>
-            <div class="corpo_config">
-                <ul class="listagem nome">
-                    <li>DAR ACESSO ÀS CATEGORIAS</li>
-                    <li>USUÁRIOS ACESSAM PERMISSÕES</li>
-                </ul>
-                <ul class="listagem input">
-                    <li><input type="text" name="nome_site" /></li>
-                    <li><input type="text" name="nome_site" /></li>
-                </ul>
-                <ul class="listagem dica">
+
+    <?php
+    /*
+     * Background - CONTEÚDO DA SEGUNDA TAB - SISTEMA
+     */
+    ?>
+        <div class="background">
+            <tr class="list">
+                <td class="title">
+                    <span>DAR ACESSO ÀS CATEGORIAS</span>
+                    <span>USUÁRIOS ACESSAM PERMISSÕES</span>
+                </td>
+                <td class="input">
+                    <ul>
+                        <li><input type="text" name="nome_site" /></li>
+                        <li><input type="text" name="nome_site" /></li>
+                    </ul>
+                </td>
+
+                <td class="dica">
                     <li>Você deseja que o usuário possa configurar as categorias.</li>
                     <li>Usuários podem configurar permissões.</li>
-                </ul>
+                </td>
+            </tr>
 
-            </div>
-            <div class="rodape_config">
-            </div>
         </div>
-        <div>
-            <div class="titulo_config">
-                <ul>
-                    <li class="opcao">Opção</li>
-                </ul>
-            </div>
-            <div class="corpo_config">
-                <ul class="listagem nome">
-                    <li>DAR ACESSO ÀS CATEGORIAS</li>
-                    <li>USUÁRIOS ACESSAM PERMISSÕES</li>
-                    <li>DAR ACESSO ÀS CATEGORIAS</li>
-                    <li>USUÁRIOS ACESSAM PERMISSÕES</li>
-                </ul>
-                <ul class="listagem input">
-                    <li><input type="text" name="nome_site" /></li>
-                    <li><input type="text" name="nome_site" /></li>
-                    <li><input type="text" name="nome_site" /></li>
-                    <li><input type="text" name="nome_site" /></li>
-                </ul>
-                <ul class="listagem dica">
-                    <li>Você deseja que o usuário possa configurar as categorias.</li>
-                    <li>Usuários podem configurar permissões.</li>
-                    <li>Você deseja que o usuário possa configurar as categorias.</li>
-                    <li>Usuários podem configurar permissões.</li>
-                </ul>
 
-            </div>
-            <div class="rodape_config">
-            </div>
-        </div>
     </div>
 
 </div>

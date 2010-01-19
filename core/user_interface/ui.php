@@ -15,6 +15,12 @@
     <?php /* Estilo dos hints - Tooltips, e interrogação */ ?>
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>style_hint.css" type="text/css" />
 
+    <?php /* Estilo das tabs - Painel Gerenciar e Configurações */ ?>
+    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>style_tabs.css" type="text/css" />
+
+    <?php /* Estilo do pane - Conteúdo de cada tab */ ?>
+    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>style_pane.css" type="text/css" />
+
     <?php /* Estilo dos forms - Formulários */ ?>
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>forms.css" type="text/css" />
 
