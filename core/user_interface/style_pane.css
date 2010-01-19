@@ -7,8 +7,8 @@
  *                 div.pane
  */
 
-/* TAB PANE -> table.pane_listing */
-div.panes div.background { background: #fafafa; padding: 0px; }
+/* TAB PANE -> table.pane_listing - Painel Gerenciar e Configurações*/
+div.panes div.background { background: #fafafa; padding: 0px 0; }
     div.panes div.background .header { background: #edf6ff; padding: 10px; }
 
 /* TAB PANE -> table.pane_listing */
@@ -55,7 +55,6 @@ table.pane_listing {
             float: left;
             line-height: 20px;
             margin-right: 5px;
-            background: red;
         }
         table.pane_listing tr.list td.options ul { list-style: none; margin: 0; }
         table.pane_listing tr.list td.options ul li {
@@ -72,3 +71,34 @@ table.pane_listing {
     }
 
 /* fim tab panes <<<<<<<<<*/
+
+
+
+/*
+ * CONTEÚDO CONFIGURAÇÕES
+ */
+div.panes .background div.list {
+    display: table;
+    padding: 5px 0;
+}
+    div.panes .background div.list ul {
+        list-style: none;
+    }
+    div.panes .background div.list div.title, div.input, div.dica {
+        float: left;
+        line-height: 24px;
+        display: table;
+    }
+    div.panes .background div.list div.title ul {
+        margin: 0;
+        padding-left: 10px;
+    }
+    div.panes .background div.list div.dica ul li {
+        font-size: 0.7em;
+        color: #aaaaaa;
+    }
+    div.panes .background div.list div.input ul li input {
+        margin-bottom: 5px;
+    }
+
+

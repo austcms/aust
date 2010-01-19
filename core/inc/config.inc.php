@@ -116,10 +116,12 @@ if(!empty($_POST['inserirmodulo'])){
     ?>
         <div class="background">
             <div class="list">
-                <td class="title">
-                    <span>NOME DO SITE</span>
-                    <span>NOME DO SITE</span>
-                </td>
+                <div class="title">
+                    <ul>
+                        <li>NOME DO SITE</li>
+                        <li>NOME DO SITE</li>
+                    </ul>
+                </div>
 
                 <div class="input">
                     <ul>
@@ -129,8 +131,11 @@ if(!empty($_POST['inserirmodulo'])){
                 </div>
                 
                 <div class="dica">
-                    <li>Entre o nome do seu site neste campo.</li>
-                    <li>Campo de teste.</li>
+                    <ul>
+                        <li>Entre o nome do seu site neste campo.</li>
+                        <li>Campo de teste.</li>
+                    </ul>
+                    
                 </div>
             </div>
 
@@ -142,24 +147,29 @@ if(!empty($_POST['inserirmodulo'])){
      */
     ?>
         <div class="background">
-            <tr class="list">
-                <td class="title">
-                    <span>DAR ACESSO ÀS CATEGORIAS</span>
-                    <span>USUÁRIOS ACESSAM PERMISSÕES</span>
-                </td>
-                <td class="input">
+            <div class="list">
+                <div class="title">
+                    <ul>
+                        <li>DAR ACESSO ÀS CATEGORIAS</li>
+                        <li>USUÁRIOS ACESSAM PERMISSÕES</li>
+                    </ul>
+                </div>
+
+                <div class="input">
                     <ul>
                         <li><input type="text" name="nome_site" /></li>
                         <li><input type="text" name="nome_site" /></li>
                     </ul>
-                </td>
+                </div>
 
-                <td class="dica">
-                    <li>Você deseja que o usuário possa configurar as categorias.</li>
-                    <li>Usuários podem configurar permissões.</li>
-                </td>
-            </tr>
-
+                <div class="dica">
+                    <ul>
+                        <li>Você deseja que o usuário possa configurar as categorias.</li>
+                        <li>Usuários podem configurar permissões.</li>
+                    </ul>
+                </div>
+            </div>
+            
         </div>
 
     </div>
@@ -211,6 +221,7 @@ if( $options ){
     <input type="submit" name="gravar" value="Enviar" class="submit" />
     </form>
 <?php } else { ?>
+<br clear="all" />
     <p class="alerta">
     	Nenhuma configuração ajustada ainda.
     </p>
