@@ -367,14 +367,13 @@ class dbSchema
 
     public function sql(){
 
-        //pr($this->dbSchema);
         $this->tabelasAtuais();
-
+        //pr($this->dbSchema);
         //pr($this->tabelasAtuais);
 
         foreach($this->dbSchema as $tabela=>$campos){
             
-            if(!array_key_exists($tabela, $this->tabelasAtuais) AND is_array($campos)){
+            //if(!array_key_exists($tabela, $this->tabelasAtuais) AND is_array($campos)){
                 foreach($campos as $nome=>$propriedades){
                     /**
                      * Se não for campo especial, gera SQL deste campo
@@ -413,10 +412,9 @@ class dbSchema
                  */
                 $sql[$tabela] = 'CREATE TABLE '.$tabela.' ('. implode(', ', $camposSchema) .')';
                 unset($camposSchema);
-            }
+            //}
         } // Fim do foreach
 
-        //pr($sql);
         return $sql;
     }
 }

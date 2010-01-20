@@ -86,10 +86,14 @@ class Migrations
         if( is_array($schema) ){
             $schema = new dbSchema( $schema, $c );
             if( $schema->isDbSchemaFormatOk() ){
-
+                
                 foreach( $schema->sql() as $tabela=>$sql ){
-                    if( !$c->exec($sql) )
-                        return false;
+                    /**
+                     * @todo - deve-se fazer com que se a
+                     * função a seguir não funcione ou retorne
+                     * falso, mostrar uma mensagem de erro.
+                     */
+                    $c->exec($sql);
                 }
             }
         } else if( is_string($schema) ){
@@ -100,8 +104,13 @@ class Migrations
         return true;
     }
 
-    public function dropTable(){
+    public function dropTable($table, $field){
+        $sql = "ALTER TABLE ".
+                    $options['table'].
+                " DROP COLUMN ".
+                $options['field'];
 
+        $this->conexao->exec($sql);
     }
 
     public function addField($options = array()){
@@ -119,7 +128,7 @@ class Migrations
             
             $sql = "ALTER TABLE ".
                         $options['table'].
-                    " ADD ".
+                    " ADD COLUMN ".
                     $options['field'].
                     " ". $options['type'].' '.$position;
 
