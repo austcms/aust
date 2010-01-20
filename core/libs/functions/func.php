@@ -114,9 +114,14 @@ $shora = PegaData("hora");
 $sminuto = PegaData("minuto");
 $ssegundo = PegaData("segundo");
 
+/**
+ * @todo - esta função carece ser refatorada. Devia ter uma função
+ * que fizesse todo o trabalho de codificar uma string, tirando acentos,
+ * espaços, tornar minúsculas as letras, entre outros.
+ */
 //função que tira todos os acentos
 function RetiraAcentos($a){
-    //$a = utf8_decode($a);
+    //$a = utf8_encode($a);
     //echo $current_encoding = mb_detect_encoding($a, 'auto');
         //echo $a."<br>";
         $a = str_replace(array('à','á','â','ã','ä'), "a", $a);
