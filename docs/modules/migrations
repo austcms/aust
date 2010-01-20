@@ -1,0 +1,15 @@
+Migrations permitem que se faça alterações nos módulos ao longo
+do tempo de forma que o próprio módulo atualize-se automaticamente.
+
+Estrutura
+-------------------------------------------------------------------
+
+Os arquivos de Migrations encontram-se na pasta do módulo, em
+config/migrations. Os arquivos são nomeados com o formato
+'Migration_{versao}_{NomeDasMudanças}'.
+
+A versão é nomeada no formato de data invertida, como em
+YYYYmmddHHiiss.
+
+O nome das mudanças é aquilo que foi executado no arquivo, como
+'AdicionarCampoX', 'ExcluirCampoY'.

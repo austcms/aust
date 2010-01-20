@@ -14,7 +14,10 @@
  * Carrega configurações
  */
 include(MOD_CONFIG);
-include(MOD_DBSCHEMA);
+
+if( is_file(MOD_DBSCHEMA) )
+    include(MOD_DBSCHEMA);
+
 /**
  * Classes
  */

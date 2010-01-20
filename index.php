@@ -27,7 +27,7 @@ include(CLASS_DIR."_carrega_classes.inc.php");
 include("config/core.php");
 include("config/database.php");
 
-require("core/config/installation/sql_para_construir_db.php");
+//require("core/config/installation/sql_para_construir_db.php");
 
 
 $conexao = new Conexao($dbConn);

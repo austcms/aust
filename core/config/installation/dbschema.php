@@ -143,7 +143,20 @@ $dbSchema['modulos_conf'] = array(
     )
 );
 
-
+/*
+ * MIGRATIONS
+ */
+/*
+ * Migrations -> Módulos
+ */
+    $dbSchema['migrations_mods'] = array(
+        'version' => 'varchar(50) NOT NULL',
+        'module_name' => 'varchar(254) COMMENT "Nome do módulo."',
+        'dbSchemaTableProperties' => array(
+            'PRIMARY KEY' => '(version)',
+            'UNIQUE' => 'version (version)',
+        )
+    );
 
 
 
