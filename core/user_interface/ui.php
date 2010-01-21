@@ -74,6 +74,15 @@
              */
             ?>
             <div id="altera_dados">
+                <?php
+                if($administrador->LeRegistro('tipo') == 'Webmaster'){
+                    ?><a href="adm_main.php?section=conf_modulos" class="restrito">Configurar Módulos</a><?php
+                }
+                if(in_array( $administrador->LeRegistro('tipo'), array('Webmaster', 'Administrador') )){
+                    ?><a href="adm_main.php?section=permissoes" class="restrito">Permissões</a><?php
+                }
+                ?>
+
                 <a href="adm_main.php?section=admins">Alterar meus dados/senha</a>
                 <?php
                     /*
@@ -94,19 +103,6 @@
             </div>
             <span>
             <br />
-
-
-            <?php
-            /*
-            if($administrador->LeRegistro('tipo') == 'Webmaster'){
-                ?>
-                | <a href="adm_main.php?section=conf_modulos" class="restrito">Configurar Módulos</a>
-                <?php
-            }
-            if(in_array( $administrador->LeRegistro('tipo'), array('Webmaster', 'Administrador') )){ ?>
-                | <a href="adm_main.php?section=permissoes" class="restrito">Permissões</a>
-            <?php }
-             */ ?>
 
             </span>
         </div>
