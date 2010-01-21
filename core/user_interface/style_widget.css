@@ -5,49 +5,49 @@
     width: 760px;
     display: table;
 }
-    #painel div.widget_group {
+    div.widget_group {
         float: left;
         width: 350px; /* Tamanho da coluna dos widgets */
         display: inline;
-        margin: 0 20px 10px 0;
+        margin: 0 5px 10px 5px;
         clear: none;
     }
-        #painel div.widget_group ul {
+        div.widget_group ul {
             list-style: none;
             margin: 0;
             padding: 0;
         }
-            #painel div.widget_group ul li div.widget {
+            div.widget_group div.widget {
                 float: left;
                 width: 350px; /* Tamanho dos widgets */
                 display: inline;
                 margin: 0 0 10px 0;
                 clear: none;
-                background: silver;
+                background: #fafafa;
             }
-                #painel div.widget_group ul li div.widget div.titulo {
+                div.widget_group div.widget div.titulo {
                     background: #e9f4ff;
                     width: 350px; height: 29px;
                     display: table;
                 }
-                    #painel div.widget_group ul li div.widget div.titulo h3 {
+                    div.widget_group div.widget div.titulo h3 {
                         display: table;
                         margin: 8px 0 0 10px;
                         font-weight: bold;
                     }
 
-            #painel div.widget_group ul li div.widget div.content {
+            div.widget_group div.widget div.content {
                 background: #fafafa;
-                width: 330px; /* Tamanho do content dos widgets - Content é o conteúdo do meio */
+                width: auto; /* Tamanho do content dos widgets - Content é o conteúdo do meio */
                 padding: 10px;
             }
-                #painel div.widget_group ul li div.widget div.content ul {
+                div.widget_group div.widget div.content ul {
                     list-style: circle;
                     padding-left: 15px;
                     line-height: 20px;
                 }
 
-            #painel div.widget_group ul li div.widget div.footer {
+            div.widget_group div.widget div.footer {
                 width: 350px; /* Tamanho do rodapé - Footer */
                 height: 13px;
                 background: #fafafa;

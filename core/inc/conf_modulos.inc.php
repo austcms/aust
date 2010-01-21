@@ -227,17 +227,17 @@ else {
     }
     ?>
 
-    <div class="painel-metade">
+    <div class="widget_group">
         <?php
         /*
          * LISTAGEM DAS ESTRUTURAS CRIADAS
          */
         ?>
-        <div class="painel">
+        <div class="widget">
             <div class="titulo">
-                <h2>Estruturas instaladas</h2>
+                <h3>Estruturas instaladas</h3>
             </div>
-            <div class="corpo">
+            <div class="content">
                 <p>Abaixo, as estruturas instaladas.</p>
                 <ul>
                 <?php
@@ -248,7 +248,7 @@ else {
                 ?>
                 </ul>
             </div>
-            <div class="rodape"></div>
+            <div class="footer"></div>
         </div>
 
 
@@ -257,11 +257,11 @@ else {
          * FORM INSTALAR NOVAS ESTRUTURAS
          */
         ?>
-        <div class="painel">
+        <div class="widget">
             <div class="titulo">
-                <h2>Instalar Estrutura</h2>
+                <h3>Instalar Estrutura</h3>
             </div>
-            <div class="corpo">
+            <div class="content">
                 <p>
                     Selecione abaixo a categoria-chefe, o nome da estrutura (ex.: Notícias, Artigos, Arquivos) e o módulo adequado.
                 </p>
@@ -311,7 +311,7 @@ else {
 
                 </form>
             </div>
-            <div class="rodape"></div>
+            <div class="footer"></div>
         </div>
     </div>
 
@@ -321,20 +321,21 @@ else {
     /**
      * Loop por cada diretório de módulos
      */
+    /*
     foreach (glob($diretorio."*", GLOB_ONLYDIR) as $pastas) {
         break;
         if(is_dir($pastas) AND is_file($pastas.'/index.php')) {
 
             /**
              * Carrega arquivos dos módulos
-             */
+             *
             include_once($pastas.'/index.php');
             include_once($pastas.'/'.MOD_CONFIG);
 
             /**
              * Se o módulo possui uma classe própria com métodos próprios,
              * podemos continuar
-             */
+             *
             if(!empty($modulo)){
 
                 $conteudo.= '';
@@ -350,7 +351,7 @@ else {
                  * INSTALAR MÓDULO
                  *
                  * faz a instalação do módulo, criando as tabelas e gravando informações na tabela módulo
-                 */
+                 *
                 if(!empty($_GET['instalar_modulo']) and
                     $_GET['instalar_modulo'] == $pastas){
 
@@ -362,22 +363,22 @@ else {
                     /**
                      * [embedownform] indica se este módulo possui habilidade para acoplar-se em formulários de outros módulos
                      * com seu próprio <form></form>
-                     */
+                     *
                     $modInfo['embedownform'] = (empty($modInfo['embedownform'])) ? false : $modInfo['embedownform'];
                     /**
                      * [embed] indica se este módulo possui habilidade para acoplar-se em formulários de outros módulos
-                     */
+                     *
                     $modInfo['embed'] = (empty($modInfo['embed'])) ? false : $modInfo['embed'];
                     /**
                      * [somenteestrutura] indica se a estrutura conterá categorias ou não.
-                     */
+                     *
                     $modInfo['somenteestrutura'] = (empty($modInfo['somenteestrutura'])) ? false : $modInfo['somenteestrutura'];
 
                     /**
                      * DBSCHEMA
                      *
                      * A partir será criado o banco de dados
-                     */
+                     *
                     include($pastas.'/'.MOD_DBSCHEMA);
                     
                     $migrationsMods = new MigrationsMods($conexao);
@@ -385,7 +386,7 @@ else {
                     /*
                      * Caso o módulo não tenha migrations, faz a verificação normal das tabelas
                      * a partir de schemas, o que não é recomendado.
-                     */
+                     *
                     if( $migrationsMods->hasMigration($pastas) ){
                         $installStatus = $migrationsMods->updateMigration($pastas);
                         $isInstalled = $migrationsMods->isActualVersion($pastas);
@@ -396,7 +397,7 @@ else {
 
                     /*
                      * Instalou?
-                     */
+                     *
                     if( $installStatus == true
                         OR $isInstalled )
                     {
@@ -404,7 +405,7 @@ else {
                          * Guarda configurações do módulo na base de dados
                          *
                          * Chama função InstalarTabelas para criação oficial do módulo
-                         */
+                         *
                         $param = array(
                             'tipo' => 'módulo',
                             'chave' => 'dir',
@@ -420,7 +421,7 @@ else {
                     }
                     /*
                      * Não foi possível instalar o módulo.
-                     */
+                     *
                     else {
                         $conteudo.= '<div style="color: red;">Não foi possível instalar o módulo</div>';
                     }
@@ -428,7 +429,7 @@ else {
                 }
                 /*
                  * Amostragem normal dos módulos.
-                 */
+                 *
                 else {
                     
                     if( $modulo->verificaInstalacaoTabelas()
@@ -454,19 +455,21 @@ else {
             unset($modInfo);
         }
     }
+     *
+     */
     ?>
-    <div class="painel-metade painel-dois">
+    <div class="widget_group">
 
         <?php
         /*
          * INSTALAÇÃO DE MÓDULOS
          */
         ?>
-        <div class="painel">
+        <div class="widget">
             <div class="titulo">
-                <h2>Módulos disponíveis</h2>
+                <h3>Módulos disponíveis</h3>
             </div>
-            <div class="corpo">
+            <div class="content">
 
                 <div style="margin-bottom: 10px;">
                 <?php
@@ -553,14 +556,14 @@ else {
                 </div>
 
             </div>
-            <div class="rodape"></div>
+            <div class="footer"></div>
         </div>
 
-        <div class="painel">
+        <div class="widget">
             <div class="titulo">
-                <h2>Versões dos Módulos</h2>
+                <h3>Versões dos Módulos</h3>
             </div>
-            <div class="corpo">
+            <div class="content">
 
                 <div style="margin-bottom: 10px;">
                     <ul>
@@ -584,7 +587,7 @@ else {
 
 
             </div>
-            <div class="rodape"></div>
+            <div class="footer"></div>
         </div>
 
     </div>

@@ -5,17 +5,19 @@
 *
 ***************************/
 div.body {
-	width: 760px;
-	/*background: url(img/body_meio.png) repeat-y;*/
+    width: 760px;
+    /*background: url(img/body_meio.png) repeat-y;*/
     background: white;
-	text-align: left;
-	margin: 0 auto;
-	font-size: 1.0em;
+    text-align: left;
+    margin: 0 auto;
+    font-size: 1.0em;
 }
     div.body div.content {
-            padding: 20px 20px 20px 20px;
-            margin: 0px;
-            display: block;
+        padding: 0px;
+        margin: 0px 20px 0px 20px;
+        padding: 10px 0;
+        display: block;
+        width: 720px;
     }
 
     div.body div.content:after{

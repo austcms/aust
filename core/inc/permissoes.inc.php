@@ -31,7 +31,7 @@
     pode editar todas.
 </p>
 
-<div class="painel-metade">
+<div class="widget_group">
 
     <?php
     /**
@@ -45,11 +45,11 @@
      * LISTAGEM DAS ESTRUTURAS CRIADAS
      */
     ?>
-    <div class="painel">
+    <div class="widget">
         <div class="titulo">
-            <h2>Tipos de usuários</h2>
+            <h3>Tipos de usuários</h3>
         </div>
-        <div class="corpo">
+        <div class="content">
             <p>Os tipos de usuários presentes.</p>
             <ul>
             <?php
@@ -83,7 +83,7 @@
             ?>
             </ul>
         </div>
-        <div class="rodape"></div>
+        <div class="footer"></div>
     </div>
 
 
@@ -92,11 +92,11 @@
      * Listagem de usuários
      */
     ?>
-    <div class="painel">
+    <div class="widget">
         <div class="titulo">
-            <h2>Usuários cadastrados</h2>
+            <h3>Usuários cadastrados</h3>
         </div>
-        <div class="corpo">
+        <div class="content">
             <p>
                 
             </p>
@@ -131,39 +131,39 @@
             ?>
             </ul>
         </div>
-        <div class="rodape"></div>
+        <div class="footer"></div>
     </div>
 </div>
 
 
 
-<div class="painel-metade painel-dois">
-<div class="painel">
-    <div class="titulo">
-        <h2>Permissões atuais</h2>
-    </div>
-    <div class="corpo">
-        <div id="permissoesAtuais">
-        <p>
-            Selecione ao lado:
-        </p>
-        <p style="text-align: center;">
-            <br />
-            um tipo de usuário
-            <br />
-            <strong>ou</strong>
-            <br />
-            um usuário
-        </p>
-        <?php
-
-
-
-        ?>
+<div class="widget_group">
+    <div class="widget">
+        <div class="titulo">
+            <h3>Permissões atuais</h3>
         </div>
+        <div class="content">
+            <div id="permissoesAtuais">
+            <p>
+                Selecione ao lado:
+            </p>
+            <p style="text-align: center;">
+                <br />
+                um tipo de usuário
+                <br />
+                <strong>ou</strong>
+                <br />
+                um usuário
+            </p>
+            <?php
 
 
+
+            ?>
+            </div>
+
+
+        </div>
+        <div class="footer"></div>
     </div>
-    <div class="rodape"></div>
-</div>
 </div>

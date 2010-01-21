@@ -55,7 +55,8 @@ div#top {
  */
 div#navegacao { 
     width: 100%;
-    height: 34px;
+    height: auto;
+    display: table;
     background: #e0efff;
     margin: 0 auto;
     text-align: left;
@@ -68,30 +69,39 @@ div#navegacao {
     }
     div#navegacao div.containner div#menu ul {
         list-style: none;
-        padding-top: 0px;
     }
     div#navegacao div.containner div#menu ul li {
-        display: inline;
-        height: 31px;
+        display: inline-block;
+        float: left;
+        /* height: 30px; */
+        height: auto;
+        margin: 0;
+        padding: 0;
     }
     div#navegacao div.containner div#menu ul li a {
-        display: inline-block;
         text-decoration: none;
-        color: white;
-        padding: 10px;
-        background: silver;
-
+        display: inline-block;
+        color: black;
+        padding: 5px 8px;
+        margin: 2px 2px 0 2px;
+        background: #f8f8f8;
     }
         div#navegacao div.containner div#menu ul li a:hover {
             text-decoration: none;
-            background: #1170b9;
+            background: #fcfcfc;
         }
 	div#navegacao div.containner div#menu ul li a.selecionado {
         background: url(img/marcador.png) no-repeat bottom #2d88cf;
-        padding: 10px;
+        background: white;
+        display: inline-block;
+        color: black;
+        padding: 6px 8px;
+        margin-top: 0px;
+        height: auto;
         font-weight: bold;
     }
     div#navegacao div.containner div#menu ul li.opcao_direita {
-        margin-left: 228px;
+        float: right;
+        margin: 0 10px 0 0;
     }
     

@@ -1,11 +1,11 @@
 * { margin: 0px; padding: 0px; }
 
 body {
-    font-family: Verdana, Arial, Tahoma, Helvetica, sans-serif;
-	background: #fbfbfb;
-	text-align: center;
-	margin: 0;
-	font-size: 76%;
+    font-family: Verdana, sans-serif;
+    background: #fafafa;
+    text-align: center;
+    margin: 0;
+    font-size: 76%;
 }
 
 a { color: #005393; text-decoration: underline; }
