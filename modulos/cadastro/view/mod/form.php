@@ -149,7 +149,6 @@ foreach( $camposForm as $chave=>$valor ){
         if( $valor['tipo']['tipoFisico'] == 'text' ){
             $inputType = "textarea";
         }
-        echo $inputType;
     }
 
     if( empty($valor["valor"]) ){
