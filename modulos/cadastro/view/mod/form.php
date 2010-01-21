@@ -18,7 +18,7 @@ if( !empty($_GET["w"]) ){
 
 //pr($infoCadastro);
 ?>
-<h1>Cadastro: <?php echo $this->aust->leNomeDaEstrutura($_GET['aust_node'])?></h1>
+<h2>Cadastro: <?php echo $this->aust->leNomeDaEstrutura($_GET['aust_node'])?></h2>
 <p>
     <?php
     echo $formIntro;

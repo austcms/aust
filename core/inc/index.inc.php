@@ -4,108 +4,140 @@
  */
 ?>
 
-<h1>Bem-vindo!</h1>
-<p>Com este gerenciador, você pode administrar todo o conteúdo do seu site.</p>
+<h2>Painel Principal</h2>
+<p>Este é o sistema onde você gerencia o conteúdo do seu site.</p>
 
-<div class="painel-metade">
-    <div class="painel">
-        <div class="titulo">
-            <h2>Opções rápidas</h2>
-        </div>
-        <div class="corpo">
+<div id="painel">
+    <?php
+    /**
+     *
+     * Listagem das estruturas cadastradas no sistema na tela inicial
+     *
+     * Contém o atalho para as estrutura
+     * "FECHA BARRA"
+    $param = array(
+                'orderby' => 'ORDER BY tipo'
+                );
+    $est = $aust->LeEstruturasParaArray($param);
 
-            <?php
+    //pr($est);
+    //pr($categoriasPermitidas);
+
+    if(count($est) > 0){
+        ?>
+
+        <table width="100%" summary="Lista de estruturas do site">
+        <col width="160"/>
+        <col />
+        <tbody>
+
+        <?php
+        foreach($est as $key=>$valor){
+
             /**
-             * Listagem das estruturas cadastradas no sistema na tela inicial
-             *
-             * Contém o atalho para as estrutura
-             */
-            $param = array(
-                        'orderby' => 'ORDER BY tipo'
-                        );
-            $est = $aust->LeEstruturasParaArray($param);
+             * Verifica se usuário tem permissão de acesso a esta
+             * estrutura
+             * "FECHA BARRA"
+            //pr( $categoriasPermitidas);
+            if($permissoes->verify( array( 'estrutura' => $valor['id'], 'permissoes' => $categoriasPermitidas ))){
 
-            //pr($est);
-            //pr($categoriasPermitidas);
-            
-            if(count($est) > 0){
-                ?>
-                <p>Abaixo, as estruturas instaladas. Passe o mouse.</p>
-
-                <table width="100%" summary="Lista de estruturas do site">
-                <col width="160"/>
-                <col />
-                <thead>
-                <tr>
-                    <th>Estrutura</th>
-                    <th>Tipo</th>
-                </tr>
-                </thead>
-                <tbody>
-
-                <?php
-                foreach($est as $key=>$valor){
-
-                    /**
-                     * Verifica se usuário tem permissão de acesso a esta
-                     * estrutura
-                     */
-                    //pr( $categoriasPermitidas);
-                    if($permissoes->verify( array( 'estrutura' => $valor['id'], 'permissoes' => $categoriasPermitidas ))){
-
-                        /**
-                         * Inclui módulo apropriado
-                         */
-                        //echo $valor["tipo"];
-                        //if( is_file(THIS_TO_BASEURL.'modulos/'.$valor['tipo'].'/'.MOD_CONFIG) ){
-                            include(THIS_TO_BASEURL.'modulos/'.$valor['tipo'].'/'.MOD_CONFIG);
-                        //}
-                        echo '<tr>';
-                        echo '<td valign="top">';
-                        echo '<a href="#" class="link_pai_do_est_options" onmouseover="javascript: est_options('.$valor['id'].')">'.$valor['nome'].'</a>';
-                        echo '<div class="est_options" id="est_options_'.$valor['id'].'">';
-                        if(is_array($modInfo['opcoes'])){
-                            $i = 0;
-                            foreach($modInfo['opcoes'] as $opcao=>$opcaonome){
-                                if($i > 0) echo ', ';
-                                echo '<a href="adm_main.php?section=conteudo&action='.$opcao.'&aust_node='.$valor['id'].'">'.$opcaonome.'</a>';
-                                $i++;
-                            }
-                        }
-                        echo '</div>';
-                        echo '</td>';
-                        echo '<td valign="top"><span class="est_options_info" id="est_options_info_'.$valor['id'].'">('.$valor['tipo'].')</span>'.'</td>';
-                        echo '</tr>';
+                /**
+                 * Inclui módulo apropriado
+                 *
+                //echo $valor["tipo"];
+                //if( is_file(THIS_TO_BASEURL.'modulos/'.$valor['tipo'].'/'.MOD_CONFIG) ){
+                    include(THIS_TO_BASEURL.'modulos/'.$valor['tipo'].'/'.MOD_CONFIG);
+                //}
+                echo '<tr>';
+                echo '<td valign="top">';
+                echo '<a href="#" class="link_pai_do_est_options" onmouseover="javascript: est_options('.$valor['id'].')">'.$valor['nome'].'</a>';
+                echo '<div class="est_options" id="est_options_'.$valor['id'].'">';
+                if(is_array($modInfo['opcoes'])){
+                    $i = 0;
+                    foreach($modInfo['opcoes'] as $opcao=>$opcaonome){
+                        if($i > 0) echo ', ';
+                        echo '<a href="adm_main.php?section=conteudo&action='.$opcao.'&aust_node='.$valor['id'].'">'.$opcaonome.'</a>';
+                        $i++;
                     }
                 }
-                ?>
-                </tbody>
-                </table>
-                <?php
-            } else {
-                ?>
-                <p>Não há estruturas cadastradas. Contacte seu administrador.</p>
-                <?php
+                echo '</div>';
+                echo '</td>';
+                echo '</tr>';
             }
-            ?>
+        }
+        ?>
+        </tbody>
+        </table>
+        <?php
+    } else {
+        ?>
+        <p>Não há estruturas cadastradas. Contacte seu administrador.</p>
+        <?php
+    }
+    *?>
+    *
+    */
+    ?>
 
-        </div>
-        <div class="rodape"></div>
+    <?php /* Widget Group - Coluna (Primeira) */ ?>
+    <div class="widget_group">
+
+        <?php /* Widget */ ?>
+        <ul>
+            <li>
+                <div class="widget">
+                    <div class="titulo">
+                        <h3>Início Rápido - Coluna 1</h3>
+                    </div>
+                    <div class="content">
+                        <ul>
+                            <li>Notícias<?php tt('Teste') ?></li>
+                            <li>Galeria de fotos<?php tt('Teste') ?></li>
+                            <li>Pesquisa<?php tt('Teste') ?></li>
+                            <li>Enquete<?php tt('Teste') ?></li>
+                            <li>Artigos<?php tt('Teste') ?></li>
+                            <li>Comunicados<?php tt('Teste') ?></li>
+                            <li>Teste<?php tt('Teste') ?></li>
+                        </ul>
+                    </div>
+                    <div class="footer">
+                    </div>
+                </div>
+            </li>
+        </ul>
+
+              
     </div>
 
-    <?php /*<div class="painel">
-        <div class="titulo">
-            <h2>Últimos conteúdos</h2>
-        </div>
-        <div class="corpo">
-            <p>
-                Selecione abaixo a categoria-chefe, o nome da estrutura (ex.: Notícias, Artigos, Arquivos) e o módulo adequado.
-            </p>
-        </div>
-        <div class="rodape"></div>
-    </div>*/?>
-</div>
+    <?php /* Widget Group - Coluna (Segunda) */ ?>
+    
+    <div class="widget_group">
 
+        <?php /* Widget */ ?>
+        <ul>
+            <li>
+                <div class="widget">
+                    <div class="titulo">
+                        <h3>Pessoas - Coluna 2</h3>
+                    </div>
+                    <div class="content">
+                        <ul>
+                            <li>Alexandre de Oliveira<?php tt('Teste') ?></li>
+                            <li>Andréia de Oliveira<?php tt('Teste') ?></li>
+                            <li>Acácio Neimar de Oliveira<?php tt('Teste') ?></li>
+                            <li>Arthur de Oliveira<?php tt('Teste') ?></li>
+                        </ul>
+                    </div>
+                    <div class="footer">
+                    </div>
+                </div>
+            </li>
+        </ul>
+
+    </div>
+    
+    
+</div>
 
 
 <div class="painel-metade painel-dois">

@@ -6,7 +6,7 @@ if(!empty($_GET['action'])){
 } else {
 
     ?>
-    <h1>Usuários</h1>
+    <h2>Usuários</h2>
     <p>
         Nesta página você pode gerenciar todos os usuários que administram o site.
     </p>
@@ -22,6 +22,9 @@ if(!empty($_GET['action'])){
         <li>
         <a href="adm_main.php?section=admins&action=form&fm=editar" style="text-decoration: none;"><img src="img/layoutv1/edit.jpg" border="0" /></a>
         <a href="adm_main.php?section=admins&action=form&fm=editar">Editar suas próprias informações</a>
+        </li>
+        <li>
+        <a href="adm_main.php?section=admins&action=passw">Minha senha</a>
         </li>
         <li>
         <a href="adm_main.php?section=admins&action=listar" style="text-decoration: none;"><img src="img/layoutv1/list.jpg" border="0" /></a>

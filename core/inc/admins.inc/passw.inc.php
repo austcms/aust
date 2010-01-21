@@ -1,4 +1,4 @@
-<h1>Alterar senha de acesso</h1>
+<h2>Alterar senha de acesso</h2>
 <?php
 $showform = 'yes';
 if ($_POST['metodo'] == 'gravar'){

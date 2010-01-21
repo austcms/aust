@@ -6,9 +6,9 @@
 
 
 ?>
-<h1>
+<h2>
     Permissões de Usuários
-</h1>
+</h2>
 <p>
     Nesta tela você pode dar permissões especiais a usuários e definir
     "quem edita o que". Somente administradores têm acesso a estas opções.

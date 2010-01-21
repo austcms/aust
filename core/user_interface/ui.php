@@ -3,7 +3,25 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>Aust - Gerenciador de sites<?php /* ifisset($config->LeOpcao('sitename'), 'Aust'); */ ?></title>
-    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>style.css" type="text/css" />
+    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>standard.css" type="text/css" />
+    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>style_principal.css" type="text/css" />
+    
+    <?php /* Estilo do cabeçalho - Topo e Navegação */ ?>
+    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>style_topo.css" type="text/css" />
+
+    <?php /* Estilo dos Widgets */ ?>
+    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>style_widget.css" type="text/css" />
+
+    <?php /* Estilo dos hints - Tooltips, e interrogação */ ?>
+    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>style_hint.css" type="text/css" />
+
+    <?php /* Estilo das tabs - Painel Gerenciar e Configurações */ ?>
+    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>style_tabs.css" type="text/css" />
+
+    <?php /* Estilo do pane - Conteúdo de cada tab */ ?>
+    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>style_pane.css" type="text/css" />
+
+    <?php /* Estilo dos forms - Formulários */ ?>
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>forms.css" type="text/css" />
 
 
@@ -19,52 +37,91 @@
 
     <!-- <SCRIPT LANGUAGE="JavaScript" SRC="inc/js_forms.js"></script> -->
     <script language="JavaScript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>libs/jquery.js"></script>
-    <script language="JavaScript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>codigo_principal.js"> </script>
+    <script language="JavaScript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>libs/jquery.tools.min.js"></script>
+    <?php /* <script src="http://cdn.jquerytools.org/1.1.2/full/jquery.tools.min.js"></script> */ ?>
+
+
     <script language="JavaScript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>navegation.js"></script>
+    <script language="JavaScript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>user_helps.js"></script>
     <script language="JavaScript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>interacao.js"></script>
+    <script language="JavaScript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>codigo_principal.js"> </script>
+
+
 </head>
 
 <body bgcolor="white" topmargin=0 leftmargin=0 rightmargin=0>
 
+<div id="top">
+
+    <div class="title">
+        <?php
+        /*
+         * NOME DO SITE - EDITÁVEL
+         */
+        ?>
+        <div class="logotipo">
+            <h1>AC Informática</h1>
+            <p>Gerencie o seu conteúdo</p>
+        </div>
+
+        <div class="inicializacaorapida">
+            <div id="logout">
+                <a href="logout.php">Sair</a>
+            </div>
+            <?php
+            /*
+             * LINK PARA ALTERAR DADOS OU SENHA
+             */
+            ?>
+            <div id="altera_dados">
+                <a href="adm_main.php?section=admins">Alterar meus dados/senha</a>
+                <?php
+                    /*
+                     * INFORMAÇÕES QUE IRÃO DENTRO DE ALTERAR MEUS DADOS
+                     *
+                      <a href="adm_main.php?section=admins&action=passw">Minha senha</a>
+                    | <a href="adm_main.php?section=admins&action=form&fm=editar">Editar meu perfil</a>
+                     *
+                     */
+                ?>
+
+            </div>
+            <div id="conectado_como">
+                <p>
+                    Conectado como <strong><?php echo $administrador->LeRegistro('nome');?></strong>.<br />
+                    N&iacute;vel de acesso  <strong><?php echo $administrador->LeRegistro('tipo');?></strong>.
+                </p>
+            </div>
+            <span>
+            <br />
+
+
+            <?php
+            /*
+            if($administrador->LeRegistro('tipo') == 'Webmaster'){
+                ?>
+                | <a href="adm_main.php?section=conf_modulos" class="restrito">Configurar Módulos</a>
+                <?php
+            }
+            if(in_array( $administrador->LeRegistro('tipo'), array('Webmaster', 'Administrador') )){ ?>
+                | <a href="adm_main.php?section=permissoes" class="restrito">Permissões</a>
+            <?php }
+             */ ?>
+
+            </span>
+        </div>
+    </div>
+</div>
+<div id="navegacao">
+    <div class="containner">
+        <?php include(THIS_TO_BASEURL.INC_DIR.'menu.inc.php'); ?>
+    </div>
+</div>
+
 <div id="global">
     <noscript>Seu navegador não suporta JavaScript ou ele não está ativado. Por favor ative para ter uma melhor experiência neste site.</noscript>
-    <div id="top">
-        <div class="border">
-        </div>
-        <div class="title">
-        	<div class="logotipo">
-            	<a href="adm_main.php"><h1 style="margin: 0;"><img border="0" src="<?php echo THIS_TO_BASEURL; ?>core/user_interface/img/layoutv1/logo/logo.png" /></h1></a>
-            </div>
-            <div class="inicializacaorapida">
-                <span>
-				<br />
-                Conectado como <strong><?php echo $administrador->LeRegistro('nome');?></strong>.
-                Seu n&iacute;vel de acesso &eacute; <strong><?php echo $administrador->LeRegistro('tipo');?></strong>.
-				<br />
-				<br />
-                <div style="color: black; font-weight: bold;">Atalhos rápidos:</div>
 
-				<a href="adm_main.php?section=admins&action=passw">Minha senha</a>
-				| <a href="adm_main.php?section=admins&action=form&fm=editar">Editar meu perfil</a>
-                <?php
-                if($administrador->LeRegistro('tipo') == 'Webmaster'){
-                    ?>
-                    | <a href="adm_main.php?section=conf_modulos" class="restrito">Configurar Módulos</a>
-                    <?php
-                }
-                if(in_array( $administrador->LeRegistro('tipo'), array('Webmaster', 'Administrador') )){ ?>
-                    | <a href="adm_main.php?section=permissoes" class="restrito">Permissões</a>
-                <?php }?>
 
-                </span>
-			</div>
-        </div>
-    </div>
-    <div id="navegacao">
-    	<div class="containner">
-	        <?php include(THIS_TO_BASEURL.INC_DIR.'menu.inc.php'); ?>
-        </div>
-    </div>
     <div class="body">
         <div class="content">
 
@@ -74,7 +131,7 @@
 
         </div>
     </div>
-    <div class="bottom">
+    <div id="bottom">
 
     </div>
 
@@ -99,5 +156,5 @@
     </div>
 </div>
 
-</BODY>
-</HTML>
+</body>
+</html>

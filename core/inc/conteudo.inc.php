@@ -13,9 +13,6 @@
  * @version 0.2
  * @since v0.1, 01/01/2009
  */
-
-
-
 /*
  *  Se $_GET['action'] está setado, alguma ação foi requisitada
  */
@@ -183,7 +180,7 @@ if(!empty($_GET['action'])){
                 if(count(glob($diretorio.'/'.$_GET['action'].'.php')) == 1){
                     include($diretorio.'/'.$_GET['action'].'.php');
                 } else {
-                    echo '<h1>Ops... Erro nesta ação!</h1>';
+                    echo '<h2>Ops... Erro nesta ação!</h2>';
                     echo '<p>O arquivo requisitado não existe. Entre em contato com o responsável pelo sistema.</p>';
                     echo '<p><a href="adm_main.php?section='.$_GET['section'].'"><img src="img/layoutv1/voltar.gif" border="0" /></a></p>';
                 }
@@ -198,15 +195,123 @@ if(!empty($_GET['action'])){
  * Abre a página inicial da interface de conteúdos
  */
 else {
-?>
-    <h1>Gerenciar conteúdo</h1>
-	<p>
-		Olá. Nesta página você pode <strong>gerenciar todo o conteúdo</strong> do site.
-		Selecione abaixo o que você deseja fazer:
-	</p>
+    ?>
+
+
+    <h2>Gerenciar conteúdo</h2>
+    <p>
+        Use esta tela para gerenciar seu conteúdo. Passe o mouse sobre o conteúdo para mais opções.
+    </p>
+    <?php
+    $sites = $aust->getStructures();
+    //pr($sites);
+    ?>
+    <?php // INICIO DO DIV PAINEL GERENCIAR  - É GLOBAL?>
+    <div class="painel">
+
+        <?php /* TABS */ ?>
+        <div class="tabs_area">
+            <!-- the tabs -->
+            <ul class="tabs">
+                <?php foreach( $sites as $site ): ?>
+                <li><a href="#"><?php echo $site['Site']['name'] ?></a></li>
+                <?php endforeach; ?>
+            </ul>
+                
+        </div>
+        <?php /* PANES */ ?>
+        <div class="panes">
+            <div class="background">
+                <?php
+                /*
+                 * LOOP POR CADA SITE
+                 */
+                foreach( $sites as $site ): ?>
+                <div>
+                    <table border="0" class="pane_listing">
+                    <?php if( count($site['Structures']) ): ?>
+                        <tr class="header">
+                            <td class="secoes">Conteúdos</td>
+                            <td class="acao">Opções</td>
+                            <td class="tipo">Tipo</td>
+                            <td class="acesso">Último acesso por</td>
+                        </tr>
+                    <?php else: ?>
+                        <tr class="list">
+                            <td class="sem_conteudo">Não há conteúdos nesta área.</td>
+                        </tr>
+                        </table>
+                        <?php
+                        continue;
+                    endif; ?>
+                    <?php
+                    /*
+                     * LOOP POR CADA ESTRUTURA
+                     */
+                    foreach( $site['Structures'] as $structure ):
+
+                        /*
+                         * Use o comando 'continue' para pular o resto do loop atual
+                         */
+                        unset($modInfo);
+                        if(is_file('modulos/'.$structure['tipo'].'/'.MOD_CONFIG)){
+                            /*
+                             * Pega dados do módulo. $modInfo existe.
+                             */
+                            include('modulos/'.$structure['tipo'].'/'.MOD_CONFIG);
+
+                            $type = $modInfo['nome'];
+                        } else {
+                            $type = $structure['tipo'];
+                        }
+                        ?>
+                        
+                        <tr class="list">
+                            <td class="title">
+                                <span><?php echo $structure['nome'] ?></span>
+                                <?php tt('Teste') ?>
+                            </td>
+                            <td class="options">
+                                <ul>
+                                <?php
+                                $options = (is_array($modInfo['opcoes'])) ? $modInfo['opcoes'] : Array();
+                                foreach ($options as $chave=>$valor) {
+                                    echo '<li><a href="adm_main.php?section='.$_GET['section'].'&action='.$chave.'&aust_node='.$structure['id'].'">'.$valor.'</a></li>';
+                                }
+                                ?>
+                                </ul>
+                            </td>
+                            <td class="tipo">
+                                <?php
+                                /*
+                                 * TIPO
+                                 */
+                                echo $type;
+                                ?>
+                            </td>
+                            <td class="acesso">
+                                Alexandre de Oliveira
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                        <tr class="footer">
+                            <td colspan="4"></td>
+                        </tr>
+                        </table>
+
+
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+
+    </div><?php // FIM DO DIV PAINEL GERENCIAR ?>
+
+    <br clear="all" />
 	<div class="action_options">
         <?php
-        include(INC_DIR.'conteudo.inc/user_menu.php');
+        //pr($aust->getStructures());
+        //include(INC_DIR.'conteudo.inc/user_menu.php');
         ?>
 
 	</div>

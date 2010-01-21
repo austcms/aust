@@ -60,10 +60,122 @@ if(!empty($_POST['inserirmodulo'])){
 	</div>
 <?php } ?>
 
-<h1>Configurações</h1>
+<h2>Configurações</h2>
 <p>
-    Olá. Aqui você pode configurar todas as opções disponíveis do site.
+    Nesta tela estão as principais configurações do sistema.
 </p>
+
+
+<div class="painel">
+    <?php
+    /*
+     * NOME DAS TABS - GERAL E SISTEMA
+     */
+    ?>
+
+    <div class="tabs_area">
+
+        <!-- the tabs -->
+        <ul class="tabs">
+
+            <?php
+            /*
+             * NOME DA PRIMEIRA TAB - GERAL
+             */
+            ?>
+            <li><a href="#">Geral</a></li>
+            <?php
+            /*
+             * NOME DA SEGUNDA TAB - SISTEMA
+             */
+            ?>
+            <li><a href="#">Sistema</a></li>
+
+
+        </ul>
+
+    </div>
+    
+    
+    <div class="panes">
+
+    <?php /* TR Header igual para todas as panes */ ?>
+        <table border="0" class="pane_listing">
+            <tr class="header">
+                <td class="opcoes">Opções</td>
+            </tr>
+        </table>
+        <br clear="all" />
+    <?php /***** Até aqui ******/ ?>
+
+
+    <?php
+    /*
+     * Background - CONTEÚDO DA PRIMEIRA TAB - GERAL
+     */
+    ?>
+        <div class="background">
+            <div class="list">
+                <div class="title">
+                    <ul>
+                        <li>NOME DO SITE</li>
+                        <li>NOME DO SITE</li>
+                    </ul>
+                </div>
+
+                <div class="input">
+                    <ul>
+                        <li><input type="text" name="nome_site" /></li>
+                        <li><input type="text" name="nome_site" /></li>
+                    </ul>
+                </div>
+                
+                <div class="dica">
+                    <ul>
+                        <li>Entre o nome do seu site neste campo.</li>
+                        <li>Campo de teste.</li>
+                    </ul>
+                    
+                </div>
+            </div>
+
+        </div>
+
+    <?php
+    /*
+     * Background - CONTEÚDO DA SEGUNDA TAB - SISTEMA
+     */
+    ?>
+        <div class="background">
+            <div class="list">
+                <div class="title">
+                    <ul>
+                        <li>DAR ACESSO ÀS CATEGORIAS</li>
+                        <li>USUÁRIOS ACESSAM PERMISSÕES</li>
+                    </ul>
+                </div>
+
+                <div class="input">
+                    <ul>
+                        <li><input type="text" name="nome_site" /></li>
+                        <li><input type="text" name="nome_site" /></li>
+                    </ul>
+                </div>
+
+                <div class="dica">
+                    <ul>
+                        <li>Você deseja que o usuário possa configurar as categorias.</li>
+                        <li>Usuários podem configurar permissões.</li>
+                    </ul>
+                </div>
+            </div>
+            
+        </div>
+
+    </div>
+
+</div>
+
 
 <?php
 
@@ -109,6 +221,7 @@ if( $options ){
     <input type="submit" name="gravar" value="Enviar" class="submit" />
     </form>
 <?php } else { ?>
+<br clear="all" />
     <p class="alerta">
     	Nenhuma configuração ajustada ainda.
     </p>

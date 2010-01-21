@@ -1,0 +1,102 @@
+/*
+ * TAB PANES - CONTEÚDO
+ *
+ * - table.pane_listing - Quando há uma listagem, esta é a classe
+ *
+ * - .background - Quando o contéudo é simples, .background no div filho de
+ *                 div.pane
+ */
+
+/* TAB PANE -> table.pane_listing - Painel Gerenciar e Configurações*/
+div.panes div.background { background: #fafafa; padding: 0px 0; }
+    div.panes div.background .header { background: #edf6ff; padding: 10px; }
+
+/* TAB PANE -> table.pane_listing */
+table.pane_listing {
+    border: 0px solid;
+    width: 720px;
+    padding: 0;
+    float: left;
+}
+    table.pane_listing tr.header {
+        background: #edf6ff;
+        border-bottom: 1px solid #eeeeee;
+        height: 30px;
+        margin: 0px; padding: 0;
+    }
+
+        table.pane_listing tr td:first-child {  }
+        table.pane_listing tr.header td {
+            color: #888888; text-transform: uppercase;
+            font-size: 0.9em;
+            padding: 0 0 0px 10px;
+        }
+        table.pane_listing tr.header td.tipo { font-size: 0.9em; }
+        table.pane_listing tr.header td.acesso { font-size: 0.9em; }
+    
+    table.pane_listing tr.list {
+        background: #fafafa;
+        width: 720px;
+    }
+        table.pane_listing tr.list td {
+            color: #888888; text-transform: uppercase;
+            font-size: 0.9em;
+            padding: 10px 0 0px 10px;
+
+        }
+        /* Pane sem conteúdo */
+        div.panes .sem_conteudo {
+            display: inline-block; margin: 0 10px 10px 10px;
+        }
+        /* Colunas de conteúdos */
+        table.pane_listing tr.list td.title span {
+            font-weight: bold;
+            display: inline;
+            float: left;
+            line-height: 20px;
+            margin-right: 5px;
+        }
+        table.pane_listing tr.list td.options ul { list-style: none; margin: 0; }
+        table.pane_listing tr.list td.options ul li {
+            display: inline; margin-right: 15px;
+            font-size: 0.8em;
+        }
+        table.pane_listing tr.list td.tipo { font-size: 0.8em; }
+        table.pane_listing tr.list td.acesso { font-size: 0.8em; }
+
+    table.pane_listing tr.footer {
+        height: 10px;
+        background: #fafafa;
+        border-bottom: 1px solid #efefef;
+    }
+
+/* fim tab panes <<<<<<<<<*/
+
+
+
+/*
+ * CONTEÚDO CONFIGURAÇÕES
+ */
+div.panes .background div.list {
+    display: table;
+    padding: 5px 0;
+}
+    div.panes .background div.list ul {
+        list-style: none;
+    }
+    div.panes .background div.list div.title, div.input, div.dica {
+        float: left;
+        line-height: 24px;
+        display: table;
+    }
+    div.panes .background div.list div.title ul {
+        margin: 0;
+        padding-left: 10px;
+    }
+    div.panes .background div.list div.dica ul li {
+        font-size: 0.7em;
+        color: #aaaaaa;
+    }
+    div.panes .background div.list div.input ul li input {
+        margin-bottom: 5px;
+    }

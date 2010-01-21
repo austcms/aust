@@ -26,12 +26,14 @@ class Aust
      */
     protected $conexao;
 
-	function __construct(&$conexao){
-            $this->conexao = &$conexao;
-            unset($this->AustCategorias);
-	}
+    function __construct(&$conexao){
+        $this->conexao = &$conexao;
+        unset($this->AustCategorias);
+    }
 
-	/**
+    /**
+     * gravaEstrutura()
+     *
      * Grava uma nova estrutura na tabela categorias
      *
      * @param array $param Contém os seguintes índices:
@@ -42,7 +44,6 @@ class Aust
      *      string  [modulo]            nome da pasta do módulo responsável por esta estrutura
      *      string  [autor]             autor da estrutura
      */
-
     function gravaEstrutura($params){
 
         $nome = $params['nome'];
@@ -93,9 +94,10 @@ class Aust
     }
 
     /**
+     *
      * LEITURA DE INFORMAÇÕES
+     * 
      */
-
     /**
      * Retorna categoria-chefe
      *
@@ -141,6 +143,85 @@ class Aust
             $c++;
         }
     }
+
+    /**
+     * getStructures()
+     *
+     * Get all sites and its substructures.
+     *
+     * @return <array>
+     */
+    public function getStructures(){
+        /**
+         * SITES
+         */
+        $sql = "SELECT
+                    id,nome as name
+                FROM
+                    categorias
+                WHERE
+                    subordinadoid='0'
+                ";
+
+        $query = $this->conexao->query($sql);
+        $result = array();
+        /*
+         * Each site
+         */
+        foreach( $query as $key=>$sites){
+            $result[$key]['Site']['id'] = $sites['id'];
+            $result[$key]['Site']['name'] = $sites['name'];
+
+            /*
+             * Get Structures of each site
+             */
+            $structures = $this->getStructuresByFather($sites['id']);
+            if( is_array($structures) ){
+
+                $result[$key]['Structures'] = $structures;
+            }
+        }
+
+        return $result;
+
+    } // end getStructures
+
+    /**
+     * getStructuresByFather()
+     *
+     * Fetch all structures of a given father
+     *
+     * @param <int> $id
+     * @return <array>
+     */
+    public function getStructuresByFather($id=''){
+        if( empty($id) )
+            return false;
+
+        /*
+         * Structures of given site
+         */
+        $sql = "SELECT
+                    lp.id, lp.subordinadoid, lp.nome, lp.tipo as tipo,
+                    ( SELECT COUNT(*)
+                    FROM
+                    ".self::$austTable." As clp
+                    WHERE
+                    clp.subordinadoid=lp.id
+                    ) As num_sub_nodes
+                FROM
+                    ".self::$austTable." AS lp
+                WHERE
+                    lp.subordinadoid = '".$id."' AND
+                    lp.classe = 'estrutura'
+                ORDER BY
+                    lp.tipo DESC,
+                    lp.nome ASC
+        ";
+        $query = $this->conexao->query($sql);
+
+        return $query;
+    } // end getStructuresByFather()
 
     /**
      * @todo - refatorar

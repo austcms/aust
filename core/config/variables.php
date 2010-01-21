@@ -57,6 +57,8 @@ define("CORE_DIR", "core/");
      * Libs
      */
     define("LIB_DIR", CORE_DIR."libs/"); define("LIBS_DIR", LIB_DIR);
+    define("LIB_DATA_TYPES", CORE_DIR."libs/functions/data_types.php");
+
     /**
      * GDImageViewer
      */

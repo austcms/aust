@@ -17,4 +17,39 @@
 		echo $str;
 	}
 
+/**
+ * tooltip()
+ *
+ * Gera código HTML necessário para criação dinâmica de Tooltips
+ *
+ * @param string $str
+ */
+function tooltip($str = ''){
+    if( !empty($str) ){
+        ?>
+        <span class="hint">
+            <a href="javascript: void(0)" title="Saiba mais">&nbsp;</a>
+
+            <div class="tooltip">
+                <div class="top"></div>
+                <div class="text"><p><?php echo $str ?></p></div>
+                <div class="bottom"></div>
+            </div>
+        </span>
+        <?php
+        return true;
+    }
+}// fim tooltip()
+
+/**
+ * tt()
+ *
+ * ALIAS PARA TOOLTIP()
+ *
+ * @param string $str
+ * @return bool
+ */
+function tt($str = ''){
+    return tooltip($str);
+}
 ?>

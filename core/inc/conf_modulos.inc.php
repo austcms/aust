@@ -241,6 +241,9 @@ else {
                 <p>Abaixo, as estruturas instaladas.</p>
                 <ul>
                 <?php
+                /**
+                 * @todo - refatorar LeEstruturas()
+                 */
                 $aust->LeEstruturas(Array('id', 'nome', 'tipo'), '<li><strong>&%nome</strong> (módulo &%tipo) &%options</li>', '', '', 'ORDER BY tipo DESC', 'options');
                 ?>
                 </ul>

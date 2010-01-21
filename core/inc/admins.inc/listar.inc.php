@@ -1,4 +1,4 @@
-<h1>Listando Usuários</h1>
+<h2>Listando Usuários</h2>
 <?php
 /*
  * LISTAR ADMINS

@@ -37,7 +37,7 @@ if($fm == 'editar'){
 <p style="margin-top: 15px;">
     <a href="adm_main.php?section=admins"><img src="img/layoutv1/voltar.gif" border="0" /></a>
 </p>
-<h1>Novo Usuário</h1>
+<h2>Novo Usuário</h2>
 <p>
     <strong>Cadastre</strong> a seguir um novo usuário para este gerenciador.
 </p>
