@@ -220,7 +220,7 @@ else {
 
     //
     ?>
-    <h1>Configuração: Módulos e Estruturas</h1>
+    <h2>Configuração: Módulos e Estruturas</h2>
     <?php
     if( !empty($status) AND is_array($status)){
         EscreveBoxMensagem($status);
