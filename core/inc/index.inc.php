@@ -87,7 +87,7 @@
             <li>
                 <div class="widget">
                     <div class="titulo">
-                        <h3>Início Rápido - Coluna 1</h3>
+                        <h3>Início Rápido</h3>
                     </div>
                     <div class="content">
                         <ul>
@@ -118,7 +118,7 @@
             <li>
                 <div class="widget">
                     <div class="titulo">
-                        <h3>Pessoas - Coluna 2</h3>
+                        <h3>Pessoas</h3>
                     </div>
                     <div class="content">
                         <ul>

@@ -8,8 +8,8 @@
  */
 
 /* TAB PANE -> table.pane_listing - Painel Gerenciar e Configurações*/
-div.panes div.background { background: #fafafa; padding: 0px 0; }
-    div.panes div.background .header { background: #edf6ff; padding: 10px; }
+div.panes div.background { padding: 0px 0; border-bottom: 1px solid #f9f9f9; }
+    div.panes div.background .header { padding: 10px; border: none; }
 
 /* TAB PANE -> table.pane_listing */
 table.pane_listing {
@@ -35,7 +35,6 @@ table.pane_listing {
         table.pane_listing tr.header td.acesso { font-size: 0.9em; }
     
     table.pane_listing tr.list {
-        background: #fafafa;
         width: 720px;
     }
         table.pane_listing tr.list td {
@@ -66,8 +65,7 @@ table.pane_listing {
 
     table.pane_listing tr.footer {
         height: 10px;
-        background: #fafafa;
-        border-bottom: 1px solid #efefef;
+        border-bottom: 1px solid #f9f9f9;
     }
 
 /* fim tab panes <<<<<<<<<*/

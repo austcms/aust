@@ -221,7 +221,6 @@ else {
         </div>
         <?php /* PANES */ ?>
         <div class="panes">
-            <div class="background">
                 <?php
                 /*
                  * LOOP POR CADA SITE
@@ -302,7 +301,6 @@ else {
 
                     </div>
                 <?php endforeach; ?>
-            </div>
         </div>
 
     </div><?php // FIM DO DIV PAINEL GERENCIAR ?>
