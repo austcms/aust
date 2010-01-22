@@ -29,10 +29,13 @@
             
             ?>
             
+            <?php /*
             <p>
                 Se voc&ecirc; tem uma senha de administrador, use-a abaixo
-                para acessar a &aacute;rea restrita e gerenciar o banco de dados:</p>
-                        
+                para acessar a &aacute;rea restrita e gerenciar o banco de dados:
+            </p>
+             * 
+             */?>
             <form method="post" style="margin: 0;" action="index.php?login=verify">
             
                 
@@ -41,11 +44,11 @@
                 <col />
                 <tr>
                 <td><font size="2" face="trebuchet ms" color="#0080C0">Login: </font></td>
-                <td><input type="text" name="login" size="20" /></td>
+                <td class="input"><input type="text" name="login" size="20" /></td>
                 </tr>
                 <tr>
                 <td><font size="2" face="trebuchet ms" color="#0080C0">Senha: </font></td>
-                <td><input type="password" name="senha" size="20" /></td>
+                <td class="input"><input type="password" name="senha" size="20" /></td>
                 </tr>
                 <tr>
                     <td colspan="2"><br /><br /><p>Se você esqueceu sua senha, entre em contato com um administrador.</p></td>
