@@ -504,7 +504,7 @@ else {
                     if( $migrationsMods->isActualVersion($path)
                         AND $modulos->verificaInstalacaoRegistro(array("pasta"=>$path)) )
                     {
-                        echo '<div style="color: green;">Instalado</div>';
+                        echo '<br /><span class="green">Instalado</span><br />';
                     } elseif( $migrationsMods->isActualVersion($path)
                         AND !$modulos->verificaInstalacaoRegistro(array("pasta"=>$path)) )
                     {
@@ -526,8 +526,8 @@ else {
                         echo '<div style="color: orange;">Tabela instalada, mas requer atualização e registro do módulo no DB.<br />';
                         echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&instalar_modulo='.$path.'">Rodar Migration</a></div>';
                     } else {
-                        echo '<div style="color: red;">Não Instalado, ';
-                        echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&instalar_modulo='.$path.'">instalar agora</a></div>';
+                        echo '<br /><span class="red">Não Instalado,</span> ';
+                        echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&instalar_modulo='.$path.'">instalar agora</a><br />';
                     }
                     /*
                     if( $modulo->verificaInstalacaoTabelas()
