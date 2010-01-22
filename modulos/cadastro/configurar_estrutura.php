@@ -259,7 +259,10 @@ if(!empty($_GET['function'])){
 }
 ?>
 
-<h1>Configuração: <?=$aust->leNomeDaEstrutura($_GET['aust_node'])?></h1>
+<h2>Configuração: <?=$aust->leNomeDaEstrutura($_GET['aust_node'])?></h2>
+<p>
+    Configure esta estrutura de cadastro.
+</p>
 <?php if(!empty($status)){ ?>
     <div class="box-full">
         <div class="box alerta">
@@ -281,7 +284,7 @@ if(!empty($_GET['function'])){
     </div>
 <?php } ?>
 
-<div class="painel-metade">
+<div class="widget_group">
 
     <?php
     /**
@@ -290,11 +293,11 @@ if(!empty($_GET['function'])){
      * Form para inserir novos campos em um cadastro
      */
     ?>
-    <div class="painel">
+    <div class="widget">
         <div class="titulo">
-            <h2>Novo campo</h2>
+            <h3>Novo campo</h3>
         </div>
-        <div class="corpo">
+        <div class="content">
             <p>Insira um novo campo no cadastro.</p>
             <form method="post" action="<?=$config->self;?>" class="simples pequeno">
                 <input type="hidden" name="tabela" value="<?=$tabela_da_estrutura?>" />
@@ -405,7 +408,7 @@ if(!empty($_GET['function'])){
 
             </form>
         </div>
-        <div class="rodape"></div>
+        <div class="footer"></div>
     </div>
 
     <?php
@@ -413,11 +416,11 @@ if(!empty($_GET['function'])){
      * FILTROS ESPECIAIS
      */
     ?>
-    <div class="painel">
+    <div class="widget">
         <div class="titulo">
-            <h2>Opções de Filtragem</h2>
+            <h3>Opções de Filtragem</h3>
         </div>
-        <div class="corpo">
+        <div class="content">
             <p>
                 Se você especificar o campo de email abaixo, será mostrado um input
                 na listagem para que o usuário possa ver os emails dos usuários
@@ -463,11 +466,11 @@ if(!empty($_GET['function'])){
            
 
         </div>
-        <div class="rodape"></div>
+        <div class="footer"></div>
     </div>
 </div>
 
-<div class="painel-metade painel-dois">
+<div class="widget_group">
     <?
     /**
      * LISTAGEM DE CAMPOS
@@ -475,11 +478,11 @@ if(!empty($_GET['function'])){
      * Listagem dos campos deste cadastro e configuração destes
      */
     ?>
-    <div class="painel">
+    <div class="widget">
         <div class="titulo">
-            <h2>Campos deste cadastro</h2>
+            <h3>Campos deste cadastro</h3>
         </div>
-        <div class="corpo">
+        <div class="content">
             <p>A seguir, você tem a lista dos campos existentes neste cadastro.</p>
             <ul>
             <?php
@@ -496,6 +499,8 @@ if(!empty($_GET['function'])){
              * Pega o valor físico do campo da tabela
              */
             $fields = count($mysql);
+            if( !is_array($mysql) )
+                $mysql = array();
 
             foreach($mysql as $chave=>$valor){
                 /**
@@ -570,18 +575,18 @@ if(!empty($_GET['function'])){
             </ul>
 
         </div>
-        <div class="rodape"></div>
+        <div class="footer"></div>
     </div>
     <?
     /*
      * Opções gerais do cadastro
      */
     ?>
-    <div class="painel">
+    <div class="widget">
         <div class="titulo">
-            <h2>Opções do cadastro</h2>
+            <h3>Opções do cadastro</h3>
         </div>
-        <div class="corpo">
+        <div class="content">
             <p>A seguir, você configurar as principais opções deste cadastro.</p>
             <form method="post" action="<?=$config->self;?>" class="simples pequeno">
                 <?php
@@ -625,6 +630,6 @@ if(!empty($_GET['function'])){
             </form>
 
         </div>
-        <div class="rodape"></div>
+        <div class="footer"></div>
     </div>
 </div>

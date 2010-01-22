@@ -288,7 +288,7 @@ class FormHelper
                     $selectThis = false;
                 }
                 $conteudo.= '<input type="hidden" name="'.$inputName.'[]" value="0" />';
-                $conteudo.= '<div class="input_checkbox_each"><input type="checkbox" name="'.$inputName.'[]" '.$selectThis.' value="'.$chave.'" />'.$valor.'</div>';
+                $conteudo.= '<div class="input_checkbox_each"><input type="checkbox" name="'.$inputName.'[]" '.$selectThis.' value="'.$chave.'" /> '.$valor.'</div>';
             }
 
         } // fim checkbox
