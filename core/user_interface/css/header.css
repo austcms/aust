@@ -20,6 +20,8 @@ div#top {
         
     }
         div#top div.title div.logotipo h1 { margin: 0 0 0 10px; }
+            div#top div.title div.logotipo h1 a { text-decoration: none; }
+            div#top div.title div.logotipo h1 a:focus { outline: none; }
         div#top div.title div.logotipo p { font-size: 0.8em; }
 
 	div#top div.title div.inicializacaorapida {

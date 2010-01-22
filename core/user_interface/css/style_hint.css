@@ -18,7 +18,7 @@ span.hint {
     
     span.hint a:hover {
         background: url(../img/interrogacao.png) no-repeat;
-        background-position: 0px -27px;
+        background-position: 0px -22px;
     }
 
     span.hint a:focus {
