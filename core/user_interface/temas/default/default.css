@@ -26,7 +26,8 @@ h2.ok { color: #006600; }
 span.red { color: #d40000; }
 span.green { color: #006413; }
 
-
+/* DIV central - body */
+div.body { background: white; }
 
 /* TOPO */
 div#top {
@@ -58,3 +59,14 @@ div.widget div.titulo { background: #e9f4ff; }
 div.widget div.titulo h3 { color: #065796; }
 div.widget { background: #fdfdfd; }
 div.widget div.footer { background: #fdfdfd; }
+
+/* PANES */
+table.pane_listing tr.list { background: #fdfdfd; }
+table.pane_listing tr.footer { background: #fdfdfd; }
+
+/* TAB PANE -> table.pane_listing - Painel Gerenciar e Configurações*/
+div.panes div.background { background: #fdfdfd; }
+    div.panes div.background .header { background: #edf6ff; }
+
+
+
