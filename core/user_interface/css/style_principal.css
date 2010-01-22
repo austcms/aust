@@ -65,7 +65,7 @@ div.body {
             div.body div.content div.box-dois { margin: 0; }
 
             div.body div.content div.box-full {
-                    width: 690px;
+                    width: 100%;
                     background: white;
                     margin-right: 10px;
             }
@@ -76,7 +76,7 @@ div.body {
             div.body div.content div.box div.rodape { margin: 10px; padding: 10px; background: white; }
             div.body div.content div.alerta { background: #ffee60; padding: 5px; border: 1px solid orange; margin-bottom: 10px; }
             div.body div.content div.pergunta { background: yellow; padding: 15px; border: 1px solid orange; text-align: center; }
-            div.body div.content div.sucesso { background: #D9FFD9; padding: 5px; border: 1px solid #009900 }
+            div.body div.content div.sucesso { background: #D9FFD9; color: #006413; padding: 5px; border: 1px solid #009900 }
             div.body div.content div.insucesso { background: #f68585; padding: 5px; border: 1px solid #db4343 }
 
     /********* CATEGORIAS *********/
@@ -120,31 +120,6 @@ div#bottom {
     background: white;
 	font-size: 1px;
 	margin: 0 auto;
-}
-
-	
-	
-/*******************************
-*** RSS BOX ***
-*******************************/
-
-.rssclass {
-	font-size: 12px;
-	float:left;
-	display: inline;
-	filter: progid:DXImageTransform.Microsoft.alpha(opacity=80); /*Specify fade effect in IE. Remove if desired.*/
-	-moz-opacity: 0.8; /*Specify fade effect in Firefox. Remove if desired.*/
-}
-	.rssclass a { color: green; text-decoration: underline; }
-	.rssclass a:hover { color: green; text-decoration: none; }
-
-
-div#categoriacontainer{
-	margin: 0 auto;
-	padding-bottom: 10px;
-	padding-left: 0;
-	border: solid 0.0em #3F4C6B;
-	text-align: left;
 }
  
 /*******************************

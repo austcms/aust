@@ -300,7 +300,7 @@ class dbSchema
          */
 
         $checkedSchema = $this->verificaSchema();
-        if($checkedSchema != 1 AND $this->_isDbSchemaFormatOk() ){
+        if($checkedSchema != 1 AND $this->isDbSchemaFormatOk() ){
             /**
              * Tabela por tabela do Schema
              */
@@ -372,7 +372,7 @@ class dbSchema
      * @param <array> [opcional] $dbSchema
      * @return <bool>
      */
-    public function _isDbSchemaFormatOk($dbSchema = ''){
+    public function isDbSchemaFormatOk($dbSchema = ''){
 
         if( empty($dbSchema) )
             $dbSchema = $this->dbSchema;
