@@ -65,15 +65,14 @@
         </div>
 
         <div class="inicializacaorapida">
-            <div id="logout">
-                <a href="logout.php">Sair</a>
-            </div>
+  
             <?php
             /*
              * LINK PARA ALTERAR DADOS OU SENHA
              */
             ?>
             <div id="altera_dados">
+                <a href="logout.php">Sair</a>
                 <?php
                 if($administrador->LeRegistro('tipo') == 'Webmaster'){
                     ?><a href="adm_main.php?section=conf_modulos" class="restrito">Configurar Módulos</a><?php

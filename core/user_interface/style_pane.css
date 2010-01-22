@@ -61,8 +61,8 @@ table.pane_listing {
             display: inline; margin-right: 15px;
             font-size: 0.8em;
         }
-        table.pane_listing tr.list td.tipo { font-size: 0.8em; }
-        table.pane_listing tr.list td.acesso { font-size: 0.8em; }
+        table.pane_listing tr.list td.tipo { font-size: 0.7em; }
+        table.pane_listing tr.list td.acesso { font-size: 0.7em; }
 
     table.pane_listing tr.footer {
         height: 10px;

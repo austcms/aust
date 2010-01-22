@@ -16,28 +16,27 @@ div#top {
     }
 	
 	div#top div.title div.logotipo {
-        width: 400px;
+        width: 300px;
         float: left;
         text-align: left;
-        margin: 0 0 0 0;
+        margin: 15px 0 0 0;
         
     }
         div#top div.title div.logotipo h1 { margin-top: 0; }
         div#top div.title div.logotipo p { font-size: 0.8em; color: #004b85; }
 
 	div#top div.title div.inicializacaorapida {
-        width: 250px;
+        width: 300px;
         text-align: left;
-        float: left;
-        margin-left: 110px;
-        margin-top:10px;
+        float: right;
+        margin-left: 160px;
+        margin-top: 10px;
     }
-        #logout a {
-            float: right;
-            margin-left: 10px;
-        }
+
         #altera_dados a {
             float: right;
+            margin-left: 10px;
+            line-height: 18px;
         }
         #conectado_como {
             margin-top: 20px;

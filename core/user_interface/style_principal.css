@@ -190,3 +190,15 @@ div#categoriacontainer{
 
 
 table.listagem td.adddate { width: 120px; }
+
+
+/*
+ * Pessoas e permissões
+ */
+
+div.action_options ul li {
+    line-height: 20px;
+}
+    div.action_options ul li.sem_icone {
+        margin-left: 20px;
+    }
