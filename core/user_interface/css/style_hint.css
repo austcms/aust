@@ -7,7 +7,7 @@ span.hint {
     height: 20px;
 }
     span.hint a {
-        background: url(img/interrogacao.png) no-repeat top;
+        background: url(../img/interrogacao.png) no-repeat top;
         display: inline-block;
         width: 20px;
         height: 20px;
@@ -17,7 +17,7 @@ span.hint {
     }
     
     span.hint a:hover {
-        background: url(img/interrogacao.png) no-repeat;
+        background: url(../img/interrogacao.png) no-repeat;
         background-position: 0px -27px;
     }
 
@@ -36,7 +36,7 @@ span.hint div.tooltip {
     padding: 0;
 }
     span.hint div.tooltip div.top {
-        background: url(img/top_tooltip.png);
+        background: url(../img/top_tooltip.png);
         margin: 0px;
         width: 255px;
         height: 20px;
@@ -44,7 +44,7 @@ span.hint div.tooltip {
     }
 
     span.hint div.tooltip div.text {
-        background: url(img/meio_tooltip.png) repeat-y;
+        background: url(../img/meio_tooltip.png) repeat-y;
         margin: 0;
         width: 257px;
         padding: 10px;
@@ -57,7 +57,7 @@ span.hint div.tooltip {
         }
 
     span.hint div.tooltip div.bottom {
-        background: url(img/bottom_tooltip.png);
+        background: url(../img/bottom_tooltip.png);
         margin: 0px;
         width: 255px;
         height: 25px;

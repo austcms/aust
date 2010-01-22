@@ -2,7 +2,6 @@
 
 body {
     font-family: 'Lucida Grande','Arial', Verdana, sans-serif;
-    background: #fafafa;
     text-align: center;
     margin: 0;
     font-size: 76%;
@@ -13,7 +12,7 @@ a:hover { text-decoration: none; }
 
 /* <A> ESPECIAL */
 a.delete { font-size: 0.8em; text-transform: uppercase; color: orange; }
-a.restrito { }
+a.restrito { margin: 0 0 0 5px;}
 
 
 p { margin-top: 0px; margin-bottom: 15px; }
