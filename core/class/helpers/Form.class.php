@@ -163,6 +163,13 @@ class FormHelper
             $conteudo.= '<div class="input_field input_text">';
             $conteudo.= '<input type="text" name="'.$inputName.'" value="'.$inputValue.'" id="input-'.$fieldName.'" />';
         }
+        /*
+         * DATE FIELD
+         */
+        else if( $inputType == "date"){
+            $options['fieldName'] = $fieldName;
+            $conteudo.= $this->date($inputName, $options);
+        }
         /**
          * <TEXTAREA>
          *
@@ -296,6 +303,39 @@ class FormHelper
         $conteudo.= '</div>';
 
         return $conteudo;
+    }
+
+    /**
+     * date()
+     *
+     * Gera o código HTML para um campo do tipo 'date'
+     *
+     * @param <string> $inputName
+     * @param <array> $options
+     * @return <string>
+     */
+    public function date($inputName, $options){
+
+        /*
+         * Inicializa Conteúdo a ser retornado
+         */
+        $c = '';
+
+        $inputValue = empty($options['value']) ? '' : $options['value'];
+        $fieldName = empty($options['fieldName']) ? '' : $options['fieldName'];
+
+        $inputValueDay = date("d", strtotime($inputValue) );
+        $inputValueMonth = date("m", strtotime($inputValue) );
+        $inputValueYear = date("Y", strtotime($inputValue) );
+
+        $c.= '<div class="input_field input_date">';
+        $c.= '<input type="text" name="'.$inputName.'[day]" value="'.$inputValueDay.'" id="input-'.$fieldName.'" class="input_date_day input-'.$fieldName.'-day " maxlength="2" />';
+        $c.= '-';
+        $c.= '<input type="text" name="'.$inputName.'[month]" value="'.$inputValueMonth.'" id="input-'.$fieldName.'-month" class="input_date_month input-'.$fieldName.'-month" maxlength="2" />';
+        $c.= '-';
+        $c.= '<input type="text" name="'.$inputName.'[year]" value="'.$inputValueYear.'" id="input-'.$fieldName.'-year" class="input_date_year input-'.$fieldName.'-year" maxlength="4" />';
+        $c.= '<p class="explanation">Formato: dia-mês-ano (dd-mm-aaaa). Exemplo: 21-04-1987</p>';
+        return $c;
     }
 
     public function end($submitValue = "Enviar", $options = ""){

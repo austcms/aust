@@ -75,5 +75,7 @@ form.formHelper {
     form.formHelper label { width: 120px; }
     form.formHelper div.input_field {  }
     form.formHelper div.input_textarea textarea { width: 300px; height: 50px; }
+    form.formHelper div.input_date input { width: 18px; }
+        form.formHelper div.input_date .input_date_year { width: 35px; }
     form.formHelper div.input_checkbox { display: table; }
 
