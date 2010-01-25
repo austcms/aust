@@ -5,26 +5,11 @@
  */
 
 $widgets = new Widgets($envParams, $administrador->getId());
-$installedWidgets = $widgets->getInstalledWidgets();
 
 ?>
 
 <h2>Painel Principal</h2>
 <p>Este é o sistema onde você gerencia o conteúdo do seu site.</p>
-
-<?php
-/*
-vd($categoriasPermitidas);
-$params = array(
-    'estrutura' => '1',
-    'permitidas' => $categoriasPermitidas,
-);
-//var_dump(Permissoes::verify($params));
-
-//var_dump($permissoes);
- * 
- */
-?>
 
 <div id="painel">
 
@@ -32,30 +17,41 @@ $params = array(
     <div class="widget_group">
 
         <?php
+        $c = $widgets->getInstalledWidgets();
+
         /*
          * WIDGETS - COLUNA 1
          */
-        foreach( $widgets->getInstalledWidgetsByColumn(1) as $widget ){
-            ?>
+        if( !empty($c['1']) ):
 
-            <ul>
-                <li>
-                    <div class="widget">
-                        <div class="titulo">
-                            <h3><?php echo $widget->getTitle(); ?></h3>
+            foreach( $c['1'] as $widget ){
+                ?>
+                <ul>
+                    <li>
+                        <div class="widget">
+                            <div class="titulo">
+                                <h3><?php echo $widget->getTitle(); ?></h3>
+                            </div>
+                            <div class="content">
+                                <?php echo $widget->getHtml(); ?>
+                            </div>
+                            <div class="footer">
+                            </div>
                         </div>
-                        <div class="content">
-                            <?php echo $widget->getHtml(); ?>
-                        </div>
-                        <div class="footer">
-                        </div>
-                    </div>
-                </li>
-            </ul>
+                    </li>
+                </ul>
+                <?php
+            }
+            
+        else:
+            ?>
+            Esta coluna não possui Widgets.
             <?php
-        }
+        endif;
         ?>
 
+        <br/>
+        <a href="adm_main.php?section=widgets&column_nr=1">Adicionar Widget</a>
               
     </div>
 
@@ -67,25 +63,36 @@ $params = array(
         /*
          * WIDGETS - COLUNA 1
          */
-        foreach( $widgets->getInstalledWidgetsByColumn(2) as $widget ){
+        if( !empty($c['2']) ):
+
+            foreach( $c['2'] as $widget ){
+                ?>
+                <ul>
+                    <li>
+                        <div class="widget">
+                            <div class="titulo">
+                                <h3><?php echo $widget->getTitle(); ?></h3>
+                            </div>
+                            <div class="content">
+                                <?php echo $widget->getHtml(); ?>
+                            </div>
+                            <div class="footer">
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <?php
+            }
+
+        else:
             ?>
-            <ul>
-                <li>
-                    <div class="widget">
-                        <div class="titulo">
-                            <h3><?php echo $widget->getTitle(); ?></h3>
-                        </div>
-                        <div class="content">
-                            <?php echo $widget->getHtml(); ?>
-                        </div>
-                        <div class="footer">
-                        </div>
-                    </div>
-                </li>
-            </ul>
+            Esta coluna não possui Widgets.
             <?php
-        }
+        endif;
+
         ?>
+        <br/>
+        <a href="adm_main.php?section=widgets&column_nr=2">Adicionar Widget</a>
 
     </div>
     

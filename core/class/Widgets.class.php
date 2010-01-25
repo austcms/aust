@@ -46,7 +46,8 @@ class Widgets
      */
     public function getInstalledWidgets($params = array()){
 
-        $column = empty($params['column']) ? '' : "AND column_nr='".$params['column']."'";
+        $column = empty($params['column']) ? ''       : "AND column_nr='".$params['column']."'";
+        $mode =   empty($params['mode'])   ? 'normal' : $params['mode'];
 
         $sql = "SELECT
                     *
@@ -59,12 +60,17 @@ class Widgets
         $query = $this->conexao->query($sql);
         $result = array();
 
-        if( is_array($query) ){
-            foreach( $query as $valor ){
-                $result[$valor['column_nr']][$valor['position_nr']] = $valor;
+        if( $mode == 'list' ){
+            return $result;
+        } else {
+            if( is_array($query) ){
+                foreach( $query as $valor ){
+                    $result[$valor['column_nr']][$valor['position_nr']] = $this->_instanciateWidget($valor);
+                }
             }
+            $this->installedWidgets = $result;
+
         }
-        $this->installedWidgets = $result;
 
         return $result;
     } // end getInstalledWidgets()
@@ -79,50 +85,133 @@ class Widgets
      */
     public function getInstalledWidgetsByColumn($column){
 
-
         if( !empty($this->installedWidgets[$column]) ){
             $widgets = $this->installedWidgets[$column];
         } else {
-            $widgets = reset( $this->getInstalledWidgets(array('column' => $column)) );
+            $widgets = $this->getInstalledWidgets( array( 'column' => $column) );
         }
-
+        
         $result = array();
-
         if( is_array($widgets) ){
-            foreach( $widgets as $valor ){
 
-                if( is_file(WIDGETS_DIR.$valor['path'].'/core/conf.php') ){
-                    include(WIDGETS_DIR.$valor['path'].'/core/conf.php');
-                    
-                    if( !empty($conf['class']) )
-                        $class = $conf['class'];
-                }
-
-                /*
-                 * Widget tem classe própria
-                 */
-                if( !empty($class) ){
-                    include_once(WIDGETS_DIR.$valor['path'].'/'.$class.'.php');
-                }
-                /*
-                 * Widget NÃO tem classe própria
-                 */
-                else {
-                    $class = 'Widget';
-                }
-
-                $result[$valor['position_nr']] = new $class($this->envParams, $valor['path']);
+            foreach( $widgets as $position_nr=>$valor ){
+                $result[$position_nr] = $valor;
             }
         }
-
         return $result;
     } // end getInstalledWidgetsByColumn()
 
-    /*
+    public function getWidgets(){
+
+        foreach (glob(WIDGETS_DIR."dashboard/*", GLOB_ONLYDIR) as $pastas) {
+            include($pastas.'/core/conf.php');
+            $name = basename($pastas);
+            $result[$name] = $conf;
+
+        }
+
+        return $result;
+    }
+
+    function installWidget($params){
+        if( empty($params['name']) ){
+            return false;
+        } else {
+            $name = $params['name'];
+        }
+        
+        if( empty($params['admin_id']) ){
+            return false;
+        } else {
+            $admin_id = $params['admin_id'];
+        }
+
+        if( empty($params['column_nr']) ){
+            return false;
+        } else {
+            $column_nr = $params['column_nr'];
+        }
+        
+        if( empty($params['path']) ){
+            return false;
+        } else {
+            $path = $params['path'];
+        }
+
+        if( empty($params['position_nr']) ){
+            $position_nr = $this->getLastPositionOfGivenColumn($column_nr, $admin_id)+1;
+        } else {
+            $position_nr = $params['position_nr'];
+        }
+        
+        $sql = "INSERT INTO
+                    widgets
+                    (name,path,column_nr,position_nr,admin_id)
+                VALUES
+                    ('".$name."','".$path."','".$column_nr."','".$position_nr."','".$admin_id."')
+                ";
+        
+        return $this->conexao->exec($sql);
+
+    }
+
+    /**
+     * instantiateWidget()
      *
-     * *** FOR WIDGETS ONLY ***
+     * Instancia um Widget
      *
+     * @param <type> $valor
+     * @return class
      */
+    function _instanciateWidget($valor){
+        
+        if( is_file(WIDGETS_DIR.$valor['path'].'/core/conf.php') ){
+            include(WIDGETS_DIR.$valor['path'].'/core/conf.php');
+
+            if( !empty($conf['class']) )
+                $class = $conf['class'];
+        }
+
+        /*
+         * Widget tem classe própria
+         */
+        if( !empty($class) ){
+            include_once(WIDGETS_DIR.$valor['path'].'/'.$class.'.php');
+        }
+        /*
+         * Widget NÃO tem classe própria
+         */
+        else {
+            $class = 'Widget';
+        }
+
+        //$result[$valor['position_nr']] = ;
+        return new $class($this->envParams, $valor['path']);
+    }
+
+    function getLastPositionOfGivenColumn($column_nr, $admin_id){
+        $sql = "SELECT
+                    position_nr
+                FROM
+                    widgets
+                WHERE
+                    column_nr='".$column_nr."' AND
+                    admin_id='".$admin_id."'
+                ORDER BY
+                    position_nr DESC
+                LIMIT 10
+                ";
+
+        $query = reset( $this->conexao->query($sql) );
+        if( !empty($query['position_nr'])
+            AND $query['position_nr'] > 0 )
+        {
+            return $query['position_nr'];
+        } else {
+            return 0;
+        }
+        
+    }
 
 }
 ?>
