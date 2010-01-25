@@ -3,7 +3,9 @@
  * WIDGET CONFIGURATION
  */
 
-$conf['title'] = 'First Widget';
+$conf['title'] = 'Estruturas Instaladas';
+$conf['description'] = 'Acesse cada estrutura do gerenciador mais facilmente através deste componente.';
+
 $conf['class'] = 'CategoryShortcuts';
 
 ?>
