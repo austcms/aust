@@ -36,16 +36,17 @@
 
             div.widget_group div.widget div.content {
                 width: auto; /* Tamanho do content dos widgets - Content é o conteúdo do meio */
-                padding: 10px;
+                padding: 0px;
+                margin: 10px;
             }
                 div.widget_group div.widget div.content ul {
                     list-style: circle;
-                    padding-left: 15px;
+                    padding-left: 20px;
                     line-height: 20px;
                 }
 
             div.widget_group div.widget div.footer {
                 width: 350px; /* Tamanho do rodapé - Footer */
-                height: 13px;
+                height: 3px;
             }
 

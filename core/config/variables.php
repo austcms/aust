@@ -175,4 +175,9 @@ define('MOD_VIEW_DIR', 'view/');
  * MIGRATIONS
  */
     define('MIGRATION_MOD_DIR', 'core/migrations/');
+
+/*
+ * WIDGETS
+ */
+    define('WIDGETS_DIR', 'widgets/');
 ?>

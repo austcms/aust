@@ -18,7 +18,14 @@
  */
 if(!empty($_GET['action'])){
 
-	/**
+    /*
+     * Tem permissão?
+     */
+    if( !$permissoes->verify($aust_node) )
+        exit();
+
+
+    /**
      * A seguir, o código de automação dos módulos (CRUD). São carregados os
      * formulários de cada módulo.
      *
@@ -196,17 +203,17 @@ if(!empty($_GET['action'])){
  */
 else {
     ?>
-
-
     <h2>Gerenciar conteúdo</h2>
     <p>
-        Use esta tela para gerenciar seu conteúdo. Passe o mouse sobre o conteúdo para mais opções.
+        Selecione qual estrutura você deseja gerenciar.
+        <?php tt('Uma estrutura é um conjunto
+             de informações no site, como <em>Notícias</em>, <em>Artigos</em> e outros, por exemplo.') ?>
     </p>
     <?php
     $sites = $aust->getStructures();
     //pr($sites);
     ?>
-    <?php // INICIO DO DIV PAINEL GERENCIAR  - É GLOBAL?>
+    <?php /* INICIO DO DIV PAINEL GERENCIAR  - É GLOBAL */ ?>
     <div class="painel">
 
         <?php /* TABS */ ?>
@@ -263,6 +270,9 @@ else {
                         } else {
                             $type = $structure['tipo'];
                         }
+
+                        if( !$permissoes->verify($structure['id']) )
+                            continue;
                         ?>
                         
                         <tr class="list">
@@ -297,7 +307,6 @@ else {
                             <td colspan="4"></td>
                         </tr>
                         </table>
-
 
                     </div>
                 <?php endforeach; ?>

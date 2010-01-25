@@ -31,6 +31,8 @@ class Permissoes extends SQLObject {
      */
     protected $conexao;
 
+    var $permissoes = array();
+
     /**
      *
      * @param array $param Ids do usuário e grupo de usuário do agente
@@ -117,8 +119,15 @@ class Permissoes extends SQLObject {
                                     ), 'sql'
         );
         $permissoes = $this->conexao->query($permissoesSql) ;
+        $result = array();
+        if( !empty($permissoes) ){
+            foreach( $permissoes as $permissao ){
+                $result[] = $permissao['categorias_id'];
+            }
+        }
+        $this->permissoes = $result;
 
-        return $permissoes;
+        return $result;
         
     }
 
@@ -133,19 +142,32 @@ class Permissoes extends SQLObject {
      */
     function verify($param){
 
-        if(empty($param['estrutura'])){
-            return true;
-        } else {
-            if(empty($param['permissoes'])){
-                $permissoes = $this->read(array());
-            } else {
-                $permissoes = $param['permissoes'];
+        if( is_string($param) OR is_int($param) ){
+            if( empty($this->permissoes) ){
+                return true;
             }
 
-            if(empty($permissoes)){
+            if( in_array($param, $this->permissoes) ){
                 return true;
-            } elseif(in_array($param['estrutura'], $permissoes)){
+            }
+
+            return false;
+
+        } else if( is_array($params) ){
+            if(empty($param['estrutura'])){
                 return true;
+            } else {
+                if(empty($param['permissoes'])){
+                    $permissoes = $this->read(array());
+                } else {
+                    $permissoes = $param['permissoes'];
+                }
+
+                if(empty($permissoes)){
+                    return true;
+                } elseif(in_array($param['estrutura'], $permissoes)){
+                    return true;
+                }
             }
         }
         
