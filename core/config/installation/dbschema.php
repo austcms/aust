@@ -29,6 +29,8 @@ $dbSchema['admins'] = array(
     'biografia' => 'text',
     'supervisionado' => 'int',
     'adddate' => 'datetime',
+    'is_blocked' => 'int default "0"',
+    'is_deleted' => 'int default "0"',
     'autor' => 'int',
     'dbSchemaTableProperties' => array(
         'PRIMARY KEY' => '(id)',
@@ -158,6 +160,21 @@ $dbSchema['modulos_conf'] = array(
         )
     );
 
-
+/*
+ * WIDGETS
+ */
+    $dbSchema['widgets'] = array(
+        'id' => 'int NOT NULL auto_increment',
+        'name' => 'varchar(150) NOT NULL',
+        'path' => 'varchar(250) NOT NULL',
+        'column_nr' => 'int NOT NULL COMMENT "Número da coluna em que o widget estará."',
+        'position_nr' => 'int NOT NULL COMMENT "Posição do widget na coluna"',
+        'is_global' => 'int NOT NULL DEFAULT "0" COMMENT "1 se este widget é para todos os usuários."',
+        'admin_id' => 'int NOT NULL COMMENT "Id do administrador atual"',
+        'dbSchemaTableProperties' => array(
+            'PRIMARY KEY' => '(id)',
+            'UNIQUE' => 'id (id)',
+        )
+    );
 
 ?>
