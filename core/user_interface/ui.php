@@ -10,19 +10,22 @@
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/header.css" type="text/css" />
 
     <?php /* Estilo dos Widgets */ ?>
-    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/style_widget.css" type="text/css" />
+    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/widget.css" type="text/css" />
 
     <?php /* Estilo dos hints - Tooltips, e interrogação */ ?>
-    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/style_hint.css" type="text/css" />
+    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/hint.css" type="text/css" />
 
     <?php /* Estilo das tabs - Painel Gerenciar e Configurações */ ?>
-    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/style_tabs.css" type="text/css" />
+    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/tabs.css" type="text/css" />
 
     <?php /* Estilo do pane - Conteúdo de cada tab */ ?>
-    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/style_pane.css" type="text/css" />
+    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/pane.css" type="text/css" />
 
     <?php /* Estilo dos forms - Formulários */ ?>
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/forms.css" type="text/css" />
+
+    <?php /* Estilo dos lightboxs - Lightbox */ ?>
+    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/lightbox.css" type="text/css" />
 
     <?php /* Tema default */ ?>
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>temas/default/default.css" type="text/css" />
@@ -42,7 +45,6 @@
     <script language="JavaScript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>libs/jquery.js"></script>
     <script language="JavaScript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>libs/jquery.tools.min.js"></script>
     <?php /* <script src="http://cdn.jquerytools.org/1.1.2/full/jquery.tools.min.js"></script> */ ?>
-
 
     <script language="JavaScript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>navegation.js"></script>
     <script language="JavaScript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>user_helps.js"></script>
@@ -121,11 +123,13 @@
         </div>
     </div>
     <div id="link_bottom">
-        <div class="borda"></div>
         <div class="links_admin">
             <?php
             if($administrador->LeRegistro('tipo') == 'Webmaster'){
-                ?><a href="adm_main.php?section=conf_modulos" class="restrito">Configurar Módulos</a><?php
+            ?>
+            <div class="borda"></div>
+            <br />
+                <a href="adm_main.php?section=conf_modulos" class="restrito">Configurar Módulos</a><?php
             }
             if(in_array( $administrador->LeRegistro('tipo'), array('Webmaster', 'Administrador') )){
                 ?><a href="adm_main.php?section=permissoes" class="restrito">Permissões</a><?php
@@ -158,6 +162,52 @@
         </div>
     </div>
 </div>
+
+
+ <?php
+ /*
+  * LIGHTBOX - TESTE
+  */
+ ?>
+<div id="boxes">
+
+    <div id="box" class="window">
+        <div class="box-top">
+            <h2>Lightbox de teste</h2>
+            <a href="#" class="close">Fechar</a>
+        </div>
+        <div class="box-conteudo">
+            <p>
+                Fusce convallis pretium bibendum.
+                Donec tincidunt tempus arcu, vitae eleifend sapien porta sed.
+                Pellentesque fringilla dui dolor, eu volutpat urna. 
+            </p>
+            <p>
+                Integer volutpat dolor vel orci placerat vel gravida magna eleifend.
+                Integer sit amet felis ac est viverra fermentum in molestie nulla.
+            </p>
+            <p>
+                Maecenas nec lacus nibh. Pellentesque habitant morbi tristique
+                senectus et netus et malesuada fames ac turpis egestas. Mauris
+                placerat neque ut nunc dictum tempor et gravida tortor. Maecenas
+            </p>
+
+        </div>
+        <div class="box-bottom">
+        </div>
+    </div>
+
+</div>
+
+<div id="mask">
+</div>
+<?php
+/*
+ * FIM DO LIGHTBOX
+ */
+?>
+
+
 
 </body>
 </html>
