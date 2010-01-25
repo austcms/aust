@@ -34,8 +34,6 @@
     background: white;
 }
 	#boxes  #box .box-top h2 {
-		font-size: 14px;
-		color: blue;
 		float: left;
 		display: table;
 		padding: 0 0 0 12px;
@@ -60,7 +58,7 @@
 	
 #boxes #box .box-bottom {
     width: 342px;
-    height: 39px;
+    height: 30px;
     background: white;
     margin: 0;
     padding: 0;
