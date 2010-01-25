@@ -28,7 +28,7 @@ $(document).ready(function(){
         //tip: '#caixa_tooltip',
         effect: 'fade',
         events: {
-            def: 'click,mouseout'
+            def: 'click, mouseout'
         }
     });
 

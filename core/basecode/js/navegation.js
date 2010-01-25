@@ -3,71 +3,48 @@ function AbreGaleriaInterna(sid){
 	window.open('inc/galeriainterna/inc_galeriainterna_geral.php?sid=' + sid,'_blank','width=500,height=500,status=no,menubar=0,scrollbar=1,toolbar=0');	
 }
 
-/**
- * LIGHTBOX
- */
-/**
- * Seleciona os elementos a com atributo name="modal"
- * e atribui evento a eles para amostragem de lightbox
- */
-$('a[name=modal]').click(function(e) {
-    /*
-     * Cancela o comportamento padrão do link e Armazena o atributo href do link
-     */
-    e.preventDefault();
-    var id = "#" + $(this).attr('class');
+$(document).ready(function() {
+    //seleciona os elementos a com atributo name="modal"
+    $('a[name=modal]').click(function(e) {
+    //cancela o comportamento padrão do link
+        e.preventDefault();
 
-    /*
-     * Armazena a largura e a altura da tela
-     */
-    var maskHeight = $(document).height();
-    var maskWidth = $(document).width();
+    //armazena o atributo href do link
+        var id= $(this).attr('href');
 
-    /*
-     * Define largura e altura do div#mask iguais às dimensoes da tela
-     */
-    $('#mask').css({'width':maskWidth,'height':maskHeight});
+    //armazena a largura e a altura da tela
+        var maskHeight = $(document).height();
+        var maskWidth = $(document).width();
 
-    /*
-     * Efeito de transição
-     */
-    $('#mask').fadeIn(400);
-    $('#mask').fadeTo("slow", 0.9);
+    //Define largura e altura do div#mask iguais ás dimensçoes da tela
+        $('#mask').css({'width':maskWidth,'height':maskHeight});
 
-    /*
-     * Armazena a largura e a altura da janela
-     */
-    var winH = $(window).height();
-    var winW = $(window).width();
+    //efeito de transição
+        $('#mask').fadeIn(700);
+        $('#mask').fadeTo("slow", 0.9);
 
-    /*
-     * Centraliza na tela a janela popup
-     */
-    var top = (winH - $( id ).height()) / 2;
-    var left = (winW - $( id ).width()) / 2;
+    //armazena a largura e a altura da janela
+        var winH = $(window).height();
+        var winW = $(window).width();
 
-    $( id ).css('top', top);
-    $( id ).css('left', left);
+    //centraliza na tela a janela popup
+        var top = (winH - $('#box').height()) / 2;
+        var left = (winW - $('#box').width()) / 2;
 
-    //alert(id);
+        $('#box').css('top', top);
+        $('#box').css('left', left);
 
-    $(id).fadeIn(800);
+    //efeito de transição
+        $(id).fadeIn(800);
+        });
 
-    /**
-     * Focus
-     */
-    if( id == "#modalcarregar" ){
-        $("#modalcarregar input[name=email]").focus();
-    } else if( id == "#modalgravar" ) {
-        $("#modalgravar input[name=email]").focus();
-    }
-});
+    //se o botão fechar for clicado
+        $('.window .close').click(function(e){
 
-/**
- * Dá comando ao botão de fechar do Lightbox
- */
-$('.window .close').click(function(e){
-    e.preventDefault();
-    $('#mask, .window').fadeOut("normal");
+    //cancela o comportamento padrão do link
+            e.preventDefault();
+            $('#mask, .window').hide();
+        });
+    
 });
 

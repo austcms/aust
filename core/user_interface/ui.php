@@ -24,6 +24,9 @@
     <?php /* Estilo dos forms - Formulários */ ?>
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/forms.css" type="text/css" />
 
+    <?php /* Estilo dos lightboxs - Lightbox */ ?>
+    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/lightbox.css" type="text/css" />
+
     <?php /* Tema default */ ?>
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>temas/default/default.css" type="text/css" />
 
@@ -42,7 +45,6 @@
     <script language="JavaScript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>libs/jquery.js"></script>
     <script language="JavaScript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>libs/jquery.tools.min.js"></script>
     <?php /* <script src="http://cdn.jquerytools.org/1.1.2/full/jquery.tools.min.js"></script> */ ?>
-
 
     <script language="JavaScript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>navegation.js"></script>
     <script language="JavaScript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>user_helps.js"></script>
@@ -121,11 +123,13 @@
         </div>
     </div>
     <div id="link_bottom">
-        <div class="borda"></div>
         <div class="links_admin">
             <?php
             if($administrador->LeRegistro('tipo') == 'Webmaster'){
-                ?><a href="adm_main.php?section=conf_modulos" class="restrito">Configurar Módulos</a><?php
+            ?>
+            <div class="borda"></div>
+            <br />
+                <a href="adm_main.php?section=conf_modulos" class="restrito">Configurar Módulos</a><?php
             }
             if(in_array( $administrador->LeRegistro('tipo'), array('Webmaster', 'Administrador') )){
                 ?><a href="adm_main.php?section=permissoes" class="restrito">Permissões</a><?php
@@ -158,6 +162,43 @@
         </div>
     </div>
 </div>
+
+
+ <?php
+ /*
+  * LIGHTBOX - TESTE
+  */
+ ?>
+
+<div id="boxes">
+
+    <div id="box" class="window">
+        <div class="box-top">
+            <h2>Lightbox</h2>
+            <a href="#" class="close">Fechar</a>
+        </div>
+        <div class="box-conteudo">
+            <p>
+                Olá!
+            </p>
+
+        </div>
+        <div class="box-bottom">
+        </div>
+    </div>
+
+</div>
+
+<div id="mask">
+</div>
+
+<?php
+/*
+ * FIM DO LIGHTBOX
+ */
+?>
+
+
 
 </body>
 </html>
