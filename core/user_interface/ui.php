@@ -63,7 +63,7 @@
          */
         ?>
         <div class="logotipo">
-            <h1>AC Informática</h1>
+            <h1><a href="adm_main.php?section=index">AC Informática</a></h1>
         </div>
 
         <div class="inicializacaorapida">
@@ -117,21 +117,25 @@
     <div class="body">
         <div class="content">
         <?php echo $content_for_layout; ?>
-            <div class="borda"></div>
-            <div class="links_admin">
-                <?php
-                if($administrador->LeRegistro('tipo') == 'Webmaster'){
-                    ?><a href="adm_main.php?section=conf_modulos" class="restrito">Configurar Módulos</a><?php
-                }
-                if(in_array( $administrador->LeRegistro('tipo'), array('Webmaster', 'Administrador') )){
-                    ?><a href="adm_main.php?section=permissoes" class="restrito">Permissões</a><?php
-                }
-                ?>
-            </div>
+        
         </div>
     </div>
+    <div id="link_bottom">
+        <div class="borda"></div>
+        <div class="links_admin">
+            <?php
+            if($administrador->LeRegistro('tipo') == 'Webmaster'){
+                ?><a href="adm_main.php?section=conf_modulos" class="restrito">Configurar Módulos</a><?php
+            }
+            if(in_array( $administrador->LeRegistro('tipo'), array('Webmaster', 'Administrador') )){
+                ?><a href="adm_main.php?section=permissoes" class="restrito">Permissões</a><?php
+            }
+            ?>
+        </div>
+    </div>
+        
     <div id="bottom">
-
+    
     </div>
 
     <div id="body">

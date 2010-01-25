@@ -51,7 +51,11 @@ div#navegacao {
         color: black;
         font-weight: bold;
     }
-
+    
+/* Links Configurar módulos e permissões */
+div#link_bottom {
+    background: white;
+}
 
 
 /* WIDGETS */

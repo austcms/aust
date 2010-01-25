@@ -5,7 +5,7 @@
 }
 
 HTML, BODY {
-	background: #ededed;
+	background: #f4f4f4;
 	font-family: Arial, Tahoma, 'Trebuchet MS', sans-serif;
 	height: 100%;
 }
@@ -18,32 +18,34 @@ p { margin-bottom: 15px; font-size: 1em; line-height: 18px; }
 h1 { margin-bottom: 15px; font-size: 1.8em; }
 
 
-#outer { width: 100%; text-align: center; height: 100%; overflow: hidden; position: relative; }
+#outer { width: 100%; text-align: center; height: 100%; overflow: hidden; position: relative; display: table;}
 	#outer[id] { display: table; position: static; }
       
-    #middle { width: 400px; position: absolute; top: 50%; } /* para o IE */
+    #middle { width: 300px; position: absolute; top: 50%; } /* para o IE */
     #middle[id] { display: table-cell; vertical-align: middle; position: static; }
       
-    #inner { width: 400px; margin: 0 auto; position: relative; left: -50%; top: -50% } /* para o IE */
+    #inner { width: 300px; margin: 0 auto; position: relative; left: -50%; top: -50% } /* para o IE */
 	#inner[id] { position: static; left: -50%; } 
 	
 	#inner #top {
-		background: url(img/login_top.jpg);
-		height: 26px;
-		font-size:1px;
+		background: white;
+		height: 16px;
+		font-size: 1px;
 	}
 	
 	#inner #body {
-		background: url(img/login_body.jpg);
+		background: white;
         font-size: 1em;
-		padding: 2px 30px 0 30px;
+		padding: 2px 20px 0 20px;
         margin: 0;
 	}
 	
 	#inner #bottom {
-		background: url(img/login_bottom.jpg) no-repeat;
-		height: 22px;
-		font-size:1px;
+		background: white;
+		font-size: 1px;
 	}
+form table td.input input {
+    width: 140px;
+}
 	
 
