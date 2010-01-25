@@ -31,6 +31,9 @@ include(THIS_TO_BASEURL.CLASS_DIR."Administrador"   .CLASS_FILE_SUFIX.".php");
 include(THIS_TO_BASEURL.CLASS_DIR."Modulos"         .CLASS_FILE_SUFIX.".php");
 include(THIS_TO_BASEURL.CLASS_DIR."UI"              .CLASS_FILE_SUFIX.".php");
 
+include(THIS_TO_BASEURL.CLASS_DIR."Widgets"         .CLASS_FILE_SUFIX.".php");
+include(THIS_TO_BASEURL.CLASS_DIR."Widget"          .CLASS_FILE_SUFIX.".php");
+
 include(THIS_TO_BASEURL.CLASS_DIR."Permissoes"      .CLASS_FILE_SUFIX.".php");
 /**
  * MVC

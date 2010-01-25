@@ -107,6 +107,13 @@ if(!$isResponser){
         $aust_table = 'categorias';
         include_once(INC_DIR.'inc_categorias_functions.php');
         
+
+        $envParams = array(
+            'aust' => $aust,
+            'conexao' => $conexao,
+            'administrador' => $administrador,
+            'permissoes' => $permissoes,
+        );
         /**
          * USER INTERFACE (UI)
          *

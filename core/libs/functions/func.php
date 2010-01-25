@@ -2,20 +2,16 @@
 /*
  * Arquivo contendo principais funções para facilitar o processo de codificação
  *
- * Índice:
- *
- * - ArrayToLower($array, $round = 0) = retorna uma array para minúsculas
- * - EscreveBoxMensagem($status) = simples função para escrever um div padronizado com a string do parâmetro $status
- *
  */
 
 
 
 /*
+ *
  * Datas e variáveis
+ * 
  */
 
-// 
 // retorna uma array com valores em letra minúscula (semelhante a strtolower)
 function ArrayToLower($array,$round = 0){
     foreach($array as $key => $value){
@@ -391,12 +387,28 @@ function PegaExtensao($param){
  * funções para facilitar debuggar o codigo
  */
 
-    // executa print_r() com tag <pre> ao redor
+    /**
+     * pr()
+     *
+     * Executa print_r() com tag <pre> ao redor
+     */
     function pr($var){
         echo "<pre>";
         print_r($var);
         echo "</pre>";
     }
+
+    /**
+     * vd()
+     *
+     * Executa var_dump() com tag <pre> ao redor
+     */
+    function vd($var){
+        echo "<pre>";
+        var_dump($var);
+        echo "</pre>";
+    }
+
 
 
 ?>

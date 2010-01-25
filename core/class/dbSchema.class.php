@@ -168,7 +168,6 @@ class dbSchema
          *      0: nenhuma tabela existe
          *      1: todas as tabelas existém
          */
-
         if(!empty($status)){
             /**
              * Algumas tabelas existém e outras não
@@ -393,8 +392,11 @@ class dbSchema
         //pr($this->tabelasAtuais);
 
         foreach($this->dbSchema as $tabela=>$campos){
-            
-            //if(!array_key_exists($tabela, $this->tabelasAtuais) AND is_array($campos)){
+
+            /*
+             * Só roda SQL se tabela não existe ainda.
+             */
+            if(!array_key_exists($tabela, $this->tabelasAtuais) AND is_array($campos)){
                 foreach($campos as $nome=>$propriedades){
                     /**
                      * Se não for campo especial, gera SQL deste campo
@@ -433,7 +435,7 @@ class dbSchema
                  */
                 $sql[$tabela] = 'CREATE TABLE '.$tabela.' ('. implode(', ', $camposSchema) .')';
                 unset($camposSchema);
-            //}
+            }
         } // Fim do foreach
 
         return $sql;
