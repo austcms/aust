@@ -11,7 +11,7 @@
 </h2>
 <p>
     Nesta tela você pode dar permissões especiais a usuários e definir
-    "quem edita o que". Somente administradores têm acesso a estas opções.
+    "quem edita o que". Somente administradores têm acesso a esta tela.
 </p>
 <h2>
     Como funciona
@@ -22,13 +22,21 @@
     selecione quem você quer dar permissões. Pode ser um grupo de
     usuários (moderadores, colaboradores) ou um usuário cadastrado específico.
     Você só pode configurar quem está abaixo de você na hierarquia (se você
-    é administrar, poderá editar somente moderadores e colaboradores).
+    é administrador, poderá editar somente moderadores e colaboradores).
 </p>
 
 <p>
     À direita, em <strong>Permissões Atuais</strong>, você encontra as seções do gerenciador. Basta marcar quais
     conteúdos o usuário pode editar. Se nenhum estiver selecionado, o usuário
     pode editar todas.
+</p>
+<p>
+    <strong>Exemplo:</strong> João é moderador e suponhamos que temos Notícias e Artigos.
+    Se você configurar que João só poderá editar Notícias,
+    ele não acessará nada mais. Entretanto, se após isto você configurar que moderadores podem acessar
+    somente Artigos, João acessará Artigos (pois ele é um moderador) e aquilo ao qual ele tem permissão,
+    Notícias. Para que João passe a acessar somente o que moderadores podem acessar, desmarque todas
+    as opções, assim ele passará a obedecer as regras impostas aos moderadores.
 </p>
 
 <div class="widget_group">
