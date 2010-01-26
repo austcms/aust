@@ -169,18 +169,17 @@
   * LIGHTBOX - TESTE
   */
  ?>
-<div id="boxes">
 
-    <div id="box" class="window">
-        <div class="box-top">
+    <div id="lb_box" class="window">
+        <div class="header">
             <h2>Lightbox de teste</h2>
             <a href="#" class="close">Fechar</a>
         </div>
-        <div class="box-conteudo">
+        <div class="content">
             <p>
                 Fusce convallis pretium bibendum.
                 Donec tincidunt tempus arcu, vitae eleifend sapien porta sed.
-                Pellentesque fringilla dui dolor, eu volutpat urna. 
+                Pellentesque fringilla dui dolor, eu volutpat urna.
             </p>
             <p>
                 Integer volutpat dolor vel orci placerat vel gravida magna eleifend.
@@ -193,11 +192,10 @@
             </p>
 
         </div>
-        <div class="box-bottom">
+        <div class="footer">
         </div>
     </div>
 
-</div>
 
 <div id="mask">
 </div>
@@ -206,7 +204,6 @@
  * FIM DO LIGHTBOX
  */
 ?>
-
 
 
 </body>
