@@ -174,14 +174,15 @@ div#link_bottom {
 }
 div#link_bottom div.borda {
     border-bottom: 1px solid #f4f4f4;
-    padding-top: 0px;
+    padding: 0px;
     margin: 0;
-    font-size: 0;
+    font-size: 0px;
 }
 div#link_bottom div.links_admin {
     text-align: left;
-    margin-left: 20px;
-    margin-top: 10px;
+}
+div#link_bottom div.links_admin a {
+    padding-left: 15px;
 }
 
 /*
