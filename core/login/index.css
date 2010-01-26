@@ -9,7 +9,7 @@ body {
     font-family: 'Lucida Grande', 'Lucida Sans', Arial, 'Trebuchet MS', sans-serif;
     height: 100%;
     font-size: 76%;
-    color: #444444;
+    color: #666666;
 }
 
 p { margin-bottom: 15px; font-size: 1em; line-height: 18px; }
@@ -30,7 +30,7 @@ h2.wait {
         width: 350px;
 
         position: absolute;
-        left: 50%; margin-left: -150px;
+        left: 50%; margin-left: -175px;
         top: 50%; margin-top: -92px; /* height de .inside -20px */
 
         background: #dddddd;
