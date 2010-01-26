@@ -10,7 +10,7 @@
     display: none;
 }
 
-#boxes .window {
+.window {
     position:absolute;
     width:350px;
     /*height:394px;*/
@@ -23,40 +23,40 @@
 /**** Lightbox 1 ****/
 
 /* Personalize a janela modal aqui. Você pode adicionar uma imagem de fundo. */
-#boxes #box {
+.window {
     width: 342px;
     /*height:394px;*/
     padding: 10px;
 }
-#boxes  #box .box-top {
+.window .header {
     width: 342px;
     height: 40px;
     background: white;
 }
-	#boxes  #box .box-top h2 {
+	.window .header h2 {
 		float: left;
 		display: table;
 		padding: 0 0 0 12px;
 	}
 
-	#boxes  #box .box-top .close {
+	.window .header .close {
 		display: table;
 		float: right;
 		width: 28px;
 		padding: 6px 6px 0 0;
 	}
 
-#boxes  #box .box-conteudo {
+.window .content {
     width: 342px;
     background: white;
     text-align: left;
 }
-    #boxes  #box .box-conteudo p {
+    .window .content p {
         padding: 0 10px 0 10px;
         margin: 0;
     }
 	
-#boxes #box .box-bottom {
+.window .footer {
     width: 342px;
     height: 30px;
     background: white;
