@@ -46,9 +46,9 @@ class dbSchemaTest extends PHPUnit_Framework_TestCase
         $this->assertType('array', $this->dbSchema->tabelasAtuais());
     }
 
-    function test_IsDbSchemaFormatOk(){
-        $this->assertTrue($this->dbSchema->_isDbSchemaFormatOk());
-        $this->assertFalse($this->dbSchema->_isDbSchemaFormatOk('blabla'));
+    function testIsDbSchemaFormatOk(){
+        $this->assertTrue($this->dbSchema->isDbSchemaFormatOk());
+        $this->assertFalse($this->dbSchema->isDbSchemaFormatOk('blabla'));
     }
 
 

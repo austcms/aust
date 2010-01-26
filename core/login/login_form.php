@@ -7,69 +7,78 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Aust - Gerenciador de Conteúdo</title>
-<link rel="stylesheet" href="core/login/index.css" type="text/css" />
+    <link rel="stylesheet" href="core/login/index.css" type="text/css" />
+    <script type="text/javaScript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>libs/jquery.js"></script>
+    <script type="text/javascript">
+
+        function formFadeOut(){
+            $('.inside').fadeOut('fast');
+            setTimeout( function(){
+                $('.inside').html('<h2 class="wait">Verificando dados...</h2>');
+                $('.inside').fadeIn('fast');
+
+            }, 170);
+
+            return true;
+        }
+    </script>
+
 </head>
 
 <body>
 
-<div id="outer">
-  <div id="middle">
-    <div id="inner">
-    
-        <div id="top">&nbsp;</div>
-        <div id="body">
+<div class="body">
+    <div class="inside">
 
-            <h1>Administradores</h1>
-            <?php
-            if (!empty($_GET['status'])){
-                if ($_GET['status'] == "invalido"){
-                    echo "<p style=\"color: red\">Login incorreto.</p>";
-                }
-            }
-            
-            ?>
-            
-            <?php /*
-            <p>
-                Se voc&ecirc; tem uma senha de administrador, use-a abaixo
-                para acessar a &aacute;rea restrita e gerenciar o banco de dados:
-            </p>
-             * 
-             */?>
-            <form method="post" style="margin: 0;" action="index.php?login=verify">
-            
-                
-                <table width="250" border="0" style="margin: 0 auto;" cellpadding="0" cellspacing="3">
-                <col width="50" />
-                <col />
-                <tr>
-                <td><font size="2" face="trebuchet ms" color="#0080C0">Login: </font></td>
-                <td class="input"><input type="text" name="login" size="20" /></td>
-                </tr>
-                <tr>
-                <td><font size="2" face="trebuchet ms" color="#0080C0">Senha: </font></td>
-                <td class="input"><input type="password" name="senha" size="20" /></td>
-                </tr>
-                <tr>
-                    <td colspan="2"><br /><br /><p>Se você esqueceu sua senha, entre em contato com um administrador.</p></td>
-                </tr>
-                <tr height="5">
-                <td colspan="2"><center></center></td>
-                </tr>
-                <tr>
-                <td colspan="2"><center>
-                  <input type="submit" value="Entrar" /></center></td>
-                </tr>
-                <tr height="15">
-                <td colspan="2"><center></center></td>
-                </tr>
-                </table>
-                
-            </form>
-        </div>
-        <div id="bottom">&nbsp;</div>
+    <h1>Gerenciador Restrito</h1>
+    <?php
+    if (!empty($_GET['status'])){
+        if ($_GET['status'] == "invalido"){
+            echo '<p class="incorrect">Dados incorretos.</p>';
+        }
+    }
+
+    ?>
+
+    <?php /*
+    <p>
+        Se voc&ecirc; tem uma senha de administrador, use-a abaixo
+        para acessar a &aacute;rea restrita e gerenciar o banco de dados:
+    </p>
+     *
+     */?>
+    <form method="post" name="login_form" style="margin: 0;" action="index.php?login=verify"
+          onsubmit="return formFadeOut();">
+
+
+        <table width="250" border="0" style="margin: 0 auto;" cellpadding="0" cellspacing="3">
+        <col width="60" />
+        <col />
+        <tr>
+            <td class="label">
+                <label for="login">Usuário:</label>
+            </td>
+            <td class="input">
+                <input type="text" id="login" name="login" />
+            </td>
+        </tr>
+        <tr>
+            <td class="label">
+                <label for="passw">Senha:</label>
+            </td>
+            <td class="input">
+                <input type="password" id="passw" name="senha" />
+            </td>
+        </tr>
+        <tr>
+            <td class="submit" colspan="2">
+                <input type="submit" value="Entrar" />
+            </td>
+        </tr>
+        </table>
+
+    </form>
     </div>
-  </div>
 </div>
 
 </body>
