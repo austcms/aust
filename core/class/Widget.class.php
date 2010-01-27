@@ -18,10 +18,11 @@ class Widget
     
     var $conexao;
 
-    function __construct($envParams, $path){
+    function __construct($envParams, $data){
         $this->envParams = $envParams;
         $this->conexao = $envParams['conexao'];
-        $this->path = $path;
+        $this->path = $data['path'];
+        $this->id = $data['id'];
 
     }
 
@@ -98,5 +99,34 @@ class Widget
 
         return $this->_html;
     }
+
+    /**
+     * getId()
+     *
+     * @return <string>
+     */
+    function getId(){
+        return $this->id;
+    }
+
+    /**
+     * getName()
+     *
+     * @return <string>
+     */
+    function getName(){
+        $name = array_reverse( explode('/', $this->path) );
+        return $name[0];
+    }
+
+    /**
+     * getPath()
+     *
+     * @return <string>
+     */
+    function getPath(){
+        return $this->path;
+    }
+
 }
 ?>
