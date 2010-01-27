@@ -8,6 +8,9 @@
  * @since 01/01/2009
  */
 
+var arquivoAjax = "core/libs/ajax.php";
+var privilegio_escolhido = false;
+
 /**
  * Função de Start
  */
@@ -21,6 +24,33 @@ $(document).ready(function(){
     if(privilegio_escolhido != ''){
         form_privilegio('1')
     }
+
+    $("#sortable1, #sortable2").sortable({
+        connectWith: '.connectedSortable',
+        handle: 'h3',
+        opacity: 0.4,
+        containment: 'document',
+        stop: function () {
+            //alert('oi');
+            var order1 = $('#sortable1').sortable('serialize', {key: 'widgets[1][]'});
+            var order2 = $('#sortable2').sortable('serialize', {key: 'widgets[2][]'});
+
+            $.ajax({
+                url: arquivoAjax+'?lib=widgets&location=dashboard&userId='+userId,
+                data: order1+'&'+order2,
+                complete: function(response){
+                    //alert(response.responseText);
+                    //$('#permissoesAtuais').html(response.responseText);
+                },
+                type: "get",
+                dataType: "html"
+            });
+        }
+
+    }).disableSelection();
+
+    $("#sortable").disableSelection();
+
 
 
     // Hints
@@ -41,8 +71,6 @@ $(document).ready(function(){
 
 });
 
-var arquivoAjax = "core/libs/ajax.php";
-var privilegio_escolhido = false;
 /*
  * MÓDULOS
  */

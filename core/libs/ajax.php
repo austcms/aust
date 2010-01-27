@@ -57,6 +57,8 @@ $conexao = new Conexao($dbConn);
 
 if($_GET['lib'] == 'user_permissoes'){
     include('ajax/user_permissoes.php');
+} elseif($_GET['lib'] == 'widgets'){
+    include('ajax/widgets.php');
 }
 
 //print_r($_POST);

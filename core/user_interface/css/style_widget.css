@@ -17,12 +17,12 @@
             margin: 0;
             padding: 0;
         }
-            div.widget_group div.widget {
-                float: left;
-                width: 350px; /* Tamanho dos widgets */
-                display: inline;
+            div.widget_group ul li {
                 margin: 0 0 10px 0;
-                clear: none;
+            }
+            div.widget_group div.widget {
+                width: 350px; /* Tamanho dos widgets */
+                margin: 0 0 0px 0;
             }
                 div.widget_group div.widget div.titulo {
                     width: 350px; height: 29px;
@@ -32,6 +32,10 @@
                         display: table;
                         margin: 8px 0 0 10px;
                         font-size: 1.0em;
+                    }
+
+                    div.widget_group ul.draganddrop h3 {
+                        cursor: move;
                     }
 
             div.widget_group div.widget div.content {
