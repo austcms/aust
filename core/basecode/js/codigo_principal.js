@@ -15,7 +15,8 @@ var privilegio_escolhido = false;
  * Função de Start
  */
 $(document).ready(function(){
-
+    lightbox();
+    
     if($('div.campooptions').length > 0){ $('div.campooptions').hide(); }
     if($('div.est_options').length > 0){ $('div.est_options').hide(); }
     if($('div#categoriacontainer_priv').length > 0) { $('div#categoriacontainer_priv').hide(); }
@@ -58,7 +59,7 @@ $(document).ready(function(){
         //tip: '#caixa_tooltip',
         effect: 'fade',
         events: {
-            def: 'click,mouseout'
+            def: 'click, mouseout'
         }
     });
 
