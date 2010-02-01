@@ -23,7 +23,7 @@
  * [Se novo conteúdo]
  */
     if($_GET['action'] == 'criar'){
-        $tagh1 = "Criar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
+        $tagh2 = "Criar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
         $tagp = 'Crie um novo conteúdo abaixo.';
         $dados = array('id' => '');
     }
@@ -32,7 +32,7 @@
  */
     else if($_GET['action'] == 'editar'){
 
-        $tagh1 = "Editar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
+        $tagh2 = "Editar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
         $tagp = 'Edite o conteúdo abaixo.';
         $sql = "
                 SELECT
@@ -50,7 +50,7 @@
     <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
 </p>
 
-<h2><?php echo $tagh1;?></h2>
+<h2><?php echo $tagh2;?></h2>
 <p><?php echo $tagp;?></p>
 
 
@@ -75,7 +75,7 @@
     <tr>
         <td valign="top" class="first"><label>Categoria:</label></td>
         <td class="second">
-            <div id="categoriacontainer">
+            <div id="categoriacontainer" style="float: left;">
             <?php
             $current_node = '';
             if($_GET['action'] == "editar"){
@@ -87,8 +87,17 @@
 
             echo BuildDDList( CoreConfig::read('austTable') ,'frmcategoria', $administrador->tipo ,$aust_node, $current_node);
             ?>
-            </div>
 
+
+            </div>
+            <div class="nova_categoria" style="float: left;">
+                <?php
+                /*
+                 * Link para inserir nova categoria
+                 */
+                ?>
+                <a href="#box" name="modal" class="lb_categoria"></a>
+            </div>
         </td>
     </tr>
     <tr>
