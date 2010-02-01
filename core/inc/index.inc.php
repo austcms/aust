@@ -11,17 +11,22 @@ $widgets = new Widgets($envParams, $administrador->getId());
 <h2>Painel Principal</h2>
 <p>
     Este é o sistema onde você gerencia o conteúdo do seu site.
-    <a href="#box" name="modal" class="lb_box">Lightbox - Teste</a>
+    
 </p>
-
-
-
+<?php
+/*
+ * Para criar um Lightbox, basta criar um link como no exemplo abaixo, mudando
+ * o nome da class conforme cada Lightbox. 
+ */
+//<a href="#box" name="modal" class="lb_box">Lightbox - Teste</a>
+?>
 
 <div id="painel">
 
     <?php /* Widget Group - Coluna (Primeira) */ ?>
     <div class="widget_group">
 
+        <ul id="sortable1" class="connectedSortable draganddrop">
         <?php
         $c = $widgets->getInstalledWidgets();
 
@@ -32,8 +37,7 @@ $widgets = new Widgets($envParams, $administrador->getId());
 
             foreach( $c['1'] as $widget ){
                 ?>
-                <ul>
-                    <li>
+                    <li id="widgets_<?php echo $widget->getId(); ?>">
                         <div class="widget">
                             <div class="titulo">
                                 <h3><?php echo $widget->getTitle(); ?></h3>
@@ -45,7 +49,6 @@ $widgets = new Widgets($envParams, $administrador->getId());
                             </div>
                         </div>
                     </li>
-                </ul>
                 <?php
             }
             
@@ -55,6 +58,7 @@ $widgets = new Widgets($envParams, $administrador->getId());
             <?php
         endif;
         ?>
+        </ul>
 
         <br/>
         <a href="adm_main.php?section=widgets&column_nr=1">Adicionar Widget</a>
@@ -65,6 +69,7 @@ $widgets = new Widgets($envParams, $administrador->getId());
     
     <div class="widget_group">
 
+        <ul id="sortable2" class="connectedSortable draganddrop">
         <?php
         /*
          * WIDGETS - COLUNA 1
@@ -73,20 +78,19 @@ $widgets = new Widgets($envParams, $administrador->getId());
 
             foreach( $c['2'] as $widget ){
                 ?>
-                <ul>
-                    <li>
-                        <div class="widget">
-                            <div class="titulo">
-                                <h3><?php echo $widget->getTitle(); ?></h3>
-                            </div>
-                            <div class="content">
-                                <?php echo $widget->getHtml(); ?>
-                            </div>
-                            <div class="footer">
-                            </div>
+                <li id="widgets_<?php echo $widget->getId(); ?>">
+                    <div class="widget">
+                        <div class="titulo">
+                            <h3><?php echo $widget->getTitle(); ?></h3>
                         </div>
-                    </li>
-                </ul>
+                        <div class="content">
+                            <?php echo $widget->getHtml(); ?>
+                        </div>
+                        <div class="footer">
+                        </div>
+                    </div>
+
+                </li>
                 <?php
             }
 
@@ -97,6 +101,7 @@ $widgets = new Widgets($envParams, $administrador->getId());
         endif;
 
         ?>
+        </ul>
         <br/>
         <a href="adm_main.php?section=widgets&column_nr=2">Adicionar Widget</a>
 

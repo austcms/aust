@@ -38,12 +38,16 @@
 
     */
     ?>
+    <script type="text/javascript">
+        var userId = '<?php echo $administrador->getId() ?>';
+    </script>
     <script language="javascript" type="text/javascript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>tiny_mce/tiny_mce.js"></script>
     <script language="javascript" type="text/javascript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>tiny_mce_loader.js"></script>
 
     <!-- <SCRIPT LANGUAGE="JavaScript" SRC="inc/js_forms.js"></script> -->
     <script language="JavaScript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>libs/jquery.js"></script>
     <script language="JavaScript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>libs/jquery.tools.min.js"></script>
+    <script language="JavaScript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>libs/jquery-ui-1.7.2.custom.min.js"></script>
     <?php /* <script src="http://cdn.jquerytools.org/1.1.2/full/jquery.tools.min.js"></script> */ ?>
 
     <script language="JavaScript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>navegation.js"></script>
@@ -196,7 +200,7 @@
         </div>
     </div>
 
-
+   
 <div id="mask">
 </div>
 <?php

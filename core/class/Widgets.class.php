@@ -56,6 +56,7 @@ class Widgets
                 WHERE
                     admin_id='".$this->userId."'
                     {$column}
+                ORDER BY column_nr ASC, position_nr ASC
                 ";
         $query = $this->conexao->query($sql);
         $result = array();
@@ -186,7 +187,7 @@ class Widgets
         }
 
         //$result[$valor['position_nr']] = ;
-        return new $class($this->envParams, $valor['path']);
+        return new $class($this->envParams, $valor);
     }
 
     function getLastPositionOfGivenColumn($column_nr, $admin_id){
