@@ -1,0 +1,37 @@
+Para criar um Lightbox, basta criar um link, ajustando
+o nome da classe conforme o id do Lightbox.
+
+Exemplo:
+
+<a href="#box" name="modal" class="lb_box">Meu Lightbox</a>
+
+
+Modelo de Lightbox
+-------------------------------------------------------------------
+
+    <div id="lb_box" class="window">
+        <div class="header">
+            <h2>Lightbox de teste</h2>
+            <a href="#" class="close"><img src="<?php echo IMG_DIR; ?>fechar_lb.png" border="0" /></a>
+        </div>
+        <div class="content">
+            <p>
+                Fusce convallis pretium bibendum.
+                Donec tincidunt tempus arcu, vitae eleifend sapien porta sed.
+                Pellentesque fringilla dui dolor, eu volutpat urna.
+            </p>
+
+            <p>
+                Integer volutpat dolor vel orci placerat vel gravida magna eleifend.
+                Integer sit amet felis ac est viverra fermentum in molestie nulla.
+            </p>
+            <p>
+                Maecenas nec lacus nibh. Pellentesque habitant morbi tristique
+                senectus et netus et malesuada fames ac turpis egestas. Mauris
+                placerat neque ut nunc dictum tempor et gravida tortor. Maecenas
+            </p>
+
+        </div>
+        <div class="footer">
+        </div>
+    </div>

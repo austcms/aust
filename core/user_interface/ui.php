@@ -1,3 +1,7 @@
+<?php
+define("IMG_DIR", "core/user_interface/img/");
+
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -177,7 +181,7 @@
     <div id="lb_box" class="window">
         <div class="header">
             <h2>Lightbox de teste</h2>
-            <a href="#" class="close">Fechar</a>
+            <a href="#" class="close"><img src="<?php echo IMG_DIR; ?>fechar_lb.png" border="0" /></a>
         </div>
         <div class="content">
             <p>
@@ -185,6 +189,7 @@
                 Donec tincidunt tempus arcu, vitae eleifend sapien porta sed.
                 Pellentesque fringilla dui dolor, eu volutpat urna.
             </p>
+            
             <p>
                 Integer volutpat dolor vel orci placerat vel gravida magna eleifend.
                 Integer sit amet felis ac est viverra fermentum in molestie nulla.
