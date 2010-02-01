@@ -1,3 +1,4 @@
+a {outline: none;}
 
 #mask {
     position: absolute;
@@ -29,40 +30,55 @@
     padding: 10px;
 }
 .window .header {
-    width: 342px;
+    width: 372px;
     height: 40px;
     background: white;
+    padding: 10px 0 0 0px;
 }
 	.window .header h2 {
 		float: left;
 		display: table;
-		padding: 0 0 0 12px;
+		padding: 0 0 0 20px;
 	}
 
-	.window .header .close {
-		display: table;
+	.window .header a {
 		float: right;
 		width: 28px;
-		padding: 6px 6px 0 0;
+        height: 29px;
+        display: block;
+        background: url(../img/fechar_lb.png) no-repeat top;
+        padding-right: 10px;
 	}
+        .window .header a:hover {
+            background-position: 0px -31px;
+            padding-right: 5px;
+        }
+
+
+
 
 .window .content {
-    width: 342px;
+    width: 332px;
     background: white;
     text-align: left;
+    padding: 10px 20px 0 20px;
 }
     .window .content p {
-        padding: 0 10px 0 10px;
+        padding: 5px 0 15px 0;
         margin: 0;
     }
 	
 .window .footer {
-    width: 342px;
+    width: 372px;
     height: 30px;
     background: white;
     margin: 0;
     padding: 0;
 }
-	
+
+/* Lightbox Nova Categoria */
+#lb_categoria table td.titulo {
+    padding-right: 10px;
+}
 
 

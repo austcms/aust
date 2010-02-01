@@ -174,36 +174,37 @@ define("IMG_DIR", "core/user_interface/img/");
 
  <?php
  /*
-  * LIGHTBOX - TESTE
+  * LIGHTBOX - Criar nova categoria
   */
  ?>
 
-    <div id="lb_box" class="window">
-        <div class="header">
-            <h2>Lightbox de teste</h2>
-            <a href="#" class="close"><img src="<?php echo IMG_DIR; ?>fechar_lb.png" border="0" /></a>
-        </div>
-        <div class="content">
-            <p>
-                Fusce convallis pretium bibendum.
-                Donec tincidunt tempus arcu, vitae eleifend sapien porta sed.
-                Pellentesque fringilla dui dolor, eu volutpat urna.
-            </p>
-            
-            <p>
-                Integer volutpat dolor vel orci placerat vel gravida magna eleifend.
-                Integer sit amet felis ac est viverra fermentum in molestie nulla.
-            </p>
-            <p>
-                Maecenas nec lacus nibh. Pellentesque habitant morbi tristique
-                senectus et netus et malesuada fames ac turpis egestas. Mauris
-                placerat neque ut nunc dictum tempor et gravida tortor. Maecenas
-            </p>
-
-        </div>
-        <div class="footer">
-        </div>
+<div id="lb_categoria" class="window">
+    <div class="header">
+        <h2>Nova Categoria</h2>
+        <a href="#" class="close"></a>
     </div>
+    <div class="content">
+        <table>
+            <tr>
+                <td valign="top" class="titulo">Nome: </td>
+                <td>
+                    <INPUT TYPE="text" NAME="frmnome">
+                    <p class="explanation">
+                        Digite o nome da categoria. (Começa com letra maiúscula e não leva
+                        ponto final)
+                    </p>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                <center><INPUT TYPE="submit" VALUE="Entrar"></center></td>
+            </tr>
+        </table>
+
+    </div>
+    <div class="footer">
+    </div>
+</div>
 
    
 <div id="mask">
