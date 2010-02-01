@@ -30,7 +30,7 @@ $cat = $query[0]['nome'];
 <p>
     <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
 </p>
-<h1><?php echo $h1;?></h1>
+<h2><?php echo $h1;?></h2>
 <p>Abaixo você encontra a listagem dos últimos textos desta categoria.</p>
 <?php
 if((!empty($filter)) AND ($filter <> 'off')){
@@ -62,7 +62,7 @@ $query = $modulo->conexao->query($sql);
 <a name="list">&nbsp;</a>
 <div class="painel_de_controle"><input type="submit" name="deletar" value="Deletar selecionados" />
 </div>
-<table width="680" cellspacing="0" cellpadding="10" class="listagem">
+<table cellspacing="0" cellpadding="10" class="listagem">
     <tr class="titulo">
         
         <?php for($i=0; $i< count($modulo->config['contentHeader']['campos']); $i++) { ?>

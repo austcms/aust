@@ -104,6 +104,17 @@ div.body {
 			div.body div.content div.alert_box div.containner { margin:0 auto; text-align: center; padding: 15px; background: #FFFF99; }
 				div.body div.content div.alert_box div.containner p {  }
 
+    /* EST_OPTIONS
+     * Campos de opções rápidas
+     */
+        table tr td a.link_pai_do_est_options { text-decoration: none; }
+        table tr td a.link_pai_do_est_options:hover { text-decoration: none; }
+
+        table tr td div.est_options a { color: orange; text-decoration: underline; }
+        table tr td div.est_options a:hover { color: #00b53c; text-decoration: none; }
+        table tr td div.est_options div.campooptions_tabela {  }
+        table tr td div.est_options div.campooptions_campo {  }
+        table tr td span.est_options_info { color: #666666; }
 
 	
 /***************************
@@ -121,50 +132,6 @@ div#bottom {
 	margin: 0 auto;
 }
  
-/*******************************
-*
-*	LISTAGEM DE CONTEÚDO AUST
-*
-*******************************/
-
-    /* acima de cada listagem há um painel de controle para excluir, bloquear itens, etc */
-    div.painel_de_controle { margin-bottom: 10px; padding: 0; float: right; }
-    /* tabela para listagem, seja de conteúdo ou usuários */
-    table.listagem { margin: 0px; border-collapse: collapse;}
-    table.listagem tr td { padding: 5px; }
-    table.listagem tr td { padding: 5px; margin: 0px;}
-
-    table.listagem tr.titulo {
-            color: #cccccc;
-            font-weight: bold;
-            background: #333333;
-        }
-    table.listagem tr.conteudo { height: 20px; }
-    table.listagem tr.conteudo td { background: #FFF0E1; border-top: 2px solid white; }
-    table.listagem tr.conteudo td a {  }
-
-    /* CAMPOOPTION
-     * Campos de opções Ajax em formulários de setup
-     */
-        table.listagem tr.conteudo td div.campooptions { background: #f1f1f1; padding: 10px; margin-top: 3px; border: 1px solid silver;  background: red; }
-        table.listagem tr.conteudo td div.campooptions div.campooptions_tabela {  }
-        table.listagem tr.conteudo td div.campooptions div.campooptions_campo {  }
-
-    /* EST_OPTIONS
-     * Campos de opções rápidas
-     */
-        table tr td a.link_pai_do_est_options { text-decoration: none; }
-        table tr td a.link_pai_do_est_options:hover { text-decoration: none; }
-
-        table tr td div.est_options a { color: orange; text-decoration: underline; }
-        table tr td div.est_options a:hover { color: #00b53c; text-decoration: none; }
-        table tr td div.est_options div.campooptions_tabela {  }
-        table tr td div.est_options div.campooptions_campo {  }
-        table tr td span.est_options_info { color: #666666; }
-
-
-table.listagem td.adddate { width: 120px; }
-
 /*
  * Links Permissões e configurar módulos
  */

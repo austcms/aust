@@ -12,16 +12,19 @@
 */
 
 /*
- * FORMS
+ * STANDARDS
  */
     form label { float: left; font-size: 1.0em; font-weight: bold; margin-bottom: 10px; color: #333333; }
     form div.input { display: inline; width: 100%; float: left; }
-    form input.text { font-size: 1.2em; height: 20px; font-weight: bold; width: 380px; }
+    form input.text { width: 380px; font-size: 1.3em; height: 22px; padding: 0px 2px; } /* standard */
     form select { font-size: 1.2em; height: 24px; }
     form textarea { margin-bottom: 10px; width: 100%; }
     form input.submit { display: block; font-size: 1.4em; padding: 10px; margin-bottom: 5px; clear: both; }
-    div.body div.content form h1 { margin-top: 15px; }
 
+    form p.explanation { margin: 0; font-size: 12px; color: #999999; }
+    form p.explanation_example { margin: 0; margin-bottom: 15px; font-size: 12px; color: #FF9900; }
+
+/* Classes 'simples' & 'pequeno' são de forms do core não, não de modulso */
     form.simples label { float: left; width: 240px; font-size: 1.0em; font-weight: normal; color: #333333; }
     form.simples div.input { display: inline; width: 420px; float: left; }
     form.simples input.text { font-size: 1.0em; height: 20px; width: 300px; }
@@ -31,17 +34,6 @@
     form.pequeno div.input { display: inline; width: 150px; float: left; }
     form.pequeno label { width: 130px;  }
     form .campo { display: block; padding-bottom: 5px; }
-
-    form.normal div.campo { display: block; padding-bottom: 15px; }
-    form.normal label { display: block; width: 620px; font-size: 1.0em; color: navy; }
-    form.normal div.input { display: block; width: 620px; padding-bottom: 15px; }
-    form.normal input { clear: both }
-    form.normal input.text { font-size: 1.0em; height: 20px; width: 300px; }
-    form.normal input.submit { display: block; font-size: 1.2em; height: 46px; padding: 10px; margin-bottom: 5px; clear: both; }
-    form.normal select { font-size: 1em; height: 24px;  }
-
-    form p.explanation { margin: 0; font-size: 12px; color: #999999; }
-    form p.explanation_example { margin: 0; margin-bottom: 15px; font-size: 12px; color: #FF9900; }
 
     form div.input_painel {
         background: #efefef;
@@ -59,20 +51,47 @@
         display: table;
     }
 
-        form div.input_painel div.containner div.options {
-            display: table;
-            padding: 0;
+        form div.input_painel div.containner div.options { display: table; }
 
-        }
-
-/**
- * FORM HELPER
- */
-form.formHelper {
-
+/* MÓDULOS */
+/* Table de forms de módulos */
+table.form {
+     width: 100%;
 }
+    table.form td.first { width: 180px; }
+    table.form label { font-weight: bold; color: #444444; }
+    table.form input.text { font-size: 1.3em; font-weight: bold; width: 380px; }
 
-    form.formHelper label { width: 120px; }
+/* Table Listagem */
+    /* Acima de cada listagem há um painel de controle para excluir, bloquear itens, etc */
+    div.painel_de_controle { margin-bottom: 10px; padding: 0; float: right; }
+    /* Tabela para listagem, seja de conteúdo ou usuários */
+    table.listagem { width: 100%; margin: 0px; border-collapse: collapse;}
+    table.listagem tr td { padding: 5px; }
+    table.listagem tr td { padding: 5px; margin: 0px;}
+
+    table.listagem tr.titulo {
+            color: #cccccc;
+            font-weight: bold;
+            background: #333333;
+        }
+    table.listagem tr.conteudo { height: 20px; }
+    table.listagem tr.conteudo td { background: #FFF0E1; border-top: 2px solid white; }
+    table.listagem tr.conteudo td a {  }
+
+    /* CAMPOOPTION
+     * Campos de opções Ajax em formulários de setup
+     */
+        table.listagem tr.conteudo td div.campooptions { background: #f1f1f1; padding: 10px; margin-top: 3px; border: 1px solid silver;  background: red; }
+        table.listagem tr.conteudo td div.campooptions div.campooptions_tabela {  }
+        table.listagem tr.conteudo td div.campooptions div.campooptions_campo {  }
+
+table.listagem td.adddate { width: 120px; }
+
+/* FormHelper (cadastros) */
+form.formHelper { }
+
+    form.formHelper label { width: 130px; }
     form.formHelper div.input_field {  }
     form.formHelper div.input_textarea textarea { width: 300px; height: 50px; }
     form.formHelper div.input_date input { width: 18px; }

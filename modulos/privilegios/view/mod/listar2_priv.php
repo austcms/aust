@@ -10,7 +10,7 @@ $tabela = $modulo->LeTabelaDeDados($_GET['aust_node']);
 ?>
 
 <p><a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a></p>
-<h1>Listando conteúdo: <?php echo $aust->leNomeDaEstrutura($_GET['aust_node']);?></h1>
+<h2>Listando conteúdo: <?php echo $aust->leNomeDaEstrutura($_GET['aust_node']);?></h2>
 <p>A seguir você vê a lista de registros sob o cadastro "<?php echo $aust->leNomeDaEstrutura($_GET['aust_node'])?>".</p>
 
 <?
@@ -60,7 +60,7 @@ $fields = mysql_num_fields($mysql);
         <? } ?>
         <input type="submit" name="deletar" value="Deletar" />
     </div>
-<table width="680" cellspacing="0" cellpadding="10" class="listagem">
+<table cellspacing="0" cellpadding="10" class="listagem">
     <tr class="titulo">
 
         <?php for($i=0; $i< count($content_header[campos]); $i++) { ?>

@@ -259,7 +259,7 @@ if(!empty($_GET['function'])){
 }
 ?>
 
-<h2>Configuração: <?=$aust->leNomeDaEstrutura($_GET['aust_node'])?></h2>
+<h3>Configuração: <?=$aust->leNomeDaEstrutura($_GET['aust_node'])?></h3>
 <p>
     Configure esta estrutura de cadastro.
 </p>
@@ -267,9 +267,9 @@ if(!empty($_GET['function'])){
     <div class="box-full">
         <div class="box alerta">
             <div class="titulo">
-                <h2>Status</h2>
+                <h3>Status</h3>
             </div>
-            <div class="corpo">
+            <div class="content">
                 <?php
                 if(is_string($status))
                     echo $status;

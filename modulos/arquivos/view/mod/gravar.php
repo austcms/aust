@@ -24,7 +24,7 @@ if(!empty($_POST)){
         set_time_limit(0);
 
         $h1 = 'Upload de arquivo: '.$aust->leNomeDaEstrutura($_GET[aust_node]);
-        echo '<h1>'.$h1.'</h1>';
+        echo '<h2>'.$h1.'</h2>';
         // variável que contém erros
         $erro = array();
 
