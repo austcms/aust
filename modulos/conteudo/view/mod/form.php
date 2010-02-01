@@ -76,7 +76,7 @@
     <tr>
         <td valign="top"><label>Categoria:</label></td>
         <td>
-            <div id="categoriacontainer">
+            <div id="categoriacontainer" style="float: left;">
             <?php
             $current_node = '';
             if($_GET['action'] == "editar"){
@@ -89,15 +89,16 @@
             echo BuildDDList( CoreConfig::read('austTable') ,'frmcategoria', $administrador->tipo ,$aust_node, $current_node);
             ?>
 
-            <?php
-            /*
-             * Link para inserir nova categoria
-             */
-            ?>
-            <a href="#box" name="modal" class="lb_categoria">Inserir nova categoria</a>
-            
-            </div>
 
+            </div>
+            <div class="nova_categoria" style="float: left;">
+                <?php
+                /*
+                 * Link para inserir nova categoria
+                 */
+                ?>
+                <a href="#box" name="modal" class="lb_categoria"></a>
+            </div>
         </td>
     </tr>
     <tr>
