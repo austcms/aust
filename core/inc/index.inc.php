@@ -1,25 +1,14 @@
 <?php
-
 /*
  * WIDGETS
  */
-
 $widgets = new Widgets($envParams, $administrador->getId());
-
 ?>
 
 <h2>Painel Principal</h2>
 <p>
     Este é o sistema onde você gerencia o conteúdo do seu site.
-    
 </p>
-<?php
-/*
- * Para criar um Lightbox, basta criar um link como no exemplo abaixo, mudando
- * o nome da class conforme cada Lightbox. 
- */
-//<a href="#box" name="modal" class="lb_box">Lightbox - Teste</a>
-?>
 
 <div id="painel">
 
@@ -29,7 +18,42 @@ $widgets = new Widgets($envParams, $administrador->getId());
         <ul id="sortable1" class="connectedSortable draganddrop">
         <?php
         $c = $widgets->getInstalledWidgets();
+        /*
+         * Instala Widgets caso não haja nenhum instalado
+         */
+        if( empty($c) ){
+            $widgetsToInstall = array(
+                array(
+                    'name' => 'category_shortcuts',
+                    'admin_id' => $administrador->getId(),
+                    'column_nr' => 1,
+                    'path' => 'dashboard/category_shortcuts',
+                ),
+                array(
+                    'name' => 'people',
+                    'admin_id' => $administrador->getId(),
+                    'column_nr' => 2,
+                    'path' => 'dashboard/people',
+                ),
+            );
 
+            foreach( $widgetsToInstall as $widgetToInstall ){
+                if( $widgets->installWidget($widgetToInstall) ){
+                    $installStatus[] = 'success';
+                } else {
+                    $installStatus[] = 'insuccess';
+                }
+            }
+
+            if( !in_array('insuccess', $installStatus) ){
+                header( 'Location: adm_main.php' );
+                exit();
+            } else {
+                echo '<h2>Ocorreu um erro desconhecido ao instalar dados do usuário.</h2>';
+                exit();
+            }
+            
+        }
         /*
          * WIDGETS - COLUNA 1
          */
@@ -37,7 +61,7 @@ $widgets = new Widgets($envParams, $administrador->getId());
 
             foreach( $c['1'] as $widget ){
                 ?>
-                    <li id="widgets_<?php echo $widget->getId(); ?>">
+                    <li id="widgets_<?php echo $widget->getId(); ?>" class="sorted">
                         <div class="widget">
                             <div class="titulo">
                                 <h3><?php echo $widget->getTitle(); ?></h3>
@@ -59,9 +83,13 @@ $widgets = new Widgets($envParams, $administrador->getId());
         endif;
         ?>
         </ul>
-
+        <?php
+        /*
         <br/>
         <a href="adm_main.php?section=widgets&column_nr=1">Adicionar Widget</a>
+         *
+         */
+        ?>
               
     </div>
 
@@ -72,13 +100,13 @@ $widgets = new Widgets($envParams, $administrador->getId());
         <ul id="sortable2" class="connectedSortable draganddrop">
         <?php
         /*
-         * WIDGETS - COLUNA 1
+         * WIDGETS - COLUNA 2
          */
         if( !empty($c['2']) ):
 
             foreach( $c['2'] as $widget ){
                 ?>
-                <li id="widgets_<?php echo $widget->getId(); ?>">
+                <li id="widgets_<?php echo $widget->getId(); ?>" class="sorted">
                     <div class="widget">
                         <div class="titulo">
                             <h3><?php echo $widget->getTitle(); ?></h3>
@@ -102,8 +130,13 @@ $widgets = new Widgets($envParams, $administrador->getId());
 
         ?>
         </ul>
+        <?php
+        /*
         <br/>
         <a href="adm_main.php?section=widgets&column_nr=2">Adicionar Widget</a>
+         *
+         */
+        ?>
 
     </div>
     
