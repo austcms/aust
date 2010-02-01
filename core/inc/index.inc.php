@@ -11,11 +11,15 @@ $widgets = new Widgets($envParams, $administrador->getId());
 <h2>Painel Principal</h2>
 <p>
     Este é o sistema onde você gerencia o conteúdo do seu site.
-    <a href="#box" name="modal" class="lb_box">Lightbox - Teste</a>
+    
 </p>
-
-
-
+<?php
+/*
+ * Para criar um Lightbox, basta criar um link como no exemplo abaixo, mudando
+ * o nome da class conforme cada Lightbox. 
+ */
+//<a href="#box" name="modal" class="lb_box">Lightbox - Teste</a>
+?>
 
 <div id="painel">
 
