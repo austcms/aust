@@ -77,9 +77,7 @@ $widgets = new Widgets($envParams, $administrador->getId());
             }
             
         else:
-            ?>
-            Esta coluna não possui Widgets.
-            <?php
+            //Esta coluna não possui Widgets.
         endif;
         ?>
         </ul>
@@ -123,9 +121,7 @@ $widgets = new Widgets($envParams, $administrador->getId());
             }
 
         else:
-            ?>
-            Esta coluna não possui Widgets.
-            <?php
+            //Esta coluna não possui Widgets.
         endif;
 
         ?>

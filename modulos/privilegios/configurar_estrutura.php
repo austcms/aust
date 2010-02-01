@@ -175,14 +175,14 @@ if(!empty($_GET['function'])){
 }
 ?>
 
-<h1>Configuração: <?=$aust->leNomeDaEstrutura($_GET['aust_node'])?></h1>
+<h2>Configuração: <?=$aust->leNomeDaEstrutura($_GET['aust_node'])?></h2>
 <?php if(!empty($status)){ ?>
     <div class="box-full">
         <div class="box alerta">
             <div class="titulo">
-                <h2>Status</h2>
+                <h3>Status</h3>
             </div>
-            <div class="corpo">
+            <div class="content">
                 <?php
                 if(is_string($status))
                     echo $status;
@@ -197,7 +197,7 @@ if(!empty($_GET['function'])){
     </div>
 <?php } ?>
 
-<div class="painel-metade">
+<div class="widget_group">
 
     <?php
     /**
@@ -206,11 +206,11 @@ if(!empty($_GET['function'])){
      * Form para inserir novos campos em um cadastro
      */
     ?>
-    <div class="painel">
+    <div class="widget">
         <div class="titulo">
-            <h2>Configurações gerais</h2>
+            <h3>Configurações gerais</h3>
         </div>
-        <div class="corpo">
+        <div class="content">
             <p></p>
 
             <?php
@@ -314,20 +314,20 @@ if(!empty($_GET['function'])){
 
             </form>
         </div>
-        <div class="rodape"></div>
+        <div class="footer"></div>
     </div>
 
-    <div class="painel">
+    <div class="widget">
         <div class="titulo">
-            <h2></h2>
+            <h3></h3>
         </div>
-        <div class="corpo">
+        <div class="content">
             <p>
                 
             </p>
 
         </div>
-        <div class="rodape"></div>
+        <div class="footer"></div>
     </div>
 </div>
 
@@ -339,11 +339,11 @@ if(!empty($_GET['function'])){
      * Listagem dos campos deste cadastro e configuração destes
      */
     ?>
-    <div class="painel">
+    <div class="widget">
         <div class="titulo">
-            <h2>Relacionamento entre Módulos</h2>
+            <h3>Relacionamento entre Módulos</h3>
         </div>
-        <div class="corpo">
+        <div class="content">
             <p>
                 A quais módulos estes privilégios se aplicam?
             </p>
@@ -400,24 +400,24 @@ if(!empty($_GET['function'])){
             }
             ?>
         </div>
-        <div class="rodape"></div>
+        <div class="footer"></div>
     </div>
     <?
     /*
      * Opções gerais do cadastro
      */
     ?>
-    <div class="painel">
+    <div class="widget">
         <div class="titulo">
-            <h2></h2>
+            <h3></h3>
         </div>
-        <div class="corpo">
+        <div class="content">
             <p></p>
             <form method="post" action="<?=$config->self;?>" class="simples pequeno">
 
             </form>
 
         </div>
-        <div class="rodape"></div>
+        <div class="footer"></div>
     </div>
 </div>

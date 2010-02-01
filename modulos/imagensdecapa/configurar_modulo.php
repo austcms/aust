@@ -101,7 +101,7 @@ if(!empty($_GET['function'])){
 }
 ?>
 
-<h1><?php echo $modInfo['nome']; ?></h1>
+<h2><?php echo $modInfo['nome']; ?></h2>
 <p>
     Esta é a tela de configuração do Módulo, e não de estruturas ou categorias.
 </p>
@@ -109,9 +109,9 @@ if(!empty($_GET['function'])){
     <div class="box-full">
         <div class="box alerta">
             <div class="titulo">
-                <h2>Status</h2>
+                <h3>Status</h3>
             </div>
-            <div class="corpo">
+            <div class="content">
                 <?php
                 if(is_string($status))
                     echo $status;
@@ -126,18 +126,18 @@ if(!empty($_GET['function'])){
     </div>
 <?php } ?>
 
-<div class="painel-metade">
+<div class="widget_group">
 
     <?php
     /*
      * Configura qual estrutura pode ter imagens de capa
      */
     ?>
-    <div class="painel">
+    <div class="widget">
         <div class="titulo">
-            <h2>Imagens de capa</h2>
+            <h3>Imagens de capa</h3>
         </div>
-        <div class="corpo">
+        <div class="content">
             <p>Selecione a seguir quais estruturas podem ter imagens de capa.</p>
                 <?php
 
@@ -177,7 +177,7 @@ if(!empty($_GET['function'])){
                 ?>
 
         </div>
-        <div class="rodape"></div>
+        <div class="footer"></div>
     </div>
 </div>
 
@@ -187,31 +187,31 @@ if(!empty($_GET['function'])){
      * Listagem dos campos deste cadastro
      */
     ?>
-    <div class="painel">
+    <div class="widget">
         <div class="titulo">
-            <h2>Campos deste cadastro</h2>
+            <h3>Campos deste cadastro</h3>
         </div>
-        <div class="corpo">
+        <div class="content">
             <p>A seguir, você tem a lista dos campos existentes neste cadastro.</p>
 
 
         </div>
-        <div class="rodape"></div>
+        <div class="footer"></div>
     </div>
     <?
     /*
      * Opções gerais do cadastro
      */
     ?>
-    <div class="painel">
+    <div class="widget">
         <div class="titulo">
-            <h2>Opções do cadastro</h2>
+            <h3>Opções do cadastro</h3>
         </div>
-        <div class="corpo">
+        <div class="content">
             <p>A seguir, você configurar as principais opções deste cadastro.</p>
 
 
         </div>
-        <div class="rodape"></div>
+        <div class="footer"></div>
     </div>
 </div>

@@ -11,7 +11,7 @@ $precisa_aprovacao = $modulo->PegaConfig(Array('estrutura'=>$_GET['aust_node'], 
 ?>
 
 <p><a href="adm_main.php?section=<?=$_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a></p>
-<h2>Listando conteúdo: <?=$aust->leNomeDaEstrutura($_GET['aust_node']);?></h2>
+<h3>Listando conteúdo: <?=$aust->leNomeDaEstrutura($_GET['aust_node']);?></h3>
 <p>A seguir você vê a lista de registros sob o cadastro "<?=$aust->leNomeDaEstrutura($_GET['aust_node'])?>".</p>
 
 <?
@@ -100,14 +100,14 @@ if( $fields > 0 ){
         <div class="painel_de_controle">Selecionados:
             <?
             // se este cadastro precisa de aprovação, mostra botão para aprovar usuário
-            //if($precisa_aprovacao['valor'] == '1'){ ?>
+            if($precisa_aprovacao['valor'] == '1'){ ?>
                 <input type="submit" name="aprovar" value="Aprovar" />
-            <?// } ?>
+            <? } ?>
             <input type="submit" name="deletar" value="Deletar" />
         </div>
 
 
-        <table width="680" class="listagem">
+        <table class="listagem">
             <?
             /*
              * Título dos campos
@@ -170,13 +170,11 @@ if( $fields > 0 ){
                                     echo '<a href="adm_main.php?section='.$_GET['section'].'&action=editar&aust_node='.$_GET['aust_node'].'&w='.$dados["id"].'">';
                                     echo $dados[$campo];
                                     echo '</a>';
-                                    if( ($precisa_aprovacao['valor'] == '1'
+                                    if( $precisa_aprovacao['valor'] == '1'
                                          AND (
-                                                 $dados['des_aprovado'] == 0
-                                                 OR empty($dados['des_aprovado'])
-                                             )
+                                             $dados['approved'] == 0
+                                             OR empty($dados['approved']) )
                                         )
-                                        OR $dados['des_aprovado'] == 0)
                                     {
                                         echo '<span style="font-size: 10px;"> (necessita aprovação)</span>';
                                     }

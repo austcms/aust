@@ -56,7 +56,7 @@ if($_GET['action'] == 'criar') {
 	<a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
 </p>
 
-<h1><?php echo $tagh1;?></h1>
+<h2><?php echo $tagh1;?></h2>
 <p><?php echo $tagp;?></p>
 
 <?php
@@ -163,13 +163,10 @@ if($_GET['action'] == 'criar') {
 <input type="hidden" name="frmcategoria_id" value="<?php echo $austNode; ?>">
 
 
-<table width="100%" border="0" cellpadding="0" cellspacing="3">
-<col width="200">
-<col>
-
+<table border="0" cellpadding="0" cellspacing="3" class="form">
     <tr>
-        <td valign="top">Nome para este privilégio: </td>
-        <td>
+        <td valign="top" class="first">Nome para este privilégio: </td>
+        <td class="second">
             <?php if($dados['classe'] == "padrão"){ ?>
                 <INPUT TYPE="text" NAME="frmtitulo" value="<?php ifisset($dados['titulo']);?>" disabled="disabled" SIZE="65">
                 <p class="explanation">

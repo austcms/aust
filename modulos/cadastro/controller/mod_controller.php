@@ -184,6 +184,8 @@ class ModController extends ModsController
             )
         );
 
+        //pr($infoTabelaFisica);
+
         $campos = $infoCadastro["campo"];
 
         //pr($_POST);
@@ -191,13 +193,11 @@ class ModController extends ModsController
         $relational = array();
         
         if( $this->data ){
-            //pr($campos);
 
             /*
              * LOOP POR CADA TABELA
              */
             foreach( $this->data as $tabela=>$dados ){
-
 
                 /*
                  * LOOP POR CADA CAMPO
@@ -208,13 +208,13 @@ class ModController extends ModsController
                     //$valor["especie"]." --- ";
                     
                     /*
-                     * RELACIONAL UM PARA MUITOS
+                     * CAMPO RELACIONAL UM PARA MUITOS
                      */
                     if( $campos[$campo]["especie"] == "relacional_umparamuitos" ){
                         //echo $campos[$campo]["chave"];
                         //echo $tabela;
                         unset($this->data[$tabela][$campo]);
-                        
+
                         $i = 0;
                         //pr($valor);
                         foreach( $valor as $subArray ){
@@ -226,7 +226,19 @@ class ModController extends ModsController
                             }
                             $toDeleteTables[$campos[$campo]["referencia"]] = 1;
                         }
-                        
+
+                    }
+                    /*
+                     * CAMPO DATE
+                     */
+                    else if( $infoTabelaFisica[$campos[$campo]["chave"]]['Type'] == "date" ){
+                        $year = $this->data[$tabela][$campo]['year'];
+                        unset($this->data[$tabela][$campo]);
+
+                        if( strlen($year) == '4' ){
+                            $this->data[$tabela][$campo] = $valor['year'].'-'.$valor['month'].'-'.$valor['day'];
+
+                        }
                     }
 
                 }

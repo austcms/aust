@@ -62,7 +62,6 @@ echo $form->create( $infoCadastro["estrutura"]["tabela"]["valor"] );
 /**
  * Campos
  */
-//pr($camposForm);
 
 $tabelaCadastro = $infoCadastro["estrutura"]["valor"];
 
@@ -78,8 +77,6 @@ foreach( $camposForm as $chave=>$valor ){
     unset($select);
     unset($checkbox);
     unset($inputType);
-
-    //pr($valor);
 
     /**
      * RELACIONAL UM PARA UM
@@ -144,11 +141,10 @@ foreach( $camposForm as $chave=>$valor ){
                 }
             }
         }
-    } else {
-
-        if( $valor['tipo']['tipoFisico'] == 'text' ){
-            $inputType = "textarea";
-        }
+    } elseif( $valor['tipo']['tipoFisico'] == 'date' ){
+        $inputType = "date";
+    } elseif( $valor['tipo']['tipoFisico'] == 'text' ){
+        $inputType = "textarea";
     }
 
     if( empty($valor["valor"]) ){
@@ -180,45 +176,6 @@ foreach( $camposForm as $chave=>$valor ){
     <?php
 }
 
-?>
-
-
-<?php
-/**
- * Mostra <input> de módulos embed
- */
-/**
-$embed = $modulo->LeModulosEmbed();
-if( count($embed) ){
-    ?>
-    <tr>
-        <td colspan="2"><h1>Outras opções</h1></td>
-    </tr>
-    <?php
-    foreach($embed AS $chave=>$valor){
-        foreach($valor AS $chave2=>$valor2){
-            if($chave2 == 'pasta'){
-                if(is_file($valor2.'/embed/usuarios_form.php')){
-                    include($valor2.'/embed/usuarios_form.php');
-                    for($i = 0; $i < count($embed_form); $i++){
-                        ?>
-                        <tr>
-                            <td valign="top"><label><?php echo $embed_form[$i]['propriedade']?>:</label></td>
-                            <td>
-                            <? if(!empty($embed_form[$i]['intro'])){ echo '<p class="explanation">'.$embed_form[$i]['intro'].'</p>'; } ?>
-                            <?php echo $embed_form[$i]['input'];?>
-                            <? if(!empty($embed_form[$i]['explanation'])){ echo '<p class="explanation">'.$embed_form[$i]['explanation'].'</p>'; } ?>
-                            </td>
-                        </tr>
-                        <?
-                    }
-                }
-            }
-        }
-    }
-}
- * 
- */
 
 echo $form->end();
 ?>
