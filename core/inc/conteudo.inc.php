@@ -18,7 +18,14 @@
  */
 if(!empty($_GET['action'])){
 
-	/**
+    /*
+     * Tem permissão?
+     */
+    if( !$permissoes->verify($aust_node) )
+        exit();
+
+
+    /**
      * A seguir, o código de automação dos módulos (CRUD). São carregados os
      * formulários de cada módulo.
      *
@@ -196,17 +203,17 @@ if(!empty($_GET['action'])){
  */
 else {
     ?>
-
-
     <h2>Gerenciar conteúdo</h2>
     <p>
-        Use esta tela para gerenciar seu conteúdo. Passe o mouse sobre o conteúdo para mais opções.
+        Selecione qual estrutura você deseja gerenciar.
+        <?php tt('Uma estrutura é uma área do site,
+            como <em>Notícias</em>, <em>Artigos</em> e outros, por exemplo.') ?>
     </p>
     <?php
     $sites = $aust->getStructures();
     //pr($sites);
     ?>
-    <?php // INICIO DO DIV PAINEL GERENCIAR  - É GLOBAL?>
+    <?php /* INICIO DO DIV PAINEL GERENCIAR  - É GLOBAL */ ?>
     <div class="painel">
 
         <?php /* TABS */ ?>
@@ -233,7 +240,6 @@ else {
                             <td class="secoes">Conteúdos</td>
                             <td class="acao">Opções</td>
                             <td class="tipo">Tipo</td>
-                            <td class="acesso">Último acesso por</td>
                         </tr>
                     <?php else: ?>
                         <tr class="list">
@@ -263,12 +269,14 @@ else {
                         } else {
                             $type = $structure['tipo'];
                         }
+
+                        if( !$permissoes->verify($structure['id']) )
+                            continue;
                         ?>
                         
                         <tr class="list">
                             <td class="title">
                                 <span><?php echo $structure['nome'] ?></span>
-                                <?php tt('Teste') ?>
                             </td>
                             <td class="options">
                                 <ul>
@@ -288,16 +296,12 @@ else {
                                 echo $type;
                                 ?>
                             </td>
-                            <td class="acesso">
-                                Alexandre de Oliveira
-                            </td>
                         </tr>
                         <?php endforeach; ?>
                         <tr class="footer">
                             <td colspan="4"></td>
                         </tr>
                         </table>
-
 
                     </div>
                 <?php endforeach; ?>

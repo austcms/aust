@@ -14,6 +14,7 @@ div.body {
         padding: 0px;
         margin: 0px 20px 0px 20px;
         padding: 10px 0;
+        padding-bottom: 20px;
         display: block;
         width: 720px;
     }
@@ -167,12 +168,21 @@ table.listagem td.adddate { width: 120px; }
 /*
  * Links Permissões e configurar módulos
  */
-div.body div.content div.borda {
-    border-top: 1px solid #f4f4f4;
-    margin: 20px 0 15px 0;
+div#link_bottom {
+    background: white;
+    display: block;
 }
-div.body div.content div.links_admin {
-    margin-top: 10px;
+div#link_bottom div.borda {
+    border-bottom: 1px solid #f4f4f4;
+    padding: 0px;
+    margin: 0;
+    font-size: 0px;
+}
+div#link_bottom div.links_admin {
+    text-align: left;
+}
+div#link_bottom div.links_admin a {
+    padding-left: 15px;
 }
 
 /*

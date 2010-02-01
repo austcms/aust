@@ -1,0 +1,68 @@
+
+#mask {
+    position: absolute;
+    z-index:9000;
+    background-color: #323232;
+    top: 0;
+    left: 0;
+    filter: alpha(opacity=90);
+    opacity: 0.9;
+    display: none;
+}
+
+.window {
+    position:absolute;
+    width:350px;
+    /*height:394px;*/
+    display:none;
+    z-index:9999;
+    padding:0;
+    top: 0;
+}
+
+/**** Lightbox ****/
+
+/* Personalize a janela modal aqui. Você pode adicionar uma imagem de fundo. */
+.window {
+    width: 342px;
+    /*height:394px;*/
+    padding: 10px;
+}
+.window .header {
+    width: 342px;
+    height: 40px;
+    background: white;
+}
+	.window .header h2 {
+		float: left;
+		display: table;
+		padding: 0 0 0 12px;
+	}
+
+	.window .header .close {
+		display: table;
+		float: right;
+		width: 28px;
+		padding: 6px 6px 0 0;
+	}
+
+.window .content {
+    width: 342px;
+    background: white;
+    text-align: left;
+}
+    .window .content p {
+        padding: 0 10px 0 10px;
+        margin: 0;
+    }
+	
+.window .footer {
+    width: 342px;
+    height: 30px;
+    background: white;
+    margin: 0;
+    padding: 0;
+}
+	
+
+

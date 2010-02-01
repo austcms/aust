@@ -4,46 +4,63 @@
     padding: 0;
 }
 
-HTML, BODY {
-	background: #ededed;
-	font-family: Arial, Tahoma, 'Trebuchet MS', sans-serif;
-	height: 100%;
-}
-
-BODY {
+body {
+    background: #f4f4f4;
+    font-family: 'Lucida Grande', 'Lucida Sans', Arial, 'Trebuchet MS', sans-serif;
+    height: 100%;
     font-size: 76%;
+    color: #666666;
 }
 
 p { margin-bottom: 15px; font-size: 1em; line-height: 18px; }
-h1 { margin-bottom: 15px; font-size: 1.8em; }
+p.incorrect { font-style: italic; text-align: center; font-weight: bold; color: #f50079 }
 
+h1 {
+    text-align: center; margin: 0px auto; font-size: 2.2em;
+    font-family: 'Georgia';
+    padding: 10px;
+}
+h2.wait {
+    text-align: center;
+    padding: 70px 0;
+    color: #999999;
+}
 
-#outer { width: 100%; text-align: center; height: 100%; overflow: hidden; position: relative; }
-	#outer[id] { display: table; position: static; }
-      
-    #middle { width: 400px; position: absolute; top: 50%; } /* para o IE */
-    #middle[id] { display: table-cell; vertical-align: middle; position: static; }
-      
-    #inner { width: 400px; margin: 0 auto; position: relative; left: -50%; top: -50% } /* para o IE */
-	#inner[id] { position: static; left: -50%; } 
+    .body {
+        width: 350px;
+
+        position: absolute;
+        left: 50%; margin-left: -175px;
+        top: 50%; margin-top: -92px; /* height de .inside -20px */
+
+        background: #dddddd;
+        /*
+
+        filter:alpha(opacity=50);
+        -moz-opacity:0.5;
+        -khtml-opacity: 0.5;
+        opacity: 0.5;
+        */
+    }
+
+    .body .inside {
+        margin: 10px;
+        min-height: 165px;
+        background: white;
+    }
 	
-	#inner #top {
-		background: url(img/login_top.jpg);
-		height: 26px;
-		font-size:1px;
-	}
-	
-	#inner #body {
-		background: url(img/login_body.jpg);
-        font-size: 1em;
-		padding: 2px 30px 0 30px;
-        margin: 0;
-	}
-	
-	#inner #bottom {
-		background: url(img/login_bottom.jpg) no-repeat;
-		height: 22px;
-		font-size:1px;
-	}
+td.label { text-align: right; color: #888888; }
+
+td.input { text-align: left; }
+    td.input input {
+        width: 160px; height: 22px;
+        font-size: 1.4em;
+        font-family: Verdana, 'Georgia';
+        border: solid 1px #eeeeee;
+        padding: 1px;
+    }
+
+td.submit { text-align: center; }
+    td.submit input { padding: 5px; margin: 5px 0 10px 0; font-style: italic; }
 	
 

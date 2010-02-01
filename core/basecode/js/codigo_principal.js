@@ -8,11 +8,15 @@
  * @since 01/01/2009
  */
 
+var arquivoAjax = "core/libs/ajax.php";
+var privilegio_escolhido = false;
+
 /**
  * Função de Start
  */
 $(document).ready(function(){
-
+    lightbox();
+    
     if($('div.campooptions').length > 0){ $('div.campooptions').hide(); }
     if($('div.est_options').length > 0){ $('div.est_options').hide(); }
     if($('div#categoriacontainer_priv').length > 0) { $('div#categoriacontainer_priv').hide(); }
@@ -22,13 +26,42 @@ $(document).ready(function(){
         form_privilegio('1')
     }
 
+    /* WIDGETS - DRAG&DROP */
+    $("#sortable1, #sortable2").sortable({
+        connectWith: '.connectedSortable',
+        handle: 'h3',
+        opacity: 0.4,
+        containment: 'document',
+        dropOnEmpty: true,
+        stop: function () {
+            //alert('oi');
+            var order1 = $('#sortable1').sortable('serialize', {key: 'widgets[1][]'});
+            var order2 = $('#sortable2').sortable('serialize', {key: 'widgets[2][]'});
+
+            $.ajax({
+                url: arquivoAjax+'?lib=widgets&location=dashboard&userId='+userId,
+                data: order1+'&'+order2,
+                complete: function(response){
+                    //alert(response.responseText);
+                    //$('#permissoesAtuais').html(response.responseText);
+                },
+                type: "get",
+                dataType: "html"
+            });
+        }
+
+    });
+
+    $("#sortable").disableSelection();
+
+
 
     // Hints
     $("span.hint a").tooltip({
         //tip: '#caixa_tooltip',
         effect: 'fade',
         events: {
-            def: 'click,mouseout'
+            def: 'click, mouseout'
         }
     });
 
@@ -41,8 +74,6 @@ $(document).ready(function(){
 
 });
 
-var arquivoAjax = "core/libs/ajax.php";
-var privilegio_escolhido = false;
 /*
  * MÓDULOS
  */

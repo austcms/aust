@@ -1,111 +1,95 @@
 <?php
-/**
- * Este é o arquivo contendo a página inicial do sistema
+/*
+ * WIDGETS
  */
+$widgets = new Widgets($envParams, $administrador->getId());
 ?>
 
 <h2>Painel Principal</h2>
-<p>Este é o sistema onde você gerencia o conteúdo do seu site.</p>
+<p>
+    Este é o sistema onde você gerencia o conteúdo do seu site.
+</p>
 
 <div id="painel">
-    <?php
-    /**
-     *
-     * Listagem das estruturas cadastradas no sistema na tela inicial
-     *
-     * Contém o atalho para as estrutura
-     * "FECHA BARRA"
-    $param = array(
-                'orderby' => 'ORDER BY tipo'
-                );
-    $est = $aust->LeEstruturasParaArray($param);
-
-    //pr($est);
-    //pr($categoriasPermitidas);
-
-    if(count($est) > 0){
-        ?>
-
-        <table width="100%" summary="Lista de estruturas do site">
-        <col width="160"/>
-        <col />
-        <tbody>
-
-        <?php
-        foreach($est as $key=>$valor){
-
-            /**
-             * Verifica se usuário tem permissão de acesso a esta
-             * estrutura
-             * "FECHA BARRA"
-            //pr( $categoriasPermitidas);
-            if($permissoes->verify( array( 'estrutura' => $valor['id'], 'permissoes' => $categoriasPermitidas ))){
-
-                /**
-                 * Inclui módulo apropriado
-                 *
-                //echo $valor["tipo"];
-                //if( is_file(THIS_TO_BASEURL.'modulos/'.$valor['tipo'].'/'.MOD_CONFIG) ){
-                    include(THIS_TO_BASEURL.'modulos/'.$valor['tipo'].'/'.MOD_CONFIG);
-                //}
-                echo '<tr>';
-                echo '<td valign="top">';
-                echo '<a href="#" class="link_pai_do_est_options" onmouseover="javascript: est_options('.$valor['id'].')">'.$valor['nome'].'</a>';
-                echo '<div class="est_options" id="est_options_'.$valor['id'].'">';
-                if(is_array($modInfo['opcoes'])){
-                    $i = 0;
-                    foreach($modInfo['opcoes'] as $opcao=>$opcaonome){
-                        if($i > 0) echo ', ';
-                        echo '<a href="adm_main.php?section=conteudo&action='.$opcao.'&aust_node='.$valor['id'].'">'.$opcaonome.'</a>';
-                        $i++;
-                    }
-                }
-                echo '</div>';
-                echo '</td>';
-                echo '</tr>';
-            }
-        }
-        ?>
-        </tbody>
-        </table>
-        <?php
-    } else {
-        ?>
-        <p>Não há estruturas cadastradas. Contacte seu administrador.</p>
-        <?php
-    }
-    *?>
-    *
-    */
-    ?>
 
     <?php /* Widget Group - Coluna (Primeira) */ ?>
     <div class="widget_group">
 
-        <?php /* Widget */ ?>
-        <ul>
-            <li>
-                <div class="widget">
-                    <div class="titulo">
-                        <h3>Início Rápido</h3>
-                    </div>
-                    <div class="content">
-                        <ul>
-                            <li>Notícias<?php tt('Teste') ?></li>
-                            <li>Galeria de fotos<?php tt('Teste') ?></li>
-                            <li>Pesquisa<?php tt('Teste') ?></li>
-                            <li>Enquete<?php tt('Teste') ?></li>
-                            <li>Artigos<?php tt('Teste') ?></li>
-                            <li>Comunicados<?php tt('Teste') ?></li>
-                            <li>Teste<?php tt('Teste') ?></li>
-                        </ul>
-                    </div>
-                    <div class="footer">
-                    </div>
-                </div>
-            </li>
-        </ul>
+        <ul id="sortable1" class="connectedSortable draganddrop">
+        <?php
+        $c = $widgets->getInstalledWidgets();
+        /*
+         * Instala Widgets caso não haja nenhum instalado
+         */
+        if( empty($c) ){
+            $widgetsToInstall = array(
+                array(
+                    'name' => 'category_shortcuts',
+                    'admin_id' => $administrador->getId(),
+                    'column_nr' => 1,
+                    'path' => 'dashboard/category_shortcuts',
+                ),
+                array(
+                    'name' => 'people',
+                    'admin_id' => $administrador->getId(),
+                    'column_nr' => 2,
+                    'path' => 'dashboard/people',
+                ),
+            );
 
+            foreach( $widgetsToInstall as $widgetToInstall ){
+                if( $widgets->installWidget($widgetToInstall) ){
+                    $installStatus[] = 'success';
+                } else {
+                    $installStatus[] = 'insuccess';
+                }
+            }
+
+            if( !in_array('insuccess', $installStatus) ){
+                header( 'Location: adm_main.php' );
+                exit();
+            } else {
+                echo '<h2>Ocorreu um erro desconhecido ao instalar dados do usuário.</h2>';
+                exit();
+            }
+            
+        }
+        /*
+         * WIDGETS - COLUNA 1
+         */
+        if( !empty($c['1']) ):
+
+            foreach( $c['1'] as $widget ){
+                ?>
+                    <li id="widgets_<?php echo $widget->getId(); ?>" class="sorted">
+                        <div class="widget">
+                            <div class="titulo">
+                                <h3><?php echo $widget->getTitle(); ?></h3>
+                            </div>
+                            <div class="content">
+                                <?php echo $widget->getHtml(); ?>
+                            </div>
+                            <div class="footer">
+                            </div>
+                        </div>
+                    </li>
+                <?php
+            }
+            
+        else:
+            ?>
+            Esta coluna não possui Widgets.
+            <?php
+        endif;
+        ?>
+        </ul>
+        <?php
+        /*
+        <br/>
+        <a href="adm_main.php?section=widgets&column_nr=1">Adicionar Widget</a>
+         *
+         */
+        ?>
               
     </div>
 
@@ -113,26 +97,46 @@
     
     <div class="widget_group">
 
-        <?php /* Widget */ ?>
-        <ul>
-            <li>
-                <div class="widget">
-                    <div class="titulo">
-                        <h3>Pessoas</h3>
+        <ul id="sortable2" class="connectedSortable draganddrop">
+        <?php
+        /*
+         * WIDGETS - COLUNA 2
+         */
+        if( !empty($c['2']) ):
+
+            foreach( $c['2'] as $widget ){
+                ?>
+                <li id="widgets_<?php echo $widget->getId(); ?>" class="sorted">
+                    <div class="widget">
+                        <div class="titulo">
+                            <h3><?php echo $widget->getTitle(); ?></h3>
+                        </div>
+                        <div class="content">
+                            <?php echo $widget->getHtml(); ?>
+                        </div>
+                        <div class="footer">
+                        </div>
                     </div>
-                    <div class="content">
-                        <ul>
-                            <li>Alexandre de Oliveira<?php tt('Teste') ?></li>
-                            <li>Andréia de Oliveira<?php tt('Teste') ?></li>
-                            <li>Acácio Neimar de Oliveira<?php tt('Teste') ?></li>
-                            <li>Arthur de Oliveira<?php tt('Teste') ?></li>
-                        </ul>
-                    </div>
-                    <div class="footer">
-                    </div>
-                </div>
-            </li>
+
+                </li>
+                <?php
+            }
+
+        else:
+            ?>
+            Esta coluna não possui Widgets.
+            <?php
+        endif;
+
+        ?>
         </ul>
+        <?php
+        /*
+        <br/>
+        <a href="adm_main.php?section=widgets&column_nr=2">Adicionar Widget</a>
+         *
+         */
+        ?>
 
     </div>
     
