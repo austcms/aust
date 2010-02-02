@@ -104,6 +104,7 @@ form.formHelper { }
  * Listagem de Pessoas - table com a class listagem e pessoas
  */
 table.pessoas { width: 505px; margin: 0px; border-collapse: collapse;}
+table.pessoas tr.conteudo td a img { padding-right: 5px; }
 
 div.pessoas {
     float: left;
