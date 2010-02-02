@@ -75,7 +75,7 @@
     <tr>
         <td valign="top" class="first"><label>Categoria:</label></td>
         <td class="second">
-            <div id="categoriacontainer" style="float: left;">
+            <div id="categoriacontainer">
             <?php
             $current_node = '';
             if($_GET['action'] == "editar"){
