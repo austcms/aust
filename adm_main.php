@@ -89,7 +89,14 @@ if(!$isResponser){
         $aust = new Aust($conexao);
         $administrador = new Administrador($conexao);
         $modulos = new Modulos( array('conexao'=>$conexao) );
-        $config = new Config( array('conexao'=>$conexao) );
+        $config = new Config(
+                array(
+                    'conexao' => $conexao,
+                    'permissions' => $configPermissoes,
+                    'userType' => $administrador->tipo,
+                    'rootType' => 'Webmaster'
+                    )
+            );
 
         /**
          * Carrega todas as estruturas que não tem categorias.

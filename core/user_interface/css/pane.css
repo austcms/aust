@@ -7,10 +7,8 @@
  *                 div.pane
  */
 
-/* TAB PANE -> table.pane_listing - Painel Gerenciar e Configurações*/
-div.panes div.background { padding: 0px 0; border-bottom: 1px solid #f9f9f9; }
-    div.panes div.background .header { padding: 10px; border: none; }
 
+/* TABLE */
 /* TAB PANE -> table.pane_listing */
 table.pane_listing {
     border: 0px solid;
@@ -72,29 +70,10 @@ table.pane_listing {
 
 
 
-/*
- * CONTEÚDO CONFIGURAÇÕES
- */
-div.panes .background div.list {
-    display: table;
-    padding: 5px 0;
-}
-    div.panes .background div.list ul {
-        list-style: none;
-    }
-    div.panes .background div.list div.title, div.input, div.dica {
-        float: left;
-        line-height: 24px;
-        display: table;
-    }
-    div.panes .background div.list div.title ul {
-        margin: 0;
-        padding-left: 10px;
-    }
-    div.panes .background div.list div.dica ul li {
-        font-size: 0.7em;
-        color: #aaaaaa;
-    }
-    div.panes .background div.list div.input ul li input {
-        margin-bottom: 5px;
-    }
+/* DIV.BACKGROUND */
+/* CONTEÚDO CONFIGURAÇÕES */
+
+div.panes div.background { padding: 10px 10px; border-bottom: 1px solid #f9f9f9; }
+
+/* Form */
+    div.panes div.background td.first { vertical-align: top; }
