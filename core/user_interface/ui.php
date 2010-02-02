@@ -6,7 +6,7 @@ define("IMG_DIR", "core/user_interface/img/");
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Aust - Gerenciador de sites<?php /* ifisset($config->LeOpcao('sitename'), 'Aust'); */ ?></title>
+    <title><?php echo $config->getConfig('site_name'); ?> - Gerenciador<?php /* ifisset($config->LeOpcao('sitename'), 'Aust'); */ ?></title>
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/standard.css" type="text/css" />
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/style_principal.css" type="text/css" />
     
@@ -42,6 +42,12 @@ define("IMG_DIR", "core/user_interface/img/");
 
     */
     ?>
+    <?php
+    /**
+     * @todo - o comando abaixo é perigoso, pois permite que um usuário altere
+     * informações de outro usuário.
+     */
+    ?>
     <script type="text/javascript">
         var userId = '<?php echo $administrador->getId() ?>';
     </script>
@@ -73,7 +79,9 @@ define("IMG_DIR", "core/user_interface/img/");
          */
         ?>
         <div class="logotipo">
-            <h1><a href="adm_main.php?section=index">AC Informática</a></h1>
+            <h1>
+                <a href="adm_main.php?section=index"><?php echo $config->getConfig('site_name'); ?></a>
+            </h1>
         </div>
 
         <div class="inicializacaorapida">

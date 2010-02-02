@@ -18,6 +18,19 @@ class Widget
     
     var $conexao;
 
+    /**
+     * Verifica se já foi renderizado
+     *
+     * @var <bool>
+     */
+    var $_preRendered = false;
+    /**
+     * Tooltips do Widget
+     *
+     * @var <array>
+     */
+    var $_tt = '';
+
     function __construct($envParams, $data){
         $this->envParams = $envParams;
         $this->conexao = $envParams['conexao'];
@@ -29,6 +42,7 @@ class Widget
     function preRenderWidget(){
 
         $widgetPath = $this->path;
+        $this->_preRendered = true;
         if( is_dir(WIDGETS_DIR.$widgetPath) ){
 
             foreach( $this->envParams as $var=>$value ){
@@ -41,6 +55,7 @@ class Widget
             include( WIDGETS_DIR.$widgetPath.'/core/conf.php' );
             $this->_title = $conf['title'];
 
+            $this->_tt = (empty($conf['tt'])) ? '' : $conf['tt'];
 
             if( !empty($conf['class']) AND is_string($conf['class']) ){
                 include_once( WIDGETS_DIR.$widgetPath.'/'.$conf['class'].'.php' );
@@ -128,5 +143,23 @@ class Widget
         return $this->path;
     }
 
+    /**
+     * getTooltip()
+     *
+     * @return <string>
+     */
+    function getTooltip($location = ''){
+
+        if( empty($location) ){
+            $location = 'title';
+        }
+
+        $this->preRenderWidget();
+
+        if( empty($this->_tt[$location]) )
+            return '';
+        else
+            return tt( $this->_tt[$location] );
+    }
 }
 ?>
