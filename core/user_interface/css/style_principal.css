@@ -80,6 +80,7 @@ div.body {
 
     /********* CATEGORIAS *********/
             div.body div.content div.structure {  }
+            div#categoriacontainer { float: left; }
             div#categoriacontainer select{ font-size: 1.0em }
             div#categoriacontainer select option.node{ color: #990000; font-weight:normal; background-color: #D9ECFF; }
             div.structure0 { font-weight: bold; text-transform: uppercase; color: #006600; }

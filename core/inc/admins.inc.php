@@ -33,9 +33,7 @@ if(!empty($_GET['action'])){
         </ul>
 
     </div>
-    <?php
-}
-?>
+
 <br />
 <h2>
     Permissões de Usuários
@@ -45,3 +43,6 @@ if(!empty($_GET['action'])){
     "quem edita o que". Somente administradores têm acesso a esta tela.
 </p>
 <a href="adm_main.php?section=permissoes">Editar permissões</a>
+    <?php
+}
+?>
