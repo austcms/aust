@@ -16,4 +16,8 @@ $navPermissoes = Array(
 
     );
 
+$configPermissoes = array(
+    'Geral' => '*',
+);
+
 ?>

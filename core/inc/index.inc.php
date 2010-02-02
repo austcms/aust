@@ -64,7 +64,7 @@ $widgets = new Widgets($envParams, $administrador->getId());
                     <li id="widgets_<?php echo $widget->getId(); ?>" class="sorted">
                         <div class="widget">
                             <div class="titulo">
-                                <h3><?php echo $widget->getTitle(); ?></h3>
+                                <h3><?php echo $widget->getTitle(); ?><?php $widget->getTooltip(); ?></h3>
                             </div>
                             <div class="content">
                                 <?php echo $widget->getHtml(); ?>
@@ -107,7 +107,7 @@ $widgets = new Widgets($envParams, $administrador->getId());
                 <li id="widgets_<?php echo $widget->getId(); ?>" class="sorted">
                     <div class="widget">
                         <div class="titulo">
-                            <h3><?php echo $widget->getTitle(); ?></h3>
+                            <h3><?php echo $widget->getTitle(); ?><?php $widget->getTooltip(); ?></h3>
                         </div>
                         <div class="content">
                             <?php echo $widget->getHtml(); ?>

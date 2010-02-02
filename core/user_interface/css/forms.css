@@ -57,6 +57,7 @@
 /* Table de forms de módulos */
 table.form {
      width: 100%;
+     margin: 0 0 10px 0;
 }
     table.form td.first { width: 180px; }
     table.form label { font-weight: bold; color: #444444; }
