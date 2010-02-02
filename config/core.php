@@ -27,7 +27,29 @@ $aust_charset['db_collate'] = 'utf8_general_ci';
  * Todas as configurações do sistema
  */
 
-CoreConfig::write('austTable','categorias');
+    CoreConfig::write('austTable','categorias');
+
+    /*
+     * CONFIG
+     */
+    /*
+     * Tipo de configuração padrão, visível a todos os usuários.
+     */
+    CoreConfig::write('configStandardType','Geral');
+    /*
+     * Configurações que devem ser instaladas automaticamente.
+     */
+        $neededConfig = array(
+            array(
+                'tipo' => 'Geral',
+                'local' => '',
+                'nome' => 'Nome do site',
+                'propriedade' => 'site_name',
+                'valor' => 'Modifique o nome do site',
+                'explanation' => 'Este nome aparecerá no título do gerenciador',
+            ),
+        );
+        CoreConfig::write('neededConfig', $neededConfig);
 
 /*
  * Acid Framework

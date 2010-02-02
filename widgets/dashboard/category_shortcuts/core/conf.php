@@ -8,4 +8,11 @@ $conf['description'] = 'Acesse cada estrutura do gerenciador mais facilmente atr
 
 $conf['class'] = 'CategoryShortcuts';
 
+/*
+ * TOOLTIPS
+ */
+$conf['tt']['title'] = 'Estas são as <em>estruturas instaladas</em> no site. Passe o mouse e'.
+                       ' acesse os formulários mais rapidamente.';
+
+
 ?>

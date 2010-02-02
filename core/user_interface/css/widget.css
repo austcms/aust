@@ -30,9 +30,10 @@
                     display: table;
                 }
                     div.widget_group div.widget div.titulo h3 {
-                        display: table;
-                        margin: 8px 0 0 10px;
+                        display: block;
+                        margin: 5px 0 0 10px;
                         font-size: 1.0em;
+                        line-height: 18px;
                     }
 
                     div.widget_group ul.draganddrop h3 {
