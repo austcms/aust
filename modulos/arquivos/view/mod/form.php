@@ -37,7 +37,7 @@ if($_GET['action'] == 'editar'){
 
 ?>
 
-<h1><?=$h1?></h1>
+<h2><?=$h1?></h2>
 <p>
     <a href="adm_main.php?section=<?=$_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
 </p>
@@ -57,9 +57,7 @@ if($_GET['action'] == 'editar'){
     <input type="hidden" name="frmarquivo_tamanho" value="<?php ifisset($dados['arquivo_tamanho']);?>">
     <input type="hidden" name="frmadmin_id" value="<?php ifisset($dados['autor'], $administrador->LeRegistro('id'));?>">
     
-    <table width="670" border=0 cellpadding=0 cellspacing=0>
-    <col width="200">
-    <col>
+    <table border=0 cellpadding=0 cellspacing=0 class="form">
     <?php
     /*
      * CATEGORIA
@@ -98,14 +96,14 @@ if($_GET['action'] == 'editar'){
     ?>
 
     <tr>
-        <td valign="top">
+        <td valign="top" class="first">
             <?php if($fm == "editar"){ ?>
                 Arquivo:
             <?php }else{ ?>
                 Selecione o arquivo:
             <?php } ?>
         </td>
-        <td>
+        <td class="second">
             <?php if($fm == "editar"){ ?>
                 <p style="font-weight: bold;">
                     <?php echo $dados['arquivo_nome'] ?>
@@ -120,8 +118,8 @@ if($_GET['action'] == 'editar'){
         </td>
     </tr>
     <tr>
-        <td valign="top">Título: </td>
-        <td>
+        <td valign="top" class="first">Título: </td>
+        <td class="second">
             <INPUT TYPE="text" NAME="frmtitulo" value="<?php ifisset($dados[titulo]);?>" SIZE="65">
             <p class="explanation">
                 Digite um título. (Título começa com letra maiúscula e não leva

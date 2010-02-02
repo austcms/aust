@@ -11,7 +11,7 @@
 
 
 ?>
-<h1>Setup de cadastro: configuração inicial</h1>
+<h2>Setup de cadastro: configuração inicial</h2>
 <form action="" method="post" class="normal">
 
 <?php

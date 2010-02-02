@@ -12,9 +12,10 @@
     $tempmodulo = $modulo;
     $embed = $modulo->LeModulosEmbed();
     
-
-    foreach( $embed as $valor ){
-        $embedIds[] = $valor["id"];
+    if( !empty($embed) ){
+        foreach( $embed as $valor ){
+            $embedIds[] = $valor["id"];
+        }
     }
 
     /*

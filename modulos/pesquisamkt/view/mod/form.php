@@ -246,7 +246,7 @@
     <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
 </p>
 
-<h1><?php echo $tagh1;?></h1>
+<h2><?php echo $tagh1;?></h2>
 
 <?php
 if( $_GET["action"] == "editar" ){
@@ -264,7 +264,7 @@ if( $_GET["action"] == "editar" ){
 ?>
 <div class="resultados" style="width: 99%; display: block;">
     <div class="resultados_content" style="margin: 5px; padding: 10px 20px 10px 20px; width: 93%; background: #faf9f9; display: table;">
-    <h2>Resultados</h2>
+    <h3>Resultados</h3>
     <p>
         A seguir, o resultado da pesquisa: <em><?php echo $dados['titulo'] ?></em>
     </p>
@@ -334,12 +334,12 @@ if( !empty($perguntasQuantidade) ):
     <?php }?>
     <input type="hidden" name="w" value="<?php ifisset( $dados['id'] );?>">
     <input type="hidden" name="aust_node" value="<?php echo $austNode; ?>">
-    <table width="670" border=0 cellpadding=0 cellspacing=0>
+    <table border=0 cellpadding=0 cellspacing=0 class="form">
         <col width="200">
         <col width="470">
         <tr>
-            <td valign="top"><label>Título da pesquisa:</label></td>
-            <td>
+            <td valign="top" class="first"><label>Título da pesquisa:</label></td>
+            <td class="second">
                 <INPUT TYPE='text' NAME='frmtitulo' class='text' value='<?php if( !empty($dados['titulo']) ) echo $dados['titulo'];?>' />
                 <p class="explanation">
                     Um título para a pesquisa.
@@ -452,7 +452,7 @@ if( !empty($perguntasQuantidade) ):
         <tr>
             <td colspan="2">
             <div style="display: table; width: 100%; border-top: 1px silver dashed;" id="alternativas">
-                <h2>Perguntas e respostas</h2>
+                <h3>Perguntas e respostas</h3>
                 <p>
                     A seguir, crie perguntas e suas respostas.
                     Alternativas deixadas em branco não serão salvas.
@@ -632,7 +632,7 @@ else:
     </p>
     <form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?section=<?php echo $_GET["section"] ?>&action=<?php echo $_GET["action"]?>&aust_node=<?php echo $_GET["aust_node"]?>" enctype="multipart/form-data" >
     <input type="hidden" name="metodo" value="<?php echo $_GET['action'];?>">
-    <table width="670" border=0 cellpadding=0 cellspacing=0>
+    <table border=0 cellpadding=0 cellspacing=0 class="form">
         <col width="250">
         <col width="320">
         <tr>

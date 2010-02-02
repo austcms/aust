@@ -70,12 +70,11 @@
 
 <input type="hidden" name="w" value="<?php ifisset( $dados['id'] );?>">
 <input type="hidden" name="aust_node" value="<?php echo $austNode; ?>">
-<table width="670" border=0 cellpadding=0 cellspacing=0>
-    <col width="200">
-    <col width="470">
+
+<table cellpadding=0 cellspacing=0 class="form">
     <tr>
-        <td valign="top"><label>Categoria:</label></td>
-        <td>
+        <td valign="top" class="first"><label>Categoria:</label></td>
+        <td class="second">
             <div id="categoriacontainer" style="float: left;">
             <?php
             $current_node = '';
@@ -176,23 +175,37 @@
     </tr>
     <tr>
         <td colspan="2">
-            <textarea name="frmtexto" id="jseditor" rows="20" style="width: 670px"><?php if( !empty($dados['texto']) ) echo $dados['texto'];?></textarea>
+            <textarea name="frmtexto" id="jseditor" rows="20"><?php if( !empty($dados['texto']) ) echo $dados['texto'];?></textarea>
         <br />
         </td>
     </tr>
-    <tr>
-        <td valign="top"><label>Modo:</label></td>
-        <td>
-            <select name="frmrestrito" class="select">
-                <option <?php if( !empty($dados['restrito']) ) makeselected($dados['restrito'], 'normal'); ?> value="normal">Mostrar em todas as páginas</option>
-                <option <?php if( !empty($dados['restrito']) ) makeselected($dados['restrito'], 'naofrontend'); ?> value="naofrontend">Não mostrar na página principal</option>
-                <option <?php if( !empty($dados['restrito']) ) makeselected($dados['restrito'], 'invisivel'); ?> value="invisivel">Tornar invisível este item em todo o site</option>
-            </select>
-            <p class="explanation">
-                Selecione acima que tipo de exibição você deseja para este conteúdo.
-            </p>
-        </td>
-    </tr>
+    <?php
+    /*
+     * ORDEM
+     */
+    $showModo = false; // por padrão, não mostra
+    if( !empty($moduloConfig["modo_de_visualizacao"]) ){
+        if( $moduloConfig["modo_de_visualizacao"]["valor"] == "1" )
+            $showModo = true;
+    }
+    if( $showModo ){
+    ?>
+        <tr>
+            <td valign="top"><label>Modo:</label></td>
+            <td>
+                <select name="frmrestrito" class="select">
+                    <option <?php if( !empty($dados['restrito']) ) makeselected($dados['restrito'], 'normal'); ?> value="normal">Mostrar em todas as páginas</option>
+                    <option <?php if( !empty($dados['restrito']) ) makeselected($dados['restrito'], 'naofrontend'); ?> value="naofrontend">Não mostrar na página principal</option>
+                    <option <?php if( !empty($dados['restrito']) ) makeselected($dados['restrito'], 'invisivel'); ?> value="invisivel">Tornar invisível este item em todo o site</option>
+                </select>
+                <p class="explanation">
+                    Selecione acima que tipo de exibição você deseja para este conteúdo.
+                </p>
+            </td>
+        </tr>
+        <?php
+    }
+    ?>
 
     <?php
     /*
@@ -233,5 +246,5 @@
 
 <br />
 <p>
-	<a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+    <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
 </p>

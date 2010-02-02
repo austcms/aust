@@ -206,8 +206,8 @@ else {
     <h2>Gerenciar conteúdo</h2>
     <p>
         Selecione qual estrutura você deseja gerenciar.
-        <?php tt('Uma estrutura é um conjunto
-             de informações no site, como <em>Notícias</em>, <em>Artigos</em> e outros, por exemplo.') ?>
+        <?php tt('Uma estrutura é uma área do site,
+            como <em>Notícias</em>, <em>Artigos</em> e outros, por exemplo.') ?>
     </p>
     <?php
     $sites = $aust->getStructures();
@@ -240,7 +240,6 @@ else {
                             <td class="secoes">Conteúdos</td>
                             <td class="acao">Opções</td>
                             <td class="tipo">Tipo</td>
-                            <td class="acesso">Último acesso por</td>
                         </tr>
                     <?php else: ?>
                         <tr class="list">
@@ -278,7 +277,6 @@ else {
                         <tr class="list">
                             <td class="title">
                                 <span><?php echo $structure['nome'] ?></span>
-                                <?php tt('Teste') ?>
                             </td>
                             <td class="options">
                                 <ul>
@@ -297,9 +295,6 @@ else {
                                  */
                                 echo $type;
                                 ?>
-                            </td>
-                            <td class="acesso">
-                                Alexandre de Oliveira
                             </td>
                         </tr>
                         <?php endforeach; ?>
