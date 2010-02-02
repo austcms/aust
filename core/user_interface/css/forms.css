@@ -70,6 +70,8 @@ table.form {
     table.listagem tr td { padding: 5px; }
     table.listagem tr td { padding: 5px; margin: 0px;}
 
+    
+
     table.listagem tr.titulo {
             color: #cccccc;
             font-weight: bold;
@@ -97,4 +99,78 @@ form.formHelper { }
     form.formHelper div.input_date input { width: 18px; }
         form.formHelper div.input_date .input_date_year { width: 35px; }
     form.formHelper div.input_checkbox { display: table; }
+
+/*
+ * Listagem de Pessoas - table com a class listagem e pessoas
+ */
+table.pessoas { width: 505px; margin: 0px; border-collapse: collapse;}
+
+div.pessoas {
+    float: left;
+    display: table;
+    margin-right: 20px;
+}
+div.divisoria {
+    border-left: 1px solid #f4f4f4;
+    width: 1px;
+    float: left;
+    height: 350px;
+    margin: 10px 0 0 0;
+}
+
+div.mais_opcoes {
+    float: left;
+    display: table;
+    width: 170px;
+    margin-left: 20px;
+}
+    div.mais_opcoes h3 {
+        color: #b1b1b1;
+        font-size: 1.1em;
+        margin: 10px 0 15px 0;
+    }
+
+    .botao { margin: 13px 0 13px 0; }
+
+    /* Botão Nova pessoa*/
+        div.mais_opcoes .botao .bt_novapessoa a {
+            width: 120px;
+            height: 26px;
+            background: url(../img/bt_novapessoa.png) no-repeat;
+            display: block;
+            padding: 0;
+            margin: 0;
+        }
+            div.mais_opcoes .botao .bt_novapessoa a:hover {
+                background-position: 0px -26px;
+                display: block;
+            }
+
+    /* Botão Permissões*/
+            div.mais_opcoes .botao .bt_permissoes a {
+                width: 120px;
+                height: 26px;
+                background: url(../img/bt_permissoes.png) no-repeat;
+                display: block;
+                padding: 0;
+                margin: 0;
+            }
+                div.mais_opcoes .botao .bt_permissoes a:hover {
+                    background-position: 0px -26px;
+                    display: block;
+                }
+
+    /* Botão Meus Dados*/
+            div.mais_opcoes .botao .bt_dados a {
+                width: 120px;
+                height: 26px;
+                background: url(../img/bt_dados.png) no-repeat;
+                display: block;
+                padding: 0;
+                margin: 0;
+            }
+                div.mais_opcoes .botao .bt_dados a:hover {
+                    background-position: 0px -26px;
+                    display: block;
+                }
 
