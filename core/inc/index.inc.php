@@ -10,6 +10,7 @@ $widgets = new Widgets($envParams, $administrador->getId());
     Este é o sistema onde você gerencia o conteúdo do seu site.
 </p>
 
+
 <div id="painel">
 
     <?php /* Widget Group - Coluna (Primeira) */ ?>

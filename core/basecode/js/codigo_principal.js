@@ -57,9 +57,14 @@ $(document).ready(function(){
 
 
     // Hints
+    //var whichEffect = 'fade';
+    // IE7 ou mais antigo usam toggle e não fade
+    //if( $.browser.msie && parseInt($.browser.version) ) whichEffect = 'toggle';
     $("span.hint a").tooltip({
-        //tip: '#caixa_tooltip',
-        effect: 'fade',
+        //tip: 'div.tooltip',
+        effect: 'toggle',// whichEffect,
+        opacity: 1,
+        offset: [10, 10],
         events: {
             def: 'click, mouseout'
         }
