@@ -203,11 +203,14 @@ if(!empty($_GET['action'])){
  */
 else {
     ?>
-    <h2>Gerenciar conteúdo</h2>
-    <p>
-        Selecione qual estrutura você deseja gerenciar.
+    <h2>Gerenciar conteúdo
         <?php tt('Uma estrutura é uma área do site,
             como <em>Notícias</em>, <em>Artigos</em> e outros, por exemplo.') ?>
+
+    </h2>
+    <p>
+        Selecione qual estrutura você deseja gerenciar.
+
     </p>
     <?php
     $sites = $aust->getStructures();
