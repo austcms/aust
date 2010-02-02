@@ -11,6 +11,7 @@
         display: inline;
         margin: 0 5px 10px 5px;
         clear: none;
+        
     }
         div.widget_group ul.draganddrop {
             list-style: none;
@@ -24,6 +25,7 @@
             div.widget_group div.widget {
                 width: 350px; /* Tamanho dos widgets */
                 margin: 0 0 10px 0;
+                border: 1px #f6f6f6 solid;
             }
                 div.widget_group div.widget div.titulo {
                     width: 350px; height: 29px;

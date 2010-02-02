@@ -94,7 +94,7 @@ define("IMG_DIR", "core/user_interface/img/");
             <div id="altera_dados">
                 <a href="logout.php">Sair</a>
                 
-                <a href="adm_main.php?section=admins">Alterar meus dados/senha</a>
+                <a href="adm_main.php?section=admins&action=form&fm=editar">Alterar meus dados/senha</a>
                 <?php
                     /*
                      * INFORMAÇÕES QUE IRÃO DENTRO DE ALTERAR MEUS DADOS
