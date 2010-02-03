@@ -1,0 +1,18 @@
+
+
+Iniciando em 0
+==============
+
+Erros de instalação ou funcionamento do sistema
+
+    002 -> O banco de dados existe mas há tabelas não instaladas ou
+           defeituosas.
+
+Iniciando em 1
+==============
+
+Erros de acesso por usuários
+
+    101 -> Dados inválidos para login (login, senha)
+    102 -> Usuário existente mas está bloqueado
+    103 -> Usuário foi bloqueado enquanto acessava o gerenciador

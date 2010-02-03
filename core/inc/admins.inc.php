@@ -1,46 +1,19 @@
 <?php
-	
 
-if(!empty($_GET['action'])){
-    include('admins.inc/'.$_GET['action'].'.inc.php');
-} else {
-
-    ?>
-<div class="pessoas">
-    <h2>Pessoas</h2>
-    <p>
-        Nesta página você pode gerenciar todos os usuários que administram o site.
-    </p>
-    <p>
-        A seguir, a lista das pessoas cadastrados.
-    </p>
-<?php
 /*
- * LISTAR ADMINS
- *
- * -> Lista os usuários do sistema
+ * BLOQUEAR/DESBLOQUEAR PESSOA
  */
-$w = (!empty($_GET['w'])) ? $_GET['w'] : 'NULL';
-$sql = "SELECT *
-        FROM admins
-        WHERE
-            id='$w'";
-$query = $conexao->query($sql);
-if( !empty($query) ){
-    $dados = $query[0];
-}
-
 if( !empty($_GET['block'])
-    AND $_GET['block'] == "block"
-    AND (!empty($dados['login']) AND $dados["login"] <> "kurko"))
+    AND $_GET['block'] == "block")
 {
 
     $sql = "UPDATE
                 admins
             SET
-                tipo='0'
+                is_blocked='1'
             WHERE
-                id='$w'
+                id='$w' AND
+                tipo<>( SELECT id FROM admins_tipos WHERE nome IN ('Webmaster', 'Root') )
             ";
 
     // se executar query, EscreveBoxMensagem mostra mensagem padrão
@@ -64,14 +37,7 @@ if( !empty($_GET['block'])
     $sql = "UPDATE
                 admins
             SET
-                tipo=
-                (
-                    SELECT
-                        id
-                    FROM
-                        admins_tipos
-                    WHERE
-                        nome='Colaborador')
+                is_blocked=0
             WHERE
                 id='$w'
             ";
@@ -91,24 +57,58 @@ if( !empty($_GET['block'])
 	}
 	EscreveBoxMensagem($status);
 }
-?>
 
-<?php
-$sql = "SELECT
-            admins.id, admins.nome, admins.login, admins.tipo AS atipo,
-            admins_tipos.nome AS tipo, admins_tipos.id AS aid
-        FROM
-            admins
-        LEFT JOIN
-            admins_tipos
-        ON
-            admins.tipo=admins_tipos.id
-        ";
-$query = $conexao->query($sql);
-//echo $sql;
-?>
-<table class="listagem pessoas">
+if(!empty($_GET['action'])){
+    if( $_GET['action'] == 'edit' ){
+        $_GET['action'] = 'form';
+    }
+    include('admins.inc/'.$_GET['action'].'.inc.php');
+} else {
 
+    ?>
+    <div class="pessoas">
+        <h2>Pessoas</h2>
+        <p>
+            Nesta página você pode gerenciar todos os usuários que administram o site.
+        </p>
+        <p>
+            A seguir, a lista das pessoas cadastrados.
+        </p>
+    <?php
+    /*
+     * LISTAR ADMINS
+     *
+     * -> Lista os usuários do sistema
+     */
+    $w = (!empty($_GET['w'])) ? $_GET['w'] : 'NULL';
+    $sql = "SELECT *
+            FROM admins
+            WHERE
+                id='$w'";
+    $query = $conexao->query($sql);
+    if( !empty($query) ){
+        $dados = $query[0];
+    }
+    ?>
+
+    <?php
+    $sql = "SELECT
+                admins.*,
+                admins.id, admins.nome, admins.login, admins.tipo AS atipo,
+                admins_tipos.nome AS tipo, admins_tipos.id AS aid
+            FROM
+                admins
+            LEFT JOIN
+                admins_tipos
+            ON
+                admins.tipo=admins_tipos.id
+            ORDER BY aid ASC
+            ";
+    $query = $conexao->query($sql);
+    //echo $sql;
+
+    ?>
+    <table class="listagem pessoas">
     <tr class="titulo">
         <td>
 
@@ -116,7 +116,6 @@ $query = $conexao->query($sql);
         <td>
             Nome completo
         </td>
-        
         <td>
             Tipo
         </td>
@@ -124,98 +123,99 @@ $query = $conexao->query($sql);
             Opções
         </td>
     </tr>
-<?php
-foreach($query as $dados){
-?>
-    <tr class="conteudo">
-        <td>
-            <?php echo $dados["id"]?>
-        </td>
-        <td>
-            <?php echo $dados["nome"]?>
-        </td>
-       
-        <td>
-            <?php if($dados["atipo"] == '0') echo 'Bloqueado'; else echo $dados["tipo"]; ?>
-        </td>
-        <td>
-            <a href="adm_main.php?section=admins&action=form&fm=editar&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;"><img src="core/user_interface/img/edit.png" alt="Editar" border="0" /></a>
-            <?php
-            if($dados["login"] <> "kurko"){
-            ?>
-            <a href="adm_main.php?section=admins&action=ver_info&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;"><img src="core/user_interface/img/lupa.png" alt="Ver Informações" border="0" /></a>
-            
-            <?php } ?>
+    <?php
+    foreach($query as $dados){
+    ?>
+        <tr class="conteudo">
+            <td>
+                <?php echo $dados["id"]?>
+            </td>
+            <td>
+                <?php echo $dados["nome"]?>
+            </td>
+
+            <td>
+                <?php if($dados["atipo"] == '0') echo 'Bloqueado'; else echo $dados["tipo"]; ?>
+            </td>
+            <td>
                 <?php
                 if($dados["login"] <> "kurko"){
-                    if($dados["atipo"] == "0"){ ?>
-                        <a href="adm_main.php?section=admins&action=listar&block=unblock&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;"><img src="img/layoutv1/unblock.jpg" alt="Desbloquear" border="0" /></a>
-                    <?php } else { ?>
-                        <a href="adm_main.php?section=admins&action=listar&block=block&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;"><img src="core/user_interface/img/block.png" alt="Bloquear" border="0" /></a>
-                    <?php } ?>
-                <?php } ?>
-        </td>
-    </tr>
-<?php
-}
-echo '</table>';
-?>
+                    ?>
+                    <a href="adm_main.php?section=admins&action=edit&fm=editar&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;" title="Editar"><img src="core/user_interface/img/edit.png" alt="Editar" border="0" /></a>
 
-<p style="margin-top: 15px;">
-    <a href="adm_main.php?section=admins"><img src="img/layoutv1/voltar.gif" border="0" /></a>
-</p>
+                <?php
+                }
+                ?>
+                <a href="adm_main.php?section=admins&action=ver_info&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;" title="Ver Informações"><img src="core/user_interface/img/lupa.png" alt="Ver Informações" border="0" /></a>
+                <?php
+                if( $dados["login"] <> "kurko"
+                    AND strtolower($dados["tipo"]) <> "webmaster"
+                    AND (
+                        in_array( $administrador->LeRegistro("tipo"), $navPermissoes['admins']['form'] )
+                        OR strtolower($dados["tipo"]) == "colaborador" 
+                    )
+                ){
+                    if($dados["is_blocked"] == "1"){
+                        ?>
+                        <a href="adm_main.php?section=admins&block=unblock&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;" title="Desbloquear usuário"><img src="img/layoutv1/unblock.jpg" alt="Desbloquear usuário" border="0" /></a>
+                        <?php
+                    } else {
+                        ?>
+                        <a href="adm_main.php?section=admins&block=block&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;" title="Bloquear usuário"><img src="core/user_interface/img/block.png" alt="Bloquear usuário" border="0" /></a>
+                        <?php
+                    }
+                    ?>
+                    <?php
+                }
+                ?>
+            </td>
+        </tr>
+    <?php
+    }
+    ?>
+    </table>
 
-</div>
+    <p style="margin-top: 15px;">
+        <a href="adm_main.php?section=admins"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+    </p>
 
-<div class="divisoria">
-</div>
-<div class="mais_opcoes">
-    <h3>Mais opções</h3>
-    
-    <div class="botao">
-        <div class="bt_novapessoa">
-            <a href="adm_main.php?section=admins&action=form&fm=criar"></a>
-        </div>
     </div>
-    <div class="botao">
-        <div class="bt_permissoes">
-            <a href="adm_main.php?section=permissoes"></a>
-        </div>
+
+    <div class="divisoria">
     </div>
-    <div class="botao">
-        <div class="bt_dados">
-            <a href="adm_main.php?section=admins&action=form&fm=editar"></a>
+    <div class="mais_opcoes">
+        <h3>Mais opções</h3>
+        <?php
+        /*
+         * Verifica permissões
+         */
+        /*
+         * Nova pessoa
+         */
+        if( in_array( $administrador->LeRegistro("tipo"), $navPermissoes['admins']['form'] ) ){
+            ?>
+            <div class="botao">
+                <div class="bt_novapessoa">
+                    <a href="adm_main.php?section=admins&action=form&fm=criar"></a>
+                </div>
+            </div>
+            <?php
+        }
+        ?>
+        <div class="botao">
+            <div class="bt_permissoes">
+                <a href="adm_main.php?section=permissoes"></a>
+            </div>
         </div>
+        <div class="botao">
+            <div class="bt_dados">
+                <a href="adm_main.php?section=admins&action=edit&fm=editar"></a>
+            </div>
+        </div>
+
+
     </div>
-    
-    
-</div>
 
     <?php
 }
-?>
-<?php /*
- *
- *<div class="action_options">
-        <ul style="list-style: none;">
-        <li>
-            <a href="adm_main.php?section=admins&action=form&fm=criar" style="text-decoration: none;"><img src="img/layoutv1/adicionar.jpg" border="0" /></a>
-            <a href="adm_main.php?section=admins&action=form&fm=criar">Cadastrar um novo usuário</a>
-        </li>
-        <li>
-            <a href="adm_main.php?section=admins&action=form&fm=editar" style="text-decoration: none;"><img src="img/layoutv1/edit.jpg" border="0" /></a>
-            <a href="adm_main.php?section=admins&action=form&fm=editar">Editar suas próprias informações</a>
-        </li>
-        <li class="sem_icone">
-            <a href="adm_main.php?section=admins&action=passw">Minha senha</a>
-        </li>
-        <li>
-            <a href="adm_main.php?section=admins&action=listar" style="text-decoration: none;"><img src="img/layoutv1/list.jpg" border="0" /></a>
-            <a href="adm_main.php?section=admins&action=listar">Listar e editar os usuários cadastrados</a>
-        </li>
-        </ul>
-
-    </div>
- *
- */
 ?>

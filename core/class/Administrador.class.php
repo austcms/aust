@@ -14,24 +14,39 @@ class Administrador {
 
     function __construct($conexaoClass, $location = '') {
         $this->conexao = $conexaoClass;
-        $this->VerificaSession();
         $this->tipo = $this->LeRegistro('tipo');
+        $this->VerificaSession();
     }
-    /*********************************
-    *
-    *	funções de ação
-    *
-    *********************************/
 
+    /**
+     * type()
+     *
+     * Retorna o tipo do usuário atual.
+     *
+     * @return <string>
+     */
+    public function type(){
+        return $this->tipo;
+    } // end type()
 
-    /*********************************
-    *
-    *	funções de verificaçãoo ou leitura
-    *
-    *********************************/
+    /**
+     * tipo() alias-> type()
+     *
+     * @return <string>
+     */
+    public function tipo(){
+        return $this->type();
+    } // end tipo()
 
     // verifica se o usuário está logado ou não e redireciona
     function VerificaSession() {
+        if( !empty($_SESSION['login']['is_blocked'])){
+            if($_SESSION['login']['is_blocked'] == '1'){
+                header("Location: logout.php?status=1022");
+                exit();
+            }
+        }
+
         $paginaatual = basename($_SERVER['PHP_SELF']);
         if($paginaatual <> 'index.php') {
             if(empty($_SESSION["loginid"]))
@@ -40,7 +55,6 @@ class Administrador {
             if(!empty($_SESSION["loginid"]))
                 header("Location: adm_main.php");
         }
-
     }
 
     /**
@@ -76,6 +90,7 @@ class Administrador {
         $query = $this->conexao->query($sql);
         $dados = $query[0];
         $_SESSION['login'.$campo] = $dados[$campo];
+        $_SESSION['login']['is_blocked'] = $dados['is_blocked'];
         return $dados[$campo];
 
     }

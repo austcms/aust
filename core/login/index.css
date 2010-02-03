@@ -12,8 +12,8 @@ body {
     color: #666666;
 }
 
-p { margin-bottom: 15px; font-size: 1em; line-height: 18px; }
-p.incorrect { font-style: italic; text-align: center; font-weight: bold; color: #f50079 }
+p { margin-bottom: 15px; text-align: center; font-size: 1em; line-height: 18px; }
+p.incorrect { font-style: italic; font-weight: bold; color: #f50079 }
 
 h1 {
     text-align: center; margin: 0px auto; font-size: 2.2em;
