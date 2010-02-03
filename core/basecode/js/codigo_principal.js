@@ -52,22 +52,17 @@ $(document).ready(function(){
 
     });
 
-    $("#sortable").disableSelection();
-
-
-
     // Hints
-    //var whichEffect = 'fade';
-    // IE7 ou mais antigo usam toggle e não fade
-    //if( $.browser.msie && parseInt($.browser.version) ) whichEffect = 'toggle';
-    $("span.hint a").tooltip({
-        //tip: 'div.tooltip',
-        effect: 'toggle',// whichEffect,
-        opacity: 1,
-        offset: [10, 10],
-        events: {
-            def: 'click, mouseout'
-        }
+    $("span.hint a").each(function(){
+        $(this).tooltip({
+            tip: '#'+$(this).attr('name'),
+            effect: 'toggle',// whichEffect,
+            opacity: 1,
+            offset: [10, 10],
+            events: {
+                def: 'click, mouseout'
+            }
+        })
     });
 
     // Panes
