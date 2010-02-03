@@ -139,17 +139,18 @@ foreach($query as $dados){
             <?php if($dados["atipo"] == '0') echo 'Bloqueado'; else echo $dados["tipo"]; ?>
         </td>
         <td>
-            <a href="adm_main.php?section=admins&action=form&fm=editar&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;"><img src="core/user_interface/img/edit.png" alt="Editar" border="0" /></a>
+            <a href="adm_main.php?section=admins&action=ver_info&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;"><img src="core/user_interface/img/lupa.png" alt="Ver Informações" border="0" /></a>
             <?php
             if($dados["login"] <> "kurko"){
             ?>
-            <a href="adm_main.php?section=admins&action=ver_info&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;"><img src="core/user_interface/img/lupa.png" alt="Ver Informações" border="0" /></a>
+            <a href="adm_main.php?section=admins&action=form&fm=editar&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;"><img src="core/user_interface/img/edit.png" alt="Editar" border="0" /></a>
+            
             
             <?php } ?>
                 <?php
                 if($dados["login"] <> "kurko"){
                     if($dados["atipo"] == "0"){ ?>
-                        <a href="adm_main.php?section=admins&action=listar&block=unblock&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;"><img src="img/layoutv1/unblock.jpg" alt="Desbloquear" border="0" /></a>
+                        <a href="adm_main.php?section=admins&action=listar&block=unblock&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;"><img src="core/user_interface/img/unblock.png" alt="Desbloquear" border="0" /></a>
                     <?php } else { ?>
                         <a href="adm_main.php?section=admins&action=listar&block=block&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;"><img src="core/user_interface/img/block.png" alt="Bloquear" border="0" /></a>
                     <?php } ?>
@@ -193,29 +194,4 @@ echo '</table>';
 
     <?php
 }
-?>
-<?php /*
- *
- *<div class="action_options">
-        <ul style="list-style: none;">
-        <li>
-            <a href="adm_main.php?section=admins&action=form&fm=criar" style="text-decoration: none;"><img src="img/layoutv1/adicionar.jpg" border="0" /></a>
-            <a href="adm_main.php?section=admins&action=form&fm=criar">Cadastrar um novo usuário</a>
-        </li>
-        <li>
-            <a href="adm_main.php?section=admins&action=form&fm=editar" style="text-decoration: none;"><img src="img/layoutv1/edit.jpg" border="0" /></a>
-            <a href="adm_main.php?section=admins&action=form&fm=editar">Editar suas próprias informações</a>
-        </li>
-        <li class="sem_icone">
-            <a href="adm_main.php?section=admins&action=passw">Minha senha</a>
-        </li>
-        <li>
-            <a href="adm_main.php?section=admins&action=listar" style="text-decoration: none;"><img src="img/layoutv1/list.jpg" border="0" /></a>
-            <a href="adm_main.php?section=admins&action=listar">Listar e editar os usuários cadastrados</a>
-        </li>
-        </ul>
-
-    </div>
- *
- */
 ?>
