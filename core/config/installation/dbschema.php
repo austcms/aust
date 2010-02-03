@@ -67,9 +67,9 @@ $dbSchema['admins_tipos'] = array(
     ),
     'dbSchemaSQLQuery' => array(
         "INSERT INTO admins_tipos(nome,data,publico) VALUES('Webmaster','".date("Y-m-d H:i:s")."',0)",
-        "INSERT INTO admins_tipos(nome,publico,nome_abrev,data,descricao) VALUES('Administrador',1,'Adm','".date("Y-m-d H:i:s")."','O Administrador controla todo o site e gerencia moderadores e colaboradores. Somente administradores podem cadastrar outros usuários.')",
-        "INSERT INTO admins_tipos(nome,publico,data,descricao) VALUES('Moderador',1,'".date("Y-m-d H:i:s")."','O Moderador controla e gerencia todo o conteúdo. Não podem adicionar outros usuários ou configurar as opções.')",
-        "INSERT INTO admins_tipos(nome,publico,data,descricao) VALUES('Colaborador',1,'".date("Y-m-d H:i:s")."','O Colaborador pode somente inserir conteúdo.')",
+        "INSERT INTO admins_tipos(nome,publico,nome_abrev,data,descricao) VALUES('Administrador',1,'Adm','".date("Y-m-d H:i:s")."','Administradores têm total acesso ao gerenciar. Somente eles têm poder para criar novos usuários, alterar hierarquias e configurar o gerenciador.')",
+        "INSERT INTO admins_tipos(nome,publico,data,descricao) VALUES('Moderador',1,'".date("Y-m-d H:i:s")."','Moderadores têm poder de restringir o acesso ao gerenciamento de conteúdo e bloquear colaboradores. Ele que define que usuários podem escrever notícias, por exemplo.')",
+        "INSERT INTO admins_tipos(nome,publico,data,descricao) VALUES('Colaborador',1,'".date("Y-m-d H:i:s")."','Colaboradores podem somente gerenciar conteúdos. Não podem gerenciar pessoas nem modificar configurações importantes.')",
     )
 );
 
