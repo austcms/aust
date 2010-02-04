@@ -147,9 +147,6 @@ define("IMG_DIR", "core/user_interface/img/");
             <br />
                 <a href="adm_main.php?section=conf_modulos" class="restrito">Configurar Módulos</a><?php
             }
-            if(in_array( $administrador->LeRegistro('tipo'), array('Webmaster', 'Administrador') )){
-                ?><a href="adm_main.php?section=permissoes" class="restrito">Permissões</a><?php
-            }
             ?>
         </div>
     </div>

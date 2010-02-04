@@ -52,17 +52,17 @@ $(document).ready(function(){
 
     });
 
-    $("#sortable").disableSelection();
-
-
-
     // Hints
-    $("span.hint a").tooltip({
-        //tip: '#caixa_tooltip',
-        effect: 'fade',
-        events: {
-            def: 'click, mouseout'
-        }
+    $("span.hint a").each(function(){
+        $(this).tooltip({
+            tip: '#'+$(this).attr('name'),
+            effect: 'toggle',// whichEffect,
+            opacity: 1,
+            offset: [10, 10],
+            events: {
+                def: 'click, mouseout'
+            }
+        })
     });
 
     // Panes

@@ -10,7 +10,9 @@
     <link rel="stylesheet" href="core/login/index.css" type="text/css" />
     <script type="text/javaScript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>libs/jquery.js"></script>
     <script type="text/javascript">
-
+        $(document).ready(function(){
+            $('#login').focus();
+        });
         function formFadeOut(){
             $('.inside').fadeOut('fast');
             setTimeout( function(){
@@ -33,20 +35,30 @@
     <h1>Gerenciador Restrito</h1>
     <?php
     if (!empty($_GET['status'])){
-        if ($_GET['status'] == "invalido"){
+        /*
+         * Senha incorreta
+         */
+        if ($_GET['status'] == "101"){
             echo '<p class="incorrect">Dados incorretos.</p>';
+        }
+        /*
+         * Usuário existente mas bloqueado
+         */
+        else if ($_GET['status'] == "102"){
+            echo '<p class="incorrect">Sinto muito, seu acesso está bloqueado.</p>';
+        }
+        /*
+         * Usuário existente mas bloqueado enquanto navegava
+         */
+        else if ($_GET['status'] == "1022"){
+            echo '<p class="incorrect">Ops... Seu acesso foi bloqueado '.
+                'por um administrador neste exato momento.</p>';
+            echo '<p>Entre em contato com um administrador.</p>';
         }
     }
 
     ?>
 
-    <?php /*
-    <p>
-        Se voc&ecirc; tem uma senha de administrador, use-a abaixo
-        para acessar a &aacute;rea restrita e gerenciar o banco de dados:
-    </p>
-     *
-     */?>
     <form method="post" name="login_form" style="margin: 0;" action="index.php?login=verify"
           onsubmit="return formFadeOut();">
 
