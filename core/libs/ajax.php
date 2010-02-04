@@ -4,6 +4,8 @@
  *
  * Carrega arquivos do diretório libs
  */
+session_name("aust");
+session_start();
 
 /**
  * Caminho deste arquivo até o root
@@ -54,11 +56,13 @@ include(THIS_TO_BASEURL.LIBS_DIR.'aust/aust_func.php');
 
 // Conexão
 $conexao = new Conexao($dbConn);
+$administrador = new Administrador($conexao);
+$aust = new Aust($conexao);
 
-if($_GET['lib'] == 'user_permissoes'){
-    include('ajax/user_permissoes.php');
-} elseif($_GET['lib'] == 'widgets'){
-    include('ajax/widgets.php');
+if( is_file('ajax/aj_'.$_GET['lib'].'.php') ){
+    include('ajax/aj_'.$_GET['lib'].'.php');
+} else {
+    echo '';
 }
 
 //print_r($_POST);

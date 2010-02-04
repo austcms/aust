@@ -1,6 +1,5 @@
 <?php
 define("IMG_DIR", "core/user_interface/img/");
-
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -50,6 +49,7 @@ define("IMG_DIR", "core/user_interface/img/");
     ?>
     <script type="text/javascript">
         var userId = '<?php echo $administrador->getId() ?>';
+        var IMG_DIR = '<?php echo IMG_DIR ?>';
     </script>
     <script language="javascript" type="text/javascript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>tiny_mce/tiny_mce.js"></script>
     <script language="javascript" type="text/javascript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>tiny_mce_loader.js"></script>
@@ -58,6 +58,7 @@ define("IMG_DIR", "core/user_interface/img/");
     <script language="JavaScript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>libs/jquery.js"></script>
     <script language="JavaScript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>libs/jquery.tools.min.js"></script>
     <script language="JavaScript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>libs/jquery-ui-1.7.2.custom.min.js"></script>
+    <script language="JavaScript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>libs/plugins.js"></script>
     <?php /* <script src="http://cdn.jquerytools.org/1.1.2/full/jquery.tools.min.js"></script> */ ?>
 
     <script language="JavaScript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>navegation.js"></script>
@@ -177,48 +178,8 @@ define("IMG_DIR", "core/user_interface/img/");
 </div>
 
 
- <?php
- /*
-  * LIGHTBOX - Criar nova categoria
-  */
- ?>
-
-<div id="lb_categoria" class="window">
-    <div class="header">
-        <h2>Nova Categoria</h2>
-        <a href="#" class="close"></a>
-    </div>
-    <div class="content">
-        <table>
-            <tr>
-                <td valign="top" class="titulo">Nome: </td>
-                <td>
-                    <INPUT TYPE="text" NAME="frmnome">
-                    <p class="explanation">
-                        Digite o nome da categoria. (Começa com letra maiúscula e não leva
-                        ponto final)
-                    </p>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                <center><INPUT TYPE="submit" VALUE="Entrar"></center></td>
-            </tr>
-        </table>
-
-    </div>
-    <div class="footer">
-    </div>
-</div>
-
-   
 <div id="mask">
 </div>
-<?php
-/*
- * FIM DO LIGHTBOX
- */
-?>
 
 
 </body>

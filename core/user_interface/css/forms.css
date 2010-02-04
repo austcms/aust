@@ -14,7 +14,6 @@
 /*
  * STANDARDS
  */
-    form label { float: left; font-size: 1.0em; font-weight: bold; margin-bottom: 10px; color: #333333; }
     form div.input { display: inline; width: 100%; float: left; }
     form input.text { width: 380px; font-size: 1.3em; height: 22px; padding: 0px 2px; } /* standard */
     form select { font-size: 1.2em; height: 24px; }
@@ -53,6 +52,10 @@
 
         form div.input_painel div.containner div.options { display: table; }
 
+/* Lightbox */
+    .window .lb_content table.form td label { line-height: 24px; margin: 0 5px 0 0; }
+    .window .lb_content table.form td input.text { font-size: 1.3em; font-weight: bold; width: 240px; }
+
 /* MÓDULOS */
 /* Table de forms de módulos */
 table.form {
@@ -61,8 +64,7 @@ table.form {
 }
     table.form td.first { width: 180px; }
     table.form label { font-weight: bold; color: #444444; }
-    table.form input.text,
-        table.form input[type=text] { font-size: 1.3em; font-weight: bold; width: 380px; }
+    table.form input.text { font-size: 1.3em; font-weight: bold; width: 380px; }
 
 /* Table Listagem */
     /* Acima de cada listagem há um painel de controle para excluir, bloquear itens, etc */

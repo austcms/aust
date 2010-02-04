@@ -90,14 +90,9 @@
 
 
             </div>
-            <div class="nova_categoria" style="float: left;">
-                <?php
-                /*
-                 * Link para inserir nova categoria
-                 */
-                ?>
-                <a href="#box" name="modal" class="lb_categoria"></a>
-            </div>
+            <?php
+            lbCategoria($austNode);
+            ?>
         </td>
     </tr>
     <tr>

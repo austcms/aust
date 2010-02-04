@@ -7,7 +7,7 @@ body {
     font-size: 76%;
 }
 
-a { text-decoration: underline; }
+a { text-decoration: underline; outline: none; }
 a:hover { text-decoration: none; }
 
 /* <A> ESPECIAL */
