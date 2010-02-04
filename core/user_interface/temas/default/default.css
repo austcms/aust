@@ -41,10 +41,10 @@ div#navegacao {
     background: #065796;
 }
     div#menu ul li a {
-        background: #f8f8f8;
+        background: #efefef;
     }
         div#menu ul li a:hover {
-            background: #fcfcfc;
+            background: white;
         }
 	div#menu ul li a.selecionado {
         background: white;
