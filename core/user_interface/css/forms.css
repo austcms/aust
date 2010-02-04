@@ -70,7 +70,7 @@ table.form {
     /* Acima de cada listagem há um painel de controle para excluir, bloquear itens, etc */
     div.painel_de_controle { margin-bottom: 10px; padding: 0; float: right; }
     /* Tabela para listagem, seja de conteúdo ou usuários */
-    table.listagem { width: 100%; margin: 0px; border-collapse: collapse;}
+table.listagem { width: 100%; margin: 0px; border-collapse: collapse;}
     table.listagem tr td { padding: 5px; }
     table.listagem tr td { padding: 5px; margin: 0px;}
 

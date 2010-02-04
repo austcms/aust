@@ -38,11 +38,19 @@ function tt($str = ''){
     return tooltip($str);
 }
 
-function lbCategoria($austNode=''){
-    if( empty($austNode) )
-        return false;
+function lbCategoria($userObject=''){
 
     $random = substr( sha1( rand(0, 100) ), rand(5,20));
+    global $administrador;
+    /**
+     * @todo - definir melhor quais tipos de usuários podem
+     * acessar determnadas áreas do site. $navPermissoes já
+     * é bom, mas por exemplo, falta algo para esta função, por
+     * exemplo.
+     */
+    if( !in_array(strtolower($administrador->tipo), array('webmaster', 'root', 'administrador', 'moderador')) ){
+        return false;
+    }
     ?>
 
     <div id="lb_categoria_<?php echo $random; ?>" class="window lb_categoria">
@@ -60,7 +68,9 @@ function lbCategoria($austNode=''){
                     <td>
                         <input name="lb[frmcategoria]" id="lb_input_categoria_<?php echo $random; ?>" class="text lb_focus" />
                         <p class="explanation">
-                            Digite o nome da categoria. (Começa com letra maiúscula e não leva
+                            Digite o nome de uma nova categoria. Ex.: 'Geral'
+                        </p>
+                        <p class="explanation">(Começa com letra maiúscula e não leva
                             ponto final)
                         </p>
                     </td>
