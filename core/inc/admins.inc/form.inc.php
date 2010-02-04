@@ -75,7 +75,7 @@ if($fm == 'editar'){
                     $query = $conexao->query($sql);
                     foreach($query as $result){
                         ?>
-                        <input type="radio" <?php if($fm == 'editar') makechecked($result['id'], $dados['tipo']); else echo 'checked'; ?> name="frmhierarquia" value="<?php echo $result['id']?>" onclick="javascript: form_hierarquia(this.value);" /> <?php echo $result['nome']?><br />
+                        <input type="radio" <?php if($fm == 'editar') makechecked($result['id'], $dados['tipo']); else echo 'checked'; ?> name="frmtipo" value="<?php echo $result['id']?>" onclick="javascript: form_hierarquia(this.value);" /> <?php echo $result['nome']?><br />
                         <?php
                     }
                     ?>
