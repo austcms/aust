@@ -311,6 +311,7 @@ else {
     </div><?php // FIM DO DIV PAINEL GERENCIAR ?>
 
     <br clear="all" />
+    <br clear="all" />
 	<div class="action_options">
         <?php
         //pr($aust->getStructures());

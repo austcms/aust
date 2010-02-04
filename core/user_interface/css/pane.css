@@ -73,7 +73,7 @@ table.pane_listing {
 /* DIV.BACKGROUND */
 /* CONTEÚDO CONFIGURAÇÕES */
 
-div.panes div.background { padding: 10px 10px; border-bottom: 1px solid #f9f9f9; }
+div.panes div.background { padding: 10px 10px; border: 1px solid #f9f9f9; }
 
 /* Form */
     div.panes div.background td.first { vertical-align: top; }
