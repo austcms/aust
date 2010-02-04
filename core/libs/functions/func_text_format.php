@@ -26,11 +26,13 @@
  */
 function tooltip($str = ''){
     if( !empty($str) ){
+        $random = substr( sha1( rand(0, 100) ), rand(5,20));
         ?>
         <span class="hint">
-            <a href="javascript: void(0)" title="Saiba mais">&nbsp;</a>
 
-            <div class="tooltip">
+            <a href="javascript: void(0)" class="tooltip-trigger" name="<?php echo $random;?>">&nbsp;</a>
+
+            <div class="tooltip" id="<?php echo $random;?>">
                 <div class="top"></div>
                 <div class="text"><p><?php echo $str ?></p></div>
                 <div class="bottom"></div>

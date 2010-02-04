@@ -2,7 +2,7 @@
  * INTERROGAÇÃO
  */
 span.hint {
-    display: inline-block;
+    display: relative;
     width: 20px;
     height: 20px;
 }
@@ -10,9 +10,10 @@ h2 span.hint a {
     line-height: 14px;
     margin: 0 0 0px 0;
 }
-    span.hint a {
+    span.hint a.tooltip-trigger {
         background: url(../img/interrogacao.png) no-repeat top;
         display: inline-block;
+        position: relative;
         width: 20px;
         height: 20px;
         text-decoration: none;
@@ -31,7 +32,7 @@ h2 span.hint a {
 /*
  * TOOLTIP
  */
-span.hint div.tooltip {
+div.tooltip {
     display: none;
     background: transparent;
     margin: 0 0 0 80px;
@@ -42,7 +43,8 @@ span.hint div.tooltip {
     font-size: 12px;
     cursor: auto;
 }
-    span.hint div.tooltip div.top {
+
+    div.tooltip div.top {
         background: url(../img/top_tooltip.png);
         margin: 0px;
         width: 255px;
@@ -50,19 +52,19 @@ span.hint div.tooltip {
         margin-left: 1px;
     }
 
-    span.hint div.tooltip div.text {
+    div.tooltip div.text {
         background: url(../img/meio_tooltip.png) repeat-y;
         margin: 0;
         width: 215px;
         padding: 5px 20px 5px 20px;
         color: #646464;
     }
-        span.hint div.tooltip div.text p {
+        div.tooltip div.text p {
             margin: 0 5px 0 5px;
             padding-top: 0;
         }
 
-    span.hint div.tooltip div.bottom {
+    div.tooltip div.bottom {
         background: url(../img/bottom_tooltip.png);
         margin: 0px;
         width: 255px;
