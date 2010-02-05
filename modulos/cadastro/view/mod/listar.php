@@ -172,8 +172,8 @@ if( $fields > 0 ){
                                     echo '</a>';
                                     if( $precisa_aprovacao['valor'] == '1'
                                          AND (
-                                             $dados['approved'] == 0
-                                             OR empty($dados['approved']) )
+                                             $dados['des_approved'] == 0
+                                             OR empty($dados['des_approved']) )
                                         )
                                     {
                                         echo '<span style="font-size: 10px;"> (necessita aprovação)</span>';

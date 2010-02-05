@@ -31,10 +31,11 @@
 *********************************/
 ?>
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?section=<?php echo $_GET['section'];?>&action=actions&aust_node=<?php echo $_GET['aust_node'];?>">
-<a name="list">&nbsp;</a>
+<a name="list"></a>
 <div class="painel_de_controle"><input type="submit" name="deletar" value="Deletar selecionados" />
 </div>
-<table cellspacing="0" cellpadding="10" class="listagem">
+<br clear="all" />
+<table cellspacing="0" cellpadding="0" border="0" class="listagem">
     <tr class="titulo">
         
         <?php for($i=0; $i< count($modulo->config['contentHeader']['campos']); $i++) { ?>
