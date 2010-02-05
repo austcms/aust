@@ -87,11 +87,11 @@
 /** Link nova categoria **/
 div.nova_categoria {
     margin-left: 2px;
-    margin-bottom: 1px;
+    margin-bottom: 0px;
 }
      div.nova_categoria a {
-        width: 114px;
-        height: 25px;
+        width: 109px;
+        height: 21px;
         background: url(../img/nova_categoria.png) no-repeat;
         display: block;
         padding: 0;
@@ -99,6 +99,6 @@ div.nova_categoria {
         float: left;
     }
          div.nova_categoria a:hover {
-            background-position: 0px -25px;
+            background-position: 0px -22px;
             display: block;
         }
