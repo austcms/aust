@@ -18,6 +18,9 @@ class ModController extends ModsController
         //$this->autoRender= false;
     }
 
+    public function actions(){
+    }
+
     /**
      * formulário
      */

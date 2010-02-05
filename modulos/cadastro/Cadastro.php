@@ -222,7 +222,7 @@ class Cadastro extends Modulos {
                         ".$tP.".id,
                         $mostrar
                         ".implode(", ", $leftJoinCampos).$virgula."
-                        ".$tP.".approved AS des_aprovado
+                        ".$tP.".approved AS des_approved
                     FROM
                         ".$est["tabela"][0]." AS ".$tP."
 

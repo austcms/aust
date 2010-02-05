@@ -9,8 +9,7 @@
  * É padrão e pode ser copiado para todos os forms
  */
 ?>
-<div style="border-top: 1px dashed silver; padding: 15px 0 0 0; margin: 15px 0 15px 0; display: table; ">
-<table width="670" border="0" cellpadding="0" cellspacing="0">
+<table border="0" cellpadding="0" cellspacing="0" class="form">
 <?php
     /**
      * Lê somente módulos que contém habilidade Embed
@@ -96,4 +95,3 @@
     }
 ?>
 </table>
-</div>
