@@ -142,6 +142,7 @@ div#bottom {
 	font-size: 1px;
 	margin: 0 auto;
 }
+
  
 /*
  * Links Permissões e configurar módulos
@@ -160,7 +161,12 @@ div#link_bottom div.links_admin {
     text-align: left;
 }
 div#link_bottom div.links_admin a {
+    padding-left: 0px;
+}
+div#link_bottom span.para_webmaster {
     padding-left: 15px;
+    color: silver;
+    font-size: 0.9em;
 }
 
 /*

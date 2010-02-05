@@ -17,7 +17,6 @@ table.pane_listing {
     float: left;
 }
     table.pane_listing tr.header {
-        background: #edf6ff;
         border-bottom: 1px solid #eeeeee;
         height: 30px;
         margin: 0px; padding: 0;
