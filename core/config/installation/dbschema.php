@@ -76,11 +76,12 @@ $dbSchema['admins_tipos'] = array(
 
 $dbSchema['categorias'] = array(
     'id' => 'int NOT NULL auto_increment',
-    'nome' => 'text',
-    'nome_encoded' => 'text',
-    'patriarca' => 'text',
-    'patriarca_encoded' => 'text',
+    'nome' => 'varchar(240)',
+    'nome_encoded' => 'varchar(240)',
+    'patriarca' => 'varchar(240)',
+    'patriarca_encoded' => 'varchar(240)',
     'subordinadoid' => 'int',
+    'subordinado_nome_encoded' => 'varchar(240)',
     'descricao' => 'text',
     'classe' => 'varchar(200)',
     'tipo' => 'varchar(200)',

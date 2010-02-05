@@ -11,24 +11,157 @@
  * @since v0.1.5, 30/05/2009
  */
 
-class Aust
-{
+class Aust {
 
     /**
      *
      * @var string Tabela padrão do sistema Aust
      */
-	static $austTable = 'categorias';
-	protected $AustCategorias = Array();
+    static $austTable = 'categorias';
+    protected $AustCategorias = Array();
     /**
      *
      * @var class Classe responsável pela conexão com o banco de dados
      */
     protected $conexao;
 
-    function __construct(&$conexao){
+    public $_recursiveLimit = 50;
+    public $_recursiveCurrent = 1;
+
+    function __construct(&$conexao) {
         $this->conexao = &$conexao;
         unset($this->AustCategorias);
+    }
+
+    /*
+     *
+     * CATEGORIAS
+     *
+    */
+    public function newCategory($params) {
+
+        $catName = (empty($params['catName'])) ? false : addslashes( str_replace("\n", "", $params['catName']) );
+        $father = (empty($params['father'])) ? false : $params['father'];
+        $descricao = (empty($params['descricao'])) ? false : addslashes( $params['descricao'] );
+        $autor = (empty($params['autor'])) ? false : $params['autor'];
+        $permissao = (empty($params['permissao'])) ? false : $params['permissao'];
+        $classe = (empty($params['classe'])) ? 'categoria' : $params['classe'];
+
+        $tipo = (empty($params['tipo'])) ? '' : $params['tipo'];
+        $tipoLegivel = (empty($params['tipoLegivel'])) ? '' : $params['tipoLegivel'];
+
+        if( !$catName ) return false;
+        if( !$father ) return false;
+
+        /**
+         * Faz um loop para descobrir qual é o patriarca
+         * desta nova categoria a ser cadastrada.
+         */
+        $i = 0;
+        $subordinadoidtmp = $_POST['frmsubordinadoid'];
+
+        while( $i < 1 ) {
+            $sql = "SELECT
+                        id, nome, subordinadoid, classe, nome_encoded,tipo,tipo_legivel
+                    FROM
+                        categorias
+                    WHERE
+                        id='$father'
+                    ";
+
+            $query = $this->conexao->query($sql);
+            $dados = $query[0];
+
+            if( empty($tipo) ) {
+                $tipo = $dados['tipo'];
+                $tipoLegivel = $dados['tipo_legivel'];
+            }
+
+            /*
+             * Patriarca
+            */
+            if( !empty($dados['patriarca']) )
+                $patriarca = $dados['patriarca'];
+            else
+                $patriarca = $this->getPatriarch($dados['id']);
+
+            $catNameEncoded = encodeText( $catName );
+            $patriarcaEncoded = encodeText( $patriarca );
+            $subordinadoNomeEncoded = encodeText( $dados['nome'] );
+
+
+            if($dados['classe'] == "estrutura") {
+                $tipo = $this->LeModuloDaEstrutura($dados['id']);
+                $i++;
+            } else {
+                $subordinadoidtmp = $dados['subordinadoid'];
+                $i++;
+            }
+            $tipo_legivel = $this->LeModuloDaEstruturaLegivel($dados['id']);
+
+        }
+
+        $sql = "INSERT INTO
+                    categorias
+                    (
+                        nome, nome_encoded,
+                        descricao,
+                        patriarca, patriarca_encoded,
+                        subordinadoid,subordinado_nome_encoded,
+                        classe,tipo,tipo_legivel,
+                        autor
+                    )
+                VALUES
+                    (
+                        '{$catName}','{$catNameEncoded}',
+                        '$descricao',
+                        '$patriarca', '$patriarcaEncoded',
+                        '$father', '$subordinadoNomeEncoded',
+                        '$classe','$tipo','$tipo_legivel',
+                        '".$autor."'
+                    )";
+        if( $this->conexao->exec($sql) ) {
+            return $this->conexao->lastInsertId();
+        }
+
+        return 0;
+    }
+
+    public function getPatriarch($id) {
+
+        if( $this->_recursiveCurrent > $this->_recursiveLimit )
+            return false;
+
+        $sql = "SELECT
+                    id, nome, patriarca, subordinadoid, classe
+                FROM
+                    categorias
+                WHERE
+                    id='$id'";
+        $query = reset( $this->conexao->query($sql) );
+
+        /**
+         * Categoria sem patriarca, busca o patriarca do seu pai
+         */
+        if( empty($query['patriarca'])
+                AND $query['classe'] == 'categoria' ) {
+            $this->_recursiveCurrent++;
+            return $this->getPatriarch($query['subordinadoid']);
+        }
+        /*
+         * Sem patriarca, mas é uma estrutura, então é o próprio patriarca
+        */
+        elseif( empty($query['patriarca'])
+                AND $query['classe'] == 'estrutura' ) {
+            return $query['nome'];
+        }
+        /*
+         * Tem um patriarca já definido.
+        */
+        else {
+            $this->_recursiveCurrent = 1;
+            return $query['patriarca'];
+        }
     }
 
     /**
@@ -44,7 +177,7 @@ class Aust
      *      string  [modulo]            nome da pasta do módulo responsável por esta estrutura
      *      string  [autor]             autor da estrutura
      */
-    function gravaEstrutura($params){
+    function gravaEstrutura($params) {
 
         $nome = $params['nome'];
         $nome_encoded = (empty($params['nome_encoded'])) ? encodeText($nome) : $params['nome_encoded'] ;
@@ -55,7 +188,7 @@ class Aust
         $autor = $params['autor'];
 
 
-        if(is_file('modulos/'.$modulo.'/config.php')){
+        if(is_file('modulos/'.$modulo.'/config.php')) {
             include('modulos/'.$modulo.'/config.php');
             $tipo_legivel = $modInfo['nome'];
         } else {
@@ -73,18 +206,18 @@ class Aust
             '$nome','$categoria_chefe','estrutura','$modulo','$tipo_legivel',$publico,'$autor',
             '$nome_encoded'
             )
-        ";
+                ";
         /**
          * Retorna o id do registro feito
          */
-        if ($this->conexao->exec($sql)){
-                return $this->conexao->conn->lastInsertId();
+        if ($this->conexao->exec($sql)) {
+            return $this->conexao->conn->lastInsertId();
         } else {
-                return FALSE;
+            return FALSE;
         }
     }
 
-    public function Instalar($nome, $descricao = '', $classe = '', $tipo = '', $subordinadoid = '0'){
+    public function Instalar($nome, $descricao = '', $classe = '', $tipo = '', $subordinadoid = '0') {
         $sql = "INSERT INTO
                     categorias
                         (nome,descricao,classe,tipo,subordinadoid)
@@ -96,7 +229,7 @@ class Aust
     /**
      *
      * LEITURA DE INFORMAÇÕES
-     * 
+     *
      */
     /**
      * Retorna categoria-chefe
@@ -111,12 +244,12 @@ class Aust
      * @param <type> $charend
      * @param <type> $order
      */
-    public function LeCategoriaChefe($columns, $formato, $chardivisor = '', $charend = '', $order = ''){
+    public function LeCategoriaChefe($columns, $formato, $chardivisor = '', $charend = '', $order = '') {
 
-        for($i = 0; $i < count($columns); $i++){
+        for($i = 0; $i < count($columns); $i++) {
             $fields .= $columns[$i];
-            if($i != count($columns) - 1){
-                    $fields .= ',';
+            if($i != count($columns) - 1) {
+                $fields .= ',';
             }
         }
         $sql = "SELECT
@@ -129,16 +262,16 @@ class Aust
         $query = $this->conexao->query($sql);
         $t = count($query);
         $c = 0;
-        foreach($query as $menu){
+        foreach($query as $menu) {
             $str = $formato;
-            for($i = 0; $i < count($columns); $i++){
-                    $str = str_replace("&%" . $columns[$i], $menu[$columns[$i]], $str);
+            for($i = 0; $i < count($columns); $i++) {
+                $str = str_replace("&%" . $columns[$i], $menu[$columns[$i]], $str);
             }
             echo $str;
-            if($c < $t-1){
-                    echo $chardivisor;
+            if($c < $t-1) {
+                echo $chardivisor;
             } else {
-                    echo $charend;
+                echo $charend;
             }
             $c++;
         }
@@ -151,7 +284,7 @@ class Aust
      *
      * @return <array>
      */
-    public function getStructures(){
+    public function getStructures() {
         /**
          * SITES
          */
@@ -167,16 +300,16 @@ class Aust
         $result = array();
         /*
          * Each site
-         */
-        foreach( $query as $key=>$sites){
+        */
+        foreach( $query as $key=>$sites) {
             $result[$key]['Site']['id'] = $sites['id'];
             $result[$key]['Site']['name'] = $sites['name'];
 
             /*
              * Get Structures of each site
-             */
+            */
             $structures = $this->getStructuresByFather($sites['id']);
-            if( is_array($structures) ){
+            if( is_array($structures) ) {
 
                 $result[$key]['Structures'] = $structures;
             }
@@ -194,13 +327,13 @@ class Aust
      * @param <int> $id
      * @return <array>
      */
-    public function getStructuresByFather($id=''){
+    public function getStructuresByFather($id='') {
         if( empty($id) )
             return false;
 
         /*
          * Structures of given site
-         */
+        */
         $sql = "SELECT
                     lp.id, lp.subordinadoid, lp.nome, lp.tipo as tipo,
                     ( SELECT COUNT(*)
@@ -235,12 +368,12 @@ class Aust
      * @param <type> $order
      * @param <type> $options
      */
-    public function LeEstruturas($columns, $formato, $chardivisor = '', $charend = '', $order = '', $options = ''){
-       $fields = '';
-        for($i = 0; $i < count($columns); $i++){
+    public function LeEstruturas($columns, $formato, $chardivisor = '', $charend = '', $order = '', $options = '') {
+        $fields = '';
+        for($i = 0; $i < count($columns); $i++) {
             $fields .= $columns[$i];
-            if($i != count($columns) - 1){
-                    $fields .= ',';
+            if($i != count($columns) - 1) {
+                $fields .= ',';
             }
         }
         $sql = "SELECT
@@ -253,22 +386,22 @@ class Aust
         $query = $this->conexao->query($sql);
         $t = count($query);
         $c = 0;
-        foreach($query as $menu){
+        foreach($query as $menu) {
             $str = $formato;
-            for($i = 0; $i < count($columns); $i++){
+            for($i = 0; $i < count($columns); $i++) {
                 $str = str_replace("&%" . $columns[$i], $menu[$columns[$i]], $str);
             }
-            if(!empty($options)){
+            if(!empty($options)) {
                 $diretorio = 'modulos/'.$menu['tipo']; // pega o endereço do diretório
                 foreach (glob($diretorio."*", GLOB_ONLYDIR) as $pastas) {
-                    if(is_file($pastas.'/configurar_estrutura.php')){
+                    if(is_file($pastas.'/configurar_estrutura.php')) {
                         $str = str_replace('&%options', '<a href="adm_main.php?section='.$_GET['section'].'&aust_node='.$menu['id'].'&action=configurar">Configurar</a>', $str);
                     }
                 }
                 $str = str_replace("&%options", "", $str);
             }
             echo $str;
-            if($c < $t-1){
+            if($c < $t-1) {
                 echo $chardivisor;
             } else {
                 echo $charend;
@@ -285,7 +418,7 @@ class Aust
      * @param int $austNode
      * @return array
      */
-    public function pegaInformacoesDeEstrutura( $austNode ){
+    public function pegaInformacoesDeEstrutura( $austNode ) {
         /**
          * Busca na tabela do Aust onde o id é igual à estrutura requisitada.
          */
@@ -295,12 +428,12 @@ class Aust
 
     /**
      * Retorna o nome de cada estrutura do sistema (notícias, artigos, etc) no formato ARRAY
-     * 
+     *
      * @param array $param
-     * @return array 
+     * @return array
      */
-    function LeEstruturasParaArray($param = ''){
-        if(!empty($param['where'])){
+    function LeEstruturasParaArray($param = '') {
+        if(!empty($param['where'])) {
             $where = $param['where'];
         } else {
             $where = "classe='estrutura'";
@@ -330,7 +463,7 @@ class Aust
 
         $estruturas_array = array();
         //while($dados = mysql_fetch_array($mysql)){
-        foreach($query as $chave=>$valor){
+        foreach($query as $chave=>$valor) {
             $estruturas_array[$valor['id']]['nome'] = $valor['nome'];
             $estruturas_array[$valor['id']]['tipo'] = $valor['tipo'];
             $estruturas_array[$valor['id']]['id'] = $valor['id'];
@@ -338,7 +471,7 @@ class Aust
         return $estruturas_array;
     }
     // retorna o módulo responsável por determinada estrutura
-    function LeModuloDaEstrutura($node){
+    function LeModuloDaEstrutura($node) {
         $sql = "SELECT
                                 tipo
                         FROM
@@ -350,7 +483,7 @@ class Aust
     }
 
     // retorna o nome legível do módulo
-    function LeModuloDaEstruturaLegivel($node){
+    function LeModuloDaEstruturaLegivel($node) {
         $sql = "SELECT
                                 tipo
                         FROM
@@ -360,7 +493,7 @@ class Aust
 
         $query = $this->conexao->query($sql);
         $tipo = $query[0]['tipo'];
-        if(is_file('modulos/'.$tipo.'/config.php')){
+        if(is_file('modulos/'.$tipo.'/config.php')) {
             include('modulos/'.$tipo.'/config.php');
             return $modInfo['nome'];
         } else {
@@ -370,11 +503,11 @@ class Aust
 
     /**
      * Retorna o nome de estrutura/categoria de acordo com seu ID
-     * 
+     *
      * @param int $node É o ID da estrutura/categoria a ser buscada
      * @return string Nome da estrutura/categoria
      */
-    public function leNomeDaEstrutura($node){
+    public function leNomeDaEstrutura($node) {
         $sql = "SELECT
                     nome
                 FROM
@@ -385,16 +518,16 @@ class Aust
         return $query[0]['nome'];
     }
 
-    function LimpaVariavelCategorias(){
-        if(is_array($this->AustCategorias)){
-            foreach($this->AustCategorias as $key=>$valor){
+    function LimpaVariavelCategorias() {
+        if(is_array($this->AustCategorias)) {
+            foreach($this->AustCategorias as $key=>$valor) {
                 array_pop($this->AustCategorias);
             }
         }
     }
 
 
-	/**
+    /**
      * Retorna todas as filhas da categoria
      *
      * @author Alexandre de Oliveira (chavedomundo@gmail.com)
@@ -405,7 +538,7 @@ class Aust
      * @param int       $current_node
      * @return array    retorna array com todas as filhas da categoria dita categorias requisitadas
      */
-	function categoriasFilhas($params){
+    function categoriasFilhas($params) {
 
         /**
          * Trata cada variável recebida
@@ -420,16 +553,16 @@ class Aust
          */
         $this->LeCategoriasFilhasCopy($categoriaChefe, $pai, $nivel, $nodeAtual); // gambiarra
 
-        if($pai >= 0){
+        if($pai >= 0) {
             $this->AustCategorias[$pai] = '';
         }
-		$resultado = $this->AustCategorias;
-		$this->LimpaVariavelCategorias();
-		return $resultado;
+        $resultado = $this->AustCategorias;
+        $this->LimpaVariavelCategorias();
+        return $resultado;
     }
 
-	// gambiarra para que LeCategoriasFilhas possa rodar em loop e retornar $this->AustCategorias e limpando esta variÃ¡vel no final
-	function LeCategoriasFilhasCopy($categoriachefe, $parent=0, $level=0, $current_node=-1){
+    // gambiarra para que LeCategoriasFilhas possa rodar em loop e retornar $this->AustCategorias e limpando esta variÃ¡vel no final
+    function LeCategoriasFilhasCopy($categoriachefe, $parent=0, $level=0, $current_node=-1) {
         /**
          * Guarda qual o id do pai para carregar suas filhas
          */
@@ -438,17 +571,17 @@ class Aust
          * Se não for especificada uma estrutura, carrega todas as categorias da categoria chefe
          * especificada
          */
-		if($parent == 0){
-            if(is_int($categoriachefe)){
+        if($parent == 0) {
+            if(is_int($categoriachefe)) {
                 $where = $where . " AND lp.id='".$categoriachefe."'";
             } elseif(is_string($categoriachefe)) {
                 $where = $where . " AND lp.nome='".$categoriachefe."'";
             }
-		}
+        }
         /**
          * Monta o SQL
          */
-		$sql="SELECT
+        $sql="SELECT
 					lp.id, lp.subordinadoid, lp.nome, lp.classe,
 					( SELECT COUNT(*)
 						FROM
@@ -459,28 +592,28 @@ class Aust
 				FROM
 					".self::$austTable." AS lp
 				WHERE
-					$where
-		";
+                $where
+                ";
 
         $query = $this->conexao->query($sql);
 
-		$i = 0;
+        $i = 0;
         $items = '';
-		foreach ( $query as $chave=>$myrow ){
+        foreach ( $query as $chave=>$myrow ) {
 
-			$this->AustCategorias[$myrow['id']] = $myrow['nome'];
+            $this->AustCategorias[$myrow['id']] = $myrow['nome'];
 
             //chamar recursivamente a função
-			$items.=$this->LeCategoriasFilhasCopy($categoriachefe, $myrow["id"], $level+1, $current_node);
+            $items.=$this->LeCategoriasFilhasCopy($categoriachefe, $myrow["id"], $level+1, $current_node);
 
-		}
-	}
-    
-	/**
+        }
+    }
+
+    /**
      * DEPRECIADO!!!!!
      *
      * Use categoriasFilhas() no lugar desta
-     * 
+     *
      * Retorna todas as filhas da categoria
      *
      * @author Alexandre de Oliveira (chavedomundo@gmail.com)
@@ -491,20 +624,20 @@ class Aust
      * @param int       $current_node
      * @return array    retorna array com todas as filhas da categoria dita categorias requisitadas
      */
-	function LeCategoriasFilhas($categoriachefe, $parent=0, $level=0, $current_node=-1){
+    function LeCategoriasFilhas($categoriachefe, $parent=0, $level=0, $current_node=-1) {
         //trigger_error('Use categoriasFilhas() instead', E_USER_NOTICE);
 
-		$this->LeCategoriasFilhasCopy($categoriachefe, $parent, $level, $current_node); // gambiarra
+        $this->LeCategoriasFilhasCopy($categoriachefe, $parent, $level, $current_node); // gambiarra
 
-        if($parent >= 0){
+        if($parent >= 0) {
             $this->AustCategorias[$parent] = 'tetesteste';
         }
-		$resultado = $this->AustCategorias;
-		$this->LimpaVariavelCategorias();
-		return $resultado;
+        $resultado = $this->AustCategorias;
+        $this->LimpaVariavelCategorias();
+        return $resultado;
     }
-	
-	/**
+
+    /**
      * DEPRECIADO!!!!!
      *
      * Use categoriasFilhas() no lugar desta
@@ -519,25 +652,25 @@ class Aust
      * @param int       $current_node
      * @return array    retorna array com todas as filhas da categoria dita categorias requisitadas
      */
-	// LISTAR: funÃ§Ã£o que retorna diretÃ³rio e arquivo para include da listagem do mÃ³dulo da estrutura com id $aust_node
-	function AustListar($aust_node = '0'){
-		$pasta_do_modulo = $this->LeModuloDaEstrutura($aust_node);
-		if(is_file('modulos/'.$pasta_do_modulo.'/listar.php')){
-			return 'modulos/'.$pasta_do_modulo.'/listar.php';
-		} else {
-			return 'conteudo.inc/listar.inc.php';
-		}
-	}
+    // LISTAR: funÃ§Ã£o que retorna diretÃ³rio e arquivo para include da listagem do mÃ³dulo da estrutura com id $aust_node
+    function AustListar($aust_node = '0') {
+        $pasta_do_modulo = $this->LeModuloDaEstrutura($aust_node);
+        if(is_file('modulos/'.$pasta_do_modulo.'/listar.php')) {
+            return 'modulos/'.$pasta_do_modulo.'/listar.php';
+        } else {
+            return 'conteudo.inc/listar.inc.php';
+        }
+    }
 
     // Lê somente estruturas que não devem ter categorias e grava em uma $_SESSION
-    function EstruturasSemCategorias(){
+    function EstruturasSemCategorias() {
         unset( $_SESSION['somenteestrutura']);
         $diretorio = 'modulos/'; // pega o endereço do diretório
         foreach (glob($diretorio."*", GLOB_ONLYDIR) as $pastas) {
-            if(is_file($pastas.'/config.php')){
+            if(is_file($pastas.'/config.php')) {
                 include($pastas.'/config.php');
-                if($modInfo['somenteestrutura']){
-                    
+                if($modInfo['somenteestrutura']) {
+
                     $tmparray = array_reverse( explode("/", $pastas));
                     $_SESSION['somenteestrutura'][] = $tmparray[0];
                 }
@@ -554,12 +687,32 @@ class Aust
      */
 
     // verifica se existe alguma categoria instalada e retorna TRUE ou FALSE
-    public function Instalado(){
-            $sql = "SELECT
-                                    id
-                            FROM
-                                    categorias";
-            return $this->conexao->count($sql);
+    public function Instalado() {
+        $sql = "SELECT
+                    id
+                FROM
+                    categorias";
+        return $this->conexao->count($sql);
+    }
+
+    /*
+     *
+     * RENDERIZAÇÃO
+     *
+     */
+    /**
+     * getCategoryHtmlSelect()
+     *
+     * Retorna <select> com as categorias atuais
+     *
+     * @param <type> $austNode
+     * @param <type> $currentNode
+     * @return <string>
+     */
+    public function getCategoryHtmlSelect($austNode, $currentNode = ''){
+        include_once (THIS_TO_BASEURL."core/inc/inc_categorias_functions.php");
+        $tmp = BuildDDList( CoreConfig::read('austTable') ,'frmcategoria', $administrador->tipo ,$austNode, $currentNode, false, true);
+        return $tmp;
     }
 
 }

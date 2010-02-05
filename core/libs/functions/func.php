@@ -3,28 +3,22 @@
  * Arquivo contendo principais funções para facilitar o processo de codificação
  *
  */
-
-
-
 /*
  *
- * Datas e variáveis
- * 
+ * STRINGS
+ *
  */
+    // retorna uma array com valores em letra minúscula (semelhante a strtolower)
+    function ArrayToLower($array,$round = 0){
+        foreach($array as $key => $value){
+            if(is_array($value))
+                $array[strtolower($key)] =  $this->arraytolower($value,$round+1);
+            else
+                $array[strtolower($key)] = strtolower($value);
+        }
+        return $array;
 
-// retorna uma array com valores em letra minúscula (semelhante a strtolower)
-function ArrayToLower($array,$round = 0){
-    foreach($array as $key => $value){
-        if(is_array($value))
-            $array[strtolower($key)] =  $this->arraytolower($value,$round+1);
-        else
-            $array[strtolower($key)] = strtolower($value);
     }
-    return $array;
-
-}
-
-
     /**
      * Ajusta string, retirando acentos e tornando acessível na URL do browser
      *
@@ -33,7 +27,7 @@ function ArrayToLower($array,$round = 0){
      *
      * @return string Retorna texto codificado, sem acentos, em minúsculas, sem espaços
      */
-    function encodeText($str){
+    function encodeText($str=''){
 
         // troca estas letras
         $changeTheseLetters = array('à','á','â','ã','ä','å','ç','è','é','ê','ë','ì','í','î','ï','ñ','ò','ó','ô','õ','ö','ù','ü','ú','ÿ','À','Á','Â','Ã','Ä','Å','Ç','È','É','Ê','Ë','Ì','Í','Î','Ï','Ñ','Ò','Ó','Ô','Õ','Ö','Ù','Ü','Ú');
@@ -64,14 +58,13 @@ function ArrayToLower($array,$round = 0){
      *
      * @param array $status
      */
-
-function EscreveBoxMensagem($status){
-	echo '<div class="box-full">
+    function EscreveBoxMensagem($status){
+        echo '<div class="box-full">
             <div class="box '.$status['classe'].'">
                 '.$status['mensagem'].'
             </div>
         </div>';
-}
+    }
 
 /**
  * Retorna o dia, mês, ano, hora, minuto ou segundo atual

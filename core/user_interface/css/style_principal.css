@@ -54,6 +54,7 @@ div.body {
      *
      * Painel onde encontram-se opções
      */
+            /* Status */
             div.body div.content div.box-metade {
                     width: 340px;
                     background: red;
@@ -65,17 +66,27 @@ div.body {
             div.body div.content div.box-full {
                     width: 100%;
                     background: white;
-                    margin-right: 10px;
+                    display: table;
+                    margin-right: 0px;
+                    margin-bottom: 10px;
             }
-            div.body div.content div.box { background: #dddddd; padding-bottom: 1px; margin-bottom: 10px; }
-            div.body div.content div.box div.titulo { padding: 5px; }
-            div.body div.content div.box div.titulo h2 { font-size: 1.2em; margin: 0; }
-            div.body div.content div.box div.corpo { margin: 1px; margin-bottom: 0; padding: 10px; background: white; }
-            div.body div.content div.box div.rodape { margin: 10px; padding: 10px; background: white; }
-            div.body div.content div.alerta { background: #ffee60; padding: 5px; border: 1px solid orange; margin-bottom: 10px; }
-            div.body div.content div.pergunta { background: yellow; padding: 15px; border: 1px solid orange; text-align: center; }
-            div.body div.content div.sucesso { background: #D9FFD9; color: #006413; padding: 5px; border: 1px solid #009900 }
-            div.body div.content div.insucesso { background: #f68585; padding: 5px; border: 1px solid #db4343 }
+            div.box { width: 100%; background: #dddddd; padding-bottom: 1px; }
+            div.box div.titulo { padding: 5px; }
+            div.box div.titulo h2 { font-size: 1.2em; margin: 0; }
+            div.box div.corpo { margin: 1px; margin-bottom: 0; padding: 10px; background: white; }
+            div.box div.rodape { margin: 10px; padding: 10px; background: white; }
+            div.alerta { background: #ffee60; padding: 5px; border: 1px solid orange; margin-bottom: 10px; }
+            div.pergunta { background: yellow; padding: 15px; border: 1px solid orange; text-align: center; }
+            div.sucesso { background: #D9FFD9; color: #006413; padding: 5px; border: 1px solid #009900 }
+            div.insucesso { background: #f68585; padding: 5px; border: 1px solid #db4343 }
+
+            /* Status em Lightbox */
+
+            .window .lb_content div.sucesso {
+                background: transparent;
+                border: 0px;
+                color: #27c702; font-weight: bold; font-style: italic;
+            }
 
     /********* CATEGORIAS *********/
             div.body div.content div.structure {  }

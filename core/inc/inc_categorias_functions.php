@@ -25,9 +25,12 @@ function ShowStructure($table){
 * @param String ID
 * @return String
 */
-function BuildDDList($table,$id="ddListOptions",$escala,$parent=0, $current_node=-1,$primeirovazio=false){
+function BuildDDList($table,$id="ddListOptions",$escala,$parent=0, $current_node=-1,$primeirovazio=false, $optionsOnly=false){
     $ddListItems=_BuildDDListItems($table,$escala,$parent, 0, $current_node);
-    if($primeirovazio == true){
+
+    if($optionsOnly == true){
+        return "$ddListItems";
+    } else if($primeirovazio == true){
         return "
         <select name='$id' id='$id'>
         <option value=''>Nenhum</option>

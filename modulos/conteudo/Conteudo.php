@@ -64,16 +64,16 @@ class Conteudo extends Modulos
         /*
          * Default options
          */
-        $categorias = getDataInArray($options, 'categoria');
+        $categorias = getDataInArray($options, 'categorias');
         $pagina = getDataInArray($options, 'pagina');
         $itens_por_pagina = getDataInArray($options, 'resultadosPorPagina');
         $limit = '';
 
+        $order = ' ORDER BY id DESC';
         /*
          * Gera condições para sql
          */
         if(!empty($categorias)) {
-            $order = ' ORDER BY id DESC';
             $where = ' WHERE ';
             $c = 0;
             foreach($categorias as $key=>$valor) {
@@ -110,7 +110,6 @@ class Conteudo extends Modulos
                 FROM
                     ".$this->tabela_criar.$where.$order.
                 $limit;
-
         return $sql;
 
     } // fim getSQLForListing()
