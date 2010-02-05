@@ -173,7 +173,6 @@ if($conexao->DBExiste){
             echo '<p>A seguir, as tabelas que foram instaladas.</p>';
             echo '<ul>';
 
-            pr($dbSchema->tabelasInstaladas);
             foreach($dbSchema->tabelasInstaladas as $chave=>$valor){
                 if($dbSchema->tabelasInstaladas[$chave]){
                     $status = '<span style="color: green">Instalado</span>';
