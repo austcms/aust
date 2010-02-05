@@ -149,7 +149,9 @@ define("IMG_DIR", "core/user_interface/img/");
             ?>
             <div class="borda"></div>
             <br />
-                <a href="adm_main.php?section=conf_modulos" class="restrito">Configurar Módulos</a><?php
+                <span class="para_webmaster">Para Webmasters:</span><a href="adm_main.php?section=conf_modulos" class="restrito">Configurar Módulos</a>
+                <a href="adm_main.php?section=categorias" class="restrito">Categorias</a>
+            <?php
             }
             ?>
         </div>
