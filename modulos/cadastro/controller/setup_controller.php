@@ -60,8 +60,10 @@ class SetupController extends ModsSetup
             /**
              * Trata o nome da tabela para poder criar no db
              */
-             
-            $tabela = RetiraAcentos(strtolower(str_replace(' ', '_', $_SESSION['exPOST']['nome'])));
+            $tabela = $_SESSION['exPOST']['nome'];
+            $tabela = str_replace(' ', '_', $tabela );
+            $tabela = mb_strtolower(  $tabela, "UTF-8" );
+            $tabela = RetiraAcentos( $tabela );
             
             /**
              * TRATAMENTO DE CAMPOS
@@ -156,7 +158,7 @@ class SetupController extends ModsSetup
                      * Retira acentuação e caracteres indesejados para criar
                      * campos nas tabelas
                      */
-                    $valor = RetiraAcentos(strtolower(str_replace(' ', '_', $_POST['campo'][$i]))).' '. $campo_tipo;
+                    $valor = RetiraAcentos(mb_strtolower(str_replace(' ', '_', $_POST['campo'][$i]), 'UTF-8')).' '. $campo_tipo;
 
                     /**
                      * Se for data ou relacional, não tem charset
@@ -179,7 +181,7 @@ class SetupController extends ModsSetup
                         $campos .= ', '.$valor;
                     }
                     
-                    $campo = RetiraAcentos(strtolower(str_replace(' ', '_', $_POST['campo'][$i])));
+                    $campo = RetiraAcentos(mb_strtolower(str_replace(' ', '_', $_POST['campo'][$i]), 'UTF-8'));
 
                     /**
                      * CONFIGURAÇÃO DE CAMPOS
@@ -251,7 +253,7 @@ class SetupController extends ModsSetup
                          * o nome do campo, somente tabela_tabela
                          */
                         if($tamanhoRestante == 0){
-                            $tabelasRelacionadasNome = RetiraAcentos(strtolower(str_replace(' ', '_', $tabela."_".$tabelaRelacionada )));
+                            $tabelasRelacionadasNome = RetiraAcentos(mb_strtolower(str_replace(' ', '_', $tabela."_".$tabelaRelacionada ), 'UTF-8'));
                         }
                         /*
                          * Se só o nome das tabelas já foi maior que 64
@@ -260,7 +262,7 @@ class SetupController extends ModsSetup
                          * caracteres.
                          */
                         else if($tamanhoRestante < 0){
-                            $tabelasRelacionadasNome = RetiraAcentos(strtolower(str_replace(' ', '_', $tabela."_".$tabelaRelacionada )));
+                            $tabelasRelacionadasNome = RetiraAcentos(mb_strtolower(str_replace(' ', '_', $tabela."_".$tabelaRelacionada ), 'UTF-8'));
                             $tabelasRelacionadasNome = substr($tabelasRelacionadasNome, 0, strlen($tabelasRelacionadasNome)-$tamanhoRestante);
                         }
                         /*
@@ -270,14 +272,14 @@ class SetupController extends ModsSetup
                          */
                         else if( strlen($campo) > $tamanhoRestante ) {
                             $campoRelacionado = substr($campo, 0, $tamanhoRestante);
-                            $tabelasRelacionadasNome = RetiraAcentos(strtolower(str_replace(' ', '_', $tabela."_".$campoRelacionado."_".$tabelaRelacionada )));
+                            $tabelasRelacionadasNome = RetiraAcentos(mb_strtolower(str_replace(' ', '_', $tabela."_".$campoRelacionado."_".$tabelaRelacionada ), 'UTF-8'));
                         }
                         /*
                          * Tudo está normal. Cria o nome da tabela sem
                          * problemas.
                          */
                         else {
-                            $tabelasRelacionadasNome = RetiraAcentos(strtolower(str_replace(' ', '_', $tabela."_".$campo."_".$tabelaRelacionada )));
+                            $tabelasRelacionadasNome = RetiraAcentos(mb_strtolower(str_replace(' ', '_', $tabela."_".$campo."_".$tabelaRelacionada ), 'UTF-8'));
                         }
 
                         /**
@@ -481,10 +483,10 @@ class SetupController extends ModsSetup
                                 cadastros_conf
                                 (tipo,chave,valor,categorias_id,adddate,autor,desativado,desabilitado,publico,restrito,aprovado)
                             VALUES
-                                ('estrutura','tabela','".RetiraAcentos(strtolower(str_replace(' ', '_', $_SESSION['exPOST']['nome'])))."',".$status_insert.", '".date('Y-m-d H:i:s')."', ".$this->administrador->LeRegistro('id').",0,0,1,0,1)
+                                ('estrutura','tabela','".RetiraAcentos(mb_strtolower(str_replace(' ', '_', $_SESSION['exPOST']['nome']), 'UTF-8'))."',".$status_insert.", '".date('Y-m-d H:i:s')."', ".$this->administrador->LeRegistro('id').",0,0,1,0,1)
                             ";
                 if($this->conexao->exec($sql_conf)){
-                    $status_setup[] = 'Configuração da estrutura \''.RetiraAcentos(strtolower(str_replace(' ', '_', $_SESSION['exPOST']['nome']))).'\' salva com sucesso!';
+                    $status_setup[] = 'Configuração da estrutura \''.RetiraAcentos(mb_strtolower(str_replace(' ', '_', $_SESSION['exPOST']['nome']), 'UTF-8')).'\' salva com sucesso!';
 
                     // número de erros encontrados
                     $status_campos = 0;
@@ -499,10 +501,10 @@ class SetupController extends ModsSetup
                         $status_setup[] = 'Erro ao criar campos';
                     }
                 } else {
-                    $status_setup[] = 'Erro ao salvar configuração da estrutura \''.RetiraAcentos(strtolower(str_replace(' ', '_', $_SESSION['exPOST']['nome']))).'\'.';
+                    $status_setup[] = 'Erro ao salvar configuração da estrutura \''.RetiraAcentos(mb_strtolower(str_replace(' ', '_', $_SESSION['exPOST']['nome']), 'UTF-8')).'\'.';
                 }
             } else {
-                $status_setup[] = 'Erro ao criar tabela \''.RetiraAcentos(strtolower(str_replace(' ', '_', $_SESSION['exPOST']['nome']))).'\'.';
+                $status_setup[] = 'Erro ao criar tabela \''.RetiraAcentos(mb_strtolower(str_replace(' ', '_', $_SESSION['exPOST']['nome']), 'UTF-8')).'\'.';
             }
 
         }

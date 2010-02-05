@@ -34,7 +34,7 @@ $modInfo = array(
     /**
      * 'className': Classe oficial do módulo
      */
-    'className' => 'Textos',
+    'className' => 'Conteudo',
     /**
      * 'descricao': Descrição que facilita compreender a função do módulo
      */

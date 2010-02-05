@@ -57,6 +57,8 @@ define("CORE_DIR", "core/");
      * Libs
      */
     define("LIB_DIR", CORE_DIR."libs/"); define("LIBS_DIR", LIB_DIR);
+    define("LIB_DATA_TYPES", CORE_DIR."libs/functions/data_types.php");
+
     /**
      * GDImageViewer
      */
@@ -168,4 +170,14 @@ define('MOD_CONTROLLER', MOD_CONTROLLER_DIR.'mod_controller.php');
 define('MOD_CONTROLLER_NAME', 'ModController');
 define('MOD_VIEW_DIR', 'view/');
 
+
+/*
+ * MIGRATIONS
+ */
+    define('MIGRATION_MOD_DIR', 'core/migrations/');
+
+/*
+ * WIDGETS
+ */
+    define('WIDGETS_DIR', 'widgets/');
 ?>

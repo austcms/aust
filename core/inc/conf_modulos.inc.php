@@ -4,6 +4,82 @@
  */
 if($administrador->LeRegistro('tipo') == 'Webmaster'){
 
+/*
+ * MIGRATIONS
+ *
+ * Verificações de Migrations de módulos
+ */
+    $migrationsMods = new MigrationsMods( $conexao );
+    /*
+     * INSTALA MÓDULO
+     */
+    if( !empty($_GET['instalar_modulo'])
+        AND is_dir($_GET['instalar_modulo']) )
+    {
+        $path = $_GET['instalar_modulo'];
+
+        /**
+         * Carrega arquivos dos módulos
+         */
+        include_once($path.'/index.php');
+        include_once($path.'/'.MOD_CONFIG);
+
+        $modName = $migrationsMods->getModNameFromPath($path);
+
+        /**
+         * Ajusta variáveis para gravação
+         */
+            /**
+             * [embedownform] indica se este módulo possui habilidade
+             * para acoplar-se em formulários de outros módulos
+             * com seu próprio <form></form>
+             */
+            $modInfo['embedownform'] = (empty($modInfo['embedownform'])) ? false : $modInfo['embedownform'];
+            /**
+             * [embed] indica se este módulo possui
+             * habilidade para acoplar-se em formulários de outros módulos
+             */
+            $modInfo['embed'] = (empty($modInfo['embed'])) ? false : $modInfo['embed'];
+            /**
+             * [somenteestrutura] indica se a estrutura conterá categorias ou não.
+             */
+            $modInfo['somenteestrutura'] = (empty($modInfo['somenteestrutura'])) ? false : $modInfo['somenteestrutura'];
+
+        /*
+         * Caso o módulo não tenha migrations, faz a verificação normal das tabelas
+         * a partir de schemas, o que não é recomendado.
+         */
+        if( $migrationsMods->hasMigration($path) ){
+            $installStatus = $migrationsMods->updateMigration($path);
+            $isInstalled = $migrationsMods->isActualVersion($path);
+
+            $param = array(
+                'tipo' => 'módulo',
+                'chave' => 'dir',
+                'valor' => $modName,
+                'pasta' => $path,
+                'modInfo' => $modInfo,
+                'autor' => $administrador->LeRegistro('id'),
+            );
+            $modulo->configuraModulo($param);
+
+            $status['classe'] = 'sucesso';
+            $status['mensagem'] = '<strong>Sucesso: </strong> Migration executado com sucesso!';
+        } else {
+            $status['classe'] = 'insucesso';
+            $status['mensagem'] = 'Este módulo não possui Migrations.';
+        }
+    }
+    /*
+     * Migration Status
+     */
+    $migrationsStatus = $migrationsMods->status();
+
+    //pr($migrationsStatus);
+    $modulesStatus = $modulos->getModuleInformation( array_keys($migrationsStatus) );
+
+    //pr($modulesStatus);
+
 
 /*
  * JS DO MÓDULO
@@ -144,32 +220,35 @@ else {
 
     //
     ?>
-    <h1>Configuração: Módulos e Estruturas</h1>
+    <h2>Configuração: Módulos e Estruturas</h2>
     <?php
     if( !empty($status) AND is_array($status)){
         EscreveBoxMensagem($status);
     }
     ?>
 
-    <div class="painel-metade">
+    <div class="widget_group">
         <?php
         /*
          * LISTAGEM DAS ESTRUTURAS CRIADAS
          */
         ?>
-        <div class="painel">
+        <div class="widget">
             <div class="titulo">
-                <h2>Estruturas instaladas</h2>
+                <h3>Estruturas instaladas</h3>
             </div>
-            <div class="corpo">
+            <div class="content">
                 <p>Abaixo, as estruturas instaladas.</p>
                 <ul>
                 <?php
+                /**
+                 * @todo - refatorar LeEstruturas()
+                 */
                 $aust->LeEstruturas(Array('id', 'nome', 'tipo'), '<li><strong>&%nome</strong> (módulo &%tipo) &%options</li>', '', '', 'ORDER BY tipo DESC', 'options');
                 ?>
                 </ul>
             </div>
-            <div class="rodape"></div>
+            <div class="footer"></div>
         </div>
 
 
@@ -178,11 +257,11 @@ else {
          * FORM INSTALAR NOVAS ESTRUTURAS
          */
         ?>
-        <div class="painel">
+        <div class="widget">
             <div class="titulo">
-                <h2>Instalar Estrutura</h2>
+                <h3>Instalar Estrutura</h3>
             </div>
-            <div class="corpo">
+            <div class="content">
                 <p>
                     Selecione abaixo a categoria-chefe, o nome da estrutura (ex.: Notícias, Artigos, Arquivos) e o módulo adequado.
                 </p>
@@ -232,7 +311,7 @@ else {
 
                 </form>
             </div>
-            <div class="rodape"></div>
+            <div class="footer"></div>
         </div>
     </div>
 
@@ -240,34 +319,23 @@ else {
     <?php
 
     /**
-     * @todo - passar todo este bloco de código abaixo para uma classe
-     * TABELAS DE MÓDULOS INSTALADOS
-     */
-    /**
-     * Diretório dos módulos relativo ao /root
-     */
-    $diretorio = MODULOS_DIR; // pega o endereço do diretório
-    /**
-     * Conteúdo a ser mostrado
-     */
-    $conteudo = '';
-
-    /**
      * Loop por cada diretório de módulos
      */
+    /*
     foreach (glob($diretorio."*", GLOB_ONLYDIR) as $pastas) {
+        break;
         if(is_dir($pastas) AND is_file($pastas.'/index.php')) {
 
             /**
              * Carrega arquivos dos módulos
-             */
-            include($pastas.'/index.php');
-            include($pastas.'/'.MOD_CONFIG);
+             *
+            include_once($pastas.'/index.php');
+            include_once($pastas.'/'.MOD_CONFIG);
 
             /**
              * Se o módulo possui uma classe própria com métodos próprios,
              * podemos continuar
-             */
+             *
             if(!empty($modulo)){
 
                 $conteudo.= '';
@@ -283,7 +351,7 @@ else {
                  * INSTALAR MÓDULO
                  *
                  * faz a instalação do módulo, criando as tabelas e gravando informações na tabela módulo
-                 */
+                 *
                 if(!empty($_GET['instalar_modulo']) and
                     $_GET['instalar_modulo'] == $pastas){
 
@@ -295,32 +363,49 @@ else {
                     /**
                      * [embedownform] indica se este módulo possui habilidade para acoplar-se em formulários de outros módulos
                      * com seu próprio <form></form>
-                     */
+                     *
                     $modInfo['embedownform'] = (empty($modInfo['embedownform'])) ? false : $modInfo['embedownform'];
                     /**
                      * [embed] indica se este módulo possui habilidade para acoplar-se em formulários de outros módulos
-                     */
+                     *
                     $modInfo['embed'] = (empty($modInfo['embed'])) ? false : $modInfo['embed'];
                     /**
                      * [somenteestrutura] indica se a estrutura conterá categorias ou não.
-                     */
+                     *
                     $modInfo['somenteestrutura'] = (empty($modInfo['somenteestrutura'])) ? false : $modInfo['somenteestrutura'];
 
                     /**
                      * DBSCHEMA
-                     */
-                    include($pastas.'/'.MOD_DBSCHEMA);
-                    $thisDbSchema = new dbSchema($modDbSchema, $conexao);
-
-                    /**
-                     * Guarda configurações do módulo na base de dados
                      *
-                     * Chama função InstalarTabelas para criação oficial do módulo
-                     */
-                    $tmp = $thisDbSchema->instalarSchema();
-                    if( $tmp == 1
-                        OR $modulo->verificaInstalacaoTabelas() )
+                     * A partir será criado o banco de dados
+                     *
+                    include($pastas.'/'.MOD_DBSCHEMA);
+                    
+                    $migrationsMods = new MigrationsMods($conexao);
+
+                    /*
+                     * Caso o módulo não tenha migrations, faz a verificação normal das tabelas
+                     * a partir de schemas, o que não é recomendado.
+                     *
+                    if( $migrationsMods->hasMigration($pastas) ){
+                        $installStatus = $migrationsMods->updateMigration($pastas);
+                        $isInstalled = $migrationsMods->isActualVersion($pastas);
+                    } else {
+                        $installStatus = $thisDbSchema->instalarSchema();
+                        $isInstalled = $modulo->verificaInstalacaoTabelas();
+                    }
+
+                    /*
+                     * Instalou?
+                     *
+                    if( $installStatus == true
+                        OR $isInstalled )
                     {
+                        /**
+                         * Guarda configurações do módulo na base de dados
+                         *
+                         * Chama função InstalarTabelas para criação oficial do módulo
+                         *
                         $param = array(
                             'tipo' => 'módulo',
                             'chave' => 'dir',
@@ -333,13 +418,19 @@ else {
 
 
                         $conteudo.= '<div style="color: green;">Instalado com sucesso!</div>';
-                        //$config->AjustaOpcoes($pasta_dir[0].'_paginacao', '20', 'Itens mostrados por página', $pasta_dir[0], 'modulo');
-                        // Grava configuração no DB
-                        //$status = $config->GravaConfig();
-                    } else{
+                    }
+                    /*
+                     * Não foi possível instalar o módulo.
+                     *
+                    else {
                         $conteudo.= '<div style="color: red;">Não foi possível instalar o módulo</div>';
                     }
-                } else {
+
+                }
+                /*
+                 * Amostragem normal dos módulos.
+                 *
+                else {
                     
                     if( $modulo->verificaInstalacaoTabelas()
                         AND $modulo->verificaInstalacaoRegistro(array("pasta"=>$pastas)) )
@@ -364,26 +455,141 @@ else {
             unset($modInfo);
         }
     }
+     *
+     */
     ?>
-    <div class="painel-metade painel-dois">
-        <div class="painel">
+    <div class="widget_group">
+
+        <?php
+        /*
+         * INSTALAÇÃO DE MÓDULOS
+         */
+        ?>
+        <div class="widget">
             <div class="titulo">
-                <h2>Módulos disponíveis</h2>
+                <h3>Módulos disponíveis</h3>
             </div>
-            <div class="corpo">
+            <div class="content">
 
                 <div style="margin-bottom: 10px;">
                 <?php
-                //pr($conteudo);
-                echo $conteudo;
-                unset($conteudo);
+                foreach( $modulesStatus as $modulo) {
+                    $path = $modulo['path'];
+                    ?>
+                    <div>
+
+                    <strong>
+                    <?php
+                    /*
+                     * Tem configurador?
+                     */
+                    if(is_file($modulo['path'].'/configurar_modulo.php')){
+                        echo '<a href="adm_main.php?section=conf_modulos&action=configurar_modulo&modulo='.$modulo['path'].'" style="text-decoration: none;">'.$modulo['config']['nome'].'</a>';
+                    } else {
+                        echo $modulo['config']['nome'];
+                    }
+                    ?>
+                    </strong>
+                    <br />
+                    <?php echo $modulo['config']['descricao']?>
+                    <?php
+
+                    /*
+                     * STATUS DE INSTALAÇÃO
+                     */
+                    /*
+                     * Totalmente Atualizado.
+                     */
+                    //var_dump($migrationsMods->isActualVersion($path));
+                    if( $migrationsMods->isActualVersion($path)
+                        AND $modulos->verificaInstalacaoRegistro(array("pasta"=>$path)) )
+                    {
+                        echo '<br /><span class="green">Instalado</span><br />';
+                    } elseif( $migrationsMods->isActualVersion($path)
+                        AND !$modulos->verificaInstalacaoRegistro(array("pasta"=>$path)) )
+                    {
+                        echo '<div style="color: orange;">Migration atualizado, mas não há registro do módulo no DB.<br />';
+                        echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&instalar_modulo='.$path.'">Tentar registrar agora</a></div>';
+                    }
+                    /*
+                     * Não atualizado,
+                     * contém alguma versão no DB.
+                     */
+                    elseif( $migrationsMods->hasSomeVersion($path)
+                            AND $modulos->verificaInstalacaoRegistro(array("pasta"=>$path)) )
+                    {
+                        echo '<div style="color: orange;">Tabela instalada, mas requer atualização.<br />';
+                        echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&instalar_modulo='.$path.'">Rodar Migration</a></div>';
+                    } elseif( $migrationsMods->hasSomeVersion($path)
+                            AND !$modulos->verificaInstalacaoRegistro(array("pasta"=>$path)) )
+                    {
+                        echo '<div style="color: orange;">Tabela instalada, mas requer atualização e registro do módulo no DB.<br />';
+                        echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&instalar_modulo='.$path.'">Rodar Migration</a></div>';
+                    } else {
+                        echo '<br /><span class="red">Não Instalado,</span> ';
+                        echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&instalar_modulo='.$path.'">instalar agora</a><br />';
+                    }
+                    /*
+                    if( $modulo->verificaInstalacaoTabelas()
+                        AND $modulo->verificaInstalacaoRegistro(array("pasta"=>$pastas)) )
+                    {
+                        $conteudo.= '<div style="color: green;">Instalado</div>';
+
+                    } else if( $modulo->verificaInstalacaoTabelas() ){
+                        $conteudo.= '<div style="color: orange;">Tabela instalada, registro no DB não.<br />';
+                        $conteudo.= '<a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&instalar_modulo='.$pastas.'">Tentar instalar</a></div>';
+                    } else if( $modulo->verificaInstalacaoRegistro(array("pasta"=>$pastas)) ){
+                        $conteudo.= '<div style="color: orange;">Tabela não instalada, registro no DB sim.</div>';
+                    } else {
+                        $conteudo.= '<div style="color: red;">Não Instalado, ';
+                        $conteudo.= '<a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&instalar_modulo='.$pastas.'">clique para instalar</a></div>';
+                    }
+                     *
+                     */
+                    ?>
+
+                    <br />
+                    </div>
+                    <?php
+                }
                 ?>
+                </div>
+
+            </div>
+            <div class="footer"></div>
+        </div>
+
+        <div class="widget">
+            <div class="titulo">
+                <h3>Versões dos Módulos</h3>
+            </div>
+            <div class="content">
+
+                <div style="margin-bottom: 10px;">
+                    <ul>
+                    <?php
+                    foreach( $migrationsStatus as $modName=>$status ){
+                        ?>
+                        <li>
+                        <?php
+                        if( $status ){
+                            echo $modName.': Ok.';
+                        } else {
+                            echo $modName.': Requer atualização.';
+                        }
+                        ?>
+                        </li>
+                        <?php
+                    }
+                    ?>
+                    </ul>
                 </div>
 
 
             </div>
-            <div class="rodape"></div>
+            <div class="footer"></div>
         </div>
+
     </div>
 
 

@@ -11,11 +11,11 @@
  * @version 0.1.1
  * @since v0.1.5, 30/05/2009
  */
-class Modulos {
-/**
- * TABELAS
- */
-// TABELA
+class Modulos
+{
+    /**
+     * TABELAS
+     */
     protected $db_tabelas;
     protected $sql_das_tabelas;
     protected $sql_registros;
@@ -55,12 +55,7 @@ class Modulos {
     function __construct($param) {
         global $aust;
         $this->aust = $aust;
-
-        /**
-         * Pega a string global que diz qual é o charset do projeto
-         */
-        global $aust_charset;
-
+        
         /**
          * Ajusta a conexao para o módulo
          */
@@ -87,80 +82,82 @@ class Modulos {
     /*
      * MÈTODOS DE SUPORTE
      */
+    /**
+     * getContentTable()
+     *
+     * Retorna o nome da tabela principal.
+     *
+     * @return <string>
+     */
     public function getContentTable(){
         return $this->tabela_criar;
     }
 
+
+
     /**
-     * trataImagem
      *
-     * Trata uma imagem
+     * VERIFICAÇÕES
      *
-     * @param array $files O mesmo $_FILE vindo de um formulário
-     * @param string $width Valor padrão de largura
-     * @param string $height Valor padrão de altura
-     * @return array
      */
-    function trataImagem($files, $width = "1024", $height = "768") {
+    /**
+     * hasSchema()
+     *
+     * Ao contrário de Schema, o módulo pode ter Migration (preferido).
+     *
+     * @return <bool>
+     */
+    public function hasSchema(){
+        if( empty($this->modDbSchema) )
+            return false;
 
-        /*
-         * Toma dados de $files
-         */
-        $frmarquivo = $files['tmp_name'];
-        $frmarquivo_name = $files['name'];
-        $frmarquivo_type = $files['type'];
-
-        /*
-         * Abre o arquivo e tomas as informações
-         */
-        $fppeq = fopen($frmarquivo,"rb");
-        $arquivo = fread($fppeq, filesize($frmarquivo));
-        fclose($fppeq);
-
-        /*
-         * Cria a imagem e toma suas proporções
-         */
-        $im = imagecreatefromstring($arquivo); //criar uma amostra da imagem original
-        $largurao = imagesx($im);// pegar a largura da amostra
-        $alturao = imagesy($im);// pegar a altura da amostra
-
-        /*
-         * Configura o tamanho da nova imagem
-         */
-        if($largurao > $width)
-            $largurad = $width;
-        else
-            $largurad = $largurao; // definir a altura da miniatura em px
-
-        $alturad = ($alturao*$largurad)/$largurao; // calcula a largura da imagem a partir da altura da miniatura
-        $nova = imagecreatetruecolor($largurad,$alturad); // criar uma imagem em branco
-        //imagecopyresized($nova,$im,0,0,0,0,$largurad,$alturad,$largurao,$alturao);
-        imagecopyresampled($nova,$im,0,0,0,0,$largurad,$alturad,$largurao,$alturao);
-
-        ob_start();
-        imagejpeg($nova, '', 100);
-        $mynewimage = ob_get_contents();
-        ob_end_clean();
-
-        /*
-         * Prepara dados resultados para retornar
-         */
-        imagedestroy($nova);
-
-        $result["filesize"] = strlen($mynewimage);
-        //$result["filedata"] = addslashes($mynewimage);
-        $result["filedata"] = $mynewimage;
-        $result["filename"] = $frmarquivo_name;
-        $result["filetype"] = $frmarquivo_type;
-
-        return $result;
-
+        return true;
     }
 
+    public function hasMigration(){
+        
+    }
 
     /**
-     * VERIFICAÇÕES
+     * getModuleInformation()
+     *
+     * Retorna informações gerais sobre um módulo.
+     *
+     * @param <array> $params
+     * @return <array>
      */
+    public function getModuleInformation($params){
+
+        /*
+         * Load Migrations
+         */
+        $migrationsMods = new MigrationsMods( $this->conexao );
+        //$migrationsStatus = $migrationsMods->status();
+
+        if( is_array($params) ){
+            
+            foreach( $params as $modName ){
+                $pastas = MODULOS_DIR.$modName;
+
+                /**
+                 * Carrega arquivos do módulo atual
+                 */
+                //include($pastas.'/index.php');
+                if( !is_file($pastas.'/'.MOD_CONFIG) )
+                    continue; // cai fora se não tem config
+                
+                include($pastas.'/'.MOD_CONFIG);
+
+                $result[$modName]['version'] = $migrationsMods->isActualVersion($pastas);
+                $result[$modName]['path'] = $pastas;//.'/'.MOD_CONFIG;
+                $result[$modName]['config'] = $modInfo;
+
+            }
+        }
+
+        return $result;
+    }
+
 
     /**
      * verificaInstalacaoTabelas()
@@ -168,16 +165,18 @@ class Modulos {
      * @return <bool>
      */
     public function verificaInstalacaoTabelas() {
+
+        if( empty($this->modDbSchema) )
+            return false;
+        
         $schema = $this->modDbSchema;
         foreach( $schema as $tabela=>$valor ) {
             $sql = "DESCRIBE ". $tabela;
             $query = $this->conexao->query($sql);
             if(!$query) {
                 return false;
-                //$erro[] = $tabela;
             } else {
                 return true;
-                //$sucesso[] = $tabela;
             }
         }
     }
@@ -255,9 +254,13 @@ class Modulos {
         return $query;
     }
 
+    
     /**
+     *
      * RESPONSER
      *
+     */
+    /**
      * Carrega conteúdo para leitura externa. Retorna, geralmente, em array.
      *
      * @global Aust $aust
@@ -412,6 +415,74 @@ class Modulos {
 
 
 
+    /**
+     * @todo - trataImagem() não deveria estar nesta função.
+     */
+    /**
+     * trataImagem()
+     *
+     * Trata uma imagem
+     *
+     * @param array $files O mesmo $_FILE vindo de um formulário
+     * @param string $width Valor padrão de largura
+     * @param string $height Valor padrão de altura
+     * @return array
+     */
+    function trataImagem($files, $width = "1024", $height = "768") {
+
+        /*
+         * Toma dados de $files
+         */
+        $frmarquivo = $files['tmp_name'];
+        $frmarquivo_name = $files['name'];
+        $frmarquivo_type = $files['type'];
+
+        /*
+         * Abre o arquivo e tomas as informações
+         */
+        $fppeq = fopen($frmarquivo,"rb");
+        $arquivo = fread($fppeq, filesize($frmarquivo));
+        fclose($fppeq);
+
+        /*
+         * Cria a imagem e toma suas proporções
+         */
+        $im = imagecreatefromstring($arquivo); //criar uma amostra da imagem original
+        $largurao = imagesx($im);// pegar a largura da amostra
+        $alturao = imagesy($im);// pegar a altura da amostra
+
+        /*
+         * Configura o tamanho da nova imagem
+         */
+        if($largurao > $width)
+            $largurad = $width;
+        else
+            $largurad = $largurao; // definir a altura da miniatura em px
+
+        $alturad = ($alturao*$largurad)/$largurao; // calcula a largura da imagem a partir da altura da miniatura
+        $nova = imagecreatetruecolor($largurad,$alturad); // criar uma imagem em branco
+        //imagecopyresized($nova,$im,0,0,0,0,$largurad,$alturad,$largurao,$alturao);
+        imagecopyresampled($nova,$im,0,0,0,0,$largurad,$alturad,$largurao,$alturao);
+
+        ob_start();
+        imagejpeg($nova, '', 100);
+        $mynewimage = ob_get_contents();
+        ob_end_clean();
+
+        /*
+         * Prepara dados resultados para retornar
+         */
+        imagedestroy($nova);
+
+        $result["filesize"] = strlen($mynewimage);
+        //$result["filedata"] = addslashes($mynewimage);
+        $result["filedata"] = $mynewimage;
+        $result["filename"] = $frmarquivo_name;
+        $result["filetype"] = $frmarquivo_type;
+
+        return $result;
+
+    }
 
 
 
@@ -465,6 +536,7 @@ class Modulos {
         $autor = (empty($param['autor'])) ? '' : $param['autor'];
 
 
+        $this->conexao->exec("DELETE FROM modulos WHERE pasta='".$pasta."'");
 
         $sql = "INSERT INTO
                     modulos
@@ -574,13 +646,6 @@ class Modulos {
         $return = '';
 
         foreach($query as $dados) {
-            /*
-            $return[$i]['pasta'] = $dados['pasta'];
-            $return[$i]['nome'] = $dados['nome'];
-            $return[$i]['chave'] = $dados['chave'];
-            $return[$i]['valor'] = $dados['valor'];
-             *
-             */
             $return[$i] = $dados;
             $i++;
         }

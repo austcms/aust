@@ -29,6 +29,8 @@ $dbSchema['admins'] = array(
     'biografia' => 'text',
     'supervisionado' => 'int',
     'adddate' => 'datetime',
+    'is_blocked' => 'int default "0"',
+    'is_deleted' => 'int default "0"',
     'autor' => 'int',
     'dbSchemaTableProperties' => array(
         'PRIMARY KEY' => '(id)',
@@ -65,20 +67,21 @@ $dbSchema['admins_tipos'] = array(
     ),
     'dbSchemaSQLQuery' => array(
         "INSERT INTO admins_tipos(nome,data,publico) VALUES('Webmaster','".date("Y-m-d H:i:s")."',0)",
-        "INSERT INTO admins_tipos(nome,publico,nome_abrev,data,descricao) VALUES('Administrador',1,'Adm','".date("Y-m-d H:i:s")."','O Administrador controla todo o site e gerencia moderadores e colaboradores. Somente administradores podem cadastrar outros usuários.')",
-        "INSERT INTO admins_tipos(nome,publico,data,descricao) VALUES('Moderador',1,'".date("Y-m-d H:i:s")."','O Moderador controla e gerencia todo o conteúdo. Não podem adicionar outros usuários ou configurar as opções.')",
-        "INSERT INTO admins_tipos(nome,publico,data,descricao) VALUES('Colaborador',1,'".date("Y-m-d H:i:s")."','O Colaborador pode somente inserir conteúdo.')",
+        "INSERT INTO admins_tipos(nome,publico,nome_abrev,data,descricao) VALUES('Administrador',1,'Adm','".date("Y-m-d H:i:s")."','Administradores têm total acesso ao gerenciar. Somente eles têm poder para criar novos usuários, alterar hierarquias e configurar o gerenciador.')",
+        "INSERT INTO admins_tipos(nome,publico,data,descricao) VALUES('Moderador',1,'".date("Y-m-d H:i:s")."','Moderadores têm poder de restringir o acesso ao gerenciamento de conteúdo e bloquear colaboradores. Ele que define que usuários podem escrever notícias, por exemplo.')",
+        "INSERT INTO admins_tipos(nome,publico,data,descricao) VALUES('Colaborador',1,'".date("Y-m-d H:i:s")."','Colaboradores podem somente gerenciar conteúdos. Não podem gerenciar pessoas nem modificar configurações importantes.')",
     )
 );
 
 
 $dbSchema['categorias'] = array(
     'id' => 'int NOT NULL auto_increment',
-    'nome' => 'text',
-    'nome_encoded' => 'text',
-    'patriarca' => 'text',
-    'patriarca_encoded' => 'text',
+    'nome' => 'varchar(240)',
+    'nome_encoded' => 'varchar(240)',
+    'patriarca' => 'varchar(240)',
+    'patriarca_encoded' => 'varchar(240)',
     'subordinadoid' => 'int',
+    'subordinado_nome_encoded' => 'varchar(240)',
     'descricao' => 'text',
     'classe' => 'varchar(200)',
     'tipo' => 'varchar(200)',
@@ -102,7 +105,12 @@ $dbSchema['config'] = array(
     'nome' => 'text',
     'propriedade' => 'varchar(100)',
     'valor' => 'text',
-    'autor' => 'varchar(120)',
+    'explanation' => 'text',
+    'options_json' => 'text',
+    'class' => 'varchar(100)',
+    'ref_table' => 'varchar(100)',
+    'ref_field' => 'varchar(100)',
+    'autor' => 'int',
     'dbSchemaTableProperties' => array(
         'PRIMARY KEY' => '(id)',
         'UNIQUE' => 'id (id)',
@@ -143,8 +151,36 @@ $dbSchema['modulos_conf'] = array(
     )
 );
 
+/*
+ * MIGRATIONS
+ */
+/*
+ * Migrations -> Módulos
+ */
+    $dbSchema['migrations_mods'] = array(
+        'version' => 'varchar(50) NOT NULL',
+        'module_name' => 'varchar(254) COMMENT "Nome do módulo."',
+        'dbSchemaTableProperties' => array(
+            'PRIMARY KEY' => '(version)',
+            'UNIQUE' => 'version (version)',
+        )
+    );
 
-
-
+/*
+ * WIDGETS
+ */
+    $dbSchema['widgets'] = array(
+        'id' => 'int NOT NULL auto_increment',
+        'name' => 'varchar(150) NOT NULL',
+        'path' => 'varchar(250) NOT NULL',
+        'column_nr' => 'int NOT NULL COMMENT "Número da coluna em que o widget estará."',
+        'position_nr' => 'int NOT NULL COMMENT "Posição do widget na coluna"',
+        'is_global' => 'int NOT NULL DEFAULT "0" COMMENT "1 se este widget é para todos os usuários."',
+        'admin_id' => 'int NOT NULL COMMENT "Id do administrador atual"',
+        'dbSchemaTableProperties' => array(
+            'PRIMARY KEY' => '(id)',
+            'UNIQUE' => 'id (id)',
+        )
+    );
 
 ?>

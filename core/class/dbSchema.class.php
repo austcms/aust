@@ -29,7 +29,7 @@ class dbSchema
      *
      * @var array Possui o schema das tabelas do DB
      */
-    protected $dbSchema;
+    public $dbSchema;
     /**
      *
      * @var class Classe responsável pela conexão com o banco de dados
@@ -91,7 +91,6 @@ class dbSchema
         
         $this->conexao = $conexaoClass;
 
-        //$this->tabelasAtuais();
         /**
          * Se não houve verificação do Schema atual ainda
          */
@@ -169,7 +168,6 @@ class dbSchema
          *      0: nenhuma tabela existe
          *      1: todas as tabelas existém
          */
-
         if(!empty($status)){
             /**
              * Algumas tabelas existém e outras não
@@ -202,7 +200,14 @@ class dbSchema
         
     }
 
-    protected function tabelasAtuais(){
+    /**
+     * tabelasAtuais()
+     *
+     * Verifica quais as tabelas estão instaladas atualmente
+     *
+     * @return <array>
+     */
+    public function tabelasAtuais(){
         /**
          * Carrega todas as tabelas do DB
          */
@@ -224,6 +229,8 @@ class dbSchema
                 $this->tabelasAtuais[ reset($dados) ][$info['Field']] = $info;
             }
         }
+
+        return $this->tabelasAtuais;
 
     }
 
@@ -290,94 +297,60 @@ class dbSchema
          * Verifica se as tabelas já existem. Somente se estiver tudo ok a
          * instalação continua
          */
-        //pr($this->schemaStatus);
 
         $checkedSchema = $this->verificaSchema();
-        //var_dump($checkedSchema);
-        //echo '<strong>--->'.$this->verificaSchema().'<----</strong>';
         if($checkedSchema != 1 AND $this->isDbSchemaFormatOk() ){
-            //echo 'diferente de 1 e não falso';
             /**
              * Tabela por tabela do Schema
              */
-            foreach($this->dbSchema as $tabela=>$campos){
 
-                if(!array_key_exists($tabela, $this->tabelasAtuais) AND is_array($campos)){
-                    foreach($campos as $nome=>$propriedades){
-                        /**
-                         * Se não for campo especial, gera SQL deste campo
-                         */
-                        if(!in_array( $nome, $this->camposEspeciais)){
-                            $camposSchema[] = $nome.' '.$propriedades;
-                        }
-                        /**
-                         * Campo especial (Keys)
-                         */
-                        else {
-                            if(is_array($propriedades)){
-                                /**
-                                 * Percorre os campos especiais (Keys)
-                                 */
-                                foreach($propriedades as $key=>$propriedades2){
-                                    /**
-                                     * Se for propriedades como Keys primárias, únicas, etc
-                                     */
-                                    if($nome == 'dbSchemaTableProperties'){
-                                        $camposSchema[] = $key.' '.$propriedades2;
-                                    }
-                                    /**
-                                     * Se for SQLs que devem ser rodados na criação da tabela
-                                     */
-                                    elseif($nome == 'dbSchemaSQLQuery'){
-                                        $sqlsubquery[$tabela][] = $propriedades2;
-                                    }
-                                }
-                            }
-                            
-                        }
-                    }
-                    /**
-                     * Gera SQL
-                     */
-                    $sql[$tabela] = 'CREATE TABLE '.$tabela.' ('. implode(', ', $camposSchema) .')';
-                    unset($camposSchema);
-                }
-            } // Fim do foreach
+            $sql = $this->sql();
 
             /**
              * Executa Query por Query, criando cada tabela inexistente
              */
             if(is_array($sql)){
                 foreach($sql as $tabela=>$valor){
+                    /*
+                     * SubSQLQueries, por exemplo
+                     */
+                    if( !empty($valor) AND is_array($valor) ){
 
-                    $mysql = $this->conexao->exec($valor, 'CREATE_TABLE');
-                    if($mysql){
-                        $resultado[$tabela] = 1;
-                        /**
-                         * Guarda resultado como tabela instalada
-                         */
-                        $this->tabelasInstaladas[$tabela] = 1;
                         
                         /**
-                         * Se há querys subsequentes a serem rodadas
+                         * subqueries
                          */
-                        if(!empty($sqlsubquery[$tabela]) AND is_array($sqlsubquery[$tabela])){
-                            foreach($sqlsubquery[$tabela] as $subsql){
-                                if($this->conexao->exec($subsql)){
-                                    
+                        foreach( $valor as $subTabelas ){
+
+                            foreach($subTabelas as $subSql){
+                                if($this->conexao->exec($subSql)){
+
                                 } else {
 
                                 }
                             }
                         }
+                    }
+                    /*
+                     * SQLs simples, como TABLES
+                     */
+                    else {
+                        $mysql = $this->conexao->exec($valor, 'CREATE_TABLE');
+                        if($mysql){
+                            $resultado[$tabela] = 1;
+                            /**
+                             * Guarda resultado como tabela instalada
+                             */
+                            $this->tabelasInstaladas[$tabela] = 1;
 
-                    } else {
-                        /**
-                         * Guarda resultado como tabela não instalada
-                         */
-                        $this->tabelasInstaladas[$tabela] = 0;
+                        } else {
+                            /**
+                             * Guarda resultado como tabela não instalada
+                             */
+                            $this->tabelasInstaladas[$tabela] = 0;
 
-                        $resultado[$tabela] = 0;
+                            $resultado[$tabela] = 0;
+                        }
                     }
                 }
             }
@@ -401,14 +374,85 @@ class dbSchema
         }
     }
 
-    protected function isDbSchemaFormatOk($dbSchema = ''){
-        if ( is_array($this->dbSchema)) {
+    /**
+     * isDbSchemaFormatOk()
+     *
+     * Verifica se o formato do schema está correto
+     *
+     * @param <array> [opcional] $dbSchema
+     * @return <bool>
+     */
+    public function isDbSchemaFormatOk($dbSchema = ''){
+
+        if( empty($dbSchema) )
+            $dbSchema = $this->dbSchema;
+
+        if ( is_array($dbSchema)) {
             return true;
         }
 
         return false;
 
 
+    }
+
+    public function sql(){
+
+        $this->tabelasAtuais();
+        //pr($this->dbSchema);
+        //pr($this->tabelasAtuais);
+
+        foreach($this->dbSchema as $tabela=>$campos){
+
+            /*
+             * Só roda SQL se tabela não existe ainda.
+             */
+            if(!array_key_exists($tabela, $this->tabelasAtuais) AND is_array($campos)){
+                foreach($campos as $nome=>$propriedades){
+                    /**
+                     * Se não for campo especial, gera SQL deste campo
+                     */
+                    if(!in_array( $nome, $this->camposEspeciais)){
+                        $camposSchema[] = $nome.' '.$propriedades;
+                    }
+                    /**
+                     * Campo especial (Keys)
+                     */
+                    else {
+                        if(is_array($propriedades)){
+                            /**
+                             * Percorre os campos especiais (Keys)
+                             */
+                            foreach($propriedades as $key=>$propriedades2){
+                                /**
+                                 * Se for propriedades como Keys primárias, únicas, etc
+                                 */
+                                if($nome == 'dbSchemaTableProperties'){
+                                    $camposSchema[] = $key.' '.$propriedades2;
+                                }
+                                /**
+                                 * Se for SQLs que devem ser rodados na criação da tabela
+                                 */
+                                elseif($nome == 'dbSchemaSQLQuery'){
+                                    $sqlsubquery[$tabela][] = $propriedades2;
+                                }
+                            }
+                        }
+
+                    }
+                }
+                /**
+                 * Gera SQL
+                 */
+                $sql[$tabela] = 'CREATE TABLE '.$tabela.' ('. implode(', ', $camposSchema) .')';
+                unset($camposSchema);
+            }
+        } // Fim do foreach
+
+        if( !empty($sqlsubquery) )
+            $sql['dbSchemaSQLQuery'] = $sqlsubquery;
+
+        return $sql;
     }
 }
 

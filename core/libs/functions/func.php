@@ -2,33 +2,23 @@
 /*
  * Arquivo contendo principais funções para facilitar o processo de codificação
  *
- * Índice:
- *
- * - ArrayToLower($array, $round = 0) = retorna uma array para minúsculas
- * - EscreveBoxMensagem($status) = simples função para escrever um div padronizado com a string do parâmetro $status
- *
  */
-
-
-
 /*
- * Datas e variáveis
+ *
+ * STRINGS
+ *
  */
+    // retorna uma array com valores em letra minúscula (semelhante a strtolower)
+    function ArrayToLower($array,$round = 0){
+        foreach($array as $key => $value){
+            if(is_array($value))
+                $array[strtolower($key)] =  $this->arraytolower($value,$round+1);
+            else
+                $array[strtolower($key)] = strtolower($value);
+        }
+        return $array;
 
-// 
-// retorna uma array com valores em letra minúscula (semelhante a strtolower)
-function ArrayToLower($array,$round = 0){
-    foreach($array as $key => $value){
-        if(is_array($value))
-            $array[strtolower($key)] =  $this->arraytolower($value,$round+1);
-        else
-            $array[strtolower($key)] = strtolower($value);
     }
-    return $array;
-
-}
-
-
     /**
      * Ajusta string, retirando acentos e tornando acessível na URL do browser
      *
@@ -37,7 +27,7 @@ function ArrayToLower($array,$round = 0){
      *
      * @return string Retorna texto codificado, sem acentos, em minúsculas, sem espaços
      */
-    function encodeText($str){
+    function encodeText($str=''){
 
         // troca estas letras
         $changeTheseLetters = array('à','á','â','ã','ä','å','ç','è','é','ê','ë','ì','í','î','ï','ñ','ò','ó','ô','õ','ö','ù','ü','ú','ÿ','À','Á','Â','Ã','Ä','Å','Ç','È','É','Ê','Ë','Ì','Í','Î','Ï','Ñ','Ò','Ó','Ô','Õ','Ö','Ù','Ü','Ú');
@@ -68,14 +58,13 @@ function ArrayToLower($array,$round = 0){
      *
      * @param array $status
      */
-
-function EscreveBoxMensagem($status){
-	echo '<div class="box-full">
+    function EscreveBoxMensagem($status){
+        echo '<div class="box-full">
             <div class="box '.$status['classe'].'">
                 '.$status['mensagem'].'
             </div>
         </div>';
-}
+    }
 
 /**
  * Retorna o dia, mês, ano, hora, minuto ou segundo atual
@@ -114,9 +103,14 @@ $shora = PegaData("hora");
 $sminuto = PegaData("minuto");
 $ssegundo = PegaData("segundo");
 
+/**
+ * @todo - esta função carece ser refatorada. Devia ter uma função
+ * que fizesse todo o trabalho de codificar uma string, tirando acentos,
+ * espaços, tornar minúsculas as letras, entre outros.
+ */
 //função que tira todos os acentos
 function RetiraAcentos($a){
-    //$a = utf8_decode($a);
+    //$a = utf8_encode($a);
     //echo $current_encoding = mb_detect_encoding($a, 'auto');
         //echo $a."<br>";
         $a = str_replace(array('à','á','â','ã','ä'), "a", $a);
@@ -386,12 +380,28 @@ function PegaExtensao($param){
  * funções para facilitar debuggar o codigo
  */
 
-    // executa print_r() com tag <pre> ao redor
+    /**
+     * pr()
+     *
+     * Executa print_r() com tag <pre> ao redor
+     */
     function pr($var){
         echo "<pre>";
         print_r($var);
         echo "</pre>";
     }
+
+    /**
+     * vd()
+     *
+     * Executa var_dump() com tag <pre> ao redor
+     */
+    function vd($var){
+        echo "<pre>";
+        var_dump($var);
+        echo "</pre>";
+    }
+
 
 
 ?>

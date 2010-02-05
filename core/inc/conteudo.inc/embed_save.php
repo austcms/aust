@@ -11,8 +11,11 @@
  */
 $embed = $this->modulo->LeModulosEmbed();
 
-foreach( $embed as $valor ){
-    $embedIds[] = $valor["id"];
+$embedIds = array();
+if( is_array($embed) ){
+    foreach( $embed as $valor ){
+        $embedIds[] = $valor["id"];
+    }
 }
 
 /*
