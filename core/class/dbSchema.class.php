@@ -311,35 +311,46 @@ class dbSchema
              */
             if(is_array($sql)){
                 foreach($sql as $tabela=>$valor){
+                    /*
+                     * SubSQLQueries, por exemplo
+                     */
+                    if( !empty($valor) AND is_array($valor) ){
 
-                    $mysql = $this->conexao->exec($valor, 'CREATE_TABLE');
-                    if($mysql){
-                        $resultado[$tabela] = 1;
-                        /**
-                         * Guarda resultado como tabela instalada
-                         */
-                        $this->tabelasInstaladas[$tabela] = 1;
                         
                         /**
-                         * Se há querys subsequentes a serem rodadas
+                         * subqueries
                          */
-                        if(!empty($sqlsubquery[$tabela]) AND is_array($sqlsubquery[$tabela])){
-                            foreach($sqlsubquery[$tabela] as $subsql){
-                                if($this->conexao->exec($subsql)){
-                                    
+                        foreach( $valor as $subTabelas ){
+
+                            foreach($subTabelas as $subSql){
+                                if($this->conexao->exec($subSql)){
+
                                 } else {
 
                                 }
                             }
                         }
+                    }
+                    /*
+                     * SQLs simples, como TABLES
+                     */
+                    else {
+                        $mysql = $this->conexao->exec($valor, 'CREATE_TABLE');
+                        if($mysql){
+                            $resultado[$tabela] = 1;
+                            /**
+                             * Guarda resultado como tabela instalada
+                             */
+                            $this->tabelasInstaladas[$tabela] = 1;
 
-                    } else {
-                        /**
-                         * Guarda resultado como tabela não instalada
-                         */
-                        $this->tabelasInstaladas[$tabela] = 0;
+                        } else {
+                            /**
+                             * Guarda resultado como tabela não instalada
+                             */
+                            $this->tabelasInstaladas[$tabela] = 0;
 
-                        $resultado[$tabela] = 0;
+                            $resultado[$tabela] = 0;
+                        }
                     }
                 }
             }
@@ -437,6 +448,9 @@ class dbSchema
                 unset($camposSchema);
             }
         } // Fim do foreach
+
+        if( !empty($sqlsubquery) )
+            $sql['dbSchemaSQLQuery'] = $sqlsubquery;
 
         return $sql;
     }
