@@ -18,7 +18,7 @@ p.alerta { color: #FF3300; }
 h1, h2, h3, h4, h5, h6 { color: #004B85; }
 h1 { color: #004b85; }
 h1.restrito { color: #990000; }
-h2.restrito { color: #990000; }
+h2.restrito { color: #990000; margin-top: 15px; }
 h2.falha { color: red; }
 h2.ok { color: #006600; }
 
@@ -68,6 +68,7 @@ div.widget div.footer { background: #fdfdfd; }
 table.pane_listing tr.list { background: #fdfdfd; }
 table.pane_listing tr.footer { background: #fdfdfd; }
 table.pane_listing tr.header { background: #edf6ff; }
+ table.pane_listing tr.header td { color: #888888; }
 
 /* TAB PANE -> table.pane_listing - Painel Gerenciar e Configurações*/
 div.panes div.background { background: #fdfdfd; }
