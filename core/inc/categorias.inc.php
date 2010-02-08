@@ -6,7 +6,7 @@ switch($_GET['action']){
                          * Faz a gravação
                          */
 						?>
-						<h1>Gravar</h1>
+						<h2>Gravar</h2>
 						<?php
 
 						$texto = $_POST['frmdescricao'];
@@ -113,7 +113,7 @@ switch($_GET['action']){
 						
 						if($aust->Instalado()){
 						?>
-                            <h1>Gerenciar Categorias</h1>
+                            <h2>Gerenciar Categorias</h2>
                             <p>
                                 <strong>O que são Categorias?</strong> Todo o conteúdo do site está dividido em sessões, como em um jornal.
                                 Estas divisões chamam-se <em>Categorias</em>.
@@ -191,3 +191,4 @@ switch($_GET['action']){
 	}
 }
 ?>
+<br />

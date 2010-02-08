@@ -36,6 +36,12 @@ define("IMG_DIR", "core/user_interface/img/");
     <?php /* Tema Verde */ ?>
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>temas/classic_green/default.css" type="text/css" />
 
+    <?php /* Tema Vermelho */ ?>
+    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>temas/classic_red/default.css" type="text/css" />
+
+    <?php /* Tema Cinza azulado */ ?>
+    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>temas/classic_silver/default.css" type="text/css" />
+
 
     <!-- TinyMCE -->
     <?php
