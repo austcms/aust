@@ -47,8 +47,5 @@ ul.tabs {
         ul.tabs a.current, ul.tabs a.current:hover, ul.tabs li.current a {
             background-position: -420px -62px;
             cursor: default !important;
-            color: #2d88cf;
-            background: url(img/marcador_ger.png) no-repeat bottom #edf6ff;
-            background: #edf6ff;
-             
+            
         }

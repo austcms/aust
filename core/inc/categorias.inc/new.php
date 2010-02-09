@@ -1,5 +1,5 @@
 
-<h1>Novo</h1>
+<h2>Nova Categoria</h2>
 <p>
     <a href="javascript: history.back();"><img src="img/layoutv1/voltar.gif" border="0" /></a>
 </p>
