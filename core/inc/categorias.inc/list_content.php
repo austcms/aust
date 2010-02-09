@@ -14,7 +14,7 @@
 $w = (!empty($_GET['w'])) ? $_GET['w'] : 'NULL';
 ?>
 
-<h1>Listando Categorias</h1>
+<h2>Listando Categorias</h2>
 <p>
     A seguir você pode ver a estrutura de categorias do site. O <strong>conceito é simples</strong>, lembre-se de uma Árvore
     Genealógica, onde os filhos ficam abaixo dos pais em hierarquia.

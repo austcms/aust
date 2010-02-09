@@ -17,7 +17,6 @@ table.pane_listing {
     float: left;
 }
     table.pane_listing tr.header {
-        background: #edf6ff;
         border-bottom: 1px solid #eeeeee;
         height: 30px;
         margin: 0px; padding: 0;
@@ -25,7 +24,7 @@ table.pane_listing {
 
         table.pane_listing tr td:first-child {  }
         table.pane_listing tr.header td {
-            color: #888888; text-transform: uppercase;
+            text-transform: uppercase;
             font-size: 0.9em;
             padding: 0 0 0px 10px;
         }
