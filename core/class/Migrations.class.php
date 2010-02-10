@@ -82,18 +82,20 @@ class Migrations
      */
     function createTable($schema){
         $c = $this->conexao;
-
         if( is_array($schema) ){
             $schema = new dbSchema( $schema, $c );
             if( $schema->isDbSchemaFormatOk() ){
+
+                if( is_array($schema->sql())){
                 
-                foreach( $schema->sql() as $tabela=>$sql ){
-                    /**
-                     * @todo - deve-se fazer com que se a
-                     * função a seguir não funcione ou retorne
-                     * falso, mostrar uma mensagem de erro.
-                     */
-                    $c->exec($sql);
+                    foreach( $schema->sql() as $tabela=>$sql ){
+                        /**
+                         * @todo - deve-se fazer com que se a
+                         * função a seguir não funcione ou retorne
+                         * falso, mostrar uma mensagem de erro.
+                         */
+                        $c->exec($sql);
+                    }
                 }
             }
         } else if( is_string($schema) ){
