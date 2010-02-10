@@ -3,8 +3,6 @@
 /*
  * DELETAR, APROVAR
  */
-
-
 // para deletar
 if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
     /*

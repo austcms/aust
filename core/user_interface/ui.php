@@ -30,8 +30,17 @@ define("IMG_DIR", "core/user_interface/img/");
     <?php /* Estilo dos lightboxs - Lightbox */ ?>
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/lightbox.css" type="text/css" />
 
-    <?php /* Tema default */ ?>
-    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>temas/default/default.css" type="text/css" />
+    <?php /* Tema Azul */ ?>
+    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>temas/classic_blue/default.css" type="text/css" />
+
+    <?php /* Tema Verde */ ?>
+    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>temas/classic_green/default.css" type="text/css" />
+
+    <?php /* Tema Vermelho */ ?>
+    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>temas/classic_red/default.css" type="text/css" />
+
+    <?php /* Tema Cinza azulado */ ?>
+    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>temas/classic_silver/default.css" type="text/css" />
 
 
     <!-- TinyMCE -->
@@ -146,7 +155,9 @@ define("IMG_DIR", "core/user_interface/img/");
             ?>
             <div class="borda"></div>
             <br />
-                <a href="adm_main.php?section=conf_modulos" class="restrito">Configurar Módulos</a><?php
+                <span class="para_webmaster">Para Webmasters:</span><a href="adm_main.php?section=conf_modulos" class="restrito">Configurar Módulos</a>
+                <a href="adm_main.php?section=categorias" class="restrito">Categorias</a>
+            <?php
             }
             ?>
         </div>

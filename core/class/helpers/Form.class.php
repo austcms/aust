@@ -321,7 +321,7 @@ class FormHelper
          */
         $c = '';
 
-        $inputValue = empty($options['value']) ? '' : $options['value'];
+        $inputValue = empty($options['value']) ? date("Y-m-d") : $options['value'];
         $fieldName = empty($options['fieldName']) ? '' : $options['fieldName'];
 
         $inputValueDay = date("d", strtotime($inputValue) );

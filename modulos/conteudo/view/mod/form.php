@@ -91,7 +91,19 @@
 
             </div>
             <?php
-            lbCategoria($austNode);
+            /*
+             * Nova_Categoria?
+             */
+            $showNovaCategoria = false;
+            if( !empty($moduloConfig["nova_categoria"]) ){
+                if( $moduloConfig["nova_categoria"]["valor"] == "1" )
+                    $showNovaCategoria = true;
+            }
+            if( $showNovaCategoria ){
+                ?>
+                lbCategoria($austNode);
+                <?php
+            }
             ?>
         </td>
     </tr>
@@ -109,10 +121,10 @@
     /*
      * RESUMO
      */
-    $showResumo = true;
+    $showResumo = false;
     if( !empty($moduloConfig["resumo"]) ){
-        if( $moduloConfig["resumo"]["valor"] == "0" )
-            $showResumo = false;
+        if( $moduloConfig["resumo"]["valor"] == "1" )
+            $showResumo = true;
     }
     if( $showResumo ){
     ?>
