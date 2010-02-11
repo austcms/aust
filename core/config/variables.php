@@ -49,6 +49,8 @@ define("CORE_DIR", "core/");
      */
     define("UI_PATH", CORE_DIR."user_interface/");
     define("UI_STANDARD_FILE", UI_PATH."ui.php");
+    define("THEMES_DIR", UI_PATH."themes/");
+    define("THEMES_SCREENSHOT_FILE", "screenshot");
     /**
      * Define o diretório onde estão os arquivos de login e autenticação
      */

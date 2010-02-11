@@ -31,17 +31,7 @@ define("IMG_DIR", "core/user_interface/img/");
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/lightbox.css" type="text/css" />
 
     <?php /* Tema Azul */ ?>
-    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>temas/classic_blue/default.css" type="text/css" />
-
-    <?php /* Tema Verde */ ?>
-    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>temas/classic_green/default.css" type="text/css" />
-
-    <?php /* Tema Vermelho */ ?>
-    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>temas/classic_red/default.css" type="text/css" />
-
-    <?php /* Tema Cinza azulado */ ?>
-    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>temas/classic_silver/default.css" type="text/css" />
-
+    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.THEMES_DIR; ?>classic_blue/default.css" type="text/css" />
 
     <!-- TinyMCE -->
     <?php
