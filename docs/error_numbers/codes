@@ -13,6 +13,7 @@ Iniciando em 1
 
 Erros de acesso por usuários
 
+    100 -> Usuário não logado
     101 -> Dados inválidos para login (login, senha)
     102 -> Usuário existente mas está bloqueado
     103 -> Usuário foi bloqueado enquanto acessava o gerenciador

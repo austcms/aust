@@ -113,5 +113,88 @@ class Conteudo extends Modulos
         return $sql;
 
     } // fim getSQLForListing()
+
+    public function save($post = array() ){
+
+        if( empty($post) )
+            return false;
+
+        $post['frmtitulo_encoded'] = encodeText($post['frmtitulo']);
+
+        foreach($post as $key=>$valor) {
+            // se o argumento $post contém 'frm' no início
+            if(strpos($key, 'frm') === 0) {
+                $sqlcampo[] = str_replace('frm', '', $key);
+                $sqlvalor[] = $valor;
+                // ajusta os campos da tabela nos quais serão gravados dados
+                $valor = addslashes($valor);
+                if($post['metodo'] == 'criar') {
+                    if($c > 0) {
+                        $sqlcampostr = $sqlcampostr.','.str_replace('frm', '', $key);
+                        $sqlvalorstr = $sqlvalorstr.",'".$valor."'";
+                    } else {
+                        $sqlcampostr = str_replace('frm', '', $key);
+                        $sqlvalorstr = "'".$valor."'";
+                    }
+                } else if($post['metodo'] == 'editar') {
+                    if($c > 0) {
+                        $sqlcampostr = $sqlcampostr.','.str_replace('frm', '', $key).'=\''.$valor.'\'';
+                    } else {
+                        $sqlcampostr = str_replace('frm', '', $key).'=\''.$valor.'\'';
+                    }
+                }
+
+                $c++;
+            }
+        }
+
+        if( empty($sqlcampostr) OR
+            empty($sqlvalorstr) ){
+            return false;
+        }
+
+
+
+        if($post['metodo'] == 'criar') {
+            $sql = "INSERT INTO
+                        ".$this->tabela_criar."
+                        ($sqlcampostr)
+                    VALUES
+                        ($sqlvalorstr)";
+
+
+        } else if($post['metodo'] == 'editar') {
+            $sql = "UPDATE
+                        ".$this->tabela_criar."
+                    SET
+                        $sqlcampostr
+                    WHERE
+                        id='".$post['w']."'
+                    ";
+        }
+
+        $query = $this->conexao->exec($sql);
+
+        if($query !== false) {
+            $resultado = TRUE;
+
+            // se estiver criando um registro, guarda seu id para ser usado por módulos embed a seguir
+            if($post['metodo'] == 'criar') {
+                $post['w'] = $this->conexao->conn->lastInsertId();
+            }
+
+
+            /*
+                 *
+                 * EMBED SAVE
+                 *
+            */
+            //include(INC_DIR.'conteudo.inc/embed_save.php');
+
+        } else {
+            $resultado = FALSE;
+        }
+        return $resultado;
+    }
 }
 ?>
