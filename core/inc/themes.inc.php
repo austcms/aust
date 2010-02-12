@@ -37,11 +37,14 @@ $c = $widgets->getInstalledWidgets($params);
         <div class="theme">
 
             <div class="theme_name">
-                <?php echo $theme['name']; ?>
+                <h3> <?php echo $theme['name']; ?> </h3>
             </div>
 
             <div class="screenshot">
                 <?php echo '<img src="'.$theme['screenshotFile'].'" />'; ?>
+            </div>
+            <div class="instalar">
+                <a href="#"></a>
             </div>
         </div>
     </div>
