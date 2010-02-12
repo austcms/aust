@@ -454,6 +454,23 @@ class dbSchema
 
         return $sql;
     }
+
+    public function sqlForMissingFields($params, $mode = ''){
+
+        $table = key($params);
+        $fields = $params[$table];
+        $addStatement = '';
+
+        if( is_array($fields) ){
+            foreach( $fields as $field=>$property ){
+                $addStatement[] = 'ADD COLUMN '.$field. ' '.$property.' ';
+            }
+        }
+
+        //$properties = str_replace('"', "'", reset( $params[$table] ) );
+
+        return 'ALTER TABLE '.$table.' '.implode(", ", $addStatement);
+    }
 }
 
 ?>
