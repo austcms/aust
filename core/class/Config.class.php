@@ -1,56 +1,301 @@
 <?php
-
 class Config {
+
     private $Opcoes; // variável possuindo as configurações
-    private $OpcoesNomes; // variável possuindo as configurações
     public $self;
 
     public $options;
     public $conexao;
 
-    // Inicializa Configurações
+    /**
+     * Contém configurações de permissões de acesso às configurações do sistema
+     *
+     * O formato é o seguinte:
+     *
+     *      array(
+     *          tipo_1 => grupo_de_admins_1,
+     *          tipo_2 => array(
+     *              grupo_de_admins_1,
+     *              grupo_de_admins_2,
+     *          ),
+     *          tipo_3 => '*'
+     *      )
+     *
+     * Interpretação:
+     *
+     *      - tipo_1 : somente grupo_de_admins_1 pode ver,
+     *      - tipo_2 : somente grupo_de_admins 1 e 2 podem ver,
+     *      - tipo_3 : todos podem ver
+     *      - tipo_4 : não especificado, ninguém pode ver, exceto webmaster.
+     *
+     * O tipo_4 neste formato, ninguém podendo ver, evita que novas configurações
+     * venham à tona e possam ser vistos por qualquer usuário.
+     *
+     * @var <array>
+     */
+    public $permissions = array('*'=>'*');
+
+    /**
+     * Grupo do usuário
+     */
+    public $_userType = '';
+
+    /**
+     * Grupo root
+     */
+    public $_rootType = 'root';
+
+    /**
+     * Contém os itens de configuração que estão faltando para
+     * que o sistema esteja íntegro.
+     *
+     * @var <array>
+     */
+    public $_missingConfig = array();
+
+    
     function __construct( $params ) {
         $this->conexao = $params['conexao'];
         $this->self = $_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'];
 
         /*
-        $sql = "SELECT * FROM config";
-
-        $mysql = mysql_query($sql);
-        $total = mysql_num_rows($mysql);
-
-        if($total == 0) {
-            $sql2[] = "INSERT INTO config (nome,propriedade,valor) VALUES ('Nome do site','sitename','')";
-            $sql2[] = "INSERT INTO config (nome,propriedade,valor) VALUES ('Email do suporte técnico','suportetecnicoemail','')";
-            foreach($sql2 as $key=>$valor) {
-                mysql_query($valor);
-            }
-            $sql = "SELECT * FROM config";
-            $mysql = mysql_query($sql);
-        }
-        // se existém registros no DB config
-        //if(count($_SESSION['conf']) < $total){
-        while($dados = mysql_fetch_array($mysql)) {
-        //$this->AjustaOpcoes($dados[propriedade], $dados[valor]);
-            $loaded_config[$dados[propriedade]] = $dados[valor];
-        }
-        $_SESSION['conf'] = $loaded_config;
-
-        //}
-
-        $session_config = Array();
-        $session_config = $_SESSION['conf'];
-        foreach ($session_config as $chave=>$valor) {
-            $this->AjustaOpcoes($chave, $valor);
-        }
-         *
+         * Permissões de usuários acessar configurações
          */
+        $this->permissions = (empty($params['permissions'])) ? array('*'=>'*') : $params['permissions'];
+
+        /*
+         * Grupo do usuário (webmaster, administrador, moderador, etc)
+         */
+        $this->_userType = (empty($params['userType'])) ? '' : strtolower($params['userType']);
+
+        /*
+         * Grupo root
+         */
+        $this->_rootType = (empty($params['rootType'])) ? '' : strtolower($params['rootType']);
+
+        if( !$this->checkIntegrity() )
+            $this->_initConfig();
 
     }
 
+    public function getConfig($property){
+        if( !empty($property) ){
+
+            /*
+             * String, ou seja, apenas um valor dado.
+             */
+            if( is_string($property) ){
+                $type = CoreConfig::read('configStandardType');
+                $field = 'valor';
+                $params = array(
+                    'where' => "tipo='".$type."' AND propriedade='".$property."'",
+                    'mode' => 'single',
+
+                );
+            } else {
+                return false;
+            }
+
+
+
+            $result = reset( $this->getConfigs($params) );
+            $result = reset($result);
+            return $result[$field];
+
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * getConfig()
+     * 
+     * @param <array> $params
+     * @return <array>
+     */
+    public function getConfigs($params = array()){
+
+        /*
+         * Modo de retorno
+         */
+        $mode = (empty($params["mode"])) ? '' : $params["mode"];
+        unset($params['mode']);
+
+        $where = (empty($params["where"])) ? '' : 'AND ( '. $params["where"].')';
+        unset($params['where']);
+
+        /**
+         * Tipo de configuração, geralmente global
+         */
+        $type = (empty($params["type"])) ? array() : $params["type"];
+        if( is_string($type) )
+            $type = array($type);
+        $type = (empty($type)) ? '' : ' AND tipo IN (\''. implode("','", $type) .'\')';
+
+        $sql = "SELECT * FROM
+                    config
+                WHERE
+                    1=1
+                    $where
+                    $type
+                ORDER BY tipo ASC
+                ";
+        $query = $this->conexao->query($sql);
+
+        $result = array();
+        foreach( $query as $valor ){
+            $result[$valor['tipo']][] = $valor;
+        }
+
+        if( !empty($result) ){
+            return $result;
+        } else {
+            return array();
+        }
+    }
+
+    /**
+     * hasPermission()
+     *
+     * Verifica se usuário tem permissão de ver uma determinada configuração
+     * seguindo as regras em $this->permission.
+     *
+     * @param <mixed> $param
+     * @return <bool>
+     */
+    function hasPermission($param){
+        /*
+         * $ut = $this->_userType
+         */
+        $uT = $this->_userType;
+
+        /*
+         * Usuários Root podem tudo
+         */
+        if( $uT == $this->_rootType )
+            return true;
+        
+        /*
+         * Por padrão, param é = type (global, etc)
+         */
+        if( is_string($param) ){
+            $givenType = $param;
+            /*
+             * Se existe alguma permissão definida
+             */
+            if( array_key_exists($givenType, $this->permissions) ){
+                /*
+                 * String
+                 */
+                if( is_string( $this->permissions[$givenType]) ){
+                    if( $uT == strtolower($this->permissions[$givenType]) )
+                        return true;
+                    if( $this->permissions[$givenType] == '*' )
+                        return true;
+                }
+                /*
+                 * Array
+                 */
+                elseif( is_array( $this->permissions[$givenType]) ){
+                    foreach( $this->permissions[$givenType] as $typePermitted ){
+                        if( $uT == strtolower($typePermitted) )
+                            return true;
+                    }
+                }
+            }
+        }
+        return false;
+    } // end hasPermission()
+
+    /*
+     *
+     * INTEGRIDADE DAS CONFIGURAÇÕES
+     *
+     */
+    /**
+     * checkIntegrity()
+     *
+     * Verifica a integridade das configurações, se todas
+     * necessárias estão presentes.
+     *
+     * @return <bool>
+     */
+    public function checkIntegrity(){
+
+        $neededConfig = CoreConfig::read('neededConfig');
+
+        if( !empty($neededConfig) AND is_array($neededConfig) ){
+            foreach( $neededConfig as $valor ){
+                $whereConfig[] = "(tipo='".$valor['tipo']."' AND propriedade='".$valor['propriedade']."')";
+            }
+        } else {
+            return true;
+        }
+
+        $qtdNeeded = count($neededConfig);
+
+        $sql = "SELECT tipo, propriedade FROM
+                    config
+                WHERE
+                    ".implode(" OR ", $whereConfig)."
+                ";
+        $query = $this->conexao->query($sql);
+
+        /*
+         * Não é igual o número de valores encontrados e o de necessários
+         */
+        if( $qtdNeeded != count($query) ){
+
+            $actualConfig = array();
+            foreach( $query as $valor ){
+                $actualConfig[$valor['tipo']][] = $valor['propriedade'];
+            }
+            
+            foreach( $neededConfig as $valor ){
+                if( empty($actualConfig[$valor['tipo']]) OR
+                    !in_array($valor['propriedade'], $actualConfig[$valor['tipo']]) )
+                {
+                    $this->_missingConfig[] = $valor;
+                }
+            }
+            
+            return false;
+        } else
+            return true;
+
+    } // end checkIntegrity()
+
+    public function _initConfig(){
+
+        $i = 0;
+        foreach( $this->_missingConfig as $neededConfig ){
+            foreach( $neededConfig as $key=>$value ){
+                $fields[$i][] = $key;
+                $values[$i][] = $value;
+            }
+            $i++;
+        }
+
+        //pr($fields);
+        //pr($values);
+        foreach( $fields as $i=>$valor ){
+            
+            $sql =
+                "INSERT INTO
+                    config
+                    (".implode(', ', $valor).")
+                 VALUES
+                    ('".implode("', '", $values[$i])."')";
+            $this->conexao->query($sql);
+        }
+        
+        return true;
+    }
+
+
     // Atualiza Configurações
     function AtualizaConfig(){
-            $this->__construct();
+        $this->__construct();
     }
 
     // Acessa a variável que guarda as configurações e retorna seu valor
@@ -135,25 +380,7 @@ class Config {
 
     }
 
-    // Cria formulário
-    function getOptions($params){
 
-        $where = (empty($params["where"])) ? '' : 'WHERE '. $params["where"];
-
-
-        $sql = "SELECT * FROM config $where ORDER BY tipo ASC";
-        //echo 'oijoij';
-        $query = $this->conexao->query($sql);
-        //pr($query);
-
-        if( count($query) ){
-
-            return $query;
-
-        } else {
-            return false;
-        }
-    }
 
     public function ContaConfig(){
         return count($this->options);

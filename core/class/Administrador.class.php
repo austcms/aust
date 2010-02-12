@@ -1,6 +1,6 @@
 <?php
 class Administrador {
-	var $login;
+    var $login;
     /**
      *
      * @var class Classe responsável pela conexão com o banco de dados
@@ -11,41 +11,62 @@ class Administrador {
      * @var class Contém o tipo de usuário em modo legível
      */
     public $tipo;
-	
-	function __construct($conexaoClass, $location = ''){
+
+    function __construct($conexaoClass, $location = '') {
         $this->conexao = $conexaoClass;
-		$this->VerificaSession();
         $this->tipo = $this->LeRegistro('tipo');
+        $this->VerificaSession();
+    }
 
+    /**
+     * type()
+     *
+     * Retorna o tipo do usuário atual.
+     *
+     * @return <string>
+     */
+    public function type(){
+        return $this->tipo;
+    } // end type()
 
+    /**
+     * tipo() alias-> type()
+     *
+     * @return <string>
+     */
+    public function tipo(){
+        return $this->type();
+    } // end tipo()
 
-	}
-	/*********************************
-	*
-	*	funções de ação
-	*
-	*********************************/
+    // verifica se o usuário está logado ou não e redireciona
+    function VerificaSession() {
+        if( !empty($_SESSION['login']['is_blocked'])){
+            if($_SESSION['login']['is_blocked'] == '1'){
+                header("Location: logout.php?status=1022");
+                exit();
+            }
+        }
 
+        $paginaatual = basename($_SERVER['PHP_SELF']);
+        if($paginaatual <> 'index.php') {
+            if(empty($_SESSION["loginid"]))
+                header("Location: index.php");
+        } else {
+            if(!empty($_SESSION["loginid"]))
+                header("Location: adm_main.php");
+        }
+    }
 
-	/*********************************
-	*
-	*	funções de verificaçãoo ou leitura
-	*
-	*********************************/
-	
-	// verifica se o usuário está logado ou não e redireciona
-	function VerificaSession(){
-		$paginaatual = basename($_SERVER['PHP_SELF']);
-		//if (strpos($this_page, "?") !== false) $paginaatual = reset(explode("?", $this_page));
-		if($paginaatual <> 'index.php'){
-			if(empty($_SESSION["loginid"]))
-				header("Location: index.php");
-		} else {
-			if(!empty($_SESSION["loginid"]))
-				header("Location: adm_main.php");
-		}
-	
-	}
+    /**
+     * getId()
+     * 
+     * Retorna o Id do administrador
+     * 
+     * @return <string>
+     */
+    public function getId(){
+        return $this->LeRegistro('id');
+    } // end getId()
 
     /**
      * Lê um campo diretamente do DB do usuário atual
@@ -53,7 +74,7 @@ class Administrador {
      * @param string $campo qual campo deve ser lido do DB
      * @return string $dados retorno o valor lido no campo do DB
      */
-    public function LeRegistro($campo){
+    public function LeRegistro($campo) {
         $sql = "SELECT
                     admins.*, admins_tipos.nome as tipo, admins_tipos.id as tipoid
                 FROM
@@ -65,14 +86,15 @@ class Administrador {
                     admins.login='".$_SESSION['loginlogin']."' AND
                     admins.id='".$_SESSION['loginid']."'
                 ";
-        
+
         $query = $this->conexao->query($sql);
         $dados = $query[0];
         $_SESSION['login'.$campo] = $dados[$campo];
+        $_SESSION['login']['is_blocked'] = $dados['is_blocked'];
         return $dados[$campo];
-	
-	}
-	
+
+    }
+
 
 }
 

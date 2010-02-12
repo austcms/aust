@@ -1,4 +1,4 @@
-<h1>Atualizar categoria</h1>
+<h2>Atualização de Categoria</h2>
 
 <?php
 

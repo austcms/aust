@@ -1,111 +1,144 @@
 <?php
-/**
- * Este é o arquivo contendo a página inicial do sistema
+/*
+ * WIDGETS
  */
+$widgets = new Widgets($envParams, $administrador->getId());
 ?>
 
-<h1>Bem-vindo!</h1>
-<p>Com este gerenciador, você pode administrar todo o conteúdo do seu site.</p>
+<h2>Painel Principal</h2>
+<p>
+    Este é o sistema onde você gerencia o conteúdo do seu site.
+</p>
 
-<div class="painel-metade">
-    <div class="painel">
-        <div class="titulo">
-            <h2>Opções rápidas</h2>
-        </div>
-        <div class="corpo">
 
-            <?php
-            /**
-             * Listagem das estruturas cadastradas no sistema na tela inicial
-             *
-             * Contém o atalho para as estrutura
-             */
-            $param = array(
-                        'orderby' => 'ORDER BY tipo'
-                        );
-            $est = $aust->LeEstruturasParaArray($param);
+<div id="painel">
 
-            //pr($est);
-            //pr($categoriasPermitidas);
-            
-            if(count($est) > 0){
-                ?>
-                <p>Abaixo, as estruturas instaladas. Passe o mouse.</p>
+    <?php /* Widget Group - Coluna (Primeira) */ ?>
+    <div class="widget_group">
 
-                <table width="100%" summary="Lista de estruturas do site">
-                <col width="160"/>
-                <col />
-                <thead>
-                <tr>
-                    <th>Estrutura</th>
-                    <th>Tipo</th>
-                </tr>
-                </thead>
-                <tbody>
+        <ul id="sortable1" class="connectedSortable draganddrop">
+        <?php
+        $c = $widgets->getInstalledWidgets();
+        /*
+         * Instala Widgets caso não haja nenhum instalado
+         */
+        if( empty($c) ){
+            $widgetsToInstall = array(
+                array(
+                    'name' => 'category_shortcuts',
+                    'admin_id' => $administrador->getId(),
+                    'column_nr' => 1,
+                    'path' => 'dashboard/category_shortcuts',
+                ),
+                array(
+                    'name' => 'people',
+                    'admin_id' => $administrador->getId(),
+                    'column_nr' => 2,
+                    'path' => 'dashboard/people',
+                ),
+            );
 
-                <?php
-                foreach($est as $key=>$valor){
-
-                    /**
-                     * Verifica se usuário tem permissão de acesso a esta
-                     * estrutura
-                     */
-                    //pr( $categoriasPermitidas);
-                    if($permissoes->verify( array( 'estrutura' => $valor['id'], 'permissoes' => $categoriasPermitidas ))){
-
-                        /**
-                         * Inclui módulo apropriado
-                         */
-                        //echo $valor["tipo"];
-                        //if( is_file(THIS_TO_BASEURL.'modulos/'.$valor['tipo'].'/'.MOD_CONFIG) ){
-                            include(THIS_TO_BASEURL.'modulos/'.$valor['tipo'].'/'.MOD_CONFIG);
-                        //}
-                        echo '<tr>';
-                        echo '<td valign="top">';
-                        echo '<a href="#" class="link_pai_do_est_options" onmouseover="javascript: est_options('.$valor['id'].')">'.$valor['nome'].'</a>';
-                        echo '<div class="est_options" id="est_options_'.$valor['id'].'">';
-                        if(is_array($modInfo['opcoes'])){
-                            $i = 0;
-                            foreach($modInfo['opcoes'] as $opcao=>$opcaonome){
-                                if($i > 0) echo ', ';
-                                echo '<a href="adm_main.php?section=conteudo&action='.$opcao.'&aust_node='.$valor['id'].'">'.$opcaonome.'</a>';
-                                $i++;
-                            }
-                        }
-                        echo '</div>';
-                        echo '</td>';
-                        echo '<td valign="top"><span class="est_options_info" id="est_options_info_'.$valor['id'].'">('.$valor['tipo'].')</span>'.'</td>';
-                        echo '</tr>';
-                    }
+            foreach( $widgetsToInstall as $widgetToInstall ){
+                if( $widgets->installWidget($widgetToInstall) ){
+                    $installStatus[] = 'success';
+                } else {
+                    $installStatus[] = 'insuccess';
                 }
-                ?>
-                </tbody>
-                </table>
-                <?php
+            }
+
+            if( !in_array('insuccess', $installStatus) ){
+                header( 'Location: adm_main.php' );
+                exit();
             } else {
+                echo '<h2>Ocorreu um erro desconhecido ao instalar dados do usuário.</h2>';
+                exit();
+            }
+            
+        }
+        /*
+         * WIDGETS - COLUNA 1
+         */
+        if( !empty($c['1']) ):
+
+            foreach( $c['1'] as $widget ){
                 ?>
-                <p>Não há estruturas cadastradas. Contacte seu administrador.</p>
+                    <li id="widgets_<?php echo $widget->getId(); ?>" class="sorted">
+                        <div class="widget">
+                            <div class="titulo">
+                                <h3><?php echo $widget->getTitle(); ?><?php $widget->getTooltip(); ?></h3>
+                            </div>
+                            <div class="content">
+                                <?php echo $widget->getHtml(); ?>
+                            </div>
+                            <div class="footer">
+                            </div>
+                        </div>
+                    </li>
                 <?php
             }
-            ?>
-
-        </div>
-        <div class="rodape"></div>
+            
+        else:
+            //Esta coluna não possui Widgets.
+        endif;
+        ?>
+        </ul>
+        <?php
+        /*
+        <br/>
+        <a href="adm_main.php?section=widgets&column_nr=1">Adicionar Widget</a>
+         *
+         */
+        ?>
+              
     </div>
 
-    <?php /*<div class="painel">
-        <div class="titulo">
-            <h2>Últimos conteúdos</h2>
-        </div>
-        <div class="corpo">
-            <p>
-                Selecione abaixo a categoria-chefe, o nome da estrutura (ex.: Notícias, Artigos, Arquivos) e o módulo adequado.
-            </p>
-        </div>
-        <div class="rodape"></div>
-    </div>*/?>
-</div>
+    <?php /* Widget Group - Coluna (Segunda) */ ?>
+    
+    <div class="widget_group">
 
+        <ul id="sortable2" class="connectedSortable draganddrop">
+        <?php
+        /*
+         * WIDGETS - COLUNA 2
+         */
+        if( !empty($c['2']) ):
+
+            foreach( $c['2'] as $widget ){
+                ?>
+                <li id="widgets_<?php echo $widget->getId(); ?>" class="sorted">
+                    <div class="widget">
+                        <div class="titulo">
+                            <h3><?php echo $widget->getTitle(); ?><?php $widget->getTooltip(); ?></h3>
+                        </div>
+                        <div class="content">
+                            <?php echo $widget->getHtml(); ?>
+                        </div>
+                        <div class="footer">
+                        </div>
+                    </div>
+
+                </li>
+                <?php
+            }
+
+        else:
+            //Esta coluna não possui Widgets.
+        endif;
+
+        ?>
+        </ul>
+        <?php
+        /*
+        <br/>
+        <a href="adm_main.php?section=widgets&column_nr=2">Adicionar Widget</a>
+         *
+         */
+        ?>
+
+    </div>
+    
+    
+</div>
 
 
 <div class="painel-metade painel-dois">

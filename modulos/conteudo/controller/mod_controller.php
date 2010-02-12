@@ -20,7 +20,7 @@ class ModController extends ModsController
     public function listar(){
 
         /**
-         * <H1> HEADER
+         * <h2> HEADER
          */
         $this->set('h1', $this->aust->leNomeDaEstrutura($_GET['aust_node']) );
 

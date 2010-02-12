@@ -62,7 +62,7 @@ if(empty($_POST['setup_ready']) and empty($_POST['qtd_campos'])){
 	<p>Configurando esta estrutura...</p>
 	<p>Seu cadastro terá <? echo '<strong>'.$_POST['qtd_campos'].'</strong>'; if($_POST['qtd_campos'] == 1) echo ' campo'; else echo ' campos';?>.
 	Preencha abaixo informações sobre cada campo.</p>
-    <h2>Cadastro "<?=$_SESSION['exPOST']['nome']?>"</h2>
+    <h3>Cadastro "<?=$_SESSION['exPOST']['nome']?>"</h3>
 	
 	<table width="99%" border="0" class="listagem">
 	<col width="15">

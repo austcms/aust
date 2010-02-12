@@ -15,9 +15,9 @@
 <p>
     <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
 </p>
-<h1>
+<h2>
     Listando contéudo: <?php echo $h1;?>
-</h1>
+</h2>
 <p>
     Abaixo você encontra a listagem dos últimos textos desta categoria.
 </p>
@@ -31,10 +31,11 @@
 *********************************/
 ?>
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?section=<?php echo $_GET['section'];?>&action=actions&aust_node=<?php echo $_GET['aust_node'];?>">
-<a name="list">&nbsp;</a>
+<a name="list"></a>
 <div class="painel_de_controle"><input type="submit" name="deletar" value="Deletar selecionados" />
 </div>
-<table width="680" cellspacing="0" cellpadding="10" class="listagem">
+<br clear="all" />
+<table cellspacing="0" cellpadding="0" border="0" class="listagem">
     <tr class="titulo">
         
         <?php for($i=0; $i< count($modulo->config['contentHeader']['campos']); $i++) { ?>

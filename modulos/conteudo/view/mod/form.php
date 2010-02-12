@@ -23,7 +23,7 @@
  * [Se novo conteúdo]
  */
     if($_GET['action'] == 'criar'){
-        $tagh1 = "Criar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
+        $tagh2 = "Criar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
         $tagp = 'Crie um novo conteúdo abaixo.';
         $dados = array('id' => '');
     }
@@ -32,7 +32,7 @@
  */
     else if($_GET['action'] == 'editar'){
 
-        $tagh1 = "Editar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
+        $tagh2 = "Editar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
         $tagp = 'Edite o conteúdo abaixo.';
         $sql = "
                 SELECT
@@ -50,7 +50,7 @@
     <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
 </p>
 
-<h1><?php echo $tagh1;?></h1>
+<h2><?php echo $tagh2;?></h2>
 <p><?php echo $tagp;?></p>
 
 
@@ -70,12 +70,11 @@
 
 <input type="hidden" name="w" value="<?php ifisset( $dados['id'] );?>">
 <input type="hidden" name="aust_node" value="<?php echo $austNode; ?>">
-<table width="670" border=0 cellpadding=0 cellspacing=0>
-    <col width="200">
-    <col width="470">
+
+<table cellpadding=0 cellspacing=0 class="form">
     <tr>
-        <td valign="top"><label>Categoria:</label></td>
-        <td>
+        <td valign="top" class="first"><label>Categoria:</label></td>
+        <td class="second">
             <div id="categoriacontainer">
             <?php
             $current_node = '';
@@ -88,8 +87,24 @@
 
             echo BuildDDList( CoreConfig::read('austTable') ,'frmcategoria', $administrador->tipo ,$aust_node, $current_node);
             ?>
-            </div>
 
+
+            </div>
+            <?php
+            /*
+             * Nova_Categoria?
+             */
+            $showNovaCategoria = false;
+            if( !empty($moduloConfig["nova_categoria"]) ){
+                if( $moduloConfig["nova_categoria"]["valor"] == "1" )
+                    $showNovaCategoria = true;
+            }
+            if( $showNovaCategoria ){
+                ?>
+                lbCategoria($austNode);
+                <?php
+            }
+            ?>
         </td>
     </tr>
     <tr>
@@ -106,10 +121,10 @@
     /*
      * RESUMO
      */
-    $showResumo = true;
+    $showResumo = false;
     if( !empty($moduloConfig["resumo"]) ){
-        if( $moduloConfig["resumo"]["valor"] == "0" )
-            $showResumo = false;
+        if( $moduloConfig["resumo"]["valor"] == "1" )
+            $showResumo = true;
     }
     if( $showResumo ){
     ?>
@@ -167,23 +182,37 @@
     </tr>
     <tr>
         <td colspan="2">
-            <textarea name="frmtexto" id="jseditor" rows="20" style="width: 670px"><?php if( !empty($dados['texto']) ) echo $dados['texto'];?></textarea>
+            <textarea name="frmtexto" id="jseditor" rows="20"><?php if( !empty($dados['texto']) ) echo $dados['texto'];?></textarea>
         <br />
         </td>
     </tr>
-    <tr>
-        <td valign="top"><label>Modo:</label></td>
-        <td>
-            <select name="frmrestrito" class="select">
-                <option <?php if( !empty($dados['restrito']) ) makeselected($dados['restrito'], 'normal'); ?> value="normal">Mostrar em todas as páginas</option>
-                <option <?php if( !empty($dados['restrito']) ) makeselected($dados['restrito'], 'naofrontend'); ?> value="naofrontend">Não mostrar na página principal</option>
-                <option <?php if( !empty($dados['restrito']) ) makeselected($dados['restrito'], 'invisivel'); ?> value="invisivel">Tornar invisível este item em todo o site</option>
-            </select>
-            <p class="explanation">
-                Selecione acima que tipo de exibição você deseja para este conteúdo.
-            </p>
-        </td>
-    </tr>
+    <?php
+    /*
+     * ORDEM
+     */
+    $showModo = false; // por padrão, não mostra
+    if( !empty($moduloConfig["modo_de_visualizacao"]) ){
+        if( $moduloConfig["modo_de_visualizacao"]["valor"] == "1" )
+            $showModo = true;
+    }
+    if( $showModo ){
+    ?>
+        <tr>
+            <td valign="top"><label>Modo:</label></td>
+            <td>
+                <select name="frmrestrito" class="select">
+                    <option <?php if( !empty($dados['restrito']) ) makeselected($dados['restrito'], 'normal'); ?> value="normal">Mostrar em todas as páginas</option>
+                    <option <?php if( !empty($dados['restrito']) ) makeselected($dados['restrito'], 'naofrontend'); ?> value="naofrontend">Não mostrar na página principal</option>
+                    <option <?php if( !empty($dados['restrito']) ) makeselected($dados['restrito'], 'invisivel'); ?> value="invisivel">Tornar invisível este item em todo o site</option>
+                </select>
+                <p class="explanation">
+                    Selecione acima que tipo de exibição você deseja para este conteúdo.
+                </p>
+            </td>
+        </tr>
+        <?php
+    }
+    ?>
 
     <?php
     /*
@@ -224,5 +253,5 @@
 
 <br />
 <p>
-	<a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+    <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
 </p>

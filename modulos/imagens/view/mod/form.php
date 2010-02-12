@@ -70,7 +70,7 @@
     <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
 </p>
 
-<h1><?php echo $tagh1;?></h1>
+<h2><?php echo $tagh1;?></h2>
 <p><?php echo $tagp;?></p>
 
 
@@ -88,7 +88,7 @@
 <?php }?>
 <input type="hidden" name="w" value="<?php ifisset( $dados['id'] );?>">
 <input type="hidden" name="aust_node" value="<?php echo $austNode; ?>">
-<table width="670" border=0 cellpadding=0 cellspacing=0>
+<table border=0 cellpadding=0 cellspacing=0 class="form">
     <col width="200">
     <col width="470">
 

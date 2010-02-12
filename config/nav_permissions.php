@@ -6,14 +6,37 @@
  * especificado.
  */
 
-$navPermissoes = Array(
+$navPermissoes = array(
                     'categorias' =>
-                                Array('new' =>
-                                        Array('Webmaster', 'Administrador')),
+                        array('new' =>
+                            array(
+                                'Webmaster', 'Administrador'
+                            )
+                        ),
+                    'admins' =>
+                        array('form' =>
+                            array(
+                                'Webmaster',
+                                'Administrador',
+                                //'Moderador'
+                            )
+                        ),
+                        array('au-permissao' =>
+                            array(
+                                'Webmaster',
+                                'Administrador',
+                                //'Moderador'
+                            )
+                        ),
                     'conf_modulos' =>
-                                Array('au-permissao' =>
-                                        Array('Webmaster'))
+                        array('au-permissao' =>
+                            array('Webmaster')
+                        )
 
     );
+
+$configPermissoes = array(
+    'Geral' => '*',
+);
 
 ?>

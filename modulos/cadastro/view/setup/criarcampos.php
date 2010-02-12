@@ -10,7 +10,7 @@
             //echo $_SESSION['exPOST']['nome'];
 ?>
 
-<h1>Setup de cadastro: configuração inicial</h1>
+<h2>Setup de cadastro: configuração inicial</h2>
 <form action="" method="post" class="normal">
 
 <?php
@@ -27,9 +27,9 @@ foreach($exPOST as $chave=>$valor){
 	<p>Configurando esta estrutura...</p>
 	<p>Seu cadastro terá <?php echo '<strong>'.$_POST['qtd_campos'].'</strong>'; if($_POST['qtd_campos'] == 1) echo ' campo'; else echo ' campos';?>.
 	Preencha abaixo informações sobre cada campo.</p>
-    <h2>Cadastro "<?php echo $_SESSION['exPOST']['nome']?>"</h2>
+    <h3>Cadastro "<?php echo $_SESSION['exPOST']['nome']?>"</h3>
 
-	<table width="99%" border="0" class="listagem">
+	<table border="0" class="listagem">
 	<col width="15">
 	<col width="160">
 	<col width="400">
@@ -51,12 +51,12 @@ foreach($exPOST as $chave=>$valor){
             <td valign="top">
                 <select name="campo_tipo[]" onchange="javascript: SetupCampoRelacionalTabelas(this, '<?php echo 'campooption'.$i?>', '<?php echo $i?>')">
                     <option value="varchar(200)">Texto pequeno (ex: nome, idade)</option>
-                    <option value="text">Texto médio ou grande (ex: descrição, biografia)</option>
+                    <option value="text">Texto grande (ex: descrição, biografia)</option>
                     <option value="date">Data (ex: data de nascimento)</option>
                     <option value="pw">Senha</option>
                     <option value="arquivo">Arquivo</option>
-                    <option value="relacional_umparaum">Relacional Um-para-um (tabela)</option>
-                    <option value="relacional_umparamuitos">Relacional Um-para-muitos (tabela)</option>
+                    <option value="relacional_umparaum">Relacional 1-para-1 (tabela)</option>
+                    <option value="relacional_umparamuitos">Relacional 1-para-muitos (tabela)</option>
                 </select>
             <div class="campooptions" id="<?php echo 'campooption'.$i?>">
                 <?

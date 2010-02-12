@@ -13,6 +13,9 @@ class ModController extends ModsController
 
     var $helpers = array('Form');
 
+    public function actions(){
+    }
+
     public function listar(){
         //$this->render('listar');
         //$this->autoRender= false;
@@ -32,6 +35,13 @@ class ModController extends ModsController
     public function criar($params = array() ){
         $this->render('form');
     }
-    
+
+    /**
+     * FORMULÁRIO DE INSERÇÃO
+     */
+    public function editar($params = array() ){
+        $this->render('form');
+    }
+
 }
 ?>

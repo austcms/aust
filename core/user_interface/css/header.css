@@ -1,0 +1,98 @@
+/*
+ * CABEÇALHO DO SITE
+ */
+div#top {
+    width: 100%;
+    display: table;
+    margin: 0 auto;
+}
+    div#top div.title {
+        width: 760px;
+        display: table;
+        margin: 0 auto;
+    }
+	
+	div#top div.title div.logotipo {
+        width: 400px;
+        float: left;
+        text-align: left;
+        margin: 10px 0 12px 0;
+        
+    }
+        div#top div.title div.logotipo h1 { margin: 0 0 0 10px; }
+            div#top div.title div.logotipo h1 a { text-decoration: none; }
+            div#top div.title div.logotipo h1 a:focus { outline: none; }
+        div#top div.title div.logotipo p { font-size: 0.8em; }
+
+	div#top div.title div.inicializacaorapida {
+        width: 300px;
+        text-align: left;
+        float: right;
+        margin-right: 10px;
+        font-size: 0.9em;
+        margin-top: 15px;
+    }
+
+        #altera_dados a {
+            float: right;
+            margin-left: 10px;
+            line-height: 18px;
+        }
+        #conectado_como {
+            margin-top: 20px;
+            width: 250px;
+            float: right;
+        }
+            #conectado_como p {
+                font-size: 0.8em;
+                text-align: right;
+            }
+
+/*
+ * NAVEGAÇÃO DO SITE 
+ */
+div#navegacao { 
+    width: 100%;
+    height: auto;
+    display: table;
+    margin: 0 auto;
+    text-align: left;
+    
+}
+    div#navegacao div.containner {
+        width: 760px;
+        margin: 0 auto;
+        text-align: left;
+    }
+    div#menu ul {
+        list-style: none;
+    }
+    div#menu ul li {
+        display: inline-block;
+        float: left;
+        /* height: 30px; */
+        height: auto;
+        margin: 0;
+        padding: 0;
+    }
+    div#menu ul li a {
+        text-decoration: none;
+        display: inline-block;
+        padding: 5px 8px;
+        margin: 2px 2px 0 2px;
+    }
+        div#menu ul li a:hover {
+            text-decoration: none;
+        }
+	div#menu ul li a.selecionado {
+        display: inline-block;
+        padding: 6px 8px;
+        margin-top: 0px;
+        height: auto;
+        font-weight: bold;
+    }
+    div#menu ul li.opcao_direita {
+        float: right;
+        margin: 0 10px 0 0;
+    }
+    

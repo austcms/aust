@@ -52,7 +52,7 @@
     <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
 </p>
 
-<h1><?php echo $tagh1;?></h1>
+<h2><?php echo $tagh1;?></h2>
 <p><?php echo $tagp;?></p>
 
 
@@ -70,10 +70,7 @@
 <?php }?>
 <input type="hidden" name="w" value="<?php ifisset( $dados['id'] );?>">
 <input type="hidden" name="aust_node" value="<?php echo $austNode; ?>">
-<table width="670" border=0 cellpadding=0 cellspacing=0>
-    <col width="200">
-    <col width="470">
-
+<table border=0 cellpadding=0 cellspacing=0 class="form">
     <?php
     /*
      * CATEGORIA
@@ -90,8 +87,8 @@
     ?>
 
         <tr>
-            <td valign="top"><label>Categoria:</label></td>
-            <td>
+            <td valign="top" class="first"><label>Categoria:</label></td>
+            <td class="second">
                 <div id="categoriacontainer">
                 <?php
                 $current_node = '';
@@ -116,8 +113,8 @@
     }
     ?>
     <tr>
-        <td valign="top"><label>Título:</label></td>
-        <td>
+        <td valign="top" class="first"><label>Título:</label></td>
+        <td class="second">
             <INPUT TYPE='text' NAME='frmtitulo' class='text' value='<?php if( !empty($dados['titulo']) ) echo $dados['titulo'];?>' />
             <p class="explanation">
 

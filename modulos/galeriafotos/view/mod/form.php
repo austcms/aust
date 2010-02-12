@@ -24,7 +24,7 @@
  * [Se novo conteúdo]
  */
     if($_GET['action'] == 'criar'){
-        $tagh1 = "Criar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
+        $tagh2 = "Criar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
         $tagp = 'Crie uma nova galeria de fotos a seguir. Primeiro configure as'.
                 'informações básicas da galeria e abaixo as fotos.';
         $dados = array('id' => '');
@@ -34,7 +34,7 @@
  */
     else if($_GET['action'] == 'editar'){
 
-        $tagh1 = "Editar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
+        $tagh2 = "Editar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
         $tagp = 'Edite o conteúdo abaixo.';
         $sql = "
                 SELECT
@@ -79,7 +79,7 @@
     <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
 </p>
 
-<h1><?php echo $tagh1;?></h1>
+<h3><?php echo $tagh2;?></h3>
 <p><?php echo $tagp;?></p>
 
 
@@ -94,10 +94,7 @@
 <?php }?>
 <input type="hidden" name="w" value="<?php ifisset( $dados['id'] );?>">
 <input type="hidden" name="aust_node" value="<?php echo $austNode; ?>">
-<table width="670" border=0 cellpadding=0 cellspacing=0>
-    <col width="200">
-    <col width="470">
-
+<table border=0 cellpadding=0 cellspacing=0 class="form">
 
     <?php
     /*
@@ -106,8 +103,8 @@
     if( $dados["bytes"] > 0 ){
         ?>
         <tr>
-            <td valign="top">Imagem atual:</td>
-            <td>
+            <td valign="top" class="first">Imagem atual:</td>
+            <td class="second">
                 <img src="core/libs/imageviewer/visualiza_foto.php?table=imagens&thumbs=yes&myid=<?php echo $dados["id"]; ?>&maxxsize=450&maxysize=400" />
                 <p class="explanation">
                 Imagem cadastrada atualmente. Para alterá-la, envie uma nova no formulário abaixo.
@@ -119,8 +116,8 @@
     ?>
 
     <tr>
-        <td valign="top"><label>Título da galeria:</label></td>
-        <td>
+        <td valign="top" class="first"><label>Título da galeria:</label></td>
+        <td class="second">
             <INPUT TYPE='text' NAME='frmtitulo' class='text' value='<?php if( !empty($dados['titulo']) ) echo $dados['titulo'];?>' />
             <p class="explanation">
             Exemplo: Fotos do Segundo Encontro Nacional
@@ -212,7 +209,7 @@
 
     <tr>
         <td colspan="2">
-            <h2>Fotos da Galeria</h2>
+            <h3>Fotos da Galeria</h3>
         </td>
     </tr>
     <tr>

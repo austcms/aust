@@ -4,7 +4,6 @@
  * DELETAR, APROVAR
  */
 
-
 // para deletar
 if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
     /*
@@ -46,33 +45,51 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
         }
 
         $sql = "SELECT
-                    id, url, arquivo_nome
+                    *
                 FROM
                     arquivos
                 WHERE
                     {$where}";
-        //$mysql = mysql_query($sql);
-        //$dados = mysql_fetch_array($mysql);
+        $mysql = $modulo->conexao->query($sql);
+        $dados = $mysql[0];
 
-        $sql = "DELETE FROM
-                    ".$modulo->LeTabelaDaEstrutura($_GET['aust_node'])."
-                WHERE
-                    $where
-                    ";
-        if($modulo->conexao->exec($sql)){
-            $resultado = TRUE;
-        } else {
-            $resultado = FALSE;
+        // se conseguir excluir o arquivo fisicamente, então exclui dados do DB
+        try{
+
+            if( !is_file($dados['systemurl'])
+                OR unlink($dados['systemurl'])
+                OR die('Erro ao deletar arquivo, pois ele provavelmente não existe mais. Entre em contato com o administrador.</p>'))
+            {
+
+                $sql = "DELETE FROM
+                            ".$modulo->LeTabelaDaEstrutura($_GET['aust_node'])."
+                        WHERE
+                            $where
+                            ";
+                if($modulo->conexao->exec($sql)){
+                    $resultado = TRUE;
+                } else {
+                    $resultado = FALSE;
+                }
+
+                if($resultado){
+                    $status['classe'] = 'sucesso';
+                    $status['mensagem'] = '<strong>Sucesso: </strong> Os dados foram excluídos com sucesso.';
+                } else {
+                    $status['classe'] = 'insucesso';
+                    $status['mensagem'] = '<strong>Erro: </strong> Ocorreu um erro ao excluir os dados. '.
+                                          'Verifique se o arquivo já não foi apagado.';
+                }
+                EscreveBoxMensagem($status);
+            } else {
+                $status['classe'] = 'insucesso';
+                $status['mensagem'] = '<strong>Erro: </strong> Não foi possível excluir o arquivo.';
+                EscreveBoxMensagem($status);
+            }
+        } catch (Exception $e) {
+            echo 'exceção: ', $e->getMessage(), "<br>";
         }
 
-        if($resultado){
-            $status['classe'] = 'sucesso';
-            $status['mensagem'] = '<strong>Sucesso: </strong> Os dados foram excluídos com sucesso.';
-        } else {
-            $status['classe'] = 'insucesso';
-            $status['mensagem'] = '<strong>Erro: </strong> Ocorreu um erro ao excluir os dados.';
-        }
-        EscreveBoxMensagem($status);
     }
 
 /*
@@ -131,6 +148,7 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
         } else {
             $resultado = FALSE;
         }
+
 
         if($resultado){
             $status['classe'] = 'sucesso';

@@ -6,12 +6,12 @@
 
 
 ?>
-<h1>
+<h2>
     Permissões de Usuários
-</h1>
+</h2>
 <p>
     Nesta tela você pode dar permissões especiais a usuários e definir
-    "quem edita o que". Somente administradores têm acesso a estas opções.
+    "quem edita o que". Somente administradores têm acesso a esta tela.
 </p>
 <h2>
     Como funciona
@@ -22,7 +22,7 @@
     selecione quem você quer dar permissões. Pode ser um grupo de
     usuários (moderadores, colaboradores) ou um usuário cadastrado específico.
     Você só pode configurar quem está abaixo de você na hierarquia (se você
-    é administrar, poderá editar somente moderadores e colaboradores).
+    é administrador, poderá editar somente moderadores e colaboradores).
 </p>
 
 <p>
@@ -30,8 +30,16 @@
     conteúdos o usuário pode editar. Se nenhum estiver selecionado, o usuário
     pode editar todas.
 </p>
+<p>
+    <strong>Exemplo:</strong> João é moderador e suponhamos que temos Notícias e Artigos.
+    Se você configurar que João só poderá editar Notícias,
+    ele não acessará nada mais. Entretanto, se após isto você configurar que moderadores podem acessar
+    somente Artigos, João acessará Artigos (pois ele é um moderador) e aquilo ao qual ele tem permissão,
+    Notícias. Para que João passe a acessar somente o que moderadores podem acessar, desmarque todas
+    as opções, assim ele passará a obedecer as regras impostas aos moderadores.
+</p>
 
-<div class="painel-metade">
+<div class="widget_group">
 
     <?php
     /**
@@ -45,11 +53,11 @@
      * LISTAGEM DAS ESTRUTURAS CRIADAS
      */
     ?>
-    <div class="painel">
+    <div class="widget">
         <div class="titulo">
-            <h2>Tipos de usuários</h2>
+            <h3>Tipos de usuários</h3>
         </div>
-        <div class="corpo">
+        <div class="content">
             <p>Os tipos de usuários presentes.</p>
             <ul>
             <?php
@@ -83,7 +91,7 @@
             ?>
             </ul>
         </div>
-        <div class="rodape"></div>
+        <div class="footer"></div>
     </div>
 
 
@@ -92,11 +100,11 @@
      * Listagem de usuários
      */
     ?>
-    <div class="painel">
+    <div class="widget">
         <div class="titulo">
-            <h2>Usuários cadastrados</h2>
+            <h3>Usuários cadastrados</h3>
         </div>
-        <div class="corpo">
+        <div class="content">
             <p>
                 
             </p>
@@ -131,39 +139,39 @@
             ?>
             </ul>
         </div>
-        <div class="rodape"></div>
+        <div class="footer"></div>
     </div>
 </div>
 
 
 
-<div class="painel-metade painel-dois">
-<div class="painel">
-    <div class="titulo">
-        <h2>Permissões atuais</h2>
-    </div>
-    <div class="corpo">
-        <div id="permissoesAtuais">
-        <p>
-            Selecione ao lado:
-        </p>
-        <p style="text-align: center;">
-            <br />
-            um tipo de usuário
-            <br />
-            <strong>ou</strong>
-            <br />
-            um usuário
-        </p>
-        <?php
-
-
-
-        ?>
+<div class="widget_group">
+    <div class="widget">
+        <div class="titulo">
+            <h3>Permissões atuais</h3>
         </div>
+        <div class="content">
+            <div id="permissoesAtuais">
+            <p>
+                Selecione ao lado:
+            </p>
+            <p style="text-align: center;">
+                <br />
+                um tipo de usuário
+                <br />
+                <strong>ou</strong>
+                <br />
+                um usuário
+            </p>
+            <?php
 
 
+
+            ?>
+            </div>
+
+
+        </div>
+        <div class="footer"></div>
     </div>
-    <div class="rodape"></div>
-</div>
 </div>

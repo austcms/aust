@@ -3,6 +3,12 @@ session_name("aust");
 session_start();
 
 /*
+ *
+ * ! Aqui está a página que avisa o que está faltando no banco de dados. !
+ *
+ */
+/*
+ *
  * SETUP
  *
  * Devem ser carregadas configurações de banco de dados, além de classes e o schema das tabelas
@@ -129,12 +135,17 @@ if($conexao->DBExiste){
                         echo '<ul>';
                         foreach($campo as $nome=>$propriedade){
                             echo '<li>';
-                            echo '<strong>'.$nome.':</strong> '.$propriedade;
+                            echo ''.$nome.': '.$propriedade;
                             echo '</li>';
                         }
                         echo '</ul>';
 
-                        //echo '</p>';
+                        ?>
+                        <p>
+                            <em><?php echo $dbSchema->sqlForMissingFields(array($tabela=>$campo)); ?></em>
+                        </p>
+                        <?php
+
                     }
                     ?>
                 <p>Use as informações acima para criar manualmente os campos.</p>
@@ -173,7 +184,6 @@ if($conexao->DBExiste){
             echo '<p>A seguir, as tabelas que foram instaladas.</p>';
             echo '<ul>';
 
-            pr($dbSchema->tabelasInstaladas);
             foreach($dbSchema->tabelasInstaladas as $chave=>$valor){
                 if($dbSchema->tabelasInstaladas[$chave]){
                     $status = '<span style="color: green">Instalado</span>';

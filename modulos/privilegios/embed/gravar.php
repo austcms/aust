@@ -7,12 +7,21 @@
 
 $conteudo_tabela = $_POST["contentTable"];
 
-// Se $_post[w] está vazio, é um novo conteúdo
+/*
+ * Se $_post[w] está vazio, é um novo conteúdo
+ */
 if(empty($_POST['w']) AND $_POST['metodo'] == 'criar'){
-    $insert_id = mysql_insert_id();
+    /*
+     * $insert_id pega o último id inserido do conteúdo principal. Não é
+     * seguro pegar este valor aqui, mas sim que o conteúdo
+     * principal já tenha salvo o valor em $_POST['w']
+     */
+    $insert_id = $this->modulo->conexao->lastInsertId();
 } elseif(!empty($_POST['w'])) {
     $insert_id = $_POST['w'];
 }
+
+
 
 // se foi clicado algum item no form de inclusão
 if(is_array($_POST['privid'])){

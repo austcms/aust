@@ -227,7 +227,7 @@ class Conexao extends SQLObject {
              */
             
             $result = $this->conn->exec($sql);
-            
+
             /**
              * Quando executado CREATE TABLE, retorno com sucesso é 0 e
              * insucesso é false, não sendo possível diferenciar entre um e
