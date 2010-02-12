@@ -1,0 +1,13 @@
+/*
+    Document   : forms.css
+    Created on : 17/07/2009, 10:28:20
+    Author     : Alexandre
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+#themes {  }
+#themes .theme { float: left; width: 220px; margin-left: 20px; display: table; }
+#themes .theme .theme_name { float: left; }
+#themes .theme .screnshot { float: left; }
+#themes .theme .screnshot img { padding-left: 10px; }

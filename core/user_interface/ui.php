@@ -30,6 +30,10 @@ define("IMG_DIR", "core/user_interface/img/");
     <?php /* Estilo dos lightboxs - Lightbox */ ?>
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/lightbox.css" type="text/css" />
 
+    <?php /* Estilo da seleção de temas */ ?>
+    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/theme.css" type="text/css" />
+
+
     <?php /* Tema Azul */ ?>
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.THEMES_DIR; ?>classic_blue/default.css" type="text/css" />
 

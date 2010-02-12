@@ -30,12 +30,25 @@ $c = $widgets->getInstalledWidgets($params);
 </h2>
 
 <?php
-
-//pr($themes->getThemes());
     foreach( $themes->getThemes() as $theme ){
-        //include($theme['path'].'/info.php');
-        echo '<img src="'.$theme['screenshotFile'].'" />';
-        echo $theme['name'];
+    ?>
+
+    <div id="themes">
+        <div class="theme">
+
+            <div class="theme_name">
+                <?php echo $theme['name']; ?>
+            </div>
+
+            <div class="screenshot">
+                <?php echo '<img src="'.$theme['screenshotFile'].'" />'; ?>
+            </div>
+        </div>
+    </div>
+
+    <?php
     }
 
 ?>
+
+
