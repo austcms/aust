@@ -141,7 +141,6 @@ class Permissoes extends SQLObject {
      * à estrutura requerida
      */
     function verify($param){
-
         if( is_string($param) OR is_int($param) ){
             if( empty($this->permissoes) ){
                 return true;

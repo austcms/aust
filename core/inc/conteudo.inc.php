@@ -18,13 +18,6 @@
  */
 if(!empty($_GET['action'])){
 
-    /*
-     * Tem permissão?
-     */
-    if( !$permissoes->verify($aust_node) )
-        exit();
-
-
     /**
      * A seguir, o código de automação dos módulos (CRUD). São carregados os
      * formulários de cada módulo.
@@ -48,6 +41,13 @@ if(!empty($_GET['action'])){
     }
     // @todo - Módulos devem procurar por $aust_node, não $_GET['aust_node']
     $_GET["aust_node"] = $aust_node;
+
+    /*
+     * Tem permissão?
+     */
+    if( !$permissoes->verify($aust_node) )
+        exit();
+
     /**
      * Identifica qual é a pasta do módulo responsável por esta
      * estrutura/categoria
@@ -57,8 +57,33 @@ if(!empty($_GET['action'])){
     /**
      * Carrega arquivos principal do módulo requerido
      */
-	include(MODULOS_DIR.$modDir.'index.php');
+	//include(MODULOS_DIR.$modDir.'index.php');
 
+    /*
+     *
+     * INSTANCIA MÓDULO
+     *
+     */
+    /**
+     * Carrega arquivos principal do módulo requerido
+     */
+        include(MODULOS_DIR.$modDir.MOD_CONFIG);
+        //include(MODULOS_DIR.$modDir.MOD_DBSCHEMA);
+        /**
+         * Carrega classe do módulo e cria objeto
+         */
+        $moduloNome = (empty($modInfo['className'])) ? 'Classe' : $modInfo['className'];
+        include(MODULOS_DIR.$modDir.$moduloNome.'.php');
+
+        $param = array(
+            'conexao' => $conexao,
+            'config' => $modInfo,
+            'user' => $administrador,
+            'modDbSchema' => $modDbSchema,
+        );
+
+        $modulo = new $moduloNome($param);
+        unset( $modDbSchema );
     /**
      * MVC?
      *

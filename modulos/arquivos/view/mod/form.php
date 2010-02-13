@@ -80,6 +80,24 @@ if($_GET['action'] == 'editar'){
                 echo BuildDDList( CoreConfig::read('austTable'), 'frmcategoria_id', $escala, $aust_node, $current_node );
                 ?>
                 </div>
+                <?php
+                /*
+                 * Nova_Categoria?
+                 */
+                $showNovaCategoria = false;
+                if( !empty($moduloConfig["nova_categoria"]) ){
+                    if( $moduloConfig["nova_categoria"]["valor"] == "1" )
+                        $showNovaCategoria = true;
+                }
+                if( $showNovaCategoria ){
+                    $param = array(
+                        'austNode' => $austNode,
+                        'categoryInput' => 'frmcategoria_id',
+                    );
+                    lbCategoria( $param );
+                }
+                ?>
+
             </td>
         </tr>
     <?php

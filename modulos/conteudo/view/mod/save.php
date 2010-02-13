@@ -10,7 +10,6 @@
 
 $c = 0;
 if(!empty($_POST)){
-    pr($_POST);
     $resultado = $this->modulo->save($_POST);
     if($resultado){
             $status['classe'] = 'sucesso';

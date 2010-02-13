@@ -12,6 +12,8 @@ class Administrador {
      */
     public $tipo;
 
+    public $id;
+
     public $forbiddenCode;
 
     function __construct($conexaoClass, $location = '') {
@@ -118,7 +120,12 @@ class Administrador {
      * @return <string>
      */
     public function getId(){
-        return $this->LeRegistro('id');
+        if( !empty($this->id) ){
+            return $this->id;
+        } else {
+            $this->id = $this->LeRegistro('id');
+            return $this->id;
+        }
     } // end getId()
 
     /**
@@ -136,11 +143,14 @@ class Administrador {
                     admins_tipos
                 ON admins.tipo=admins_tipos.id
                 WHERE
-                    admins.login='".$_SESSION['login']['username']."' AND
                     admins.id='".$_SESSION['login']['id']."'
                 ";
 
         $query = $this->conexao->query($sql);
+
+        if( empty($query) )
+            return false;
+        
         $dados = $query[0];
         $_SESSION['login'.$campo] = $dados[$campo];
         $_SESSION['login']['is_blocked'] = $dados['is_blocked'];

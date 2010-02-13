@@ -42,6 +42,13 @@ class Modulos
      * @var class Configurações do módulo
      */
     public $config;
+
+    /**
+     *
+     * @var array parametros do __construct
+     */
+    public $params;
+
     /**
      *
      * @var string Diretório onde estão os módulos
@@ -55,12 +62,21 @@ class Modulos
     function __construct($param) {
         global $aust;
         $this->aust = $aust;
-        
+
+        $this->params = &$param;
+
         /**
          * Ajusta a conexao para o módulo
          */
         if( !empty($param['conexao']) ) {
-            $this->conexao = $param['conexao'];
+            $this->conexao = &$param['conexao'];
+        }
+
+        /**
+         * Usuário atual
+         */
+        if( !empty($param['user']) ) {
+            $this->user = &$param['user'];
         }
 
         /**
@@ -85,14 +101,40 @@ class Modulos
      *
      */
     public function save(){
-        
+        return false;
+    }
+    public function saveEmbed(){
+        return false;
     }
 
-    public function delete($table, $conditions){
+    /**
+     * delete()
+     *
+     * @param <string> $table
+     * @param <array> $conditions
+     * @return <integer>
+     */
+    public function delete($table = '', $conditions = array()){
+
+        /*
+         * Temos de ter argumentos, senão... return false
+         */
+        if( empty($conditions) OR
+            empty($table) )
+            return false;
 
         foreach( $conditions as $field=>$value ){
-
+            $conditionsStr[] = $field."='".$value."'";
         }
+
+        $sql = "DELETE
+                FROM
+                    $table
+                WHERE
+                    ".implode(' AND ', $conditionsStr)."
+            ";
+
+        return $this->conexao->exec($sql);
 
 
     }
@@ -121,6 +163,8 @@ class Modulos
     public function getContentTable(){
         return $this->tabela_criar;
     }
+
+
 
     /**
      *
@@ -617,6 +661,11 @@ class Modulos
         }
     } // fim leModulos()
 
+    /*
+     *
+     * EMBED
+     *
+     */
     /**
      * getRelatedEmbed()
      *
@@ -646,7 +695,47 @@ class Modulos
             $tmp[] = $valor["categoria_id"];
         }
         return $tmp;
-    }
+    } // fim getRelatedEmbed()
+
+    /**
+     * saveEmbeddedModules()
+     *
+     * Salva todos os dados de um formulário de embed's.
+     *
+     * @param <array> $data
+     * @return <bool>
+     */
+    public function saveEmbeddedModules($data){
+
+        //pr( $data );
+        if( empty($data) )
+            return false;
+
+        if( empty($data['embedModules']) )
+            return false;
+        
+        foreach($data['embedModules'] AS $embedModule) {
+
+            $modDir = $embedModule['dir'];
+
+            if( is_file($modDir.'/'.MOD_CONFIG) ){
+                include($modDir."/".MOD_CONFIG);
+
+                $className = $modInfo['className'];
+                include($modDir."/".$className.'.php');
+
+                $param = $this->params;
+
+                $embedModulo = new $className($this->params);
+                $dataToSave = array_merge($embedModule, $data['options']);
+
+                $embedModulo->saveEmbed($dataToSave);
+            }
+
+        } // fim do foreach por cada estrutura com embed
+
+        return true;
+    } // fim saveEmbeddedModules()
 
     // retorna o nome da tabela da estrutura
     function LeTabelaDaEstrutura($param='') {

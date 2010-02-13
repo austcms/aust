@@ -114,6 +114,12 @@ class Conteudo extends Modulos
 
     } // fim getSQLForListing()
 
+    /**
+     * save()
+     *
+     * @param <array> $post
+     * @return <bool>
+     */
     public function save($post = array() ){
 
         if( empty($post) )
@@ -148,11 +154,9 @@ class Conteudo extends Modulos
             }
         }
 
-        if( empty($sqlcampostr) OR
-            empty($sqlvalorstr) ){
+        if( empty($sqlcampostr) ){
             return false;
         }
-
 
 
         if($post['metodo'] == 'criar') {
@@ -163,7 +167,9 @@ class Conteudo extends Modulos
                         ($sqlvalorstr)";
 
 
-        } else if($post['metodo'] == 'editar') {
+        } elseif( $post['metodo'] == 'editar' OR
+                  $post['w'] > 0 )
+        {
             $sql = "UPDATE
                         ".$this->tabela_criar."
                     SET
@@ -173,26 +179,43 @@ class Conteudo extends Modulos
                     ";
         }
 
+
         $query = $this->conexao->exec($sql);
 
         if($query !== false) {
-            $resultado = TRUE;
+            $resultado = true;
 
             // se estiver criando um registro, guarda seu id para ser usado por módulos embed a seguir
             if($post['metodo'] == 'criar') {
                 $post['w'] = $this->conexao->conn->lastInsertId();
             }
 
-
+            $w = $post['w'];
             /*
-                 *
-                 * EMBED SAVE
-                 *
+             *
+             * EMBED SAVE
+             *
             */
             //include(INC_DIR.'conteudo.inc/embed_save.php');
 
+
+            /*
+             *
+             * EMBED SAVE
+             *
+             */
+            $embedData = array(
+                'embedModules' => $post['embed'],
+                'options' => array(
+                    'targetTable' => $post['contentTable'],
+                    'w' => $w,
+                )
+            );
+            $this->saveEmbeddedModules($embedData);
+
+
         } else {
-            $resultado = FALSE;
+            $resultado = false;
         }
         return $resultado;
     }
