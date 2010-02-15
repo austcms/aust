@@ -61,7 +61,7 @@ if($fm == 'editar'){
                  * Se for edição do próprio perfil, não permite modificação
                  */
                 //vd( in_array(strtolower($administrador->tipo), array('root','webmaster','administrador' ) ) );
-                if( //$administrador->LeRegistro('id') != $dados['id']
+                if( $administrador->LeRegistro('id') != $dados['id'] AND
                     in_array(strtolower($administrador->tipo), array('root','webmaster','administrador' ) ) )
                 {
                     ?><div style=" width: 120px; display: table; float: left;"><?php
@@ -103,8 +103,24 @@ if($fm == 'editar'){
                     $query = $conexao->query($sql);
                     $result = $query[0];
                     ?>
-                    A hierarquia é <strong><?php echo $result['nome'];?></strong> do sistema. Somente <em>administradores</em> podem
-                    modificar a hierarquia de um usuário.
+                    <p>
+                        <strong><?php echo $result['nome'];?></strong> do sistema.
+                    </p>
+                    <p>
+                        <?php
+                        if( $administrador->LeRegistro('id') == $dados['id'] ){
+                            ?>
+                            Você não pode alterar sua própria hierarquia.
+                            <?php
+                        } else {
+                            ?>
+                            Somente <em>administradores</em> podem
+                            modificar a hierarquia de um usuário.
+                            <?php
+                        }
+                        ?>
+                    </p>
+
                 <?php
                 }
                 ?>
