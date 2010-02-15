@@ -100,9 +100,7 @@
                     $showNovaCategoria = true;
             }
             if( $showNovaCategoria ){
-                ?>
                 lbCategoria($austNode);
-                <?php
             }
             ?>
         </td>
