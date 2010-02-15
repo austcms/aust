@@ -3,5 +3,5 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-$name = "Classic Vermelho";
+$name = "Classic Roxo";
 ?>

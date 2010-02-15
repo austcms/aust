@@ -8,15 +8,15 @@ Description:
 /* BÁSICO */
 body { background: #f1f1f1; }
 
-a { color: #af220e; }
-a:hover { color: #e33219; }
+a { color: #003399; }
+a:hover { color: #395da1; }
 a.restrito { color: #990000; }
 
 p { color: #2e2e2e; }
 p.alerta { color: #FF3300; }
 
-h1, h2, h3, h4, h5, h6 { color: #af220e; }
-h1 { color: #004b85; }
+h1, h2, h3, h4, h5, h6 { color: #3d3d3d; }
+h1 { color: #069866; }
 h1.restrito { color: #990000; }
 h2.restrito { color: #990000; }
 h2.falha { color: red; }
@@ -31,14 +31,14 @@ div.body { background: white; }
 
 /* TOPO */
 div#top {
-    background: #af220e;
+    background: #a0a0a0;
 }
     div#top h1 { color: #f5f5f5; }
     div#top a { color: #f5f5f5; }
 
 /* NAVEGAÇÃO */
 div#navegacao {
-    background: #af220e;
+    background: #a0a0a0;
 }
     div#menu ul li a {
         background: #f1f1f1;
@@ -59,24 +59,24 @@ div#link_bottom {
 
 
 /* WIDGETS */
-div.widget div.titulo { background: #df6857; }
-div.widget div.titulo h3 { color: white; }
+div.widget div.titulo { background: #dddddd; }
+div.widget div.titulo h3 { color: #000000; }
 div.widget { background: #fdfdfd; }
 div.widget div.footer { background: #fdfdfd; }
 
 /* PANES */
 table.pane_listing tr.list { background: #fdfdfd; }
 table.pane_listing tr.footer { background: #fdfdfd; }
-table.pane_listing tr.header { background: #df6857; }
- table.pane_listing tr.header td { color: white; }
+table.pane_listing tr.header { background: #dddddd; }
+ table.pane_listing tr.header td { color: #000000; }
 
 /* TAB PANE -> table.pane_listing - Painel Gerenciar e Configurações*/
 div.panes div.background { background: #fdfdfd; }
     div.panes div.background .header { background: #fdfdfd; }
 
 ul.tabs a.current, ul.tabs a.current:hover, ul.tabs li.current a {
-    background: #d5604f;
-    color: white;
+    background: #dddddd;
+    color: #003399;
 }
 
 
