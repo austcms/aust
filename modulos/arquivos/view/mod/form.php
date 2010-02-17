@@ -49,7 +49,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
     <a href="adm_main.php?section=<?=$_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
 </p>
 
-<p>Envie um arquivo para o site. Os usuários poderão baixar este arquivo.</p>
+<p>Envie um arquivo para o site.</p>
 
 <form method="post" action="adm_main.php?section=<?=$_GET['section'];?>&action=gravar&aust_node=<?=$_GET['aust_node']?>" enctype="multipart/form-data">
     <input type="hidden" name="metodo" value="<?=$fm;?>">
@@ -143,7 +143,8 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
                 if( strtolower( substr($_SERVER["SERVER_PROTOCOL"], 0, 4) ) == 'http' ){
                     $url = 'http://';
                 }
-                $url = $url.$_SERVER["SERVER_NAME"].$dados['url'];
+                $url = $modulo->parseUrl( $url.$_SERVER["SERVER_NAME"].$dados['url'] );
+
             }
             ?>
             <tr>
