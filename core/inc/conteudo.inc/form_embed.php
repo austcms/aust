@@ -28,14 +28,9 @@
 
     if( !empty($embed) AND count($embed)){
         ?>
-        <tr>
-            <td colspan="2">
-                <input type="hidden" name="contentTable" value="<?php
-                echo $modulo->getContentTable();
-                ?>" />
-                <br /></td>
-        </tr>
-
+        <input type="hidden" name="contentTable" value="<?php
+        echo $modulo->getContentTable();
+        ?>" />
         <?php
         /*
         <tr>

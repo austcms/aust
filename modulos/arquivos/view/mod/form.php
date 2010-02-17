@@ -35,6 +35,13 @@ if($_GET['action'] == 'editar'){
     $fm = "criar";
 }
 
+/*
+ * Tamanho máximo do Upload.
+ */
+$maxSize = (int) str_replace('M','', ini_get(upload_max_filesize) );
+if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
+    $maxSize = (int) str_replace('M','', ini_get('post_max_size') );
+
 ?>
 
 <h2><?=$h1?></h2>
@@ -105,29 +112,62 @@ if($_GET['action'] == 'editar'){
         </td>
         <td class="second">
             <?php if($fm == "editar"){ ?>
-                <p style="font-weight: bold;">
+                <span style="font-weight: bold;">
                     <?php echo $dados['arquivo_nome'] ?>
-                </p>
+                </span>
             <?php }else{ ?>
-                <INPUT TYPE="file" NAME="arquivo">
+                <INPUT TYPE="file" NAME="arquivo" class="text">
                 <p class="explanation">
                     Localize o arquivo que você deseja realizar upload.
-                    O tamanho máximo aceito neste servidor é <?php echo ini_get(upload_max_filesize)?>b.
+                    O tamanho máximo aceito neste servidor é <?php echo $maxSize; ?>Mb.
                 </p>
             <?php } ?>
         </td>
     </tr>
+    <?php
+    /**
+     * PATH DO ARQUIVO PARA LINK?
+     */
+    if($fm == "editar"){
+        $showshow_path_to_link = false; // por padrão, não mostra
+        if( !empty($moduloConfig["show_path_to_link"]) ){
+            if( $moduloConfig["show_path_to_link"]["valor"] == "1" )
+                $showshow_path_to_link = true;
+        }
+        if( $showshow_path_to_link ){
+
+            $url = '';
+
+            
+            if( !empty($dados['url']) ){
+                if( strtolower( substr($_SERVER["SERVER_PROTOCOL"], 0, 4) ) == 'http' ){
+                    $url = 'http://';
+                }
+                $url = $url.$_SERVER["SERVER_NAME"].$dados['url'];
+            }
+            ?>
+            <tr>
+                <td valign="top" class="first">Endereço do arquivo: </td>
+                <td class="second">
+                    <?php echo $url;?>
+                    <p class="explanation">
+                        Copie, se desejar, para criar links para o arquivo.
+                    </p>
+                </td>
+            </tr>
+            <?php
+        }
+    }
+    ?>
     <tr>
         <td valign="top" class="first">Título: </td>
         <td class="second">
-            <INPUT TYPE="text" NAME="frmtitulo" value="<?php ifisset($dados[titulo]);?>" SIZE="65">
-            <p class="explanation">
-                Digite um título. (Título começa com letra maiúscula e não leva
-                ponto final)
+            <input type="text" name="frmtitulo" value="<?php ifisset($dados['titulo']);?>" class="text" />
+            <?php tt('Digite um título. Lembre-se, títulos começam com letra maiúscula e não leva
+                ponto final.'); ?>
+            <p class="explanation_example">
+                Exemplo: <em>Arquivo de exercícios segunda prova</em>
             </p>
-                <p class="explanation_example">
-                    Exemplo: <em>Arquivo de exercícios segunda prova</em>
-                </p>
             <p class="explanation" id="exists_titulo">
             </p>
         </td>
@@ -173,7 +213,7 @@ if($_GET['action'] == 'editar'){
 
 
     <tr>
-    <td colspan="2" style="padding-top: 30px;"><center><INPUT TYPE="submit" VALUE="Entrar"></center></td>
+        <td colspan="2"><center><input type="submit" value="Enviar" class="submit"></center></td>
     </tr>
     </table>
 
@@ -181,9 +221,8 @@ if($_GET['action'] == 'editar'){
 
 <br />
 <p>
-    Configurações deste servidor:<br>
-    <strong>upload_max_filesize</strong> => <?=ini_get(upload_max_filesize)?> -
-    <strong>post_max_size</strong> => <?=ini_get('post_max_size');?>
+    Os arquivos enviados poderão ter o tamanho limite de
+    <strong><?php echo $maxSize ?>Mb</strong> neste servidor.
 </p>
 
 
