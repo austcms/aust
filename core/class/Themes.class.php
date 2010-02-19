@@ -19,6 +19,13 @@ class Themes {
         $this->conexao = $param['conexao'];
     }
 
+    /**
+     * getThemes()
+     *
+     * Retorna os temas atuais
+     *
+     * @return <array>
+     */
     public function getThemes(){
         $result = ARRAY();
 
@@ -45,6 +52,45 @@ class Themes {
         return $result;
     } // end getThemes()
 
+    public function setTheme($params){
+
+        $userId = $params['userId'];
+        $themeName = $params['themeName'];
+
+        $sql = "DELETE
+                FROM config
+                WHERE
+                    tipo='Themes' AND
+                    local='".$userId."' AND
+                    propriedade='current_theme'
+                ";
+        $this->conexao->exec($sql);
+
+        $sql = "INSERT INTO
+                    config
+                    (tipo, local, nome, propriedade, valor, autor)
+                VALUES
+                    ('Themes', '".$userId."', 'Tema Atual', 'current_theme', '".$themeName."', '".$userId."')
+                ";
+        $this->conexao->exec($sql);
+
+        return true;
+
+    }
+
+    public function currentTheme($userId){
+        $sql = "SELECT valor
+                FROM config
+                WHERE
+                    tipo='Themes' AND
+                    local='".$userId."' AND
+                    propriedade='current_theme'
+                LIMIT 1
+                ";
+
+        $tmp = $this->conexao->query($sql);
+        return $tmp[0]['valor'];
+    }
 }
 
 ?>
