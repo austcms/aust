@@ -100,9 +100,7 @@
                     $showNovaCategoria = true;
             }
             if( $showNovaCategoria ){
-                ?>
                 lbCategoria($austNode);
-                <?php
             }
             ?>
         </td>
@@ -229,7 +227,7 @@
 
     ?>
     <tr>
-        <td colspan="2" style="padding-top: 10px;"><center><INPUT TYPE="submit" VALUE="Enviar!" name="submit" class="submit"></center></td>
+        <td colspan="2"><center><INPUT TYPE="submit" VALUE="Enviar!" name="submit" class="submit"></center></td>
     </tr>
 </table>
 
