@@ -186,10 +186,11 @@ define('MOD_VIEW_DIR', 'view/');
  * CACHE
  */
     define('CACHE_DIR', CORE_DIR.'cache/');
+    define('CACHE_PUBLIC_DIR', UI_PATH.'cache/');
 
-    define('CACHE_CSS_CONTENT', CSS_PATH.'style');
-    define('CACHE_JS_CONTENT', BASECODE_JS.'javascript');
-    define('CACHE_CSS_FILES', CACHE_DIR.'CLIENTSIDE_CSS_FILE');
-    define('CACHE_JS_FILES', CACHE_DIR.'CLIENTSIDE_JS_FILE');
+    define('CACHE_CSS_CONTENT', CACHE_PUBLIC_DIR.'style.css');
+    define('CACHE_JS_CONTENT', CACHE_PUBLIC_DIR.'javascript.js');
+    define('CACHE_CSS_FILES', CACHE_DIR.'CLIENTSIDE_CSS_FILES');
+    define('CACHE_JS_FILES', CACHE_DIR.'CLIENTSIDE_JS_FILES');
 
 ?>

@@ -45,7 +45,7 @@ class HtmlHelper
      * 
      */
     /**
-     * js()
+     * css()
      *
      * Loads all js into one file.
      *
@@ -53,10 +53,12 @@ class HtmlHelper
      */
     public function css(){
 
-        $isCached = false; //$this->_isCssCached();
+        $isCached = $this->_isCssCached();
         $cacheFilePath = CACHE_CSS_CONTENT;
 
-        if( !$isCached ){
+        if( !$isCached OR
+            !is_readable($cacheFilePath) )
+        {
             ob_start();
             foreach( glob( THIS_TO_BASEURL.CSS_PATH.'*.css' ) as $file ){
                 $files[$file] = filesize($file);
@@ -75,12 +77,18 @@ class HtmlHelper
              *                             ->qualquer caractere
              *                                 ->*\
              */
-            $pattern = '/(\/\*!|\/\*\s|\/\*\*).*(\*\/)|\n|\n\s\{|\t/Us';
-            $replacement = '';
-            //$cachedFileStream = preg_replace($pattern, $replacement, $cachedFileStream);
+            $pattern = '/(\/\*!|\/\*\s|\/\*\*).*(\*\/)|\n|\s\s\s\s|\n\s\{|\t/Us';
+            $replacement = ' ';
+            $cachedFileStream = preg_replace($pattern, $replacement, $cachedFileStream);
             /*
              * Salva cache
              */
+            if( !is_writable($cacheFilePath) ){
+                foreach( $files as $file=>$size ){
+                    echo '<link rel="stylesheet" href="'.$file.'?v='.$size.'" type="text/css" />';
+                }
+                return false;
+            }
             if( !is_file($cacheFilePath) ){
                 $handle = fopen( $cacheFilePath, 'w+');
                 chmod($cacheFilePath, 0777);
@@ -109,7 +117,9 @@ class HtmlHelper
             }
             fclose($handle);
         }
-        echo '<link rel="stylesheet" href="'.$cacheFilePath.'?v='.$this->cssCacheFilesize.'" type="text/css" />';
+        if( is_readable($cacheFilePath) )
+            echo '<link rel="stylesheet" href="'.$cacheFilePath.'?v='.$this->cssCacheFilesize.'" type="text/css" />';
+        
         return true;
     }
 
@@ -183,7 +193,7 @@ class HtmlHelper
 
         $isCached = $this->_isJsCached();
         $jsCacheFile = CACHE_JS_CONTENT;
-
+        
         if( !$isCached ){
             ob_start();
             foreach( glob( THIS_TO_BASEURL.BASECODE_JS.'*.js' ) as $file ){
@@ -197,6 +207,15 @@ class HtmlHelper
             $js = ob_get_contents();
             ob_end_clean();
 
+            /*
+             * Permissões negadas nos diretórios de cache
+             */
+            if( !is_writable($jsCacheFile) ){
+                foreach( $files as $file=>$size ){
+                    echo '<script type="text/javascript" src="'.$file.'?v='.$size.'"></script>';
+                }
+                return false;
+            }
             /*
              * Procura por
              *         ->(/*! ou /* com espaço ou /**
@@ -223,14 +242,14 @@ class HtmlHelper
             /*
              * Salva informações sobre quais arquivos estão com cache
              */
-            if( !is_file(CACHE_CSS_FILES) ){
-                $handle = fopen( CACHE_CSS_FILES, 'w+');
-                chmod(CACHE_CSS_FILES, 0777);
+            if( !is_file(CACHE_JS_FILES) ){
+                $handle = fopen( CACHE_JS_FILES, 'w+');
+                chmod(CACHE_JS_FILES, 0777);
             } else {
-                $handle = fopen( CACHE_CSS_FILES, 'w');
+                $handle = fopen( CACHE_JS_FILES, 'w');
             }
 
-            if( is_writable(CACHE_CSS_FILES) ){
+            if( is_writable(CACHE_JS_FILES) ){
                 foreach ($files as $filename=>$filesize) {
                     fputcsv($handle, array($filename.';'.$filesize) );
                 }
@@ -264,14 +283,14 @@ class HtmlHelper
             $this->jsCacheFilesize+= (int) $size;
         }
 
-        if( !is_file(CACHE_CSS_CONTENT) OR
-            filesize(CACHE_CSS_CONTENT) == 0 )
+        if( !is_file(CACHE_JS_CONTENT) OR
+            filesize(CACHE_JS_CONTENT) == 0 )
             return false;
         /*
          * Verifica quais arquivos estão cached
          */
-        if( file_exists(CACHE_CSS_FILES) )
-            $handle = fopen(CACHE_CSS_FILES, "r"); // Open file form read.
+        if( file_exists(CACHE_JS_FILES) )
+            $handle = fopen(CACHE_JS_FILES, "r"); // Open file form read.
         else
             return false;
 

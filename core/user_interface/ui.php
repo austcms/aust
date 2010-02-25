@@ -151,6 +151,44 @@ define("IMG_DIR", "core/user_interface/img/");
                     <a href="adm_main.php?section=categorias" class="restrito">Categorias</a>
                 <?php
                 if( Registry::read('debugLevel') > 1 ){
+
+                    /*
+                     * CACHE
+                     */
+                    $cacheDirs = Registry::read('permission_needed_dirs');
+                    foreach( $cacheDirs as $dir ){
+                        if( !is_writable($dir) OR
+                            !is_readable($dir))
+                        {
+                            $cacheError[] = $dir;
+                        }
+                    }
+                    if( !empty($cacheError) ){
+
+                        ?>
+                        <table class="debug">
+                        <tr class="header">
+                            <td>
+                            <strong>Cache</strong>
+                            </td>
+                        </tr>
+                        <?php
+                        foreach( $cacheError as $dir ){
+                            ?>
+                            <tr class="list">
+                                <td>
+                                <span>
+                                <strong><?php echo $dir ?></strong>
+                                com permissão negada.
+                                </span>
+                                </td>
+                            </tr>
+                            <?php
+                        }
+                        ?>
+                        </table>
+                        <?php
+                    }
                     ?>
 
                     <table class="debug">
