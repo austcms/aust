@@ -47,6 +47,8 @@ include(LIB_DIR."aust/aust_func.php");
 $conexao = new Conexao($dbConn);
 $model = new Model($conexao);
 
+include(CORE_CONFIG_DIR."core.php");
+
 /**
  * Configurações do core do sistema
  */

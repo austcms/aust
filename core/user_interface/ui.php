@@ -7,9 +7,10 @@ define("IMG_DIR", "core/user_interface/img/");
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="expires" content="Mon, 19 Feb 2024 11:12:01 GMT" />
     <title><?php echo $config->getConfig('site_name'); ?> - Gerenciador<?php /* ifisset($config->LeOpcao('sitename'), 'Aust'); */ ?></title>
+<?php
+/*
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/standard.css" type="text/css" />
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/style_principal.css" type="text/css" />
-    
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/header.css" type="text/css" />
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/widget.css" type="text/css" />
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/hint.css" type="text/css" />
@@ -17,10 +18,13 @@ define("IMG_DIR", "core/user_interface/img/");
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/pane.css" type="text/css" />
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/forms.css" type="text/css" />
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/lightbox.css" type="text/css" />
-
-    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>temas/classic_blue/default.css" type="text/css" />
+ * 
+ */
+?>
 
     <?php
+    $html = HtmlHelper::getInstance();
+    $html->css();
     /* Para TinyMCE
      *
      * Para retirar do site: Verificar textareas nos formulários e em inc_content_gravar.php
@@ -30,6 +34,7 @@ define("IMG_DIR", "core/user_interface/img/");
      *
      */
     ?>
+    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>temas/classic_blue/default.css" type="text/css" />
     <?php
     /**
      * @todo - o comando abaixo é perigoso, pois permite que um usuário altere
@@ -42,7 +47,6 @@ define("IMG_DIR", "core/user_interface/img/");
     </script>
 
     <?php
-    $html = HtmlHelper::getInstance();
     $html->js();
     /*
     <script type="text/javascript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>libs/jquery.js"></script>
