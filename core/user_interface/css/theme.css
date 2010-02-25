@@ -1,0 +1,33 @@
+/*
+    Document   : forms.css
+    Created on : 17/07/2009, 10:28:20
+    Author     : Alexandre
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+#themes {  }
+#themes .theme { float: left; width: 220px; margin: 10px 0 20px 20px; display: table; }
+
+#themes .theme .theme_name { float: left; }
+    #themes .theme .theme_name h3 { padding-left: 3px; color: #000000; float: left; }
+    #themes .theme .theme_name input { float: left; background: red; margin-top: 4px;}
+
+#themes .theme .screnshot { float: left; }
+#themes .theme .screnshot img { padding-left: 10px; }
+
+/** Botão Instalar **/
+    #themes div.instalar { margin: 10px 0 0 2px; }
+     #themes div.instalar a {
+        width: 63px;
+        height: 23px;
+        background: url(../img/instalar_tema.png) no-repeat;
+        display: block;
+        padding: 0;
+        margin: 0;
+        float: left;
+    }
+        #themes div.instalar a:hover {
+            background-position: 0px -23px;
+            display: block;
+        }
