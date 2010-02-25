@@ -76,7 +76,7 @@ class HtmlHelper
              * Salva cache
              */
             if( is_writable($jsCacheFile) ){
-                $handle = fopen( $jsCacheFile, 'w');
+                $handle = fopen( $jsCacheFile, '+w');
                 fwrite($handle, $js);
                 fclose($handle);
             }
@@ -84,7 +84,7 @@ class HtmlHelper
              * Salva informações sobre quais arquivos estão com cache
              */
             if( is_writable(CACHE_DIR.'CLIENTSIDE_JAVASCRIPT_FILES') ){
-                $handle = fopen( CACHE_DIR.'CLIENTSIDE_JAVASCRIPT_FILES', 'w');
+                $handle = fopen( CACHE_DIR.'CLIENTSIDE_JAVASCRIPT_FILES', '+w');
                 foreach ($files as $filename=>$filesize) {
                     fputcsv($handle, array($filename.';'.$filesize) );
                 }
@@ -117,7 +117,10 @@ class HtmlHelper
         /*
          * Verifica quais arquivos estão cached
          */
-        $handle = fopen(CACHE_DIR.'CLIENTSIDE_JAVASCRIPT_FILES', "r"); // Open file form read.
+        if( file_exists(CACHE_DIR.'CLIENTSIDE_JAVASCRIPT_FILES') )
+            $handle = fopen(CACHE_DIR.'CLIENTSIDE_JAVASCRIPT_FILES', "r"); // Open file form read.
+        else
+            return false;
 
         if( $handle ){
             while( !feof($handle) ){
@@ -131,7 +134,8 @@ class HtmlHelper
                 unset($array);
                 
             }
-        }
+        } else
+            return false;
         fclose($handle); // Close the file.
 
         //pr($files);
