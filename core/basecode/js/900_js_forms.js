@@ -16,7 +16,7 @@ function SenhaVerificaForm(entered){
             alert("A confirmação da senha não bate com a nova senha digitada.\n Redigite a nova senha e a confirmação da mesma.");
             return false;
         }
-        }
+    }
 }
 
 function NoticiaVerificaForm(entered){

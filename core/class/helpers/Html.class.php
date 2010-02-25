@@ -48,14 +48,13 @@ class HtmlHelper
         $isCached = $this->_isJsCached();
         $jsCacheFile = CACHE_DIR.'javascript.js';
 
-        if( $isCached ){
-            ob_start();
-            include($jsCacheFile);
-            ob_end_clean();
-        } else {
+        if( !$isCached ){
             ob_start();
             foreach( glob( THIS_TO_BASEURL.BASECODE_JS.'*.js' ) as $file ){
                 $files[$file] = filesize($file);
+                /*
+                 * Para criar cache
+                 */
                 include($file);
             }
             
@@ -71,7 +70,6 @@ class HtmlHelper
             $pattern = '/(\/\*!|\/\*\s|\/\*\*).*(\*\/)/Us';
             $replacement = '';
             $js = preg_replace($pattern, $replacement, $js);
-
             /*
              * Salva cache
              */
@@ -103,7 +101,7 @@ class HtmlHelper
             }
             fclose($handle);
         }
-        echo '<script type="text/javascript" src="'.$jsCacheFile.'"></script>';
+        echo '<script type="text/javascript" src="'.$jsCacheFile.'?v='.$this->jsCacheFilesize.'"></script>';
         return true;
     }
 
@@ -119,13 +117,19 @@ class HtmlHelper
      */
     public function _isJsCached(){
 
+
+        $this->jsCacheFilesize = 0;
         /*
          * Arquivos atuais
          */
         foreach( glob( THIS_TO_BASEURL.BASECODE_JS.'*.js' ) as $file ){
-            $files[$file] = filesize($file);
+            $size = filesize($file);
+            $files[$file] = $size;
+            $this->jsCacheFilesize+= (int) $size;
         }
 
+        if( filesize(CACHE_DIR.'javascript.js') == 0 )
+            return false;
         /*
          * Verifica quais arquivos estão cached
          */
@@ -137,11 +141,11 @@ class HtmlHelper
         if( $handle ){
             while( !feof($handle) ){
                 $buffer = fgets($handle, 4096); // Read a line.
-
                 $array = explode(";", $buffer);
+
                 if( !empty($array[3]) )
                     return false;
-                
+
                 $current[$array[0]] = trim($array[1]);
                 unset($array);
                 
