@@ -1,4 +1,5 @@
 nbproject/
 uploads/
 core/cache/*
+**/cache/*
 .gitignore~
