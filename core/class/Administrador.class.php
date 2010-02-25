@@ -10,7 +10,7 @@ class Administrador {
      *
      * @var class Contém o tipo de usuário em modo legível
      */
-    public $tipo;
+    public $userInfo;
 
     function __construct($conexaoClass, $location = '') {
         $this->conexao = $conexaoClass;
@@ -75,8 +75,20 @@ class Administrador {
      * @return string $dados retorno o valor lido no campo do DB
      */
     public function LeRegistro($campo) {
+        if( !empty($this->userInfo[$campo]) )
+            return $this->userInfo[$campo];
+
+        if( $campo == 'tipo' ){
+            $statement = "admins_tipos.nome as tipo";
+        } else if( $campo == 'tipoid' ){
+            $statement = "admins_tipos.id as tipoid";
+        } else {
+            $statement = "admins.$campo as $campo";
+        }
+
         $sql = "SELECT
-                    admins.*, admins_tipos.nome as tipo, admins_tipos.id as tipoid
+                    $statement,
+                    admins.is_blocked
                 FROM
                     admins
                 LEFT JOIN
@@ -91,6 +103,7 @@ class Administrador {
         $dados = $query[0];
         $_SESSION['login'.$campo] = $dados[$campo];
         $_SESSION['login']['is_blocked'] = $dados['is_blocked'];
+        $this->userInfo[$campo] = $dados[$campo];
         return $dados[$campo];
 
     }

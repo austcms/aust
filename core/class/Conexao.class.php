@@ -142,6 +142,11 @@ class Conexao extends SQLObject {
      */
     public function query($sql, $type = "ASSOC"){
         /**
+         * Timer init
+         */
+        $sT = microtime(true);
+        
+        /**
          * Se a extensão PDO está ativada
          */
         if($this->PdoExtension()){
@@ -185,6 +190,10 @@ class Conexao extends SQLObject {
                 $query = $this->conn->query($sql);
             }
 
+            if( $query === false){
+                $debugResult = end( $this->conn->errorInfo() );
+            }
+
             if( !empty($query) ){
 
                 foreach($query as $chave=>$valor){
@@ -194,6 +203,12 @@ class Conexao extends SQLObject {
             }
             
         } else {
+
+            /**
+             * @todo - fazer errorinfo para sqls inválidos
+             * para querys não PDO
+             */
+
             $mysql = mysql_query($sql);
             
             while($dados = mysql_fetch_array($mysql)){
@@ -207,6 +222,30 @@ class Conexao extends SQLObject {
         if(empty($result)){
             $result = array();
         }
+
+        /*
+         * Salva debug SQL
+         */
+        if( Registry::read('debugLevel') > 1 ){
+
+            $sEnd = microtime(true);
+
+            if( !is_string($debugResult) ){
+                $debugResult = count($result);
+            }
+            /*
+             * DESCRIBE NÃO SÃO MOSTRADOS
+             */
+            if( substr( $sql, 0, 8 ) !== 'DESCRIBE' ){
+                $debugVars = array(
+                    'sql' => $sql,
+                    'result' => $debugResult,
+                    'time' => $sEnd - $sT
+                );
+                Registry::add('debug',$debugVars);
+            }
+        }
+
         return $result;
     }
 
@@ -284,69 +323,6 @@ class Conexao extends SQLObject {
         return $this->conn->lastInsertId();
     }
 
-    /**
-     * Retorna a lista de tabelas existentes
-     *
-     * @param string $db Banco de dados
-     * @return array Retorna a lista de tabelas
-     */
-    public function listaTabelasDoDBParaArray($db = '' ){
-
-        /**
-         * Ajusta o DB (se nenhum especificado, usa o padrão do sistema)
-         */
-        $db = ( empty($db) ) ? $this->dbConfig['db'] : $db;
-
-        /**
-         * SQL para mostrar as tabelas da base de dados selecionada
-         */
-        $sql = "SHOW TABLES";
-
-        /**
-         * Carrega as tabelas, verifica a quantidade e ajusta uma array com elas
-         * para retornar.
-         */
-        $arraytmp = array();
-        $query = $this->query($sql);
-        $qntd_tabelas = count($query);
-        if($qntd_tabelas > 0){
-            foreach ( $query as $chave=>$valor ){
-                $arraytmp[] = reset($valor);
-            }
-        }
-        return $arraytmp;
-
-    }
-
-    /**
-     * Retorna array com os campos da tabela selecionada
-     *
-     * @param string $tabela
-     * @return array Array contendo todos os campos da tabela escolhida,
-     * juntamente com informações como tipo e chaves.
-     */
-    public function listaCampos( $tabela ){
-        $sql = "DESCRIBE ". $tabela;
-
-        $query = $this->query($sql);
-
-        /**
-         * Loop pelos campos ajustando para o português os índices da array
-         * de retorno.
-         */
-        foreach($query as $chave=>$valor){
-            $query[$chave]['campo'] = $valor['Field'];
-            $query[$chave]['tipo'] = $valor['Type'];
-        }
-        
-        return $query;
-
-    }
-
-
-
-
-    // Verifica se algum WEBMASTER existe cadastrado no sistema. Retorna Falso ou Verdadeiro.
     public function VerificaAdmin(){
             $sql = "SELECT admins.id
                             FROM
@@ -368,7 +344,6 @@ class Conexao extends SQLObject {
             $mysql = mysql_query($sql);
             return mysql_num_rows($mysql);
     }
-
     /**
      * VERIFICAÇÕES INTERNAS
      */

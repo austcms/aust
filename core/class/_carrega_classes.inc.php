@@ -16,7 +16,7 @@ if(!defined('THIS_TO_BASEURL')){
 /**
  * Carrega as classes
  */
-include(THIS_TO_BASEURL.CLASS_DIR."CoreConfig"      .CLASS_FILE_SUFIX.".php");
+include(THIS_TO_BASEURL.CLASS_DIR."Registry"        .CLASS_FILE_SUFIX.".php");
 include(THIS_TO_BASEURL.CLASS_DIR."SQLObject"       .CLASS_FILE_SUFIX.".php");
 include(THIS_TO_BASEURL.CLASS_DIR."dbSchema"        .CLASS_FILE_SUFIX.".php");
 include(THIS_TO_BASEURL.CLASS_DIR."Conexao"         .CLASS_FILE_SUFIX.".php");
@@ -51,6 +51,7 @@ include(THIS_TO_BASEURL.CLASS_DIR."ModsSetup"      .CLASS_FILE_SUFIX.".php");
  */
 include(THIS_TO_BASEURL.CLASS_DIR."Helpers"         .CLASS_FILE_SUFIX.".php");
 include(THIS_TO_BASEURL.CLASS_DIR."helpers/EmbedForms".CLASS_FILE_SUFIX.".php");
+include(THIS_TO_BASEURL.CLASS_DIR."helpers/Html".CLASS_FILE_SUFIX.".php");
 //include(THIS_TO_BASEURL.HELPERS_DIR."Form"          .CLASS_FILE_SUFIX.".php");
 
 /**

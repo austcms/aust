@@ -105,7 +105,7 @@ if($_GET['action'] == 'criar') {
                     SELECT
                         id, nome
                     FROM
-                        ".CoreConfig::read('austTable')."
+                        ".Registry::read('austTable')."
                     WHERE
                         id IN ('".implode("','", $categorias)."')
                     ";
@@ -140,7 +140,7 @@ if($_GET['action'] == 'criar') {
     }
 
     // escreve <select>
-    //echo BuildDDList( CoreConfig::read('austTable'),'categoria_id',$escala,'',$current_node);
+    //echo BuildDDList( Registry::read('austTable'),'categoria_id',$escala,'',$current_node);
     ?>
 </div>
 

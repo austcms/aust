@@ -356,6 +356,15 @@ class Modulos
         return $response = (empty($response)) ? array() : $response;
     }
 
+    /*
+     *
+     * INTERFACE
+     *
+     */
+    public function loadHtmlEditor(){
+        return loadHtmlEditor();
+    }
+
     /**
      * Método responsável por retornar o nome de arquivos que representar
      * determinada interface ou funcionalidade.

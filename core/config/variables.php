@@ -180,4 +180,10 @@ define('MOD_VIEW_DIR', 'view/');
  * WIDGETS
  */
     define('WIDGETS_DIR', 'widgets/');
+
+/*
+ * CACHE
+ */
+    define('CACHE_DIR', CORE_DIR.'cache/');
+
 ?>

@@ -12,6 +12,8 @@
     );
     $moduloConfig = $modulo->loadModConf($params);
 
+    $modulo->loadHtmlEditor();
+
 
 /*
  * Ajusta variáveis iniciais
@@ -85,7 +87,7 @@
                 <?php
             }
 
-            echo BuildDDList( CoreConfig::read('austTable') ,'frmcategoria', $administrador->tipo ,$aust_node, $current_node);
+            echo BuildDDList( Registry::read('austTable') ,'frmcategoria', $administrador->tipo ,$aust_node, $current_node);
             ?>
 
 
@@ -100,9 +102,7 @@
                     $showNovaCategoria = true;
             }
             if( $showNovaCategoria ){
-                ?>
                 lbCategoria($austNode);
-                <?php
             }
             ?>
         </td>
@@ -229,7 +229,7 @@
 
     ?>
     <tr>
-        <td colspan="2" style="padding-top: 10px;"><center><INPUT TYPE="submit" VALUE="Enviar!" name="submit" class="submit"></center></td>
+        <td colspan="2"><center><INPUT TYPE="submit" VALUE="Enviar!" name="submit" class="submit"></center></td>
     </tr>
 </table>
 

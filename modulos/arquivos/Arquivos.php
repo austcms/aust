@@ -38,6 +38,32 @@ class Arquivos extends Modulos {
 
     }
 
+    /**
+     * parseUrl()
+     *
+     * Converte urls com ../ para o formato correto.
+     *
+     * @param <string> $url
+     * @return <string>
+     */
+    public function parseUrl($url){
+
+        $workVar = explode("/", $url);
+
+        foreach( $workVar as $nr=>$value ){
+            if( $value == '..' ){
+                unset( $workVar[$nr] );
+                unset( $workVar[$nr-1] );
+            }
+        }
+
+        $url = implode('/', $workVar);
+        $url = str_replace("./", "", $url);
+
+        return $url;
+
+    }
+
     /*
      * funções de verificação ou leitura automática do DB
     */

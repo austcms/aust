@@ -249,6 +249,15 @@ if(!empty($_GET['function'])){
                     "inputType" => "checkbox",
                 ),
                 /*
+                 * show_path_to_link
+                 */
+                array(
+                    "propriedade" => "show_path_to_link", // nome da propriedade
+                    "value" => "",
+                    "label" => "Mostrar path para link?",
+                    "inputType" => "checkbox",
+                ),
+                /*
                  * Modo
                  */
                 /*

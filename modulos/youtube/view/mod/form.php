@@ -99,7 +99,7 @@
                     <?php
                 }
 
-                echo BuildDDList( CoreConfig::read('austTable') ,'frmcategoria', $administrador->tipo ,$aust_node, $current_node);
+                echo BuildDDList( Registry::read('austTable') ,'frmcategoria', $administrador->tipo ,$aust_node, $current_node);
                 ?>
                 </div>
 

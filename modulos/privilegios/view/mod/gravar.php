@@ -126,7 +126,7 @@ if(!empty($_POST)) {
                                 privilegio_target
                                 (privilegio_id, target_table,target_id, type, admin_id, created_on)
                             VALUES
-                                ('".$insert_id."','".CoreConfig::read('austTable')."','".$_POST["categoria_id"]."', 'structure','".$_POST['frmadmin_id']."','".date("Y-m-d")."')
+                                ('".$insert_id."','".Registry::read('austTable')."','".$_POST["categoria_id"]."', 'structure','".$_POST['frmadmin_id']."','".date("Y-m-d")."')
                             ";
             $this->modulo->conexao->exec($sql_tipo);
         }
