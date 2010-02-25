@@ -18,27 +18,28 @@ if( !empty($_GET['current_theme']) ){
 
 ?>
 <h2>
-    Temas
+    Aparência
 </h2>
-
+<p>
+    Personalize o seu gerenciador com os temas abaixo.
+</p>
+<p>
+    É simples e rápido. Escolha o tema e aperte no botão instalar.
+</p>
+<p style="font-size: 0.9em; color: silver;">
+    Em breve mais temas.
+</p>
 <?php
     $mensagem = array(
         'classe' => 'sucesso',
         'mensagem' => '<strong>Sucesso: </strong> Tema Instalado!',
         
     );
-    $mensagem_erro = array(
-        'classe' => 'insucesso',
-        'mensagem' => '<strong>Erro: </strong> Ocorreu um erro desconhecido. Tente novamente. '.
-            'Se o problema prosseguir, contacte um administrador.',
-    );
-
 
     if($_GET['status'] == 'installed' ){
         EscreveBoxMensagem($mensagem);
-    }else{
-        EscreveBoxMensagem($mensagem_erro);
     }
+    
     foreach( $themes->getThemes() as $theme ){
     ?>
 
@@ -62,5 +63,10 @@ if( !empty($_GET['current_theme']) ){
     }
 
 ?>
+<br clear="all" />
+<p>
+    <a href="adm_main.php"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+</p>
+
 
 

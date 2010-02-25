@@ -36,6 +36,8 @@ $aust_charset['db_collate'] = 'utf8_general_ci';
      * Tipo de configuração padrão, visível a todos os usuários.
      */
     CoreConfig::write('configStandardType','Geral');
+    CoreConfig::write('defaultTheme','classic_blue');
+
     /*
      * Configurações que devem ser instaladas automaticamente.
      */

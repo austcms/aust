@@ -11,6 +11,8 @@ if(empty($_GET['section']))
 <ul>
     <li><a <?php MenuSelecionado($_GET['section'], "index"); ?> href="adm_main.php?section=index">Painel</a></li>
     <li><a <?php MenuSelecionado($_GET['section'], "conteudo"); ?> href="adm_main.php?section=conteudo">Gerenciar Conteúdo</a></li>
+    
+    <li class="opcao_direita"><a <?php MenuSelecionado($_GET['section'], "themes"); ?> href="adm_main.php?section=themes">Aparência</a></li>
     <?php
     /*
      * CONFIGURAÇÕES
@@ -21,7 +23,6 @@ if(empty($_GET['section']))
         <li><a <?php MenuSelecionado($_GET['section'], "config"); ?> href="adm_main.php?section=config">Configurações</a></li>
     <?php
     }
-
     /*
      * PESSOAS E PERMISSÕES
      */
@@ -30,9 +31,12 @@ if(empty($_GET['section']))
         OR $usuario_tipo == "Moderador")
     {
         ?>
-        <li class="opcao_direita"><a <?php MenuSelecionado($_GET['section'], "admins"); ?> href="adm_main.php?section=admins">Pessoas e Permissões</a></li>
+        <li class="opcao_permissoes"><a <?php MenuSelecionado($_GET['section'], "admins"); ?> href="adm_main.php?section=admins">Pessoas e Permissões</a></li>
         <?php
     }
     ?>
+        
 </ul>
+
 </div>
+
