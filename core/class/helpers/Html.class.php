@@ -75,21 +75,33 @@ class HtmlHelper
             /*
              * Salva cache
              */
-            if( is_writable($jsCacheFile) ){
-                $handle = fopen( $jsCacheFile, '+w');
-                fwrite($handle, $js);
-                fclose($handle);
+            if( !is_file($jsCacheFile) ){
+                $handle = fopen( $jsCacheFile, 'w+');
+                chmod($jsCacheFile, 0777);
+            } else {
+                $handle = fopen( $jsCacheFile, 'w');
             }
+
+            if( is_writable($jsCacheFile) ){
+                fwrite($handle, $js);
+            }
+            fclose($handle);
             /*
              * Salva informações sobre quais arquivos estão com cache
              */
+            if( !is_file(CACHE_DIR.'CLIENTSIDE_JAVASCRIPT_FILES') ){
+                $handle = fopen( CACHE_DIR.'CLIENTSIDE_JAVASCRIPT_FILES', 'w+');
+                chmod(CACHE_DIR.'CLIENTSIDE_JAVASCRIPT_FILES', 0777);
+            } else {
+                $handle = fopen( CACHE_DIR.'CLIENTSIDE_JAVASCRIPT_FILES', 'w');
+            }
+
             if( is_writable(CACHE_DIR.'CLIENTSIDE_JAVASCRIPT_FILES') ){
-                $handle = fopen( CACHE_DIR.'CLIENTSIDE_JAVASCRIPT_FILES', '+w');
                 foreach ($files as $filename=>$filesize) {
                     fputcsv($handle, array($filename.';'.$filesize) );
                 }
-                fclose($handle);
             }
+            fclose($handle);
         }
         echo '<script type="text/javascript" src="'.$jsCacheFile.'"></script>';
         return true;
