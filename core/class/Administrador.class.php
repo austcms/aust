@@ -12,10 +12,12 @@ class Administrador {
      */
     public $userInfo;
 
+    public $forbiddenCode;
+
     function __construct($conexaoClass, $location = '') {
         $this->conexao = $conexaoClass;
         $this->tipo = $this->LeRegistro('tipo');
-        $this->VerificaSession();
+
     }
 
     /**
@@ -38,24 +40,75 @@ class Administrador {
         return $this->type();
     } // end tipo()
 
-    // verifica se o usuário está logado ou não e redireciona
-    function VerificaSession() {
+    /**
+     * redirectForbiddenSession()
+     *
+     * Realiza o devido redirecionamento da sessão caso ela
+     * seja proibida
+     *
+     * @return <bool>
+     */
+    public function redirectForbiddenSession(){
+        if( !empty($this->forbiddenCode) ){
+            header("Location: logout.php?status=".$this->forbiddenCode);
+            exit();
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * verifySession()
+     *
+     * @return <bool>
+     */
+    function verifySession() {
+        
         if( !empty($_SESSION['login']['is_blocked'])){
             if($_SESSION['login']['is_blocked'] == '1'){
-                header("Location: logout.php?status=1022");
-                exit();
+                $this->forbiddenCode = '103';
+                return false;
             }
         }
 
         $paginaatual = basename($_SERVER['PHP_SELF']);
-        if($paginaatual <> 'index.php') {
-            if(empty($_SESSION["loginid"]))
-                header("Location: index.php");
-        } else {
-            if(!empty($_SESSION["loginid"]))
-                header("Location: adm_main.php");
+        if( $paginaatual <> 'index.php' AND
+            empty($_SESSION["loginid"]) )
+        {
+            $this->forbiddenCode = '100';
+            return false;
+        } else if( $paginaatual <> 'adm_main.php' AND
+                   !empty($_SESSION['login']['id']))
+        {
+            header("Location: adm_main.php");
+            return false;
         }
+
+        return true;
     }
+
+    /**
+     * isLogged()
+     *
+     * Verifica se o usuário está logado.
+     *
+     * @return <bool>
+     */
+    public function isLogged(){
+        if( !empty($_SESSION['login']['id']) AND
+            $_SESSION['login']['id'] > 0 AND
+            !empty( $_SESSION['login']['username'] ) )
+        {
+            return true;
+        }
+        /*
+         * Não logado
+         */
+        else {
+            return false;
+        }
+    } // end isLogged()
 
     /**
      * getId()
@@ -95,8 +148,8 @@ class Administrador {
                     admins_tipos
                 ON admins.tipo=admins_tipos.id
                 WHERE
-                    admins.login='".$_SESSION['loginlogin']."' AND
-                    admins.id='".$_SESSION['loginid']."'
+                    admins.login='".$_SESSION['login']['username']."' AND
+                    admins.id='".$_SESSION['login']['id']."'
                 ";
 
         $query = $this->conexao->query($sql);

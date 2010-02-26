@@ -90,6 +90,8 @@ if(!$isResponser){
          */
         $aust = new Aust($conexao);
         $administrador = new Administrador($conexao);
+        $administrador->verifySession();
+        $administrador->redirectForbiddenSession();
         $modulos = new Modulos( array('conexao'=>$conexao) );
         $config = new Config(
                 array(

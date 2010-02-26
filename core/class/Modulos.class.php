@@ -80,8 +80,37 @@ class Modulos
     }
 
     /*
-     * MÈTODOS DE SUPORTE
+     *
+     * CRUD
+     *
      */
+    public function save(){
+        
+    }
+
+    public function delete($table, $conditions){
+
+        foreach( $conditions as $field=>$value ){
+
+        }
+
+
+    }
+
+    /*
+     *
+     * MÈTODOS DE SUPORTE
+     * 
+     */
+
+    public function getFieldsFromPost(){
+        
+    }
+
+    public function getValuesFromPost(){
+
+    }
+
     /**
      * getContentTable()
      *
@@ -92,8 +121,6 @@ class Modulos
     public function getContentTable(){
         return $this->tabela_criar;
     }
-
-
 
     /**
      *

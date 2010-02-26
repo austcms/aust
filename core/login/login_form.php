@@ -50,7 +50,7 @@
         /*
          * Usuário existente mas bloqueado enquanto navegava
          */
-        else if ($_GET['status'] == "1022"){
+        else if ($_GET['status'] == "103"){
             echo '<p class="incorrect">Ops... Seu acesso foi bloqueado '.
                 'por um administrador neste exato momento.</p>';
             echo '<p>Entre em contato com um administrador.</p>';

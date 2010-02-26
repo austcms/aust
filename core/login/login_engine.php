@@ -58,6 +58,9 @@ if( !empty($query)
 {
     $dados = $query[0];
 
+    $_SESSION['login']['id'] = $dados["id"];
+    $_SESSION['login']['username'] = $login1;
+
     $_SESSION['loginlogin'] = $login1;
     $_SESSION['loginid'] = $dados["id"];
     $_SESSION['loginnome'] = $dados["nome"];
