@@ -152,6 +152,8 @@ define('MOD_ACTIONS_FILE', 'core/actions.php');
 define('MOD_DBSCHEMA', 'core/config/db_schema.php');
 /**
  * Configurações do Módulo
+ *
+ *      A partir do diretório do módulo...
  */
 define('MOD_CONFIG', 'core/config/config.php');
 /**

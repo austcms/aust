@@ -5,6 +5,7 @@ require_once 'PHPUnit/Framework.php';
 
 require_once 'core/class/SQLObject.class.php';
 require_once 'core/class/Conexao.class.php';
+require_once 'core/class/Administrador.class.php';
 require_once 'core/config/variables.php';
 require_once 'core/libs/functions/func.php';
 
@@ -35,16 +36,19 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
         require MODULOS_DIR.$this->moduleForTesting.'/core/config/config.php';
         require_once MODULOS_DIR.$this->moduleForTesting.'/'.$modInfo['className'].'.php';
 
+        $_SESSION['login']['id'] = 1;
+
         $params = array(
-            'conexao' => $this->conexao
+            'conexao' => $this->conexao,
+            'user' => new Administrador($this->conexao),
         );
         
         $this->obj = new $modInfo['className']( $params );
     }
 
-    function testGetSQLForListing(){
-        $this->assertType('string', $this->obj->getSqlForListing() );
-        $this->assertType('string', $this->obj->getSqlForListing(
+    function testLoadSql(){
+        $this->assertType('string', $this->obj->loadSql() );
+        $this->assertType('string', $this->obj->loadSql(
                     array(
                         'resultadosPorPagina' => 0,
                     ))
@@ -81,6 +85,32 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
             'titulo' => 'Notícia de teste',
         );
     }
+
+    function testSaveEmbeddedModules(){
+
+        $params = array(
+            'embedModules' => array (
+                0 => array(
+                    'className' => 'Privilegios',
+                    'dir' => 'modulos/privilegios',
+                    'privilegio' => '1',
+                    'data' => array(
+                        'privid' => array(
+                            '0' => '1',
+                        )
+                    )
+                )
+            ),
+            'options' => array(
+                'targetTable' => 'textos',
+                'w' => '2',
+            )
+        );
+
+        $this->assertTrue( $this->obj->saveEmbeddedModules($params) );
+
+    }
+
     /**
      * @depends testSave
      */
@@ -90,7 +120,10 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
             'titulo' => 'Notícia de teste',
         );
         
-        //$this->assertTrue( $this->obj->delete('textos', $params) );
+        $this->assertGreaterThan(0, $this->obj->delete('textos', $params) );
+        $this->assertFalse( $this->obj->delete('textos', array()) );
+
+        $this->assertEquals( 0, $this->obj->delete('textos', array('titulo' => '123890567')) );
     }
 
 }

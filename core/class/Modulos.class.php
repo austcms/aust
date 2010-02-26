@@ -42,6 +42,13 @@ class Modulos
      * @var class Configurações do módulo
      */
     public $config;
+
+    /**
+     *
+     * @var array parametros do __construct
+     */
+    public $params;
+
     /**
      *
      * @var string Diretório onde estão os módulos
@@ -55,12 +62,21 @@ class Modulos
     function __construct($param) {
         global $aust;
         $this->aust = $aust;
-        
+
+        $this->params = &$param;
+
         /**
          * Ajusta a conexao para o módulo
          */
         if( !empty($param['conexao']) ) {
-            $this->conexao = $param['conexao'];
+            $this->conexao = &$param['conexao'];
+        }
+
+        /**
+         * Usuário atual
+         */
+        if( !empty($param['user']) ) {
+            $this->user = &$param['user'];
         }
 
         /**
@@ -84,18 +100,189 @@ class Modulos
      * CRUD
      *
      */
-    public function save(){
+    public function save($post = array()){
+
+        if( empty($post) )
+            return false;
         
     }
 
-    public function delete($table, $conditions){
+    /**
+     * load()
+     *
+     * Responsável por carregar dados-padrão da estrutura,
+     * como para listagens.
+     *
+     * @return <array>
+     */
+    public function load(){
+        return array();
+    }
+
+    /**
+     * loadSql()
+     *
+     * Retorna simplesmente o SQL para então executar Query
+     */
+    public function loadSql(){
+        return false;
+    }
+    /**
+     * delete()
+     *
+     * @param <string> $table
+     * @param <array> $conditions
+     * @return <integer>
+     */
+    public function delete($table = '', $conditions = array()){
+
+        /*
+         * Temos de ter argumentos, senão... return false
+         */
+        if( empty($conditions) OR
+            empty($table) )
+            return false;
 
         foreach( $conditions as $field=>$value ){
-
+            $conditionsStr[] = $field."='".$value."'";
         }
+
+        $sql = "DELETE
+                FROM
+                    $table
+                WHERE
+                    ".implode(' AND ', $conditionsStr)."
+            ";
+
+        return $this->conexao->exec($sql);
 
 
     }
+
+    /*
+     *
+     * EMBED
+     *
+     */
+    /*
+     * EMBED -> CRUD
+     */
+    /**
+     * saveEmbed()
+     *
+     * Após save() de um módulo X ser invocado, saveEmbed() é chamado
+     * em cada módulo relacionado a X pela forma Embed.
+     *
+     * Quanto aos parâmetros, eis o formato correto:
+     *
+     *      Valores necessários:
+     *      array(
+     *          # dados de cada módulo embed, em 0, 1, 2, ..., n
+     *          'embedModules' => array(
+     *              0 => array(
+     *                  'className' => 'NomeDaClasseDesteMódulo',
+     *                  'dir' => 'diretório/do/módulo'
+     *                  'data' => array(
+     *                      'contém todos os dados que serão salvos'
+     *                  )
+     *              ),
+     *              1 => valores_da_segunda_estrutura_embed...,
+     *              # provavelmente o formulário já terá os valores
+     *              # inputs dos embed de forma que este formato já
+     *              # esteja pronto
+     *          ),
+     *          'options' => array(
+     *              targetTable => 'nome_da_tabela_da_estrutura_líder',
+     *              id => 'last_insert_id da estrutura líder',
+     *              # como a estrutura líder há pouco inseriu um novo
+     *              # registro, o id deste estará na chave acima.
+     *          )
+     *      )
+     *
+     * @param <array> $params
+     * @return <bool>
+     */
+    public function saveEmbed($params = array()){
+        return false;
+    }
+
+    public function deleteEmbed(){
+        return false;
+    }
+
+    /*
+     * EMBED -> DEFINIÇÕES
+     */
+    /**
+     * getRelatedEmbed()
+     *
+     * Dado uma estrutura, verifica quais outras estruturas sao associadas a ele
+     * para fazer um embed.
+     *
+     * Se a estrutura é Notícias, verifica quais outras podem fazer embed nos
+     * seus formulários.
+     *
+     * Retorna array com ids das estruturas relacionadas
+     *
+     * @param int $austNode
+     * @return array
+     */
+    public function getRelatedEmbed($austNode){
+        $sql = "SELECT
+                    categoria_id
+                FROM
+                    modulos_conf as m
+                WHERE
+                    m.tipo='relacionamentos' AND
+                    m.valor='".$austNode."'
+                ";
+        $query = $this->conexao->query($sql);
+        $tmp = array();
+        foreach( $query as $valor ){
+            $tmp[] = $valor["categoria_id"];
+        }
+        return $tmp;
+    } // fim getRelatedEmbed()
+
+    /**
+     * saveEmbeddedModules()
+     *
+     * Salva todos os dados de um formulário de embed's.
+     *
+     * @param <array> $data
+     * @return <bool>
+     */
+    public function saveEmbeddedModules($data){
+
+        //pr( $data );
+        if( empty($data) )
+            return false;
+
+        if( empty($data['embedModules']) )
+            return false;
+
+        foreach($data['embedModules'] AS $embedModule) {
+
+            $modDir = $embedModule['dir'];
+
+            if( is_file($modDir.'/'.MOD_CONFIG) ){
+                include($modDir."/".MOD_CONFIG);
+
+                $className = $modInfo['className'];
+                include($modDir."/".$className.'.php');
+
+                $param = $this->params;
+
+                $embedModulo = new $className($this->params);
+                $dataToSave = array_merge($embedModule, $data['options']);
+
+                $embedModulo->saveEmbed($dataToSave);
+            }
+
+        } // fim do foreach por cada estrutura com embed
+
+        return true;
+    } // fim saveEmbeddedModules()
 
     /*
      *
@@ -121,6 +308,8 @@ class Modulos
     public function getContentTable(){
         return $this->tabela_criar;
     }
+
+
 
     /**
      *
@@ -625,37 +814,6 @@ class Modulos
             }
         }
     } // fim leModulos()
-
-    /**
-     * getRelatedEmbed()
-     *
-     * Dado uma estrutura, verifica quais outras estruturas sao associadas a ele
-     * para fazer um embed.
-     *
-     * Se a estrutura é Notícias, verifica quais outras podem fazer embed nos
-     * seus formulários.
-     *
-     * Retorna array com ids das estruturas relacionadas
-     *
-     * @param int $austNode
-     * @return array
-     */
-    public function getRelatedEmbed($austNode){
-        $sql = "SELECT
-                    categoria_id
-                FROM
-                    modulos_conf as m
-                WHERE
-                    m.tipo='relacionamentos' AND
-                    m.valor='".$austNode."'
-                ";
-        $query = $this->conexao->query($sql);
-        $tmp = array();
-        foreach( $query as $valor ){
-            $tmp[] = $valor["categoria_id"];
-        }
-        return $tmp;
-    }
 
     // retorna o nome da tabela da estrutura
     function LeTabelaDaEstrutura($param='') {

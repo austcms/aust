@@ -38,7 +38,22 @@ function tt($str = ''){
     return tooltip($str);
 }
 
-function lbCategoria($userObject=''){
+function lbCategoria($params){
+
+    if( is_string($params) ){
+        $austNode = $params;
+        $categoryInput = 'frmcategoria';
+
+    } else {
+        if( empty($params['austNode']) )
+            return false;
+        else
+            $austNode = $params['austNode'];
+        $categoryInput = (empty($params['categoryInput'])) ? 'frmcategoria' : $params['categoryInput'];
+    }
+
+
+//    pr($categoryInput);
 
     $random = substr( sha1( rand(0, 100) ), rand(5,20));
     global $administrador;
@@ -60,6 +75,7 @@ function lbCategoria($userObject=''){
         </div>
         <div class="lb_content">
             <input type="hidden" class="aust_node_hidden" value="<?php echo $_GET['aust_node']; ?>" />
+            <input type="hidden" name="category_input" value="<?php echo $categoryInput; ?>" />
             <table class="form">
                 <tr>
                     <td valign="top" class="titulo">

@@ -89,6 +89,7 @@ function newCategory(lbId){
     var givenAN = $('#'+lbId+' .aust_node_hidden').val();
     var urlAN = $.getURLParam('aust_node');
     var catName = $('#'+lbId+' input[name=lb[frmcategoria]]').val();
+    var categoryInput = $('#'+lbId+' input[name=category_input]').val();
 
     //updateCategorySelect('frmcategoria', givenAN, '');
 
@@ -110,7 +111,7 @@ function newCategory(lbId){
                 $('#'+lbId+' .lb_content').html('<div class="sucesso">Dados salvos com sucesso.</div>');
                 $('#'+lbId+' .lb_content').fadeIn('fast');
 
-                updateCategorySelect('frmcategoria', givenAN, response.responseText);
+                updateCategorySelect( categoryInput, givenAN, response.responseText);
 
                 setTimeout(function(){
                     lightboxClose();

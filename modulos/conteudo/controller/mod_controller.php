@@ -55,7 +55,7 @@ class ModController extends ModsController
             'pagina' => $pagina,
             'resultadosPorPagina' => $num_por_pagina
         );
-        $sql = $this->modulo->getSQLForListing($params);
+        $sql = $this->modulo->loadSql($params);
 
         /*
          * Query com resultado
@@ -77,7 +77,7 @@ class ModController extends ModsController
     }
 
     public function save(){
-        
+        $this->set('resultado', $this->modulo->save($_POST));
     }
     
 }
