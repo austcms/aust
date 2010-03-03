@@ -44,7 +44,7 @@
                 WHERE
                     id='$w'
                 ";
-        $query = $modulo->conexao->query($sql);
+        $query = $modulo->connection->query($sql);
         $dados = $query[0];
     }
 ?>

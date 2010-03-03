@@ -1,9 +1,8 @@
 <?php
 /**
- * Classe dos módulos
- *
- * Contém funcionalidades genéricas do módulos, funcionalidades estas presentes
- * em todos os módulos.
+ * Classe dos módulos, contém informações de todos os módulos. Não é
+ * superclasse, mas contém métodos para leitura de diretórios e
+ * aplicações gerais.
  *
  * @package Classes
  * @name Módulos
@@ -118,14 +117,19 @@ class Modulos
      * 
      */
 
-
-
     /**
      * getModuleInformation()
      *
      * Retorna informações gerais sobre um módulo.
      *
      * @param <array> $params
+     * 
+     *      O formato é o que segue:
+     * 
+     *          array(
+     *              'modulo_1', 'modulo_2', 'modulo_3'
+     *          );
+     *
      * @return <array>
      */
     public function getModuleInformation($params){

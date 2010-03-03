@@ -170,7 +170,7 @@ if(!empty($_POST)){
                         arquivo_nome='".$_POST['frmarquivo_nome']."'
                     ";
             
-            $mysql = $this->modulo->conexao->exec($sql);
+            $mysql = $this->modulo->connection->exec($sql);
             $total = count($mysql);
             if($total == 0)
                 $w = 'NULL';
@@ -202,7 +202,7 @@ if(!empty($_POST)){
         //echo $sql.'<br>';
         //
         // verifica se dados do arquivo estão no DB
-        if( $this->modulo->conexao->exec($sql) ){
+        if( $this->modulo->connection->exec($sql) ){
             $resultado = TRUE;
 
 

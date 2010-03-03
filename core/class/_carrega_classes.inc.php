@@ -21,7 +21,7 @@ if(!defined('THIS_TO_BASEURL')){
 function __autoload($classe){
     if( is_file(THIS_TO_BASEURL.CLASS_DIR.$classe.".php") ){
         include_once(THIS_TO_BASEURL.CLASS_DIR.$classe.".php");
-    } else {
+    } else if( is_file(THIS_TO_BASEURL.CLASS_DIR.$classe."".CLASS_FILE_SUFIX.".php") ){
         include_once(THIS_TO_BASEURL.CLASS_DIR.$classe."".CLASS_FILE_SUFIX.".php");
     }
 }

@@ -9,17 +9,24 @@
  * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @since v0.1.5, 30/05/2009
  */
-abstract class Modulo
+abstract class Module
 {
-    /**
-     * TABELAS
-     */
-    protected $db_tabelas;
-    protected $sql_das_tabelas;
-    protected $sql_registros;
-    public $tabela_criar;
 
-    protected $modDbSchema;
+    /**
+     *
+     * @var <string> Tabela principal de dados
+     */
+    public $mainTable;
+
+    /**
+     * VARIÁVEIS DO MÓDULO
+     */
+    /**
+     *
+     * @var <string> erros e sucessos das operações
+     */
+    public $status;
+
     /**
      * VARIÁVEIS DE AMBIENTE
      *
@@ -29,7 +36,7 @@ abstract class Modulo
      *
      * @var class Classe responsável pela conexão com o banco de dados
      */
-    public $conexao;
+    public $connection;
     /**
      *
      * @var class Classe responsável pela conexão com o banco de dados
@@ -37,15 +44,9 @@ abstract class Modulo
     public $aust;
     /**
      *
-     * @var class Configurações do módulo
+     * @var class Configurações estáticas do módulo
      */
     public $config;
-
-    /**
-     *
-     * @var array parametros do __construct
-     */
-    public $params;
 
     /**
      *
@@ -53,61 +54,22 @@ abstract class Modulo
      */
     const MOD_DIR = 'modulos/';
     /**
+     * __CONSTRUCT()
      *
      * @param array $param:
      *      'conexao': Contém a conexão universal
      */
-    function __construct($param) {
-        global $aust;
-        $this->aust = $aust;
-
-        $this->params = &$param;
-
+    function __construct() {
         /**
          * Ajusta a conexao para o módulo
          */
-            $this->conexao = Connection::getInstance();
-
+            $this->connection = Connection::getInstance();
         /**
          * Usuário atual
          */
-        if( !empty($param['user']) ) {
-            $this->user = &$param['user'];
-        }
+            $this->user = User::getInstance();
 
-        /**
-         * Grava configurações do módulo no objeto
-         */
-        if( !empty($param['config']) ) {
-            $this->config = $param['config'];
-        }
-
-        /**
-         * modDbSchema: Grava o schema se for passado como argumento
-         */
-        if( !empty($param['modDbSchema']) ) {
-            $this->modDbSchema = $param['modDbSchema'];
-
-        }
-    }
-
-    /**
-     * getInstance()
-     *
-     * Para Singleton
-     *
-     * @staticvar <object> $instance
-     * @return <Conexao object>
-     */
-    static function getInstance(){
-        static $instance;
-
-        if( !$instance ){
-            $instance[0] = new get_class();
-        }
-
-        return $instance[0];
-
+        $this->config = $this->loadConfig();
     }
 
     /*
@@ -116,12 +78,9 @@ abstract class Modulo
      *
      */
     public function save($post = array()){
-
         if( empty($post) )
             return false;
-        
     }
-
     /**
      * load()
      *
@@ -150,7 +109,6 @@ abstract class Modulo
      * @return <integer>
      */
     public function delete($table = '', $conditions = array()){
-
         /*
          * Temos de ter argumentos, senão... return false
          */
@@ -169,9 +127,7 @@ abstract class Modulo
                     ".implode(' AND ', $conditionsStr)."
             ";
 
-        return $this->conexao->exec($sql);
-
-
+        return $this->connection->exec($sql);
     }
 
     /*
@@ -251,14 +207,13 @@ abstract class Modulo
                     m.tipo='relacionamentos' AND
                     m.valor='".$austNode."'
                 ";
-        $query = $this->conexao->query($sql);
+        $query = $this->connection->query($sql);
         $tmp = array();
         foreach( $query as $valor ){
             $tmp[] = $valor["categoria_id"];
         }
         return $tmp;
     } // fim getRelatedEmbed()
-
     /**
      * saveEmbeddedModules()
      *
@@ -299,20 +254,17 @@ abstract class Modulo
         return true;
     } // fim saveEmbeddedModules()
 
-    /*
-     *
-     * MÈTODOS DE SUPORTE
-     * 
-     */
-
+/*
+ *
+ * MÈTODOS DE SUPORTE
+ *
+ */
     public function getFieldsFromPost(){
         
     }
-
     public function getValuesFromPost(){
 
     }
-
     /**
      * getContentTable()
      *
@@ -324,13 +276,24 @@ abstract class Modulo
         return $this->tabela_criar;
     }
 
+    public function loadConfig(){
+        
+        $modDir = strtolower( get_class($this) ).'/';
+        include MODULOS_DIR.$modDir.MOD_CONFIG;
+
+        if( empty($modInfo) )
+            return false;
+        
+        $this->config = $modInfo;
+        return $this->config;
+    }
 
 
-    /**
-     *
-     * VERIFICAÇÕES
-     *
-     */
+/**
+ *
+ * VERIFICAÇÕES
+ *
+ */
     /**
      * hasSchema()
      *
@@ -389,29 +352,6 @@ abstract class Modulo
         return $result;
     }
 
-
-    /**
-     * verificaInstalacaoTabelas()
-     *
-     * @return <bool>
-     */
-    public function verificaInstalacaoTabelas() {
-
-        if( empty($this->modDbSchema) )
-            return false;
-        
-        $schema = $this->modDbSchema;
-        foreach( $schema as $tabela=>$valor ) {
-            $sql = "DESCRIBE ". $tabela;
-            $query = $this->conexao->query($sql);
-            if(!$query) {
-                return false;
-            } else {
-                return true;
-            }
-        }
-    }
-
     /**
      * verificaInstalacaoRegistro()
      *
@@ -424,7 +364,7 @@ abstract class Modulo
         }
 
         $sql = "SELECT id FROM modulos WHERE ".$where;
-        $query = $this->conexao->query($sql);
+        $query = $this->connection->query($sql);
         if( !$query ){
             return false;
         } else {
@@ -455,7 +395,7 @@ abstract class Modulo
             AND !empty($params['aust_node']) ) {
 
             $data = $params["data"];
-            $this->conexao->exec("DELETE FROM config WHERE tipo='mod_conf' AND local='".$params["aust_node"]."'");
+            $this->connection->exec("DELETE FROM config WHERE tipo='mod_conf' AND local='".$params["aust_node"]."'");
             foreach( $data as $propriedade=>$valor ) {
 
                 $paramsToSave = array(
@@ -468,7 +408,7 @@ abstract class Modulo
                     "valor" => $valor
                     )
                 );
-                $this->conexao->exec($this->conexao->saveSql($paramsToSave));
+                $this->connection->exec($this->connection->saveSql($paramsToSave));
             }
         }
         return true;
@@ -477,7 +417,7 @@ abstract class Modulo
     function loadModConf($params) {
         $sql = "SELECT * FROM config WHERE tipo='mod_conf' AND local='".$params["aust_node"]."' LIMIT 200";
 
-        $queryTmp = $this->conexao->query($sql, "ASSOC");
+        $queryTmp = $this->connection->query($sql, "ASSOC");
 
         foreach($queryTmp as $valor) {
             $query[$valor["propriedade"]] = $valor;
@@ -563,7 +503,7 @@ abstract class Modulo
                                 LIMIT 0,4
                                 ";
 
-                        $result = $this->conexao->query($sql);
+                        $result = $this->connection->query($sql);
 
                         foreach($result as $dados) {
                         /**
@@ -717,7 +657,7 @@ abstract class Modulo
         $autor = (empty($param['autor'])) ? '' : $param['autor'];
 
 
-        $this->conexao->exec("DELETE FROM modulos WHERE pasta='".$pasta."'");
+        $this->connection->exec("DELETE FROM modulos WHERE pasta='".$pasta."'");
 
         $sql = "INSERT INTO
                     modulos
@@ -725,7 +665,7 @@ abstract class Modulo
                 VALUES
                     ('$tipo','$chave','$valor','$pasta','".$modInfo['nome']."','".$modInfo['descricao']."','".$modInfo['embed']."','".$modInfo['embedownform']."','".$modInfo['somenteestrutura']."','$autor')
             ";
-        if($this->conexao->exec($sql, 'CREATE_TABLE')) {
+        if($this->connection->exec($sql, 'CREATE_TABLE')) {
             return TRUE;
         } else {
             return FALSE;
@@ -739,7 +679,7 @@ abstract class Modulo
      */
     function leModulos() {
 
-        $modulos = $this->conexao->query("SELECT * FROM modulos");
+        $modulos = $this->connection->query("SELECT * FROM modulos");
         //pr($modulos);
         return $modulos;
 
@@ -771,9 +711,12 @@ abstract class Modulo
         }
     } // fim leModulos()
 
+    /**
+     * @todo - deprecated
+     */
     // retorna o nome da tabela da estrutura
     function LeTabelaDaEstrutura($param='') {
-        return $this->tabela_criar;
+        return $this->mainTable;
     }
 
     /*
@@ -791,7 +734,7 @@ abstract class Modulo
                 WHERE
                     m.embed='1'
                 ";
-        $query = $this->conexao->query($sql);
+        $query = $this->connection->query($sql);
         $i = 0;
         $return = '';
 
@@ -819,7 +762,7 @@ abstract class Modulo
                 WHERE
                     embedownform='1'
                 ";
-        $query = $this->conexao->query($sql);
+        $query = $this->connection->query($sql);
 
         $return = '';
         $i = 0;
@@ -847,7 +790,7 @@ abstract class Modulo
                 WHERE
                     valor='".$estrutura."'
                 ";
-        $query = $this->conexao->query($sql);
+        $query = $this->connection->query($sql);
 
         $return = '';
         foreach($query as $dados) {
@@ -865,7 +808,7 @@ abstract class Modulo
                 FROM
                     modulos
                 ";
-        $query = $this->conexao->query($sql);
+        $query = $this->connection->query($sql);
         $i = 0;
         foreach($query as $dados) {
             $return[$i]['pasta'] = $dados['pasta'];

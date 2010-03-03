@@ -78,7 +78,7 @@ if($administrador->LeRegistro('tipo') == 'Webmaster'){
     //pr($migrationsStatus);
     $modulesStatus = $modulos->getModuleInformation( array_keys($migrationsStatus) );
 
-    pr($modulesStatus);
+    //pr($modulesStatus);
 
 
 /*

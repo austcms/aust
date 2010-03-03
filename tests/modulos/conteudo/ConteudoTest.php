@@ -2,47 +2,30 @@
 require_once 'PHPUnit/Framework.php';
 
 #####################################
-
 require_once 'tests/config/auto_include.php';
 require_once 'core/class/SQLObject.class.php';
 require_once 'core/config/variables.php';
 require_once 'core/libs/functions/func.php';
-
-
 #####################################
-
-require_once 'core/class/Modulos.class.php';
-
 
 class ConteudoTest extends PHPUnit_Framework_TestCase
 {
-    public $dbConfig = array();
-
-    public $conexao;
-
-    public $moduleForTesting = 'conteudo';
-
     public function setUp(){
+        /*
+         * MÓDULOS ATUAL
+         *
+         * Diretório do módulo
+         */
+        $mod = 'conteudo';
 
         /*
          * Informações de conexão com banco de dados
          */
-        require 'tests/config/database.php';
-        $this->dbConfig = $dbConn;
-        
-        $this->conexao = Connection::getInstance();
 
-        require MODULOS_DIR.$this->moduleForTesting.'/core/config/config.php';
-        require_once MODULOS_DIR.$this->moduleForTesting.'/'.$modInfo['className'].'.php';
+        include 'modulos/'.$mod.'/'.MOD_CONFIG;
+        include_once 'modulos/'.$mod.'/'.$modInfo['className'].'.php';
 
-        $_SESSION['login']['id'] = 1;
-
-        $params = array(
-            'conexao' => $this->conexao,
-            'user' => User::getInstance(),
-        );
-        
-        $this->obj = new $modInfo['className']( $params );
+        $this->obj = new $modInfo['className'];//new $modInfo['className']();
     }
 
     function testLoadSql(){
@@ -54,8 +37,15 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
                 );
     }
 
+    function testLoadConfig(){
+        $this->assertType('array', $this->obj->loadConfig());
+        $this->assertArrayHasKey('className', $this->obj->loadConfig());
+    }
     /*
      * ESPECÍFICO DO MÓDULO
+     */
+    /*
+     * CRUD
      */
 
     function testSave(){
@@ -125,5 +115,12 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
         $this->assertEquals( 0, $this->obj->delete('textos', array('titulo' => '123890567')) );
     }
 
+    function testLoad(){
+        
+    }
+
+    function testLoadEmbed(){
+
+    }
 }
 ?>

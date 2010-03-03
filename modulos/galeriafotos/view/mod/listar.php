@@ -24,7 +24,7 @@ $sql = "SELECT
             id='".$_GET['aust_node']."'";
 
             
-$query = $this->aust->conexao->query($sql);
+$query = $this->aust->connection->query($sql);
 
 $cat = $query[0]['nome'];
 ?>
@@ -50,7 +50,7 @@ $sql = $modulo->SQLParaListagem($categorias, $pagina, $num_por_pagina);
 		//echo '<br><br>'.$sql .'<br>';
 
 
-$query = $modulo->conexao->query($sql);
+$query = $modulo->connection->query($sql);
 
 
 /*********************************
@@ -151,7 +151,7 @@ if(count($query) == 0){
  */
 
     $sql = $modulo->SQLParaListagem($categorias);
-    $total_registros = $modulo->conexao->count($sql);
+    $total_registros = $modulo->connection->count($sql);
 
     $total_paginas = $total_registros/$num_por_pagina;
 

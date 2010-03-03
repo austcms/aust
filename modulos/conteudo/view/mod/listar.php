@@ -123,7 +123,7 @@ if(count($query) == 0){
  */
 
     $sql = $modulo->getSQLForListing($categorias);
-    $total_registros = $modulo->conexao->count($sql);
+    $total_registros = $modulo->connection->count($sql);
 
     $total_paginas = $total_registros/$numPorPagina;
 

@@ -12,7 +12,7 @@
  * @since v0.1.5, 30/05/2009
  */
 
-class PesquisaMkt extends Modulo
+class PesquisaMkt extends Module
 {
 
 	// TABELA

@@ -1,42 +1,65 @@
 <?php
+/**
+ * CLASSE DO MÓDULO
+ *
+ * Classe contendo funcionalidades deste módulo
+ *
+ * @package Modulos
+ * @name Arquivos
+ * @author Alexandre de Oliveira <chavedomundo@gmail.com>
+ * @version 0.2
+ * @since v0.1.5, 30/05/2009
+ */
+class Arquivos extends Module
+{
+    /**
+     *
+     * @var <string> Extensões proibidas
+     */
+    public $invalidExtensions = 'php|php3|html|htm|css|js';
 
-/*********************************
-*
-*	classe do módulo TEXTOS
-*
-*********************************/
-class Arquivos extends Modulo {
+    /**
+     *
+     * @var <string> Diretório que o upload acontecerá
+     */
+    public $uploadSubDir;
 
-    // TABELA
-    protected $db_tabelas;
-    protected $sql_das_tabelas;
-    protected $sql_registros;
-    public $tabela_criar;
-    
-    /*********************************
-	*
-	*	funções de ação
-	*
-	*********************************/
+    /**
+     *
+     * @var <string> Diretório relativo para download
+     */
+    public $relativeDir;
 
-    function __construct($param = '') {
-        // pega a string global que diz qual é o charset do projeto
-        global $aust_charset;
-        if (!empty($aust_charset['db']) and !empty($aust_charset['db_collate'])) {
-            $charset = 'CHARACTER SET '.$aust_charset['db'].' COLLATE '.$aust_charset['db_collate'];
+    function __construct(){
+
+        $this->uploadSubDir = 'uploads/'.date('Y').'/'.date('m').'/';
+
+        $this->relativeDir = './';
+        if( !empty($this->modOptions["upload_path"]["valor"]) )
+            $this->relativeDir = $this->modOptions["upload_path"]["valor"];
+                
+        parent::__construct();
+    }
+
+    /**
+     * getInstance()
+     *
+     * Para Singleton
+     *
+     * @staticvar <object> $instance
+     * @return <Conexao object>
+     */
+    static function getInstance(){
+        static $instance;
+
+        if( !$instance ){
+            $instance[0] = new get_class();
         }
-        // define qual é a tabela principal
-        $this->tabela_criar = "arquivos";
 
-        /**
-         * A classe Pai inicializa algumas varíaveis importantes. A linha a
-         * seguir assegura-se de que estas variáveis estarão presentes nesta
-         * classe.
-         */
-        parent::__construct($param);
-
+        return $instance[0];
 
     }
+
 
     /**
      * parseUrl()
@@ -56,21 +79,206 @@ class Arquivos extends Modulo {
                 unset( $workVar[$nr-1] );
             }
         }
-
         $url = implode('/', $workVar);
         $url = str_replace("./", "", $url);
 
         return $url;
+    }
+
+    public function uploadFile($file){
+
+        if( !is_array($file) )
+            return false;
+
+        if(  count($file) == 1 ){
+            $file = reset($file);
+            /*
+             * Tamanho máximo do arquivo (em bytes)
+             */
+            $conf["tamanho"] = 500000000;
+
+            if( !$file['name'] ){
+                $this->status = 'empty_file';
+                return false;
+            }
+
+            unset($this->status['uploadFile'][$file['file']]);
+            
+            /*
+             * Verifica se o mime-type do arquivo é válido
+             */
+            if( eregi("^image\/(".$this->invalidExtensions.")$", $file["type"]) ){
+                $this->status['uploadFile'][$file['name']] = 'invalid_extension';
+                return false;
+            }
+
+            /*
+             * Verifica tamanho do arquivo
+             */
+            if( !empty($con["tamanho"]) AND
+                $file["size"] > $conf["tamanho"])
+            {
+                $this->status['uploadFile'][$file['name']] = 'filesize';
+                return false;
+            }
+
+            // Verificação de dados OK, nenhum erro ocorrido, executa então o upload...
+            // Pega extensão do arquivo
+
+            $frmarquivo_filename = $this->_adjustFileName($file['name'], true);
+            $frmarquivo_tipo = $file['type'];
+            $frmarquivo_tamanho = $file['size'];
+
+            //ajusta o $_POST para salvar dados no DB
+            /*
+            $_POST['frmarquivo_nome'] = $frmarquivo_nome;
+            $_POST['frmarquivo_tipo'] = $frmarquivo_tipo;
+            $_POST['frmarquivo_tamanho'] = $frmarquivo_tamanho;
+            $_POST['frmarquivo_extensao'] = PegaExtensao($_POST['frmarquivo_nome']);
+             * 
+             */
+
+
+            //$frmarquivo_nome = urlencode($file['name']);
+            //$imagem_nome = str_replace($trocarIsso, $porIsso, $frmfilename);
+            //$imagem_nome = urlencode($imagem_nome);
+//                $imagem_nome = stri ($imagem_nome);
+
+            /**
+             * Caminho de onde a imagem ficará
+             */
+            $upload_dir = $this->uploadSubDir;
+
+            if( !is_dir($this->relativeDir.$upload_dir) ){
+                /*
+                 * A permissão só vai funcionar para linux
+                 */
+                mkdir($this->relativeDir.$upload_dir, 0777, true);
+                chmod($this->relativeDir.$upload_dir, 0777);
+            }
+
+            /*
+             *
+             * PATHS TO FILE
+             *
+             */
+            /*
+             * Url path
+             */
+            $urlBaseDir = str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']).$this->relativeDir;
+            $frmurl = $urlBaseDir.$upload_dir .'/'.$frmarquivo_nome;
+            print_r($frmUrl);
+            $_POST['frmurl'] = $frmurl;
+
+            /*
+             * System path
+             * Pega $systemurl
+             */
+            $current_dir = getcwd();
+            chdir($this->relativeDir);
+
+            $frmSystemUrl = $this->_getSystemUrl( $upload_dir .'/'.$frmarquivo_nome );
+            $_POST['frmsystemurl'] = $frmSystemUrl;
+
+            //pr($_POST);
+            //exit(0);
+            /*
+             * Faz o upload da imagem
+             */
+            if( !is_file($file["tmp_name"]) )
+                return false;
+
+            return $this->_moveUploadedFile($file["tmp_name"], $frmSystemUrl);
+
+        }
 
     }
 
-    /*
-     * funções de verificação ou leitura automática do DB
-    */
-    public function SQLParaListagem($param) {
-        // configura e ajusta as variáveis
+    /**
+     * _adjustFilename()
+     *
+     * Mdofica o nome do arquivo. com $makeUnique = true, insere uma
+     * string aleatória antes do nome.
+     *
+     * @param <string> $str
+     * @param <bool> $makeUnique
+     * @return <string>
+     */
+    public function _adjustFileName($str, $makeUnique = false){
+        $trocarIsso = array(
+            'à','á','â','ã','ä','å',
+            'ç',
+            'è','é','ê','ë',
+            'ì','í','î','ï',
+            'ñ',
+            'ò','ó','ô','õ','ö',
+            'ù','ü','ú','ÿ',
+            'À','Á','Â','Ã','Ä','Å',
+            'Ç',
+            'È','É','Ê','Ë',
+            'Ì','Í','Î','Ï',
+            'Ñ',
+            'Ò','Ó','Ô','Õ','Ö',
+            'Ù','Ü','Ú','?',',',' ');
+        $porIsso = array('a','a','a','a','a','a','c','e','e','e','e','i','i','i','i','n','o','o','o','o','o','u','u','u','y','A','A','A','A','A','A','C','E','E','E','E','I','I','I','I','N','O','O','O','O','O','U','U','U','_','_','_');
+
+        $str = str_replace($trocarIsso, $porIsso, $str);
+        $str = strtolower($str);
+        if( $makeUnique )
+            return substr( sha1(strtolower( $str.date('Ymdhis') ) ), 0, 6 ).'_'.strtolower( $str );
+        else
+            return $str;
+    } // end _adjustFilename()
+
+    /**
+     * _getSystemUrl()
+     *
+     * @param <string> $filepath
+     * @return <string>
+     */
+    public function _getSystemUrl($filepath){
+
+        $current_dir = getcwd();
+        chdir($this->relativeDir);
+
+        $str = getcwd().'/'.$filepath;
+        chdir($current_dir);
+
+        return str_replace('//', '/', $str);
+    } // end _getSystemUrl()
+
+    /**
+     * _moveUploadedFile()
+     *
+     * @param <string> $filepath
+     * @param <string> $systemUrl
+     * @return <string>
+     */
+    public function _moveUploadedFile($filepath, $systemUrl){
+        if( move_uploaded_file($filepath, $systemUrl) ){
+            return true;
+        } else {
+            $this->status['uploadFile'][$file['name']] = 'upload_error';
+            return false;
+        }
+    } // end _getSystemUrl()
+
+
+    /**
+     * loadSql($params)
+     *
+     * @param <array> $param
+     * @return <bool>
+     */
+    public function loadSql($param) {
+
+        /*
+         * Configura e ajusta as variáveis
+         */
         $categorias = $param;
-        // se $categorias estiver vazio (nunca deverá acontecer)
+        /*
+         * Se $categorias estiver vazio (nunca deverá acontecer)
+         */
         if(!empty($categorias)) {
             $order = ' ORDER BY created_on DESC';
             $where = ' WHERE ';
@@ -85,16 +293,16 @@ class Arquivos extends Modulo {
         }
         // SQL para verificar na tabela CADASTRO_CONF quais campos existem
         $sql = "SELECT
-					*, DATE_FORMAT(created_on, '%d/%m/%Y %H:%i') as data, categoria_id AS cat,
-					(	SELECT
-							nome
-						FROM
-							categorias AS c
-						WHERE
-							id=cat
-					) AS node
-				FROM
-					".$this->tabela_criar." AS conf
+                    *, DATE_FORMAT(created_on, '%d/%m/%Y %H:%i') as data, categoria_id AS cat,
+                    (	SELECT
+                        nome
+                FROM
+                    categorias AS c
+                WHERE
+                    id=cat
+                    ) AS node
+                FROM
+                    arquivos AS conf
                 ".$where.$order;
         return $sql;
     }

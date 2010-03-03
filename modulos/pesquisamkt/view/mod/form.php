@@ -76,7 +76,7 @@
                     p.id='$w'
                 ";
 
-        $query = $modulo->conexao->query($sql, "ASSOC");
+        $query = $modulo->connection->query($sql, "ASSOC");
         $dados = $query[0];
         $pesqAtiva = $dados["ativo"];
 
@@ -89,7 +89,7 @@
                     pp.pesqmkt_id='$w'
                 ";
 
-        $query = $modulo->conexao->query($sql, "ASSOC");
+        $query = $modulo->connection->query($sql, "ASSOC");
         $perguntas = $query;
         //pr($perguntas);
 
@@ -124,7 +124,7 @@
                     pp.pesqmkt_id='$w'
                 ";
 
-        $query = $modulo->conexao->query($sql, "ASSOC");
+        $query = $modulo->connection->query($sql, "ASSOC");
         $respostasTmp = $query;
 
         foreach( $respostasTmp as $chave=>$valor ){

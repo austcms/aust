@@ -6,7 +6,7 @@
 *
 *********************************/
 
-class GaleriaImagens extends Modulo {
+class GaleriaImagens extends Module {
 
 	// TABELA
 	protected $db_tabelas;
@@ -139,8 +139,8 @@ class GaleriaImagens extends Modulo {
                     ".implode(' AND ', $where)."
                 ";
 
-        $query = $this->conexao->query($sql);
-        $total = $this->conexao->count($sql);
+        $query = $this->connection->query($sql);
+        $total = $this->connection->count($sql);
         if($total){
 
             // se total>0, começa a escrever o html
@@ -208,8 +208,8 @@ class GaleriaImagens extends Modulo {
                     ordem asc
                 ";
         //echo $sql;
-        $query = $this->conexao->query($sql);
-        $total = $this->conexao->count($sql);
+        $query = $this->connection->query($sql);
+        $total = $this->connection->count($sql);
 
         $ordem = 0;
         foreach ( $query as $dados ){
@@ -270,7 +270,7 @@ class GaleriaImagens extends Modulo {
                         WHERE
                             ref='$w' AND
                             especie='capa'";
-                $this->conexao->exec($sql);
+                $this->connection->exec($sql);
             }
 
 
@@ -287,7 +287,7 @@ class GaleriaImagens extends Modulo {
                                 '".$arquivo_temppeq."' )";
 
             //echo "Tamanho do arquivo pequeno: ".$arquivopeq_size."bytes.";
-            $result['query'] = $this->conexao->exec($sql);
+            $result['query'] = $this->connection->exec($sql);
             //var_dump($result['query']);
             return $result;
 

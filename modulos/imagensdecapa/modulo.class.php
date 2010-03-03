@@ -6,7 +6,7 @@
 *
 *********************************/
 
-class ImagensDeCapa extends Modulo {
+class ImagensDeCapa extends Module {
 
 	// TABELA
 	protected $db_tabelas;

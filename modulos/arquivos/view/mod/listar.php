@@ -9,7 +9,7 @@ $sql = "SELECT
             id='".$_GET['aust_node']."'";
 
 
-$query = $this->aust->conexao->query($sql);
+$query = $conexao->query($sql);
 
 $cat = $query[0]['nome'];?>
 <p>
@@ -26,12 +26,12 @@ if((!empty($filter)) AND ($filter <> 'off')){
 $categorias = $aust->LeCategoriasFilhas('',$_GET['aust_node']);
 $categorias[$_GET['aust_node']] = 'Estrutura';
 //print_r($categorias);
-$sql = $modulo->SQLParaListagem($categorias);
+$sql = $modulo->loadSql($categorias);
 	//	echo '<br><br>'.$sql .'<br>';
 
 
-$query = $modulo->conexao->query($sql);
-//pr($sql);
+$query = $modulo->connection->query($sql);
+//pr($query);
 
 /*********************************
 *

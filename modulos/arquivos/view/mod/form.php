@@ -27,7 +27,7 @@ if($_GET['action'] == 'editar'){
             WHERE
                 id='".$_GET['w']."'
             ";
-    $mysql = $modulo->conexao->query($sql);
+    $mysql = $modulo->connection->query($sql);
     $dados = $mysql[0];
     $fm = "editar";
 } else {

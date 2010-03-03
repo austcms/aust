@@ -62,7 +62,7 @@
                 WHERE
                     id='$w'
                 ";
-        $query = $modulo->conexao->query($sql, "ASSOC");
+        $query = $modulo->connection->query($sql, "ASSOC");
         $dados = $query[0];
     }
 ?>

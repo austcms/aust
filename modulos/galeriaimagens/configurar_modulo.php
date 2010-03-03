@@ -29,7 +29,7 @@ if(!empty($_GET['function'])){
                     chave='".$_GET['w']."' AND
                     categorias_id='".$_GET['aust_node']."'
         ";
-        if($modulo->conexao->exec($sql))
+        if($modulo->connection->exec($sql))
             $status[] = "Campo desativado com sucesso";
         else
             $status[] = "Erro ao desativar campo.";
@@ -45,7 +45,7 @@ if(!empty($_GET['function'])){
                     chave='".$_GET['w']."' AND
                     categorias_id='".$_GET['aust_node']."'
         ";
-        if($modulo->conexao->exec($sql))
+        if($modulo->connection->exec($sql))
             $status[] = "Campo ativado com sucesso";
         else
             $status[] = "Erro ao ativar campo.";
@@ -61,7 +61,7 @@ if(!empty($_GET['function'])){
                     chave='".$_GET['w']."' AND
                     categorias_id='".$_GET['aust_node']."'
         ";
-        if($modulo->conexao->exec($sql))
+        if($modulo->connection->exec($sql))
             $status[] = "Preenchimento do campo ajustado para necessário com sucesso.";
         else
             $status[] = "Erro ao executar ação.";
@@ -77,7 +77,7 @@ if(!empty($_GET['function'])){
                     chave='".$_GET['w']."' AND
                     categorias_id='".$_GET['aust_node']."'
         ";
-        if($modulo->conexao->exec($sql))
+        if($modulo->connection->exec($sql))
             $status[] = "Não é necessário preenchimento obrigatório do campo ajustado com sucesso.";
         else
             $status[] = "Erro ao executar ação.";
@@ -148,7 +148,7 @@ if(!empty($_GET['function'])){
                             nome='".$nome_modulo."' AND
                             tipo='liberacao'
                         ";
-                $query = $modulo->conexao->query($sql);
+                $query = $modulo->connection->query($sql);
                 $return = array();
                 foreach( $query as $dados ){
                     $return[] = $dados['valor'];
@@ -163,7 +163,7 @@ if(!empty($_GET['function'])){
                         ORDER BY
                             tipo ASC
                         ";
-                $query = $modulo->conexao->query($sql);
+                $query = $modulo->connection->query($sql);
                 foreach( $query as $dados ){
 
                     /**

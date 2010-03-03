@@ -16,7 +16,7 @@ if(empty($_POST['w']) AND $_POST['metodo'] == 'criar'){
      * seguro pegar este valor aqui, mas sim que o conteúdo
      * principal já tenha salvo o valor em $_POST['w']
      */
-    $insert_id = $this->modulo->conexao->lastInsertId();
+    $insert_id = $this->modulo->connection->lastInsertId();
 } elseif(!empty($_POST['w'])) {
     $insert_id = $_POST['w'];
 }
@@ -36,7 +36,7 @@ if(is_array($_POST['privid'])){
                     ";
 
     //pr($sql_delete);
-    $modulo->conexao->exec($sql_delete);
+    $modulo->connection->exec($sql_delete);
 
     
     /*
@@ -57,7 +57,7 @@ if(is_array($_POST['privid'])){
     //pr($embed_sql);
 
     foreach($embed_sql as $valor){
-        $modulo->conexao->exec($valor);
+        $modulo->connection->exec($valor);
     }
 
 
@@ -71,6 +71,6 @@ if(is_array($_POST['privid'])){
                         target_id='".$insert_id."'
                     ";
 
-    $modulo->conexao->exec($sql_delete);
+    $modulo->connection->exec($sql_delete);
 }
 ?>

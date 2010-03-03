@@ -63,7 +63,7 @@ if(!empty($_POST['novo_campo'])){
 //    echo $sql;
 
 
-    if($modulo->conexao->exec($sql)){
+    if($modulo->connection->exec($sql)){
         $status[] = 'As informações sobre o campo foram gravadas!';
 
         $sql = "ALTER TABLE
@@ -71,7 +71,7 @@ if(!empty($_POST['novo_campo'])){
                 ADD COLUMN
                     {$campo} {$campo_tipo}
                 ".$_POST['campo_local'];
-        if($modulo->conexao->exec($sql)){
+        if($modulo->connection->exec($sql)){
             $status[] = "Campo criado na tabela com sucesso.";
         } else {
             $status[] = "<span style=\"color:red;\">Erro na criação do campo <strong>{$campo}</strong> na tabela.";
@@ -105,7 +105,7 @@ if(!empty($_POST['configurar_opcoes'])){
                         categorias_id='".$_GET['aust_node']."'
             ";
             
-            if($modulo->conexao->exec($sql)){
+            if($modulo->connection->exec($sql)){
                 $status[] = "Informação \"".$key."\" salva com sucesso.";
             } else {
                 $status[] = "<span style=\"color:red;\">Erro ao salvar \"".$key."\".";
@@ -136,7 +136,7 @@ if(!empty($_GET['function'])){
                     chave='".$_GET['w']."' AND
                     categorias_id='".$_GET['aust_node']."'
         ";
-        if($modulo->conexao->exec($sql))
+        if($modulo->connection->exec($sql))
             $status[] = "Campo desativado com sucesso";
         else
             $status[] = "Erro ao desativar campo.";
@@ -154,7 +154,7 @@ if(!empty($_GET['function'])){
                     chave='".$_GET['w']."' AND
                     categorias_id='".$_GET['aust_node']."'
         ";
-        if($modulo->conexao->exec($sql))
+        if($modulo->connection->exec($sql))
             $status[] = "Campo ativado com sucesso";
         else
             $status[] = "Erro ao ativar campo.";
@@ -173,7 +173,7 @@ if(!empty($_GET['function'])){
                     chave='".$_GET['w']."' AND
                     categorias_id='".$_GET['aust_node']."'
         ";
-        if($modulo->conexao->exec($sql))
+        if($modulo->connection->exec($sql))
             $status[] = "Preenchimento do campo ajustado para necessário com sucesso.";
         else
             $status[] = "Erro ao executar ação.";
@@ -192,7 +192,7 @@ if(!empty($_GET['function'])){
                     chave='".$_GET['w']."' AND
                     categorias_id='".$_GET['aust_node']."'
         ";
-        if($modulo->conexao->exec($sql))
+        if($modulo->connection->exec($sql))
             $status[] = "Não é necessário preenchimento obrigatório do campo ajustado com sucesso.";
         else
             $status[] = "Erro ao executar ação.";
@@ -213,7 +213,7 @@ if(!empty($_GET['function'])){
                     chave='".$_GET['w']."' AND
                     categorias_id='".$_GET['aust_node']."'
         ";
-        if($modulo->conexao->exec($sql))
+        if($modulo->connection->exec($sql))
             $status[] = "Campo aparecerá na listagem de cadastro.";
         else
             $status[] = "Erro ao executar ação.";
@@ -234,7 +234,7 @@ if(!empty($_GET['function'])){
                     chave='".$_GET['w']."' AND
                     categorias_id='".$_GET['aust_node']."'
         ";
-        if($modulo->conexao->exec($sql))
+        if($modulo->connection->exec($sql))
             $status[] = "O campo selecionado não aparecerá mais em listagens.";
         else
             $status[] = "Erro ao executar ação.";
@@ -372,7 +372,7 @@ if(!empty($_GET['function'])){
                                     ".$tabela_da_estrutura."
                                 LIMIT 0,1
                                 ";
-                        $dados = $modulo->conexao->query($sql,"ASSOC");
+                        $dados = $modulo->connection->query($sql,"ASSOC");
                         $dados = $dados[0];
                         // pega o valor físico do campo da tabela
                         //$fields = mysql_num_fields($mysql);
@@ -387,7 +387,7 @@ if(!empty($_GET['function'])){
                                         chave='".$campo."'
                                     LIMIT 0,2
                                     ";
-                            $result = $modulo->conexao->query($sql,"ASSOC");
+                            $result = $modulo->connection->query($sql,"ASSOC");
                             $result = $result[0];
                             if( count($result) > 0 ){
                                 $i++;
@@ -431,7 +431,7 @@ if(!empty($_GET['function'])){
                 AND $_POST["filtro_especial_campo_email"] == "Salvar" ){
 
                 $sql = "DELETE FROM cadastros_conf WHERE tipo='filtros_especiais'";
-                $modulo->conexao->exec($sql);
+                $modulo->connection->exec($sql);
 
                 if( !empty($_POST['email']) ){
                     $sql = "INSERT INTO
@@ -440,7 +440,7 @@ if(!empty($_GET['function'])){
                             VALUES
                                 ('filtros_especiais', 'email', '".$_POST['email']."', '".$_GET["aust_node"]."')
                             ";
-                    $modulo->conexao->exec($sql);
+                    $modulo->connection->exec($sql);
                 }
             }
 
@@ -452,7 +452,7 @@ if(!empty($_GET['function'])){
                         chave='email' AND
                         categorias_id='".$_GET["aust_node"]."'
                     ";
-            $dados = $modulo->conexao->query($sql);
+            $dados = $modulo->connection->query($sql);
             $dados = $dados[0]["valor"];
 
             ?>
@@ -493,7 +493,7 @@ if(!empty($_GET['function'])){
                         ".$tabela_da_estrutura."
                     LIMIT 0,1
                     ";
-            $mysql = $modulo->conexao->query($sql, 'ASSOC');
+            $mysql = $modulo->connection->query($sql, 'ASSOC');
             $mysql = $mysql[0];
             /**
              * Pega o valor físico do campo da tabela
@@ -515,7 +515,7 @@ if(!empty($_GET['function'])){
                             categorias_id='".$_GET['aust_node']."'
                         LIMIT 0,2
                         ";
-                $result = $modulo->conexao->query($sql);
+                $result = $modulo->connection->query($sql);
                 if( count($result) > 0 ){
                     $dados = $result[0];
                     ?>
@@ -599,7 +599,7 @@ if(!empty($_GET['function'])){
                             tipo='config' AND
                             categorias_id='".$_GET['aust_node']."'
                         ";
-                $result = $modulo->conexao->query($sql);
+                $result = $modulo->connection->query($sql);
                 foreach($result as $dados){
                     ?>
                         <div class="campo">

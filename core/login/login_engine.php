@@ -17,7 +17,7 @@ include_once("config/database.php");
  */
 include_once(CLASS_DIR."/_carrega_classes.inc.php");
 
-$conexao = new Conexao($dbConn);
+$conexao = Connection::getInstance();
 
 /*********************************
 	*

@@ -80,7 +80,7 @@ class ModController extends ModsController
                         WHERE
                             id=".$w."
                         ";
-                $dados = $this->conexao->query($sql, "ASSOC");
+                $dados = $this->connection->query($sql, "ASSOC");
                 $dados = $dados[0];
             }
             
@@ -254,7 +254,7 @@ class ModController extends ModsController
             if( !empty($w) AND $w > 0 )
                 $lastInsertId = $w;
             else
-                $lastInsertId = $this->model->conexao->lastInsertId();
+                $lastInsertId = $this->model->connection->lastInsertId();
 
             /*
              * DADOS RELACIONAIS
@@ -287,7 +287,7 @@ class ModController extends ModsController
                                 ".$infoCadastro["estrutura"]["tabela"]["valor"]."_id='$w'
                                 ";
                     //echo $sql;
-                    $this->model->conexao->exec($sql);
+                    $this->model->connection->exec($sql);
                     unset($sql);
                 }
 
@@ -338,7 +338,7 @@ class ModController extends ModsController
             if( !empty($sql) ){
                 if( is_array($sql) ){
                     foreach( $sql as $uniqueSql ){
-                        $this->model->conexao->exec($uniqueSql);
+                        $this->model->connection->exec($uniqueSql);
                         //pr($uniqueSql);
                     }
                 }
@@ -413,13 +413,13 @@ class ModController extends ModsController
                 $h1 = 'Editando: '.$this->aust->leNomeDaEstrutura($_GET['aust_node']);
             }
             //echo $sql;
-            $query = $this->modulo->conexao->exec($sql);
+            $query = $this->modulo->connection->exec($sql);
             if($query){
                 $resultado = TRUE;
 
                 // se estiver criando um registro, guarda seu id para ser usado por módulos embed a seguir
                 if($_POST['metodo'] == 'criar'){
-                    $_POST['w'] = $this->modulo->conexao->conn->lastInsertId();
+                    $_POST['w'] = $this->modulo->connection->conn->lastInsertId();
                 }
 
 

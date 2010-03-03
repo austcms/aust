@@ -20,7 +20,7 @@ $precisa_aprovacao = $modulo->PegaConfig(Array('estrutura'=>$_GET['aust_node'], 
  */
 if($precisa_aprovacao['valor'] == '1'){
     $sql = "SELECT id FROM ".$tabela." WHERE approved=0 or approved IS NULL";
-    $result = $modulo->conexao->query($sql);
+    $result = $modulo->connection->query($sql);
     if( count($result) > 0 ){
         echo '<p>Há cadastros para serem aprovados.</p>';
     }
@@ -38,7 +38,7 @@ $param = Array(
 );
 $sql = $modulo->SQLParaListagem($param);
 //echo '<br><br>'.$sql .'<br>';
-$resultado = $modulo->conexao->query($sql, "ASSOC");
+$resultado = $modulo->connection->query($sql, "ASSOC");
 $fields = count($resultado);
 //print_r($precisa_aprovacao);
 
@@ -57,7 +57,7 @@ if( $fields > 0 ){
                 chave='email' AND
                 categorias_id='".$_GET["aust_node"]."'
             ";
-    $filtroEspecial = $modulo->conexao->query($sql);
+    $filtroEspecial = $modulo->connection->query($sql);
     $filtroEspecial = $filtroEspecial[0]["valor"];
 
     if( !empty($filtroEspecial) ){
@@ -69,7 +69,7 @@ if( $fields > 0 ){
                     t.".$filtroEspecial."
                 ORDER BY t.id DESC
                 ";
-        $email = $modulo->conexao->query($sql);
+        $email = $modulo->connection->query($sql);
         foreach( $email as $valor ){
             $emails[] = $valor['email'];
         }

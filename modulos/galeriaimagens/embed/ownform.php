@@ -50,7 +50,7 @@ if( !empty($_POST['action']) AND ($_POST['action'] == $thisFormGravarAction) ){
     <?php
     if(!empty($_GET['deletegaleriaimagens'])){
         $sql = "DELETE FROM galeriaimagens WHERE id='".$_GET['deletegaleriaimagens']."'";
-        if($modulo->conexao->exec($sql)){
+        if($modulo->connection->exec($sql)){
             $status['mensagem'] = 'Imagem excluída com sucesso!';
             $status['classe'] = 'sucesso';
             EscreveBoxMensagem($status);

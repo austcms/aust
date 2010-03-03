@@ -1,5 +1,5 @@
 <?php
-class Privilegios extends Modulo {
+class Privilegios extends Module {
 
     public function __construct($param = '') {
         
@@ -35,7 +35,7 @@ class Privilegios extends Modulo {
              * seguro pegar este valor aqui, mas sim que o conteúdo
              * principal já tenha salvo o valor em $w
              */
-            $insert_id = $this->conexao->lastInsertId();
+            $insert_id = $this->connection->lastInsertId();
         } elseif(!empty($w)) {
             $insert_id = $w;
         }
@@ -55,7 +55,7 @@ class Privilegios extends Modulo {
                                 target_id='".$insert_id."'
                             ";
 
-            $this->conexao->exec($sql_delete);
+            $this->connection->exec($sql_delete);
 
             /*
              * Prepara o sql
@@ -70,13 +70,13 @@ class Privilegios extends Modulo {
                                 VALUES
                                     ('$valor','$targetTable','$insert_id',
                                     '".date("Y-m-d")."',
-                                    '".$this->params['user']->getId()."', 'content')
+                                    '".User::getInstance()->getId()."', 'content')
                                 ";
 
             }
 
             foreach($embed_sql as $valor){
-                $this->conexao->exec($valor);
+                $this->connection->exec($valor);
             }
 
 
@@ -92,7 +92,7 @@ class Privilegios extends Modulo {
                                 target_id='".$insert_id."'
                             ";
 
-            $this->conexao->exec($sql_delete);
+            $this->connection->exec($sql_delete);
         }
 
         return true;
@@ -111,7 +111,7 @@ class Privilegios extends Modulo {
                     tipo='relacionamentos'
                 ";
         //echo $sql;
-        $result = $this->conexao->query($sql);
+        $result = $this->connection->query($sql);
         $return = array();
         foreach( $result as $key=>$valor ){
             $return[] = reset($valor);

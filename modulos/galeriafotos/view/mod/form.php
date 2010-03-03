@@ -71,7 +71,7 @@
                 WHERE
                     id='$w'
                 ";
-        $query = $modulo->conexao->query($sql, "ASSOC");
+        $query = $modulo->connection->query($sql, "ASSOC");
         $dados = $query[0];
     }
 ?>
@@ -218,7 +218,7 @@
                 if( !empty($_GET["delete"]) AND $_GET["delete"] > 0 ){
                     $sql = "DELETE FROM galeria_fotos_imagens
                             WHERE id='".$_GET["delete"]."'";
-                    if( $modulo->conexao->exec($sql) ){
+                    if( $modulo->connection->exec($sql) ){
                         echo "<div style='color: green;'>";
                         echo "<p>Imagem excluída com sucesso</p>";
                         echo "</div>";
@@ -236,7 +236,7 @@
 
                     $sql = "SELECT id, nome FROM galeria_fotos_imagens
                             WHERE galeria_foto_id='".$w."'";
-                    $query = $modulo->conexao->query($sql, "ASSOC");
+                    $query = $modulo->connection->query($sql, "ASSOC");
                     $c = 1;
                     foreach($query as $dados){
                         if($c == 1){

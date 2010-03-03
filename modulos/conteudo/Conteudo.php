@@ -10,43 +10,33 @@
  * @version 0.2
  * @since v0.1.5, 30/05/2009
  */
-class Conteudo extends Modulo
+class Conteudo extends Module
 {
+    public $mainTable = "textos";
 
-    // TABELA
-    protected $db_tabelas;
-    protected $sql_das_tabelas;
-    protected $sql_registros;
-    public $tabela_criar;
-
-    /**
-     *
-     * @var class Classe responsável pela conexão com o banco de dados
-     */
-    public $conexao;
-    /**
-     *
-     * @var class Configurações do módulo
-     */
-    public $config;
-    /**
-     * @todo - Comentar certo esta classe
-     *
-     *
-     * @global string $aust_charset Contém o charset das tabelas
-     * @param Conexao $conexao Objeto que contém as configurações com o DB
-     */
-    function __construct($param = ''){
-
-        $this->tabela_criar = "textos";
-        /**
-         * A classe Pai inicializa algumas varíaveis importantes. A linha a
-         * seguir assegura-se de que estas variáveis estarão presentes nesta
-         * classe.
-         */
-        parent::__construct($param);
-	
+    function __construct(){
+        parent::__construct(array());
     }
+
+    /**
+     * getInstance()
+     *
+     * Para Singleton
+     *
+     * @staticvar <object> $instance
+     * @return <Conexao object>
+     */
+    static function getInstance(){
+        static $instance;
+
+        if( !$instance ){
+            $instance[0] = new get_class();
+        }
+
+        return $instance[0];
+
+    }
+
 
     /**
      * loadSql()
@@ -129,6 +119,9 @@ class Conteudo extends Modulo
 
         $post['frmtitulo_encoded'] = encodeText($post['frmtitulo']);
 
+        /**
+         * @todo - tirar isto daqui
+         */
         foreach($post as $key=>$valor) {
             // se o argumento $post contém 'frm' no início
             if(strpos($key, 'frm') === 0) {
@@ -163,7 +156,7 @@ class Conteudo extends Modulo
 
         if($post['metodo'] == 'criar') {
             $sql = "INSERT INTO
-                        ".$this->tabela_criar."
+                        textos
                         ($sqlcampostr)
                     VALUES
                         ($sqlvalorstr)";
@@ -173,7 +166,7 @@ class Conteudo extends Modulo
                   $post['w'] > 0 )
         {
             $sql = "UPDATE
-                        ".$this->tabela_criar."
+                        textos
                     SET
                         $sqlcampostr
                     WHERE
@@ -181,15 +174,14 @@ class Conteudo extends Modulo
                     ";
         }
 
-
-        $query = $this->conexao->exec($sql);
-
+        $query = $this->connection->exec($sql);
+        
         if($query !== false) {
             $resultado = true;
 
             // se estiver criando um registro, guarda seu id para ser usado por módulos embed a seguir
             if($post['metodo'] == 'criar') {
-                $post['w'] = $this->conexao->conn->lastInsertId();
+                $post['w'] = $this->connection->conn->lastInsertId();
             }
 
             $w = $post['w'];
