@@ -89,6 +89,7 @@ if(!$isResponser){
         $aust = new Aust($conexao);
         $administrador = new Administrador($conexao);
         $modulos = new Modulos( array('conexao'=>$conexao) );
+        $themes = new Themes( array('conexao'=>$conexao) );
         $config = new Config(
                 array(
                     'conexao' => $conexao,
