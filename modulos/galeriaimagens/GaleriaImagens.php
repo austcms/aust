@@ -6,7 +6,7 @@
 *
 *********************************/
 
-class GaleriaImagens extends Modulos {
+class GaleriaImagens extends Modulo {
 
 	// TABELA
 	protected $db_tabelas;

@@ -15,7 +15,7 @@
  * @version 0.1
  * @since v0.1.5, 30/05/2009
  */
-class Conexao extends SQLObject {
+class Connection extends SQLObject {
     /**
      *
      * @var bool Se a base de dados existe. Serve para verificação simples.
@@ -46,15 +46,15 @@ class Conexao extends SQLObject {
      *
      * @param array $conexao Contém parâmetros de conexão ao DB
      */
-    function __construct($dbConfig){
+    function __construct(){
             
-        $this->dbConfig = $dbConfig;
+        $this->dbConfig = DATABASE_CONFIG::$dbConn;
 
         /**
          * Se a extensão PDO, usada para conexão com vários tipos de bases de dados
          */
         if($this->PdoExtension()){
-            $this->PdoInit($dbConfig);
+            $this->PdoInit($this->dbConfig);
             if($this->debugLevel == 1){
                 $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
             }
@@ -63,8 +63,28 @@ class Conexao extends SQLObject {
          * Conexão comum
          */
         else {
-            $this->DbConnect($dbConfig);
+            $this->DbConnect($this->dbConfig);
         }
+    }
+
+
+    /**
+     * getInstance()
+     *
+     * Para Singleton
+     *
+     * @staticvar <object> $instance
+     * @return <Conexao object>
+     */
+    static function getInstance(){
+        static $instance;
+
+        if( !$instance ){
+            $instance[0] = new Connection;
+        }
+
+        return $instance[0];
+
     }
 
     /**

@@ -10,7 +10,7 @@
  * @version 0.2
  * @since v0.1.5, 30/05/2009
  */
-class Conteudo extends Modulos
+class Conteudo extends Modulo
 {
 
     // TABELA

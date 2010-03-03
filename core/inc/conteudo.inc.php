@@ -76,7 +76,6 @@ if(!empty($_GET['action'])){
         include(MODULOS_DIR.$modDir.$moduloNome.'.php');
 
         $param = array(
-            'conexao' => $conexao,
             'config' => $modInfo,
             'user' => $administrador,
             'modDbSchema' => $modDbSchema,

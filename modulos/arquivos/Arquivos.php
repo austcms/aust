@@ -5,7 +5,7 @@
 *	classe do módulo TEXTOS
 *
 *********************************/
-class Arquivos extends Modulos {
+class Arquivos extends Modulo {
 
     // TABELA
     protected $db_tabelas;

@@ -5,11 +5,10 @@ require_once 'PHPUnit/Framework.php';
 
 require_once 'tests/config/auto_include.php';
 require_once 'core/class/SQLObject.class.php';
-require_once 'core/class/Conexao.class.php';
 
 #####################################
 
-class ConexaoTest extends PHPUnit_Framework_TestCase
+class ConnectionTest extends PHPUnit_Framework_TestCase
 {
 
     public $dbConfig = array();
@@ -21,15 +20,15 @@ class ConexaoTest extends PHPUnit_Framework_TestCase
         /*
          * Informações de conexão com banco de dados
          */
-        require('config/database.php');
+        require('tests/config/database.php');
         $this->dbConfig = $dbConn;
         
-        $this->conexao = new Conexao($this->dbConfig);
+        $this->conexao = Connection::getInstance();
     }
 
     public function testConexaoWithPdoInit(){
 
-        $this->assertObjectHasAttribute('conn', new Conexao($this->dbConfig) );
+        $this->assertObjectHasAttribute('conn', Connection::getInstance() );
         //$this->assertEquals(0, count($stack));
     }
 

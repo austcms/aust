@@ -12,7 +12,7 @@
  * @since v0.1.5, 30/05/2009
  */
 
-class YouTube extends Modulos
+class YouTube extends Modulo
 {
 
 	// TABELA

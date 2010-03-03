@@ -1,5 +1,5 @@
 <?php
-class Privilegios extends Modulos {
+class Privilegios extends Modulo {
 
     public function __construct($param = '') {
         

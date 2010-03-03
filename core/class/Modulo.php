@@ -1,17 +1,15 @@
 <?php
 /**
- * Classe dos módulos
+ * abstract Modulo
  *
- * Contém funcionalidades genéricas do módulos, funcionalidades estas presentes
- * em todos os módulos.
+ * Superclasse dos módulos
  *
  * @package Classes
  * @name Módulos
  * @author Alexandre de Oliveira <chavedomundo@gmail.com>
- * @version 0.1.1
  * @since v0.1.5, 30/05/2009
  */
-class Modulos
+abstract class Modulo
 {
     /**
      * TABELAS
@@ -105,7 +103,7 @@ class Modulos
         static $instance;
 
         if( !$instance ){
-            $instance[0] = new Modulos;
+            $instance[0] = new get_class();
         }
 
         return $instance[0];
@@ -114,11 +112,242 @@ class Modulos
 
     /*
      *
+     * CRUD
+     *
+     */
+    public function save($post = array()){
+
+        if( empty($post) )
+            return false;
+        
+    }
+
+    /**
+     * load()
+     *
+     * Responsável por carregar dados-padrão da estrutura,
+     * como para listagens.
+     *
+     * @return <array>
+     */
+    public function load(){
+        return array();
+    }
+
+    /**
+     * loadSql()
+     *
+     * Retorna simplesmente o SQL para então executar Query
+     */
+    public function loadSql(){
+        return false;
+    }
+    /**
+     * delete()
+     *
+     * @param <string> $table
+     * @param <array> $conditions
+     * @return <integer>
+     */
+    public function delete($table = '', $conditions = array()){
+
+        /*
+         * Temos de ter argumentos, senão... return false
+         */
+        if( empty($conditions) OR
+            empty($table) )
+            return false;
+
+        foreach( $conditions as $field=>$value ){
+            $conditionsStr[] = $field."='".$value."'";
+        }
+
+        $sql = "DELETE
+                FROM
+                    $table
+                WHERE
+                    ".implode(' AND ', $conditionsStr)."
+            ";
+
+        return $this->conexao->exec($sql);
+
+
+    }
+
+    /*
+     *
+     * EMBED
+     *
+     */
+    /*
+     * EMBED -> CRUD
+     */
+    /**
+     * saveEmbed()
+     *
+     * Após save() de um módulo X ser invocado, saveEmbed() é chamado
+     * em cada módulo relacionado a X pela forma Embed.
+     *
+     * Quanto aos parâmetros, eis o formato correto:
+     *
+     *      Valores necessários:
+     *      array(
+     *          # dados de cada módulo embed, em 0, 1, 2, ..., n
+     *          'embedModules' => array(
+     *              0 => array(
+     *                  'className' => 'NomeDaClasseDesteMódulo',
+     *                  'dir' => 'diretório/do/módulo'
+     *                  'data' => array(
+     *                      'contém todos os dados que serão salvos'
+     *                  )
+     *              ),
+     *              1 => valores_da_segunda_estrutura_embed...,
+     *              # provavelmente o formulário já terá os valores
+     *              # inputs dos embed de forma que este formato já
+     *              # esteja pronto
+     *          ),
+     *          'options' => array(
+     *              targetTable => 'nome_da_tabela_da_estrutura_líder',
+     *              id => 'last_insert_id da estrutura líder',
+     *              # como a estrutura líder há pouco inseriu um novo
+     *              # registro, o id deste estará na chave acima.
+     *          )
+     *      )
+     *
+     * @param <array> $params
+     * @return <bool>
+     */
+    public function saveEmbed($params = array()){
+        return false;
+    }
+
+    public function deleteEmbed(){
+        return false;
+    }
+
+    /*
+     * EMBED -> DEFINIÇÕES
+     */
+    /**
+     * getRelatedEmbed()
+     *
+     * Dado uma estrutura, verifica quais outras estruturas sao associadas a ele
+     * para fazer um embed.
+     *
+     * Se a estrutura é Notícias, verifica quais outras podem fazer embed nos
+     * seus formulários.
+     *
+     * Retorna array com ids das estruturas relacionadas
+     *
+     * @param int $austNode
+     * @return array
+     */
+    public function getRelatedEmbed($austNode){
+        $sql = "SELECT
+                    categoria_id
+                FROM
+                    modulos_conf as m
+                WHERE
+                    m.tipo='relacionamentos' AND
+                    m.valor='".$austNode."'
+                ";
+        $query = $this->conexao->query($sql);
+        $tmp = array();
+        foreach( $query as $valor ){
+            $tmp[] = $valor["categoria_id"];
+        }
+        return $tmp;
+    } // fim getRelatedEmbed()
+
+    /**
+     * saveEmbeddedModules()
+     *
+     * Salva todos os dados de um formulário de embed's.
+     *
+     * @param <array> $data
+     * @return <bool>
+     */
+    public function saveEmbeddedModules($data){
+
+        //pr( $data );
+        if( empty($data) )
+            return false;
+
+        if( empty($data['embedModules']) )
+            return false;
+
+        foreach($data['embedModules'] AS $embedModule) {
+
+            $modDir = $embedModule['dir'];
+
+            if( is_file($modDir.'/'.MOD_CONFIG) ){
+                include($modDir."/".MOD_CONFIG);
+
+                $className = $modInfo['className'];
+                include($modDir."/".$className.'.php');
+
+                $param = $this->params;
+
+                $embedModulo = new $className($this->params);
+                $dataToSave = array_merge($embedModule, $data['options']);
+
+                $embedModulo->saveEmbed($dataToSave);
+            }
+
+        } // fim do foreach por cada estrutura com embed
+
+        return true;
+    } // fim saveEmbeddedModules()
+
+    /*
+     *
      * MÈTODOS DE SUPORTE
      * 
      */
 
+    public function getFieldsFromPost(){
+        
+    }
 
+    public function getValuesFromPost(){
+
+    }
+
+    /**
+     * getContentTable()
+     *
+     * Retorna o nome da tabela principal.
+     *
+     * @return <string>
+     */
+    public function getContentTable(){
+        return $this->tabela_criar;
+    }
+
+
+
+    /**
+     *
+     * VERIFICAÇÕES
+     *
+     */
+    /**
+     * hasSchema()
+     *
+     * Ao contrário de Schema, o módulo pode ter Migration (preferido).
+     *
+     * @return <bool>
+     */
+    public function hasSchema(){
+        if( empty($this->modDbSchema) )
+            return false;
+
+        return true;
+    }
+
+    public function hasMigration(){
+        
+    }
 
     /**
      * getModuleInformation()
@@ -133,7 +362,7 @@ class Modulos
         /*
          * Load Migrations
          */
-        $migrationsMods = MigrationsMods::getInstance();
+        $migrationsMods = new MigrationsMods( $this->conexao );
         //$migrationsStatus = $migrationsMods->status();
 
         if( is_array($params) ){

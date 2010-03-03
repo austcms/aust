@@ -7,7 +7,7 @@
  * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @since v0.1.6, 09/07/2009
  */
-class Cadastro extends Modulos {
+class Cadastro extends Modulo {
 
     function __construct($param = ''){
 

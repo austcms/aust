@@ -55,7 +55,7 @@ function __autoload($classe){
 include(THIS_TO_BASEURL.LIBS_DIR.'aust/aust_func.php');
 
 // Conexão
-$conexao = new Conexao($dbConn);
+$conexao = Connection::getInstance();
 $administrador = new Administrador($conexao);
 $aust = new Aust($conexao);
 

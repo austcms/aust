@@ -3,8 +3,8 @@ require_once 'PHPUnit/Framework.php';
 
 #####################################
 
+require_once 'tests/config/auto_include.php';
 require_once 'core/class/SQLObject.class.php';
-require_once 'core/class/Conexao.class.php';
 
 #####################################
 
@@ -20,12 +20,11 @@ class AdministradorTest extends PHPUnit_Framework_TestCase
         /*
          * Informações de conexão com banco de dados
          */
-        require('config/database.php');
+        require('tests/config/database.php');
         $this->dbConfig = $dbConn;
         
-        $this->conexao = new Conexao($this->dbConfig);
-        require_once('core/class/Administrador.class.php');
-        $this->obj = new Administrador($this->conexao);
+        $this->conexao = Connection::getInstance();
+        $this->obj = User::getInstance();
     }
 
     public function testRedirectForbiddenSession(){

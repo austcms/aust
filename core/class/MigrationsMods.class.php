@@ -17,8 +17,27 @@ class MigrationsMods
      */
     var $conexao;
 
-    function  __construct($conexaoClass) {
-        $this->conexao = $conexaoClass;
+    function  __construct() {
+        $this->conexao = Connection::getInstance();
+    }
+
+    /**
+     * getInstance()
+     *
+     * Para Singleton
+     *
+     * @staticvar <object> $instance
+     * @return <Conexao object>
+     */
+    static function getInstance(){
+        static $instance;
+
+        if( !$instance ){
+            $instance[0] = new MigrationsMods;
+        }
+
+        return $instance[0];
+
     }
 
     /*

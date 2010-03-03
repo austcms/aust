@@ -3,9 +3,8 @@ require_once 'PHPUnit/Framework.php';
 
 #####################################
 
+require_once 'tests/config/auto_include.php';
 require_once 'core/class/SQLObject.class.php';
-require_once 'core/class/Conexao.class.php';
-require_once 'core/class/Administrador.class.php';
 require_once 'core/config/variables.php';
 require_once 'core/libs/functions/func.php';
 
@@ -31,7 +30,7 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
         require 'tests/config/database.php';
         $this->dbConfig = $dbConn;
         
-        $this->conexao = new Conexao($this->dbConfig);
+        $this->conexao = Connection::getInstance();
 
         require MODULOS_DIR.$this->moduleForTesting.'/core/config/config.php';
         require_once MODULOS_DIR.$this->moduleForTesting.'/'.$modInfo['className'].'.php';
@@ -40,7 +39,7 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
 
         $params = array(
             'conexao' => $this->conexao,
-            'user' => new Administrador($this->conexao),
+            'user' => User::getInstance(),
         );
         
         $this->obj = new $modInfo['className']( $params );

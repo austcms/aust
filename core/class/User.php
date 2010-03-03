@@ -1,5 +1,5 @@
 <?php
-class Administrador {
+class User {
     var $login;
     /**
      *
@@ -16,9 +16,28 @@ class Administrador {
 
     public $forbiddenCode;
 
-    function __construct($conexaoClass, $location = '') {
-        $this->conexao = $conexaoClass;
+    function __construct() {
+        $this->conexao = Connection::getInstance();
         $this->tipo = $this->LeRegistro('tipo');
+
+    }
+
+    /**
+     * getInstance()
+     *
+     * Para Singleton
+     *
+     * @staticvar <object> $instance
+     * @return <Conexao object>
+     */
+    static function getInstance(){
+        static $instance;
+
+        if( !$instance ){
+            $instance[0] = new User;
+        }
+
+        return $instance[0];
 
     }
 
