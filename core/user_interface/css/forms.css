@@ -62,6 +62,7 @@ table.form {
      width: 100%;
      margin: 0 0 10px 0;
 }
+    table.form tr td { padding-bottom: 10px; }
     table.form td.first { width: 180px; }
     table.form label { font-weight: bold; color: #444444; }
     table.form input.text { font-size: 1.3em; font-weight: bold; width: 380px; }
@@ -101,7 +102,7 @@ table.listagem td.adddate { width: 110px; }
 /* FormHelper (cadastros) */
 form.formHelper { }
 
-    form.formHelper label { width: 130px; }
+    form.formHelper label { width: 160px; margin-right: 5px; float: left; }
     form.formHelper div.input_field {  }
     form.formHelper div.input_textarea textarea { width: 300px; height: 50px; }
     form.formHelper div.input_date input { width: 18px; }

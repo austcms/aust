@@ -243,6 +243,15 @@ if(!empty($_GET['function'])){
                  * Resumo
                  */
                 array(
+                    "propriedade" => "nova_categoria", // nome da propriedade
+                    "value" => "",
+                    "label" => "Permite criar categoria?",
+                    "inputType" => "checkbox",
+                ),
+                /*
+                 * Resumo
+                 */
+                array(
                     "propriedade" => "modo_de_visualizacao", // nome da propriedade
                     "value" => "",
                     "label" => "Opção Modo de Visualização?",

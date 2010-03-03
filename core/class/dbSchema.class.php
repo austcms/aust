@@ -454,6 +454,33 @@ class dbSchema
 
         return $sql;
     }
+
+    /**
+     * sqlForMissingFields()
+     * 
+     * Retorna o SQL necessário para criar os campos que estão
+     * faltando de acordo com $params.
+     * 
+     * @param <array> $params
+     * @param <string> $mode
+     * @return <string> 
+     */
+    public function sqlForMissingFields($params, $mode = ''){
+
+        $table = key($params);
+        $fields = $params[$table];
+        $addStatement = '';
+
+        if( is_array($fields) ){
+            foreach( $fields as $field=>$property ){
+                $addStatement[] = 'ADD COLUMN '.$field. ' '.$property.' ';
+            }
+        }
+
+        //$properties = str_replace('"', "'", reset( $params[$table] ) );
+
+        return 'ALTER TABLE '.$table.' '.implode(", ", $addStatement);
+    } // fim sqlForMissingFields()
 }
 
 ?>

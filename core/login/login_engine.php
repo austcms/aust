@@ -5,7 +5,7 @@
  * Este arquivo é carregado via include e não deve ser usado individualmente
 */
 
-sleep(1);
+//sleep(1);
 
 header("Cache-Control: no-cache, must-revalidate");
 

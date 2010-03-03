@@ -30,18 +30,11 @@ define("IMG_DIR", "core/user_interface/img/");
     <?php /* Estilo dos lightboxs - Lightbox */ ?>
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/lightbox.css" type="text/css" />
 
+    <?php /* Estilo da seleção de temas */ ?>
+    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/theme.css" type="text/css" />
+
     <?php /* Tema Azul */ ?>
-    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>temas/classic_blue/default.css" type="text/css" />
-
-    <?php /* Tema Verde */ ?>
-    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>temas/classic_green/default.css" type="text/css" />
-
-    <?php /* Tema Vermelho */ ?>
-    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>temas/classic_red/default.css" type="text/css" />
-
-    <?php /* Tema Cinza azulado */ ?>
-    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>temas/classic_silver/default.css" type="text/css" />
-
+    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.THEMES_DIR; ?><?php echo $themes->currentTheme($administrador->getId()); ?>/default.css" type="text/css" />
 
     <!-- TinyMCE -->
     <?php
@@ -104,7 +97,7 @@ define("IMG_DIR", "core/user_interface/img/");
             <div id="altera_dados">
                 <a href="logout.php">Sair</a>
                 
-                <a href="adm_main.php?section=admins&action=form&fm=editar">Alterar meus dados/senha</a>
+                <a href="adm_main.php?section=admins&action=edit&fm=editar">Alterar meus dados/senha</a>
                 <?php
                     /*
                      * INFORMAÇÕES QUE IRÃO DENTRO DE ALTERAR MEUS DADOS
