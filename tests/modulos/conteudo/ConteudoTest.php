@@ -37,6 +37,11 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
                 );
     }
 
+    function testUseThisTable(){
+        $this->assertEquals('textos', $this->obj->useThisTable() );
+    }
+
+
     function testLoadConfig(){
         $this->assertType('array', $this->obj->loadConfig());
         $this->assertArrayHasKey('className', $this->obj->loadConfig());
@@ -62,7 +67,7 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
             'w' => '',
             'aust_node' => '2',
             'frmcategoria' => '4',
-            'frmtitulo' => 'Notícia de teste',
+            'frmtitulo' => 'Notícia de teste123456789',
             'frmtexto' => 'Esta notícia foi inserida via teste unitário',
             'contentTable' => 'textos',
             'submit' => 'Enviar!',
@@ -71,8 +76,24 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
         $this->assertTrue( $this->obj->save($params) );
 
         $params = array(
-            'titulo' => 'Notícia de teste',
+            'titulo' => 'Notícia de teste123456789',
         );
+
+        /**
+         * Verifica se realmente salvou os dados
+         *
+         *      Conteudo
+         */
+            $sql = "SELECT id FROM textos WHERE titulo='".$params['titulo']."'";
+            $this->assertArrayHasKey(0,
+                    $this->obj->connection->query($sql), 'Não salvou o arquivo'
+                );
+
+        /**
+         * A exclusão dos registros acontece dentro de outro teste
+         * abaixo.
+         */
+
     }
 
     function testSaveEmbeddedModules(){
@@ -106,7 +127,7 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
     function testDelete(){
 
         $params = array(
-            'titulo' => 'Notícia de teste',
+            'titulo' => 'Notícia de teste123456789',
         );
         
         $this->assertGreaterThan(0, $this->obj->delete('textos', $params) );

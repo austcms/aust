@@ -77,6 +77,7 @@ class Privilegios extends Module {
 
             foreach($embed_sql as $valor){
                 $this->connection->exec($valor);
+                $this->w = $this->connection->lastInsertId();
             }
 
 

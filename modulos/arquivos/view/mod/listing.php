@@ -74,7 +74,7 @@ if(count($query) > 0){
                 <td>
                     <?php
                     if($i == 1){
-                        echo '<a href="adm_main.php?section='.$_GET['section'].'&action=editar&aust_node='.$_GET['aust_node'].'&w='.$dados["id"].'">';
+                        echo '<a href="adm_main.php?section='.$_GET['section'].'&action=edit&aust_node='.$_GET['aust_node'].'&w='.$dados["id"].'">';
                         echo $dados[$modulo->config['contentHeader']['campos'][$i]];
                         echo '</a>';
                     } else {

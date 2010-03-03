@@ -47,7 +47,6 @@
         $embedI = 0;
         foreach($embed AS $chave=>$valor){
             if( in_array( $valor["id"], $embedRelatedNodes ) ){
-
                 // Inicializa algumas variáveis
                     $embed_form = array();
 
@@ -61,8 +60,10 @@
                 echo '<input type="hidden" name="embed['.$embedI.'][className]" value="'.$modInfo['className'].'" />';
                 echo '<input type="hidden" name="embed['.$embedI.'][dir]" value="'.$valor['pasta'].'" />';
 
-                //pr($embed_form);
-                if(!empty($embed_form) AND in_array($_GET['action'], $embed_form['actions'])){
+                if( !empty($embed_form) AND
+                    in_array($_GET['action'], $embed_form['actions']))
+                {
+
                     if(is_file($valor['pasta'].'/embed/form.php')){
                         include($valor['pasta'].'/embed/form.php');
                         //include($valor['pasta'].'/index.php');

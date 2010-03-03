@@ -9,7 +9,7 @@
  * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @since v0.1.5, 30/05/2009
  */
-abstract class Module
+class Module
 {
 
     /**
@@ -18,6 +18,12 @@ abstract class Module
      */
     public $mainTable;
 
+    /**
+     *
+     * @var <int> Id em uso
+     */
+    public $w;
+    
     /**
      * VARIÁVEIS DO MÓDULO
      */
@@ -77,9 +83,45 @@ abstract class Module
      * CRUD
      *
      */
+
+    /**
+     * save()
+     *
+     * Comando que deve poder ser chamado por qualquer módulo.
+     *
+     * Este super-método serve estritamente para salvar dados
+     * no DB. Se um módulo precisa algo diferente disto,
+     * sobrescreva este método na classe do módulo.
+     *
+     * @param <array> $post
+     * @return <bool>
+     */
     public function save($post = array()){
-        if( empty($post) )
-            return false;
+
+        $method = $post['method'];
+
+        /*
+         * Gera SQL
+         */
+        $sql = $this->generateSqlFromForm($post, $method);
+        /**
+         * Salva no DB
+         */
+        if( $this->connection->exec($sql) ){
+
+            $this->w = $this->connection->conn->lastInsertId();
+
+            /*
+             *
+             * EMBED SAVE
+             *
+             */
+            $this->saveEmbeddedModules($this->getDataForEmbeddedSaving($post));
+
+            return true;
+        }
+
+        return false;
     }
     /**
      * load()
@@ -128,6 +170,72 @@ abstract class Module
             ";
 
         return $this->connection->exec($sql);
+    }
+
+    /*
+     * CRUD -> SUPPORT
+     */
+    public function generateSqlFromForm($post, $method = 'new'){
+
+        foreach($post as $key=>$valor){
+            /*
+             * Verifica se $post contém algum 'frm' no início
+             */
+            if(strpos($key, 'frm') === 0){
+                $sqlcampo[] = str_replace('frm', '', $key);
+                $sqlvalor[] = $valor;
+
+                /*
+                 * Ajusta os campos da tabela nos quais serão gravados dados
+                 */
+                if($method == 'edit'){
+                    if($c > 0){
+                        $sqlcampostr = $sqlcampostr.','.str_replace('frm', '', $key).'=\''.$valor.'\'';
+                    } else {
+                        $sqlcampostr = str_replace('frm', '', $key).'=\''.$valor.'\'';
+                    }
+                } else {
+                    if($c > 0){
+                        $sqlcampostr = $sqlcampostr.','.str_replace('frm', '', $key);
+                        $sqlvalorstr = $sqlvalorstr.",'".$valor."'";
+                        $where .= " AND ".str_replace('frm', '', $key) ."='".$valor."'";
+                    } else {
+                        $sqlcampostr = str_replace('frm', '', $key);
+                        $sqlvalorstr = "'".$valor."'";
+                        $where .= str_replace('frm', '', $key) ."='".$valor."'";
+                    }
+                }
+
+                $c++;
+            }
+        }
+
+        if($method == 'edit'){
+            $total = 0;
+            $sql = "UPDATE ".$this->useThisTable()." SET $sqlcampostr
+                    WHERE id='".$post['w']."'";
+        } else {
+            $sql = "INSERT INTO ".$this->useThisTable()." ($sqlcampostr)
+                    VALUES ({$sqlvalorstr})";
+        }
+
+
+        return $sql;
+    }
+
+    /**
+     * useThisTable()
+     *
+     * Se $this->useThisTable existe, retorna-a. Senão, retorna
+     * $this->mainTable.
+     *
+     * @return <string> Tabela a ser usada
+     */
+    function useThisTable(){
+        if( empty($this->useThisTable) )
+            return $this->mainTable;
+
+        return $this->useThisTable;
     }
 
     /*
@@ -184,6 +292,28 @@ abstract class Module
     /*
      * EMBED -> DEFINIÇÕES
      */
+
+    /**
+     * getDataForEmbeddedSaving()
+     *
+     * Retorna todos os dados necessário para começar a salvar
+     * os embed.
+     *
+     * @param <array> $post
+     * @return <array>
+     */
+    function getDataForEmbeddedSaving($post){
+        $embedData = array(
+            'embedModules' => $post['embed'],
+            'options' => array(
+                'targetTable' => $this->mainTable,
+                'w' => $this->w,
+            )
+        );
+
+        return $embedData;
+    }
+
     /**
      * getRelatedEmbed()
      *
@@ -239,14 +369,14 @@ abstract class Module
                 include($modDir."/".MOD_CONFIG);
 
                 $className = $modInfo['className'];
-                include($modDir."/".$className.'.php');
+                include_once($modDir."/".$className.'.php');
 
                 $param = $this->params;
 
-                $embedModulo = new $className($this->params);
+                $this->{$className} = new $className($this->params);
                 $dataToSave = array_merge($embedModule, $data['options']);
 
-                $embedModulo->saveEmbed($dataToSave);
+                $this->{$className}->saveEmbed($dataToSave);
             }
 
         } // fim do foreach por cada estrutura com embed

@@ -14,6 +14,12 @@ class Arquivos extends Module
 {
     /**
      *
+     * @var <string> Tabela principal de dados
+     */
+    public $mainTable = 'arquivos';
+    
+    /**
+     *
      * @var <string> Extensões proibidas
      */
     public $invalidExtensions = 'php|php3|html|htm|css|js';
@@ -71,6 +77,9 @@ class Arquivos extends Module
      */
     public function parseUrl($url){
 
+        $url = str_replace("://", ":/()_+/", $url);
+        $url = str_replace("//", "/", $url);
+        $url = str_replace(":/()_+/", "://", $url);
         $workVar = explode("/", $url);
 
         foreach( $workVar as $nr=>$value ){
@@ -89,6 +98,7 @@ class Arquivos extends Module
 
         if( !is_array($file) )
             return false;
+
 
         if(  count($file) == 1 ){
             $file = reset($file);
@@ -125,24 +135,14 @@ class Arquivos extends Module
             // Verificação de dados OK, nenhum erro ocorrido, executa então o upload...
             // Pega extensão do arquivo
 
-            $frmarquivo_filename = $this->_adjustFileName($file['name'], true);
-            $frmarquivo_tipo = $file['type'];
-            $frmarquivo_tamanho = $file['size'];
+            $newFilename = $this->_adjustFileName($file['name'], true);
+            $filename = $file['name'];
 
             //ajusta o $_POST para salvar dados no DB
-            /*
-            $_POST['frmarquivo_nome'] = $frmarquivo_nome;
-            $_POST['frmarquivo_tipo'] = $frmarquivo_tipo;
-            $_POST['frmarquivo_tamanho'] = $frmarquivo_tamanho;
-            $_POST['frmarquivo_extensao'] = PegaExtensao($_POST['frmarquivo_nome']);
-             * 
-             */
-
-
-            //$frmarquivo_nome = urlencode($file['name']);
-            //$imagem_nome = str_replace($trocarIsso, $porIsso, $frmfilename);
-            //$imagem_nome = urlencode($imagem_nome);
-//                $imagem_nome = stri ($imagem_nome);
+            $this->forPost[$filename]['frmarquivo_nome'] = $newFilename;
+            $this->forPost[$filename]['frmarquivo_tipo'] = $file['type'];
+            $this->forPost[$filename]['frmarquivo_tamanho'] = $file['size'];
+            $this->forPost[$filename]['frmarquivo_extensao'] = $this->getExtension($_POST['frmarquivo_nome']);
 
             /**
              * Caminho de onde a imagem ficará
@@ -166,9 +166,9 @@ class Arquivos extends Module
              * Url path
              */
             $urlBaseDir = str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']).$this->relativeDir;
-            $frmurl = $urlBaseDir.$upload_dir .'/'.$frmarquivo_nome;
+            $frmurl = $urlBaseDir.$upload_dir .'/'.$newFilename;
             print_r($frmUrl);
-            $_POST['frmurl'] = $frmurl;
+             $this->forPost[$filename]['frmurl'] = $frmurl;
 
             /*
              * System path
@@ -177,8 +177,8 @@ class Arquivos extends Module
             $current_dir = getcwd();
             chdir($this->relativeDir);
 
-            $frmSystemUrl = $this->_getSystemUrl( $upload_dir .'/'.$frmarquivo_nome );
-            $_POST['frmsystemurl'] = $frmSystemUrl;
+            $frmSystemUrl = $this->_getSystemUrl( $upload_dir .'/'.$newFilename );
+            $this->forPost[$filename]['frmsystemurl'] = $frmSystemUrl;
 
             //pr($_POST);
             //exit(0);
@@ -188,7 +188,12 @@ class Arquivos extends Module
             if( !is_file($file["tmp_name"]) )
                 return false;
 
-            return $this->_moveUploadedFile($file["tmp_name"], $frmSystemUrl);
+            if( $this->_moveUploadedFile($file["tmp_name"], $frmSystemUrl) )
+                return true;
+            else
+                $this->status['uploadFile'][$file['name']] = 'upload_error';
+
+            return false;
 
         }
 
@@ -220,7 +225,20 @@ class Arquivos extends Module
             'Ñ',
             'Ò','Ó','Ô','Õ','Ö',
             'Ù','Ü','Ú','?',',',' ');
-        $porIsso = array('a','a','a','a','a','a','c','e','e','e','e','i','i','i','i','n','o','o','o','o','o','u','u','u','y','A','A','A','A','A','A','C','E','E','E','E','I','I','I','I','N','O','O','O','O','O','U','U','U','_','_','_');
+        $porIsso = array('a','a','a','a','a','a',
+            'c',
+            'e','e','e','e',
+            'i','i','i','i',
+            'n',
+            'o','o','o','o','o',
+            'u','u','u','y',
+            'A','A','A','A','A','A',
+            'C',
+            'E','E','E','E',
+            'I','I','I','I',
+            'N',
+            'O','O','O','O','O',
+            'U','U','U','_','_','_');
 
         $str = str_replace($trocarIsso, $porIsso, $str);
         $str = strtolower($str);
@@ -254,16 +272,84 @@ class Arquivos extends Module
      * @param <string> $systemUrl
      * @return <string>
      */
-    public function _moveUploadedFile($filepath, $systemUrl){
-        if( move_uploaded_file($filepath, $systemUrl) ){
+    public function _moveUploadedFile($filepath, $destination){
+        if( move_uploaded_file($filepath, $destination) ){
             return true;
         } else {
-            $this->status['uploadFile'][$file['name']] = 'upload_error';
             return false;
         }
     } // end _getSystemUrl()
 
+    /**
+     * getExtension()
+     *
+     * @param <string> $filename
+     * @return <string>
+     */
+    public function getExtension($filename){
+        $ext = explode('.', $filename);
+        $ext = array_reverse($ext);
 
+        if( count($ext) == 2 )
+            return $ext[0];
+
+        return false;
+    }
+
+    /*
+     *
+     * CRUD
+     *
+     */
+    /**
+     * save()
+     *
+     * Realiza upload de arquivos e salva tudo no DB
+     *
+     * @param <array> $post $_POST
+     * @param <array> $files $_FILES
+     * @return <bool>
+     */
+    public function save($post, $files){
+        
+        if( count($files) == 1 ){
+            return $this->_saveEachFile($post, $files);
+        } else if( empty($files) ) {
+            return $this->_saveEachFile($post);
+        }
+
+        return false;
+    }
+
+    /**
+     * _saveEachFile(){
+     *
+     * Salvará um arquivo apenas. Save() tem a responsabilidade de
+     * separar os arquivos, se enviados todos de um vez só,
+     * e chamar este métodos uma vez por arquivo
+     *
+     * @param <array> $post
+     * @param <array> $file
+     */
+    public function _saveEachFile($post, $file = false){
+
+        $method = $post['method'];
+
+        /*
+         * Tenta upload
+         */
+        if( $file ){
+            $this->uploadFile($file);
+            $filename = reset($file);
+            $filename = $filename['name'];
+            $post = array_merge( $post, $this->forPost[$filename] );
+            $post['frmurl'] = $this->parseUrl($post['frmurl']);
+        }
+
+        return parent::save($post);
+
+        return false;
+    }
     /**
      * loadSql($params)
      *

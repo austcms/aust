@@ -16,7 +16,7 @@ class ModController extends ModsController
     public function actions(){
     }
 
-    public function listar(){
+    function listing(){
         //$this->render('listar');
         //$this->autoRender= false;
     }
@@ -32,14 +32,14 @@ class ModController extends ModsController
     /**
      * FORMULÁRIO DE INSERÇÃO
      */
-    public function criar($params = array() ){
+    function create($params = array() ){
         $this->render('form');
     }
 
     /**
      * FORMULÁRIO DE INSERÇÃO
      */
-    public function editar($params = array() ){
+    public function edit($params = array() ){
         $this->render('form');
     }
 
