@@ -23,7 +23,7 @@ if( is_array($embed) ){
  * estrutura atual.
  */
 
-$embedRelatedNodes = $this->getRelatedEmbed($_GET["aust_node"]);
+$embedRelatedNodes = $this->getRelatedEmbedAsArray($_GET["aust_node"]);
 
 pr($embed);
 /*

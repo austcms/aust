@@ -47,60 +47,8 @@ class Conteudo extends Module
      * @return <string>
      */
     public function loadSql($options = array()) {
-        /*
-         * SET DEFAULT OPTIONS
-         */
-        require_once(LIB_DATA_TYPES);
-        /*
-         * Default options
-         */
-        $categorias = getDataInArray($options, 'categorias');
-        $pagina = getDataInArray($options, 'pagina');
-        $itens_por_pagina = getDataInArray($options, 'resultadosPorPagina');
-        $limit = '';
 
-        $order = ' ORDER BY id DESC';
-        /*
-         * Gera condições para sql
-         */
-        if(!empty($categorias)) {
-            $where = ' WHERE ';
-            $c = 0;
-            foreach($categorias as $key=>$valor) {
-                if($c == 0)
-                    $where = $where . 'categoria=\''.$key.'\'';
-                else
-                    $where = $where . ' OR categoria=\''.$key.'\'';
-                $c++;
-            }
-        }
-
-        /*
-         * Paginação?
-         */
-        if(!empty($pagina)) {
-            $item_atual = ($pagina * $itens_por_pagina) - $itens_por_pagina;
-            $limit = " LIMIT ".$item_atual.",".$itens_por_pagina;
-        }
-
-        /*
-         * Sql para listagem
-         */
-        $sql = "SELECT
-                    id, titulo, visitantes,
-                    categoria AS cat,
-                    DATE_FORMAT(adddate, '%d/%m/%Y %H:%i') as adddate,
-                    (	SELECT
-                            nome
-                        FROM
-                            categorias AS c
-                        WHERE
-                            id=cat
-                    ) AS node
-                FROM
-                    ".$this->tabela_criar.$where.$order.
-                $limit;
-        return $sql;
+        return parent::loadSql($options);
 
     } // fim getSQLForListing()
 

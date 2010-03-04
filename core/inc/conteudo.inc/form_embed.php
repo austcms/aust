@@ -22,7 +22,7 @@
      * Contém quais as outras estruturas (nodes) que são relacionadas à
      * estrutura atual.
      */
-    $embedRelatedNodes = $modulo->getRelatedEmbed($_GET["aust_node"]);
+    $embedRelatedNodes = $modulo->getRelatedEmbedAsArray($_GET["aust_node"]);
 
 
 

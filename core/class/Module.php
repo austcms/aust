@@ -23,10 +23,21 @@ class Module
      * @var <int> Id em uso
      */
     public $w;
+
+    /**
+     *
+     * @var <array>
+     */
+    public $loadedIds;
     
     /**
      * VARIÁVEIS DO MÓDULO
      */
+    /**
+     *
+     * @var <array> Contém a tabela atual descrita
+     */
+    public $describedTable;
     /**
      *
      * @var <string> erros e sucessos das operações
@@ -53,6 +64,11 @@ class Module
      * @var class Configurações estáticas do módulo
      */
     public $config;
+
+    /**
+     * CONFIGURAÇÕES
+     */
+    public $testing = false;
 
     /**
      *
@@ -131,17 +147,155 @@ class Module
      *
      * @return <array>
      */
-    public function load(){
-        return array();
+    public function load($param = ''){
+
+        $this->loadedIds = array();
+        
+        $qry = $this->connection->query($this->loadSql($param));
+
+        if( empty($qry) )
+            return array();
+
+        $qry = $this->_organizesLoadedData($qry);
+
+        $austNode = $param['austNode'];
+        $embedModules = $this->getRelatedEmbed($austNode);
+
+        if( empty($embedModules)
+            OR empty($this->loadedIds) )
+            return $qry;
+
+        /*
+         * Carrega dados dos módulos relacionados via embed
+         */
+        $paramForEmbedLoad = array(
+            'target_id' => $this->loadedIds,
+            'target_table' => $this->useThisTable()
+        );
+
+        foreach( $embedModules as $object ){
+            $embedResults[get_class($object)] = $object->loadEmbed($paramForEmbedLoad);
+            //$qry = array_merge( $qry, $object->loadEmbed($paramForEmbedLoad) );
+        }
+
+        foreach( $embedResults as $module=>$embedResult ){
+
+            foreach( $embedResult as $mainId=>$eachEmbed ){
+                $qry[$mainId][$module] = $eachEmbed;
+            }
+        }
+        
+        sort($qry);
+        return $qry;
+    }
+
+    /**
+     * _organizesLoadedData()
+     *
+     * Organiza uma array com os dados carregados de um db, botando
+     * como chave de cada índice da array o id do registro.
+     *
+     * @param <array> $results
+     * @return <array>
+     */
+    public function _organizesLoadedData($results){
+
+        $result = array();
+        foreach($results as $valor){
+            if( !empty($valor['id']) ){
+                $result[$valor['id']] = $valor;
+                $this->loadedIds[] = $valor['id'];
+            } else
+                $result[] = $valor;
+        }
+
+        return $result;
     }
 
     /**
      * loadSql()
      *
+     * Tenta ser genérico para todos os módulos
+     *
      * Retorna simplesmente o SQL para então executar Query
      */
-    public function loadSql(){
-        return false;
+    public function loadSql($options = array()){
+        /*
+         * SET DEFAULT OPTIONS
+         */
+        require_once(LIB_DATA_TYPES);
+        /*
+         * Default options
+         */
+        if( !empty($options['categorias']) ){
+            print("Argumento <strong>categorias</strong> ultrapassada em \$modulo->loadSql. Use \$options['austNode'].");
+            exit(0);
+        }
+
+        $id = empty($options['id']) ? '' : $options['id'];
+        $austNode = empty($options['austNode']) ? array() : $options['austNode'];
+        $page = empty($options['page']) ? '1' : $options['page'];
+        $limit = empty($options['limit']) ? '25' : $options['limit'];
+        $order = empty($options['order']) ? 'id DESC' : $options['order'];
+
+        if( !empty($options)
+            AND !is_array($options) )
+            $id = $options;
+        
+        if( !empty($id) ){
+            if( is_array($id) ){
+                $id = " AND id IN ('".implode("','", $id)."')";
+            } else {
+                $id = " AND id='$id'";
+            }
+        }
+
+        /*
+         * Gera condições para sql
+         */
+        if( !empty($austNode) ) {
+            $where = ' ';
+            if( !is_array($austNode) )
+                $austNode = array($austNode);
+
+            $where = $where . " AND categoria IN ('".implode("','", $austNode)."')";
+        }
+
+        /*
+         * Paginação?
+         */
+            if( $page == 0 )
+                $page = 1;
+            
+            $pageLimit = (($page-1) * $limit);
+            $limit = " LIMIT ".$pageLimit.",".$limit;
+
+        if( empty($this->describedTable[$this->useThisTable()]) ){
+            $this->describedTable[$this->useThisTable()] = $this->connection->query('DESCRIBE '.$this->useThisTable());
+        }
+        //print_r($described);
+
+        /*
+         * Sql para listagem
+         */
+        $sql = "SELECT
+                    id, titulo, visitantes,
+                    categoria AS cat,
+                    DATE_FORMAT(adddate, '%d/%m/%Y %H:%i') as adddate,
+                    (	SELECT
+                            nome
+                        FROM
+                            categorias AS c
+                        WHERE
+                            id=cat
+                    ) AS node
+                FROM
+                    ".$this->useThisTable()."
+                WHERE 1=1 $id".
+                $where.
+                " ORDER BY ".$order."
+                $limit";
+        return $sql;
     }
     /**
      * delete()
@@ -289,6 +443,36 @@ class Module
         return false;
     }
 
+    public function loadEmbed($param){
+        $targetId = $param['target_id'];
+
+        if( !is_array($targetId) )
+            $targetId = array($targetId);
+
+        $targetTable = $param['target_table'];
+
+        $sql = "SELECT
+                    id, privilegio_id,
+                    target_id
+                FROM
+                    ".$this->useThisTable()."
+                WHERE
+                    target_id IN ('". implode("','", $targetId)."') AND
+                    target_table='$targetTable'
+                ";
+
+        $query = $this->connection->query($sql);
+
+        if( empty($query) )
+            return array();
+
+        foreach( $query as $valor ){
+            $result[$valor['target_id']][] = $valor;
+        }
+
+        return $result;
+    }
+
     /*
      * EMBED -> DEFINIÇÕES
      */
@@ -320,6 +504,55 @@ class Module
      * Dado uma estrutura, verifica quais outras estruturas sao associadas a ele
      * para fazer um embed.
      *
+     * Retorna array com objetos dos módulos relacionados
+     *
+     * @param int $austNode
+     * @return array of objects
+     */
+    public function getRelatedEmbed($austNode){
+
+        $result = array();
+        $sql = "SELECT
+                    c.tipo
+                FROM
+                    modulos_conf AS m
+                INNER JOIN
+                    categorias AS c
+                ON
+                    m.categoria_id=c.id
+                WHERE
+                    m.tipo='relacionamentos' AND
+                    c.id='".$austNode."'
+                ";
+
+        $query = $this->connection->query($sql);
+        if( empty($query) )
+            return array();
+
+        foreach( $query as $valor ){
+
+            if( !file_exists( MODULOS_DIR.$valor["tipo"].'/'.MOD_CONFIG ) )
+                continue;
+
+            include(MODULOS_DIR.$valor["tipo"].'/'.MOD_CONFIG);
+
+            if( !file_exists( MODULOS_DIR.$valor["tipo"].'/'.$modInfo['className'].'.php' ) )
+                continue;
+            
+            include_once(MODULOS_DIR.$valor["tipo"].'/'.$modInfo['className'].'.php');
+
+            $result[] = new $modInfo['className'];
+        }
+
+        return $result;
+    } // fim getRelatedEmbed()
+
+    /**
+     * getRelatedEmbedAsArray()
+     *
+     * Dado uma estrutura, verifica quais outras estruturas sao associadas a ele
+     * para fazer um embed.
+     *
      * Se a estrutura é Notícias, verifica quais outras podem fazer embed nos
      * seus formulários.
      *
@@ -328,7 +561,7 @@ class Module
      * @param int $austNode
      * @return array
      */
-    public function getRelatedEmbed($austNode){
+    public function getRelatedEmbedAsArray($austNode){
         $sql = "SELECT
                     categoria_id
                 FROM
@@ -343,7 +576,8 @@ class Module
             $tmp[] = $valor["categoria_id"];
         }
         return $tmp;
-    } // fim getRelatedEmbed()
+    } // fim getRelatedEmbedAsArray()
+
     /**
      * saveEmbeddedModules()
      *

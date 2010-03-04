@@ -1,5 +1,8 @@
 <?php
-class Privilegios extends Module {
+class Privilegios extends Module
+{
+
+    public $mainTable = "privilegios";
 
     public function __construct($param = '') {
         
@@ -100,6 +103,12 @@ class Privilegios extends Module {
         
     }
 
+    public function loadEmbed($param = array()){
+        $this->mainTable = "privilegio_target";
+
+        return parent::loadEmbed($param);
+
+    }
 
     public function getRelatedCategories($austNode){
         $sql = "

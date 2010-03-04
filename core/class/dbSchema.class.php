@@ -84,12 +84,12 @@ class dbSchema
      * @param array $dbSchema O Schema das tabelas necessário ao funcionamento do sistema
      * @param class $conexaoClass Classe de conexão com o banco de dados
      */
-    function  __construct($dbSchema, $conexaoClass) {
+    function  __construct($dbSchema, $conexaoClass = '') {
         if ( is_array($dbSchema) ){
             $this->dbSchema = $dbSchema;
         }
         
-        $this->conexao = $conexaoClass;
+        $this->conexao = Connection::getInstance();
 
         /**
          * Se não houve verificação do Schema atual ainda
