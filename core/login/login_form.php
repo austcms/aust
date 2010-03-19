@@ -8,7 +8,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>Aust - Gerenciador de Conteúdo</title>
     <link rel="stylesheet" href="core/login/index.css" type="text/css" />
-    <script type="text/javascript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>libs/jquery.js"></script>
+    <script type="text/javascript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>100_jquery.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
             $('#login').focus();
