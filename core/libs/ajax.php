@@ -25,6 +25,16 @@ include(THIS_TO_BASEURL.'core/config/variables.php');
  * Carrega as configurações de conexão do banco de dados
  */
 include(THIS_TO_BASEURL.CONFIG_DIR.'database.php');
+
+
+/**
+ * 
+ * Carrega classes automaticamente
+ *
+ */
+    include_once(THIS_TO_BASEURL.CLASS_DIR.'_carrega_classes.inc.php');
+
+
 /**
  * Configurações do core do sistema
  */
@@ -42,21 +52,12 @@ include(THIS_TO_BASEURL.LIB_DIR.'functions/func.php');
 include(THIS_TO_BASEURL.LIB_DIR.'functions/func_content.php');
 include(THIS_TO_BASEURL.LIB_DIR.'functions/func_text_format.php');
 
-/**
- * Função que carrega classes automaticamente
- *
- * @param string $classe Nome da classe a ser carregada
- */
-function __autoload($classe){
-    include_once(THIS_TO_BASEURL.CLASS_DIR.$classe.'.class.php');
-}
-
 // aust_func
 include(THIS_TO_BASEURL.LIBS_DIR.'aust/aust_func.php');
 
 // Conexão
 $conexao = Connection::getInstance();
-$administrador = new Administrador($conexao);
+$administrador = User::getInstance();
 $aust = new Aust($conexao);
 
 if( is_file('ajax/aj_'.$_GET['lib'].'.php') ){
