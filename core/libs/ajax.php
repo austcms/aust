@@ -39,6 +39,7 @@ include(THIS_TO_BASEURL.CONFIG_DIR.'database.php');
  * Configurações do core do sistema
  */
 include(THIS_TO_BASEURL.CONFIG_DIR.'core.php');
+include(THIS_TO_BASEURL.CORE_CONFIG_DIR.'core.php');
 
 header("Content-Type: text/html; charset=".$aust_charset['view']);
 

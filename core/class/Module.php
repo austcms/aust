@@ -316,26 +316,24 @@ class Module
      * @param <array> $conditions
      * @return <integer>
      */
-    public function delete($table = '', $conditions = array()){
-        /*
-         * Temos de ter argumentos, senão... return false
-         */
-        if( empty($conditions) OR
-            empty($table) )
-            return false;
+    public function delete($id){
 
-        foreach( $conditions as $field=>$value ){
-            $conditionsStr[] = $field."='".$value."'";
+        if( is_int($id) OR is_string($id) ){
+
+            $sql = "DELETE
+                    FROM
+                        ".$this->useThisTable()."
+                    WHERE
+                        id='$id'
+                ";
+
+            $result = $this->connection->exec($sql);
+
+            if( $result )
+                return true;
+
         }
-
-        $sql = "DELETE
-                FROM
-                    $table
-                WHERE
-                    ".implode(' AND ', $conditionsStr)."
-            ";
-
-        return $this->connection->exec($sql);
+        return false;
     }
 
     /*

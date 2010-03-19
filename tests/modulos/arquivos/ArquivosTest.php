@@ -116,7 +116,7 @@ class ArquivosTest extends PHPUnit_Framework_TestCase
 
     }
 
-    function testSave(){
+    function testSaveAndLoad(){
         /*
          * Salva um arquivo sem upload
          */
@@ -167,10 +167,6 @@ class ArquivosTest extends PHPUnit_Framework_TestCase
 
     }
 
-    function testLoad(){
-
-    }
-
     function testLoadSql(){
         function testLoadSql(){
             $this->assertType('string', $this->obj->loadSql() );
@@ -180,10 +176,6 @@ class ArquivosTest extends PHPUnit_Framework_TestCase
                         ))
                     );
         }
-    }
-
-    function testDelete(){
-
     }
 
 }

@@ -23,7 +23,7 @@
 /*
  * [Se novo conteúdo]
  */
-    if($_GET['action'] == 'criar'){
+    if($_GET['action'] == 'create'){
         $tagh2 = "Criar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
         $tagp = 'Crie um novo conteúdo abaixo.';
         $dados = array('id' => '');
@@ -31,7 +31,7 @@
 /*
  * [Se modo edição]
  */
-    else if($_GET['action'] == 'editar'){
+    else if($_GET['action'] == 'edit'){
 
     }
 ?>
@@ -47,7 +47,7 @@
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?section=<?php echo $_GET["section"] ?>&action=save" enctype="multipart/form-data" >
 <input type="hidden" name="metodo" value="<?php echo $_GET['action'];?>">
 
-<?php if($_GET['action'] == 'criar'){ ?>
+<?php if($_GET['action'] == 'create'){ ?>
     <input type="hidden" name="frmadddate" value="<?php echo date("Y-m-d H:i:s"); ?>">
     <input type="hidden" name="frmautor" value="<?php echo $_SESSION['loginid'];?>">
 <?php } else { ?>

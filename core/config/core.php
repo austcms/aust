@@ -11,4 +11,10 @@ Registry::write('permission_needed_dirs',
             CACHE_JS_CONTENT,
         ));
 
+Registry::write('default_actions',
+        array(
+            'Criar' => 'create',
+            'Listar' => 'listing',
+            'Editar' => 'edit',
+        ));
 ?>

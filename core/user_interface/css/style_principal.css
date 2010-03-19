@@ -173,11 +173,17 @@ div#link_bottom span.para_webmaster {
  * Pessoas e permissões
  */
 
-div.action_options ul li {
-    line-height: 20px;
+div#permissoesAtuais .structure {
+    border-bottom: 1px solid #efefef;
+    margin: 0 0 5px 0;
+    padding: 0 0 5px 0;
 }
-    div.action_options ul li.sem_icone {
-        margin-left: 20px;
+    div#permissoesAtuais .title {
+        font-weight: bold;
+    }
+    div#permissoesAtuais .actions {
+        margin: 5px 0 0 15px;
+        color: #666666;
     }
 
 /* DEBUG */

@@ -33,7 +33,13 @@ if( !empty($_POST['id']) ){
 
     //pr($agente);
 /**
- * Se nenhuma ação deve ser tomada, escreve checkboxes
+ *
+ * CHECKBOXES PARA DEFINIÇÃO DE PERMISSÕES
+ *
+ * Se nenhuma ação deve ser tomada, escreve checkboxes.
+ *
+ * Mostra as actions possíveis em cada estrutura (create, edit, listing, etc).
+ * Lista as estruturas e abaixo os actions.
  *
  *
  */
@@ -52,9 +58,12 @@ if(empty($_GET['action'])){
                                 ), 'all'
     );
 
+
+
     /**
      * CarregaPermissões
      */
+
     if($_POST['tipo'] == 'userTipo'){
         $permissoesCondition = array('admins_tipos_id' => $_POST['id']);
     } elseif($_POST['tipo'] == 'user'){
@@ -64,30 +73,78 @@ if(empty($_GET['action'])){
                                     'table' => 'admins_permissions',
                                     'conditions' => $permissoesCondition,
 
-                                    'fields' => array('categorias_id'),
+                                    'fields' => array('categorias_id', 'action'),
                                 ), 'all'
     );
 
+    /*
+     * Define os actions principais
+     */
+    $actions = Registry::read('default_actions');
+
     $categoriasChecked = array();
     foreach($permissoes as $valor){
-        $categoriasChecked[] = $valor['categorias_id'];
+        if( !empty($valor['action']) )
+            $categoriasChecked[ $valor['categorias_id'] ][$valor['action']] = true;
     }
 
+    //pr($categoriasChecked);
+
+    /*
+     * HelperFunction
+     *
+     * Escreve 'checked' nos devidos actions a seguir
+     */
+    function isCheckedPermission($structure, $action){
+        global $categoriasChecked;
+
+        if( empty($categoriasChecked[$structure]) )
+            return false;
+
+        if( !empty($categoriasChecked[$structure][$action])
+            AND $categoriasChecked[$structure][$action] == true )
+        {
+            return 'checked="true"';
+        }
+        return false;
+
+    }
 
     foreach($categorias as $valor){
 
         /**
          * Se for estrutura, deixa negrito
          */
-        if($valor['classe'] == 'estrutura'){
-            echo '<strong>';
-        }
         ?>
-        <input type="checkbox" id="<?php echo $valor['nome']; ?>" <?php if(in_array($valor['id'], $categoriasChecked)) echo 'checked="true"'; ?> onchange="alteraPermissao('tipo=<?php echo $_POST['tipo']; ?>&agentid=<?php echo $agente['0']['id']; ?>&categoria=<?php echo $valor['id']; ?>', this)" value="<?php echo $valor['nome']; ?>" /> <?php echo $valor['nome']; ?> (<?php echo $valor['tipo_legivel']; ?>)<br />
+        <div class="structure">
+        <div class="title">
+            <?php echo $valor['nome']; ?>
+        </div>
+        <div class="actions">
+            <?php
+            /*
+             *
+             * ACTIONS POSSÍVEIS
+             *
+             * Lista os actions (create,edit, listing, etc)
+             * com um checkbox em cada um.
+             * 
+             */
+            foreach( $actions as $action_name=>$action ){
+                ?>
+                <input
+                    type="checkbox"
+                    id="<?php echo $valor['nome'].'_'.$action; ?>"
+                     <?php echo isCheckedPermission($valor['id'], $action) ?>
+                    onchange="alteraPermissao('tipo=<?php echo $_POST['tipo']; ?>&agentid=<?php echo $agente['0']['id']; ?>&categoria=<?php echo $valor['id']; ?>&action=<?php echo $action; ?>', this)"
+                    value="<?php echo $valor['nome']; ?>" />
+                    <?php echo $action_name; ?>
+                <?php
+            }
+            ?>
+        </div>
+        </div>
         <?php
-        if($valor['classe'] == 'estrutura'){
-            echo '</strong>';
-        }
     }
 /**
  * 'ACTION == altera_permissao'
@@ -99,6 +156,7 @@ if(empty($_GET['action'])){
  */
 } elseif($_GET['action'] == 'altera_permissao'){
 
+    pr($_POST);
     /**
      * Cria permissão
      */
@@ -119,9 +177,9 @@ if(empty($_GET['action'])){
          */
         $sql = "INSERT INTO
                     admins_permissions
-                    (".$agenteTipo.",categorias_id,tipo,adddate)
+                    (".$agenteTipo.",categorias_id,tipo,adddate,action)
                 VALUES
-                    ('".$_POST['agentid']."','".$_POST['categoria']."','permit','".DataParaMySQL('horario')."')
+                    ('".$_POST['agentid']."','".$_POST['categoria']."','permit','".DataParaMySQL('horario')."', '".$_POST['action']."')
                 ";
 
     /**
@@ -144,7 +202,8 @@ if(empty($_GET['action'])){
                     admins_permissions
                 WHERE
                     ".$agenteTipo."='".$_POST['agentid']."' AND
-                    categorias_id='".$_POST['categoria']."'
+                    categorias_id='".$_POST['categoria']."' AND
+                    action='".$_POST['action']."'
                 ";
     }
 

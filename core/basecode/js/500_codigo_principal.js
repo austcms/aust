@@ -194,9 +194,9 @@ function mostraPermissoes(id, tipo){
 /**
  * Altera permissões de usuários
  *
- * @param string posted Contém a query string direto que será enviada como está
- * para o PHP no Ajax
- * 
+ * @param posted O que será gravado
+ * @param este =this
+ * @return bool
  */
 function alteraPermissao(posted, este){
     //alert('soijarg');

@@ -10,6 +10,8 @@ require_once 'core/libs/functions/func.php';
 
 class ConteudoTest extends PHPUnit_Framework_TestCase
 {
+    public $lastSaveId;
+    
     public function setUp(){
         /*
          * MÓDULOS ATUAL
@@ -122,7 +124,7 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
          */
             $sql = "SELECT id FROM textos WHERE titulo='".$params['titulo']."'";
             $this->assertArrayHasKey(0,
-                    $this->obj->connection->query($sql), 'Não salvou o arquivo'
+                    $this->obj->connection->query($sql), 'Não salvou o conteúdo'
                 );
 
         /**
@@ -154,6 +156,7 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
         );
 
         $this->assertTrue( $this->obj->saveEmbeddedModules($params) );
+        
 
     }
 
@@ -195,13 +198,30 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
     function testDelete(){
 
         $params = array(
-            'titulo' => 'Notícia de teste123456789',
+            'metodo' => 'criar',
+            'frmadddate' => '2010-02-12 19:30:42',
+            'frmautor' => '1',
+            'w' => '',
+            'aust_node' => '2',
+            'frmcategoria' => '4',
+            'frmtitulo' => 'Notícia de teste123456789',
+            'frmtexto' => 'Esta notícia foi inserida via teste unitário',
+            'contentTable' => 'textos',
+            'submit' => 'Enviar!',
         );
-        
-        $this->assertGreaterThan(0, $this->obj->delete('textos', $params) );
-        $this->assertFalse( $this->obj->delete('textos', array()) );
 
-        $this->assertEquals( 0, $this->obj->delete('textos', array('titulo' => '123890567')) );
+        $this->assertTrue( $this->obj->save($params) );
+
+        $this->assertTrue( $this->obj->delete($this->obj->connection->lastInsertId()) );
+
+        //$params = array(
+//            'titulo' => 'Notícia de teste123456789',
+//        );
+        
+        //$this->assertGreaterThan(0, $this->obj->delete('textos', $params) );
+        //$this->assertFalse( $this->obj->delete('textos', array()) );
+
+        //$this->assertEquals( 0, $this->obj->delete('textos', array('titulo' => '123890567')) );
     }
 
 
@@ -295,17 +315,5 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
         //$this->assertArrayHasKey(0, $this->obj->load() );
     }
 
-    function testLoadWithEmbedData(){
-        /*
-         * Salva dados no DB para que se possa testar
-         */
-
-         //$this->obj->
-
-    }
-
-    function testLoadEmbed(){
-
-    }
 }
 ?>
