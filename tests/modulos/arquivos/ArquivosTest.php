@@ -89,7 +89,7 @@ class ArquivosTest extends PHPUnit_Framework_TestCase
 
     function testGenerateSqlFromForm(){
         $post = array(
-            'w' => '1',
+            //'w' => '1',
             'naocampo' => 'naocampo',
             'frmcampo1' => 'valor1',
         );
@@ -107,6 +107,7 @@ class ArquivosTest extends PHPUnit_Framework_TestCase
         /*
          * UPDATE sql
          */
+        $post['w'] = 1;
         $sql = $this->obj->generateSqlFromForm($post, 'edit');
         $sql = preg_replace('/\n|\t/Us', "", $sql);
         $sql = preg_replace('/\s{2,}/s', " ", $sql);
