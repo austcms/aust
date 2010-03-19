@@ -278,6 +278,11 @@ class Connection extends SQLObject {
      */
     public function exec($sql, $mode = ''){
         /**
+         * Timer init
+         */
+        $sT = microtime(true);
+        
+        /**
          * Se a extensão PDO está ativada
          */
         if($this->PdoExtension()){
@@ -286,6 +291,10 @@ class Connection extends SQLObject {
              */
             
             $result = $this->conn->exec($sql);
+
+            if( $result === false){
+                $debugResult = end( $this->conn->errorInfo() );
+            }
 
             /**
              * Quando executado CREATE TABLE, retorno com sucesso é 0 e
@@ -299,10 +308,35 @@ class Connection extends SQLObject {
                     return false;
                 }
             }
-            return $result;
         } else {
-            return mysql_query($sql);
+            $result = mysql_query($sql);
         }
+
+        /*
+         * Salva debug SQL
+         */
+        if( Registry::read('debugLevel') > 1 ){
+
+            $sEnd = microtime(true);
+
+            if( !is_string($debugResult) ){
+                $debugResult = count($result);
+            }
+            /*
+             * DESCRIBE NÃO SÃO MOSTRADOS
+             */
+            if( substr( $sql, 0, 8 ) !== 'DESCRIBE' ){
+                $debugVars = array(
+                    'sql' => $sql,
+                    'result' => $debugResult,
+                    'time' => $sEnd - $sT
+                );
+                Registry::add('debug',$debugVars);
+            }
+        }
+
+        return $result;
+
     }
 
     /**

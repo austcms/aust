@@ -39,7 +39,7 @@ if(is_file( Modulos::MOD_DIR .$aust->LeModuloDaEstrutura($_GET['aust_node']).'/'
                 WHERE
                     id='$w'
                 ";
-        if ($modulo->conexao->exec($sql)){
+        if ($modulo->connection->exec($sql)){
         ?>
             <div style="width: 680px; display: table;">
                 <div style="background: red; padding: 15px; text-align: center;">
@@ -77,7 +77,7 @@ if(is_file( Modulos::MOD_DIR .$aust->LeModuloDaEstrutura($_GET['aust_node']).'/'
                 WHERE
                     id='$w'
                 ";
-        if ($modulo->conexao->exec($sql)){
+        if ($modulo->connection->exec($sql)){
         ?>
             <div style="width: 680px; display: table;">
                 <div style="background: green; padding: 15px; text-align: center;">
@@ -142,8 +142,7 @@ if(is_file( Modulos::MOD_DIR .$aust->LeModuloDaEstrutura($_GET['aust_node']).'/'
                         $where
                         ";
 
-
-            if($modulo->conexao->exec($sql)){
+            if($modulo->connection->exec($sql)){
                 $resultado = TRUE;
             } else {
                 $resultado = FALSE;

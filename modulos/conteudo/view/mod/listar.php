@@ -122,7 +122,7 @@ if(count($query) == 0){
  * mostra painel de navegação para paginação
  */
 
-    $sql = $modulo->getSQLForListing($categorias);
+    //$sql = $modulo->getSQLForListing($categorias);
     $total_registros = $modulo->connection->count($sql);
 
     $total_paginas = $total_registros/$numPorPagina;

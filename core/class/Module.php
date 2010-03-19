@@ -148,7 +148,6 @@ class Module
      * @return <array>
      */
     public function load($param = ''){
-
         $this->loadedIds = array();
         
         $qry = $this->connection->query($this->loadSql($param));
@@ -158,12 +157,21 @@ class Module
 
         $qry = $this->_organizesLoadedData($qry);
 
-        $austNode = $param['austNode'];
+        if( is_array($param['austNode']) ){
+            $austNode = reset( array_keys( $param['austNode'] ) );
+        } else {
+            $austNode = $param['austNode'];
+        }
+
         $embedModules = $this->getRelatedEmbed($austNode);
+
 
         if( empty($embedModules)
             OR empty($this->loadedIds) )
+        {
+            sort($qry);
             return $qry;
+        }
 
         /*
          * Carrega dados dos módulos relacionados via embed
@@ -258,7 +266,7 @@ class Module
             if( !is_array($austNode) )
                 $austNode = array($austNode);
 
-            $where = $where . " AND categoria IN ('".implode("','", $austNode)."')";
+            $where = $where . " AND categoria IN ('".implode("','", array_keys($austNode) )."')";
         }
 
         /*
@@ -390,6 +398,26 @@ class Module
             return $this->mainTable;
 
         return $this->useThisTable;
+    }
+    /**
+     * alias getContentTable()
+     *
+     * Retorna o nome da tabela principal.
+     *
+     * @return <string>
+     */
+    public function getContentTable(){
+        return $this->useThisTable();
+    }
+    /**
+     * alias getMainTable()
+     *
+     * Retorna o nome da tabela principal.
+     *
+     * @return <string>
+     */
+    public function getMainTable(){
+        return $this->useThisTable();
     }
 
     /*
@@ -628,16 +656,6 @@ class Module
     }
     public function getValuesFromPost(){
 
-    }
-    /**
-     * getContentTable()
-     *
-     * Retorna o nome da tabela principal.
-     *
-     * @return <string>
-     */
-    public function getContentTable(){
-        return $this->tabela_criar;
     }
 
     public function loadConfig(){
@@ -1080,7 +1098,7 @@ class Module
      */
     // retorna o nome da tabela da estrutura
     function LeTabelaDaEstrutura($param='') {
-        return $this->mainTable;
+        return $this->useThisTable();
     }
 
     /*

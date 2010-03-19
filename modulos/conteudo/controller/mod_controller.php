@@ -51,11 +51,12 @@ class ModController extends ModsController
          * SQL para listagem
          */
         $params = array(
-            'categorias' => $categorias,
+            'austNode' => $categorias,
             'pagina' => $pagina,
             'resultadosPorPagina' => $num_por_pagina
         );
         $sql = $this->modulo->loadSql($params);
+        $this->set('sql', $sql );
 
         /*
          * Query com resultado
@@ -72,6 +73,23 @@ class ModController extends ModsController
 
     public function editar(){
 
+        $this->set('tagh2', "Editar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']) );
+        $this->set('tagp', 'Edite o conteúdo abaixo.');
+
+        $w = (!empty($_GET['w'])) ? $_GET['w'] : '';
+        $this->set('w', $w);
+
+
+        $sql = "
+                SELECT
+                    *
+                FROM
+                    ".$this->modulo->getContentTable()."
+                WHERE
+                    id='$w'
+                ";
+        $query = $this->modulo->connection->query($sql);
+        $this->set('dados', $query[0] );
         
         $this->render('form');
     }

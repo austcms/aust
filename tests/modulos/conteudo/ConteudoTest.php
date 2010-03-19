@@ -62,7 +62,7 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
                         trim($sql) );
 
         unset($sql);
-        $sql = $this->obj->loadSql( array('page'=>3, 'id'=>'1', 'austNode' => array('3','4')) );
+        $sql = $this->obj->loadSql( array('page'=>3, 'id'=>'1', 'austNode' => array('3'=>'categoria1','4'=>'categoria1')) );
         $sql = preg_replace('/\n|\t/Us', "", preg_replace('/\s{2,}/s', " ", $sql));
         $this->assertEquals( trim("SELECT id, titulo, visitantes, categoria AS cat, ".
                         "DATE_FORMAT(adddate, '%d/%m/%Y %H:%i') as adddate, ".
@@ -271,7 +271,7 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
          * VERIFICA LOAD()
          */
         $params = array(
-            'austNode' => $catLastInsertId
+            'austNode' => array($catLastInsertId => 'teste7777'),
         );
 
         $result = $this->obj->load($params);
@@ -286,6 +286,7 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
         $sql = "DELETE FROM modulos_conf WHERE id='$modConfLastInsertId' AND valor='teste7777'";
         $this->obj->connection->query($sql);
 
+        //var_dump($result);
         $this->assertArrayHasKey(0, $result, "Module::load() não funcionando" );
         $this->assertArrayHasKey('Privilegios', reset($result), "Dados embed de Module::load() não retornam" );
 
