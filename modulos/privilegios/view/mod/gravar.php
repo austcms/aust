@@ -99,9 +99,9 @@ if(!empty($_POST)) {
         }
 
 
-    $success = $this->modulo->conexao->exec($sql);
+    $success = $this->modulo->connection->exec($sql);
     if( $success !== false ) {
-        $insert_id = $this->modulo->conexao->lastInsertId();
+        $insert_id = $this->modulo->connection->lastInsertId();
 
         if( !empty($_POST['w']) ){
             $insert_id = $_POST['w'];
@@ -116,7 +116,7 @@ if(!empty($_POST)) {
          * 'Categoria' significa que uma estrutura inteira está bloqueada.
          */
             $sql_delete = "DELETE FROM privilegio_target WHERE privilegio_id='".$insert_id."'";
-            $this->modulo->conexao->exec($sql_delete);
+            $this->modulo->connection->exec($sql_delete);
 
         if( $_POST["privilegio_tipo"] == "categoria" 
             AND !empty($_POST["categoria_id"]) )
@@ -126,9 +126,9 @@ if(!empty($_POST)) {
                                 privilegio_target
                                 (privilegio_id, target_table,target_id, type, admin_id, created_on)
                             VALUES
-                                ('".$insert_id."','".CoreConfig::read('austTable')."','".$_POST["categoria_id"]."', 'structure','".$_POST['frmadmin_id']."','".date("Y-m-d")."')
+                                ('".$insert_id."','".Registry::read('austTable')."','".$_POST["categoria_id"]."', 'structure','".$_POST['frmadmin_id']."','".date("Y-m-d")."')
                             ";
-            $this->modulo->conexao->exec($sql_tipo);
+            $this->modulo->connection->exec($sql_tipo);
         }
 
         $resultado = TRUE;

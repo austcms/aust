@@ -53,8 +53,8 @@ if( !empty($_POST) AND $save  ) {
                     ordem asc
                 ";
         //echo $sql;
-        $query = $modulo->conexao->query($sql);
-        $total = $modulo->conexao->count($sql);
+        $query = $modulo->connection->query($sql);
+        $total = $modulo->connection->count($sql);
 
         $ordem = 0;
         foreach ( $query as $dados ){
@@ -155,7 +155,7 @@ if( !empty($_POST) AND $save  ) {
             $h1 = 'Editando: '.$this->aust->leNomeDaEstrutura($_GET['aust_node']);
     }
 
-    $query = $this->modulo->conexao->exec($sql);
+    $query = $this->modulo->connection->exec($sql);
     //echo $sql;
     //$query = false;
     if($query) {
@@ -163,7 +163,7 @@ if( !empty($_POST) AND $save  ) {
 
         // se estiver criando um registro, guarda seu id para ser usado por módulos embed a seguir
         if($_POST['metodo'] == 'criar') {
-            $_POST['w'] = $this->modulo->conexao->conn->lastInsertId();
+            $_POST['w'] = $this->modulo->connection->conn->lastInsertId();
         }
 
 

@@ -50,7 +50,7 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
                     arquivos
                 WHERE
                     {$where}";
-        $mysql = $modulo->conexao->query($sql);
+        $mysql = $modulo->connection->query($sql);
         $dados = $mysql[0];
 
         // se conseguir excluir o arquivo fisicamente, então exclui dados do DB
@@ -66,7 +66,7 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
                         WHERE
                             $where
                             ";
-                if($modulo->conexao->exec($sql)){
+                if($modulo->connection->exec($sql)){
                     $resultado = TRUE;
                 } else {
                     $resultado = FALSE;
@@ -143,7 +143,7 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
                     $where
                     ";
         //echo $sql;
-        if($modulo->conexao->exec($sql)){
+        if($modulo->connection->exec($sql)){
             $resultado = TRUE;
         } else {
             $resultado = FALSE;

@@ -179,3 +179,18 @@ div.action_options ul li {
     div.action_options ul li.sem_icone {
         margin-left: 20px;
     }
+
+/* DEBUG */
+table.debug {
+    width: 96%;
+    margin: 15px auto;
+    font-size: 1em;
+    color: #666666;
+    font-family: 'Monaco', 'System', Monospace;
+}
+    table.debug tr.header td { padding-right: 5px; }
+    table.debug td.sql { padding-bottom: 5px; }
+    table.debug tr.list td.time,
+    table.debug tr.list td.result { text-align: center; }
+
+    table.debug tr.error { color: red; font-style: italic; }

@@ -111,7 +111,7 @@ if( !empty($_POST) AND $save  ) {
         $h1 = 'Editando: '.$this->aust->leNomeDaEstrutura($_GET['aust_node']);
     }
 
-    $query = $this->modulo->conexao->exec($sql);
+    $query = $this->modulo->connection->exec($sql);
     //$query = false;
 
     /*
@@ -122,7 +122,7 @@ if( !empty($_POST) AND $save  ) {
 
         // se estiver criando um registro, guarda seu id para ser usado por módulos embed a seguir
         if($_POST['metodo'] == 'criar') {
-            $_POST['w'] = $this->modulo->conexao->conn->lastInsertId();
+            $_POST['w'] = $this->modulo->connection->conn->lastInsertId();
         }
 
         /*
@@ -155,7 +155,7 @@ if( !empty($_POST) AND $save  ) {
                                 )
                                 ";
                 
-                if( ! $this->modulo->conexao->exec($sqlImagem) )
+                if( ! $this->modulo->connection->exec($sqlImagem) )
                     $erroImg[] = $valor["filename"];
                     
                 unset($sqlImagem);

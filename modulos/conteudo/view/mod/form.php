@@ -12,12 +12,13 @@
     );
     $moduloConfig = $modulo->loadModConf($params);
 
+    $modulo->loadHtmlEditor();
+
 
 /*
  * Ajusta variáveis iniciais
  */
     $aust_node = (!empty($_GET['aust_node'])) ? $_GET['aust_node'] : '';
-    $w = (!empty($_GET['w'])) ? $_GET['w'] : '';
 
 /*
  * [Se novo conteúdo]
@@ -32,18 +33,6 @@
  */
     else if($_GET['action'] == 'editar'){
 
-        $tagh2 = "Editar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
-        $tagp = 'Edite o conteúdo abaixo.';
-        $sql = "
-                SELECT
-                    *
-                FROM
-                    ".$modulo->tabela_criar."
-                WHERE
-                    id='$w'
-                ";
-        $query = $modulo->conexao->query($sql);
-        $dados = $query[0];
     }
 ?>
 <p>
@@ -85,7 +74,7 @@
                 <?php
             }
 
-            echo BuildDDList( CoreConfig::read('austTable') ,'frmcategoria', $administrador->tipo ,$aust_node, $current_node);
+            echo BuildDDList( Registry::read('austTable') ,'frmcategoria', $administrador->tipo ,$aust_node, $current_node);
             ?>
 
 

@@ -22,7 +22,7 @@
      * Contém quais as outras estruturas (nodes) que são relacionadas à
      * estrutura atual.
      */
-    $embedRelatedNodes = $modulo->getRelatedEmbed($_GET["aust_node"]);
+    $embedRelatedNodes = $modulo->getRelatedEmbedAsArray($_GET["aust_node"]);
 
 
 
@@ -40,10 +40,13 @@
         <?php
          * 
          */
-    
+
+        /*
+         * Contagem atual do módulo embed
+         */
+        $embedI = 0;
         foreach($embed AS $chave=>$valor){
             if( in_array( $valor["id"], $embedRelatedNodes ) ){
-
                 // Inicializa algumas variáveis
                     $embed_form = array();
 
@@ -52,10 +55,15 @@
                     include($valor['pasta'].'/embed/embed_info.php');
                 }
 
+                include($valor['pasta'].'/'.MOD_CONFIG);
                 // Em quais actions este módulo deve ser embed?
+                echo '<input type="hidden" name="embed['.$embedI.'][className]" value="'.$modInfo['className'].'" />';
+                echo '<input type="hidden" name="embed['.$embedI.'][dir]" value="'.$valor['pasta'].'" />';
 
-                //pr($embed_form);
-                if(!empty($embed_form) AND in_array($_GET['action'], $embed_form['actions'])){
+                if( !empty($embed_form) AND
+                    in_array($_GET['action'], $embed_form['actions']))
+                {
+
                     if(is_file($valor['pasta'].'/embed/form.php')){
                         include($valor['pasta'].'/embed/form.php');
                         //include($valor['pasta'].'/index.php');
@@ -79,7 +87,10 @@
                     }
                 }
             } // fim if( pode ser embed )
+            $embedI++;
         } // fim for()
+
+        unset($embedI);
     }
     //unset($embed);
     //unset($modulo);

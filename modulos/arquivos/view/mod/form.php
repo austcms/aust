@@ -17,7 +17,7 @@ $aust_node = (!empty($_GET['aust_node'])) ? $_GET['aust_node'] : '';
     $moduloConfig = $modulo->loadModConf($params);
 
 
-if($_GET['action'] == 'editar'){
+if($_GET['action'] == 'edit'){
     $h1 = 'Edite informações do arquivo';
     $sql = "
             SELECT
@@ -27,12 +27,12 @@ if($_GET['action'] == 'editar'){
             WHERE
                 id='".$_GET['w']."'
             ";
-    $mysql = $modulo->conexao->query($sql);
+    $mysql = $modulo->connection->query($sql);
     $dados = $mysql[0];
-    $fm = "editar";
+    $fm = "edit";
 } else {
     $h1 = 'Novo arquivo';
-    $fm = "criar";
+    $fm = "create";
 }
 
 /*
@@ -52,7 +52,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
 <p>Envie um arquivo para o site.</p>
 
 <form method="post" action="adm_main.php?section=<?=$_GET['section'];?>&action=gravar&aust_node=<?=$_GET['aust_node']?>" enctype="multipart/form-data">
-    <input type="hidden" name="metodo" value="<?=$fm;?>">
+    <input type="hidden" name="method" value="<?php echo $_GET['action'];?>">
 
     <input type="hidden" name="w" value="<?php ifisset($_GET['w']);?>">
     <input type="hidden" name="aust_node" value="<?php echo $austNode;?>">
@@ -81,17 +81,35 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
             <td>
                 <div id="categoriacontainer">
                 <?php
-                if($fm == "editar"){
+                if($fm == "edit"){
                     $current_node = $dados['categoria_id'];
                 }
-                echo BuildDDList( CoreConfig::read('austTable'), 'frmcategoria_id', $escala, $aust_node, $current_node );
+                echo BuildDDList( Registry::read('austTable'), 'frmcategoria_id', $escala, $aust_node, $current_node );
                 ?>
                 </div>
+                <?php
+                /*
+                 * Nova_Categoria?
+                 */
+                $showNovaCategoria = false;
+                if( !empty($moduloConfig["nova_categoria"]) ){
+                    if( $moduloConfig["nova_categoria"]["valor"] == "1" )
+                        $showNovaCategoria = true;
+                }
+                if( $showNovaCategoria ){
+                    $param = array(
+                        'austNode' => $austNode,
+                        'categoryInput' => 'frmcategoria_id',
+                    );
+                    lbCategoria( $param );
+                }
+                ?>
+
             </td>
         </tr>
     <?php
     } else {
-        if($fm == "editar"){
+        if($fm == "edit"){
             $current_node = $dados['categoria_id'];
         } else {
             $current_node = $aust_node;
@@ -104,14 +122,14 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
 
     <tr>
         <td valign="top" class="first">
-            <?php if($fm == "editar"){ ?>
+            <?php if($fm == "edit"){ ?>
                 Arquivo:
             <?php }else{ ?>
                 Selecione o arquivo:
             <?php } ?>
         </td>
         <td class="second">
-            <?php if($fm == "editar"){ ?>
+            <?php if($fm == "edit"){ ?>
                 <span style="font-weight: bold;">
                     <?php echo $dados['arquivo_nome'] ?>
                 </span>
@@ -128,7 +146,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
     /**
      * PATH DO ARQUIVO PARA LINK?
      */
-    if($fm == "editar"){
+    if($fm == "edit"){
         $showshow_path_to_link = false; // por padrão, não mostra
         if( !empty($moduloConfig["show_path_to_link"]) ){
             if( $moduloConfig["show_path_to_link"]["valor"] == "1" )

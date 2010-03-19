@@ -48,7 +48,7 @@ if($_GET['action'] == 'criar') {
             WHERE
                 id='$w'
             ";
-    $query = $modulo->conexao->query($sql);
+    $query = $modulo->connection->query($sql);
     $dados = $query[0];
 }
 ?>
@@ -93,7 +93,7 @@ if($_GET['action'] == 'criar') {
                     WHERE
                         privilegio_id='$w'
                     ";
-            $query = $modulo->conexao->query($sql);
+            $query = $modulo->connection->query($sql);
             $node = $query[0];
             if( is_array($node) )
                 $current_node = reset($node);
@@ -105,11 +105,11 @@ if($_GET['action'] == 'criar') {
                     SELECT
                         id, nome
                     FROM
-                        ".CoreConfig::read('austTable')."
+                        ".Registry::read('austTable')."
                     WHERE
                         id IN ('".implode("','", $categorias)."')
                     ";
-            $query = $modulo->conexao->query($sql);
+            $query = $modulo->connection->query($sql);
 
             /*
              * Cria <select>
@@ -140,7 +140,7 @@ if($_GET['action'] == 'criar') {
     }
 
     // escreve <select>
-    //echo BuildDDList( CoreConfig::read('austTable'),'categoria_id',$escala,'',$current_node);
+    //echo BuildDDList( Registry::read('austTable'),'categoria_id',$escala,'',$current_node);
     ?>
 </div>
 

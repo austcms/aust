@@ -1,101 +1,112 @@
 <?php
-class Privilegios extends Modulos {
+class Privilegios extends Module
+{
 
-// TABELA
-    protected $db_tabelas;
-    protected $sql_das_tabelas;
-    protected $sql_registros;
-    public $tabela_criar;
+    public $mainTable = "privilegios";
 
-    /**
-     *
-     * @var class Classe responsável pela conexão com o banco de dados
-     */
-    public $conexao;
-    /**
-     *
-     * @var class Configurações do módulo
-     */
-    public $config;
-	/*********************************
-	*
-	*	funções de ação
-	*
-	*********************************/
-
-    function __construct($param = '') {
-        // define qual é a tabela principal
+    public function __construct($param = '') {
+        
         $this->tabela_criar = "privilegios";
         parent::__construct($param);
 
-        //$this->tabela_criar = "privilegios_conf";
+    }
+
+    /*
+     *
+     * CRUD
+     *
+     */
+
+    public function saveEmbed($params){
+        $data = $params['data'];
+
         /*
-        // sql das tabelas
-        $this->db_tabelas[] = "privilegios_conf";
-        $this->sql_das_tabelas[] = "
-			CREATE TABLE privilegios_conf (
-				id int NOT NULL auto_increment,
-				tipo varchar(80) {$charset},
-				chave varchar(120) {$charset},
-				valor text {$charset},
-				nome varchar(120) {$charset},
-				comentario text {$charset},
-				descricao text {$charset},
-				ref_tabela varchar(120) {$charset},
-				ref_campo varchar(120) {$charset},
-				referencia varchar(120) {$charset},
-				especie varchar(120) {$charset} COMMENT 'Se é específico de um módulo ou não (ex: privilégio do módulo texto)',
-				classe varchar(120) {$charset} COMMENT 'Se é padrão do sistema ou não',
-				necessario bool,
-				restrito bool,
-				publico bool,
-				desativado bool,
-				desabilitado bool,
-				bloqueado bool,
-				aprovado int,
-				categorias_id int,
-				adddate datetime,
-				autor int,
-				PRIMARY KEY (id),
-				UNIQUE id (id)
-			) {$charset}
-            ";
+         * Último ID inserido.
+         */
+        $w = $params['w'];
+        /*
+         * Esta é a tabela principal do módulo pai
+         */
+        $targetTable = $params['targetTable'];
 
-        $this->db_tabelas[] = "privilegios_de_conteudos";
-        $this->sql_das_tabelas[] = "
-			CREATE TABLE privilegios_de_conteudos (
-				id int NOT NULL auto_increment,
-				tipo varchar(80) {$charset},
-				privilegios_conf_id varchar(80) {$charset},
-                conteudo_tabela varchar(120) {$charset},
-                conteudo_id int,
-                expiradate datetime,
-				adddate datetime,
-				autor int,
-				PRIMARY KEY (id),
-				UNIQUE id (id)
-			) {$charset}
-            ";
+        /*
+         * Se $w está vazio, é um novo conteúdo
+         */
+        if(empty($w) AND $params['metodo'] == 'criar'){
+            /*
+             * $insert_id pega o último id inserido do conteúdo principal. Não é
+             * seguro pegar este valor aqui, mas sim que o conteúdo
+             * principal já tenha salvo o valor em $w
+             */
+            $insert_id = $this->connection->lastInsertId();
+        } elseif(!empty($w)) {
+            $insert_id = $w;
+        }
 
-        $this->db_tabelas[] = "privilegios_de_usuarios";
-        $this->sql_das_tabelas[] = "
-			CREATE TABLE privilegios_de_usuarios (
-				id int NOT NULL auto_increment,
-				tipo varchar(80) {$charset},
-				privilegios_conf_id varchar(80) {$charset},
-                usuario_tabela varchar(120) {$charset},
-                usuario_id int,
-                expiradate datetime,
-				adddate datetime,
-				autor int,
-				PRIMARY KEY (id),
-				UNIQUE id (id)
-			) {$charset}
-            ";
+        /*
+         * Se foi clicado algum item no form de inclusão
+         */
+        if(is_array($data['privid'])){
+            /*
+             * Deleta privilégio anterior para fazer a atualização agora
+             */
+            $sql_delete = "DELETE
+                            FROM
+                                privilegio_target
+                            WHERE
+                                target_table='".$targetTable."' AND
+                                target_id='".$insert_id."'
+                            ";
 
-        $this->sql_registros[] = "INSERT INTO privilegios_conf(tipo,chave,valor,classe) VALUES ('grupo','nome','Cadastrados','padrão')";
-        */
+            $this->connection->exec($sql_delete);
 
+            /*
+             * Prepara o sql
+             */
+            $itens = $data['privid'];
+            
+            foreach( $itens as $valor ){
+                $embed_sql[] = "INSERT INTO
+                                    privilegio_target
+                                    (privilegio_id, target_table,
+                                    target_id, created_on, admin_id, type)
+                                VALUES
+                                    ('$valor','$targetTable','$insert_id',
+                                    '".date("Y-m-d")."',
+                                    '".User::getInstance()->getId()."', 'content')
+                                ";
+
+            }
+
+            foreach($embed_sql as $valor){
+                $this->connection->exec($valor);
+                $this->w = $this->connection->lastInsertId();
+            }
+
+
+        } else {
+            /*
+             * Deleta privilégio anterior para fazer a atualização agora
+             */
+            $sql_delete = "DELETE
+                            FROM
+                                privilegio_target
+                            WHERE
+                                target_table='".$targetTable."' AND
+                                target_id='".$insert_id."'
+                            ";
+
+            $this->connection->exec($sql_delete);
+        }
+
+        return true;
+        
+    }
+
+    public function loadEmbed($param = array()){
+        $this->mainTable = "privilegio_target";
+
+        return parent::loadEmbed($param);
 
     }
 
@@ -110,7 +121,7 @@ class Privilegios extends Modulos {
                     tipo='relacionamentos'
                 ";
         //echo $sql;
-        $result = $this->conexao->query($sql);
+        $result = $this->connection->query($sql);
         $return = array();
         foreach( $result as $key=>$valor ){
             $return[] = reset($valor);
@@ -118,11 +129,16 @@ class Privilegios extends Modulos {
         return $return;
     }
 
-    /*
-     * funções de verificação ou leitura automática do DB
+    /**
+     * SQLParaListagem()
+     * 
+     * funções de verificação ou leitura automática do DB.
+     *
+     * @param <array> $param
+     * @return <array>
      */
     public function SQLParaListagem($param) {
-    // configura e ajusta as variáveis
+        // configura e ajusta as variáveis
         $categorias = $param['categorias'];
         $metodo = $param['metodo'];
         $w = $param['id'];
@@ -159,7 +175,7 @@ class Privilegios extends Modulos {
 
                     DATE_FORMAT(created_on, '%d/%m/%Y') as adddate
                     FROM
-                            ".$this->tabela_criar." AS conf
+                        ".$this->tabela_criar." AS conf
                 ORDER BY adddate DESC
                 ";
         return $sql;

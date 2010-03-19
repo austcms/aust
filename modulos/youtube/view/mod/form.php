@@ -44,7 +44,7 @@
                 WHERE
                     id='$w'
                 ";
-        $query = $modulo->conexao->query($sql);
+        $query = $modulo->connection->query($sql);
         $dados = $query[0];
     }
 ?>
@@ -99,7 +99,7 @@
                     <?php
                 }
 
-                echo BuildDDList( CoreConfig::read('austTable') ,'frmcategoria', $administrador->tipo ,$aust_node, $current_node);
+                echo BuildDDList( Registry::read('austTable') ,'frmcategoria', $administrador->tipo ,$aust_node, $current_node);
                 ?>
                 </div>
 

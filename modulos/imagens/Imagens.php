@@ -12,7 +12,7 @@
  * @since v0.1.5, 30/05/2009
  */
 
-class Imagens extends Modulos
+class Imagens extends Module
 {
 
 	// TABELA

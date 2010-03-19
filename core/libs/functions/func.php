@@ -374,6 +374,10 @@ function PegaExtensao($param){
     return $ext[0];
 }
 
+function loadHtmlEditor(){
+    include(THIS_TO_BASEURL.BASECODE_JS.'html_editor.php');
+}
+
 /*
  * DEBUG
  *

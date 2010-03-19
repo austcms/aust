@@ -7,7 +7,7 @@
  * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @since v0.1.6, 09/07/2009
  */
-class Cadastro extends Modulos {
+class Cadastro extends Module {
 
     function __construct($param = ''){
 
@@ -35,7 +35,7 @@ class Cadastro extends Modulos {
          * Busca na tabela cadastros_conf por informações relacionadas ao
          * austNode selecionado.
          */
-        $temp = $this->conexao->query(
+        $temp = $this->connection->query(
             "SELECT * FROM cadastros_conf WHERE categorias_id='".$austNode."' ORDER BY ordem ASC",
             PDO::FETCH_ASSOC
         );
@@ -63,7 +63,7 @@ class Cadastro extends Modulos {
          * Toma informações físicas sobre a tabela
          */
         if ( !empty( $params["tabela"] ) ){
-            $temp = $this->conexao->query("DESCRIBE ".$params["tabela"], "ASSOC");
+            $temp = $this->connection->query("DESCRIBE ".$params["tabela"], "ASSOC");
         }
 
         /**
@@ -134,7 +134,7 @@ class Cadastro extends Modulos {
         /**
          * Campos carregados
          */
-        $result = $this->conexao->query($sql, "ASSOC");
+        $result = $this->connection->query($sql, "ASSOC");
 
         /**
          * Configurações
@@ -279,7 +279,7 @@ class Cadastro extends Modulos {
                 LIMIT 0,1";
                 //echo $sql;
                 
-        $resultado = $this->conexao->query($sql);
+        $resultado = $this->connection->query($sql);
         $dados = $resultado[0];
         return $dados['valor'];
     }
@@ -305,7 +305,7 @@ class Cadastro extends Modulos {
                     cadastros_conf.chave='tabela'
                 LIMIT 0,1";
                 //echo $sql;
-        $mysql = $this->conexao->query($sql);
+        $mysql = $this->connection->query($sql);
         $dados = $mysql[0];
         return $dados['valor'];
     }
@@ -325,7 +325,7 @@ class Cadastro extends Modulos {
                     ".$param['tabela']."_arquivos
                 LIMIT 0,1
                 ";
-        $result = $this->conexao->query($sql);
+        $result = $this->connection->query($sql);
         if( count($result) == 0 ){
             $sql_arquivos =
                             "CREATE TABLE ".$param['tabela']."_arquivos(
@@ -346,7 +346,7 @@ class Cadastro extends Modulos {
                             PRIMARY KEY (id),
                             UNIQUE id (id)
                         ) ".$charset;
-            if( $this->conexao->exec($sql_arquivos) ){
+            if( $this->connection->exec($sql_arquivos) ){
                 return TRUE;
             } else {
                 return FALSE;
@@ -413,7 +413,7 @@ class Cadastro extends Modulos {
                     ";
         }
 
-        $result = $this->conexao->query($sql);
+        $result = $this->connection->query($sql);
         if( count($result) > 0 ){
             $dados = $result[0];
             return $dados;

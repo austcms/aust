@@ -4,6 +4,6 @@
  *
  * Contém $dbConn
  */
-require "config/database.php";
+require_once "config/database.php";
 
 ?>

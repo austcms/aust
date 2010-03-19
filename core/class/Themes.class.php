@@ -91,7 +91,7 @@ class Themes {
         $tmp = $this->conexao->query($sql);
 
         if(empty($tmp[0]['valor']))
-            return CoreConfig::read('defaultTheme');
+            return Registry::read('defaultTheme');
 
         return $tmp[0]['valor'];
     }

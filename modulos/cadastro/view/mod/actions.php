@@ -57,7 +57,7 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
                 WHERE
                     $where
                     ";
-        if($modulo->conexao->exec($sql)){
+        if($modulo->connection->exec($sql)){
             $resultado = TRUE;
         } else {
             $resultado = FALSE;
@@ -124,7 +124,7 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
                     $where
                     ";
         //echo $sql;
-        if($modulo->conexao->exec($sql)){
+        if($modulo->connection->exec($sql)){
             $resultado = TRUE;
         } else {
             $resultado = FALSE;

@@ -30,7 +30,7 @@ include("config/database.php");
 require("core/config/installation/dbschema.php");
 
 
-$conexao = new Conexao($dbConn);
+$conexao = Connection::getInstance();
 
 
 

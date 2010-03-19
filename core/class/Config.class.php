@@ -85,7 +85,7 @@ class Config {
              * String, ou seja, apenas um valor dado.
              */
             if( is_string($property) ){
-                $type = CoreConfig::read('configStandardType');
+                $type = Registry::read('configStandardType');
                 $field = 'valor';
                 $params = array(
                     'where' => "tipo='".$type."' AND propriedade='".$property."'",
@@ -222,7 +222,7 @@ class Config {
      */
     public function checkIntegrity(){
 
-        $neededConfig = CoreConfig::read('neededConfig');
+        $neededConfig = Registry::read('neededConfig');
 
         if( !empty($neededConfig) AND is_array($neededConfig) ){
             foreach( $neededConfig as $valor ){

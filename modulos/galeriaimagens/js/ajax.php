@@ -55,8 +55,8 @@ header("Content-Type: text/html; charset=".$aust_charset['view'],true);
                         nome='".$_POST['modulo']."' AND
                         valor='".$_POST['estrutura']."'";
             //echo $sql;
-            $mysql = $modulo->conexao->query($sql);
-            $t = $modulo->conexao->count($sql);
+            $mysql = $modulo->connection->query($sql);
+            $t = $modulo->connection->count($sql);
             if($t >= 0){
                 $sql = "INSERT INTO
                             modulos_conf
@@ -64,7 +64,7 @@ header("Content-Type: text/html; charset=".$aust_charset['view'],true);
                         VALUES
                             ('liberacao','".$_POST['modulo']."','estrutura','".$_POST['estrutura']."')
                         ";
-                if($modulo->conexao->exec($sql)) echo '1';
+                if($modulo->connection->exec($sql)) echo '1';
                 else echo '0';
             }
         } else {
@@ -76,7 +76,7 @@ header("Content-Type: text/html; charset=".$aust_charset['view'],true);
                             propriedade='estrutura' AND
                             valor='".$_POST['estrutura']."'
                         ";
-                if($modulo->conexao->exec($sql)) echo '1del';
+                if($modulo->connection->exec($sql)) echo '1del';
                 else echo '0del';
         }
 

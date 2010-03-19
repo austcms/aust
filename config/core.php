@@ -27,17 +27,18 @@ $aust_charset['db_collate'] = 'utf8_general_ci';
  * Todas as configurações do sistema
  */
 
-    CoreConfig::write('austTable','categorias');
+    Registry::write('austTable','categorias');
 
     /*
      * CONFIG
      */
+    Registry::write('debugLevel', 2);
     /*
      * Tipo de configuração padrão, visível a todos os usuários.
      */
-    CoreConfig::write('configStandardType','Geral');
-    CoreConfig::write('defaultTheme','classic_blue');
 
+    Registry::write('configStandardType','Geral');
+    Registry::write('defaultTheme','classic_blue');
     /*
      * Configurações que devem ser instaladas automaticamente.
      */
@@ -51,7 +52,7 @@ $aust_charset['db_collate'] = 'utf8_general_ci';
                 'explanation' => 'Este nome aparecerá no título do gerenciador',
             ),
         );
-        CoreConfig::write('neededConfig', $neededConfig);
+        Registry::write('neededConfig', $neededConfig);
 
 /*
  * Acid Framework

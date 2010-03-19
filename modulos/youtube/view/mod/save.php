@@ -63,13 +63,13 @@ if(!empty($_POST)){
 		$h1 = 'Editando: '.$this->aust->leNomeDaEstrutura($_GET['aust_node']);
 	}
         
-    $query = $this->modulo->conexao->exec($sql);
+    $query = $this->modulo->connection->exec($sql);
     if($query){
 		$resultado = TRUE;
 
         // se estiver criando um registro, guarda seu id para ser usado por módulos embed a seguir
         if($_POST['metodo'] == 'criar'){
-            $_POST['w'] = $this->modulo->conexao->conn->lastInsertId();
+            $_POST['w'] = $this->modulo->connection->conn->lastInsertId();
         }
 
 

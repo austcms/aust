@@ -17,7 +17,7 @@ include_once("config/database.php");
  */
 include_once(CLASS_DIR."/_carrega_classes.inc.php");
 
-$conexao = new Conexao($dbConn);
+$conexao = Connection::getInstance();
 
 /*********************************
 	*
@@ -57,6 +57,9 @@ if( !empty($query)
     )
 {
     $dados = $query[0];
+
+    $_SESSION['login']['id'] = $dados["id"];
+    $_SESSION['login']['username'] = $login1;
 
     $_SESSION['loginlogin'] = $login1;
     $_SESSION['loginid'] = $dados["id"];

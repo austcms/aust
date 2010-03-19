@@ -12,7 +12,7 @@
  * @since v0.1.5, 30/05/2009
  */
 
-class GaleriaFotos extends Modulos
+class GaleriaFotos extends Module
 {
 
 	// TABELA
