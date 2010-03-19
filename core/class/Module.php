@@ -115,7 +115,7 @@ class Module
     public function save($post = array()){
 
         $method = $post['method'];
-
+        //pr($post);
         /*
          * Gera SQL
          */
@@ -123,9 +123,13 @@ class Module
         /**
          * Salva no DB
          */
-        if( $this->connection->exec($sql) ){
+        if( $this->connection->exec($sql) !== false ){
 
-            $this->w = $this->connection->conn->lastInsertId();
+            if( !empty($post['w']) OR $post['w'] > 0 ){
+                $this->w = $post['w'];
+            } else {
+                $this->w = $this->connection->conn->lastInsertId();
+            }
 
             /*
              *
@@ -339,6 +343,9 @@ class Module
      */
     public function generateSqlFromForm($post, $method = 'new'){
 
+        if( !empty($post['w']) )
+            $method = 'edit';
+
         foreach($post as $key=>$valor){
             /*
              * Verifica se $post contém algum 'frm' no início
@@ -372,7 +379,7 @@ class Module
             }
         }
 
-        if($method == 'edit'){
+        if($method == 'edit' OR !empty($post['w'])){
             $total = 0;
             $sql = "UPDATE ".$this->useThisTable()." SET $sqlcampostr
                     WHERE id='".$post['w']."'";
