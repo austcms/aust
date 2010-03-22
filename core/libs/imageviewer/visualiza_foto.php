@@ -53,7 +53,7 @@ include_once(THIS_TO_BASEURL."core/config/variables.php");
  */
 require_once(THIS_TO_BASEURL.CONFIG_DIR.'database.php');
 require_once(THIS_TO_BASEURL.CLASS_LOADER);
-$conexao = new Conexao($dbConn);
+$conexao = Connection::getInstance();
 
 /*
  * VARIÁVEIS

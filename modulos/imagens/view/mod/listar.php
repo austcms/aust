@@ -24,7 +24,7 @@ $sql = "SELECT
             id='".$_GET['aust_node']."'";
 
             
-$query = $this->aust->connection->query($sql);
+$query = $modulo->connection->query($sql);
 
 $cat = $query[0]['nome'];
 ?>

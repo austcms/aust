@@ -159,7 +159,7 @@ class Imagens extends Module
         }
         
         $sql = "SELECT
-                id, titulo, visitantes, categoria AS cat, DATE_FORMAT(adddate, '%d/%m/%Y %H:%i') as adddate,
+                id, titulo, visitantes, categoria AS cat, DATE_FORMAT(adddate, '%d/%m/%Y') as adddate,
                 (	SELECT
                             nome
                         FROM
