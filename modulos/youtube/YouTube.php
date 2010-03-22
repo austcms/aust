@@ -15,17 +15,7 @@
 class YouTube extends Module
 {
 
-	// TABELA
-	protected $db_tabelas;
-	protected $sql_das_tabelas;
-	protected $sql_registros;
-	public $tabela_criar;
-
-    /**
-     *
-     * @var class Classe responsável pela conexão com o banco de dados
-     */
-    public $conexao;
+    public $mainTable = "youtube_videos";
     /**
      *
      * @var class Configurações do módulo
@@ -38,9 +28,7 @@ class YouTube extends Module
      * @global string $aust_charset Contém o charset das tabelas
      * @param Conexao $conexao Objeto que contém as configurações com o DB
      */
-	function __construct($param = ''){
-
-        $this->tabela_criar = "youtube_videos";
+    function __construct($param = ''){
         /**
          * A classe Pai inicializa algumas varíaveis importantes. A linha a
          * seguir assegura-se de que estas variáveis estarão presentes nesta

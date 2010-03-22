@@ -17,7 +17,7 @@ class ModController extends ModsController
      *
      * Listagem de Contéudos
      */
-    public function listar(){
+    public function listing(){
 
         /**
          * <h2> HEADER
@@ -65,13 +65,11 @@ class ModController extends ModsController
 
     } // fim listar()
 
-    public function criar(){
-
-
+    public function create(){
         $this->render('form');
     }
 
-    public function editar(){
+    public function edit(){
 
         $this->set('tagh2', "Editar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']) );
         $this->set('tagp', 'Edite o conteúdo abaixo.');

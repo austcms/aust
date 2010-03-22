@@ -45,7 +45,7 @@ if(!empty($_GET['action'])){
     /*
      * Tem permissão?
      */
-    if( !$permissoes->verify($aust_node) )
+    if( !$permissoes->verify($aust_node, $_GET['action']) )
         exit();
 
     /**
@@ -308,7 +308,8 @@ else {
                                 <?php
                                 $options = (is_array($modInfo['opcoes'])) ? $modInfo['opcoes'] : Array();
                                 foreach ($options as $chave=>$valor) {
-                                    echo '<li><a href="adm_main.php?section='.$_GET['section'].'&action='.$chave.'&aust_node='.$structure['id'].'">'.$valor.'</a></li>';
+                                    if( $permissoes->verify($structure['id'], $chave) )
+                                        echo '<li><a href="adm_main.php?section='.$_GET['section'].'&action='.$chave.'&aust_node='.$structure['id'].'">'.$valor.'</a></li>';
                                 }
                                 ?>
                                 </ul>
@@ -336,11 +337,4 @@ else {
 
     <br clear="all" />
     <br clear="all" />
-	<div class="action_options">
-        <?php
-        //pr($aust->getStructures());
-        //include(INC_DIR.'conteudo.inc/user_menu.php');
-        ?>
-
-	</div>
 <?php } ?>

@@ -24,7 +24,7 @@
 /*
  * [Se novo conteúdo]
  */
-    if($_GET['action'] == 'criar'){
+    if($_GET['action'] == 'create'){
         $tagh1 = "Criar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
         $tagp = 'Crie um novo conteúdo abaixo.';
         $dados = array('id' => '');
@@ -32,7 +32,7 @@
 /*
  * [Se modo edição]
  */
-    else if($_GET['action'] == 'editar'){
+    else if($_GET['action'] == 'edit'){
 
         $tagh1 = "Editar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
         $tagp = 'Edite o conteúdo abaixo.';
@@ -40,7 +40,7 @@
                 SELECT
                     *
                 FROM
-                    ".$modulo->tabela_criar."
+                    ".$modulo->useThisTable()."
                 WHERE
                     id='$w'
                 ";
@@ -59,7 +59,7 @@
 
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?section=<?php echo $_GET["section"] ?>&action=save" enctype="multipart/form-data" >
 <input type="hidden" name="metodo" value="<?php echo $_GET['action'];?>">
-<?php if($_GET['action'] == 'criar'){ ?>
+<?php if($_GET['action'] == 'create'){ ?>
     <input type="hidden" name="frmadddate" value="<?php echo date("Y-m-d H:i:s"); ?>">
     <input type="hidden" name="frmautor" value="<?php echo $_SESSION['loginid'];?>">
 <?php } else { ?>
@@ -71,6 +71,26 @@
 <input type="hidden" name="w" value="<?php ifisset( $dados['id'] );?>">
 <input type="hidden" name="aust_node" value="<?php echo $austNode; ?>">
 <table border=0 cellpadding=0 cellspacing=0 class="form">
+
+    <tr>
+        <td colspan="2">
+            <?php
+            if( !empty($dados['url']) AND
+                substr($dados['url'], 0, 7) == 'http://' )
+            {
+                //http://www.youtube.com/watch?v=l9-7HaVKHaE&feature=popular
+                //http://www.youtube.com/v/l9-7HaVKHaE&hl=pt_BR&fs=1&rel=0
+                $showUrl = str_replace("/watch?v=", "/v/", $dados['url']).'&hl=pt_BR&fs=1&rel=0';
+                ?>
+                <center>
+                <object width="480" height="295"><param name="movie" value="<?php echo $showUrl?>"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="<?php echo $showUrl?>" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="480" height="295"></embed></object>
+                </center>
+                <?php
+            }
+            ?>
+        </td>
+    </tr>
+
     <?php
     /*
      * CATEGORIA
@@ -226,7 +246,7 @@
      * O arquivo inserido é /embed/form.php do módulo que $embed==true
      */
 
-        //include(INC_DIR.'conteudo.inc/form_embed.php');
+        include(INC_DIR.'conteudo.inc/form_embed.php');
 
     ?>
     <tr>
@@ -248,7 +268,7 @@
      * É padrão e pode ser copiado para todos os forms
      */
 
-        include(INC_DIR.'conteudo.inc/form_embedownform.php');
+        //include(INC_DIR.'conteudo.inc/form_embedownform.php');
 ?>
 
 

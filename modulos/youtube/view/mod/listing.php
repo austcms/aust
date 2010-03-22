@@ -12,16 +12,20 @@
  */
 ?>
 <div class="listagem">
-<p>
-    <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
-</p>
-<h2>
-    Listando contéudo: <?php echo $h1;?>
-</h2>
-<p>
-    Abaixo você encontra a listagem dos últimos textos desta categoria.
-</p>
 <?php
+
+?>
+<p>
+	<a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+</p>
+<h2><?php echo $h1;?></h2>
+<p>Abaixo você encontra a listagem dos últimos textos desta categoria.</p>
+<?php
+if((!empty($filter)) AND ($filter <> 'off')){
+	$addurl = "&filter=$filter&filterw=" . urlencode($filterw);
+}
+	
+
 
 
 /*********************************
@@ -31,11 +35,10 @@
 *********************************/
 ?>
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?section=<?php echo $_GET['section'];?>&action=actions&aust_node=<?php echo $_GET['aust_node'];?>">
-<a name="list"></a>
+<a name="list">&nbsp;</a>
 <div class="painel_de_controle"><input type="submit" name="deletar" value="Deletar selecionados" />
 </div>
-<br clear="all" />
-<table cellspacing="0" cellpadding="0" border="0" class="listagem">
+<table cellspacing="0" cellpadding="10" class="listagem">
     <tr class="titulo">
         
         <?php for($i=0; $i< count($modulo->config['contentHeader']['campos']); $i++) { ?>
@@ -74,7 +77,7 @@ if(count($query) == 0){
                     <td>
                         <?php
                         if($i == 1){
-                            echo '<a href="adm_main.php?section='.$_GET['section'].'&action=editar&aust_node='.$_GET['aust_node'].'&w='.$dados["id"].'">';
+                            echo '<a href="adm_main.php?section='.$_GET['section'].'&action=edit&aust_node='.$_GET['aust_node'].'&w='.$dados["id"].'">';
                             echo $dados[$modulo->config['contentHeader']['campos'][$i]];
                             echo '</a>';
                         } else {
@@ -122,7 +125,7 @@ if(count($query) == 0){
  * mostra painel de navegação para paginação
  */
 
-    //$sql = $modulo->getSQLForListing($categorias);
+    $sql = $modulo->SQLParaListagem($categorias);
     $total_registros = $modulo->connection->count($sql);
 
     $total_paginas = $total_registros/$numPorPagina;

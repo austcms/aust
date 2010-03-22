@@ -12,44 +12,16 @@
  */
 ?>
 <div class="listagem">
-<?php
-$h1 = 'Listando conteúdo: '.$this->aust->leNomeDaEstrutura($_GET['aust_node']);
-$nome_modulo = $this->aust->LeModuloDaEstrutura($_GET['aust_node']);
-$sql = "SELECT
-			id,nome
-		FROM
-			".Aust::$austTable."
-		WHERE
-			id='".$_GET['aust_node']."'";
-
-            
-$query = $this->aust->connection->query($sql);
-
-$cat = $query[0]['nome'];
-?>
 <p>
-	<a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+    <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
 </p>
-<h2><?php echo $h1;?></h2>
-<p>Abaixo você encontra a listagem dos últimos textos desta categoria.</p>
+<h2>
+    Listando contéudo: <?php echo $h1;?>
+</h2>
+<p>
+    Abaixo você encontra a listagem dos últimos textos desta categoria.
+</p>
 <?php
-if((!empty($filter)) AND ($filter <> 'off')){
-	$addurl = "&filter=$filter&filterw=" . urlencode($filterw);
-}
-	
-$categorias = $this->aust->LeCategoriasFilhas('',$_GET['aust_node']);
-$categorias[$_GET['aust_node']] = 'Estrutura';
-
-// itens de paginação
-$pagina = (empty($_GET['pagina'])) ? $pagina = 1 : $pagina = $_GET['pagina'];
-$num_por_pagina = '10';//($config->LeOpcao($nome_modulo.'_paginacao')) ? $config->LeOpcao($nome_modulo.'_paginacao') : '10';
-//echo $num_por_pagina;
-// carrega o sql para listagem
-$sql = $modulo->SQLParaListagem($categorias, $pagina, $num_por_pagina);
-		//echo '<br><br>'.$sql .'<br>';
-
-
-$query = $modulo->connection->query($sql);
 
 
 /*********************************
@@ -59,10 +31,11 @@ $query = $modulo->connection->query($sql);
 *********************************/
 ?>
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?section=<?php echo $_GET['section'];?>&action=actions&aust_node=<?php echo $_GET['aust_node'];?>">
-<a name="list">&nbsp;</a>
+<a name="list"></a>
 <div class="painel_de_controle"><input type="submit" name="deletar" value="Deletar selecionados" />
 </div>
-<table cellspacing="0" cellpadding="10" class="listagem">
+<br clear="all" />
+<table cellspacing="0" cellpadding="0" border="0" class="listagem">
     <tr class="titulo">
         
         <?php for($i=0; $i< count($modulo->config['contentHeader']['campos']); $i++) { ?>
@@ -101,7 +74,7 @@ if(count($query) == 0){
                     <td>
                         <?php
                         if($i == 1){
-                            echo '<a href="adm_main.php?section='.$_GET['section'].'&action=editar&aust_node='.$_GET['aust_node'].'&w='.$dados["id"].'">';
+                            echo '<a href="adm_main.php?section='.$_GET['section'].'&action=edit&aust_node='.$_GET['aust_node'].'&w='.$dados["id"].'">';
                             echo $dados[$modulo->config['contentHeader']['campos'][$i]];
                             echo '</a>';
                         } else {
@@ -149,10 +122,10 @@ if(count($query) == 0){
  * mostra painel de navegação para paginação
  */
 
-    $sql = $modulo->SQLParaListagem($categorias);
+    //$sql = $modulo->getSQLForListing($categorias);
     $total_registros = $modulo->connection->count($sql);
 
-    $total_paginas = $total_registros/$num_por_pagina;
+    $total_paginas = $total_registros/$numPorPagina;
 
     $prev = $pagina - 1;
     $next = $pagina + 1;
