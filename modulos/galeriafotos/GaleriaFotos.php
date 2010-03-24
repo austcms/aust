@@ -15,6 +15,8 @@
 class GaleriaFotos extends Module
 {
 
+    public $mainTable = "galeria_fotos";
+    
 	// TABELA
 	protected $db_tabelas;
 	protected $sql_das_tabelas;
@@ -40,7 +42,11 @@ class GaleriaFotos extends Module
      */
 	function __construct($param = ''){
 
-        $this->tabela_criar = "galeria_fotos";
+            /**
+             * @todo - retirar esta variável abaixo e usar $mainTable e
+             * a função useThisTable da classe pai Module.
+             */
+            $this->tabela_criar = "galeria_fotos";
         /**
          * A classe Pai inicializa algumas varíaveis importantes. A linha a
          * seguir assegura-se de que estas variáveis estarão presentes nesta
