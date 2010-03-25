@@ -149,6 +149,26 @@ elseif( !empty($_POST['inserirestrutura'])
      * Se o padrão MVC está ativado carrega SetupController
      */
     if( is_file( 'modulos/'.$_POST['modulo'].'/'.MOD_SETUP_CONTROLLER ) ){
+
+        /*
+         * Instancia Módulo para começar o Setup
+         */
+            $modDir = $_POST['modulo'].'/';
+            include(MODULOS_DIR.$modDir.MOD_CONFIG);
+            /**
+             * Carrega classe do módulo e cria objeto
+             */
+            $moduloNome = (empty($modInfo['className'])) ? 'Classe' : $modInfo['className'];
+            include_once(MODULOS_DIR.$modDir.$moduloNome.'.php');
+
+            $param = array(
+                'config' => $modInfo,
+                'user' => $administrador,
+                'modDbSchema' => $modDbSchema,
+            );
+            $modulo = new $moduloNome($param);
+            unset( $modDbSchema );
+
         /**
          * JAVASCRIPT
          * 
@@ -176,12 +196,14 @@ elseif( !empty($_POST['inserirestrutura'])
         $params = array(
             'conexao' => $conexao,
             'aust' => $aust,
+            'modulo' => $modulo,
             'administrador' => $administrador,
             'modDir' => $_POST['modulo'],
             'action' => $setupAction,
             'exPOST' => $_POST,
         );
         $setup = new SetupController( $params );
+        unset($modulo);
     }
 }
 

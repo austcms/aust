@@ -9,6 +9,8 @@
  */
 class Cadastro extends Module {
 
+    public $mainTable = "cadastro_conf";
+
     function __construct($param = ''){
 
 

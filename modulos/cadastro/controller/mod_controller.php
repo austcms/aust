@@ -254,7 +254,7 @@ class ModController extends ModsController
             if( !empty($w) AND $w > 0 )
                 $lastInsertId = $w;
             else
-                $lastInsertId = $this->model->connection->lastInsertId();
+                $lastInsertId = $this->modulo->connection->lastInsertId();
 
             /*
              * DADOS RELACIONAIS

@@ -80,7 +80,6 @@ if(!empty($_GET['action'])){
             'user' => $administrador,
             'modDbSchema' => $modDbSchema,
         );
-
         $modulo = new $moduloNome($param);
         unset( $modDbSchema );
     /**

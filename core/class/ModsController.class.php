@@ -26,6 +26,7 @@ class ModsController extends Controller
      * Variáveis do sistema
      */
     public $conexao;
+    public $connection;
     public $administrador;
     public $aust;
     public $model;
@@ -116,9 +117,9 @@ class ModsController extends Controller
          */
         $this->austNode = $param["austNode"];
         /**
-         * $conexao: configura a conexão universal a ser usada no controller
+         * $connection: configura a conexão universal a ser usada no controller
          */
-        $conexao = (empty($param['conexao'])) ? '' : $param['conexao'];
+        $this->connection = Connection::getInstance();;
         /**
          * $conexao: configura a conexão universal a ser usada no controller
          */
