@@ -7,7 +7,7 @@
 
         // se for para editar, deixa checkbox com propriedade 'check'
 
-        $conteudo_tabela = $modulo->LeTabelaDaEstrutura();
+        $mainTable = $modulo->getContentTable();
         $privid_result = array();
         if(!empty($_GET['w'])){
             $temp_w = $_GET['w'];
@@ -17,10 +17,10 @@
                     FROM
                         privilegio_target
                     WHERE
-                        target_table='".$conteudo_tabela."' AND
+                        target_table='".$mainTable."' AND
                         target_id='".$temp_w."'
                     ";
-            $result = $conexao->query($sql);
+            $result = $modulo->connection->query($sql);
 
             foreach($result as $dados_priv){
                 $privid_result[] = $dados_priv['privilegio_id'];
@@ -38,7 +38,7 @@
                 WHERE
                     pc.type='content'
                 ";
-        $result = $conexao->query($sql);
+        $result = $modulo->connection->query($sql);
         //pr($result);
         //$result = $result[0];
         foreach($result as $dados){

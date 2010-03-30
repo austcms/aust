@@ -289,7 +289,7 @@ class Connection extends SQLObject {
             /**
              * Executa e retorna resultado
              */
-            
+
             $result = $this->conn->exec($sql);
 
             if( $result === false){
@@ -322,10 +322,17 @@ class Connection extends SQLObject {
             if( !is_string($debugResult) ){
                 $debugResult = count($result);
             }
+
             /*
              * DESCRIBE NÃO SÃO MOSTRADOS
              */
             if( substr( $sql, 0, 8 ) !== 'DESCRIBE' ){
+
+                if( Registry::read('debugLevel') < 3) {
+                    if( strlen($sql) > 1200 ){
+                        $sql = substr($sql, 0, 1200).' ... <strong>Mensagem truncada</strong>.';
+                    }
+                }
                 $debugVars = array(
                     'sql' => $sql,
                     'result' => $debugResult,

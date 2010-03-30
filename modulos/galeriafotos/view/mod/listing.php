@@ -49,8 +49,17 @@ $query = $modulo->connection->query($sql);
 ?>
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?section=<?php echo $_GET['section'];?>&action=actions&aust_node=<?php echo $_GET['aust_node'];?>">
 <a name="list">&nbsp;</a>
-<div class="painel_de_controle"><input type="submit" name="deletar" value="Deletar selecionados" />
-</div>
+<?php
+/*
+ * Pode excluir conteúdo?
+ */
+if( $permissoes->canDelete($austNode) ){
+    ?>
+    <div class="painel_de_controle"><input type="submit" name="deletar" value="Deletar selecionados" />
+    </div>
+    <?php
+}
+?>
 <table cellspacing="0" cellpadding="10" class="listagem">
     <tr class="titulo">
         
@@ -90,9 +99,13 @@ if(count($query) == 0){
                     <td>
                         <?php
                         if($i == 1){
-                            echo '<a href="adm_main.php?section='.$_GET['section'].'&action=edit&aust_node='.$_GET['aust_node'].'&w='.$dados["id"].'">';
+                            //vd($permissoes->canEdit($aust_node));
+                            if( $permissoes->canEdit($austNode) )
+                                echo '<a href="adm_main.php?section='.$_GET['section'].'&action=edit&aust_node='.$_GET['aust_node'].'&w='.$dados["id"].'">';
+
                             echo $dados[$modulo->config['contentHeader']['campos'][$i]];
-                            echo '</a>';
+                            if( $permissoes->canEdit($austNode) )
+                                echo '</a>';
                         } else {
                             echo $dados[$modulo->config['contentHeader']['campos'][$i]];
                         }
@@ -100,8 +113,13 @@ if(count($query) == 0){
                     </td>
             <?php } ?>
             <td align="center">
-                <input type='checkbox' name='itens[]' value='<?php echo $dados['id'];?>'>
-                <!-- <a href="adm_main.php?section=<?php echo $_GET['section']?>&action=see_info&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;"><img src="img/layoutv1/lupa.jpg" alt="Ver Informações" border="0" /></a> -->
+                <?php
+                if( $permissoes->canDelete($austNode) ){
+                    ?>
+                    <input type='checkbox' name='itens[]' value='<?=$dados['id'];?>'>
+                    <?php
+                }
+                ?>
             <!--
                 <a href="adm_main.php?section=<?php echo $_GET['section']?>&action=edit_form&aust_node=<?php echo $aust_node;?>&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;"><img src="img/layoutv1/edit.jpg" alt="Editar" border="0" /></a>
                 <?php

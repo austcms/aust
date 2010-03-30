@@ -128,6 +128,8 @@ class ModsController extends Controller
          * $conexao: configura a conexão universal a ser usada no controller
          */
         $this->administrador = (empty($param['administrador'])) ? '' : $param['administrador'];
+
+        $this->permissoes = (empty($param['permissoes'])) ? '' : $param['permissoes'];
         /**
          * $modulo: ajusta controller para receber objeto instanciado do modulo
          */
@@ -156,6 +158,7 @@ class ModsController extends Controller
         $this->set('conexao', $conexao);
         $this->set('aust', $this->aust);
         $this->set('modulo', $modulo);
+        $this->set('permissoes', $this->permissoes);
         $this->set('austNode', $this->austNode);
         $this->set('administrador', $this->administrador);
 

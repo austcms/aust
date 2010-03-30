@@ -116,6 +116,7 @@ if(!empty($_GET['action'])){
         $param = array(
             'conexao' => $conexao,
             'modulo' => $modulo,
+            'permissoes' => $permissoes,
             'administrador' => $administrador,
             'aust' => $aust,
             'action' => $_GET['action'],

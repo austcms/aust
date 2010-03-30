@@ -12,44 +12,18 @@
  */
 ?>
 <div class="listagem">
-<?php
-$h1 = 'Listando conteúdo: '.$aust->leNomeDaEstrutura($_GET['aust_node']);
-$nome_modulo = $aust->LeModuloDaEstrutura($_GET['aust_node']);
-$sql = "SELECT
-			id,nome
-		FROM
-			".Aust::$austTable."
-		WHERE
-			id='".$_GET['aust_node']."'";
-
-            
-$query = $modulo->connection->query($sql);
-
-$cat = $query[0]['nome'];
-?>
+    
 <p>
-	<a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+    <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
 </p>
 <h2><?php echo $h1;?></h2>
-<p>Abaixo você encontra a listagem dos últimos textos desta categoria.</p>
+<p>Abaixo você encontra a listagem dos últimos itens desta categoria.</p>
 <?php
 if((!empty($filter)) AND ($filter <> 'off')){
-	$addurl = "&filter=$filter&filterw=" . urlencode($filterw);
+    $addurl = "&filter=$filter&filterw=" . urlencode($filterw);
 }
 	
-$categorias = $aust->LeCategoriasFilhas('',$_GET['aust_node']);
-$categorias[$_GET['aust_node']] = 'Estrutura';
 
-// itens de paginação
-$pagina = (empty($_GET['pagina'])) ? $pagina = 1 : $pagina = $_GET['pagina'];
-$num_por_pagina = '10';//($config->LeOpcao($nome_modulo.'_paginacao')) ? $config->LeOpcao($nome_modulo.'_paginacao') : '10';
-//echo $num_por_pagina;
-// carrega o sql para listagem
-$sql = $modulo->SQLParaListagem($categorias, $pagina, $num_por_pagina);
-		//echo '<br><br>'.$sql .'<br>';
-
-
-$query = $modulo->connection->query($sql);
 
 
 /*********************************
@@ -60,15 +34,24 @@ $query = $modulo->connection->query($sql);
 ?>
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?section=<?php echo $_GET['section'];?>&action=actions&aust_node=<?php echo $_GET['aust_node'];?>">
 <a name="list">&nbsp;</a>
-<div class="painel_de_controle"><input type="submit" name="deletar" value="Deletar selecionados" />
-</div>
+<?php
+/*
+ * Pode excluir conteúdo?
+ */
+if( $permissoes->canDelete($austNode) ){
+    ?>
+    <div class="painel_de_controle"><input type="submit" name="deletar" value="Deletar selecionados" />
+    </div>
+    <?php
+}
+?>
 <table cellspacing="0" cellpadding="10" class="listagem">
     <tr class="titulo">
         
-        <?php for($i=0; $i< count($content_header['campos']); $i++) { ?>
-                <td class="<? echo $content_header['campos'][$i]; ?>">
+        <?php for($i=0; $i< count($modulo->config['contentHeader']['campos']); $i++) { ?>
+                <td class="<? echo $modulo->config['contentHeader']['campos'][$i]; ?>">
                     <?php
-                        echo $content_header['campos_nome'][$i];
+                        echo $modulo->config['contentHeader']['camposNome'][$i];
                     ?>
                 </td>
         <?php } ?>
@@ -97,22 +80,29 @@ if(count($query) == 0){
             *
             *
             *******************************/
-                for($i=0; $i< count($content_header['campos']); $i++) { ?>
+                for($i=0; $i< count($modulo->config['contentHeader']['campos']); $i++) { ?>
                     <td>
                         <?php
                         if($i == 1){
-                            echo '<a href="adm_main.php?section='.$_GET['section'].'&action=editar&aust_node='.$_GET['aust_node'].'&w='.$dados["id"].'">';
-                            echo $dados[$content_header['campos'][$i]];
-                            echo '</a>';
+                            if( $permissoes->canEdit($_GET['aust_node']) )
+                                echo '<a href="adm_main.php?section='.$_GET['section'].'&action=edit&aust_node='.$_GET['aust_node'].'&w='.$dados["id"].'">';
+                            echo $dados[$modulo->config['contentHeader']['campos'][$i]];
+                            if( $permissoes->canEdit($_GET['aust_node']) )
+                                echo '</a>';
                         } else {
-                            echo $dados[$content_header['campos'][$i]];
+                            echo $dados[$modulo->config['contentHeader']['campos'][$i]];
                         }
                         ?>
                     </td>
             <?php } ?>
             <td align="center">
-                <input type='checkbox' name='itens[]' value='<?php echo $dados['id'];?>'>
-                <!-- <a href="adm_main.php?section=<?php echo $_GET['section']?>&action=see_info&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;"><img src="img/layoutv1/lupa.jpg" alt="Ver Informações" border="0" /></a> -->
+                <?php
+                if( $permissoes->canDelete($austNode) ){
+                    ?>
+                    <input type='checkbox' name='itens[]' value='<?=$dados['id'];?>'>
+                    <?php
+                }
+                ?>
             <!--
                 <a href="adm_main.php?section=<?php echo $_GET['section']?>&action=edit_form&aust_node=<?php echo $aust_node;?>&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;"><img src="img/layoutv1/edit.jpg" alt="Editar" border="0" /></a>
                 <?php
@@ -149,10 +139,10 @@ if(count($query) == 0){
  * mostra painel de navegação para paginação
  */
 
-    $sql = $modulo->SQLParaListagem($categorias);
+    $sql = $modulo->loadSql($categorias);
     $total_registros = $modulo->connection->count($sql);
 
-    $total_paginas = $total_registros/$num_por_pagina;
+    $total_paginas = $total_registros/$numPorPagina;
 
     $prev = $pagina - 1;
     $next = $pagina + 1;

@@ -14,33 +14,17 @@
 
 class Imagens extends Module
 {
+    public $mainTable = 'imagens';
 
-	// TABELA
-	protected $db_tabelas;
-	protected $sql_das_tabelas;
-	protected $sql_registros;
-	public $tabela_criar;
+    public $date = array(
+        'standardFormat' => '%d/%m/%Y',
+        'created_on' => 'adddate',
+        'updated_on' => 'addate'
+    );
 
-    /**
-     *
-     * @var class Classe responsável pela conexão com o banco de dados
-     */
-    public $conexao;
-    /**
-     *
-     * @var class Configurações do módulo
-     */
-    public $config;
-    /**
-     * @todo - Comentar certo esta classe
-     *
-     *
-     * @global string $aust_charset Contém o charset das tabelas
-     * @param Conexao $conexao Objeto que contém as configurações com o DB
-     */
-	function __construct($param = ''){
 
-        $this->tabela_criar = "imagens";
+    function __construct($param = ''){
+
         /**
          * A classe Pai inicializa algumas varíaveis importantes. A linha a
          * seguir assegura-se de que estas variáveis estarão presentes nesta
@@ -49,17 +33,6 @@ class Imagens extends Module
         parent::__construct($param);
 	
 	}
-
-    /**
-     * RESPONSER
-     *
-     * Carrega conteúdo para leitura externa. Retorna, geralmente, em array.
-     */
-
-    public function retornaResumo(){
-        return parent::retornaResumo();
-    }
-
 
     /**
      * trataImagem
@@ -109,7 +82,7 @@ class Imagens extends Module
         imagecopyresampled($nova,$im,0,0,0,0,$largurad,$alturad,$largurao,$alturao);
 
         ob_start();
-        imagejpeg($nova, '', 90);
+        imagejpeg($nova, '', 100);
         $mynewimage = ob_get_contents();
         ob_end_clean();
 
@@ -129,52 +102,6 @@ class Imagens extends Module
     }
 
 
-    /**
-     * @todo - comentar
-     *
-     *
-     * @param <type> $categorias
-     * @param <type> $pagina
-     * @param <type> $itens_por_pagina
-     * @return <type>
-     */
-    
-    public function SQLParaListagem($categorias = '', $pagina = '', $itens_por_pagina = ''){
-        if(!empty($categorias)){
-            $order = ' ORDER BY id DESC';
-            $where = ' WHERE ';
-            $c = 0;
-            foreach($categorias as $key=>$valor){
-                if($c == 0)
-                    $where = $where . 'categoria=\''.$key.'\'';
-                else
-                    $where = $where . ' OR categoria=\''.$key.'\'';
-                $c++;
-            }
-        }
-        $limit = '';
-        if(!empty($pagina)){
-            $item_atual = ($pagina * $itens_por_pagina) - $itens_por_pagina;
-            $limit = " LIMIT ".$item_atual.",".$itens_por_pagina;
-        }
-        
-        $sql = "SELECT
-                id, titulo, visitantes, categoria AS cat, DATE_FORMAT(adddate, '%d/%m/%Y') as adddate,
-                (	SELECT
-                            nome
-                        FROM
-                            categorias AS c
-                        WHERE
-                            id=cat
-                ) AS node
-                FROM
-                    ".$this->tabela_criar.$where.$order.
-                    $limit
-                ;
-					
-        return $sql;
-	
-    }
      
 }
 

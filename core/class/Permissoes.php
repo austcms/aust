@@ -52,6 +52,61 @@ class Permissoes extends SQLObject {
     }
 
     /**
+     * canEdit()
+     *
+     * Retorna true se usuário pode acessar formulários de edição.
+     *
+     * @param <int> $austNode
+     * @return <bool>
+     */
+    function canEdit($austNode){
+        return $this->verify($austNode, 'edit');
+    }
+
+    /**
+     * canCreate()
+     *
+     * Retorna true se usuário pode acessar formulários de criação
+     * de conteúdos.
+     *
+     * @param <int> $austNode
+     * @return <bool>
+     */
+    function canCreate($austNode){
+        return $this->verify($austNode, 'create');
+    }
+
+    /**
+     * canSave()
+     *
+     * Retorna true se usuário pode salvar conteúdos.
+     *
+     * @param <int> $austNode
+     * @return <bool>
+     */
+    function canSave($austNode){
+        return ( $this->canCreate($austNode) OR
+                 $this->canEdit($austNode) );
+
+        return false;
+    }
+
+    /**
+     * canDelete()
+     *
+     * Retorna true se usuário pode excluir conteúdos.
+     *
+     * Se o usuário pode editar conteúdos, significa que
+     * pode exclui-los também.
+     *
+     * @param <int> $austNode
+     * @return <bool>
+     */
+    function canDelete($austNode){
+        return $this->canEdit($austNode);
+    }
+
+    /**
      * read()
      *
      * [Executado automaticamente na instanciação da classe.]
@@ -151,6 +206,12 @@ class Permissoes extends SQLObject {
      * à estrutura requerida
      */
     function verify($austNode, $action = ''){
+
+        if( $action == 'save' )
+            return $this->canSave($austNode);
+
+        if( $action == 'delete' )
+            return $this->canSave($austNode);
 
         if( is_string($austNode) OR is_int($austNode) ){
             if( empty($this->permissoes) ){

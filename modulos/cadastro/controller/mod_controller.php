@@ -13,7 +13,7 @@ class ModController extends ModsController
 
     var $helpers = array('Form');
 
-    public function listar(){
+    public function listing(){
         //$this->render('listar');
         //$this->autoRender= false;
     }
@@ -32,7 +32,7 @@ class ModController extends ModsController
     /**
      * FORMULÁRIO DE INSERÇÃO
      */
-    public function criar($params = array() ){
+    public function create($params = array() ){
         /**
          * Verifica se há parâmetros
          */
@@ -150,12 +150,12 @@ class ModController extends ModsController
         $this->render('form');
     }
 
-    public function editar(){
+    public function edit(){
 
         $params = array(
             "w" => $_GET["w"]
         );
-        $this->criar($params);
+        $this->create($params);
         //$this->render('form');
     }
 
@@ -167,7 +167,6 @@ class ModController extends ModsController
     public function save(){
 
         $infoCadastro = $this->modulo->pegaInformacoesCadastro( $this->austNode );
-        //pr($infoCadastro);
 
         /*
          * UPDATE?
@@ -287,7 +286,7 @@ class ModController extends ModsController
                                 ".$infoCadastro["estrutura"]["tabela"]["valor"]."_id='$w'
                                 ";
                     //echo $sql;
-                    $this->model->connection->exec($sql);
+                    $this->modulo->connection->exec($sql);
                     unset($sql);
                 }
 
@@ -338,7 +337,7 @@ class ModController extends ModsController
             if( !empty($sql) ){
                 if( is_array($sql) ){
                     foreach( $sql as $uniqueSql ){
-                        $this->model->connection->exec($uniqueSql);
+                        $this->modulo->connection->exec($uniqueSql);
                         //pr($uniqueSql);
                     }
                 }

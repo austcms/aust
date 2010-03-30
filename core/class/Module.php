@@ -12,63 +12,87 @@
 class Module
 {
 
-    /**
+    /*
      *
-     * @var <string> Tabela principal de dados
+     * CONFIGURAÇÕES ESPECÍFICAS DO MÓDULO
+     *
      */
-    public $mainTable;
+        /**
+         *
+         * @var <string> Tabela principal de dados
+         */
+        public $mainTable;
 
-    /**
-     *
-     * @var <int> Id em uso
-     */
-    public $w;
+        /**
+         *
+         * @var <array> Formatos de data
+         */
+        public $date = array(
+            'standardFormat' => '%d/%m/%Y',
+            'created_on' => 'created_on',
+            'updated_on' => 'update_on'
+        );
 
-    /**
+
+    /*
      *
-     * @var <array>
+     * VARIÁVEIS DE AMBIENTE
+     *
      */
-    public $loadedIds;
+        /**
+         *
+         * @var <int> Id em uso
+         */
+        public $w;
+
+        /**
+         *
+         * @var <array>
+         */
+        public $loadedIds;
     
     /**
      * VARIÁVEIS DO MÓDULO
      */
-    /**
-     *
-     * @var <array> Contém a tabela atual descrita
-     */
-    public $describedTable;
-    /**
-     *
-     * @var <string> erros e sucessos das operações
-     */
-    public $status;
+        /**
+         *
+         * @var <array> Contém a tabela atual descrita
+         */
+        public $describedTable;
+        /**
+         *
+         * @var <string> erros e sucessos das operações
+         */
+        public $status;
 
     /**
      * VARIÁVEIS DE AMBIENTE
      *
      * Conexão com banco de dados, sistema Aust, entre outros
      */
-    /**
-     *
-     * @var class Classe responsável pela conexão com o banco de dados
-     */
-    public $connection;
-    /**
-     *
-     * @var class Classe responsável pela conexão com o banco de dados
-     */
-    public $aust;
-    /**
-     *
-     * @var class Configurações estáticas do módulo
-     */
-    public $config;
+        /**
+         *
+         * @var class Classe responsável pela conexão com o banco de dados
+         */
+        public $connection;
+        /**
+         *
+         * @var class Classe responsável pela conexão com o banco de dados
+         */
+        public $aust;
+        /**
+         *
+         * @var class Configurações estáticas do módulo
+         */
+        public $config;
 
     /**
-     * CONFIGURAÇÕES
+     *
+     * @var <bool> Indica se este é um teste. O sendo, não realiza
+     * alguns procedimentos impossíveis de serem realizados via
+     * testes unitários, como envio HTTP de dados.
      */
-    public $testing = false;
+    public $testMode = false;
 
     /**
      *
@@ -285,7 +309,6 @@ class Module
         if( empty($this->describedTable[$this->useThisTable()]) ){
             $this->describedTable[$this->useThisTable()] = $this->connection->query('DESCRIBE '.$this->useThisTable());
         }
-        //print_r($described);
 
         /*
          * Sql para listagem
@@ -293,7 +316,7 @@ class Module
         $sql = "SELECT
                     id, titulo, visitantes,
                     categoria AS cat,
-                    DATE_FORMAT(adddate, '%d/%m/%Y %H:%i') as adddate,
+                    DATE_FORMAT(".$this->date['created_on'].", '".$this->date['standardFormat']."') as adddate,
                     (	SELECT
                             nome
                         FROM
@@ -349,6 +372,7 @@ class Module
              * Verifica se $post contém algum 'frm' no início
              */
             if(strpos($key, 'frm') === 0){
+                $valor = addslashes( $valor );
                 $sqlcampo[] = str_replace('frm', '', $key);
                 $sqlvalor[] = $valor;
 

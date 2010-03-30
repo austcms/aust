@@ -30,7 +30,12 @@ $aust_charset['db_collate'] = 'utf8_general_ci';
     Registry::write('austTable','categorias');
 
     /*
-     * CONFIG
+     * DEBUG LEVEL
+     *
+     *      2: todos os debugs, entretanto sem detalhamentos
+     *         completos;
+     *      3: debug completo;
+     *
      */
     Registry::write('debugLevel', 2);
     /*

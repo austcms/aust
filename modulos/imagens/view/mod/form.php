@@ -23,7 +23,7 @@
 /*
  * [Se novo conteúdo]
  */
-    if($_GET['action'] == 'criar'){
+    if($_GET['action'] == 'create'){
         $tagh1 = "Criar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
         $tagp = 'Crie um novo conteúdo abaixo.';
         $dados = array('id' => '');
@@ -31,8 +31,7 @@
 /*
  * [Se modo edição]
  */
-    else if($_GET['action'] == 'editar'){
-
+    else if($_GET['action'] == 'edit'){
         $tagh1 = "Editar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
         $tagp = 'Edite o conteúdo abaixo.';
         $sql = "
@@ -58,7 +57,7 @@
                     visitantes,
                     autor
                 FROM
-                    ".$modulo->tabela_criar."
+                    ".$modulo->getMainTable()."
                 WHERE
                     id='$w'
                 ";
@@ -77,8 +76,8 @@
 
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?section=<?php echo $_GET["section"] ?>&action=save" enctype="multipart/form-data" >
 <input type="hidden" name="metodo" value="<?php echo $_GET['action'];?>">
-<?php if($_GET['action'] == 'criar'){ ?>
-    <input type="hidden" name="frmadddate" value="<?php echo date("Y-m-d H:i:s"); ?>">
+<?php if($_GET['action'] == 'create'){ ?>
+    <input type="hidden" name="frmadddate" value="<?php echo date("Y-m-d"); ?>">
     <input type="hidden" name="frmautor" value="<?php echo $_SESSION['loginid'];?>">
 <?php } else { ?>
 

@@ -17,36 +17,14 @@ class GaleriaFotos extends Module
 
     public $mainTable = "galeria_fotos";
     
-	// TABELA
-	protected $db_tabelas;
-	protected $sql_das_tabelas;
-	protected $sql_registros;
-	public $tabela_criar;
+    public $date = array(
+        'standardFormat' => '%d/%m/%Y',
+        'created_on' => 'adddate',
+        'updated_on' => 'addate'
+    );
 
-    /**
-     *
-     * @var class Classe responsável pela conexão com o banco de dados
-     */
-    public $conexao;
-    /**
-     *
-     * @var class Configurações do módulo
-     */
-    public $config;
-    /**
-     * @todo - Comentar certo esta classe
-     *
-     *
-     * @global string $aust_charset Contém o charset das tabelas
-     * @param Conexao $conexao Objeto que contém as configurações com o DB
-     */
-	function __construct($param = ''){
+    function __construct($param = ''){
 
-            /**
-             * @todo - retirar esta variável abaixo e usar $mainTable e
-             * a função useThisTable da classe pai Module.
-             */
-            $this->tabela_criar = "galeria_fotos";
         /**
          * A classe Pai inicializa algumas varíaveis importantes. A linha a
          * seguir assegura-se de que estas variáveis estarão presentes nesta
@@ -54,7 +32,7 @@ class GaleriaFotos extends Module
          */
         parent::__construct($param);
 	
-	}
+    }
 
     /**
      * RESPONSER
@@ -108,7 +86,7 @@ class GaleriaFotos extends Module
                             id=cat
                 ) AS node
                 FROM
-                    ".$this->tabela_criar.$where.$order.
+                    ".$this->useThisTable().$where.$order.
                     $limit
                 ;
 					

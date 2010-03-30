@@ -47,7 +47,7 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
         $sql = "SELECT
                     *
                 FROM
-                    arquivos
+                    ".$modulo->getMainTable()."
                 WHERE
                     {$where}";
         $mysql = $modulo->connection->query($sql);
@@ -62,7 +62,7 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
             {
 
                 $sql = "DELETE FROM
-                            ".$modulo->LeTabelaDaEstrutura($_GET['aust_node'])."
+                            ".$modulo->getMainTable()."
                         WHERE
                             $where
                             ";

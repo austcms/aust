@@ -98,8 +98,6 @@ foreach( $camposForm as $chave=>$valor ){
      * Monta checkboxes do campo que é do tipo relacional um-para-muitos
      */
     else if($valor["tipo"]["especie"] == "relacional_umparamuitos") {
-        //".$tabelaCadastro $valor["tipo"]["tabelaReferenciaCampo"]."
-        //pr($valor);
         
         $referencia = $valor["tipo"]["tabelaReferencia"];
         $tabelaRelacional = $valor["tipo"]["referencia"];
@@ -110,11 +108,9 @@ foreach( $camposForm as $chave=>$valor ){
                     ".$referencia." AS t
                 ORDER BY t.$campo ASC
                 ";
-                //echo $sql;
-        $checkboxes = $conexao->query($sql);
+        $checkboxes = $modulo->connection->query($sql);
 
         $inputType = "checkbox";
-        //pr($checkboxes);
         foreach($checkboxes as $tabelaReferenciaResult){
             $checkbox["options"][ $tabelaReferenciaResult["id"] ] = $tabelaReferenciaResult[ $campo ];
         }
@@ -132,7 +128,7 @@ foreach( $camposForm as $chave=>$valor ){
                         t.id ASC
                     ";
 
-            $values = $conexao->query($sql);
+            $values = $modulo->connection->query($sql);
             if( empty($values)){
                 $values = array();
             } else {

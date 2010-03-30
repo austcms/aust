@@ -14,6 +14,12 @@ class Conteudo extends Module
 {
     public $mainTable = "textos";
 
+    public $date = array(
+        'standardFormat' => '%d/%m/%Y',
+        'created_on' => 'adddate',
+        'updated_on' => 'addate'
+    );
+
     function __construct(){
         parent::__construct(array());
     }

@@ -96,15 +96,41 @@ if( $fields > 0 ){
      */
     if( !empty($resultado) ){ ?>
 
-        <? // Painel de controle ?>
-        <div class="painel_de_controle">Selecionados:
-            <?
-            // se este cadastro precisa de aprovação, mostra botão para aprovar usuário
+        <?php
+        /*
+         *
+         * PAINEL DE CONTROLE
+         *
+         */
+        ?>
+        <?php
+        if( $permissoes->canEdit($austNode) ){
+            ?>
+            <div class="painel_de_controle">Selecionados:
+            <?php
+            /*
+             * Se este cadastro precisa de aprovação, mostra botão para aprovar usuário
+             */
             if($precisa_aprovacao['valor'] == '1'){ ?>
                 <input type="submit" name="aprovar" value="Aprovar" />
-            <? } ?>
-            <input type="submit" name="deletar" value="Deletar" />
-        </div>
+                <?php
+            }
+
+            /*
+             * Pode excluir?
+             */
+            if( $permissoes->canDelete($austNode) ){
+                ?>
+                <input type="submit" name="deletar" value="Deletar" />
+                <?php
+            }
+            ?>
+            </div>
+            <?php
+        } // fim de canEdit()
+        ?>
+                
+
 
 
         <table class="listagem">
@@ -167,9 +193,13 @@ if( $fields > 0 ){
                                 $total_td++;
                                 //echo $total_td;
                                 if($total_td == 1){
-                                    echo '<a href="adm_main.php?section='.$_GET['section'].'&action=editar&aust_node='.$_GET['aust_node'].'&w='.$dados["id"].'">';
+
+                                    if( $permissoes->canEdit($_GET['aust_node']) )
+                                        echo '<a href="adm_main.php?section='.$_GET['section'].'&action=edit&aust_node='.$_GET['aust_node'].'&w='.$dados["id"].'">';
+
                                     echo $dados[$campo];
-                                    echo '</a>';
+                                    if( $permissoes->canEdit($_GET['aust_node']) )
+                                        echo '</a>';
                                     if( $precisa_aprovacao['valor'] == '1'
                                          AND (
                                              $dados['des_approved'] == 0
@@ -186,16 +216,20 @@ if( $fields > 0 ){
                                      * para edição
                                      */
                                     if( $total_td <= 2 ){
-                                        ?>
-                                        <a href="adm_main.php?section=<?php echo $_GET['section'];?>&action=editar&aust_node=<?php echo $_GET['aust_node'];?>&w=<?php echo $dados["id"];?>">
-                                        <?php
+                                        if( $permissoes->canEdit($_GET['aust_node']) ){
+                                            ?>
+                                            <a href="adm_main.php?section=<?php echo $_GET['section'];?>&action=edit&aust_node=<?php echo $_GET['aust_node'];?>&w=<?php echo $dados["id"];?>">
+                                            <?php
+                                        }
                                     }
 
                                     echo $dados[$campo];
                                     if( $total_td <= 2 ){
-                                        ?>
-                                        </a>
-                                        <?php
+                                        if( $permissoes->canEdit($_GET['aust_node']) ){
+                                            ?>
+                                            </a>
+                                            <?php
+                                        }
                                     }
                                 }
                                 ?>
@@ -205,7 +239,13 @@ if( $fields > 0 ){
                     }
                     ?>
                     <td align="center">
-                        <input type='checkbox' name='itens[]' value='<?=$dados[id];?>'>
+                        <?php
+                        if( $permissoes->canDelete($austNode) ){
+                            ?>
+                            <input type='checkbox' name='itens[]' value='<?=$dados['id'];?>'>
+                            <?php
+                        }
+                        ?>
                         <!-- <a href="adm_main.php?section=<?=$_GET['section']?>&action=see_info&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;"><img src="img/layoutv1/lupa.jpg" alt="Ver Informações" border="0" /></a> -->
                     <!--
                         <a href="adm_main.php?section=<?=$_GET['section']?>&action=edit_form&aust_node=<?=$aust_node;?>&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;"><img src="img/layoutv1/edit.jpg" alt="Editar" border="0" /></a>

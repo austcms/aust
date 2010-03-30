@@ -17,7 +17,13 @@ class Arquivos extends Module
      * @var <string> Tabela principal de dados
      */
     public $mainTable = 'arquivos';
-    
+
+    public $date = array(
+        'standardFormat' => '%d/%m/%Y',
+        'created_on' => 'adddate',
+        'updated_on' => 'addate'
+    );
+
     /**
      *
      * @var <string> Extensões proibidas
