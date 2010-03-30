@@ -31,7 +31,7 @@
 /*
  * Ajusta variáveis iniciais
  */
-    $aust_node = (!empty($_GET['aust_node'])) ? $_GET['aust_node'] : '';
+    $austNode = (!empty($_GET['aust_node'])) ? $_GET['aust_node'] : '';
     $w = (!empty($_GET['w'])) ? $_GET['w'] : '';
 
     $perguntas = array();

@@ -18,7 +18,7 @@
 /*
  * Ajusta variáveis iniciais
  */
-    $aust_node = (!empty($_GET['aust_node'])) ? $_GET['aust_node'] : '';
+    $austNode = (!empty($_GET['aust_node'])) ? $_GET['aust_node'] : '';
     $w = (!empty($_GET['w'])) ? $_GET['w'] : '';
 
 
@@ -78,7 +78,7 @@ if($_GET['action'] == 'criar') {
         /*
          * Verifica quais categorias este módulo está associado
          */
-        $categorias = $modulo->getRelatedCategories($aust_node);
+        $categorias = $modulo->getRelatedCategories($austNode);
 
         if( !empty($categorias) ){
 

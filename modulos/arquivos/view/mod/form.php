@@ -6,7 +6,7 @@
  */
 
 // $fm = form_method = gravar, editar, etc, pois é o mesmo formulário para fins diferentes
-$aust_node = (!empty($_GET['aust_node'])) ? $_GET['aust_node'] : '';
+$austNode = (!empty($_GET['aust_node'])) ? $_GET['aust_node'] : '';
 
 /*
  * Carrega configurações automáticas do DB
@@ -84,7 +84,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
                 if($fm == "edit"){
                     $current_node = $dados['categoria_id'];
                 }
-                echo BuildDDList( Registry::read('austTable'), 'frmcategoria_id', $escala, $aust_node, $current_node );
+                echo BuildDDList( Registry::read('austTable'), 'frmcategoria_id', $escala, $austNode, $current_node );
                 ?>
                 </div>
                 <?php
@@ -112,7 +112,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
         if($fm == "edit"){
             $current_node = $dados['categoria_id'];
         } else {
-            $current_node = $aust_node;
+            $current_node = $austNode;
         }
         ?>
         <input type="hidden" name="frmcategoria_id" value="<?php echo $current_node; ?>">

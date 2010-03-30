@@ -99,7 +99,7 @@ if(count($query) == 0){
                     <td>
                         <?php
                         if($i == 1){
-                            //vd($permissoes->canEdit($aust_node));
+                            //vd($permissoes->canEdit($austNode));
                             if( $permissoes->canEdit($austNode) )
                                 echo '<a href="adm_main.php?section='.$_GET['section'].'&action=edit&aust_node='.$_GET['aust_node'].'&w='.$dados["id"].'">';
 
@@ -121,7 +121,7 @@ if(count($query) == 0){
                 }
                 ?>
             <!--
-                <a href="adm_main.php?section=<?php echo $_GET['section']?>&action=edit_form&aust_node=<?php echo $aust_node;?>&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;"><img src="img/layoutv1/edit.jpg" alt="Editar" border="0" /></a>
+                <a href="adm_main.php?section=<?php echo $_GET['section']?>&action=edit_form&aust_node=<?php echo $austNode;?>&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;"><img src="img/layoutv1/edit.jpg" alt="Editar" border="0" /></a>
                 <?php
                 if($escala == "administrador"
                 OR $escala == "moderador"
@@ -132,7 +132,7 @@ if(count($query) == 0){
                         $addurl = "&filter=$filter&filterw=" . urlencode($filterw);
                     }
                     ?>
-                    <a href="adm_main.php?section=<?php echo $_GET['section']?>&action=<?php echo $action;?>&block=delete&aust_node=<?php echo $aust_node;?>&w=<?php echo $dados["id"]; ?><?php echo $addurl;?>" style="text-decoration: none;"><img src="img/layoutv1/delete.jpg" alt="Deletar" border="0" /></a>
+                    <a href="adm_main.php?section=<?php echo $_GET['section']?>&action=<?php echo $action;?>&block=delete&aust_node=<?php echo $austNode;?>&w=<?php echo $dados["id"]; ?><?php echo $addurl;?>" style="text-decoration: none;"><img src="img/layoutv1/delete.jpg" alt="Deletar" border="0" /></a>
                     <?php
                 }
                 ?>

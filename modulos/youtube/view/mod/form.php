@@ -18,7 +18,7 @@
 /*
  * Ajusta variáveis iniciais
  */
-    $aust_node = (!empty($_GET['aust_node'])) ? $_GET['aust_node'] : '';
+    $austNode = (!empty($_GET['aust_node'])) ? $_GET['aust_node'] : '';
     $w = (!empty($_GET['w'])) ? $_GET['w'] : '';
 
 /*
@@ -119,7 +119,7 @@
                     <?php
                 }
 
-                echo BuildDDList( Registry::read('austTable') ,'frmcategoria', $administrador->tipo ,$aust_node, $current_node);
+                echo BuildDDList( Registry::read('austTable') ,'frmcategoria', $administrador->tipo ,$austNode, $current_node);
                 ?>
                 </div>
 

@@ -1,5 +1,5 @@
 <?php
-    $aust_node = (!empty($_GET['aust_node'])) ? $_GET['aust_node'] : '';
+    $austNode = (!empty($_GET['aust_node'])) ? $_GET['aust_node'] : '';
     $w = (!empty($_GET['w'])) ? $_GET['w'] : '';
     if($_GET[action] == 'criar'){
 		$tagh1 = "Criar: ". $aust->leNomeDaEstrutura($_GET['aust_node']);
@@ -45,7 +45,7 @@
 		<?php
 		if($_GET[action] == "editar")
 			$current_node = $dados[categoria];
-        echo BuildDDList($aust_table,'frmcategoria',$escala,$aust_node,$current_node);
+        echo BuildDDList($aust_table,'frmcategoria',$escala,$austNode,$current_node);
 		?>
 		</div>
 

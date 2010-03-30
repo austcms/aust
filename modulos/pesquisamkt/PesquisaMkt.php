@@ -15,6 +15,11 @@
 class PesquisaMkt extends Module
 {
 
+    public $date = array(
+        'standardFormat' => '%d/%m/%Y',
+        'created_on' => 'adddate',
+        'updated_on' => 'addate'
+    );
 	// TABELA
 	protected $db_tabelas;
 	protected $sql_das_tabelas;

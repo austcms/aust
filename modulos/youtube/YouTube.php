@@ -16,6 +16,11 @@ class YouTube extends Module
 {
 
     public $mainTable = "youtube_videos";
+    public $date = array(
+        'standardFormat' => '%d/%m/%Y',
+        'created_on' => 'adddate',
+        'updated_on' => 'addate'
+    );
     /**
      *
      * @var class Configurações do módulo
