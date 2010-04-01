@@ -1,5 +1,7 @@
 <?php
 /**
+ * PERMISSÕES DE ESTRUTURAS
+ *
  * Classe Permissões de Módulos, não da UI do Aust
  *
  * Contém todas os atributos e métodos referentes a permissões
@@ -21,7 +23,7 @@
  * ele não tem permissão alguma, exceto aquelas configuradas.
  */
 
-class Permissoes extends SQLObject {
+class StructurePermissions extends SQLObject {
 
     var $admins_id;
     var $admins_tipos_id;

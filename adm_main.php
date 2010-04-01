@@ -136,6 +136,7 @@ if(!$isResponser){
         /**
          * Instancia o objeto $ui (UserInterface)
          */
+        $uiPermissions = UiPermissions::getInstance();
         $uI = new UI;
 
         $_GET['action'] = (empty($_GET['action'])) ? '' : $_GET['action'];
@@ -144,15 +145,15 @@ if(!$isResponser){
         /**
          * Verifica se o usuário tem permissão para acessar a página requsitada
          */
-        $permitted = $uI->verificaPermissoes();
-
+        //$permitted = $uiPermissions->isPermitted();
+        //pr($permitted);
         /**
          * Com permissão, o usuário vai até a página requisitada.
          *
          * Caso contrario, recebe uma mensagem de erro.
          */
         $param = array(
-            'permitted' => $uI->verificaPermissoes(),
+            'permitted' => $uiPermissions->isPermittedSection(),
         );
         $filename = $uI->correctUIPage($param);
 

@@ -81,8 +81,8 @@ $modInfo = array(
      *
      */
     'opcoes' => array(
-        'criar' => 'Novo',
-        'listar' => 'Listar',
+        'create' => 'Novo',
+        'listing' => 'Listar',
     ),
 
     /**

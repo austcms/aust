@@ -18,9 +18,18 @@ $params = array(
     'admins_tipos_id' => $administrador->LeRegistro('tipoid'),
     'admins_id' => $administrador->LeRegistro('id'),
     'conexao' => $conexao,
+    /*
+     * Que tipos de usuários podem acessar Widgets?
+     */
+    'widgets_viewable' => array(
+        "Webmaster", "Root", "Administrador", "Moderador", "Colaboradores"
+    )
+
 );
 
-$permissoes = new Permissoes($params);
+
+
+$permissoes = new StructurePermissions($params);
 $categoriasPermitidas = $permissoes->read($params);
 
 ?>

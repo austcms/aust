@@ -23,7 +23,7 @@ $sql = "SELECT
 			id='".$_GET['aust_node']."'";
 
 //echo $sql;
-$query = $this->aust->connection->query($sql);
+$query = $this->connection->query($sql);
 
 $cat = $query[0]['nome'];
 ?>
@@ -111,7 +111,7 @@ if(count($query) == 0){
                         <?php
                         if($i == 1){
                             if( $permissoes->canEdit($_GET['aust_node']) )
-                                echo '<a href="adm_main.php?section='.$_GET['section'].'&action=editar&aust_node='.$_GET['aust_node'].'&w='.$dados["id"].'">';
+                                echo '<a href="adm_main.php?section='.$_GET['section'].'&action=edit&aust_node='.$_GET['aust_node'].'&w='.$dados["id"].'">';
                             echo $dados[$modulo->config['contentHeader']['campos'][$i]];
                             if( $permissoes->canEdit($_GET['aust_node']) )
                                 echo '</a>';

@@ -15,6 +15,12 @@ $c = 0;
 
 if(!empty($_POST)) {
 
+    if( $_POST['metodo'] == 'create' ){
+        $_POST['frmcreated_on'] = date("Y-m-d");
+    }
+    
+    $_POST['frmupdated_on'] = date("Y-m-d");
+
     /*
      * TIPO DE PRIVILÉGIO
      */
@@ -55,7 +61,7 @@ if(!empty($_POST)) {
             $sqlvalor[] = $valor;
             // ajusta os campos da tabela nos quais serão gravados dados
 
-            if($_POST['metodo'] == 'criar') {
+            if($_POST['metodo'] == 'create') {
                 if($c > 0) {
                     $sqlcampostr = $sqlcampostr.','.str_replace('frm', '', $key);
                     $sqlvalorstr = $sqlvalorstr.",'".$valor."'";
@@ -63,7 +69,7 @@ if(!empty($_POST)) {
                     $sqlcampostr = str_replace('frm', '', $key);
                     $sqlvalorstr = "'".$valor."'";
                 }
-            } else if($_POST['metodo'] == 'editar') {
+            } else if($_POST['metodo'] == 'edit') {
                     if($c > 0) {
                         $sqlcampostr = $sqlcampostr.','.str_replace('frm', '', $key).'=\''.$valor.'\'';
                     } else {
@@ -76,9 +82,9 @@ if(!empty($_POST)) {
     }
 
 
-    if($_POST['metodo'] == 'criar') {
+    if($_POST['metodo'] == 'create') {
         $sql = "INSERT INTO
-                        ".$modulo->tabela_criar."
+                        ".$modulo->useThisTable()."
                         ($sqlcampostr)
                 VALUES
                         ($sqlvalorstr)
@@ -87,17 +93,16 @@ if(!empty($_POST)) {
 
 
         $h1 = 'Criando: '.$aust->leNomeDaEstrutura($_GET['aust_node']);
-    } else if($_POST['metodo'] == 'editar') {
-            $sql = "UPDATE
-                        ".$modulo->tabela_criar."
-                    SET
-                        $sqlcampostr
-                    WHERE
-                        id='".$_POST['w']."'
-                    ";
-            $h1 = 'Editando: '.$aust->leNomeDaEstrutura($_GET['aust_node']);
-        }
-
+    } else if($_POST['metodo'] == 'edit') {
+        $sql = "UPDATE
+                    ".$modulo->useThisTable()."
+                SET
+                    $sqlcampostr
+                WHERE
+                    id='".$_POST['w']."'
+                ";
+        $h1 = 'Editando: '.$aust->leNomeDaEstrutura($_GET['aust_node']);
+    }
 
     $success = $this->modulo->connection->exec($sql);
     if( $success !== false ) {

@@ -23,13 +23,13 @@
 
 
 // se é formulário com $_GET[action] = criar...
-if($_GET['action'] == 'criar') {
+if($_GET['action'] == 'create') {
     $tagh1 = "Criar: ". $aust->leNomeDaEstrutura($_GET['aust_node']);
     $tagp = 'Alguns usuários precisam de privilégios para acessar determinados '
            .'conteúdos. Comece criando um privilégio a seguir'
            .'.';
 
-} else if($_GET['action'] == 'editar') {
+} else if($_GET['action'] == 'edit') {
 
     $tagh1 = "Editar: ". $aust->leNomeDaEstrutura($_GET['aust_node']);
     $tagp = 'Edite o conteúdo abaixo. Somente os usuários cadastrados que tiverem este privilégio poderão
@@ -44,7 +44,7 @@ if($_GET['action'] == 'criar') {
             SELECT
                 *
             FROM
-                ".$modulo->tabela_criar."
+                ".$modulo->useThisTable()."
             WHERE
                 id='$w'
             ";
@@ -73,7 +73,7 @@ if($_GET['action'] == 'criar') {
     // Opção via <input radio>. Se selecionar que sim, mostra via JS BuildDDList
 
     $current_node = false;
-    if($_GET['action'] == "editar"){
+    if($_GET['action'] == "edit"){
 
         /*
          * Verifica quais categorias este módulo está associado
@@ -148,12 +148,9 @@ if($_GET['action'] == 'criar') {
 <input type="hidden" name="metodo" value="<?php echo $_GET['action'];?>">
 
 <?php if($_GET['action'] == 'criar'){ ?>
-    <input type="hidden" name="frmcreated_on" value="<?php echo date("Y-m-d H:i:s"); ?>">
-    <input type="hidden" name="frmupdated_on" value="<?php echo date("Y-m-d H:i:s"); ?>">
     <input type="hidden" name="frmadmin_id" value="<?php echo $_SESSION['loginid'];?>">
 <?php } else { ?>
 
-    <input type="hidden" name="frmupdated_on" value="<?php echo date("Y-m-d H:i:s"); ?>">
     <input type="hidden" name="frmadmin_id" value="<?php ifisset( $dados['admin_id'] );?>">
 
 <?php }?>

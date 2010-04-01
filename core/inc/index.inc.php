@@ -22,7 +22,7 @@ $widgets = new Widgets($envParams, $administrador->getId());
         /*
          * Instala Widgets caso não haja nenhum instalado
          */
-        if( empty($c) ){
+        if( empty($c) AND $uiPermissions->canAccessWidgets() ){
             $widgetsToInstall = array(
                 array(
                     'name' => 'category_shortcuts',
