@@ -75,6 +75,8 @@ class SetupController extends ModsSetup
              * configurações em 'cadastros_conf'.
              */
             $ordem = 0; // A ordem do campo
+            $camposExistentes = array();
+            $campoExiste = false;
             for($i = 0; $i < count($_POST['campo']); $i++) {
                 $ordem++;
 
@@ -158,8 +160,27 @@ class SetupController extends ModsSetup
                      * Retira acentuação e caracteres indesejados para criar
                      * campos nas tabelas
                      */
-                    $valor = RetiraAcentos(mb_strtolower(str_replace(' ', '_', $_POST['campo'][$i]), 'UTF-8')).' '. $campo_tipo;
+                    $valor = RetiraAcentos(mb_strtolower(str_replace(' ', '_', $_POST['campo'][$i]), 'UTF-8'));
 
+                    $campoExiste = false;
+                    if( in_array( $valor, $camposExistentes ) )
+                        $campoExiste = true;
+
+                    $adicionalAtual = 2;
+                    while( $campoExiste ){
+                        $valor = $valor.'_'.$adicionalAtual;
+                        
+                        if( !in_array( $valor, $camposExistentes ) )
+                            $campoExiste = false;
+
+
+                        $adicionalAtual++;
+
+                    }
+                    unset($adicionalAtual);
+
+                    $camposExistentes[] = $valor;
+                    $valor = $valor.' '. $campo_tipo;
                     /**
                      * Se for data ou relacional, não tem charset
                      */
@@ -396,7 +417,7 @@ class SetupController extends ModsSetup
              *
              * Se retornar sucesso, salva configurações gerais sobre o cadastro na tabela cadastros_conf
              */
-            //pr( $sql );
+            pr( $sql );
             //var_dump($this->modulo);
 
             if( $this->connection->exec( $sql, 'CREATE_TABLE') ){

@@ -1,0 +1,100 @@
+#mask {
+    position: absolute;
+    z-index:9000;
+    background-color: #323232;
+    top: 0;
+    left: 0;
+    filter: alpha(opacity=90);
+    opacity: 0.9;
+    display: none;
+}
+
+.window {
+    position:absolute;
+    width:350px;
+    /*height:394px;*/
+    display:none;
+    z-index:9999;
+    padding:0;
+    top: 0;
+}
+
+/**** Lightbox ****/
+
+/* Personalize a janela modal aqui. Você pode adicionar uma imagem de fundo. */
+.window {
+    background: white;
+    width: 342px;
+    /*height:394px;*/
+    padding: 10px;
+}
+.window .header {
+    width: 342px;
+    height: auto;
+    background: white;
+    padding: 0px 0 0 0px;
+    display: table;
+    position: relative;
+    margin: 0 0 10px 0;
+}
+	.window .header h2 {
+            float: left;
+            position: static;
+            display: table;
+            margin: 3px 0 0 0px;
+	}
+
+	.window .header a {
+            width: 28px;
+            height: 29px;
+            display: block;
+            position: absolute;
+            right: -20px;
+            top: -20px;
+            background: url(../img/fechar_lb.png) no-repeat top;
+            padding-right: 0px;
+	}
+        .window .header a:hover {
+            background-position: 0px -31px;
+            padding-right: 0px;
+        }
+
+
+
+
+.window .lb_content {
+    width: auto;
+    height: auto;
+    display: table;
+    background: transparent;
+    text-align: left;
+    padding: 0px 0px 0 0px;
+    margin: 0px 0;
+}
+    .window .lb_content p {
+        padding: 5px 0 15px 0;
+        margin: 0;
+    }
+	
+.window .footer {
+    width: 342px;
+    height: 5px;
+    background: white;
+    margin: 0;
+    padding: 0;
+}
+
+/** Link nova categoria **/
+     div.nova_categoria a {
+        width: 109px;
+        height: 21px;
+        background: url(../img/nova_categoria.png) no-repeat;
+        display: block;
+        padding: 0;
+        margin: 0;
+        float: left;
+    }
+         div.nova_categoria a:hover {
+            background-position: 0px -22px;
+            display: block;
+        }

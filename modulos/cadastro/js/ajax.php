@@ -42,7 +42,7 @@ include(THIS_TO_BASEURL.LIB_DIR."aust/aust_func.php");
 /**
  * Conexão principal
  */
-$conexao = new Conexao($dbConn);
+$conexao = Connection::getInstance();
 
 /**
  * Configurações do core do sistema
@@ -79,9 +79,11 @@ if($_POST['action'] == 'LeCadastros'){
             WHERE
                 tipo='cadastro'";
     //echo $sql;
-    $arraytmp = $conexao->listaTabelasDoDBParaArray();
-    //pr($arraytmp);
+    $arraytmp = $conexao->query('SHOW TABLES');
+    //$arraytmp = $conexao->listaTabelasDoDBParaArray();
+    
     foreach($arraytmp AS $valor){
+        $valor = reset($valor);
         echo '<option value="'.$valor.'">'.$valor.'</option>';
     }
     
@@ -95,9 +97,9 @@ elseif($_POST['action'] == 'LeCampos'){
      * Lê os campos da tabela e depois mostra um html <select> para o usuário
      * escolher o relacionamento de tabelas
      */
-    $query = $conexao->listaCampos($_POST['tabela']);
+    $query = $conexao->query('DESCRIBE '.$_POST['tabela']);
     foreach ( $query as $chave=>$valor ){
-        echo '<option value="'.$valor['campo'].'">'.$valor['campo'].'</option>';
+        echo '<option value="'.$valor['Field'].'">'.$valor['Field'].'</option>';
     }
 
 }

@@ -134,6 +134,7 @@ function RetiraAcentos($a){
 	$a = str_replace("¨", "", $a);
 	$a = str_replace("^", "", $a);
 	$a = str_replace("~", "", $a);
+	$a = str_replace(array("/","\\"), "_", $a);
 	return $a;
 }
 
