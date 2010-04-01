@@ -15,6 +15,8 @@
 class PesquisaMkt extends Module
 {
 
+    public $mainTable = 'pesqmkt';
+    
     public $date = array(
         'standardFormat' => '%d/%m/%Y',
         'created_on' => 'adddate',

@@ -690,7 +690,7 @@ class Module
     public function loadConfig(){
         
         $modDir = strtolower( get_class($this) ).'/';
-        include MODULOS_DIR.$modDir.MOD_CONFIG;
+        include THIS_TO_BASEURL.MODULOS_DIR.$modDir.MOD_CONFIG;
 
         if( empty($modInfo) )
             return false;
