@@ -145,7 +145,7 @@ $options = $config->getConfigs(
             if( $config->hasPermission($type) ){
                 ?>
                 <div class="background">
-                    <form method="post" action="adm_main.php?section=<?=$_GET['section'];?>">
+                    <form method="post" action="adm_main.php?section=<?php echo $_GET['section'];?>">
                     <table class="form">
                     <?php
                     foreach( $conf as $properties ){
@@ -202,7 +202,7 @@ if( $administrador->tipo == "Webmaster" AND 1==0 ){
     pr($options);
     if( $options ){
         ?>
-        <form method="post" action="adm_main.php?section=<?=$_GET['section'];?>" class="simples">
+        <form method="post" action="adm_main.php?section=<?php echo $_GET['section'];?>" class="simples">
         <?php
 
             foreach($options as $dados ){
@@ -243,7 +243,7 @@ if( $administrador->tipo == "Webmaster" AND 1==0 ){
 
     <h2>Nova configuração</h2>
     <p>A seguir, você pode criar uma nova configuração.</p>
-    <form method="post" action="adm_main.php?section=<?=$_GET['section']?>" class="simples">
+    <form method="post" action="adm_main.php?section=<?php echo $_GET['section']?>" class="simples">
 
     <div class="campo">
         <label>Nome humano da configuração:</label>

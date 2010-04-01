@@ -28,7 +28,7 @@ foreach($siteQuery as $chave=>$valor){
 
     <tr>
         <td colspan="1">
-            <h2><?=$valor['nome'];?></h2>
+            <h2><?php echo $valor['nome'];?></h2>
         </td>
         <td>
         </td>

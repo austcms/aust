@@ -39,7 +39,7 @@ require_once(THIS_TO_BASEURL.CLASS_DIR.'_carrega_classes.inc.php');
 //include('../modulo.class.php');
 include('../index.php');
 
-$conexao = new Conexao($dbConn);
+$conexao = Connection::getInstance();
 
 
 header("Content-Type: text/html; charset=".$aust_charset['view'],true);

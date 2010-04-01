@@ -141,8 +141,8 @@ class ImagensDeCapa extends Module {
                     echo '<tr>';
                 }
                 ?>
-                <td <?=$params['inline']?>>
-                    <img src="<?=$params['script']?><?=$dados['id'];?>" />
+                <td <?php echo $params['inline']?>>
+                    <img src="<?php echo $params['script']?><?php echo $dados['id'];?>" />
 
                     <?php
                     if(!empty($params['options'])){

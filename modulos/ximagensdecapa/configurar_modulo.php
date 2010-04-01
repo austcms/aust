@@ -170,7 +170,7 @@ if(!empty($_GET['function'])){
 
                     // input checkbox, ao ser clicado usa Ajax para guardar dados no DB
                     ?>
-                    <input type="checkbox" onchange="javascript: selectLiberacao(this);" name="<?=$dados['id']?>" <? if(in_array($dados['id'], $return)) echo 'checked="true"'; ?> value="<?=$nome_modulo;?>"> <strong><?=$dados['nome']?></strong> (módulo <?=$dados['tipo'];?>)<br />
+                    <input type="checkbox" onchange="javascript: selectLiberacao(this);" name="<?php echo $dados['id']?>" <? if(in_array($dados['id'], $return)) echo 'checked="true"'; ?> value="<?php echo $nome_modulo;?>"> <strong><?php echo $dados['nome']?></strong> (módulo <?php echo $dados['tipo'];?>)<br />
                     <?
                 }
 

@@ -19,7 +19,6 @@
  */
 $tabela_da_estrutura = $modulo->LeTabelaDaEstrutura($_GET['aust_node']);
 
-
 /**
  * Explicação do código a seguir:
  *
@@ -76,6 +75,28 @@ if(!empty($_POST['novo_campo'])){
         } else {
             $status[] = "<span style=\"color:red;\">Erro na criação do campo <strong>{$campo}</strong> na tabela.";
         }
+    } else {
+        $status[] = "Erro ao gravar informações sobre o novo campo. Nada foi criado.";
+    }
+}
+
+/*
+ *
+ * NOVO TÍTULO DIVISOR
+ *
+ */
+if( !empty($_POST['create_divisor']) AND
+    !empty($_POST['title']) )
+    {
+
+    $params = array(
+        'title' => $_POST['title'],
+        'comment' => $_POST['comment'],
+        'before' => $_POST['before']
+    );
+    
+    if( $modulo->saveDivisor($params) ){
+        $status[] = 'Divisor criado com sucesso!';
     } else {
         $status[] = "Erro ao gravar informações sobre o novo campo. Nada foi criado.";
     }
@@ -259,7 +280,7 @@ if(!empty($_GET['function'])){
 }
 ?>
 
-<h3>Configuração: <?=$aust->leNomeDaEstrutura($_GET['aust_node'])?></h3>
+<h3>Configuração: <?php echo $aust->leNomeDaEstrutura($_GET['aust_node'])?></h3>
 <p>
     Configure esta estrutura de cadastro.
 </p>
@@ -299,8 +320,8 @@ if(!empty($_GET['function'])){
         </div>
         <div class="content">
             <p>Insira um novo campo no cadastro.</p>
-            <form method="post" action="<?=$config->self;?>" class="simples pequeno">
-                <input type="hidden" name="tabela" value="<?=$tabela_da_estrutura?>" />
+            <form method="post" action="<?php echo $config->self;?>" class="simples pequeno">
+                <input type="hidden" name="tabela" value="<?php echo $tabela_da_estrutura?>" />
 
                 <?php
                 /*
@@ -321,7 +342,7 @@ if(!empty($_GET['function'])){
                 ?>
                 <div class="campo">
                     <label>Tipo do campo: </label>
-                    <select name="campo_tipo"  onchange="javascript: SetupCampoRelacionalTabelas(this, '<?='campooption0'?>', '0')">
+                    <select name="campo_tipo"  onchange="javascript: SetupCampoRelacionalTabelas(this, '<?php echo 'campooption0'?>', '0')">
                         <option value="varchar(200)">Texto pequeno</option>
                         <option value="text">Texto médio ou grande</option>
                         <option value="date">Data</option>
@@ -331,7 +352,7 @@ if(!empty($_GET['function'])){
                     </select>
                 </div>
                 <? // <select> em ajax ?>
-                <div class="campooptions" id="<?='campooption0'?>">
+                <div class="campooptions" id="<?php echo 'campooption0'?>">
                     <?
                     /*
                      * Se <select campo_tipo> for relacional, então cria dois campos <select>
@@ -340,8 +361,8 @@ if(!empty($_GET['function'])){
                      * -<select relacionado_campo_<n> onde n é igual a $i (sequencia numérica dos campos)
                      */
                     ?>
-                    <div class="campooptions_tabela" id="<?='campooption0'?>_tabela"></div>
-                    <div class="campooptions_campo" id="<?='campooption0'?>_campo"></div>
+                    <div class="campooptions_tabela" id="<?php echo 'campooption0'?>_tabela"></div>
+                    <div class="campooptions_campo" id="<?php echo 'campooption0'?>_campo"></div>
                 </div>
 
                 <?php
@@ -399,12 +420,98 @@ if(!empty($_GET['function'])){
                             }
 
                         }
+                        unset($campo);
+                        unset($dados);
+                        unset($valor);
                         ?>
                         
                     </select>
                 </div>
                 <br />
                 <input type="submit" name="novo_campo" value="Criar!" />
+
+            </form>
+        </div>
+        <div class="footer"></div>
+    </div>
+
+    <?php
+    /**
+     * TÍTULOS DIVISORES
+     *
+     * No formulário, há estes títulos que servem para dividir os
+     * inputs, como por exemplo, 'Informações Pessoais' e
+     * 'Informações Profissionais'.
+     */
+    ?>
+    <div class="widget">
+        <div class="titulo">
+            <h3>Títulos Divisores</h3>
+        </div>
+        <div class="content">
+            <p>
+                Insira um novo título divisor no formulário de cadastro.
+            </p>
+            <form method="post" action="<?php echo $config->self;?>" class="simples pequeno">
+                <input type="hidden" name="tabela" value="<?php echo $tabela_da_estrutura?>" />
+
+                <?php
+                /*
+                 * Input CAMPO: Contém o nome do campo
+                 */
+                ?>
+                <div class="campo">
+                    <label>Nome do título:</label>
+                    <div class="input">
+                        <input type="text" name="title" class="input" />
+                    </div>
+                </div>
+                <br clear="both" />
+                <div class="campo">
+                    <label>Parágrafo de comentário:</label>
+                    <div class="input">
+                        <input type="text" name="comment" class="input" />
+                    </div>
+                </div>
+                <br clear="both" />
+                <?php
+                /*
+                 * Input CAMPO_LOCAL: Indica onde será inserido o novo campo
+                 */
+                ?>
+                <div class="campo">
+                    <label>Antes de: </label>
+                    <?php
+                    /*
+                     * Busca campos do DB
+                     */
+                    $sql = "SELECT
+                                chave, valor
+                            FROM
+                                cadastros_conf
+                            WHERE
+                                tipo='campo' AND
+                                categorias_id='".$_GET['aust_node']."'
+                            ";
+                    $dados = $modulo->connection->query($sql,"ASSOC");
+                    ?>
+
+                    <select name="before">
+                        <?php
+                        /*
+                         * Lista campos para criar título divisor
+                         */
+                        foreach($dados as $valor){
+                            ?>
+                            <option value="BEFORE <?php echo $valor["chave"]?>"><?php echo $valor["valor"]?></option>
+                            <?php
+                        }
+                        ?>
+
+                    </select>
+                </div>
+                <br />
+                <input type="submit" name="create_divisor" value="Criar!" />
 
             </form>
         </div>
@@ -456,7 +563,7 @@ if(!empty($_GET['function'])){
             $dados = $dados[0]["valor"];
 
             ?>
-            <form method="post" action="<?=$config->self;?>" class="simples pequeno">
+            <form method="post" action="<?php echo $config->self;?>" class="simples pequeno">
                 <input type="hidden" name="tabela" value="<?php echo $tabela_da_estrutura ?>" />
                 Campo de email? <input type="text" name="email" value="<?php echo $dados ?>" />
                 <br />
@@ -524,13 +631,13 @@ if(!empty($_GET['function'])){
                     <?php
                     if($dados['desativado'] == '1'){
                         ?>
-                        <a href="adm_main.php?section=<?=$_GET['section']?>&aust_node=<?=$_GET['aust_node']?>&action=<?=$_GET['action']?>&function=ativar&w=<?php echo $chave; ?>">
+                        <a href="adm_main.php?section=<?php echo $_GET['section']?>&aust_node=<?php echo $_GET['aust_node']?>&action=<?php echo $_GET['action']?>&function=ativar&w=<?php echo $chave; ?>">
                             Ativar
                         </a>
                         <?
                     } else {
                     ?>
-                        <a href="adm_main.php?section=<?=$_GET['section']?>&aust_node=<?=$_GET['aust_node']?>&action=<?=$_GET['action']?>&function=desativar&w=<?php echo $chave; ?>">
+                        <a href="adm_main.php?section=<?php echo $_GET['section']?>&aust_node=<?php echo $_GET['aust_node']?>&action=<?php echo $_GET['action']?>&function=desativar&w=<?php echo $chave; ?>">
                             Desativar
                         </a>
                     <?
@@ -539,13 +646,13 @@ if(!empty($_GET['function'])){
                     <?php
                     if($dados['necessario'] == '0'){
                         ?>
-                        <a href="adm_main.php?section=<?=$_GET['section']?>&aust_node=<?=$_GET['aust_node']?>&action=<?=$_GET['action']?>&function=necessario&w=<?php echo $chave; ?>">
+                        <a href="adm_main.php?section=<?php echo $_GET['section']?>&aust_node=<?php echo $_GET['aust_node']?>&action=<?php echo $_GET['action']?>&function=necessario&w=<?php echo $chave; ?>">
                             Necessario
                         </a>
                         <?
                     } else {
                     ?>
-                        <a href="adm_main.php?section=<?=$_GET['section']?>&aust_node=<?=$_GET['aust_node']?>&action=<?=$_GET['action']?>&function=desnecessario&w=<?php echo $chave; ?>">
+                        <a href="adm_main.php?section=<?php echo $_GET['section']?>&aust_node=<?php echo $_GET['aust_node']?>&action=<?php echo $_GET['action']?>&function=desnecessario&w=<?php echo $chave; ?>">
                             Não necessário
                         </a>
                     <?
@@ -554,13 +661,13 @@ if(!empty($_GET['function'])){
                     <?php
                     if( $dados['listagem'] < '1' ){
                         ?>
-                        <a href="adm_main.php?section=<?=$_GET['section']?>&aust_node=<?=$_GET['aust_node']?>&action=<?=$_GET['action']?>&function=listar&w=<?php echo $chave; ?>">
+                        <a href="adm_main.php?section=<?php echo $_GET['section']?>&aust_node=<?php echo $_GET['aust_node']?>&action=<?php echo $_GET['action']?>&function=listar&w=<?php echo $chave; ?>">
                             Listar
                         </a>
                         <?php
                     } else {
                         ?>
-                        <a href="adm_main.php?section=<?=$_GET['section']?>&aust_node=<?=$_GET['aust_node']?>&action=<?=$_GET['action']?>&function=naolistar&w=<?php echo $chave; ?>">
+                        <a href="adm_main.php?section=<?php echo $_GET['section']?>&aust_node=<?php echo $_GET['aust_node']?>&action=<?php echo $_GET['action']?>&function=naolistar&w=<?php echo $chave; ?>">
                             Não Listar
                         </a>
                         <?
@@ -588,7 +695,7 @@ if(!empty($_GET['function'])){
         </div>
         <div class="content">
             <p>A seguir, você configurar as principais opções deste cadastro.</p>
-            <form method="post" action="<?=$config->self;?>" class="simples pequeno">
+            <form method="post" action="<?php echo $config->self;?>" class="simples pequeno">
                 <?php
                 // busca todos os campos da tabela do cadastro
                 $sql = "SELECT
@@ -603,23 +710,23 @@ if(!empty($_GET['function'])){
                 foreach($result as $dados){
                     ?>
                         <div class="campo">
-                            <label><?=$dados['nome']?>:</label>
+                            <label><?php echo $dados['nome']?>:</label>
                             <?php
                             /*
                              * Mostra o campo de acordo
                              */
                             if($dados['especie'] == 'bool'){ ?>
-                                <select name="frm<?=$dados['chave']?>">
+                                <select name="frm<?php echo $dados['chave']?>">
                                     <option <? makeselected($dados['valor'], '1') ?> value="1">Sim</option>
                                     <option <? makeselected($dados['valor'], '0') ?> value="0">Não</option>
                                 </select>
                             <? } elseif($dados['especie'] == 'string') { ?>
-                                <input type="text" name="frm<?=$dados['chave']?>" value="<?=$dados['valor']?>" />
+                                <input type="text" name="frm<?php echo $dados['chave']?>" value="<?php echo $dados['valor']?>" />
                             <? } elseif($dados['especie'] == 'blob') { ?>
-                                <textarea name="frm<?=$dados['chave']?>" cols="35" rows="3"><?=$dados['valor']?></textarea>
+                                <textarea name="frm<?php echo $dados['chave']?>" cols="35" rows="3"><?php echo $dados['valor']?></textarea>
 
                             <? } else { ?>
-                                <textarea name="frm<?=$dados['chave']?>" cols="30" rows="3"><?=$dados['valor']?></textarea>
+                                <textarea name="frm<?php echo $dados['chave']?>" cols="30" rows="3"><?php echo $dados['valor']?></textarea>
                             <? } ?>
                         </div>
                     <?

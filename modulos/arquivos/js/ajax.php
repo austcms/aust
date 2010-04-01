@@ -42,7 +42,7 @@ include(THIS_TO_BASEURL.LIB_DIR."aust/aust_func.php");
 /**
  * Conexão principal
  */
-$conexao = new Conexao($dbConn);
+$conexao = Connection::getInstance();
 
 /**
  * Configurações do core do sistema

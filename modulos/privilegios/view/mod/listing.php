@@ -125,7 +125,7 @@ if(count($query) == 0){
                 <?php
                 if( $permissoes->canDelete($austNode) ){
                     ?>
-                    <input type='checkbox' name='itens[]' value='<?=$dados['id'];?>'>
+                    <input type='checkbox' name='itens[]' value='<?php echo $dados['id'];?>'>
                     <?php
                 }
                 ?>

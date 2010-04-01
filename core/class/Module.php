@@ -75,6 +75,12 @@ class Module
          * @var class Classe responsável pela conexão com o banco de dados
          */
         public $connection;
+
+        /**
+         *
+         * @var <int> Contém o número do Nodo atual
+         */
+        public $austNode;
         /**
          *
          * @var class Classe responsável pela conexão com o banco de dados
@@ -106,6 +112,9 @@ class Module
      *      'conexao': Contém a conexão universal
      */
     function __construct() {
+
+        $this->austNode = $_GET['aust_node'];
+
         /**
          * Ajusta a conexao para o módulo
          */

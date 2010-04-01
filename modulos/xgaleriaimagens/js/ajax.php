@@ -32,7 +32,7 @@ require_once(THIS_TO_BASEURL.CLASS_LOADER);
     include(THIS_TO_BASEURL.CONFIG_CORE_FILE);
 
 
-$conexao = new Conexao($dbConn);
+$conexao = Connection::getInstance();
 include('../index.php');
 
 

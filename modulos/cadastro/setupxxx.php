@@ -26,7 +26,7 @@ if(empty($_POST['setup_ready']) and empty($_POST['qtd_campos'])){
             // cria um select com 20 números
             for($i = 1; $i <= 20; $i++){
             ?>
-                <option value="<?=$i;?>"><?=$i;?></option>
+                <option value="<?php echo $i;?>"><?php echo $i;?></option>
             <?php
             }
             ?>
@@ -62,7 +62,7 @@ if(empty($_POST['setup_ready']) and empty($_POST['qtd_campos'])){
 	<p>Configurando esta estrutura...</p>
 	<p>Seu cadastro terá <? echo '<strong>'.$_POST['qtd_campos'].'</strong>'; if($_POST['qtd_campos'] == 1) echo ' campo'; else echo ' campos';?>.
 	Preencha abaixo informações sobre cada campo.</p>
-    <h3>Cadastro "<?=$_SESSION['exPOST']['nome']?>"</h3>
+    <h3>Cadastro "<?php echo $_SESSION['exPOST']['nome']?>"</h3>
 	
 	<table width="99%" border="0" class="listagem">
 	<col width="15">
@@ -79,13 +79,13 @@ if(empty($_POST['setup_ready']) and empty($_POST['qtd_campos'])){
 	<?php for ($i = 1; $i <= $_SESSION['exPOST']['qtd_campos']; $i++){ ?>
 	<tr class="conteudo">
 		<td align="center" style="font-weight: bold;" valign="top">
-		<?=$i;?>
+		<?php echo $i;?>
 		</td>
 		<td valign="top">
 			<input type="text" name="campo[]" />
 		</td>
 		<td valign="top">
-			<select name="campo_tipo[]" onchange="javascript: SetupCampoRelacionalTabelas(this, '<?='campooption'.$i?>', '<?=$i?>')">
+			<select name="campo_tipo[]" onchange="javascript: SetupCampoRelacionalTabelas(this, '<?php echo 'campooption'.$i?>', '<?php echo $i?>')">
 				<option value="varchar(200)">Texto pequeno (ex: nome, idade)</option>
 				<option value="text">Texto médio ou grande (ex: descrição, biografia)</option>
 				<option value="date">Data (ex: data de nascimento)</option>
@@ -93,7 +93,7 @@ if(empty($_POST['setup_ready']) and empty($_POST['qtd_campos'])){
 				<option value="arquivo">Arquivo</option>
 				<option value="relacional_umparaum">Relacional Um-para-um (tabela)</option>
 			</select>
-            <div class="campooptions" id="<?='campooption'.$i?>">
+            <div class="campooptions" id="<?php echo 'campooption'.$i?>">
                 <?
                 /*
                  * Se <select campo_tipo> for relacional, então cria dois campos <select>
@@ -102,8 +102,8 @@ if(empty($_POST['setup_ready']) and empty($_POST['qtd_campos'])){
                  * -<select relacionado_campo_<n> onde n é igual a $i (sequencia numérica dos campos)
                  */
                 ?>
-                <div class="campooptions_tabela" id="<?='campooption'.$i?>_tabela"></div>
-                <div class="campooptions_campo" id="<?='campooption'.$i?>_campo"></div>
+                <div class="campooptions_tabela" id="<?php echo 'campooption'.$i?>_tabela"></div>
+                <div class="campooptions_campo" id="<?php echo 'campooption'.$i?>_campo"></div>
             </div>
             
         </td>

@@ -44,14 +44,14 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
 
 ?>
 
-<h2><?=$h1?></h2>
+<h2><?php echo $h1?></h2>
 <p>
-    <a href="adm_main.php?section=<?=$_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+    <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
 </p>
 
 <p>Envie um arquivo para o site.</p>
 
-<form method="post" action="adm_main.php?section=<?=$_GET['section'];?>&action=save&aust_node=<?=$_GET['aust_node']?>" enctype="multipart/form-data">
+<form method="post" action="adm_main.php?section=<?php echo $_GET['section'];?>&action=save&aust_node=<?php echo $_GET['aust_node']?>" enctype="multipart/form-data">
     <input type="hidden" name="method" value="<?php echo $_GET['action'];?>">
 
     <input type="hidden" name="w" value="<?php ifisset($_GET['w']);?>">
@@ -246,6 +246,6 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
 
 
 <p>
-    <a href="adm_main.php?section=<?=$_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+    <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
 </p>
 

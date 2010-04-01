@@ -9,7 +9,7 @@
  */
 class Cadastro extends Module {
 
-    public $mainTable = "cadastro_conf";
+    public $mainTable = "cadastros_conf";
 
     function __construct($param = ''){
 
@@ -20,6 +20,41 @@ class Cadastro extends Module {
          * classe.
          */
         parent::__construct($param);
+    }
+
+    /**
+     *
+     * @param <type> $params
+     * @return <type>
+     */
+    function saveDivisor($params){
+
+        if( empty($params['title']) OR
+            empty($params['before']) )
+            return false;
+
+        if( empty($params['comment']) )
+            $params['comment'] = "";
+
+        $params['title'] = addslashes($params['title']);
+        $params['comment'] = addslashes($params['comment']);
+
+        $sql = "INSERT INTO
+                    ".$this->useThisTable()."
+                    (tipo,valor,comentario,categorias_id,descricao)
+                VALUES
+                    (
+                    'divisor','".$params['title']."','".$params['comment']."',
+                    '".$this->austNode."','".$params['before']."'
+                    )
+                ";
+        
+        $result = $this->connection->exec($sql);
+
+        if( $result )
+            return true;
+
+        return false;
 
     }
 

@@ -42,8 +42,8 @@ if($_POST['action'] == $thisFormGravarAction){
 ?>
 <form method="post" action="#galeriadeimagenscapa" enctype="multipart/form-data">
     <input type="hidden" name="action" value="<?php echo $thisFormGravarAction ?>" />
-    <input type="hidden" name="w" value="<?=$_GET['w'];?>" />
-    <input type="hidden" name="frmcategoria" value="<?=$_GET['aust_node'];?>" />
+    <input type="hidden" name="w" value="<?php echo $_GET['w'];?>" />
+    <input type="hidden" name="frmcategoria" value="<?php echo $_GET['aust_node'];?>" />
     <input type="hidden" name="frmadddate" value="<?php echo date("Y-m-d H:i:s"); ?>">
     <input type="hidden" name="frmclasse" value="capa" />
     <input type="hidden" name="frmautor" value="<?php echo $_SESSION['loginid'];?>">

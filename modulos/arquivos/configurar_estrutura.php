@@ -175,7 +175,7 @@ if(!empty($_GET['function'])){
 }
 ?>
 
-<h2>Configuração: <?=$aust->leNomeDaEstrutura($_GET['aust_node'])?></h2>
+<h2>Configuração: <?php echo $aust->leNomeDaEstrutura($_GET['aust_node'])?></h2>
 <?php if(!empty($status)){ ?>
     <div class="box-full">
         <div class="box alerta">
@@ -296,7 +296,7 @@ if(!empty($_GET['function'])){
 
             ?>
 
-            <form method="post" action="<?=$config->self;?>" class="simples pequeno">
+            <form method="post" action="<?php echo $config->self;?>" class="simples pequeno">
                 <input type="hidden" name="conf_type" value="mod_conf" />
                 <input type="hidden" name="aust_node" value="<?php echo $_GET['aust_node']; ?>" />
                 <?php
@@ -403,7 +403,7 @@ if(!empty($_GET['function'])){
         </div>
         <div class="content">
             <p></p>
-            <form method="post" action="<?=$config->self;?>" class="simples pequeno">
+            <form method="post" action="<?php echo $config->self;?>" class="simples pequeno">
 
             </form>
 

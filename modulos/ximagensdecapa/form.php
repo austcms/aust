@@ -20,15 +20,15 @@
 	}
 ?>
 <p>
-	<a href="adm_main.php?section=<?=$_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+	<a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
 </p>
 
-<h2><?=$tagh1;?></h2>
-<p><?=$tagp;?></p>
+<h2><?php echo $tagh1;?></h2>
+<p><?php echo $tagp;?></p>
 
 
 
-<form method="post" action="<?=$_SERVER['PHP_SELF']?>?<?=$_SERVER['QUERY_STRING'];?>&action=gravar">
+<form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?<?php echo $_SERVER['QUERY_STRING'];?>&action=gravar">
 <input type="hidden" name="metodo" value="<?php echo $_GET[action];?>">
 <? if($_GET[action] == 'criar'){ ?>
     <input type="hidden" name="frmadddate" value="<?php echo date("Y-m-d H:i:s"); ?>">
@@ -66,7 +66,7 @@
 </tr>
 <tr>
 	<td colspan="2">
-		<textarea name="frmtexto" id="jseditor" rows="20" style="width: 670px"><?=$dados['texto'];?></textarea>
+		<textarea name="frmtexto" id="jseditor" rows="20" style="width: 670px"><?php echo $dados['texto'];?></textarea>
         <br />
 	</td>
 </tr>
@@ -104,10 +104,10 @@
                             //echo $chave4. '-'.$valor4.'<br>';
                             ?>
                             <tr>
-                                <td valign="top"><label><?=$embed_form[$i]['propriedade']?>:</label></td>
+                                <td valign="top"><label><?php echo $embed_form[$i]['propriedade']?>:</label></td>
                                 <td>
                                 <? if(!empty($embed_form[$i]['intro'])){ echo '<p class="explanation">'.$embed_form[$i]['intro'].'</p>'; } ?>
-                                <?=$embed_form[$i]['input'];?>
+                                <?php echo $embed_form[$i]['input'];?>
                                 <? if(!empty($embed_form[$i]['explanation'])){ echo '<p class="explanation">'.$embed_form[$i]['explanation'].'</p>'; } ?>
                                 </td>
                             </tr>
@@ -127,5 +127,5 @@
 
 </form>
 <p>
-	<a href="adm_main.php?section=<?=$_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+	<a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
 </p>
