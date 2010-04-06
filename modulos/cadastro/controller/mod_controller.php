@@ -62,6 +62,9 @@ class ModController extends ModsController
                 "by" => "Field",
             )
         );
+
+        $divisorTitles = $this->modulo->loadDivisors();
+        $this->set('divisorTitles', $divisorTitles);
         
         $campos = $infoCadastro["campo"];
         /**

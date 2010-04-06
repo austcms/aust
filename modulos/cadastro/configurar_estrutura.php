@@ -82,26 +82,46 @@ if(!empty($_POST['novo_campo'])){
 
 /*
  *
- * NOVO TÍTULO DIVISOR
+ * DIVISORS
  *
+ * Um divisor é um título que há entre campos de um formulário de
+ * cadastro deste módulo.
  */
-if( !empty($_POST['create_divisor']) AND
-    !empty($_POST['title']) )
-    {
+    /*
+     *
+     * NOVO TÍTULO DIVISOR
+     *
+     */
+    if( !empty($_POST['create_divisor']) AND
+        !empty($_POST['title']) )
+        {
 
-    $params = array(
-        'title' => $_POST['title'],
-        'comment' => $_POST['comment'],
-        'before' => $_POST['before']
-    );
-    
-    if( $modulo->saveDivisor($params) ){
-        $status[] = 'Divisor criado com sucesso!';
-    } else {
-        $status[] = "Erro ao gravar informações sobre o novo campo. Nada foi criado.";
+        $params = array(
+            'title' => $_POST['title'],
+            'comment' => $_POST['comment'],
+            'before' => $_POST['before']
+        );
+
+        if( $modulo->saveDivisor($params) ){
+            $status[] = 'Divisor criado com sucesso!';
+        } else {
+            $status[] = "Erro ao gravar informações sobre o novo campo. Nada foi criado.";
+        }
     }
-}
+    /*
+     * Excluir Divisor
+     */
+    if( !empty($_GET['deleteDivisor']) AND
+        $_GET['deleteDivisor'] > 0 )
+        {
 
+        if( $modulo->deleteDivisor($_GET['deleteDivisor']) ){
+            $status[] = 'Divisor excluído com sucesso!';
+        } else {
+            $status[] = "Erro. Nada foi excluído.";
+            
+        }
+    }
 
 /**
  * SALVAR CONFIGURAÇÕES
@@ -280,7 +300,7 @@ if(!empty($_GET['function'])){
 }
 ?>
 
-<h3>Configuração: <?php echo $aust->leNomeDaEstrutura($_GET['aust_node'])?></h3>
+<h2>Configuração: <?php echo $aust->leNomeDaEstrutura($_GET['aust_node'])?></h2>
 <p>
     Configure esta estrutura de cadastro.
 </p>
@@ -446,7 +466,7 @@ if(!empty($_GET['function'])){
     ?>
     <div class="widget">
         <div class="titulo">
-            <h3>Títulos Divisores</h3>
+            <a name="divisors"><h3>Títulos Divisores</h3></a>
         </div>
         <div class="content">
             <p>
@@ -512,8 +532,29 @@ if(!empty($_GET['function'])){
                 </div>
                 <br />
                 <input type="submit" name="create_divisor" value="Criar!" />
-
             </form>
+
+            <h4>Divisores atuais</h4>
+            <?php
+            $divisorTitles = $modulo->loadDivisors();
+            if( empty($divisorTitles) ){
+                ?>
+
+                <?php
+            } else {
+                foreach( $divisorTitles as $div ){
+                    ?>
+                    <strong><?php echo $div['valor'];?></strong>
+                    <br clear="all" />
+                    <em><?php echo $div['descricao'];?></em>
+                    <a href="adm_main.php?section=<?php echo $_GET['section']?>&aust_node=<?php echo $_GET['aust_node']?>&action=<?php echo $_GET['action']?>&deleteDivisor=<?php echo $div['id'] ?>#divisors">Excluir</a>
+                    <br clear="all" />
+                    <br clear="all" />
+                    <?php
+                }
+            }
+            ?>
+
         </div>
         <div class="footer"></div>
     </div>

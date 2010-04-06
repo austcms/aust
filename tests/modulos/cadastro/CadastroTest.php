@@ -33,7 +33,7 @@ class CadastroTest extends PHPUnit_Framework_TestCase
     /*
      * TÍTULOS DIVISORES
      */
-    function testSetDivisor(){
+    function testSaveDivisor(){
 
         /*
          * Teste de validação
@@ -74,9 +74,8 @@ class CadastroTest extends PHPUnit_Framework_TestCase
                             comentario='777comentario'
                         ";
 
-        $this->obj->connection->query($sqlDelete);
 
-        $resultFindAfterDeleted = $this->obj->connection->query($sqlDelete);
+        $resultFindAfterDeleted = $this->obj->connection->exec($sqlDelete);
 
         /*
          * Teste.
@@ -84,11 +83,57 @@ class CadastroTest extends PHPUnit_Framework_TestCase
         $this->assertFalse( empty( $resultFind ),
             'NÃO ENCONTROU DADOS.'
         );
-        $this->assertEquals(array(),
+        $this->assertGreaterThan(0,
             $resultFindAfterDeleted,
             'NÃO EXCLUIU DADOS.'
         );
 
+
+    }
+    /**
+     * @depends testSaveDivisor
+     */
+    function testLoadDivisors(){
+        /*
+         * Cria dados pra tests.
+         */
+        $params = array(
+            'title' => '777titulo',
+            'comment' => '777comentario',
+            'before' => 'BEFORE 777before',
+        );
+        $this->obj->saveDivisor($params);
+        $params = array(
+            'title' => '777titulo',
+            'comment' => '777comentario',
+            'before' => 'BEFORE 777before777',
+        );
+        $this->obj->saveDivisor($params);
+
+        /*
+         * Testa.
+         */
+        $divisors = $this->obj->loadDivisors();
+
+        $this->assertTrue( !empty($divisors) );
+        $this->assertArrayHasKey('777before', $divisors, $divisors);
+        $this->assertArrayHasKey('777before777', $divisors, $divisors);
+        $this->assertArrayHasKey('valor', $divisors['777before777'], $divisors['777before777']);
+        $this->assertEquals('777titulo', $divisors['777before777']['valor'], $divisors['777before777']['valor']);
+
+
+        /*
+         * Exclui do DB dados testados
+         */
+
+            $sqlDelete = "DELETE FROM ".$this->obj->useThisTable()."
+                            WHERE
+                                tipo='divisor' AND
+                                valor='777titulo' AND
+                                comentario='777comentario'
+                            ";
+
+            $this->obj->connection->query($sqlDelete);
 
     }
 

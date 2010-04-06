@@ -14,6 +14,9 @@
 /*
  * STANDARDS
  */
+    form {
+        margin-bottom: 15px;
+    }
     form div.input { display: inline; width: 100%; float: left; }
     form input.text { width: 380px; font-size: 1.3em; height: 22px; padding: 0px 2px; } /* standard */
     form select { font-size: 1.4em; height: 22px; display: inline-block;  }

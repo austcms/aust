@@ -23,12 +23,61 @@ class Cadastro extends Module {
     }
 
     /**
+     * loadDivisors()
      *
-     * @param <type> $params
+     * Divisores são títulos que aparecem entre campos de cadastro,
+     * de forma a separar os inputs por assunto.
+     *
+     * @return <array>
+     */
+    function loadDivisors(){
+        $sql = "SELECT
+                    id, tipo, valor, comentario, descricao
+                FROM
+                    ".$this->useThisTable()."
+                WHERE
+                    tipo='divisor' AND
+                    categorias_id='".$this->austNode."'
+            ";
+        $tempResult = $this->connection->query($sql);
+
+        /*
+         * Agrupa array de Divisors com as chaves sendo o nome do
+         * campo após o título.
+         */
+        $result = array();
+        foreach( $tempResult as $valor ){
+
+            $before = str_replace("BEFORE ", "", $valor['descricao']);
+            $result[$before] = $valor;
+        }
+        
+        return $result;
+    }
+
+    /**
+     * @todo
+     *
+     * saveDivisor deve excluir um divisor que já existe
+     * que seja antes do mesmo campo indicado. Assim,
+     * evita-se dois divisores antes de um mesmo campo.
+     */
+    /**
+     * saveDivisor()
+     * 
+     * Salva um Título Divisor de campos do Cadastro.
+     *
+     * @param <array> $params
+     *      Contém os elementos 'title', 'comment' (não obrigatório)
+     *      e 'before', indicando o nome do campo ao qual este divisor
+     *      antecede.
      * @return <type>
      */
     function saveDivisor($params){
 
+        /*
+         * 'title' e 'before' são obrigatórios
+         */
         if( empty($params['title']) OR
             empty($params['before']) )
             return false;
@@ -56,6 +105,23 @@ class Cadastro extends Module {
 
         return false;
 
+    }
+
+    function deleteDivisor($id){
+        if( is_int($id) OR
+            is_string($id) )
+        {
+            $where = "id='".$id."' AND tipo='divisor'";
+        }
+
+        $sql = "DELETE FROM
+                    ".$this->useThisTable()."
+                WHERE
+                    $where
+                ";
+        $result = $this->connection->exec($sql);
+
+        return $result;
     }
 
     /**

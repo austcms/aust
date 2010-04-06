@@ -78,6 +78,15 @@ foreach( $camposForm as $chave=>$valor ){
     unset($checkbox);
     unset($inputType);
 
+    if( array_key_exists($valor['nomeFisico'], $divisorTitles) ){
+        ?>
+        <h3><?php echo $divisorTitles[$valor['nomeFisico']]['valor']; ?></h3>
+        <?php
+        if( !empty($divisorTitles[$valor['nomeFisico']]['comentario']) ){
+            echo '<p>'.$divisorTitles[$valor['nomeFisico']]['comentario'].'</p>';
+        }
+    }
+
     /**
      * RELACIONAL UM PARA UM
      */
