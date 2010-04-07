@@ -19,7 +19,7 @@
     }
     form div.input { display: inline; width: 100%; float: left; }
     form input.text { width: 380px; font-size: 1.3em; height: 22px; padding: 0px 2px; } /* standard */
-    form select { font-size: 1.4em; height: 22px; display: inline-block;  }
+    form select { font-size: 1.0em; height: 22px; display: inline-block; }
     form textarea { margin-bottom: 10px; width: 100%; }
     form input.submit { display: block; font-size: 1.4em; padding: 10px; margin-bottom: 5px; clear: both; }
 
@@ -66,9 +66,11 @@ table.form {
      margin: 0 0 10px 0;
 }
     table.form tr td { padding-bottom: 10px; }
+    table.form tr td.label { padding-top: 5px; vertical-align: top; }
     table.form td.first { width: 180px; }
     table.form label { font-weight: bold; color: #444444; }
     table.form input.text { font-size: 1.3em; font-weight: bold; width: 380px; }
+    table.form input.date_text { font-size: 1.3em; font-weight: bold; width: 120px; }
 
 /* Table Listagem */
     /* Acima de cada listagem há um painel de controle para excluir, bloquear itens, etc */

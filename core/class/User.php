@@ -190,6 +190,47 @@ class User {
 
     }
 
+    public function getNameById($id){
+        $sql = "SELECT
+                    admins.nome
+                FROM
+                    admins
+                WHERE
+                    id='$id'
+                ";
+
+        $query = reset( $this->conexao->query($sql) );
+        $name = $query['nome'];
+
+        return $name;
+    }
+    /**
+     * getAllUser()
+     *
+     * Retorna todos os usuários cadastrados no sistema.
+     *
+     * @return <array>
+     */
+    public function getAllUsers(){
+        $sql = "SELECT
+                    admins.*,
+                    admins_tipos.nome as tipo,
+                    admins_tipos.id as aid
+                FROM
+                    admins
+                LEFT JOIN
+                    admins_tipos
+                ON admins.tipo=admins_tipos.id
+                ORDER BY
+                    admins_tipos.id ASC
+                LIMIT 100
+                ";
+
+        $query = $this->conexao->query($sql);
+
+        return $query;
+    }
+
 
 }
 

@@ -284,6 +284,7 @@ class ModsController extends Controller
      */
     protected function render($path, $includeType = ''){
 
+        $includeBaseurl = $this->modDir;
         /**
          * DEFINE VARIÁVEIS PARA AS VIEWS
          *

@@ -33,6 +33,12 @@ class Module
             'updated_on' => 'update_on'
         );
 
+        public $fieldsToLoad = array(
+            'titulo', 'visitantes'
+        );
+
+        public $austField = 'categoria';
+        public $order = 'id DESC';
 
     /*
      *
@@ -281,7 +287,13 @@ class Module
         $austNode = empty($options['austNode']) ? array() : $options['austNode'];
         $page = empty($options['page']) ? '1' : $options['page'];
         $limit = empty($options['limit']) ? '25' : $options['limit'];
-        $order = empty($options['order']) ? 'id DESC' : $options['order'];
+        if( empty($options['order']) ){
+            if( empty($this->order) )
+                $order = 'id DESC';
+            $order = $this->order;
+        } else {
+            $order = $options['order'];
+        }
 
         if( !empty($options)
             AND !is_array($options) )
@@ -303,7 +315,7 @@ class Module
             if( !is_array($austNode) )
                 $austNode = array($austNode);
 
-            $where = $where . " AND categoria IN ('".implode("','", array_keys($austNode) )."')";
+            $where = $where . " AND ".$this->austField." IN ('".implode("','", array_keys($austNode) )."')";
         }
 
         /*
@@ -316,15 +328,29 @@ class Module
             $limit = " LIMIT ".$pageLimit.",".$limit;
 
         if( empty($this->describedTable[$this->useThisTable()]) ){
-            $this->describedTable[$this->useThisTable()] = $this->connection->query('DESCRIBE '.$this->useThisTable());
+            $tempDescribe = $this->connection->query('DESCRIBE '.$this->useThisTable());
+            foreach( $tempDescribe as $fields ){
+                $this->describedTable[$this->useThisTable()][$fields['Field']] = $fields;
+            }
         }
+
+        $fieldsInSql = array();
+        $fields = '';
+        foreach( $this->fieldsToLoad as $field ){
+            if( array_key_exists($field, $this->describedTable[$this->useThisTable()]) ){
+                $fieldsInSql[] = $field;
+            }
+        }
+
+        if( !empty($fieldsInSql) )
+            $fields = implode(', ', $fieldsInSql).',';
 
         /*
          * Sql para listagem
          */
         $sql = "SELECT
-                    id, titulo, visitantes,
-                    categoria AS cat,
+                    id, $fields
+                    ".$this->austField." AS cat,
                     DATE_FORMAT(".$this->date['created_on'].", '".$this->date['standardFormat']."') as adddate,
                     (	SELECT
                             nome
