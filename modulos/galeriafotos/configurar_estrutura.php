@@ -258,6 +258,15 @@ if(!empty($_GET['function'])){
                     "inputType" => "checkbox",
                 ),
                 /*
+                 * Descrição
+                 */
+                array(
+                    "propriedade" => "commented_images", // nome da propriedade
+                    "value" => "",
+                    "label" => "Cada foto tem descrição",
+                    "inputType" => "checkbox",
+                ),
+                /*
                  * Modo
                  */
                 /*

@@ -234,7 +234,7 @@
                     echo '<table width="99%" style="margin-bottom: 15px;">';
 
 
-                    $sql = "SELECT id, nome FROM galeria_fotos_imagens
+                    $sql = "SELECT id, nome, texto FROM galeria_fotos_imagens
                             WHERE galeria_foto_id='".$w."'";
                     $query = $modulo->connection->query($sql, "ASSOC");
                     $c = 1;
@@ -243,11 +243,39 @@
                             echo '<tr>';
                         }
                         ?>
-                        <td valign="bottom" <?php echo $params['inline']?>>
+                        <td valign="top" <?php echo $params['inline']?>>
                             <center>
-                                <img src="core/libs/imageviewer/visualiza_foto.php?table=galeria_fotos_imagens&thumbs=yes&myid=<?php echo $dados["id"]; ?>&maxxsize=150&maxysize=200" />
+                                <img src="core/libs/imageviewer/visualiza_foto.php?table=galeria_fotos_imagens&thumbs=yes&myid=<?php echo $dados["id"]; ?>&maxxsize=160&maxysize=100" />
                                 <br clear="all" />
-                                <a href="javascript: void(0);" style="display: block; margin-top: 5px;" onclick="if( confirm('Você tem certeza que deseja excluir esta imagem?') ) window.open('adm_main.php?section=<?php echo $_GET["section"]; ?>&action=<?php echo $_GET["action"]; ?>&aust_node=<?php echo $_GET["aust_node"]; ?>&w=<?php echo $_GET["w"];?>&delete=<?php echo $dados["id"]; ?>','_top');">Excluir</a>
+                                <?php
+                                /*
+                                 * Editar comentário
+                                 */
+                                $commentedImages = false;
+                                if( !empty($moduloConfig["commented_images"]) ){
+                                    if( $moduloConfig["commented_images"]["valor"] == "1" )
+                                        $commentedImages = true;
+                                }
+                                if( $commentedImages ){
+                                    ?>
+                                    <div id="image_comment_text_<?php echo $dados["id"]; ?>">
+                                        <?php echo $dados["texto"]; ?>
+                                    </div>
+                                    <a href="javascript: void(0);" id="image_comment_icon_<?php echo $dados["id"]; ?>" onclick="$('#image_comment_input_<?php echo $dados["id"]; ?>').show(); $('#comment_<?php echo $dados["id"]; ?>').focus(); $(this).hide()">
+                                        <img src="core/user_interface/img/icons/comment_15x15.png" alt="Comentar" border="0" />
+                                    </a>
+                                    <div class="image_comment_input" style="display: none;" id="image_comment_input_<?php echo $dados["id"]; ?>">
+                                        <textarea style="margin-top: 3px; width: 130px; display: block;" class="comment_textareas" id="comment_<?php echo $dados["id"]; ?>" name="<?php echo $dados["id"]; ?>" ></textarea>
+                                        <input type="button" id="image_comment_button_<?php echo $dados["id"]; ?>" value="Salvar comentário" onclick="javascript: addCommentInImage(<?php echo $dados["id"]; ?>)" />
+                                    </div>
+
+                                    <?php
+                                }
+                                ?>
+                                <a href="javascript: void(0);" onclick="if( confirm('Você tem certeza que deseja excluir esta imagem?') ) window.open('adm_main.php?section=<?php echo $_GET["section"]; ?>&action=<?php echo $_GET["action"]; ?>&aust_node=<?php echo $_GET["aust_node"]; ?>&w=<?php echo $_GET["w"];?>&delete=<?php echo $dados["id"]; ?>','_top');">
+                                    <img src="core/user_interface/img/icons/delete_15x15.png" alt="Excluir" border="0" />
+                                </a>
+
                             </center>
                         </td>
                         <?php
@@ -259,6 +287,15 @@
                             $c++;
                         }
                     }
+                    ?>
+                    <script type="text/javascript">
+                    $('.comment_textareas').bind('keypress', function(e) {
+                            if(e.keyCode==13){
+                                addCommentInImage( $(this).attr('name') );
+                            }
+                    });
+                    </script>
+                    <?php
 
                     // se ficou faltando TDs
                     if($c <= $columns AND $c > 0){
