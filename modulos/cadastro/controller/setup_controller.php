@@ -161,6 +161,7 @@ class SetupController extends ModsSetup
                      * campos nas tabelas
                      */
                     $valor = RetiraAcentos(mb_strtolower(str_replace(' ', '_', $_POST['campo'][$i]), 'UTF-8'));
+                    $campo = RetiraAcentos(mb_strtolower(str_replace(' ', '_', $_POST['campo'][$i]), 'UTF-8'));
 
                     $campoExiste = false;
                     if( in_array( $valor, $camposExistentes ) )
@@ -169,6 +170,7 @@ class SetupController extends ModsSetup
                     $adicionalAtual = 2;
                     while( $campoExiste ){
                         $valor = $valor.'_'.$adicionalAtual;
+                        $campo = $campo.'_'.$adicionalAtual;
                         
                         if( !in_array( $valor, $camposExistentes ) )
                             $campoExiste = false;
@@ -202,7 +204,6 @@ class SetupController extends ModsSetup
                         $campos .= ', '.$valor;
                     }
                     
-                    $campo = RetiraAcentos(mb_strtolower(str_replace(' ', '_', $_POST['campo'][$i]), 'UTF-8'));
 
                     /**
                      * CONFIGURAÇÃO DE CAMPOS
