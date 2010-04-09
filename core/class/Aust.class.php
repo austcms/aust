@@ -28,9 +28,28 @@ class Aust {
     public $_recursiveLimit = 50;
     public $_recursiveCurrent = 1;
 
-    function __construct(&$conexao) {
-        $this->conexao = &$conexao;
+    function __construct($conexao = array()){
+        $this->conexao = Connection::getInstance();
         unset($this->AustCategorias);
+    }
+
+    /**
+     * getInstance()
+     *
+     * Para Singleton
+     *
+     * @staticvar <object> $instance
+     * @return <Aust object>
+     */
+    static function getInstance(){
+        static $instance;
+
+        if( !$instance ){
+            $instance[0] = new Aust;
+        }
+
+        return $instance[0];
+
     }
 
     /*

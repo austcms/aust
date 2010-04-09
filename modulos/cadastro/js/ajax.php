@@ -61,6 +61,7 @@ $conexao = Connection::getInstance();
 include('../index.php');
 
 $modulo = new Cadastro;
+$permissoes = StructurePermissions::getInstance();
 
 
 header("Content-Type: text/html; charset=".$aust_charset['view'],true);
@@ -101,6 +102,46 @@ elseif($_POST['action'] == 'LeCampos'){
     foreach ( $query as $chave=>$valor ){
         echo '<option value="'.$valor['Field'].'">'.$valor['Field'].'</option>';
     }
+
+}
+
+/*
+ * LISTING SEARCH
+ */
+
+elseif($_POST['action'] == 'search'){
+
+    /**
+     *
+     */
+    //print_r($_POST);
+    //exit();
+    $austNode = $_POST['austNode'];
+    $aust = Aust::getInstance();
+
+    $resultado = array();
+    $categorias = $aust->LeCategoriasFilhas('',$_GET['aust_node']);
+    $categorias[$austNode] = 'Estrutura';
+    $param = array(
+        'categorias' => $categorias,
+        'metodo' => 'listing',
+        'search' => $_POST['query'],
+        '' => ''
+    );
+
+    $sql = $modulo->loadSql($param);
+    //echo '<br><br>'.$sql .'<br>';
+
+    $resultado = $modulo->connection->query($sql, "ASSOC");
+
+    $fields = count($resultado);
+
+    include($modulo->getIncludeFolder().'/view/mod/listing_table.php');
+
+    //$query = $conexao->query('DESCRIBE '.$_POST['tabela']);
+    //foreach ( $query as $chave=>$valor ){
+        //echo '<option value="'.$valor['Field'].'">'.$valor['Field'].'</option>';
+    //}
 
 }
 ?>

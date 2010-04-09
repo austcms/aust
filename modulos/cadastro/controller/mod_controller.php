@@ -14,7 +14,26 @@ class ModController extends ModsController
     var $helpers = array('Form');
 
     public function listing(){
-        //$this->render('listar');
+
+        $austNode = $_GET['aust_node'];
+        $this->set('austNode', $austNode);
+
+        $categorias = $this->aust->LeCategoriasFilhas('',$_GET['aust_node']);
+        $categorias[$_GET['aust_node']] = 'Estrutura';
+        $param = array(
+            'categorias' => $categorias,
+            'metodo' => 'listing',
+            '' => ''
+        );
+
+        $sql = $this->modulo->loadSql($param);
+        //echo '<br><br>'.$sql .'<br>';
+
+        $resultado = $this->modulo->connection->query($sql, "ASSOC");
+        $this->set('resultado', $resultado);
+
+        $fields = count($resultado);
+        $this->set('fields', $fields);
         //$this->autoRender= false;
     }
 

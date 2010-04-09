@@ -94,9 +94,14 @@ class Module
         public $aust;
         /**
          *
-         * @var class Configurações estáticas do módulo
+         * @var array Configurações estáticas do módulo
          */
         public $config;
+        /**
+         *
+         * @var array Configurações estáticas do módulo
+         */
+        public $structureConfig;
 
     /**
      *
@@ -722,18 +727,86 @@ class Module
 
     }
 
+    /**
+     * loadConfig()
+     *
+     * Carrega a configuração do Módulo.
+     *
+     * @return <array>
+     */
     public function loadConfig(){
-        
-        $modDir = strtolower( get_class($this) ).'/';
-        include THIS_TO_BASEURL.MODULOS_DIR.$modDir.MOD_CONFIG;
+
+        if( !empty($this->config) )
+            return $this->config;
+
+        $modDir = $this->getIncludeFolder().'/';
+        include $modDir.MOD_CONFIG;
 
         if( empty($modInfo) )
             return false;
-        
+
         $this->config = $modInfo;
         return $this->config;
     }
 
+    /**
+     * getIncludeFolder()
+     *
+     * Retorna o endereço até a pasta do módulo.
+     *
+     * @return <string>
+     */
+    public function getIncludeFolder(){
+        return THIS_TO_BASEURL.MODULOS_DIR.strtolower( get_class($this) );
+        //return THIS_TO_BASEURL.MODULOS_DIR.$modDir.MOD_CONFIG;
+    }
+
+    /**
+     * @todo - criar unit test para o método getConfigurations() abaixo.
+     */
+    /**
+     * getConfigurations()
+     *
+     * Retorna as configurações do módulo.
+     *
+     * @return <array>
+     */
+    public function getConfigurations(){
+
+        $configurations = $this->loadConfig();
+        if( empty($configurations['configurations']) )
+            return array();
+        
+        $configurations = $configurations['configurations'];
+
+        $sql = "SELECT
+                    *
+                FROM
+                    config
+                WHERE
+                    tipo  = 'mod_conf' AND
+                    local = '".$this->austNode."'
+                ";
+        $queryTmp = $this->connection->query($sql, "ASSOC");
+
+        $query = array();
+        foreach( $queryTmp as $value ){
+            $query[$value["propriedade"]] = $value;
+        }
+
+        $result = array();
+        foreach( $configurations as $key=>$configuration ){
+            
+            $result[$key] = $configuration;
+
+            if( array_key_exists($key, $query) ){
+                $result[$key]['value'] = $query[$key]['valor'];
+            }
+        }
+
+
+        return $result;
+    } // end getConfigurations()
 
 /**
  *
@@ -830,7 +903,7 @@ class Module
      */
     public function saveModConf($params) {
 
-        global $administrador;
+        $user = User::getInstance();
 
         /*
          * Se for para configurar e tiver dados enviados
@@ -849,7 +922,7 @@ class Module
                     "data" => array(
                     "tipo" => "mod_conf",
                     "local" => $params["aust_node"],
-                    "autor" => $administrador->LeRegistro("id"),
+                    "autor" => $user->LeRegistro("id"),
                     "propriedade" => $propriedade,
                     "valor" => $valor
                     )
@@ -861,16 +934,42 @@ class Module
     }
 
     function loadModConf($params) {
-        $sql = "SELECT * FROM config WHERE tipo='mod_conf' AND local='".$params["aust_node"]."' LIMIT 200";
+        if( $params > 0 ){
+            $sql = "SELECT * FROM config WHERE tipo='mod_conf' AND local='".$params["aust_node"]."' LIMIT 200";
 
-        $queryTmp = $this->connection->query($sql, "ASSOC");
+            $queryTmp = $this->connection->query($sql, "ASSOC");
 
-        foreach($queryTmp as $valor) {
-            $query[$valor["propriedade"]] = $valor;
+            foreach($queryTmp as $valor) {
+                $query[$valor["propriedade"]] = $valor;
+            }
+            $this->structureConfig = $query;
+            return $query;
+        } else if( is_string($params) AND empty($this->structureConfig) ) {
+            $this->loadModConf($this->austNode);
+            return $this->structureConfig[$params];
+        } else if( is_string($params) AND !empty($this->structureConfig) ) {
+            return $this->structureConfig[$params];
         }
-        return $query;
     }
 
+    function getStructureConfig($key, $valueOnly = true) {
+        if( is_string($key) AND empty($this->structureConfig) ) {
+            $this->loadModConf($this->austNode);
+
+            if( $valueOnly )
+                return $this->structureConfig[$key]['valor'];
+            
+            return $this->structureConfig[$key];
+
+        } else if( is_string($key) AND !empty($this->structureConfig) ) {
+            if( $valueOnly )
+                return $this->structureConfig[$key]['valor'];
+            
+            return $this->structureConfig[$key];
+        }
+
+        return NULL;
+    }
     
     /**
      *

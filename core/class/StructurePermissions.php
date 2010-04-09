@@ -40,17 +40,36 @@ class StructurePermissions extends SQLObject {
      * @param array $param Ids do usuário e grupo de usuário do agente
      * acessando o sistema.
      */
-    function  __construct($param) {
+    function  __construct($param = '') {
 
         /**
          * Inicializa com dados do usuário atual
          */
-        if(!empty($param)){
-            $this->admins_id = $param['admins_id'];
-            $this->admins_tipos_id = $param['admins_tipos_id'];
-        }
+        $user = User::getInstance();
+
+        $this->admins_id = $user->getId();
+        $this->admins_tipos_id = $user->getTypeId();
 
         $this->conexao = Connection::getInstance();
+    }
+
+    /**
+     * getInstance()
+     *
+     * Para Singleton
+     *
+     * @staticvar <object> $instance
+     * @return <StructurePermissions object>
+     */
+    static function getInstance(){
+        static $instance;
+
+        if( !$instance ){
+            $instance[0] = new StructurePermissions;
+        }
+
+        return $instance[0];
+
     }
 
     /**

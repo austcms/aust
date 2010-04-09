@@ -81,6 +81,19 @@ $modInfo = array(
         'create' => 'Novo',
         'listing' => 'Listar',
     ),
+    /*
+     * CONFIGURAÇÕES
+     */
+    'configurations' => array(
+        /*
+         * Tem sistema de pesquisa?
+         */
+        'has_search' => array(
+            "value" => "",
+            "label" => "Tem pesquisa?",
+            "inputType" => "checkbox",
+        ),
+    ),
 
     /**
      * RESPONSER

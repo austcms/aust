@@ -133,9 +133,9 @@ class User {
 
     /**
      * getId()
-     * 
+     *
      * Retorna o Id do administrador
-     * 
+     *
      * @return <string>
      */
     public function getId(){
@@ -146,6 +146,17 @@ class User {
             return $this->id;
         }
     } // end getId()
+
+    /**
+     * getTypeId()
+     *
+     * Retorna o Id do grupo de usuário
+     *
+     * @return <int>
+     */
+    public function getTypeId(){
+        return $this->LeRegistro('tipoid');
+    } // end getTypeId()
 
     /**
      * Lê um campo diretamente do DB do usuário atual

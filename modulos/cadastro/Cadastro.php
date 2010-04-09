@@ -11,6 +11,8 @@ class Cadastro extends Module {
 
     public $mainTable = "cadastros_conf";
 
+    public $dataTable;
+
     function __construct($param = ''){
 
 
@@ -143,7 +145,8 @@ class Cadastro extends Module {
             PDO::FETCH_ASSOC
         );
         foreach( $temp as $chave=>$valor ){
-            $result[ $valor["tipo"] ][ $valor["chave"] ] = $valor;
+            if( !empty($valor["chave"]) )
+                $result[ $valor["tipo"] ][ $valor["chave"] ] = $valor;
         }
         return $result;
     }
@@ -186,20 +189,17 @@ class Cadastro extends Module {
         return $result;
     }
 
-
-
-
-
-
-
     /**
+     *
      * VERIFICAÇÕES E LEITURAS AUTOMÁTICAS DO DB
+     * 
      */
     
-    public function SQLParaListagem($param){
+    public function loadSql($param){
         // configura e ajusta as variáveis
         $categorias = $param['categorias'];
         $metodo = $param['metodo'];
+        $search = $param['search'];
         $w = $param['id'];
 
         /**
@@ -234,11 +234,11 @@ class Cadastro extends Module {
                     ".$this->config["arquitetura"]["table"]." AS conf ".
                 $where.
                 $order;
+        unset($where);
         /**
          * Campos carregados
          */
         $result = $this->connection->query($sql, "ASSOC");
-
         /**
          * Configurações
          */
@@ -265,8 +265,10 @@ class Cadastro extends Module {
                     }
                 }
 
-                $campos['valor'][] = $dados['valor'];
-                $campos['chave'][] = $dados['chave'];
+                if( !empty($dados['valor']) )
+                    $campos['valor'][] = $dados['valor'];
+                if( !empty($dados['chave']) )
+                    $campos['chave'][] = $dados['chave'];
 
             } else if($dados['tipo'] == 'estrutura' AND $dados['chave'] == 'tabela'){
                 $est['tabela'][] = $dados['valor'];
@@ -307,11 +309,31 @@ class Cadastro extends Module {
             $leftJoin = array();
             $virgula = "";
         }
-        
+
+
+        /*
+         * SEARCH?
+         *
+         * Analisa se deve buscar por algo em específico.
+         */
+        $searchQuery = "";
+        if( !empty($search) ){
+            /*
+             * Faz loop por cada campo do cadastro, criando
+             * o comando SQL Where para busca de dados.
+             */
+            foreach( $campos['chave'] as $campo ){
+                $searchQueryArray[] = $campo." LIKE '%".$search."%'";
+            }
+            if( !empty($searchQueryArray) )
+                $searchQuery = "AND (".implode(" OR ", $searchQueryArray).")";
+            //pr($campos);
+        }
+
         /**
          * Novo SQL
          */
-        if( $metodo == "listar" ){
+        if( $metodo == "listing" ){
 
             if( empty($mostrar) ){
                 $mostrar = "id,";
@@ -330,13 +352,15 @@ class Cadastro extends Module {
                         ".$est["tabela"][0]." AS ".$tP."
 
                     ".implode(" ", $leftJoin)."
-
+                    WHERE
+                        1=1
+                        $searchQuery
                     ORDER BY
                         ".$tP.".id DESC
-                    LIMIT 0,30
+                    LIMIT 0,50
 
                     ";
-        } elseif( $metodo == "editar" ){
+        } elseif( $metodo == "edit" ){
             $sql = "SELECT
                         id, ".implode(",", $campos["chave"])."
                     FROM
@@ -391,6 +415,10 @@ class Cadastro extends Module {
      * Função para retornar o nome da tabela de dados de uma estrutura da cadastro
      */
     public function LeTabelaDeDados($param){
+
+        if( !empty($this->dataTable) )
+            return $this->dataTable;
+
         if(is_int($param) or $param > 0){
             $estrutura = "categorias.id='".$param."'";
         } elseif(is_string($param)){
@@ -410,6 +438,8 @@ class Cadastro extends Module {
                 //echo $sql;
         $mysql = $this->connection->query($sql);
         $dados = $mysql[0];
+        
+        $this->dataTable = $dados['valor'];
         return $dados['valor'];
     }
 

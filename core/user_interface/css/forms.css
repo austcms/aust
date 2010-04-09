@@ -73,10 +73,17 @@ table.form {
     table.form input.date_text { font-size: 1.3em; font-weight: bold; width: 120px; }
 
 /* Table Listagem */
+    div.content_search {
+        margin-bottom: 10px; padding: 0; float: left;
+        margin-left: 20px;
+    }
+        div.content_search input {
+            width: 130px;
+        }
     /* Acima de cada listagem há um painel de controle para excluir, bloquear itens, etc */
     div.painel_de_controle { margin-bottom: 10px; padding: 0; float: right; }
     /* Tabela para listagem, seja de conteúdo ou usuários */
-table.listagem { width: 100%; margin: 0px; border-collapse: collapse;}
+table.listagem { width: 100%; margin: 0px; clear: both; border-collapse: collapse;}
     table.listagem tr td { padding: 5px; }
     table.listagem tr td { padding: 5px; margin: 0px;}
 
