@@ -935,8 +935,8 @@ class Module
 
     function loadModConf($params) {
         if( $params > 0 ){
-            $sql = "SELECT * FROM config WHERE tipo='mod_conf' AND local='".$params["aust_node"]."' LIMIT 200";
-
+            $sql = "SELECT * FROM config WHERE tipo='mod_conf' AND local='".$params."' LIMIT 200";
+            
             $queryTmp = $this->connection->query($sql, "ASSOC");
 
             foreach($queryTmp as $valor) {
