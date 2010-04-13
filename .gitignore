@@ -1,4 +1,5 @@
 nbproject/
+config/database.php
 uploads/
 core/cache/*
 core/user_interface/cache/*

@@ -103,9 +103,20 @@ class Connection extends SQLObject {
 
         $dbConfig['driver'] = (empty($dbConfig['driver'])) ? 'mysql' : $dbonfig['driver'];
 
+        $port = '';
+        if( !empty($dbConfig['port']) )
+            $port = 'port='.$dbConfig['port'].';';
+
+        $connectionStatement = $dbConfig['driver'].':host='.$dbConfig['server'].';'
+                                . $port
+                                .   'dbname='.$dbConfig['database'];
+
+        /**
+         * @todo - se não encontra conexão (não me refiro
+         * a banco de dados), simplesmente não mostra erro algum.
+         */
         if( $this->conn = new PDO(
-                                $dbConfig['driver'].':host='.$dbConfig['server'].';'
-                                .   'dbname='.$dbConfig['database'],
+                                $connectionStatement,
                                 $dbConfig['username'], $dbConfig['password'],
                                 array(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true)
                             )
