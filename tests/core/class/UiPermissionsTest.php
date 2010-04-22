@@ -22,7 +22,6 @@ class UiPermissionsTest extends PHPUnit_Framework_TestCase
          * Informações de conexão com banco de dados
          */
         require('tests/config/database.php');
-        $this->dbConfig = $dbConn;
         
         $this->user = User::getInstance();
         $this->obj = UiPermissions::getInstance();

@@ -168,6 +168,9 @@ class User {
         if( !empty($this->userInfo[$campo]) )
             return $this->userInfo[$campo];
 
+        if( !isset($_SESSION) )
+            return false;
+
         if( $campo == 'tipo' ){
             $statement = "admins_tipos.nome as tipo";
         } else if( $campo == 'tipoid' ){

@@ -89,7 +89,7 @@ class ImagensTest extends PHPUnit_Framework_TestCase
             )
         );
         $_POST = array(
-            'metodo' => 'create',
+            'method' => 'create',
             'frmadddate' => '',
             'frmautor' => '',
             'frmordem' => '777',
@@ -111,8 +111,9 @@ class ImagensTest extends PHPUnit_Framework_TestCase
         $saveResult = $this->obj->save($_POST);
         $lastInsertId = $this->obj->connection->lastInsertId();
 
-        $loadResult = $this->obj->load(array( 'id' => $lastInsertId ) );
 
+        $loadResult = $this->obj->load(array( 'id' => $lastInsertId, 'austNode' => '777' ) );
+        //var_dump($loadResult);
         $deleteResult = $this->obj->delete($lastInsertId);
 
         $this->assertTrue($saveResult, $saveResult);

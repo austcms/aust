@@ -115,16 +115,21 @@ class Connection extends SQLObject {
          * @todo - se não encontra conexão (não me refiro
          * a banco de dados), simplesmente não mostra erro algum.
          */
-        if( $this->conn = new PDO(
-                                $connectionStatement,
-                                $dbConfig['username'], $dbConfig['password'],
-                                array(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true)
-                            )
+        try {
+            if( $this->conn = new PDO(
+                                    $connectionStatement,
+                                    $dbConfig['username'], $dbConfig['password'],
+                                    array(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true)
+                                )
 
-        ){
-            $this->DBExiste = true;
-        } else {
-            return false;
+            ){
+                $this->DBExiste = true;
+            } else {
+                return false;
+            }
+        } catch(Exception $e) {
+            echo $e->getMessage();
+            exit();
         }
 
         if( !empty($dbConfig["encoding"]) ){
@@ -261,7 +266,7 @@ class Connection extends SQLObject {
 
             $sEnd = microtime(true);
 
-            if( !is_string($debugResult) ){
+            if( !empty($debugResult) AND !is_string($debugResult) ){
                 $debugResult = count($result);
             }
             /*

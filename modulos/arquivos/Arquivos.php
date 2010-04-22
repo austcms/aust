@@ -118,8 +118,9 @@ class Arquivos extends Module
                 return false;
             }
 
-            unset($this->status['uploadFile'][$file['file']]);
-            
+            if( isset( $this->status['uploadFile'] ) ){
+                unset($this->status['uploadFile'][$file['file']]);
+            }
             /*
              * Verifica se o mime-type do arquivo é válido
              */
@@ -148,6 +149,9 @@ class Arquivos extends Module
             $this->forPost[$filename]['frmarquivo_nome'] = $newFilename;
             $this->forPost[$filename]['frmarquivo_tipo'] = $file['type'];
             $this->forPost[$filename]['frmarquivo_tamanho'] = $file['size'];
+            if( !isset($_POST['frmarquivo_nome']) && $this->testMode )
+                $_POST['frmarquivo_nome'] = "teste";
+
             $this->forPost[$filename]['frmarquivo_extensao'] = $this->getExtension($_POST['frmarquivo_nome']);
 
             /**
@@ -173,7 +177,6 @@ class Arquivos extends Module
              */
             $urlBaseDir = str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']).$this->relativeDir;
             $frmurl = $urlBaseDir.$upload_dir .'/'.$newFilename;
-            print_r($frmUrl);
              $this->forPost[$filename]['frmurl'] = $frmurl;
 
             /*

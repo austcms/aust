@@ -26,6 +26,7 @@ class ArquivosTest extends PHPUnit_Framework_TestCase
         include_once 'modulos/'.$mod.'/'.$modInfo['className'].'.php';
         
         $this->obj = new $modInfo['className'];//new $modInfo['className']();
+        $this->obj->testMode = true;
 
     }
 

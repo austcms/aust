@@ -103,6 +103,8 @@ class Module
          */
         public $structureConfig;
 
+        public $params;
+
     /**
      *
      * @var <bool> Indica se este é um teste. O sendo, não realiza
@@ -124,6 +126,9 @@ class Module
      */
     function __construct() {
 
+        if( !isset ($_GET["aust_node"]) )
+            $_GET["aust_node"] = false;
+        
         $this->austNode = $_GET['aust_node'];
 
         /**
@@ -157,6 +162,11 @@ class Module
      * @return <bool>
      */
     public function save($post = array()){
+
+        if( empty($post['method']) ){
+            throw new Exception("Opção 'method' não especificado");
+            return false;
+        }
 
         $method = $post['method'];
         //pr($post);
@@ -199,7 +209,6 @@ class Module
         $this->loadedIds = array();
         
         $qry = $this->connection->query($this->loadSql($param));
-
         if( empty($qry) )
             return array();
 
@@ -315,12 +324,14 @@ class Module
         /*
          * Gera condições para sql
          */
+        $where = ' ';
         if( !empty($austNode) ) {
-            $where = ' ';
             if( !is_array($austNode) )
                 $austNode = array($austNode);
 
-            $where = $where . " AND ".$this->austField." IN ('".implode("','", array_keys($austNode) )."')";
+            $austNodeForSql = implode("','", array_values($austNode) );
+
+            $where = $where . " AND ".$this->austField." IN ('".$austNodeForSql."')";
         }
 
         /*
@@ -341,9 +352,11 @@ class Module
 
         $fieldsInSql = array();
         $fields = '';
-        foreach( $this->fieldsToLoad as $field ){
-            if( array_key_exists($field, $this->describedTable[$this->useThisTable()]) ){
-                $fieldsInSql[] = $field;
+        if( !empty( $this->describedTable[$this->useThisTable()] ) ){
+            foreach( $this->fieldsToLoad as $field ){
+                if( array_key_exists($field, $this->describedTable[$this->useThisTable()]) ){
+                    $fieldsInSql[] = $field;
+                }
             }
         }
 
@@ -407,6 +420,8 @@ class Module
         if( !empty($post['w']) )
             $method = 'edit';
 
+        $c = 0;
+        $where = "";
         foreach($post as $key=>$valor){
             /*
              * Verifica se $post contém algum 'frm' no início
@@ -584,6 +599,9 @@ class Module
      * @return <array>
      */
     function getDataForEmbeddedSaving($post){
+        if( !isset($post['embed']) )
+            $post['embed'] = array();
+        
         $embedData = array(
             'embedModules' => $post['embed'],
             'options' => array(

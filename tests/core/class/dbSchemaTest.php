@@ -22,7 +22,6 @@ class dbSchemaTest extends PHPUnit_Framework_TestCase
          */
 
         require('tests/config/database.php');
-        $this->dbConfig = $dbConn;
         
         $this->conexao = Connection::getInstance();
 
