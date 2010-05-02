@@ -70,7 +70,6 @@ class Conteudo extends Module
 
         if( empty($post) )
             return false;
-
         $post['frmtitulo_encoded'] = encodeText($post['frmtitulo']);
 
 

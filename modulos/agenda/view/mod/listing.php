@@ -25,8 +25,11 @@
 ?>
 <div class="calendario">
     <?php
-    $month_int = date("n");
-    $year = date("Y");
+    if( empty($month_int) )
+        $month_int = date("n");
+    if( empty($year) )
+        $year = date("Y");
+    
     $user = User::getInstance();
 
     // Array com o nome do mês respectivo ao número do mesmo

@@ -163,12 +163,18 @@ class Module
      */
     public function save($post = array()){
 
-        if( empty($post['method']) ){
-            throw new Exception("Opção 'method' não especificado");
+        if( empty($post['method']) AND
+            empty($post['metodo']) )
+        {
+            throw new Exception("Opção 'method' não especificado em Module");
             return false;
         }
 
-        $method = $post['method'];
+        if( !empty($post['method']) )
+            $method = $post['method'];
+        else if( !empty($post['metodo']) )
+            $method = $post['metodo'];
+
         //pr($post);
         /*
          * Gera SQL
@@ -301,6 +307,8 @@ class Module
         $austNode = empty($options['austNode']) ? array() : $options['austNode'];
         $page = empty($options['page']) ? '1' : $options['page'];
         $limit = empty($options['limit']) ? '25' : $options['limit'];
+        $customWhere = empty($options['where']) ? '' : ' '.$options['where'];
+
         if( empty($options['order']) ){
             if( empty($this->order) )
                 $order = 'id DESC';
@@ -380,7 +388,7 @@ class Module
                 FROM
                     ".$this->useThisTable()."
                 WHERE 1=1 $id".
-                $where.
+                $where."".$customWhere.
                 " ORDER BY ".$order."
                 $limit";
         return $sql;
@@ -952,7 +960,22 @@ class Module
     }
 
     function loadModConf($params) {
-        if( $params > 0 ){
+        if( is_array($params) ){
+
+
+            if( empty($params["austNode"]) AND
+                empty($params["aust_node"]) )
+                return NULL;
+
+            if( !empty($params["aust_node"]) )
+                return $this->loadModConf($params["aust_node"]);
+
+            if( !empty($params["austNode"]) )
+                return $this->loadModConf($params["austNode"]);
+
+            return NULL;
+
+        } else if( $params > 0 ){
             $sql = "SELECT * FROM config WHERE tipo='mod_conf' AND local='".$params."' LIMIT 200";
             
             $queryTmp = $this->connection->query($sql, "ASSOC");

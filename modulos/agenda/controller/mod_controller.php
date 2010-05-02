@@ -33,6 +33,11 @@ class ModController extends ModsController
         $categorias = $this->aust->LeCategoriasFilhas('',$_GET['aust_node']);
         $categorias[$_GET['aust_node']] = 'Estrutura';
 
+        /*
+         * MÊS ATUAL
+         */
+        $month_int = 4;
+        $this->set("month_int", $month_int);
 
         /*
          * PAGINAÇÃO
@@ -56,6 +61,7 @@ class ModController extends ModsController
             'resultadosPorPagina' => $num_por_pagina
         );
         $sql = $this->modulo->loadSql($params);
+        pr($sql);
         $this->set('sql', $sql );
 
         /*

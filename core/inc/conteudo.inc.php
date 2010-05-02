@@ -112,7 +112,6 @@ if(!empty($_GET['action'])){
          * Prepara os argumentos para instanciar a classe e depois
          * chama o Controller que cuidará de toda a arquitetura MVC do módulo
          */
-        
         $param = array(
             'conexao' => $conexao,
             'modulo' => $modulo,
