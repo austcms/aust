@@ -19,7 +19,7 @@
     Calendário: <?php echo $h1;?>
 </h2>
 <p>
-    Abaixo você encontra a listagem dos últimos textos desta categoria.
+    Confira seus compromissos abaixo.
 </p>
 <?php
 ?>
@@ -27,8 +27,10 @@
     <?php
     if( empty($month_int) )
         $month_int = date("n");
-    if( empty($year) )
+    if( empty($year_int) )
         $year = date("Y");
+    else
+        $year = $year_int;
     
     $user = User::getInstance();
 
@@ -67,27 +69,60 @@
     <table class="calendar">
         <tr>
             <td colspan=7 class="month_year">
+
+                <h3 style="margin-bottom: 0px;"><?php echo $mes_.'/'. $year; ?></h3>
+
                 <?php
-                echo $mes_.'/'. $year;
                 /*
-                <table border=0 cellpadding=0 cellspacing=0 width="130" class="month_year">
-                    <tr>
-                        <td width="4"><a href="javascript: MostraCalendario(<?php echo $incremento-1;?>,<?php echo $categoria;?>)" class="incremento">«</a></td>
-                        <td class="titulo_mesano"><?php echo $mes_ .'/'. $year; ?></td>
-                        <td width="4"><a href="javascript: MostraCalendario(<?php echo $incremento+1;?>,<?php echo $categoria;?>)" class="incremento">»</a></td>
-                    </tr>
-                </table>
-                 * 
+                 * Próximo mês ou anterior
                  */
+                $nextMonth = $month_int+1;
+                $prevMonth = $month_int-1;
+                $prevYear = $year;
+                $nextYear = $year;
+
+                if( $nextMonth > 12 ){
+                    $nextMonth = 1;
+                    $nextYear++;
+                }
+                if( $prevMonth < 1 ){
+                    $prevMonth = 12;
+                    $prevYear--;
+                }
+
+
+                ?>
+                <a href="adm_main.php?section=<?php echo $_GET['section'] ?>&action=<?php echo $_GET['action'] ?>&aust_node=<?php echo $_GET['aust_node'] ?>&m=<?php echo $prevMonth ?>&y=<?php echo $prevYear ?>">
+                Mês Anterior</a> -
+                <a href="adm_main.php?section=<?php echo $_GET['section'] ?>&action=<?php echo $_GET['action'] ?>&aust_node=<?php echo $_GET['aust_node'] ?>&m=<?php echo $nextMonth ?>&y=<?php echo $nextYear ?>">
+                Próximo</a>
+                <?php
+                if( $month_int != date("n") OR
+                    $year_int != date("Y") )
+                {
+                    ?>
+                    - <a href="adm_main.php?section=<?php echo $_GET['section'] ?>&action=<?php echo $_GET['action'] ?>&aust_node=<?php echo $_GET['aust_node'] ?>&m=<?php echo date("n"); ?>&y=<?php echo date("Y") ?>">
+                    Mês atual</a>
+                    <?php
+                }
                 ?>
             </td>
         </tr>
+        <?php
+        /*
+         * DIAS DA SEMANA
+         *
+         * Dom, seg, ter, qua, qui, sex, sab
+         */
+        ?>
         <tr>
             <?php
             for ( $x = 0; $x < 7; $x++ ) {
                 ?>
                 <td class="week_day">
+                    <strong>
                     <?php echo $week_titles[$x]; ?>
+                    </strong>
                 </td>
                 <?php
             }

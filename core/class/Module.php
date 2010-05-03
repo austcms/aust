@@ -214,17 +214,20 @@ class Module
     public function load($param = ''){
         $this->loadedIds = array();
         
-        $qry = $this->connection->query($this->loadSql($param));
+        $paramForLoadSql = $param;
+        
+        if( is_array($param['austNode']) ){
+            $austNode = reset( array_keys( $param['austNode'] ) );
+        } else {
+            $austNode = array($param['austNode']=>'');
+            $paramForLoadSql['austNode'] = array($param['austNode']=>'');
+        }
+
+        $qry = $this->connection->query($this->loadSql($paramForLoadSql));
         if( empty($qry) )
             return array();
 
         $qry = $this->_organizesLoadedData($qry);
-
-        if( is_array($param['austNode']) ){
-            $austNode = reset( array_keys( $param['austNode'] ) );
-        } else {
-            $austNode = $param['austNode'];
-        }
 
         $embedModules = $this->getRelatedEmbed($austNode);
 
@@ -332,12 +335,12 @@ class Module
         /*
          * Gera condições para sql
          */
-        $where = ' ';
+        $where = '';
         if( !empty($austNode) ) {
             if( !is_array($austNode) )
                 $austNode = array($austNode);
 
-            $austNodeForSql = implode("','", array_values($austNode) );
+            $austNodeForSql = implode("','", array_keys($austNode) );
 
             $where = $where . " AND ".$this->austField." IN ('".$austNodeForSql."')";
         }
@@ -387,7 +390,7 @@ class Module
                     ) AS node
                 FROM
                     ".$this->useThisTable()."
-                WHERE 1=1 $id".
+                WHERE 1=1$id".
                 $where."".$customWhere.
                 " ORDER BY ".$order."
                 $limit";
