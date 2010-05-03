@@ -266,7 +266,10 @@ class Connection extends SQLObject {
 
             $sEnd = microtime(true);
 
+               //pr($result);
             if( !empty($debugResult) AND !is_string($debugResult) ){
+                $debugResult = count($result);
+            } else if( empty($debugResult) ) {
                 $debugResult = count($result);
             }
             /*
@@ -337,7 +340,8 @@ class Connection extends SQLObject {
 
             if( !is_string($debugResult) ){
                 $debugResult = count($result);
-            }
+            } else if( empty($debugResult) )
+                $debugResult = count($result);
 
             /*
              * DESCRIBE NÃO SÃO MOSTRADOS

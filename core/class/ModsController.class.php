@@ -264,13 +264,18 @@ class ModsController extends Controller
         /**
          * Chama a action requerida.
          */
+        //pr($param['action']);
         $this->{$param['action']}();
+        //$this->{"save"}();
+        //echo $this->action;
+        //call_user_func(array($this, "saveß"));
+        //echo "oijoij";
 
         /**
          * Se não foi renderizado ainda, renderiza automaticamente
          */
         if( !$this->isRendered AND $this->autoRender )
-            $this->render( $this->action );
+            $this->render( $param['action'] );
         /**
          * $this->afterFilter() é chamado sempre depois de qualquer ação
          */

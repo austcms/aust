@@ -66,6 +66,9 @@ class Agenda extends Module
      */
     public function loadSql($options = array()) {
 
+        if( empty($options['where']) )
+            $options['where'] = "";
+
         return parent::loadSql($options);
 
     } // fim getSQLForListing()

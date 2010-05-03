@@ -31,8 +31,30 @@ class ModController extends ModsController
         }
 
         $categorias = $this->aust->LeCategoriasFilhas('',$_GET['aust_node']);
+        //pr($categorias);
         $categorias[$_GET['aust_node']] = 'Estrutura';
 
+        /*
+         * MÊS ATUAL
+         */
+        if( empty($_GET['m']) )
+            $month_int = date("n");
+        else if( is_numeric($_GET['m']) )
+            $month_int = $_GET['m'];
+        else
+            $month_int = date("n");
+        /*
+         * ANO ATUAL
+         */
+        if( empty($_GET['y']) )
+            $year_int = date("Y");
+        else if( is_numeric($_GET['y']) )
+            $year_int = $_GET['y'];
+        else
+            $year_int = date("Y");
+
+        $this->set("month_int", $month_int);
+        $this->set("year_int", $year_int);
 
         /*
          * PAGINAÇÃO
@@ -53,7 +75,8 @@ class ModController extends ModsController
         $params = array(
             'austNode' => $categorias,
             'pagina' => $pagina,
-            'resultadosPorPagina' => $num_por_pagina
+            'resultadosPorPagina' => $num_por_pagina,
+            'where' => "AND ( MONTH(start_datetime)=".$month_int." AND YEAR(start_datetime)=".$year_int." )",
         );
         $sql = $this->modulo->loadSql($params);
         $this->set('sql', $sql );

@@ -64,7 +64,7 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
                         trim($sql) );
 
         unset($sql);
-        $sql = $this->obj->loadSql( array('page'=>3, 'id'=>'1', 'austNode' => array('3','4')) );
+        $sql = $this->obj->loadSql( array('page'=>3, 'id'=>'1', 'austNode' => array('3'=>'','4'=>'')) );
         $sql = preg_replace('/\n|\t/Us', "", preg_replace('/\s{2,}/s', " ", $sql));
         $this->assertEquals( trim("SELECT id, titulo, visitantes, categoria AS cat, ".
                         "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as adddate, ".
@@ -291,7 +291,7 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
          * VERIFICA LOAD()
          */
         $params = array(
-            'austNode' => array($catLastInsertId),
+            'austNode' => array($catLastInsertId=>''),
         );
 
         $result = $this->obj->load($params);
