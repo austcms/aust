@@ -1,0 +1,9 @@
+<IfModule mod_expires.c>
+    #ExpiresActive On
+    #ExpiresDefault "access plus 10 years"
+</IfModule>
+
+<IfModule mod_rewrite.c>
+
+    #RewriteEngine On
+</IfModule>

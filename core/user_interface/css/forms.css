@@ -14,9 +14,12 @@
 /*
  * STANDARDS
  */
+    form {
+        margin-bottom: 15px;
+    }
     form div.input { display: inline; width: 100%; float: left; }
     form input.text { width: 380px; font-size: 1.3em; height: 22px; padding: 0px 2px; } /* standard */
-    form select { font-size: 1.4em; height: 22px; display: inline-block;  }
+    form select { font-size: 1.0em; height: 22px; display: inline-block; }
     form textarea { margin-bottom: 10px; width: 100%; }
     form input.submit { display: block; font-size: 1.4em; padding: 10px; margin-bottom: 5px; clear: both; }
 
@@ -63,15 +66,24 @@ table.form {
      margin: 0 0 10px 0;
 }
     table.form tr td { padding-bottom: 10px; }
+    table.form tr td.label { padding-top: 5px; vertical-align: top; }
     table.form td.first { width: 180px; }
     table.form label { font-weight: bold; color: #444444; }
     table.form input.text { font-size: 1.3em; font-weight: bold; width: 380px; }
+    table.form input.date_text { font-size: 1.3em; font-weight: bold; width: 120px; }
 
 /* Table Listagem */
+    div.content_search {
+        margin-bottom: 10px; padding: 0; float: left;
+        margin-left: 20px;
+    }
+        div.content_search input {
+            width: 130px;
+        }
     /* Acima de cada listagem há um painel de controle para excluir, bloquear itens, etc */
     div.painel_de_controle { margin-bottom: 10px; padding: 0; float: right; }
     /* Tabela para listagem, seja de conteúdo ou usuários */
-table.listagem { width: 100%; margin: 0px; border-collapse: collapse;}
+table.listagem { width: 100%; margin: 0px; clear: both; border-collapse: collapse;}
     table.listagem tr td { padding: 5px; }
     table.listagem tr td { padding: 5px; margin: 0px;}
 
@@ -102,6 +114,7 @@ table.listagem td.adddate { width: 110px; }
 /* FormHelper (cadastros) */
 form.formHelper { }
 
+    form.formHelper div.input { margin-bottom: 5px; }
     form.formHelper label { width: 160px; margin-right: 5px; float: left; }
     form.formHelper div.input_field {  }
     form.formHelper div.input_textarea textarea { width: 300px; height: 50px; }

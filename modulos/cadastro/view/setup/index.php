@@ -31,7 +31,7 @@ foreach($exPOST as $chave=>$valor){
     <select name="qtd_campos" style="width: 70px;">
         <?php
         // cria um select com 20 números
-        for($i = 1; $i <= 40; $i++){
+        for($i = 1; $i <= 100; $i++){
         ?>
             <option value="<?php echo $i;?>"><?php echo $i;?></option>
         <?php

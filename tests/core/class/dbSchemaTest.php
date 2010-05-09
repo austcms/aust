@@ -3,8 +3,8 @@ require_once 'PHPUnit/Framework.php';
 
 #####################################
 
+require_once 'tests/config/auto_include.php';
 require_once 'core/class/SQLObject.class.php';
-require_once 'core/class/Conexao.class.php';
 require_once 'core/class/dbSchema.class.php';
 
 #####################################
@@ -22,9 +22,8 @@ class dbSchemaTest extends PHPUnit_Framework_TestCase
          */
 
         require('tests/config/database.php');
-        $this->dbConfig = $dbConn;
         
-        $this->conexao = new Conexao($this->dbConfig);
+        $this->conexao = Connection::getInstance();
 
         require("core/config/installation/dbschema.php");
         $this->dbSchema = new dbSchema($dbSchema, $this->conexao);

@@ -14,6 +14,7 @@ class ModsSetup extends ModsController
     function __construct($param){
         $param['controllerName'] = 'setup';
         $param['action'] = $param['action'];
+        
         parent::__construct($param);
     }
 

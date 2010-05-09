@@ -80,8 +80,15 @@ $modInfo = array(
      *
      */
     'opcoes' => array(
-        'criar' => 'Novo',
-        'listar' => 'Listar',
+        'create' => 'Novo',
+        'listing' => 'Listar',
+    ),
+    /*
+     * Se não há valor, substitui campo vazio na listagem
+     * pelos valores abaixo
+     */
+    'replaceFieldsValueIfEmpty' => array(
+        'titulo' => '[Sem título]',
     ),
 
     /**

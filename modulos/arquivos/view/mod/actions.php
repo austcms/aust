@@ -13,7 +13,7 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
     // se não estiver confirmada a exclusão
     if(empty($_GET['confirm'])){
     ?>
-        <form method="post" action="<?=$_SERVER['PHP_SELF']?>?<?=$_SERVER['QUERY_STRING'];?>&confirm=delete" name="repost">
+        <form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?<?php echo $_SERVER['QUERY_STRING'];?>&confirm=delete" name="repost">
         <input type="hidden" name="deletar" value="deletar" />
         <?php
         $itens = $_POST['itens'];
@@ -47,10 +47,10 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
         $sql = "SELECT
                     *
                 FROM
-                    arquivos
+                    ".$modulo->getMainTable()."
                 WHERE
                     {$where}";
-        $mysql = $modulo->conexao->query($sql);
+        $mysql = $modulo->connection->query($sql);
         $dados = $mysql[0];
 
         // se conseguir excluir o arquivo fisicamente, então exclui dados do DB
@@ -62,11 +62,11 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
             {
 
                 $sql = "DELETE FROM
-                            ".$modulo->LeTabelaDaEstrutura($_GET['aust_node'])."
+                            ".$modulo->getMainTable()."
                         WHERE
                             $where
                             ";
-                if($modulo->conexao->exec($sql)){
+                if($modulo->connection->exec($sql)){
                     $resultado = TRUE;
                 } else {
                     $resultado = FALSE;
@@ -103,7 +103,7 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
     // se não estiver confirmada a exclusão
     if(empty($_GET['confirm'])){
     ?>
-        <form method="post" action="<?=$_SERVER['PHP_SELF']?>?<?=$_SERVER['QUERY_STRING'];?>&confirm=aprovar" name="repost">
+        <form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?<?php echo $_SERVER['QUERY_STRING'];?>&confirm=aprovar" name="repost">
         <input type="hidden" name="aprovar" value="aprovar" />
         <?php
         $itens = $_POST['itens'];
@@ -143,7 +143,7 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
                     $where
                     ";
         //echo $sql;
-        if($modulo->conexao->exec($sql)){
+        if($modulo->connection->exec($sql)){
             $resultado = TRUE;
         } else {
             $resultado = FALSE;

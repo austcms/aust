@@ -11,17 +11,17 @@
 class ModController extends ModsController
 {
 
-    public function listar(){
+    public function listing(){
         //$this->render('listar');
     }
 
-    public function criar(){
+    public function create(){
 
 
         $this->render('form');
     }
 
-    public function editar(){
+    public function edit(){
 
         
         $this->render('form');

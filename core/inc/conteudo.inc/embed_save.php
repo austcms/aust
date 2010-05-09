@@ -9,7 +9,7 @@
 /*
  * carrega módulos que contenham propriedade embed
  */
-$embed = $this->modulo->LeModulosEmbed();
+$embed = $this->LeModulosEmbed();
 
 $embedIds = array();
 if( is_array($embed) ){
@@ -23,8 +23,9 @@ if( is_array($embed) ){
  * estrutura atual.
  */
 
-$embedRelatedNodes = $modulo->getRelatedEmbed($_GET["aust_node"]);
+$embedRelatedNodes = $this->getRelatedEmbedAsArray($_GET["aust_node"]);
 
+pr($embed);
 /*
  * Salva o objeto do módulo atual para fazer embed
  */
@@ -48,7 +49,8 @@ if( !empty($embed) ) {
                 if($chave2 == 'pasta') {
                     if(is_file($valor2.'/embed/gravar.php')) {
                         include($valor2.'/index.php');
-                        include($valor2.'/embed/gravar.php');
+                        pr($modconf);
+                        //include($valor2.'/embed/gravar.php');
                     }
                 }
             }

@@ -34,9 +34,9 @@ $specsection['list_content_description'] =
     $dados = mysql_fetch_array($mysql);
     $cat = $dados[nome];
 ?>
-<h2><?=$h1;?></h2>
+<h2><?php echo $h1;?></h2>
 <p>
-    <a href="adm_main.php?section=<?=$section;?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+    <a href="adm_main.php?section=<?php echo $section;?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
 </p>
 <?php
     if((!empty($filter)) AND ($filter <> 'off')){
@@ -44,7 +44,7 @@ $specsection['list_content_description'] =
     }
 ?>
 
-<?=$specsection[list_content_description];?>
+<?php echo $specsection[list_content_description];?>
 
 <?php
 if($block == "block"){
@@ -68,7 +68,7 @@ if($block == "block"){
                 OR $escala == "webmaster"){
                 ?>
                     <p style="color: white; margin: 0px;">
-                        <a href="adm_main.php?section=<?=$section;?>&action=<?=$action;?>&block=delete&w=<?php echo $w; ?><?=$addurl;?>" style="text-decoration: underline; color: white;">-> Clique aqui para apagar o conte&uacute;do definitivamente <- </a>
+                        <a href="adm_main.php?section=<?php echo $section;?>&action=<?php echo $action;?>&block=delete&w=<?php echo $w; ?><?php echo $addurl;?>" style="text-decoration: underline; color: white;">-> Clique aqui para apagar o conte&uacute;do definitivamente <- </a>
                     </p>
                 <? } ?>
             </div>
@@ -108,8 +108,8 @@ if($block == "block"){
                     Tem certeza que deseja apagar o item selecionado?
                     </strong>
                     <br />
-                    <a href="adm_main.php?section=<?=$section;?>&action=<?=$action;?>&block=delete&aust_node=<?=$aust_node;?>&w=<?=$w;?>&confirm=delete<?=$addurl;?>">Sim</a> -
-                    <a href="adm_main.php?section=<?=$section;?>&action=<?=$action;?>&aust_node=<?=$aust_node;?><?=$addurl;?>">N&atilde;o</a>
+                    <a href="adm_main.php?section=<?php echo $section;?>&action=<?php echo $action;?>&block=delete&aust_node=<?php echo $aust_node;?>&w=<?php echo $w;?>&confirm=delete<?php echo $addurl;?>">Sim</a> -
+                    <a href="adm_main.php?section=<?php echo $section;?>&action=<?php echo $action;?>&aust_node=<?php echo $aust_node;?><?php echo $addurl;?>">N&atilde;o</a>
                 </p>
             </div>
         </div>
@@ -216,8 +216,8 @@ if($block == "block"){
                     </td>
             <?php } ?>
             <td>
-                <!-- <a href="adm_main.php?section=<?=$section;?>&action=see_info&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;"><img src="img/layoutv1/lupa.jpg" alt="Ver Informações" border="0" /></a> -->
-                <a href="adm_main.php?section=<?=$section;?>&action=edit_form&aust_node=<?=$aust_node;?>&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;"><img src="img/layoutv1/edit.jpg" alt="Editar" border="0" /></a>
+                <!-- <a href="adm_main.php?section=<?php echo $section;?>&action=see_info&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;"><img src="img/layoutv1/lupa.jpg" alt="Ver Informações" border="0" /></a> -->
+                <a href="adm_main.php?section=<?php echo $section;?>&action=edit_form&aust_node=<?php echo $aust_node;?>&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;"><img src="img/layoutv1/edit.jpg" alt="Editar" border="0" /></a>
                 <?php
                 if($escala == "administrador"
                 OR $escala == "moderador"
@@ -228,14 +228,14 @@ if($block == "block"){
                         $addurl = "&filter=$filter&filterw=" . urlencode($filterw);
                     }
                     ?>
-                    <a href="adm_main.php?section=<?=$section;?>&action=<?=$action;?>&block=delete&aust_node=<?=$aust_node;?>&w=<?php echo $dados["id"]; ?><?php echo $addurl;?>" style="text-decoration: none;"><img src="img/layoutv1/delete.jpg" alt="Deletar" border="0" /></a>
+                    <a href="adm_main.php?section=<?php echo $section;?>&action=<?php echo $action;?>&block=delete&aust_node=<?php echo $aust_node;?>&w=<?php echo $dados["id"]; ?><?php echo $addurl;?>" style="text-decoration: none;"><img src="img/layoutv1/delete.jpg" alt="Deletar" border="0" /></a>
                     <?php
                 }
                 ?>
                 <?php
                 // Verifica se tipo conteúdo atual está configurado para usar galeria de fotos
                 if(in_array($cat, $aust_conf['where_gallery'])){ ?>
-                    <a href="adm_main.php?section=<?=$section;?>&action=photo_content_manage&w=<?php echo $dados["id"]; ?>#add" style="text-decoration: none;"><img src="img/layoutv1/fotos.jpg" alt="Adicionar fotos a este conteúdo" border="0" /></a>
+                    <a href="adm_main.php?section=<?php echo $section;?>&action=photo_content_manage&w=<?php echo $dados["id"]; ?>#add" style="text-decoration: none;"><img src="img/layoutv1/fotos.jpg" alt="Adicionar fotos a este conteúdo" border="0" /></a>
                 <?php } ?>
             </td>
         </tr>
@@ -245,5 +245,5 @@ if($block == "block"){
 ?>
 
 <p style="margin-top: 15px;">
-    <a href="adm_main.php?section=<?=$section;?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+    <a href="adm_main.php?section=<?php echo $section;?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
 </p>

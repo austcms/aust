@@ -12,17 +12,18 @@
     );
     $moduloConfig = $modulo->loadModConf($params);
 
+    $modulo->loadHtmlEditor();
+
 
 /*
  * Ajusta variáveis iniciais
  */
-    $aust_node = (!empty($_GET['aust_node'])) ? $_GET['aust_node'] : '';
-    $w = (!empty($_GET['w'])) ? $_GET['w'] : '';
+    $austNode = (!empty($_GET['aust_node'])) ? $_GET['aust_node'] : '';
 
 /*
  * [Se novo conteúdo]
  */
-    if($_GET['action'] == 'criar'){
+    if($_GET['action'] == 'create'){
         $tagh2 = "Criar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
         $tagp = 'Crie um novo conteúdo abaixo.';
         $dados = array('id' => '');
@@ -30,20 +31,8 @@
 /*
  * [Se modo edição]
  */
-    else if($_GET['action'] == 'editar'){
+    else if($_GET['action'] == 'edit'){
 
-        $tagh2 = "Editar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
-        $tagp = 'Edite o conteúdo abaixo.';
-        $sql = "
-                SELECT
-                    *
-                FROM
-                    ".$modulo->tabela_criar."
-                WHERE
-                    id='$w'
-                ";
-        $query = $modulo->conexao->query($sql);
-        $dados = $query[0];
     }
 ?>
 <p>
@@ -58,7 +47,7 @@
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?section=<?php echo $_GET["section"] ?>&action=save" enctype="multipart/form-data" >
 <input type="hidden" name="metodo" value="<?php echo $_GET['action'];?>">
 
-<?php if($_GET['action'] == 'criar'){ ?>
+<?php if($_GET['action'] == 'create'){ ?>
     <input type="hidden" name="frmadddate" value="<?php echo date("Y-m-d H:i:s"); ?>">
     <input type="hidden" name="frmautor" value="<?php echo $_SESSION['loginid'];?>">
 <?php } else { ?>
@@ -85,7 +74,7 @@
                 <?php
             }
 
-            echo BuildDDList( CoreConfig::read('austTable') ,'frmcategoria', $administrador->tipo ,$aust_node, $current_node);
+            echo BuildDDList( Registry::read('austTable') ,'frmcategoria', $administrador->tipo ,$austNode, $current_node);
             ?>
 
 

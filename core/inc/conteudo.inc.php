@@ -18,13 +18,6 @@
  */
 if(!empty($_GET['action'])){
 
-    /*
-     * Tem permissão?
-     */
-    if( !$permissoes->verify($aust_node) )
-        exit();
-
-
     /**
      * A seguir, o código de automação dos módulos (CRUD). São carregados os
      * formulários de cada módulo.
@@ -48,6 +41,13 @@ if(!empty($_GET['action'])){
     }
     // @todo - Módulos devem procurar por $aust_node, não $_GET['aust_node']
     $_GET["aust_node"] = $aust_node;
+
+    /*
+     * Tem permissão?
+     */
+    if( !$permissoes->verify($aust_node, $_GET['action']) )
+        exit();
+
     /**
      * Identifica qual é a pasta do módulo responsável por esta
      * estrutura/categoria
@@ -57,8 +57,31 @@ if(!empty($_GET['action'])){
     /**
      * Carrega arquivos principal do módulo requerido
      */
-	include(MODULOS_DIR.$modDir.'index.php');
+	//include(MODULOS_DIR.$modDir.'index.php');
 
+    /*
+     *
+     * INSTANCIA MÓDULO
+     *
+     */
+    /**
+     * Carrega arquivos principal do módulo requerido
+     */
+        include(MODULOS_DIR.$modDir.MOD_CONFIG);
+        //include(MODULOS_DIR.$modDir.MOD_DBSCHEMA);
+        /**
+         * Carrega classe do módulo e cria objeto
+         */
+        $moduloNome = (empty($modInfo['className'])) ? 'Classe' : $modInfo['className'];
+        include(MODULOS_DIR.$modDir.$moduloNome.'.php');
+
+        $param = array(
+            'config' => $modInfo,
+            'user' => $administrador,
+            'modDbSchema' => $modDbSchema,
+        );
+        $modulo = new $moduloNome($param);
+        unset( $modDbSchema );
     /**
      * MVC?
      *
@@ -89,10 +112,10 @@ if(!empty($_GET['action'])){
          * Prepara os argumentos para instanciar a classe e depois
          * chama o Controller que cuidará de toda a arquitetura MVC do módulo
          */
-        
         $param = array(
             'conexao' => $conexao,
             'modulo' => $modulo,
+            'permissoes' => $permissoes,
             'administrador' => $administrador,
             'aust' => $aust,
             'action' => $_GET['action'],
@@ -284,7 +307,8 @@ else {
                                 <?php
                                 $options = (is_array($modInfo['opcoes'])) ? $modInfo['opcoes'] : Array();
                                 foreach ($options as $chave=>$valor) {
-                                    echo '<li><a href="adm_main.php?section='.$_GET['section'].'&action='.$chave.'&aust_node='.$structure['id'].'">'.$valor.'</a></li>';
+                                    if( $permissoes->verify($structure['id'], $chave) )
+                                        echo '<li><a href="adm_main.php?section='.$_GET['section'].'&action='.$chave.'&aust_node='.$structure['id'].'">'.$valor.'</a></li>';
                                 }
                                 ?>
                                 </ul>
@@ -312,11 +336,4 @@ else {
 
     <br clear="all" />
     <br clear="all" />
-	<div class="action_options">
-        <?php
-        //pr($aust->getStructures());
-        //include(INC_DIR.'conteudo.inc/user_menu.php');
-        ?>
-
-	</div>
 <?php } ?>

@@ -13,7 +13,7 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
     // se não estiver confirmada a exclusão
     if(empty($_GET['confirm'])){
     ?>
-        <form method="post" action="<?=$_SERVER['PHP_SELF']?>?<?=$_SERVER['QUERY_STRING'];?>&confirm=delete" name="repost">
+        <form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?<?php echo $_SERVER['QUERY_STRING'];?>&confirm=delete" name="repost">
         <input type="hidden" name="deletar" value="deletar" />
         <?php
         $itens = $_POST['itens'];
@@ -58,7 +58,7 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
                 WHERE
                     $where
                     ";
-        if($modulo->conexao->exec){
+        if($modulo->connection->exec){
             $resultado = TRUE;
         } else {
             $resultado = FALSE;
@@ -85,7 +85,7 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
     // se não estiver confirmada a exclusão
     if(empty($_GET['confirm'])){
     ?>
-        <form method="post" action="<?=$_SERVER['PHP_SELF']?>?<?=$_SERVER['QUERY_STRING'];?>&confirm=aprovar" name="repost">
+        <form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?<?php echo $_SERVER['QUERY_STRING'];?>&confirm=aprovar" name="repost">
         <input type="hidden" name="aprovar" value="aprovar" />
         <?php
         $itens = $_POST['itens'];
@@ -125,7 +125,7 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
                 WHERE
                     $where
                     ";
-        if($modulo->conexao->exec($sql)){
+        if($modulo->connection->exec($sql)){
             $resultado = TRUE;
         } else {
             $resultado = FALSE;

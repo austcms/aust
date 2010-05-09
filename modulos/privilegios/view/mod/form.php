@@ -18,18 +18,18 @@
 /*
  * Ajusta variáveis iniciais
  */
-    $aust_node = (!empty($_GET['aust_node'])) ? $_GET['aust_node'] : '';
+    $austNode = (!empty($_GET['aust_node'])) ? $_GET['aust_node'] : '';
     $w = (!empty($_GET['w'])) ? $_GET['w'] : '';
 
 
 // se é formulário com $_GET[action] = criar...
-if($_GET['action'] == 'criar') {
+if($_GET['action'] == 'create') {
     $tagh1 = "Criar: ". $aust->leNomeDaEstrutura($_GET['aust_node']);
     $tagp = 'Alguns usuários precisam de privilégios para acessar determinados '
            .'conteúdos. Comece criando um privilégio a seguir'
            .'.';
 
-} else if($_GET['action'] == 'editar') {
+} else if($_GET['action'] == 'edit') {
 
     $tagh1 = "Editar: ". $aust->leNomeDaEstrutura($_GET['aust_node']);
     $tagp = 'Edite o conteúdo abaixo. Somente os usuários cadastrados que tiverem este privilégio poderão
@@ -44,11 +44,11 @@ if($_GET['action'] == 'criar') {
             SELECT
                 *
             FROM
-                ".$modulo->tabela_criar."
+                ".$modulo->useThisTable()."
             WHERE
                 id='$w'
             ";
-    $query = $modulo->conexao->query($sql);
+    $query = $modulo->connection->query($sql);
     $dados = $query[0];
 }
 ?>
@@ -73,12 +73,12 @@ if($_GET['action'] == 'criar') {
     // Opção via <input radio>. Se selecionar que sim, mostra via JS BuildDDList
 
     $current_node = false;
-    if($_GET['action'] == "editar"){
+    if($_GET['action'] == "edit"){
 
         /*
          * Verifica quais categorias este módulo está associado
          */
-        $categorias = $modulo->getRelatedCategories($aust_node);
+        $categorias = $modulo->getRelatedCategories($austNode);
 
         if( !empty($categorias) ){
 
@@ -93,7 +93,7 @@ if($_GET['action'] == 'criar') {
                     WHERE
                         privilegio_id='$w'
                     ";
-            $query = $modulo->conexao->query($sql);
+            $query = $modulo->connection->query($sql);
             $node = $query[0];
             if( is_array($node) )
                 $current_node = reset($node);
@@ -105,11 +105,11 @@ if($_GET['action'] == 'criar') {
                     SELECT
                         id, nome
                     FROM
-                        ".CoreConfig::read('austTable')."
+                        ".Registry::read('austTable')."
                     WHERE
                         id IN ('".implode("','", $categorias)."')
                     ";
-            $query = $modulo->conexao->query($sql);
+            $query = $modulo->connection->query($sql);
 
             /*
              * Cria <select>
@@ -140,7 +140,7 @@ if($_GET['action'] == 'criar') {
     }
 
     // escreve <select>
-    //echo BuildDDList( CoreConfig::read('austTable'),'categoria_id',$escala,'',$current_node);
+    //echo BuildDDList( Registry::read('austTable'),'categoria_id',$escala,'',$current_node);
     ?>
 </div>
 
@@ -148,12 +148,9 @@ if($_GET['action'] == 'criar') {
 <input type="hidden" name="metodo" value="<?php echo $_GET['action'];?>">
 
 <?php if($_GET['action'] == 'criar'){ ?>
-    <input type="hidden" name="frmcreated_on" value="<?php echo date("Y-m-d H:i:s"); ?>">
-    <input type="hidden" name="frmupdated_on" value="<?php echo date("Y-m-d H:i:s"); ?>">
     <input type="hidden" name="frmadmin_id" value="<?php echo $_SESSION['loginid'];?>">
 <?php } else { ?>
 
-    <input type="hidden" name="frmupdated_on" value="<?php echo date("Y-m-d H:i:s"); ?>">
     <input type="hidden" name="frmadmin_id" value="<?php ifisset( $dados['admin_id'] );?>">
 
 <?php }?>

@@ -25,12 +25,16 @@ require_once("core/config/variables.php");
 include(CLASS_DIR."_carrega_classes.inc.php");
 
 include("config/core.php");
+if( !file_exists("config/database.php") ){
+    echo "N&aacute;o h&aacute; um arquivo de configura&ccedil;&atilde;o de banco de dados. Crie um.";
+    exit();
+}
 include("config/database.php");
 
 require("core/config/installation/dbschema.php");
 
 
-$conexao = new Conexao($dbConn);
+$conexao = Connection::getInstance();
 
 
 

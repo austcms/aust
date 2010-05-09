@@ -28,9 +28,28 @@ class Aust {
     public $_recursiveLimit = 50;
     public $_recursiveCurrent = 1;
 
-    function __construct(&$conexao) {
-        $this->conexao = &$conexao;
+    function __construct($conexao = array()){
+        $this->conexao = Connection::getInstance();
         unset($this->AustCategorias);
+    }
+
+    /**
+     * getInstance()
+     *
+     * Para Singleton
+     *
+     * @staticvar <object> $instance
+     * @return <Aust object>
+     */
+    static function getInstance(){
+        static $instance;
+
+        if( !$instance ){
+            $instance[0] = new Aust;
+        }
+
+        return $instance[0];
+
     }
 
     /*
@@ -422,7 +441,7 @@ class Aust {
         /**
          * Busca na tabela do Aust onde o id é igual à estrutura requisitada.
          */
-        $result = $this->conexao->query("SELECT * FROM ".CoreConfig::read("austTable")." WHERE id='".$austNode."'" );
+        $result = $this->conexao->query("SELECT * FROM ".Registry::read("austTable")." WHERE id='".$austNode."'" );
         return $result;
     }
 
@@ -711,7 +730,7 @@ class Aust {
      */
     public function getCategoryHtmlSelect($austNode, $currentNode = ''){
         include_once (THIS_TO_BASEURL."core/inc/inc_categorias_functions.php");
-        $tmp = BuildDDList( CoreConfig::read('austTable') ,'frmcategoria', $administrador->tipo ,$austNode, $currentNode, false, true);
+        $tmp = BuildDDList( Registry::read('austTable') ,'frmcategoria', $administrador->tipo ,$austNode, $currentNode, false, true);
         return $tmp;
     }
 

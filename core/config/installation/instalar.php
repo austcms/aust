@@ -35,7 +35,7 @@ session_start();
  */
     
 
-$conexao = new Conexao($dbConn);
+$conexao = new Connection($dbConn);
 
 include(THIS_TO_BASEURL.CORE_DIR."load_core.php");
 /**

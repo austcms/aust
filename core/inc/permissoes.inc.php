@@ -6,6 +6,7 @@
 
 
 ?>
+<span class="permissoes_page">
 <h2>
     Permissões de Usuários
 </h2>
@@ -24,7 +25,6 @@
     Você só pode configurar quem está abaixo de você na hierarquia (se você
     é administrador, poderá editar somente moderadores e colaboradores).
 </p>
-
 <p>
     À direita, em <strong>Permissões Atuais</strong>, você encontra as seções do gerenciador. Basta marcar quais
     conteúdos o usuário pode editar. Se nenhum estiver selecionado, o usuário
@@ -175,3 +175,4 @@
         <div class="footer"></div>
     </div>
 </div>
+</span>

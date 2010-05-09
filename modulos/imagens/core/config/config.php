@@ -80,8 +80,8 @@ $modInfo = array(
      *
      */
     'opcoes' => array(
-        'criar' => 'Inserir',
-        'listar' => 'Listar',
+        'create' => 'Inserir',
+        'listing' => 'Listar',
     ),
 
     /**

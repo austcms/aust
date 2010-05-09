@@ -28,7 +28,7 @@ class SetupController extends ModsSetup
     function setuppronto(){
         
         //pr($_POST);
-        
+        //var_dump($this->modulo);
 
         global $aust_charset;
 
@@ -75,6 +75,8 @@ class SetupController extends ModsSetup
              * configurações em 'cadastros_conf'.
              */
             $ordem = 0; // A ordem do campo
+            $camposExistentes = array();
+            $campoExiste = false;
             for($i = 0; $i < count($_POST['campo']); $i++) {
                 $ordem++;
 
@@ -158,8 +160,29 @@ class SetupController extends ModsSetup
                      * Retira acentuação e caracteres indesejados para criar
                      * campos nas tabelas
                      */
-                    $valor = RetiraAcentos(mb_strtolower(str_replace(' ', '_', $_POST['campo'][$i]), 'UTF-8')).' '. $campo_tipo;
+                    $valor = RetiraAcentos(mb_strtolower(str_replace(' ', '_', $_POST['campo'][$i]), 'UTF-8'));
+                    $campo = RetiraAcentos(mb_strtolower(str_replace(' ', '_', $_POST['campo'][$i]), 'UTF-8'));
 
+                    $campoExiste = false;
+                    if( in_array( $valor, $camposExistentes ) )
+                        $campoExiste = true;
+
+                    $adicionalAtual = 2;
+                    while( $campoExiste ){
+                        $valor = $valor.'_'.$adicionalAtual;
+                        $campo = $campo.'_'.$adicionalAtual;
+                        
+                        if( !in_array( $valor, $camposExistentes ) )
+                            $campoExiste = false;
+
+
+                        $adicionalAtual++;
+
+                    }
+                    unset($adicionalAtual);
+
+                    $camposExistentes[] = $valor;
+                    $valor = $valor.' '. $campo_tipo;
                     /**
                      * Se for data ou relacional, não tem charset
                      */
@@ -181,7 +204,6 @@ class SetupController extends ModsSetup
                         $campos .= ', '.$valor;
                     }
                     
-                    $campo = RetiraAcentos(mb_strtolower(str_replace(' ', '_', $_POST['campo'][$i]), 'UTF-8'));
 
                     /**
                      * CONFIGURAÇÃO DE CAMPOS
@@ -299,7 +321,7 @@ class SetupController extends ModsSetup
 
                                 ) ';
 
-                        $createdRelational = $this->conexao->exec($sql, 'CREATE_TABLE');
+                        $createdRelational = $this->modulo->connection->exec($sql, 'CREATE_TABLE');
                         //var_dump($createdRelational);
                         if($createdRelational){
                             $status_setup[] = 'Criação da tabela relacional um-para-muitos \''.$tabelasRelacionadasNome.'\' efetuada com sucesso.';
@@ -396,16 +418,17 @@ class SetupController extends ModsSetup
              *
              * Se retornar sucesso, salva configurações gerais sobre o cadastro na tabela cadastros_conf
              */
-            //pr( $sql );
+            pr( $sql );
+            //var_dump($this->modulo);
 
-            if( $this->conexao->exec( $sql, 'CREATE_TABLE') ){
+            if( $this->connection->exec( $sql, 'CREATE_TABLE') ){
                 $status_setup[] = "Tabela '".$tabela."' criada com sucesso!";
 
                 /**
                  * Se há SQL para criação de tabela para arquivos
                  */
                 if( !empty($sql_arquivos) AND $cria_tabela_arquivos == TRUE ){
-                    if($this->conexao->exec($sql_arquivos, 'CREATE_TABLE')){
+                    if($this->modulo->connection->exec($sql_arquivos, 'CREATE_TABLE')){
                         $status_setup[] = 'Criação da tabela \''.$tabela.'_arquivos\' efetuada com sucesso!';
                     } else {
                         $status_setup[] = 'Erro ao criar tabela \''.$tabela.'_arquivos\'.';
@@ -418,7 +441,7 @@ class SetupController extends ModsSetup
                                 VALUES
                                     ('estrutura','tabela_arquivos','".$tabela."_arquivos',".$status_insert.", '".date('Y-m-d H:i:s')."', ".$this->administrador->LeRegistro('id').",0,0,1,0,1)
                                 ";
-                    if($this->conexao->exec($sql_conf_arquivos)){
+                    if($this->modulo->connection->exec($sql_conf_arquivos)){
                         $status_setup[] = 'Configuração da estrutura \''.$tabela.'_arquivos\' salva com sucesso!';
                     } else {
                         $status_setup[] = 'Erro ao criar tabela \''.$tabela.'_arquivos\'.';
@@ -440,7 +463,7 @@ class SetupController extends ModsSetup
                                 VALUES
                                     ('config','aprovacao','".$_SESSION['exPOST']['aprovacao']."','Aprovação','bool',".$status_insert.", '".date('Y-m-d H:i:s')."', ".$this->administrador->LeRegistro('id').",0,0,1,0,1)
                                 ";
-                    if($this->conexao->exec($sql_conf_2)){
+                    if($this->modulo->connection->exec($sql_conf_2)){
                         $status_setup[] = 'Configuração de aprovação salva com sucesso!';
                     } else {
                         $status_setup[] = 'Configuração de aprovação não foi salva com sucesso.';
@@ -454,7 +477,7 @@ class SetupController extends ModsSetup
                                 VALUES
                                     ('config','descricao','".$_SESSION['exPOST']['descricao']."','Descrição','blob',".$status_insert.", '".date('Y-m-d H:i:s')."', ".$this->administrador->LeRegistro('id').",0,0,1,0,1)
                                 ";
-                    if($this->conexao->exec($sql_conf_2)){
+                    if($this->modulo->connection->exec($sql_conf_2)){
                         $status_setup[] = 'Configuração de aprovação salva com sucesso!';
                     } else {
                         $status_setup[] = 'Configuração de aprovação não foi salva com sucesso.';
@@ -468,7 +491,7 @@ class SetupController extends ModsSetup
                                 VALUES
                                     ('config','pre_senha','".$_SESSION['exPOST']['pre_senha']."','Pré-senha','string',".$status_insert.", '".date('Y-m-d H:i:s')."', ".$this->administrador->LeRegistro('id').",0,0,1,0,1)
                                 ";
-                    if($this->conexao->exec($sql_conf_2)){
+                    if($this->modulo->connection->exec($sql_conf_2)){
                         $status_setup[] = 'Configuração de pré-senha salva com sucesso!';
                     } else {
                         $status_setup[] = 'Configuração de pré-senha não foi salva com sucesso.';
@@ -485,13 +508,13 @@ class SetupController extends ModsSetup
                             VALUES
                                 ('estrutura','tabela','".RetiraAcentos(mb_strtolower(str_replace(' ', '_', $_SESSION['exPOST']['nome']), 'UTF-8'))."',".$status_insert.", '".date('Y-m-d H:i:s')."', ".$this->administrador->LeRegistro('id').",0,0,1,0,1)
                             ";
-                if($this->conexao->exec($sql_conf)){
+                if($this->modulo->connection->exec($sql_conf)){
                     $status_setup[] = 'Configuração da estrutura \''.RetiraAcentos(mb_strtolower(str_replace(' ', '_', $_SESSION['exPOST']['nome']), 'UTF-8')).'\' salva com sucesso!';
 
                     // número de erros encontrados
                     $status_campos = 0;
                     foreach ($sql_campos as $valor) {
-                        if(!$this->conexao->exec($valor)){
+                        if(!$this->modulo->connection->exec($valor)){
                             $status_campos++;
                         }
                     }

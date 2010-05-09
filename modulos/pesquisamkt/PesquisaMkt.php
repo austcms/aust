@@ -12,9 +12,16 @@
  * @since v0.1.5, 30/05/2009
  */
 
-class PesquisaMkt extends Modulos
+class PesquisaMkt extends Module
 {
 
+    public $mainTable = 'pesqmkt';
+    
+    public $date = array(
+        'standardFormat' => '%d/%m/%Y',
+        'created_on' => 'adddate',
+        'updated_on' => 'addate'
+    );
 	// TABELA
 	protected $db_tabelas;
 	protected $sql_das_tabelas;

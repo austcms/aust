@@ -13,7 +13,6 @@
  * Carrega configurações
  */
 include( MOD_CONFIG );
-include( MOD_DBSCHEMA );
 
 /**
  * Classes
@@ -38,7 +37,6 @@ include($moduloNome.'.php');
 $param = array(
     'conexao' => $conexao,
     'config' => $modInfo,
-    'modDbSchema' => $modDbSchema,
 );
 
 $modulo = new $moduloNome($param);

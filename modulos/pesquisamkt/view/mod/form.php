@@ -31,7 +31,7 @@
 /*
  * Ajusta variáveis iniciais
  */
-    $aust_node = (!empty($_GET['aust_node'])) ? $_GET['aust_node'] : '';
+    $austNode = (!empty($_GET['aust_node'])) ? $_GET['aust_node'] : '';
     $w = (!empty($_GET['w'])) ? $_GET['w'] : '';
 
     $perguntas = array();
@@ -39,7 +39,7 @@
 /*
  * [Se novo conteúdo]
  */
-    if($_GET['action'] == 'criar'){
+    if($_GET['action'] == 'create'){
         $tagh1 = "Criar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
         $tagp = 'Crie um novo conteúdo abaixo.';
         $dados = array('id' => '');
@@ -47,7 +47,7 @@
 /*
  * [Se modo edição]
  */
-    else if($_GET['action'] == 'editar'){
+    else if($_GET['action'] == 'edit'){
 
         $tagh1 = "Editar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
         $tagp = 'Edite o conteúdo abaixo.';
@@ -76,7 +76,7 @@
                     p.id='$w'
                 ";
 
-        $query = $modulo->conexao->query($sql, "ASSOC");
+        $query = $modulo->connection->query($sql, "ASSOC");
         $dados = $query[0];
         $pesqAtiva = $dados["ativo"];
 
@@ -89,7 +89,7 @@
                     pp.pesqmkt_id='$w'
                 ";
 
-        $query = $modulo->conexao->query($sql, "ASSOC");
+        $query = $modulo->connection->query($sql, "ASSOC");
         $perguntas = $query;
         //pr($perguntas);
 
@@ -124,7 +124,7 @@
                     pp.pesqmkt_id='$w'
                 ";
 
-        $query = $modulo->conexao->query($sql, "ASSOC");
+        $query = $modulo->connection->query($sql, "ASSOC");
         $respostasTmp = $query;
 
         foreach( $respostasTmp as $chave=>$valor ){
@@ -249,7 +249,7 @@
 <h2><?php echo $tagh1;?></h2>
 
 <?php
-if( $_GET["action"] == "editar" ){
+if( $_GET["action"] == "edit" ){
     ?>
 <p>
     Aqui você pode editar as informações sobre esta pesquisa.
@@ -469,7 +469,7 @@ if( !empty($perguntasQuantidade) ):
                      * PERGUNTAS
                      */
                     $pid = $i;
-                    if( $_GET["action"] == "editar" ){
+                    if( $_GET["action"] == "edit" ){
                         $pid = $pergunta["id"];
                     }
                     ?>
@@ -487,7 +487,7 @@ if( !empty($perguntasQuantidade) ):
                     ?>
                     <div id="alternativa_<?php echo $pid ?>">
                         <?php
-                        if( $_GET["action"] == "editar" ){
+                        if( $_GET["action"] == "edit" ){
                             $loop = count($respostas[$pergunta["id"]] );
                         } else {
                             /*

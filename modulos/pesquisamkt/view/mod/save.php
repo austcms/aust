@@ -18,6 +18,9 @@ if(!empty($_POST) AND !empty($_POST["perguntas"]) AND !empty($_POST["frmtitulo"]
     $_POST['frmtitulo_encoded'] = encodeText($_POST['frmtitulo']);
     $_POST['frmcategoria'] = $_POST["aust_node"];
 
+    if($_POST['metodo'] == 'create') {
+        $_POST['frmadddate'] = date("Y-m-d H:i:s");
+    }
     if( $_POST["metodo"] == "criar" ){
         foreach($_POST["perguntas"] as $idPergunta=>$pergunta ){
             if( empty($pergunta) )
@@ -36,7 +39,7 @@ if(!empty($_POST) AND !empty($_POST["perguntas"]) AND !empty($_POST["frmtitulo"]
                 WHERE
                     categoria='".$_POST["aust_node"]."'
                 ";
-        $this->modulo->conexao->exec($sql);
+        $this->modulo->connection->exec($sql);
         unset($sql);
     }
 
@@ -47,7 +50,7 @@ if(!empty($_POST) AND !empty($_POST["perguntas"]) AND !empty($_POST["frmtitulo"]
             $sqlvalor[] = $valor;
             // ajusta os campos da tabela nos quais serão gravados dados
             $valor = addslashes($valor);
-            if($_POST['metodo'] == 'criar') {
+            if($_POST['metodo'] == 'create') {
                 if($c > 0) {
                     $sqlcampostr = $sqlcampostr.','.str_replace('frm', '', $key);
                     $sqlvalorstr = $sqlvalorstr.",'".$valor."'";
@@ -55,7 +58,7 @@ if(!empty($_POST) AND !empty($_POST["perguntas"]) AND !empty($_POST["frmtitulo"]
                     $sqlcampostr = str_replace('frm', '', $key);
                     $sqlvalorstr = "'".$valor."'";
                 }
-            } else if($_POST['metodo'] == 'editar') {
+            } else if($_POST['metodo'] == 'edit') {
                     if($c > 0) {
                         $sqlcampostr = $sqlcampostr.','.str_replace('frm', '', $key).'=\''.$valor.'\'';
                     } else {
@@ -69,9 +72,9 @@ if(!empty($_POST) AND !empty($_POST["perguntas"]) AND !empty($_POST["frmtitulo"]
 
 
 
-    if($_POST['metodo'] == 'criar') {
+    if($_POST['metodo'] == 'create') {
         $sql = "INSERT INTO
-                                    ".$this->modulo->tabela_criar."
+                                    ".$this->modulo->useThisTable()."
                                     ($sqlcampostr)
                             VALUES
                                     ($sqlvalorstr)
@@ -79,9 +82,9 @@ if(!empty($_POST) AND !empty($_POST["perguntas"]) AND !empty($_POST["frmtitulo"]
 
 
         $h1 = 'Criando: '.$this->aust->leNomeDaEstrutura($_GET['aust_node']);
-    } else if($_POST['metodo'] == 'editar') {
+    } else if($_POST['metodo'] == 'edit') {
             $sql = "UPDATE
-                                    ".$this->modulo->tabela_criar."
+                                    ".$this->modulo->useThisTable()."
                             SET
                 $sqlcampostr
                             WHERE
@@ -93,22 +96,22 @@ if(!empty($_POST) AND !empty($_POST["perguntas"]) AND !empty($_POST["frmtitulo"]
     /*
      * Cria a pesquisa no DB
      */
-    $query = $this->modulo->conexao->exec($sql);
-    if($query OR $_POST["metodo"] == "editar" ){
+    $query = $this->modulo->connection->exec($sql);
+    if($query OR $_POST["metodo"] == "edit" ){
         $resultado = TRUE;
 
         /*
          * Se estiver criando um registro, guarda seu id para ser usado por módulos embed a seguir
          */
-        if($_POST['metodo'] == 'criar'){
-            $_POST['w'] = $this->modulo->conexao->conn->lastInsertId();
+        if($_POST['metodo'] == 'create'){
+            $_POST['w'] = $this->modulo->connection->conn->lastInsertId();
             
         }
 
         /*
          * ANALISA PERGUNTAS E RESPOSTAS
          */
-        if( !empty($_POST['w']) AND $_POST['metodo'] == "criar" ){
+        if( !empty($_POST['w']) AND $_POST['metodo'] == "create" ){
             $perguntas = $_POST["perguntas"];
             foreach( $perguntas as $pchave=>$pergunta ){
 
@@ -123,8 +126,8 @@ if(!empty($_POST) AND !empty($_POST["perguntas"]) AND !empty($_POST["frmtitulo"]
                                 ('".$_POST["w"]."','".$pergunta."','".$_POST["resposta_tipo"][$pchave]."')
                             ";
 
-                    $queryp = $this->modulo->conexao->exec($sqlp);
-                    $pid = $this->modulo->conexao->conn->lastInsertId();
+                    $queryp = $this->modulo->connection->exec($sqlp);
+                    $pid = $this->modulo->connection->conn->lastInsertId();
 
                     /*
                      * Se é uma pergunta com alternativas
@@ -161,7 +164,7 @@ if(!empty($_POST) AND !empty($_POST["perguntas"]) AND !empty($_POST["frmtitulo"]
         /*
          * EDIÇÃO DE PERGUNTAS
          */
-        else if( !empty($_POST['w']) AND $_POST['metodo'] == "editar" ){
+        else if( !empty($_POST['w']) AND $_POST['metodo'] == "edit" ){
 
             /*
              * Mapeia perguntas existentes no DB
@@ -173,7 +176,7 @@ if(!empty($_POST) AND !empty($_POST["perguntas"]) AND !empty($_POST["frmtitulo"]
                     WHERE
                         pp.pesqmkt_id='".$_POST['w']."'
                     ";
-            $perguntasQuery = $this->modulo->conexao->query($sql, "ASSOC");
+            $perguntasQuery = $this->modulo->connection->query($sql, "ASSOC");
 
             $perguntasExistentes = array();
             if( !empty($perguntasQuery) ){
@@ -205,9 +208,9 @@ if(!empty($_POST) AND !empty($_POST["perguntas"]) AND !empty($_POST["frmtitulo"]
                                             id='".$idPergunta."'
                                         ";
                         //echo $sqlPergunta;
-                        $this->modulo->conexao->exec($sqlPergunta);
+                        $this->modulo->connection->exec($sqlPergunta);
                         if( $_POST["resposta_tipo"][$idPergunta] == "aberta" ){
-                            $this->modulo->conexao->exec("DELETE FROM pesqmkt_respostas WHERE pesqmkt_pergunta_id='".$idPergunta."'");
+                            $this->modulo->connection->exec("DELETE FROM pesqmkt_respostas WHERE pesqmkt_pergunta_id='".$idPergunta."'");
                         }
                     }
                 }
@@ -227,8 +230,8 @@ if(!empty($_POST) AND !empty($_POST["perguntas"]) AND !empty($_POST["frmtitulo"]
                                     ('".$_POST["w"]."','".$valor."','".$_POST["resposta_tipo"][$idPergunta]."')
                                 ";
 
-                        $queryp = $this->modulo->conexao->exec($sqlp);
-                        $pid = $this->modulo->conexao->conn->lastInsertId();
+                        $queryp = $this->modulo->connection->exec($sqlp);
+                        $pid = $this->modulo->connection->conn->lastInsertId();
 
                         /*
                          * Se é uma pergunta com alternativas
@@ -285,7 +288,7 @@ if(!empty($_POST) AND !empty($_POST["perguntas"]) AND !empty($_POST["frmtitulo"]
                             WHERE
                                 pr.pesqmkt_pergunta_id='".$idPergunta."'
                             ";
-                    $respostaQuery = $this->modulo->conexao->query($sql, "ASSOC");
+                    $respostaQuery = $this->modulo->connection->query($sql, "ASSOC");
 
                     $respostaExistentes = array();
                     if( !empty($respostaQuery) ){
@@ -342,7 +345,7 @@ if(!empty($_POST) AND !empty($_POST["perguntas"]) AND !empty($_POST["frmtitulo"]
 
         if( !empty($sqlrStart) ){
             foreach( $sqlrStart as $sqlRespostas ){
-                $respostasSQL[] = $this->modulo->conexao->exec($sqlRespostas);
+                $respostasSQL[] = $this->modulo->connection->exec($sqlRespostas);
             }
         }
 

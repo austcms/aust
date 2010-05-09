@@ -26,6 +26,7 @@ class ModsController extends Controller
      * Variáveis do sistema
      */
     public $conexao;
+    public $connection;
     public $administrador;
     public $aust;
     public $model;
@@ -116,9 +117,9 @@ class ModsController extends Controller
          */
         $this->austNode = $param["austNode"];
         /**
-         * $conexao: configura a conexão universal a ser usada no controller
+         * $connection: configura a conexão universal a ser usada no controller
          */
-        $conexao = (empty($param['conexao'])) ? '' : $param['conexao'];
+        $this->connection = Connection::getInstance();;
         /**
          * $conexao: configura a conexão universal a ser usada no controller
          */
@@ -127,6 +128,8 @@ class ModsController extends Controller
          * $conexao: configura a conexão universal a ser usada no controller
          */
         $this->administrador = (empty($param['administrador'])) ? '' : $param['administrador'];
+
+        $this->permissoes = (empty($param['permissoes'])) ? '' : $param['permissoes'];
         /**
          * $modulo: ajusta controller para receber objeto instanciado do modulo
          */
@@ -155,6 +158,7 @@ class ModsController extends Controller
         $this->set('conexao', $conexao);
         $this->set('aust', $this->aust);
         $this->set('modulo', $modulo);
+        $this->set('permissoes', $this->permissoes);
         $this->set('austNode', $this->austNode);
         $this->set('administrador', $this->administrador);
 
@@ -260,13 +264,18 @@ class ModsController extends Controller
         /**
          * Chama a action requerida.
          */
+        //pr($param['action']);
         $this->{$param['action']}();
+        //$this->{"save"}();
+        //echo $this->action;
+        //call_user_func(array($this, "saveß"));
+        //echo "oijoij";
 
         /**
          * Se não foi renderizado ainda, renderiza automaticamente
          */
         if( !$this->isRendered AND $this->autoRender )
-            $this->render( $this->action );
+            $this->render( $param['action'] );
         /**
          * $this->afterFilter() é chamado sempre depois de qualquer ação
          */
@@ -280,6 +289,7 @@ class ModsController extends Controller
      */
     protected function render($path, $includeType = ''){
 
+        $includeBaseurl = $this->modDir;
         /**
          * DEFINE VARIÁVEIS PARA AS VIEWS
          *

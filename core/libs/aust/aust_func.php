@@ -96,8 +96,8 @@
 		while($dados = mysql_fetch_array($mysql)){
 		
 			?>
-			<div class="structure" id="structure<?=$level;?>" style="margin-left: <? echo $level*40;?>px">
-				<?php if($dados[num_sub_nodes] > 0) echo '+ '; else echo '- '; ?><a href="<?php echo $url . $dados[id]; ?>"><?=$dados[nome];?></a>
+			<div class="structure" id="structure<?php echo $level;?>" style="margin-left: <? echo $level*40;?>px">
+				<?php if($dados[num_sub_nodes] > 0) echo '+ '; else echo '- '; ?><a href="<?php echo $url . $dados[id]; ?>"><?php echo $dados[nome];?></a>
 			</div>
 			<?
 			if($dados[num_sub_nodes] > 0){

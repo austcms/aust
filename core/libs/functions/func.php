@@ -134,6 +134,7 @@ function RetiraAcentos($a){
 	$a = str_replace("¨", "", $a);
 	$a = str_replace("^", "", $a);
 	$a = str_replace("~", "", $a);
+	$a = str_replace(array("/","\\"), "_", $a);
 	return $a;
 }
 
@@ -372,6 +373,10 @@ function PegaExtensao($param){
     $ext = explode('.',$param);
     $ext = array_reverse($ext);
     return $ext[0];
+}
+
+function loadHtmlEditor(){
+    include(THIS_TO_BASEURL.BASECODE_JS.'html_editor.php');
 }
 
 /*

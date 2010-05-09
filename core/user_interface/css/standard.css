@@ -19,14 +19,21 @@ p { margin-top: 0px; margin-bottom: 15px; line-height: 18px; }
 p.alerta { }
 p.explanation { color: silver; padding: 0; margin:0; }
 
-h1, h2, h3, h4, h5, h6 { font-weight: normal; }
+h1, h2, h3, h4, h5, h6 { font-weight: normal; margin-bottom: 15px; }
 h1 { font-size: 3.0em; margin-top: 15px; }
 h1.restrito { }
 h2 { font-size: 1.7em; margin-bottom: 10px; margin-top: 5px; }
 h2.restrito { }
 h2.falha { }
 h2.ok { }
-h3 { font-size: 1.4em; }
+h3 {
+    font-size: 1.4em;
+}
+    form h3 {
+        margin: 35px 0 15px 0;
+        display: block;
+        clear: both;
+    }
 
 ul { margin-left: 20px; }
 

@@ -12,9 +12,9 @@ $c = 0;
 
 //pr($_FILES);
 
-if( $_POST["metodo"] == "criar" AND !empty($_FILES) AND $_FILES["frmarquivo"]["size"] > 0 ){
+if( $_POST["metodo"] == "create" AND !empty($_FILES) AND $_FILES["frmarquivo"]["size"] > 0 ){
     $save = true;
-} else if( $_POST["metodo"] == "editar" ) {
+} else if( $_POST["metodo"] == "edit" ) {
     $save = true;
 } else {
     $save = false;
@@ -68,7 +68,7 @@ if( !empty($_POST) AND $save  ) {
             $sqlvalor[] = $valor;
             // ajusta os campos da tabela nos quais serão gravados dados
             $valor = addslashes($valor);
-            if($_POST['metodo'] == 'criar') {
+            if($_POST['metodo'] == 'create') {
                 if($c > 0) {
                     $sqlcampostr = $sqlcampostr.','.str_replace('frm', '', $key);
                     $sqlvalorstr = $sqlvalorstr.",'".$valor."'";
@@ -76,7 +76,7 @@ if( !empty($_POST) AND $save  ) {
                     $sqlcampostr = str_replace('frm', '', $key);
                     $sqlvalorstr = "'".$valor."'";
                 }
-            } else if($_POST['metodo'] == 'editar') {
+            } else if($_POST['metodo'] == 'edit') {
                 if($c > 0) {
                     $sqlcampostr = $sqlcampostr.','.str_replace('frm', '', $key).'=\''.$valor.'\'';
                 } else {
@@ -90,9 +90,9 @@ if( !empty($_POST) AND $save  ) {
 
 
 
-    if($_POST['metodo'] == 'criar') {
+    if($_POST['metodo'] == 'create') {
         $sql = "INSERT INTO
-                    ".$this->modulo->tabela_criar."
+                    ".$this->modulo->useThisTable()."
                     ($sqlcampostr)
                 VALUES
                     ($sqlvalorstr)
@@ -100,29 +100,29 @@ if( !empty($_POST) AND $save  ) {
 
 
         $h1 = 'Criando: '.$this->aust->leNomeDaEstrutura($_GET['aust_node']);
-    } else if($_POST['metodo'] == 'editar') {
+    } else if($_POST['metodo'] == 'edit') {
         $sql = "UPDATE
-                ".$this->modulo->tabela_criar."
-            SET
-            $sqlcampostr
-            WHERE
-                id='".$_POST['w']."'
-            ";
+                    ".$this->modulo->useThisTable()."
+                SET
+                $sqlcampostr
+                WHERE
+                    id='".$_POST['w']."'
+                ";
         $h1 = 'Editando: '.$this->aust->leNomeDaEstrutura($_GET['aust_node']);
     }
 
-    $query = $this->modulo->conexao->exec($sql);
+    $query = $this->modulo->connection->exec($sql);
     //$query = false;
 
     /*
      * Salva dados
      */
-    if( $query OR $_POST['metodo'] == 'editar' ) {
+    if( $query OR $_POST['metodo'] == 'edit' ) {
         $resultado = TRUE;
 
         // se estiver criando um registro, guarda seu id para ser usado por módulos embed a seguir
-        if($_POST['metodo'] == 'criar') {
-            $_POST['w'] = $this->modulo->conexao->conn->lastInsertId();
+        if($_POST['metodo'] == 'create') {
+            $_POST['w'] = $this->modulo->connection->conn->lastInsertId();
         }
 
         /*
@@ -155,7 +155,7 @@ if( !empty($_POST) AND $save  ) {
                                 )
                                 ";
                 
-                if( ! $this->modulo->conexao->exec($sqlImagem) )
+                if( ! $this->modulo->connection->exec($sqlImagem) )
                     $erroImg[] = $valor["filename"];
                     
                 unset($sqlImagem);

@@ -5,44 +5,40 @@ define("IMG_DIR", "core/user_interface/img/");
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="expires" content="Mon, 19 Feb 2024 11:12:01 GMT" />
     <title><?php echo $config->getConfig('site_name'); ?> - Gerenciador<?php /* ifisset($config->LeOpcao('sitename'), 'Aust'); */ ?></title>
+<?php
+/*
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/standard.css" type="text/css" />
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/style_principal.css" type="text/css" />
-    
-    <?php /* Estilo do cabeçalho - Topo e Navegação */ ?>
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/header.css" type="text/css" />
-
-    <?php /* Estilo dos Widgets */ ?>
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/widget.css" type="text/css" />
-
-    <?php /* Estilo dos hints - Tooltips, e interrogação */ ?>
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/hint.css" type="text/css" />
-
-    <?php /* Estilo das tabs - Painel Gerenciar e Configurações */ ?>
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/tabs.css" type="text/css" />
-
-    <?php /* Estilo do pane - Conteúdo de cada tab */ ?>
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/pane.css" type="text/css" />
-
-    <?php /* Estilo dos forms - Formulários */ ?>
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/forms.css" type="text/css" />
-
-    <?php /* Estilo dos lightboxs - Lightbox */ ?>
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/lightbox.css" type="text/css" />
-
+ * 
+ */
+?>
+    <!-- TinyMCE -->
+    <?php
+    $html = HtmlHelper::getInstance();
+    $html->css();
+    /* Para TinyMCE
+     *
+     * Para retirar do site: Verificar textareas nos formulários e em inc_content_gravar.php
+     *
+     * O que carrega o editor HTML é a função loadHtmlEditor() em
+     * conjunto com a classe Modulos
+     *
+     */
+    ?>
     <?php /* Estilo da seleção de temas */ ?>
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/theme.css" type="text/css" />
 
     <?php /* Tema Azul */ ?>
     <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.THEMES_DIR; ?><?php echo $themes->currentTheme($administrador->getId()); ?>/default.css" type="text/css" />
-
-    <!-- TinyMCE -->
-    <?php
-    /* Para TinyMCE
-    Para retirar do site: Verificar textareas nos formulários e em inc_content_gravar.php
-
-    */
-    ?>
     <?php
     /**
      * @todo - o comando abaixo é perigoso, pois permite que um usuário altere
@@ -53,20 +49,22 @@ define("IMG_DIR", "core/user_interface/img/");
         var userId = '<?php echo $administrador->getId() ?>';
         var IMG_DIR = '<?php echo IMG_DIR ?>';
     </script>
-    <script language="javascript" type="text/javascript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>tiny_mce/tiny_mce.js"></script>
-    <script language="javascript" type="text/javascript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>tiny_mce_loader.js"></script>
 
-    <!-- <SCRIPT LANGUAGE="JavaScript" SRC="inc/js_forms.js"></script> -->
-    <script language="JavaScript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>libs/jquery.js"></script>
-    <script language="JavaScript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>libs/jquery.tools.min.js"></script>
-    <script language="JavaScript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>libs/jquery-ui-1.7.2.custom.min.js"></script>
-    <script language="JavaScript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>libs/plugins.js"></script>
-    <?php /* <script src="http://cdn.jquerytools.org/1.1.2/full/jquery.tools.min.js"></script> */ ?>
-
+    <?php
+    $html->js();
+    /*
+    <script type="text/javascript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>libs/jquery.js"></script>
+    <script type="text/javascript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>libs/jquery.tools.min.js"></script>
+    <script type="text/javascript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>libs/jquery-ui-1.7.2.custom.min.js"></script>
+    <script type="text/javascript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>libs/plugins.js"></script>
+     * 
     <script language="JavaScript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>navegation.js"></script>
     <script language="JavaScript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>user_helps.js"></script>
     <script language="JavaScript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>interacao.js"></script>
     <script language="JavaScript" src="<?php echo THIS_TO_BASEURL.BASECODE_JS; ?>codigo_principal.js"> </script>
+     * 
+     */
+    ?>
 
 
 </head>
@@ -141,16 +139,125 @@ define("IMG_DIR", "core/user_interface/img/");
         
         </div>
     </div>
+    <?php
+    /*
+     * DEBUG
+     */
+    ?>
     <div id="link_bottom">
         <div class="links_admin">
             <?php
             if($administrador->LeRegistro('tipo') == 'Webmaster'){
-            ?>
-            <div class="borda"></div>
-            <br />
-                <span class="para_webmaster">Para Webmasters:</span><a href="adm_main.php?section=conf_modulos" class="restrito">Configurar Módulos</a>
-                <a href="adm_main.php?section=categorias" class="restrito">Categorias</a>
-            <?php
+                ?>
+                <div class="borda"></div>
+                <br />
+                    <span class="para_webmaster">Para Webmasters:</span><a href="adm_main.php?section=conf_modulos" class="restrito">Configurar Módulos</a>
+                    <a href="adm_main.php?section=categorias" class="restrito">Categorias</a>
+                <?php
+                if( Registry::read('debugLevel') > 1 ){
+
+                    /*
+                     * CACHE
+                     */
+                    $cacheDirs = Registry::read('permission_needed_dirs');
+                    foreach( $cacheDirs as $dir ){
+                        if( !is_writable($dir) OR
+                            !is_readable($dir))
+                        {
+                            $cacheError[] = $dir;
+                        }
+                    }
+                    if( !empty($cacheError) ){
+
+                        ?>
+                        <table class="debug">
+                        <tr class="header">
+                            <td>
+                            <strong>Cache</strong>
+                            </td>
+                        </tr>
+                        <?php
+                        foreach( $cacheError as $dir ){
+                            ?>
+                            <tr class="list">
+                                <td>
+                                <span>
+                                <strong><?php echo $dir ?></strong>
+                                com permissão negada.
+                                </span>
+                                </td>
+                            </tr>
+                            <?php
+                        }
+                        ?>
+                        </table>
+                        <?php
+                    }
+                    ?>
+
+                    <table class="debug">
+                    <tr class="header">
+                        <td class="sql">
+                        <strong>SQLs</strong>
+                        </td>
+                        <td class="result">
+                        <strong>Results</strong>
+                        </td>
+                        <td class="time">
+                        <strong>Seconds</strong>
+                        </td>
+                    </tr>
+                    <?php
+
+                    $debugVars = Registry::read('debug');
+                    foreach( $debugVars as $vars ){
+                        $sqlCommands = array(
+                            "SELECT", "UPDATE", "DELETE", "INSERT", "REPLACE",
+                            "FROM", "ASC", "WHERE", "ORDER BY", "LIMIT", "TABLES",
+                            "LEFT JOIN", "DISTINCT", "COUNT", "ON", "DESCRIBE", "SHOW",
+                            "INTO", "VALUES", "SET",
+                            "IN", "NOT IN", "OR", "AND", "AS", "DESC",
+                            " and ", " as "
+                        );
+                        $boldSqlCommands = array();
+                        foreach( $sqlCommands as $valor ){
+                            $boldSqlCommands[] = "<strong>".$valor."</strong>";
+                        }
+                        $sql = str_replace($sqlCommands, $boldSqlCommands, $vars['sql'] );
+
+                        /*
+                         * Result
+                         */
+                        $errorClass = '';
+                        if( is_string($vars['result']) ){
+                            $errorClass = 'error';
+                        }
+                        ?>
+                        <tr class="list <?php echo $errorClass; ?>">
+                        <td class="sql "  valign="top">
+                            <?php echo $sql; ?>
+                        </td>
+                        <td class="result" valign="top">
+                            <?php echo $vars['result']; ?>
+                        </td>
+                        <td class="time" valign="top">
+                            <?php echo substr(number_format($vars['time'], 4, '.', ''), 0, 5); ?>
+                        </td>
+                        </tr>
+                        <tr style="height: 1px;">
+                            <td colspan="3" style="font-size: 0px; background: #eeeeee;">
+                            </td>
+                        </tr>
+                        <tr style="height: 5px;">
+                            <td colspan="3" style="font-size: 0px;">
+                            </td>
+                        </tr>
+                        <?php
+                    }
+                    ?>
+                    </table>
+                    <?php
+                }
             }
             ?>
         </div>
@@ -160,25 +267,6 @@ define("IMG_DIR", "core/user_interface/img/");
     
     </div>
 
-    <div id="body">
-        <div id="bottom_top">
-        </div>
-        <div id="middle">
-            <div style="padding-left: 30px; padding-right: 30px; text-align: right;">
-                <!--
-                <iframe style="float: left;" src="http://www.acgrupo.com.br/chavedomundo/rss/index.php" width="510" height="20" border="0" frameborder="0" scrolling="no"></iframe>
-                -->
-                <?php
-                /*
-                <a href="http://www.acgrupo.com.br" style="color: purple"><img src="http://www.acgrupo.com.br/imgout/desenvolvidoacgrupo.png" align="right" border="0" /></a>
-                 *
-                 */
-                ?>
-            </div>
-        </div>
-        <div id="bottom_bottom">
-        </div>
-    </div>
 </div>
 
 

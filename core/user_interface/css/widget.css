@@ -15,9 +15,11 @@
     }
         div.widget_group ul.draganddrop {
             list-style: none;
+            display: block;
             margin: 0;
             padding: 0 0 15px 0;
             min-height: 100px;
+            width: 100%;
         }
             div.widget_group ul.draganddrop li.sorted {
                 margin: 0 0 0px 0;

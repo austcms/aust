@@ -1,9 +1,8 @@
 <?php
 /**
- * Classe dos módulos
- *
- * Contém funcionalidades genéricas do módulos, funcionalidades estas presentes
- * em todos os módulos.
+ * Classe dos módulos, contém informações de todos os módulos. Não é
+ * superclasse, mas contém métodos para leitura de diretórios e
+ * aplicações gerais.
  *
  * @package Classes
  * @name Módulos
@@ -42,6 +41,13 @@ class Modulos
      * @var class Configurações do módulo
      */
     public $config;
+
+    /**
+     *
+     * @var array parametros do __construct
+     */
+    public $params;
+
     /**
      *
      * @var string Diretório onde estão os módulos
@@ -55,12 +61,19 @@ class Modulos
     function __construct($param) {
         global $aust;
         $this->aust = $aust;
-        
+
+        $this->params = &$param;
+
         /**
          * Ajusta a conexao para o módulo
          */
-        if( !empty($param['conexao']) ) {
-            $this->conexao = $param['conexao'];
+            $this->conexao = Connection::getInstance();
+
+        /**
+         * Usuário atual
+         */
+        if( !empty($param['user']) ) {
+            $this->user = &$param['user'];
         }
 
         /**
@@ -79,44 +92,30 @@ class Modulos
         }
     }
 
+    /**
+     * getInstance()
+     *
+     * Para Singleton
+     *
+     * @staticvar <object> $instance
+     * @return <Conexao object>
+     */
+    static function getInstance(){
+        static $instance;
+
+        if( !$instance ){
+            $instance[0] = new Modulos;
+        }
+
+        return $instance[0];
+
+    }
+
     /*
+     *
      * MÈTODOS DE SUPORTE
+     * 
      */
-    /**
-     * getContentTable()
-     *
-     * Retorna o nome da tabela principal.
-     *
-     * @return <string>
-     */
-    public function getContentTable(){
-        return $this->tabela_criar;
-    }
-
-
-
-    /**
-     *
-     * VERIFICAÇÕES
-     *
-     */
-    /**
-     * hasSchema()
-     *
-     * Ao contrário de Schema, o módulo pode ter Migration (preferido).
-     *
-     * @return <bool>
-     */
-    public function hasSchema(){
-        if( empty($this->modDbSchema) )
-            return false;
-
-        return true;
-    }
-
-    public function hasMigration(){
-        
-    }
 
     /**
      * getModuleInformation()
@@ -124,6 +123,13 @@ class Modulos
      * Retorna informações gerais sobre um módulo.
      *
      * @param <array> $params
+     * 
+     *      O formato é o que segue:
+     * 
+     *          array(
+     *              'modulo_1', 'modulo_2', 'modulo_3'
+     *          );
+     *
      * @return <array>
      */
     public function getModuleInformation($params){
@@ -131,7 +137,7 @@ class Modulos
         /*
          * Load Migrations
          */
-        $migrationsMods = new MigrationsMods( $this->conexao );
+        $migrationsMods = MigrationsMods::getInstance();
         //$migrationsStatus = $migrationsMods->status();
 
         if( is_array($params) ){
@@ -356,64 +362,14 @@ class Modulos
         return $response = (empty($response)) ? array() : $response;
     }
 
-    /**
-     * Método responsável por retornar o nome de arquivos que representar
-     * determinada interface ou funcionalidade.
+    /*
      *
-     * Retorna o diretório/nome do arquivo que deve ser carregado.
+     * INTERFACE
      *
-     * @param int $aust_node ID da estrutura a ser carregada
-     * @param string $type 'Alias' representando o que é necessário carregar
-     * @return string
      */
-    public function loadInterface($aust_node = '0', $type = '') {
-        $modDir = $this->aust->LeModuloDaEstrutura($aust_node);
-
-        if( $type == 'list' ) {
-            if ( is_file( self::MOD_DIR . $modDir . '/view/listar.php' ) ) {
-                return self::MOD_DIR . $modDir . '/view/listar.php';
-            } else {
-                return 'conteudo.inc/listar.inc.php';
-            }
-        }
-
-        elseif( $type == 'new' ) {
-            if ( is_file( self::MOD_DIR . $modDir . '/view/form.php' ) ) {
-                return self::MOD_DIR . $modDir . '/view/form.php';
-            } else {
-            /**
-             * @todo - o que fazer se o arquivo não for encontrado
-             */
-                return 'conteudo.inc/editar.inc.php';
-            }
-        }
-
-        elseif( $type == 'edit' ) {
-            if ( is_file( self::MOD_DIR . $modDir . '/view/edit.php' ) ) {
-                return self::MOD_DIR . $modDir . '/view/edit.php';
-            } elseif ( is_file( self::MOD_DIR . $modDir . '/view/form.php' ) ) {
-                return self::MOD_DIR . $modDir . '/view/form.php';
-            } else {
-                return 'conteudo.inc/edit.inc.php';
-            }
-        }
-
-        elseif( $type == 'save' ) {
-            if ( is_file( self::MOD_DIR . $modDir . '/view/save.php' ) ) {
-                return self::MOD_DIR . $modDir . '/view/save.php';
-            } else {
-            /**
-             * @todo - o que fazer se o arquivo não for encontrado
-             */
-                return 'conteudo.inc/edit.inc.php';
-            }
-        }
-
+    public function loadHtmlEditor(){
+        return loadHtmlEditor();
     }
-
-
-
-
 
     /**
      * @todo - trataImagem() não deveria estar nesta função.
@@ -589,37 +545,6 @@ class Modulos
             }
         }
     } // fim leModulos()
-
-    /**
-     * getRelatedEmbed()
-     *
-     * Dado uma estrutura, verifica quais outras estruturas sao associadas a ele
-     * para fazer um embed.
-     *
-     * Se a estrutura é Notícias, verifica quais outras podem fazer embed nos
-     * seus formulários.
-     *
-     * Retorna array com ids das estruturas relacionadas
-     *
-     * @param int $austNode
-     * @return array
-     */
-    public function getRelatedEmbed($austNode){
-        $sql = "SELECT
-                    categoria_id
-                FROM
-                    modulos_conf as m
-                WHERE
-                    m.tipo='relacionamentos' AND
-                    m.valor='".$austNode."'
-                ";
-        $query = $this->conexao->query($sql);
-        $tmp = array();
-        foreach( $query as $valor ){
-            $tmp[] = $valor["categoria_id"];
-        }
-        return $tmp;
-    }
 
     // retorna o nome da tabela da estrutura
     function LeTabelaDaEstrutura($param='') {

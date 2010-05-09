@@ -6,7 +6,8 @@
  */
 
         // se for para editar, deixa checkbox com propriedade 'check'
-        $conteudo_tabela = $modulo->LeTabelaDaEstrutura();
+
+        $mainTable = $modulo->getContentTable();
         $privid_result = array();
         if(!empty($_GET['w'])){
             $temp_w = $_GET['w'];
@@ -16,10 +17,10 @@
                     FROM
                         privilegio_target
                     WHERE
-                        target_table='".$conteudo_tabela."' AND
+                        target_table='".$mainTable."' AND
                         target_id='".$temp_w."'
                     ";
-            $result = $conexao->query($sql);
+            $result = $modulo->connection->query($sql);
 
             foreach($result as $dados_priv){
                 $privid_result[] = $dados_priv['privilegio_id'];
@@ -37,7 +38,7 @@
                 WHERE
                     pc.type='content'
                 ";
-        $result = $conexao->query($sql);
+        $result = $modulo->connection->query($sql);
         //pr($result);
         //$result = $result[0];
         foreach($result as $dados){
@@ -45,13 +46,16 @@
             if(in_array($dados['id'], $privid_result)){
                 $temp_act = 'checked="checked"';
             }
-            $temp = $temp.'<input type="checkbox" name="privid[]" '.$temp_act.' value="'.$dados['id'].'" /> '.$dados['titulo'].'<br />';
+            $temp = $temp.'<input type="checkbox" name="embed['.$embedI.'][data][privid][]" '.$temp_act.' value="'.$dados['id'].'" /> '.$dados['titulo'].'<br />';
         }
 
         // guarda o parágrafo de introdução, explicativo
         $embed_form[0]['intro'] = 'Selecione os privilégios necessários para usuários acessarem este conteúdo.';
         // salva os <inputs> criados
-        $embed_form[0]['input'] = '<div><input type="hidden" name="privilegio" value="1" />'.$temp.'</div>';
+        $embed_form[0]['input'] = '<div>'.
+                                    ''.
+                                    '<input type="hidden" name="embed['.$embedI.'][privilegio]" value="1" />'.
+                                    $temp.'</div>';
         // guarda o parágrafo de explicação
         $embed_form[0]['explanation'] = '';
 

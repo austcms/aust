@@ -40,7 +40,7 @@ if(!empty($_POST['configurar']) AND ($_POST['configurar'] == 'criar_admin')){
             ?>
             <h1 style="color: red;">Ops... Não foi possível cadastrar o usuário.!</h1>
             <p>Ocorreu um erro estranho. Entre em contato com o programador responsável por isto.</p>
-            <p><a href="<?=$_SERVER['PHP_SELF'];?>">Voltar</a></p>
+            <p><a href="<?php echo $_SERVER['PHP_SELF'];?>">Voltar</a></p>
         <?php
         }
     }

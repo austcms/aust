@@ -48,6 +48,7 @@ define("CORE_DIR", "core/");
      * Define o diretório onde estão as interfaces de usuário do painel do sistema
      */
     define("UI_PATH", CORE_DIR."user_interface/");
+        define("CSS_PATH", UI_PATH."css/");
     define("UI_STANDARD_FILE", UI_PATH."ui.php");
     define("THEMES_DIR", UI_PATH."themes/");
     define("THEMES_SCREENSHOT_FILE", "screenshot");
@@ -153,6 +154,8 @@ define('MOD_ACTIONS_FILE', 'core/actions.php');
 define('MOD_DBSCHEMA', 'core/config/db_schema.php');
 /**
  * Configurações do Módulo
+ *
+ *      A partir do diretório do módulo...
  */
 define('MOD_CONFIG', 'core/config/config.php');
 /**
@@ -182,4 +185,16 @@ define('MOD_VIEW_DIR', 'view/');
  * WIDGETS
  */
     define('WIDGETS_DIR', 'widgets/');
+
+/*
+ * CACHE
+ */
+    define('CACHE_DIR', CORE_DIR.'cache/');
+    define('CACHE_PUBLIC_DIR', UI_PATH.'cache/');
+
+    define('CACHE_CSS_CONTENT', CACHE_PUBLIC_DIR.'style.css');
+    define('CACHE_JS_CONTENT', CACHE_PUBLIC_DIR.'javascript.js');
+    define('CACHE_CSS_FILES', CACHE_DIR.'CLIENTSIDE_CSS_FILES');
+    define('CACHE_JS_FILES', CACHE_DIR.'CLIENTSIDE_JS_FILES');
+
 ?>

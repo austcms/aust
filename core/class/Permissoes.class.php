@@ -48,10 +48,14 @@ class Permissoes extends SQLObject {
             $this->admins_tipos_id = $param['admins_tipos_id'];
         }
 
-        $this->conexao = (empty($param['conexao'])) ? '' : $param['conexao'];
+        $this->conexao = Connection::getInstance();
     }
 
     /**
+     * read()
+     *
+     * [Executado automaticamente na instanciação da classe.]
+     *
      * Lê e retorna permissões de estruturas com acesso permitido ao usuário
      *
      * @param array $param Contém atributos e condições de leitura
@@ -70,7 +74,7 @@ class Permissoes extends SQLObject {
         /**
          * Se nenhum parâmetro de usuário for passado, lê o usuário atual
          */
-        if(empty($param['admins_tipos_id']) and empty($param['admins_id'])){
+        if( empty($param['admins_tipos_id']) and empty($param['admins_id']) ){
             $agente = array(
                 'admins_id' => $this->admins_id,
                 'admins_tipos_id' => $this->admins_tipos_id,
@@ -115,57 +119,93 @@ class Permissoes extends SQLObject {
                                         'conditions' => array(
                                             'OR' => $agente,
                                         ),
-                                        'fields' => array('categorias_id'),
+                                        'fields' => array('categorias_id','action'),
                                     ), 'sql'
         );
-        $permissoes = $this->conexao->query($permissoesSql) ;
-        $result = array();
-        if( !empty($permissoes) ){
-            foreach( $permissoes as $permissao ){
-                $result[] = $permissao['categorias_id'];
-            }
-        }
-        $this->permissoes = $result;
+        $query = $this->conexao->query($permissoesSql) ;
 
-        return $result;
+
+        $permissoes = array();
+        foreach($query as $valor){
+            if( !empty($valor['action']) )
+                $permissoes[ $valor['categorias_id'] ][$valor['action']] = true;
+        }
+
+        $this->permissoes = $permissoes;
+
+        return $this->permissoes;
         
     }
 
     /**
-     * Verifia se determinado usuário tem acesso a determinada estrutura (ou categoria).
+     * Verifica se determinado usuário tem acesso a determinada estrutura (ou categoria)
+     * e também a um determinado action.
      *
-     * @param array $param Informações para verificação de permissão
+     * Se o usuário não tem permissão a nenhum action de uma estrutura,
+     * retorna falso quando perguntado sobre uma estrutura
+     *
+     * @param array $austNode Informações para verificação de permissão
      *      'estrutura'
      *      'permissoes'
      * @return boolean True ou false, dependendo se o agente verificado tem acesso
      * à estrutura requerida
      */
-    function verify($param){
+    function verify($austNode, $action = ''){
 
-        if( is_string($param) OR is_int($param) ){
+        if( is_string($austNode) OR is_int($austNode) ){
             if( empty($this->permissoes) ){
                 return true;
-            }
+            } else {
+                /*
+                 * Há permissões.
+                 *
+                 * Retorna falso se:
+                 *      - não há configurações sobre action desejado;
+                 *      - action == false
+                 */
+                /*
+                 * Action vazio
+                 *
+                 * Verifica se o usuário tem alguma permissão de action na
+                 * estrutura especificada.
+                 */
+                if( empty($action) ){
+                    if( empty($this->permissoes[$austNode]) )
+                        return false;
 
-            if( in_array($param, $this->permissoes) ){
-                return true;
+                    return true;
+                }
+                /*
+                 * Action especificado
+                 *
+                 * Verifica se não está vazio a configuração do action
+                 */
+                else if( empty($this->permissoes[$austNode][$action]) ){
+                    return false;
+                }
+                /*
+                 * Se tem permissão de acesso ao action atual
+                 */
+                else if( $this->permissoes[$austNode][$action] == true ){
+                    return true;
+                }
             }
-
+            
             return false;
 
         } else if( is_array($params) ){
-            if(empty($param['estrutura'])){
+            if(empty($austNode['estrutura'])){
                 return true;
             } else {
-                if(empty($param['permissoes'])){
+                if(empty($austNode['permissoes'])){
                     $permissoes = $this->read(array());
                 } else {
-                    $permissoes = $param['permissoes'];
+                    $permissoes = $austNode['permissoes'];
                 }
 
                 if(empty($permissoes)){
                     return true;
-                } elseif(in_array($param['estrutura'], $permissoes)){
+                } elseif(in_array($austNode['estrutura'], $permissoes)){
                     return true;
                 }
             }

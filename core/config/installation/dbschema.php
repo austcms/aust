@@ -44,6 +44,7 @@ $dbSchema['admins_permissions'] = array(
     'admins_tipos_id' => 'int',
     'categorias_id' => 'int',
     'tipo' => 'varchar(80) COMMENT \'Tipo de permissão: permit, deny, etc\'',
+    'action' => 'varchar(80) COMMENT \'Action: create, edit, listing, etc\'',
     'adddate' => 'datetime',
     'autor' => 'int',
     'dbSchemaTableProperties' => array(

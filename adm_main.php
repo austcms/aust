@@ -44,8 +44,10 @@ include(LIB_DIR."aust/aust_func.php");
 /**
  * Conexão principal
  */
-$conexao = new Conexao($dbConn);
+$conexao = Connection::getInstance();
 $model = new Model($conexao);
+
+include(CORE_CONFIG_DIR."core.php");
 
 /**
  * Configurações do core do sistema
@@ -87,7 +89,9 @@ if(!$isResponser){
          * Instancia objetos necessários ao funcionamento do sistema
          */
         $aust = new Aust($conexao);
-        $administrador = new Administrador($conexao);
+        $administrador = User::getInstance();
+        $administrador->verifySession();
+        $administrador->redirectForbiddenSession();
         $modulos = new Modulos( array('conexao'=>$conexao) );
         $themes = new Themes( array('conexao'=>$conexao) );
         $config = new Config(
@@ -132,6 +136,7 @@ if(!$isResponser){
         /**
          * Instancia o objeto $ui (UserInterface)
          */
+        $uiPermissions = UiPermissions::getInstance();
         $uI = new UI;
 
         $_GET['action'] = (empty($_GET['action'])) ? '' : $_GET['action'];
@@ -140,15 +145,15 @@ if(!$isResponser){
         /**
          * Verifica se o usuário tem permissão para acessar a página requsitada
          */
-        $permitted = $uI->verificaPermissoes();
-
+        //$permitted = $uiPermissions->isPermitted();
+        //pr($permitted);
         /**
          * Com permissão, o usuário vai até a página requisitada.
          *
          * Caso contrario, recebe uma mensagem de erro.
          */
         $param = array(
-            'permitted' => $uI->verificaPermissoes(),
+            'permitted' => $uiPermissions->isPermittedSection(),
         );
         $filename = $uI->correctUIPage($param);
 

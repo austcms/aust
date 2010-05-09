@@ -13,8 +13,27 @@ class ModController extends ModsController
 
     var $helpers = array('Form');
 
-    public function listar(){
-        //$this->render('listar');
+    public function listing(){
+
+        $austNode = $_GET['aust_node'];
+        $this->set('austNode', $austNode);
+
+        $categorias = $this->aust->LeCategoriasFilhas('',$_GET['aust_node']);
+        $categorias[$_GET['aust_node']] = 'Estrutura';
+        $param = array(
+            'categorias' => $categorias,
+            'metodo' => 'listing',
+            '' => ''
+        );
+
+        $sql = $this->modulo->loadSql($param);
+        //echo '<br><br>'.$sql .'<br>';
+
+        $resultado = $this->modulo->connection->query($sql, "ASSOC");
+        $this->set('resultado', $resultado);
+
+        $fields = count($resultado);
+        $this->set('fields', $fields);
         //$this->autoRender= false;
     }
 
@@ -32,7 +51,7 @@ class ModController extends ModsController
     /**
      * FORMULÁRIO DE INSERÇÃO
      */
-    public function criar($params = array() ){
+    public function create($params = array() ){
         /**
          * Verifica se há parâmetros
          */
@@ -62,6 +81,9 @@ class ModController extends ModsController
                 "by" => "Field",
             )
         );
+
+        $divisorTitles = $this->modulo->loadDivisors();
+        $this->set('divisorTitles', $divisorTitles);
         
         $campos = $infoCadastro["campo"];
         /**
@@ -80,7 +102,7 @@ class ModController extends ModsController
                         WHERE
                             id=".$w."
                         ";
-                $dados = $this->conexao->query($sql, "ASSOC");
+                $dados = $this->connection->query($sql, "ASSOC");
                 $dados = $dados[0];
             }
             
@@ -150,12 +172,12 @@ class ModController extends ModsController
         $this->render('form');
     }
 
-    public function editar(){
+    public function edit(){
 
         $params = array(
             "w" => $_GET["w"]
         );
-        $this->criar($params);
+        $this->create($params);
         //$this->render('form');
     }
 
@@ -167,7 +189,6 @@ class ModController extends ModsController
     public function save(){
 
         $infoCadastro = $this->modulo->pegaInformacoesCadastro( $this->austNode );
-        //pr($infoCadastro);
 
         /*
          * UPDATE?
@@ -254,7 +275,7 @@ class ModController extends ModsController
             if( !empty($w) AND $w > 0 )
                 $lastInsertId = $w;
             else
-                $lastInsertId = $this->model->conexao->lastInsertId();
+                $lastInsertId = $this->modulo->connection->lastInsertId();
 
             /*
              * DADOS RELACIONAIS
@@ -287,7 +308,7 @@ class ModController extends ModsController
                                 ".$infoCadastro["estrutura"]["tabela"]["valor"]."_id='$w'
                                 ";
                     //echo $sql;
-                    $this->model->conexao->exec($sql);
+                    $this->modulo->connection->exec($sql);
                     unset($sql);
                 }
 
@@ -338,7 +359,7 @@ class ModController extends ModsController
             if( !empty($sql) ){
                 if( is_array($sql) ){
                     foreach( $sql as $uniqueSql ){
-                        $this->model->conexao->exec($uniqueSql);
+                        $this->modulo->connection->exec($uniqueSql);
                         //pr($uniqueSql);
                     }
                 }
@@ -413,13 +434,13 @@ class ModController extends ModsController
                 $h1 = 'Editando: '.$this->aust->leNomeDaEstrutura($_GET['aust_node']);
             }
             //echo $sql;
-            $query = $this->modulo->conexao->exec($sql);
+            $query = $this->modulo->connection->exec($sql);
             if($query){
                 $resultado = TRUE;
 
                 // se estiver criando um registro, guarda seu id para ser usado por módulos embed a seguir
                 if($_POST['metodo'] == 'criar'){
-                    $_POST['w'] = $this->modulo->conexao->conn->lastInsertId();
+                    $_POST['w'] = $this->modulo->connection->conn->lastInsertId();
                 }
 
 

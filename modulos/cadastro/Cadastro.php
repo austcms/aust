@@ -7,7 +7,11 @@
  * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @since v0.1.6, 09/07/2009
  */
-class Cadastro extends Modulos {
+class Cadastro extends Module {
+
+    public $mainTable = "cadastros_conf";
+
+    public $dataTable;
 
     function __construct($param = ''){
 
@@ -18,7 +22,108 @@ class Cadastro extends Modulos {
          * classe.
          */
         parent::__construct($param);
+    }
 
+    /**
+     * loadDivisors()
+     *
+     * Divisores são títulos que aparecem entre campos de cadastro,
+     * de forma a separar os inputs por assunto.
+     *
+     * @return <array>
+     */
+    function loadDivisors(){
+        $sql = "SELECT
+                    id, tipo, valor, comentario, descricao
+                FROM
+                    ".$this->useThisTable()."
+                WHERE
+                    tipo='divisor' AND
+                    categorias_id='".$this->austNode."'
+            ";
+        $tempResult = $this->connection->query($sql);
+
+        /*
+         * Agrupa array de Divisors com as chaves sendo o nome do
+         * campo após o título.
+         */
+        $result = array();
+        foreach( $tempResult as $valor ){
+
+            $before = str_replace("BEFORE ", "", $valor['descricao']);
+            $result[$before] = $valor;
+        }
+        
+        return $result;
+    }
+
+    /**
+     * @todo
+     *
+     * saveDivisor deve excluir um divisor que já existe
+     * que seja antes do mesmo campo indicado. Assim,
+     * evita-se dois divisores antes de um mesmo campo.
+     */
+    /**
+     * saveDivisor()
+     * 
+     * Salva um Título Divisor de campos do Cadastro.
+     *
+     * @param <array> $params
+     *      Contém os elementos 'title', 'comment' (não obrigatório)
+     *      e 'before', indicando o nome do campo ao qual este divisor
+     *      antecede.
+     * @return <type>
+     */
+    function saveDivisor($params){
+
+        /*
+         * 'title' e 'before' são obrigatórios
+         */
+        if( empty($params['title']) OR
+            empty($params['before']) )
+            return false;
+
+        if( empty($params['comment']) )
+            $params['comment'] = "";
+
+        $params['title'] = addslashes($params['title']);
+        $params['comment'] = addslashes($params['comment']);
+
+        $sql = "INSERT INTO
+                    ".$this->useThisTable()."
+                    (tipo,valor,comentario,categorias_id,descricao)
+                VALUES
+                    (
+                    'divisor','".$params['title']."','".$params['comment']."',
+                    '".$this->austNode."','".$params['before']."'
+                    )
+                ";
+        
+        $result = $this->connection->exec($sql);
+
+        if( $result )
+            return true;
+
+        return false;
+
+    }
+
+    function deleteDivisor($id){
+        if( is_int($id) OR
+            is_string($id) )
+        {
+            $where = "id='".$id."' AND tipo='divisor'";
+        }
+
+        $sql = "DELETE FROM
+                    ".$this->useThisTable()."
+                WHERE
+                    $where
+                ";
+        $result = $this->connection->exec($sql);
+
+        return $result;
     }
 
     /**
@@ -35,12 +140,13 @@ class Cadastro extends Modulos {
          * Busca na tabela cadastros_conf por informações relacionadas ao
          * austNode selecionado.
          */
-        $temp = $this->conexao->query(
+        $temp = $this->connection->query(
             "SELECT * FROM cadastros_conf WHERE categorias_id='".$austNode."' ORDER BY ordem ASC",
             PDO::FETCH_ASSOC
         );
         foreach( $temp as $chave=>$valor ){
-            $result[ $valor["tipo"] ][ $valor["chave"] ] = $valor;
+            if( !empty($valor["chave"]) )
+                $result[ $valor["tipo"] ][ $valor["chave"] ] = $valor;
         }
         return $result;
     }
@@ -63,7 +169,7 @@ class Cadastro extends Modulos {
          * Toma informações físicas sobre a tabela
          */
         if ( !empty( $params["tabela"] ) ){
-            $temp = $this->conexao->query("DESCRIBE ".$params["tabela"], "ASSOC");
+            $temp = $this->connection->query("DESCRIBE ".$params["tabela"], "ASSOC");
         }
 
         /**
@@ -83,20 +189,17 @@ class Cadastro extends Modulos {
         return $result;
     }
 
-
-
-
-
-
-
     /**
+     *
      * VERIFICAÇÕES E LEITURAS AUTOMÁTICAS DO DB
+     * 
      */
     
-    public function SQLParaListagem($param){
+    public function loadSql($param){
         // configura e ajusta as variáveis
         $categorias = $param['categorias'];
         $metodo = $param['metodo'];
+        $search = $param['search'];
         $w = $param['id'];
 
         /**
@@ -131,11 +234,11 @@ class Cadastro extends Modulos {
                     ".$this->config["arquitetura"]["table"]." AS conf ".
                 $where.
                 $order;
+        unset($where);
         /**
          * Campos carregados
          */
-        $result = $this->conexao->query($sql, "ASSOC");
-
+        $result = $this->connection->query($sql, "ASSOC");
         /**
          * Configurações
          */
@@ -162,8 +265,10 @@ class Cadastro extends Modulos {
                     }
                 }
 
-                $campos['valor'][] = $dados['valor'];
-                $campos['chave'][] = $dados['chave'];
+                if( !empty($dados['valor']) )
+                    $campos['valor'][] = $dados['valor'];
+                if( !empty($dados['chave']) )
+                    $campos['chave'][] = $dados['chave'];
 
             } else if($dados['tipo'] == 'estrutura' AND $dados['chave'] == 'tabela'){
                 $est['tabela'][] = $dados['valor'];
@@ -204,11 +309,31 @@ class Cadastro extends Modulos {
             $leftJoin = array();
             $virgula = "";
         }
-        
+
+
+        /*
+         * SEARCH?
+         *
+         * Analisa se deve buscar por algo em específico.
+         */
+        $searchQuery = "";
+        if( !empty($search) ){
+            /*
+             * Faz loop por cada campo do cadastro, criando
+             * o comando SQL Where para busca de dados.
+             */
+            foreach( $campos['chave'] as $campo ){
+                $searchQueryArray[] = $campo." LIKE '%".$search."%'";
+            }
+            if( !empty($searchQueryArray) )
+                $searchQuery = "AND (".implode(" OR ", $searchQueryArray).")";
+            //pr($campos);
+        }
+
         /**
          * Novo SQL
          */
-        if( $metodo == "listar" ){
+        if( $metodo == "listing" ){
 
             if( empty($mostrar) ){
                 $mostrar = "id,";
@@ -227,13 +352,15 @@ class Cadastro extends Modulos {
                         ".$est["tabela"][0]." AS ".$tP."
 
                     ".implode(" ", $leftJoin)."
-
+                    WHERE
+                        1=1
+                        $searchQuery
                     ORDER BY
                         ".$tP.".id DESC
-                    LIMIT 0,30
+                    LIMIT 0,50
 
                     ";
-        } elseif( $metodo == "editar" ){
+        } elseif( $metodo == "edit" ){
             $sql = "SELECT
                         id, ".implode(",", $campos["chave"])."
                     FROM
@@ -279,7 +406,7 @@ class Cadastro extends Modulos {
                 LIMIT 0,1";
                 //echo $sql;
                 
-        $resultado = $this->conexao->query($sql);
+        $resultado = $this->connection->query($sql);
         $dados = $resultado[0];
         return $dados['valor'];
     }
@@ -288,6 +415,10 @@ class Cadastro extends Modulos {
      * Função para retornar o nome da tabela de dados de uma estrutura da cadastro
      */
     public function LeTabelaDeDados($param){
+
+        if( !empty($this->dataTable) )
+            return $this->dataTable;
+
         if(is_int($param) or $param > 0){
             $estrutura = "categorias.id='".$param."'";
         } elseif(is_string($param)){
@@ -305,8 +436,10 @@ class Cadastro extends Modulos {
                     cadastros_conf.chave='tabela'
                 LIMIT 0,1";
                 //echo $sql;
-        $mysql = $this->conexao->query($sql);
+        $mysql = $this->connection->query($sql);
         $dados = $mysql[0];
+        
+        $this->dataTable = $dados['valor'];
         return $dados['valor'];
     }
 
@@ -325,7 +458,7 @@ class Cadastro extends Modulos {
                     ".$param['tabela']."_arquivos
                 LIMIT 0,1
                 ";
-        $result = $this->conexao->query($sql);
+        $result = $this->connection->query($sql);
         if( count($result) == 0 ){
             $sql_arquivos =
                             "CREATE TABLE ".$param['tabela']."_arquivos(
@@ -346,7 +479,7 @@ class Cadastro extends Modulos {
                             PRIMARY KEY (id),
                             UNIQUE id (id)
                         ) ".$charset;
-            if( $this->conexao->exec($sql_arquivos) ){
+            if( $this->connection->exec($sql_arquivos) ){
                 return TRUE;
             } else {
                 return FALSE;
@@ -413,7 +546,7 @@ class Cadastro extends Modulos {
                     ";
         }
 
-        $result = $this->conexao->query($sql);
+        $result = $this->connection->query($sql);
         if( count($result) > 0 ){
             $dados = $result[0];
             return $dados;

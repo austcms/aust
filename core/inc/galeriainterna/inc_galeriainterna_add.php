@@ -11,7 +11,7 @@ include("../../../func.php");
 
 <html>
 <head>
-<title>Adicionar nova imagem - <?=$_SESSION["loginnome"];?></title>
+<title>Adicionar nova imagem - <?php echo $_SESSION["loginnome"];?></title>
 
 <style>
 a   { color: blue }
