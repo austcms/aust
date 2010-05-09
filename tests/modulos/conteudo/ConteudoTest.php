@@ -315,5 +315,67 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
         //$this->assertArrayHasKey(0, $this->obj->load() );
     }
 
+    // alguns campos configurados não podem ser vazios.
+    function testReplaceFieldsValueIfEmpty(){
+
+        /*
+         * Inserir dados no DB para testes.
+         */
+        $data = array(
+            'method' => 'create',
+            'w' => '',
+            'aust_node' => '7777',
+            'frmcategoria' =>  '7777',
+            'frmtitulo' => '',
+            'frmtexto' => 'teste7777',
+            'embed' => array(
+                '0' => array(
+                    'className' => 'Privilegios',
+                    'dir' => 'modulos/privilegios',
+                    'privilegio' => '1',
+                    'data' => array(
+                        'privid' => array(
+                            '0' => '2',
+                            '1' => '3',
+                        )
+                    )
+                )
+            )
+        );
+
+        $this->assertTrue( $this->obj->save($data, array()) );
+
+        $params = array(
+            'austNode' => array('7777'=>''),
+        );
+        $query = $this->obj->load($params);
+
+        $this->obj->connection->exec("DELETE FROM textos WHERE texto='teste7777' OR categoria='7777'");
+
+        /*
+         * Análise do Teste
+         */
+        $config = $this->obj->loadConfig();
+        if( !empty($config['replaceFieldsValueIfEmpty']) ){
+
+            foreach( $query as $value ){
+
+                foreach( $config['replaceFieldsValueIfEmpty'] as $field=>$fieldRule ){
+                    //var_dump($query);
+                    if( empty($value[$field]) ){
+                        $this->fail('Resultado da query tem um campo vazio ('.$field.'), replaceFieldsValueIfEmpty() não funcionando.');
+                    }
+
+                }
+            }
+        }
+        //$this->assertArrayHasKey(0, $result, "Module::load() não funcionando" );
+
+
+
+    }
+
+
+
 }
 ?>

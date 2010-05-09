@@ -61,7 +61,14 @@ class ModController extends ModsController
         /*
          * Query com resultado
          */
-        $this->set('query', $this->modulo->connection->query($sql) );
+
+        //$query = $this->modulo->connection->query($sql);
+
+        $query = $this->modulo->load($params);
+        //$config = $this->modulo->loadConfig();
+        //$query = $this->modulo->replaceFieldsValueIfEmpty($query);
+
+        $this->set('query', $query );
 
     } // fim listar()
 
