@@ -1,3 +1,20 @@
+v0.1.8 (8/5/2010)
+
+	- Module::_replaceFieldsValueIfEmpty(). Mostrar 'Sem título' em registros vazios de listagem de módulos
+	- Botão 'Outros meses' em Módulo Agenda
+	- Mod. Cadastro: Divisor de seção
+	- Padronização de Actions de módulos (create, edit, listing, delete)
+	- Outros grupos de usuários que não Administradores, Moderadores e Colaboradores não podem ver Widgets
+	- Mod. Imagens salvando imagens com qualidade melhor
+	- Temas: adição de temas extras; Registry::write('defaultTheme', 'classic_blue')
+	- Ajuste de permissões a usuários de acordo com action de módulo (create, edit, listing)
+	- Sistema automático de concatenação de CSSs
+	- Sistema automático de concatenação de Javascript
+	- Sistema de cache para CSS e Javascript
+	- Widgets com DragAndDrop aprimorado
+	- Seletor de temas
+	- Debug SQL
+
 v0.1.7
 
 
