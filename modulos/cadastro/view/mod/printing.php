@@ -68,11 +68,17 @@ if( !empty($_GET["w"]) ){
 
         if( array_key_exists($valor['nomeFisico'], $divisorTitles) ){
             ?>
-            <h3><?php echo $divisorTitles[$valor['nomeFisico']]['valor']; ?></h3>
+            <tr valign="top">
+                <td class="divisor" colspan="2">
+                <h3><?php echo $divisorTitles[$valor['nomeFisico']]['valor']; ?></h3>
+                <?php
+                if( !empty($divisorTitles[$valor['nomeFisico']]['comentario']) ){
+                    echo '<p>'.$divisorTitles[$valor['nomeFisico']]['comentario'].'</p>';
+                }
+                ?>
+                </td>
+            </tr>
             <?php
-            if( !empty($divisorTitles[$valor['nomeFisico']]['comentario']) ){
-                echo '<p>'.$divisorTitles[$valor['nomeFisico']]['comentario'].'</p>';
-            }
         }
 
         /**

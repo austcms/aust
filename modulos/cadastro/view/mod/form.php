@@ -23,7 +23,7 @@ if( !empty($_GET["w"]) ){
 if( $_GET['action'] == "edit" ){
     if( $modulo->getStructureConfig("has_printing_version") ){
         ?>
-        <a target="blank" href="adm_main.php?section=<?php echo $_GET["section"] ?>&action=printing&theme=blank&aust_node=<?php echo $_GET['aust_node'] ?>&w=<?php echo $_GET['w'] ?>">
+        <a target="_blank" href="adm_main.php?section=<?php echo $_GET["section"] ?>&action=printing&theme=blank&aust_node=<?php echo $_GET['aust_node'] ?>&w=<?php echo $_GET['w'] ?>">
         Versão para impressão
         </a>
         <?
