@@ -985,6 +985,7 @@ class Module
             
             $queryTmp = $this->connection->query($sql, "ASSOC");
 
+            $query = array();
             foreach($queryTmp as $valor) {
                 $query[$valor["propriedade"]] = $valor;
             }
@@ -1001,6 +1002,9 @@ class Module
     function getStructureConfig($key, $valueOnly = true) {
         if( is_string($key) AND empty($this->structureConfig) ) {
             $this->loadModConf($this->austNode);
+
+            if( empty($this->structureConfig[$key]) )
+                return array();
 
             if( $valueOnly )
                 return $this->structureConfig[$key]['valor'];

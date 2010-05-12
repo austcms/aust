@@ -78,7 +78,7 @@ if(!empty($_GET['action'])){
         $param = array(
             'config' => $modInfo,
             'user' => $administrador,
-            'modDbSchema' => $modDbSchema,
+            //'modDbSchema' => $modDbSchema,
         );
         $modulo = new $moduloNome($param);
         unset( $modDbSchema );

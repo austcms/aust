@@ -35,7 +35,9 @@ if( $fields > 0 ){
                 categorias_id='".$_GET["aust_node"]."'
             ";
     $filtroEspecial = $modulo->connection->query($sql);
-    $filtroEspecial = $filtroEspecial[0]["valor"];
+
+    if( !empty($filtroEspecial[0]) )
+        $filtroEspecial = $filtroEspecial[0]["valor"];
 
     if( !empty($filtroEspecial) ){
         $sql = "SELECT

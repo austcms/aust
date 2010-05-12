@@ -19,6 +19,17 @@ if( !empty($_GET["w"]) ){
 //pr($infoCadastro);
 ?>
 <h2>Cadastro: <?php echo $this->aust->leNomeDaEstrutura($_GET['aust_node'])?></h2>
+<?php
+if( $_GET['action'] == "edit" ){
+    if( $modulo->getStructureConfig("has_printing_version") ){
+        ?>
+        <a target="blank" href="adm_main.php?section=<?php echo $_GET["section"] ?>&action=printing&theme=blank&aust_node=<?php echo $_GET['aust_node'] ?>&w=<?php echo $_GET['w'] ?>">
+        Versão para impressão
+        </a>
+        <?
+    }
+}
+?>
 <p>
     <?php
     echo $formIntro;
@@ -62,8 +73,8 @@ echo $form->create( $infoCadastro["estrutura"]["tabela"]["valor"] );
 /**
  * Campos
  */
-
-$tabelaCadastro = $infoCadastro["estrutura"]["valor"];
+//pr($infoCadastro);
+$tabelaCadastro = $infoCadastro["estrutura"]['tabela']["valor"];
 
 /*
  *
@@ -74,9 +85,9 @@ $tabelaCadastro = $infoCadastro["estrutura"]["valor"];
  */
 foreach( $camposForm as $chave=>$valor ){
 
-    unset($select);
-    unset($checkbox);
     unset($inputType);
+    $select = array();
+    $checkbox = array();
 
     if( array_key_exists($valor['nomeFisico'], $divisorTitles) ){
         ?>

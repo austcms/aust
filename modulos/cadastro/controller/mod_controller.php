@@ -169,7 +169,6 @@ class ModController extends ModsController
         $this->set('camposForm', $camposForm);
         //pr($camposForm);
 
-        $this->render('form');
     }
 
     public function edit(){
@@ -178,6 +177,17 @@ class ModController extends ModsController
             "w" => $_GET["w"]
         );
         $this->create($params);
+        $this->render('form');
+        //$this->render('form');
+    }
+
+    public function printing(){
+
+        $params = array(
+            "w" => $_GET["w"]
+        );
+        $this->create($params);
+        $this->render('printing');
         //$this->render('form');
     }
 
@@ -234,7 +244,7 @@ class ModController extends ModsController
                     /*
                      * CAMPO RELACIONAL UM PARA MUITOS
                      */
-                    if( $campos[$campo]["especie"] == "relacional_umparamuitos" ){
+                    if( !empty($campos[$campo]) AND $campos[$campo]["especie"] == "relacional_umparamuitos" ){
                         //echo $campos[$campo]["chave"];
                         //echo $tabela;
                         unset($this->data[$tabela][$campo]);
@@ -255,7 +265,9 @@ class ModController extends ModsController
                     /*
                      * CAMPO DATE
                      */
-                    else if( $infoTabelaFisica[$campos[$campo]["chave"]]['Type'] == "date" ){
+                    else if( !empty( $campos[$campo]["chave"] ) AND
+                             !empty($infoTabelaFisica[$campos[$campo]["chave"]]['Type']) AND
+                             $infoTabelaFisica[$campos[$campo]["chave"]]['Type'] == "date" ){
                         $year = $this->data[$tabela][$campo]['year'];
                         unset($this->data[$tabela][$campo]);
 

@@ -197,10 +197,10 @@ class Cadastro extends Module {
     
     public function loadSql($param){
         // configura e ajusta as variáveis
-        $categorias = $param['categorias'];
-        $metodo = $param['metodo'];
-        $search = $param['search'];
-        $w = $param['id'];
+        $categorias = (empty($param['categorias'])) ? '' : $param['categorias'];
+        $metodo = (empty($param['metodo'])) ? '' : $param['metodo'];
+        $search = (empty($param['search'])) ? '' : $param['search'];
+        $w = (empty($param['id'])) ? '' : $param['id'];
 
         /**
          * Se $categorias estiver vazio (nunca deverá acontecer)
