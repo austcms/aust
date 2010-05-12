@@ -181,6 +181,10 @@ define('MOD_CONTROLLER', MOD_CONTROLLER_DIR.'mod_controller.php');
 define('MOD_CONTROLLER_NAME', 'ModController');
 define('MOD_VIEW_DIR', 'view/');
 
+    /*
+     * MODELS
+     */
+    define('MOD_MODELS_DIR', 'models/'); // Diretório do Controller
 
 /*
  * MIGRATIONS
