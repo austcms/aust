@@ -168,7 +168,13 @@ if(!$isResponser){
         /**
          * Mostra a Interface de usuário no browser
          */
-        include(UI_STANDARD_FILE);
+        if( empty($_GET['theme'])
+            OR $_GET['theme'] != 'blank' )
+        {
+            include(UI_STANDARD_FILE);
+        } else {
+            echo $content_for_layout;
+        }
 
     }
 }

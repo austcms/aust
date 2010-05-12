@@ -338,10 +338,11 @@ class Connection extends SQLObject {
 
             $sEnd = microtime(true);
 
-            if( !is_string($debugResult) ){
+            if( empty($debugResult)
+                OR !is_string($debugResult) )
+            {
                 $debugResult = count($result);
-            } else if( empty($debugResult) )
-                $debugResult = count($result);
+            }
 
             /*
              * DESCRIBE NÃO SÃO MOSTRADOS

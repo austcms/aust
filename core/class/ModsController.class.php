@@ -155,9 +155,9 @@ class ModsController extends Controller
          * Algumas variáveis globais precisam ser acessadas pelas Views
          *
          */
-        $this->set('conexao', $conexao);
+        $this->set('conexao', $this->conexao);
         $this->set('aust', $this->aust);
-        $this->set('modulo', $modulo);
+        $this->set('modulo', $this->modulo);
         $this->set('permissoes', $this->permissoes);
         $this->set('austNode', $this->austNode);
         $this->set('administrador', $this->administrador);
@@ -202,7 +202,7 @@ class ModsController extends Controller
         /**
          * Ajuste de conexão é feito no pai da classe
          */
-        parent::__construct($conexao);
+        parent::__construct($this->conexao);
         /**
          * trigger() é responsável por engatilhar todos os métodos
          * automáticos a serem rodados, como beforeFilter, render, etc.
