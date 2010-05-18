@@ -13,11 +13,15 @@ function cadastroSearch(este, austNode){
 }
 
 function cadastroSearchAfterDelay(este, austNode){
-
     if( searchDelay ){
         $.post(
             include_baseurl+"/js/ajax.php",
-            {action: "search", query: $(este).val(), austNode: austNode},
+            {
+                action: "search",
+                query: $(este).val(),
+                austNode: austNode,
+                field: $("#search_field").val()
+            },
             function(txt){
                 //alert(txt);
                 $('#listing_table').html(txt);
