@@ -79,7 +79,22 @@ if( $fields > 0 ){
         if( $modulo->getStructureConfig("has_search") ){
             ?>
             <div class="content_search">
-                <strong>Palavras-chave:</strong> <input type="text" id="search_query_input" onkeyup="cadastroSearch(this, <?php echo $this->austNode;?>);" /><button  onclick="cadastroSearch($('.content_search #search_query_input'), <?php echo $this->austNode;?>); return false;">Pesquisar</button>
+                <strong>Palavras-chave:</strong>
+                <input type="text" id="search_query_input" onkeyup="cadastroSearch( $('#search_query_input'), <?php echo $this->austNode;?>);" />
+                <select id="search_field" onchange="cadastroSearch( $('#search_query_input'), <?php echo $this->austNode;?>);">
+                    <option value="&all&">Buscar em Todos</option>
+                    <?php
+                    foreach( $search_fields as $physicalName=>$humanName ){
+                        ?>
+                        <option value="<?php echo $physicalName; ?>"><?php echo $humanName; ?></option>
+                        <?php
+                    }
+                    ?>
+                </select>
+                <?php
+                tt("A pesquisa é realizada no valor digitado dos campos. Se você quer buscar o valor de um campo específico, selecione-o ao lado.");
+                ?>
+                <button  onclick="cadastroSearch($('.content_search #search_query_input'), <?php echo $this->austNode;?>); return false;">Pesquisar</button>
                 <script type="text/javascript">
                 $('.content_search #search_query_input').bind('keypress', function(e) {
                     if(e.keyCode==13){

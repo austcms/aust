@@ -122,11 +122,19 @@ elseif($_POST['action'] == 'search'){
     $resultado = array();
     $categorias = $aust->LeCategoriasFilhas('',$_GET['aust_node']);
     $categorias[$austNode] = 'Estrutura';
+
+    $searchField = '';
+    if( !empty($_POST["field"]) AND
+        $_POST["field"] != "&all&" )
+    {
+        $searchField = $_POST["field"];
+    }
+
     $param = array(
         'categorias' => $categorias,
         'metodo' => 'listing',
         'search' => $_POST['query'],
-        '' => ''
+        'search_field' => $searchField
     );
 
     $sql = $modulo->loadSql($param);

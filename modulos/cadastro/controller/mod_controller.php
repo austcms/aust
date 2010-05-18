@@ -34,6 +34,9 @@ class ModController extends ModsController
 
         $fields = count($resultado);
         $this->set('fields', $fields);
+        if( $this->modulo->getStructureConfig("has_search") ){
+            $this->set("search_fields", $this->modulo->getFields());
+        }
         //$this->autoRender= false;
     }
 
