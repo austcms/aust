@@ -58,6 +58,13 @@ class Conteudo extends Module
 
     } // fim getSQLForListing()
 
+	public function load($params = array()){
+		$qry = parent::load($params);
+		rsort($qry);
+		
+		return $qry;
+	}
+
     /**
      * save()
      *

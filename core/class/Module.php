@@ -233,11 +233,13 @@ class Module
         $embedModules = $this->getRelatedEmbed($austNode);
 
 
+
         if( empty($embedModules)
             OR empty($this->loadedIds) )
         {
-            sort($qry);
-            return $qry;
+	
+			sort($qry);
+			return $qry;
         }
 
         /*
