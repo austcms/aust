@@ -170,6 +170,8 @@ class ModController extends ModsController
          * Lança as informações sobre campos para o view
          */
         $this->set('camposForm', $camposForm);
+
+		$this->render('form');
         //pr($camposForm);
 
     }
