@@ -12,6 +12,7 @@ class ModController extends ModsController
 {
 
     var $helpers = array('Form');
+	public $doRender = true;
 
     public function listing(){
 
@@ -171,7 +172,10 @@ class ModController extends ModsController
          */
         $this->set('camposForm', $camposForm);
 
-		$this->render('form');
+		if( $this->doRender )
+			$this->render('form');
+		else
+			$this->render(false);
         //pr($camposForm);
 
     }
@@ -181,9 +185,9 @@ class ModController extends ModsController
         $params = array(
             "w" => $_GET["w"]
         );
+		$this->doRender = false;
         $this->create($params);
         $this->render('form');
-        //$this->render('form');
     }
 
     public function printing(){
@@ -191,6 +195,7 @@ class ModController extends ModsController
         $params = array(
             "w" => $_GET["w"]
         );
+		$this->doRender = false;
         $this->create($params);
         $this->render('printing');
         //$this->render('form');
