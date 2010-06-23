@@ -7,8 +7,10 @@ var searchDelay;
 function cadastroSearch(este, austNode){
 
     clearTimeout(searchDelay);
+    $('.content_search #loading_image').show();
     searchDelay = window.setTimeout(function(){
         cadastroSearchAfterDelay(este, austNode);
+    $('.content_search #loading_image').hide();
     }, 350);
 }
 

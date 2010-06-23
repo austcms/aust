@@ -29,6 +29,10 @@ class AgendaTest extends PHPUnit_Framework_TestCase
         $this->obj = new $modInfo['className'];//new $modInfo['className']();
     }
 
+    function testNull(){
+        
+    }
+
 
 }
 ?>
