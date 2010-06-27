@@ -19,9 +19,9 @@
  */
     Registry::write('default_actions',
             array(
-                'Criar' => 'create',
-                'Listar' => 'listing',
-                'Editar' => 'edit',
+                'Criar' => CREATE_ACTION,
+                'Listar' => LISTING_ACTION,
+                'Editar' => EDIT_ACTION,
             ));
 
 /*

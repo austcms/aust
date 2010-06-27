@@ -84,6 +84,58 @@ $modInfo = array(
         'listing' => 'Listar',
     ),
     /*
+     * CONFIGURAÇÕES
+     */
+    'configurations' => array(
+        /*
+         * Ordenate
+         */
+        'ordenate' => array(
+            "value" => "",
+            "label" => "Ordenado",
+            "inputType" => "checkbox",
+        ),
+        /*
+         * Resumo
+         */
+        'resume' => array(
+            "value" => "",
+            "label" => "Tem resumo?",
+            "inputType" => "checkbox",
+        ),
+        /*
+         * Resumo
+         */
+        'nova_categoria' => array(
+            "value" => "",
+            "label" => "Permite criar categoria?",
+            "inputType" => "checkbox",
+        ),
+        /*
+         * Há opção para selecionar o modo de visualização?
+         */
+        'modo_de_visualizacao' => array(
+            "value" => "",
+            "label" => "Opção Modo de Visualização?",
+            "inputType" => "checkbox",
+        ),
+        /*
+         * Há opção para selecionar o modo de visualização?
+         */
+        'generate_preview_url' => array(
+            "value" => "",
+            "label" => "Mostrar Url do conteúdo?",
+            "inputType" => "text",
+            'help' => 'A seguir, os códigos especiais: <ul>'.
+                      '<li>%id = id do conteúdo</li>'.
+                      '<li>%title_encoded = título encoded</li>'.
+                      '<li>%category = categoria</li>'.
+                      '</ul>'.
+                      'Exemplo: http://meusite.com.br/noticias/%id'
+        ),
+    ),
+    
+    /*
      * Se não há valor, substitui campo vazio na listagem
      * pelos valores abaixo
      */

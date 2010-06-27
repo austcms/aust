@@ -103,7 +103,25 @@
             </p>
         </td>
     </tr>
+    <?php
+    /*
+     * PREVIEW URL
+     */
+    if( $modulo->isEdit() AND $modulo->getStructureConfig("generate_preview_url") ){ ?>
+    <tr>
+        <td valign="top"><label>URL gerada:</label></td>
+        <td>
+            <?php echo $modulo->getGeneratedUrl(); ?>
+            <?php
+            tt('Esta URL é gerada automaticamente. Em caso de alterações'.
+               'no site principal, será necessário atualizar este valor');
+            ?>
+            <p class="explanation">
 
+            </p>
+        </td>
+    </tr>
+    <?php } ?>
     <?php
     /*
      * RESUMO

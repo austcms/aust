@@ -134,6 +134,27 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
 
     }
 
+    function testSimplesLoads(){
+
+        $sql = "INSERT INTO textos (titulo, categoria) VALUES ('teste7777','777')";
+        $this->obj->connection->query($sql);
+        $catLastInsertId = $this->obj->connection->lastInsertId();
+
+        $this->assertArrayHasKey(0,
+                $this->obj->load($catLastInsertId),
+                'Não carregou por id.'
+            );
+
+        $this->assertArrayHasKey(0,
+                $this->obj->load( array('austNode' => '777') ),
+                'Não carregou por aust_node.'
+            );
+
+        $this->obj->connection->query("DELETE FROM textos WHERE titulo='teste7777'");
+
+
+    }
+
     function testSaveEmbeddedModules(){
 
         $params = array(
@@ -370,10 +391,30 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
             }
         }
         //$this->assertArrayHasKey(0, $result, "Module::load() não funcionando" );
+    }
 
+    function testGetGeneratedUrl(){
+        $str = "http://mywebsite.com/news/%id/";
 
+        $params = array(
+            'method' => 'criar',
+            'frmadddate' => '2010-02-12 19:30:42',
+            'frmautor' => '1',
+            'w' => '',
+            'aust_node' => '2',
+            'frmcategoria' => '4',
+            'frmtitulo' => 'Notícia de teste123456789',
+            'frmtexto' => 'Esta notícia foi inserida via teste unitário',
+            'contentTable' => 'textos',
+            'submit' => 'Enviar!',
+        );
+
+        //$this->obj->save($params);
+        //$lastId = $this->obj->load()
 
     }
+
+
 
 
 

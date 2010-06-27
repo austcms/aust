@@ -215,14 +215,29 @@ class Module
         $this->loadedIds = array();
         
         $paramForLoadSql = $param;
-        
+
+        /*
+         * austNode é um conjunto de arrays
+         */
         if( is_array($param['austNode']) ){
             $austNode = reset( array_keys( $param['austNode'] ) );
-        } else {
+        }
+        /*
+         * $params contém mais condições para a busca
+         */
+        elseif( is_array($param) ){
             $austNode = array($param['austNode']=>'');
             $paramForLoadSql['austNode'] = array($param['austNode']=>'');
         }
+        /*
+         * Se $params é um número, significa que é um número
+         */
+        elseif( is_numeric($param) ){
+            $austNode = array( 'austNode' => '' );
+            $paramForLoadSql['id'] = $param;
 
+        }
+        
         $qry = $this->connection->query($this->loadSql($paramForLoadSql));
         if( empty($qry) )
             return array();
@@ -297,6 +312,7 @@ class Module
      * Retorna simplesmente o SQL para então executar Query
      */
     public function loadSql($options = array()){
+
         /*
          * SET DEFAULT OPTIONS
          */
@@ -305,15 +321,26 @@ class Module
          * Default options
          */
         if( !empty($options['categorias']) ){
+            print $options['categorias'];
+
+            
             print("Argumento <strong>categorias</strong> ultrapassada em \$modulo->loadSql. Use \$options['austNode'].");
             exit(0);
         }
 
-        $id = empty($options['id']) ? '' : $options['id'];
-        $austNode = empty($options['austNode']) ? array() : $options['austNode'];
-        $page = empty($options['page']) ? '1' : $options['page'];
-        $limit = empty($options['limit']) ? '25' : $options['limit'];
-        $customWhere = empty($options['where']) ? '' : ' '.$options['where'];
+        /*
+         * $options sendo array, pode ter várias condições. se $options é
+         * numérico, busca por id.
+         */
+        if( is_array($options) ){
+            $id = empty($options['id']) ? '' : $options['id'];
+            $austNode = empty($options['austNode']) ? array() : $options['austNode'];
+            $page = empty($options['page']) ? '1' : $options['page'];
+            $limit = empty($options['limit']) ? '25' : $options['limit'];
+            $customWhere = empty($options['where']) ? '' : ' '.$options['where'];
+        } elseif( is_numeric($options) ){
+            $id = $options;
+        }
 
         if( empty($options['order']) ){
             if( empty($this->order) )
@@ -820,6 +847,7 @@ class Module
                     tipo  = 'mod_conf' AND
                     local = '".$this->austNode."'
                 ";
+
         $queryTmp = $this->connection->query($sql, "ASSOC");
 
         $query = array();
@@ -846,6 +874,34 @@ class Module
  * VERIFICAÇÕES
  *
  */
+
+    /**
+     * isCreate()
+     *
+     * Verifica se é formulário de criação.
+     *
+     * @return <bool>
+     */
+    public function isCreate(){
+        if( $_GET['action'] == CREATE_ACTION )
+            return true;
+
+        return false;
+    }
+    /**
+     * isEdit()
+     *
+     * Verifica se é formulário de edição.
+     *
+     * @return <bool>
+     */
+    public function isEdit(){
+        if( $_GET['action'] == EDIT_ACTION )
+            return true;
+
+        return false;
+    }
+
     /**
      * hasSchema()
      *
@@ -1001,6 +1057,22 @@ class Module
         }
     }
 
+    /**
+     * getStructureConfig()
+     *
+     * Há configurações específicas de uma estrutura, como:
+     *
+     *      Mostrar categoria?
+     *      Tem resumo?
+     *      Mostrar URL Gerada?
+     *
+     * Este método retorna o valor de uma configuração requisitada em $key.
+     *
+     * @param <string> $key
+     * @param <bool> $valueOnly
+     * @return <mixed> Se $valueOnly, retorna somente string com valor, senão
+     * array com todo o valor.
+     */
     function getStructureConfig($key, $valueOnly = true) {
         if( is_string($key) AND empty($this->structureConfig) ) {
             $this->loadModConf($this->austNode);
@@ -1021,7 +1093,7 @@ class Module
         }
 
         return NULL;
-    }
+    } // end getStructureConfig()
 
     /*
      *

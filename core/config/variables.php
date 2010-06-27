@@ -88,6 +88,10 @@ define("CORE_DIR", "core/");
      * estão ausentes.
      */
     define('CONTENT_TRIGGERS_DIR', INC_DIR.'conteudo.inc/');
+        define('CREATE_ACTION', 'create');
+        define('EDIT_ACTION', 'edit');
+        define('LISTING_ACTION', 'listing');
+        define('DELETE_ACTION', 'delete');
 
 
     /**
