@@ -211,7 +211,7 @@ if(!empty($_GET['function'])){
         </div>
         <div class="content">
             <?php
-            $configurations = $modulo->getConfigurations();
+            $configurations = $modulo->loadModConf();
             if( !empty($configurations) && is_array($configurations) ){
                 ?>
 

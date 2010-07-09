@@ -104,8 +104,8 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
             'frmautor' => '1',
             'w' => '',
             'aust_node' => '2',
-            'frmcategoria' => '4',
-            'frmtitulo' => 'Notícia de teste123456789',
+            'frmcategoria' => '777',
+            'frmtitulo' => 'teste7777',
             'frmtexto' => 'Esta notícia foi inserida via teste unitário',
             'contentTable' => 'textos',
             'submit' => 'Enviar!',
@@ -114,7 +114,7 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
         $this->assertTrue( $this->obj->save($params) );
 
         $params = array(
-            'titulo' => 'Notícia de teste123456789',
+            'titulo' => 'teste7777',
         );
 
         /**
@@ -136,21 +136,22 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
 
     function testSimplesLoads(){
 
-        $sql = "INSERT INTO textos (titulo, categoria) VALUES ('teste7777','777')";
-        $this->obj->connection->query($sql);
+        $sql = "INSERT INTO textos (titulo, categoria) VALUES ('teste7777_777','777')";
+        $this->obj->connection->exec($sql);
         $catLastInsertId = $this->obj->connection->lastInsertId();
 
+        //print_r($this->obj->load($catLastInsertId));
         $this->assertArrayHasKey(0,
                 $this->obj->load($catLastInsertId),
-                'Não carregou por id.'
+                "Não carregou por id. \n".$this->obj->lastSql
             );
 
         $this->assertArrayHasKey(0,
                 $this->obj->load( array('austNode' => '777') ),
                 'Não carregou por aust_node.'
             );
-
-        $this->obj->connection->query("DELETE FROM textos WHERE titulo='teste7777'");
+        
+        $this->obj->connection->query("DELETE FROM textos WHERE titulo='teste7777_777'");
 
 
     }
@@ -213,9 +214,6 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
 
     }
 
-    /**
-     * @depends testSave
-     */
     function testDelete(){
 
         $params = array(
@@ -235,14 +233,6 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue( $this->obj->delete($this->obj->connection->lastInsertId()) );
 
-        //$params = array(
-//            'titulo' => 'Notícia de teste123456789',
-//        );
-        
-        //$this->assertGreaterThan(0, $this->obj->delete('textos', $params) );
-        //$this->assertFalse( $this->obj->delete('textos', array()) );
-
-        //$this->assertEquals( 0, $this->obj->delete('textos', array('titulo' => '123890567')) );
     }
 
 
@@ -393,25 +383,113 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
         //$this->assertArrayHasKey(0, $result, "Module::load() não funcionando" );
     }
 
+    function testLoadModConf(){
+        $sql = "INSERT INTO config
+                    (tipo,local,nome,propriedade,valor)
+                VALUES
+                    ('mod_conf','777','teste7777','working_test','1')
+                ";
+        $this->obj->connection->query($sql);
+        $catLastInsertId = $this->obj->connection->lastInsertId();
+
+        $this->obj->config = array(
+            'configurations' => array(
+                'working_test' => array(
+                    "value" => "",
+                    "label" => "Working?",
+                    "inputType" => "checkbox",
+                ),
+            )
+        );
+
+        /* start test #1 */
+            $result = $this->obj->loadModConf(777);
+            $this->assertArrayHasKey(
+                    'working_test',
+                    $result,
+                    'Teste #1.1 falhou');
+
+            $this->assertEquals(
+                    '1',
+                    $result['working_test']['value'],
+                    'Teste #1.2 falhou');
+            $this->assertEquals(
+                    'checkbox',
+                    $result['working_test']['inputType'],
+                    'Teste #1.3 falhou');
+
+        /* start test #2 */
+            $tmpAustNode = $this->obj->austNode;
+            $this->obj->austNode = 777;
+
+            $this->assertArrayHasKey(
+                    'working_test',
+                    $this->obj->loadModConf(),
+                    'Teste #2.1 falhou');
+            $this->assertArrayHasKey(
+                    'inputType',
+                    $this->obj->loadModConf('working_test'),
+                    'Teste #2.2 falhou');
+            $this->assertEquals(
+                    'checkbox',
+                    $result['working_test']['inputType'],
+                    'Teste #2.3 falhou');
+
+            $this->obj->austNode = $tmpAustNode;
+
+        /* test #3 */
+            $this->assertEquals('1', $this->obj->getStructureConfig('working_test'));
+            $this->assertArrayHasKey(
+                    'id',
+                    $this->obj->getStructureConfig('working_test', false)
+                );
+
+
+        $this->obj->connection->query("DELETE FROM config WHERE local='777' AND nome='teste7777'");
+    }
+
     function testGetGeneratedUrl(){
-        $str = "http://mywebsite.com/news/%id/";
 
         $params = array(
             'method' => 'criar',
             'frmadddate' => '2010-02-12 19:30:42',
             'frmautor' => '1',
             'w' => '',
-            'aust_node' => '2',
-            'frmcategoria' => '4',
-            'frmtitulo' => 'Notícia de teste123456789',
+            'frmcategoria' => '777',
+            'frmtitulo' => 'testGetGeneratedUrl',
             'frmtexto' => 'Esta notícia foi inserida via teste unitário',
             'contentTable' => 'textos',
             'submit' => 'Enviar!',
         );
 
-        //$this->obj->save($params);
-        //$lastId = $this->obj->load()
+        $this->obj->save($params);
+        $lastId = $this->obj->connection->lastInsertId();
+        $this->obj->fieldsToLoad = "*";
+        $this->obj->load($lastId);
 
+        /* test #1 */
+            $str = "http://mywebsite.com/news/%id/%title_encoded";
+            $this->obj->structureConfig = array(
+                'generate_preview_url' => array(
+                    "valor" => $str,
+                    "label" => "Generate Preview?",
+                    "inputType" => "text",
+                ),
+            );
+            $this->obj->austNode = 777;
+
+            $this->obj->w = null;
+            $this->assertFalse($this->obj->getGeneratedUrl() );
+
+            $this->obj->w = $lastId;
+            $genUrl = $this->obj->getGeneratedUrl();
+            $this->assertEquals(
+                    "http://mywebsite.com/news/".$lastId."/testgetgeneratedurl",
+                    $genUrl,
+                    "test #1.1"
+                );
+
+        $this->obj->connection->query("DELETE FROM textos WHERE categoria='777' AND titulo='testGetGeneratedUrl'");
     }
 
 

@@ -113,7 +113,7 @@
         <td>
             <?php echo $modulo->getGeneratedUrl(); ?>
             <?php
-            tt('Esta URL é gerada automaticamente. Em caso de alterações'.
+            tt('Esta URL é gerada automaticamente. Em caso de alterações '.
                'no site principal, será necessário atualizar este valor');
             ?>
             <p class="explanation">

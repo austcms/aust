@@ -42,7 +42,7 @@ class Module
 
     /*
      *
-     * VARIÁVEIS DE AMBIENTE
+     * VARIÁVEIS DE QUERY
      *
      */
         /**
@@ -56,6 +56,17 @@ class Module
          * @var <array>
          */
         public $loadedIds;
+
+        /**
+         *
+         * @var <string> Contém a última SQL criada.
+         */
+        public $lastSql;
+        /**
+         *
+         * @var <array> Último resultado de query executado.
+         */
+        public $lastQuery;
     
     /**
      * VARIÁVEIS DO MÓDULO
@@ -130,6 +141,9 @@ class Module
             $_GET["aust_node"] = false;
         
         $this->austNode = $_GET['aust_node'];
+
+        if( !empty($_GET['w']) AND is_numeric($_GET['w']) )
+            $this->w = $_GET['w'];
 
         /**
          * Ajusta a conexao para o módulo
@@ -237,7 +251,7 @@ class Module
             $paramForLoadSql['id'] = $param;
 
         }
-        
+
         $qry = $this->connection->query($this->loadSql($paramForLoadSql));
         if( empty($qry) )
             return array();
@@ -247,14 +261,13 @@ class Module
 
         $embedModules = $this->getRelatedEmbed($austNode);
 
-
-
         if( empty($embedModules)
             OR empty($this->loadedIds) )
         {
 	
-			sort($qry);
-			return $qry;
+            sort($qry);
+            $this->lastQuery = $qry;
+            return $qry;
         }
 
         /*
@@ -278,6 +291,7 @@ class Module
         }
         
         sort($qry);
+        $this->lastQuery = $qry;
         return $qry;
     }
 
@@ -320,10 +334,13 @@ class Module
         /*
          * Default options
          */
-        if( !empty($options['categorias']) ){
+        if( !empty($options['categorias'])
+            AND is_array($options) )
+        {
+
+
             print $options['categorias'];
 
-            
             print("Argumento <strong>categorias</strong> ultrapassada em \$modulo->loadSql. Use \$options['austNode'].");
             exit(0);
         }
@@ -332,23 +349,36 @@ class Module
          * $options sendo array, pode ter várias condições. se $options é
          * numérico, busca por id.
          */
+        $defaultLimit = 25;
+
+        $id = null;
+        $austNode = null;
+        $page = null;
+        $customWhere = null;
+        $order = 'id DESC';
+
+
         if( is_array($options) ){
             $id = empty($options['id']) ? '' : $options['id'];
             $austNode = empty($options['austNode']) ? array() : $options['austNode'];
             $page = empty($options['page']) ? '1' : $options['page'];
-            $limit = empty($options['limit']) ? '25' : $options['limit'];
+            $limit = empty($options['limit']) ? $defaultLimit : $options['limit'];
             $customWhere = empty($options['where']) ? '' : ' '.$options['where'];
+
+
+            if( empty($options['order']) ){
+                if( empty($this->order) )
+                    $order = 'id DESC';
+                $order = $this->order;
+            } elseif( is_string($options['order']) ) {
+                $order = $options['order'];
+            }
+
         } elseif( is_numeric($options) ){
             $id = $options;
+            $limit = $defaultLimit;
         }
 
-        if( empty($options['order']) ){
-            if( empty($this->order) )
-                $order = 'id DESC';
-            $order = $this->order;
-        } else {
-            $order = $options['order'];
-        }
 
         if( !empty($options)
             AND !is_array($options) )
@@ -378,7 +408,7 @@ class Module
         /*
          * Paginação?
          */
-            if( $page == 0 )
+            if( $page == 0 OR !is_numeric($page) )
                 $page = 1;
             
             $pageLimit = (($page-1) * $limit);
@@ -392,23 +422,36 @@ class Module
         }
 
         $fieldsInSql = array();
-        $fields = '';
+        $fields = 'id, ';
         if( !empty( $this->describedTable[$this->useThisTable()] ) ){
-            foreach( $this->fieldsToLoad as $field ){
-                if( array_key_exists($field, $this->describedTable[$this->useThisTable()]) ){
+
+            $fieldsToLoad = $this->fieldsToLoad;
+            if( !is_array($fieldsToLoad) ){
+                $fieldsToLoad = array($fieldsToLoad);
+            }
+
+            foreach( $fieldsToLoad as $field ){
+                //if( array_key_exists($field, $this->describedTable[$this->useThisTable()]) ){
+                if( $field == "*"){
+                    unset($fieldsInSql);
+                    $fieldsInSql[] = "*";
+                    $fields = "";
+                    break;
+                } else {
                     $fieldsInSql[] = $field;
                 }
             }
+
         }
 
         if( !empty($fieldsInSql) )
-            $fields = implode(', ', $fieldsInSql).',';
+            $fields.= implode(', ', $fieldsInSql).',';
 
         /*
          * Sql para listagem
          */
         $sql = "SELECT
-                    id, $fields
+                    $fields
                     ".$this->austField." AS cat,
                     DATE_FORMAT(".$this->date['created_on'].", '".$this->date['standardFormat']."') as adddate,
                     (	SELECT
@@ -424,6 +467,8 @@ class Module
                 $where."".$customWhere.
                 " ORDER BY ".$order."
                 $limit";
+
+        $this->lastSql = $sql;
         return $sql;
     }
     /**
@@ -508,6 +553,33 @@ class Module
 
 
         return $sql;
+    }
+
+    public function getGeneratedUrl($w = ""){
+
+        $result = $this->getStructureConfig('generate_preview_url');
+
+        if( empty($w) AND empty($this->w) )
+            return false;
+        else if( empty($w) AND is_numeric($this->w)){
+            $w = $this->w;
+
+            $result = str_replace("%id", $w, $result);
+
+            $lastQuery = array();
+            if( count($this->lastQuery) == 1 ){
+                $lastQuery = reset($this->lastQuery);
+            }
+
+            if( !empty($lastQuery['titulo_encoded']) ){
+                $titleEncoded = $lastQuery['titulo_encoded'];
+
+                $result = str_replace("%title_encoded", $titleEncoded, $result);
+            }
+            
+        }
+
+        return $result;
     }
 
     /**
@@ -818,56 +890,7 @@ class Module
      */
     public function getIncludeFolder(){
         return THIS_TO_BASEURL.MODULOS_DIR.strtolower( get_class($this) );
-        //return THIS_TO_BASEURL.MODULOS_DIR.$modDir.MOD_CONFIG;
     }
-
-    /**
-     * @todo - criar unit test para o método getConfigurations() abaixo.
-     */
-    /**
-     * getConfigurations()
-     *
-     * Retorna as configurações do módulo.
-     *
-     * @return <array>
-     */
-    public function getConfigurations(){
-
-        $configurations = $this->loadConfig();
-        if( empty($configurations['configurations']) )
-            return array();
-        
-        $configurations = $configurations['configurations'];
-
-        $sql = "SELECT
-                    *
-                FROM
-                    config
-                WHERE
-                    tipo  = 'mod_conf' AND
-                    local = '".$this->austNode."'
-                ";
-
-        $queryTmp = $this->connection->query($sql, "ASSOC");
-
-        $query = array();
-        foreach( $queryTmp as $value ){
-            $query[$value["propriedade"]] = $value;
-        }
-
-        $result = array();
-        foreach( $configurations as $key=>$configuration ){
-            
-            $result[$key] = $configuration;
-
-            if( array_key_exists($key, $query) ){
-                $result[$key]['value'] = $query[$key]['valor'];
-            }
-        }
-
-
-        return $result;
-    } // end getConfigurations()
 
 /**
  *
@@ -1022,7 +1045,21 @@ class Module
         return true;
     }
 
-    function loadModConf($params) {
+    /**
+     * loadModConf()
+     *
+     * Carrega configurações dinâmicas do módulo atual.
+     *
+     * Mostrar resumo, sim ou não? Estas opções não são estáticas.
+     *
+     * @param <mixed> $params
+     * @return <array>
+     */
+    function loadModConf($params = "") {
+
+        /*
+         * Array: Várias opções podem ser passadas
+         */
         if( is_array($params) ){
 
 
@@ -1038,23 +1075,69 @@ class Module
 
             return NULL;
 
-        } else if( $params > 0 ){
+        }
+        /*
+         * numeric: Um austNode foi especificado
+         */
+        else if( is_numeric($params) OR empty($params) ){
+
+            $staticConfig = $this->loadConfig();
+            $staticConfig = $staticConfig['configurations'];
+
+            if( empty($params) )
+                $params = $this->austNode;
+
             $sql = "SELECT * FROM config WHERE tipo='mod_conf' AND local='".$params."' LIMIT 200";
             
             $queryTmp = $this->connection->query($sql, "ASSOC");
 
             $query = array();
             foreach($queryTmp as $valor) {
-                $query[$valor["propriedade"]] = $valor;
+                $prop = $valor["propriedade"];
+                $query[$prop] = array();
+
+                if( !empty($staticConfig[$prop]) ){
+                    $query[$prop] = $staticConfig[$prop];
+                    //$query = array_merge_recursive($query[$prop], $staticConfig[$prop]);
+                }
+
+
+                $query[$prop] = array_merge( $query[$prop], $valor );
+                /**
+                 * @todo - array $query tem 'value' e 'valor'. Deve-se
+                 * tirar uma e ficar somente uma.
+                 */
+                $query[$valor["propriedade"]]['value'] = $valor['valor'];
             }
+
             $this->structureConfig = $query;
             return $query;
-        } else if( is_string($params) AND empty($this->structureConfig) ) {
-            $this->loadModConf($this->austNode);
-            return $this->structureConfig[$params];
-        } else if( is_string($params) AND !empty($this->structureConfig) ) {
-            return $this->structureConfig[$params];
         }
+        /*
+         * string: quando se deseja uma opção em especial. Leva-se em
+         * consideração $this->austNode
+         */
+        else if( is_string($params) ) {
+
+            /*
+             * As configurações encontradas são salvas em $this->structureConfig
+             * para que não seja necessário buscá-las novamente no DB.
+             *
+             * Verifica-se abaixo se não existe ainda, e busca-as.
+             */
+            if( empty($this->structureConfig) ){
+                $this->loadModConf($this->austNode);
+                return $this->structureConfig[$params];
+            } else {
+                
+                if( empty($this->structureConfig[$params]) )
+                    $this->loadModConf($this->austNode);
+                
+                return $this->structureConfig[$params];
+            }
+        }
+
+        return array();
     }
 
     /**
@@ -1068,12 +1151,16 @@ class Module
      *
      * Este método retorna o valor de uma configuração requisitada em $key.
      *
+     * NOTA: Subtitui $this->loadModConfig() para pegar valores de configuração
+     * da estrutura.
+     *
      * @param <string> $key
      * @param <bool> $valueOnly
      * @return <mixed> Se $valueOnly, retorna somente string com valor, senão
      * array com todo o valor.
      */
-    function getStructureConfig($key, $valueOnly = true) {
+    public function getStructureConfig($key, $valueOnly = true) {
+
         if( is_string($key) AND empty($this->structureConfig) ) {
             $this->loadModConf($this->austNode);
 
