@@ -62,7 +62,7 @@
 
 <table cellpadding=0 cellspacing=0 class="form">
     <tr>
-        <td valign="top" class="first"><label>Categoria:</label></td>
+        <td class="first"><label>Categoria:</label></td>
         <td class="second">
             <div id="categoriacontainer">
             <?php
@@ -95,7 +95,7 @@
         </td>
     </tr>
     <tr>
-        <td valign="top"><label>Título:</label></td>
+        <td><label>Título:</label></td>
         <td>
             <INPUT TYPE='text' NAME='frmtitulo' class='text' value='<?php if( !empty($dados['titulo']) ) echo $dados['titulo'];?>' />
             <p class="explanation">
@@ -116,9 +116,6 @@
             tt('Esta URL é gerada automaticamente. Em caso de alterações '.
                'no site principal, será necessário atualizar este valor');
             ?>
-            <p class="explanation">
-
-            </p>
         </td>
     </tr>
     <?php } ?>
