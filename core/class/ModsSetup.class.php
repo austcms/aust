@@ -8,7 +8,7 @@
  * @since v0.1.6 06/07/2009
  */
 
-class ModsSetup extends ModsController
+class ModsSetup
 {
 
     function __construct($param){
@@ -17,6 +17,10 @@ class ModsSetup extends ModsController
         
         parent::__construct($param);
     }
+
+	function createStructure($params = array()){
+		
+	}
 
     
 }
