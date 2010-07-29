@@ -27,11 +27,16 @@ class SetupController extends ModsSetup
      */
     function setuppronto(){
         
-        //pr($_POST);
+        pr($_POST);
         $this->loadModel("CadastroSetup");
-
+		
         global $aust_charset;
 
+		$this->CadastroSetup->createStructure();
+        $this->autoRender = false;
+		
+
+		return true;
         /**
          * Parâmetros para gravar uma nova estrutura no DB.
          */
