@@ -103,41 +103,6 @@ $shora = PegaData("hora");
 $sminuto = PegaData("minuto");
 $ssegundo = PegaData("segundo");
 
-/**
- * @todo - esta função carece ser refatorada. Devia ter uma função
- * que fizesse todo o trabalho de codificar uma string, tirando acentos,
- * espaços, tornar minúsculas as letras, entre outros.
- */
-//função que tira todos os acentos
-function RetiraAcentos($a){
-    //$a = utf8_encode($a);
-    //echo $current_encoding = mb_detect_encoding($a, 'auto');
-        //echo $a."<br>";
-        $a = str_replace(array('à','á','â','ã','ä'), "a", $a);
-        $a = str_replace(array('è','é','ê','ë'), "e", $a);
-        $a = str_replace(array('ì','í','î','ï'), "i", $a);
-        $a = str_replace(array('ò','ó','ô','ö','õ'), "o", $a);
-        $a = str_replace(array('ú','ù','û','ü'), "u", $a);
-
-        $a = str_replace(array('À','Á','Â','Ä','Ã'), "A", $a);
-        $a = str_replace(array('È','É','Ê','Ë'), "E", $a);
-        $a = str_replace(array('Ì','Í','Î','Ï'), "I", $a);
-        $a = str_replace(array('Ò','Ó','Ô','Ö','Õ'), "O", $a);
-        $a = str_replace(array('Ù','Ú','Û','Ü'), "U", $a);
-        $a = str_replace(array('ç'), "c", $a);
-        $a = str_replace(array('Ç'), "C", $a);
-        $a = str_replace(array('ñ'), "n", $a);
-        $a = str_replace(array('Ñ'), "N", $a);
-
-	$a = str_replace("´", "", $a);
-	$a = str_replace("`", "", $a);
-	$a = str_replace("¨", "", $a);
-	$a = str_replace("^", "", $a);
-	$a = str_replace("~", "", $a);
-	$a = str_replace(array("/","\\"), "_", $a);
-	return $a;
-}
-
 // criar class em menu de navegação selecionado
 function MenuSelecionado($section, $section_atual, $class=''){
     // se $section atual é igual ao section do menu

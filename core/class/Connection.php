@@ -32,6 +32,8 @@ class Connection extends SQLObject {
      */
     private $db;
 
+	public $tables = array();
+
     /**
      *
      * @var <type> Contém toda a configuração de acesso à base de dados
@@ -65,6 +67,8 @@ class Connection extends SQLObject {
         else {
             $this->DbConnect($this->dbConfig);
         }
+
+		$this->_acquireTablesList();
     }
 
 
@@ -310,7 +314,6 @@ class Connection extends SQLObject {
              */
 
             $result = $this->conn->exec($sql);
-
             if( $result === false){
                 $debugResult = end( $this->conn->errorInfo() );
             }
@@ -404,6 +407,28 @@ class Connection extends SQLObject {
     public function lastInsertId(){
         return $this->conn->lastInsertId();
     }
+
+	function _acquireTablesList(){
+		$tables = $this->query("SHOW TABLES");
+		if( empty($tables) )
+			return array();
+			
+		$result = array();
+		
+		foreach( $tables as $key=>$value){
+			$name = reset($value);
+			$result[] = $name;
+		}
+		
+		$this->tables = $result;
+		return $result;
+	}
+	
+	function hasTable($tableName){
+		$this->_acquireTablesList();
+		
+		return in_array($tableName, $this->tables);
+	}
 
     public function VerificaAdmin(){
             $sql = "SELECT admins.id

@@ -141,7 +141,8 @@ class ModsController extends Controller
          * $controllerName: O nome do controller para carregar a pasta de Views
          * correta
          */
-        $this->controllerName = (empty($param['controllerName'])) ? 'mod' : $param['controllerName'];
+		$selfController = strtolower( str_replace("Controller", "", get_class($this)) );
+        $this->controllerName = (empty($param['controllerName'])) ? $selfController : $param['controllerName'];
 
         /**
          * MODEL
