@@ -40,6 +40,9 @@ class Module
         public $austField = 'categoria';
         public $order = 'id DESC';
 
+		public $defaultLimit = '25';
+		public $limit;
+
     /*
      *
      * VARIÁVEIS DE QUERY
@@ -62,6 +65,17 @@ class Module
          * @var <string> Contém a última SQL criada.
          */
         public $lastSql;
+        /**
+         *
+         * @var <string> Contém a última SQL criada para contar quantos registros
+		 * há no DB.
+         */
+        public $lastCountSql;
+        /**
+         *
+         * @var <int> Total de registros no DB.
+         */
+        public $totalRows;
         /**
          *
          * @var <array> Último resultado de query executado.
@@ -155,6 +169,8 @@ class Module
             $this->user = User::getInstance();
 
         $this->config = $this->loadConfig();
+
+		$this->limit = $this->defaultLimit;
     }
 
     /*
@@ -252,7 +268,12 @@ class Module
 
         }
 
-        $qry = $this->connection->query($this->loadSql($paramForLoadSql));
+		// counts rows
+		$this->totalRows = $this->_getTotalRows($paramForLoadSql);
+		
+		$sql = $this->loadSql($paramForLoadSql);
+		
+        $qry = $this->connection->query($sql);
         if( empty($qry) )
             return array();
 
@@ -296,6 +317,31 @@ class Module
     }
 
     /**
+     * _totalRows()
+     *
+     * Organiza uma array com os dados carregados de um db, botando
+     * como chave de cada índice da array o id do registro.
+     *
+     * @param <mixed> $param O SQL para contar registros ou opções Array
+     * @return <int>
+     */
+	function _getTotalRows($param){
+		if( is_array($param) ){
+			$param['countTotalRows'] = true;
+			$param = $this->loadSql($param);
+		}
+		
+		if( is_string($param) ){
+			$result = reset( $this->connection->query($param) );
+			$total = ( is_numeric($result['rows']) ) ? $result['rows'] : 0;
+		} else {
+			return 0;
+		}
+		
+		return $total;
+	}
+
+    /**
      * _organizesLoadedData()
      *
      * Organiza uma array com os dados carregados de um db, botando
@@ -337,19 +383,23 @@ class Module
         if( !empty($options['categorias'])
             AND is_array($options) )
         {
-
-
             print $options['categorias'];
 
             print("Argumento <strong>categorias</strong> ultrapassada em \$modulo->loadSql. Use \$options['austNode'].");
             exit(0);
         }
 
+		/* gera sql para descobrir o número total de rows */
+		if( !empty($options['countTotalRows']) AND $options['countTotalRows'] ){
+			$options['limit'] = false;
+			$options['page'] = false;
+			$options['countTotalRows'] = true;
+		}
         /*
          * $options sendo array, pode ter várias condições. se $options é
          * numérico, busca por id.
          */
-        $defaultLimit = 25;
+		$defaultLimit = $this->defaultLimit;
 
         $id = null;
         $austNode = null;
@@ -361,7 +411,7 @@ class Module
         if( is_array($options) ){
             $id = empty($options['id']) ? '' : $options['id'];
             $austNode = empty($options['austNode']) ? array() : $options['austNode'];
-            $page = empty($options['page']) ? '1' : $options['page'];
+            $page = empty($options['page']) ? false : $options['page'];
             $limit = empty($options['limit']) ? $defaultLimit : $options['limit'];
             $customWhere = empty($options['where']) ? '' : ' '.$options['where'];
 
@@ -405,14 +455,26 @@ class Module
             $where = $where . " AND ".$this->austField." IN ('".$austNodeForSql."')";
         }
 
-        /*
-         * Paginação?
-         */
-            if( $page == 0 OR !is_numeric($page) )
-                $page = 1;
-            
-            $pageLimit = (($page-1) * $limit);
-            $limit = " LIMIT ".$pageLimit.",".$limit;
+		/*
+		 * Limit
+		 */
+		$limitStr = '';
+		$limitParams = array(
+			'page' => ( empty($page) ) ? false : $page,
+			'limit' => ( empty($limit) ) ? false : $limit,
+		);
+		/*
+		 * Limit definido?
+		 */
+		if( !empty($limit) AND empty($options['countTotalRows']) ){
+            $limitStr = $this->_limitSql( $limitParams );
+		}
+		/*
+		 * Contando rows somente
+		 */
+		elseif( !empty($options['countTotalRows']) AND $options['countTotalRows'] ) {
+			$limitStr = ' LIMIT 0,1';
+		}
 
         if( empty($this->describedTable[$this->useThisTable()]) ){
             $tempDescribe = $this->connection->query('DESCRIBE '.$this->useThisTable());
@@ -447,6 +509,13 @@ class Module
         if( !empty($fieldsInSql) )
             $fields.= implode(', ', $fieldsInSql).',';
 
+		/*
+		 * countTotalRows
+		 */
+		if( !empty($options['countTotalRows']) AND $options['countTotalRows'] === true )
+			$fields = 'count(id) as rows, ';
+		
+		
         /*
          * Sql para listagem
          */
@@ -466,11 +535,60 @@ class Module
                 WHERE 1=1$id".
                 $where."".$customWhere.
                 " ORDER BY ".$order."
-                $limit";
+                $limitStr";
 
-        $this->lastSql = $sql;
+		if( empty($options['countTotalRows']) )
+        	$this->lastSql = $sql;
+		else
+			$this->lastCountSql = $sql;
+			
         return $sql;
     }
+
+    /**
+     * _limitSql()
+     *
+     * Retorna o LIMIT de um sql
+     *
+     * @param <array> $params
+     * @return <string>
+     */
+	function _limitSql($params){
+		
+		// page
+		if( empty($params['page']) OR !is_numeric($params['page']) ){
+			$page = $this->page();
+		} else {
+			$page = $params['page'];
+		}
+			
+        if( $page <= 0 OR !is_numeric($page) )
+            $page = 1;
+		
+		if( empty($params['limit']) OR !is_numeric($params['limit']) ){
+			$limit = $this->defaultLimit;
+		} else {
+			$limit = $params['limit'];
+			$this->limit = $limit;
+		}
+		
+        $pageLimit = (($page-1) * $limit);
+
+        $result = " LIMIT ".$pageLimit.",".$limit;
+
+		return $result;
+	} // fim _limitSql()
+	
+	function page(){
+		$page = 1;
+		if( !empty($_GET['page']) )
+			$page = $_GET['page'];
+		elseif( !empty($_GET['pagina']) )
+			$page = $_GET['pagina'];
+			
+		return $page;
+	}
+
     /**
      * delete()
      *
@@ -567,7 +685,7 @@ class Module
             $result = str_replace("%id", $w, $result);
 
             $lastQuery = array();
-            if( count($this->lastQuery) == 1 ){
+            if( count($this->lastQuery) >= 1 ){
                 $lastQuery = reset($this->lastQuery);
             }
 

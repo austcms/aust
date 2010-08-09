@@ -32,23 +32,14 @@ class ModController extends ModsController
         $categorias = $this->aust->LeCategoriasFilhas('',$_GET['aust_node']);
         $categorias[$_GET['aust_node']] = 'Estrutura';
 
-        // itens de paginação
-        $pagina = (empty($_GET['pagina'])) ? $pagina = 1 : $pagina = $_GET['pagina'];
-        $num_por_pagina = '10';
-        $this->set('numPorPagina', $num_por_pagina);
-
         /*
          * SQL para listagem
          */
         $params = array(
             'austNode' => $categorias,
-            'pagina' => $pagina,
-            'resultadosPorPagina' => $num_por_pagina
         );
 
-        $sql = $this->modulo->loadSQL($params);
-
-        $query = $this->modulo->connection->query($sql);
+        $query = $this->modulo->load($params);
         $this->set('query', $query);
     }
 

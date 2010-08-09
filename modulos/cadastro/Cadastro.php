@@ -378,12 +378,12 @@ class Cadastro extends Module {
                 $mostrar = implode(",", $mostrar["chave"]).",";
 
             }
+			$fields = "".$tP.".id,
+			            $mostrar
+			            ".implode(", ", $leftJoinCampos).$virgula."
+			            ".$tP.".approved AS des_approved";
 
-            $sql = "SELECT
-                        ".$tP.".id,
-                        $mostrar
-                        ".implode(", ", $leftJoinCampos).$virgula."
-                        ".$tP.".approved AS des_approved
+            $conditions = "    
                     FROM
                         ".$est["tabela"][0]." AS ".$tP."
 
@@ -393,9 +393,14 @@ class Cadastro extends Module {
                         $searchQuery
                     ORDER BY
                         ".$tP.".id DESC
-                    LIMIT 0,50
-
                     ";
+
+			// total rows
+			$countSql = "SELECT count(*) as rows ".$conditions;
+			$this->totalRows = $this->_getTotalRows($countSql);
+			
+			$sql = "SELECT $fields ".$conditions.$this->_limitSql(array('page'=>$this->page()));
+			
         } elseif( $metodo == "edit" ){
             $sql = "SELECT
                         id, ".implode(",", $campos["chave"])."

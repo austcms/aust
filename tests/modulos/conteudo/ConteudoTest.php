@@ -30,6 +30,35 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
         $this->obj = new $modInfo['className'];//new $modInfo['className']();
     }
 
+	function test_LimitSql(){
+		
+		// test #1.1
+			$params = array(
+				'page' => 1,
+				'limit' => 20,
+			);
+			$this->assertEquals(' LIMIT 0,20', $this->obj->_limitSql($params), 'test #1.1' );
+		// test #1.2
+			$params = array(
+				'page' => 3,
+				'limit' => 20,
+			);
+			$this->assertEquals(' LIMIT 40,20', $this->obj->_limitSql($params), 'test #1.2' );
+		// test #1.3
+			$params = array(
+				'page' => -1,
+				'limit' => 50,
+			);
+			$this->assertEquals(' LIMIT 0,50', $this->obj->_limitSql($params), 'test #1.3' );
+			
+		// test #1.4
+			$params = array(
+			);
+			$this->assertEquals(' LIMIT 0,'.$this->obj->defaultLimit, $this->obj->_limitSql($params), 'test #1.4' );
+
+	}
+
+
     function testLoadSql(){
         $this->assertType('string', $this->obj->loadSql() );
         $this->assertType('string', $this->obj->loadSql(
@@ -491,9 +520,6 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
 
         $this->obj->connection->query("DELETE FROM textos WHERE categoria='777' AND titulo='testGetGeneratedUrl'");
     }
-
-
-
 
 
 }
