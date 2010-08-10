@@ -1247,11 +1247,13 @@ class Module
 			 * configuração definida.
 			 */
 			$result = array();
-			foreach( $staticConfig as $key=>$value ){
-				if( !empty($query[$key]) )
-					$result[$key] = $query[$key];
-				else
-					$result[$key] = $value;
+			if( is_array($staticConfig) ){
+				foreach( $staticConfig as $key=>$value ){
+					if( !empty($query[$key]) )
+						$result[$key] = $query[$key];
+					else
+						$result[$key] = $value;
+				}
 			}
 
             $this->structureConfig = $result;
