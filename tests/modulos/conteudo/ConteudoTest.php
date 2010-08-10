@@ -428,6 +428,11 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
                     "label" => "Working?",
                     "inputType" => "checkbox",
                 ),
+	            'working_test2' => array(
+	                "value" => "",
+	                "label" => "Working?",
+	                "inputType" => "checkbox",
+	            ),
             )
         );
 
@@ -446,6 +451,10 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
                     'checkbox',
                     $result['working_test']['inputType'],
                     'Teste #1.3 falhou');
+            $this->assertArrayHasKey(
+                    'working_test2',
+                    $result,
+                    'Teste #1.4 falhou');
 
         /* start test #2 */
             $tmpAustNode = $this->obj->austNode;
@@ -472,7 +481,6 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
                     'id',
                     $this->obj->getStructureConfig('working_test', false)
                 );
-
 
         $this->obj->connection->query("DELETE FROM config WHERE local='777' AND nome='teste7777'");
     }

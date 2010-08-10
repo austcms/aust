@@ -212,6 +212,7 @@ if(!empty($_GET['function'])){
         <div class="content">
             <?php
             $configurations = $modulo->loadModConf();
+			//pr($configurations);
             if( !empty($configurations) && is_array($configurations) ){
                 ?>
 

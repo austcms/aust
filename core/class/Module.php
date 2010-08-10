@@ -1180,7 +1180,6 @@ class Module
          */
         if( is_array($params) ){
 
-
             if( empty($params["austNode"]) AND
                 empty($params["aust_node"]) )
                 return NULL;
@@ -1199,18 +1198,32 @@ class Module
          */
         else if( is_numeric($params) OR empty($params) ){
 
+			/*
+			 * Carrega as configurações estáticas
+			 */
             $staticConfig = $this->loadConfig();
             $staticConfig = $staticConfig['configurations'];
 
             if( empty($params) )
                 $params = $this->austNode;
-
+			
+			/*
+			 * Carrega as configurações já salvas no DB. Pode haver
+			 * menos itens que as definidas estaticamente.
+			 */
             $sql = "SELECT * FROM config WHERE tipo='mod_conf' AND local='".$params."' LIMIT 200";
             
             $queryTmp = $this->connection->query($sql, "ASSOC");
 
             $query = array();
+
+			/*
+			 * Loop pela configurações salvas para preparar a Array para mesclar
+			 * com as configurações estaticas.
+			 */
             foreach($queryTmp as $valor) {
+				
+				// $prop: toma o nome da propriedade
                 $prop = $valor["propriedade"];
                 $query[$prop] = array();
 
@@ -1228,8 +1241,21 @@ class Module
                 $query[$valor["propriedade"]]['value'] = $valor['valor'];
             }
 
-            $this->structureConfig = $query;
-            return $query;
+			/*
+			 * Loop pela configurações estáticas para se certificar que todas as
+			 * configurações serão retornadas, mesmo as que não possuem nenhum
+			 * configuração definida.
+			 */
+			$result = array();
+			foreach( $staticConfig as $key=>$value ){
+				if( !empty($query[$key]) )
+					$result[$key] = $query[$key];
+				else
+					$result[$key] = $value;
+			}
+
+            $this->structureConfig = $result;
+            return $result;
         }
         /*
          * string: quando se deseja uma opção em especial. Leva-se em
