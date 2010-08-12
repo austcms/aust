@@ -84,6 +84,39 @@ $modInfo = array(
         'listing' => 'Ver agenda',
     ),
 
+	'configurations' => array(
+    	'ordenate' => array(
+	        "value" => "",
+	        "label" => "Ordenado",
+	        "inputType" => "checkbox",
+	    ),
+	    /*
+	     * Resumo
+	     */
+	    'resumo' => array(
+	        "value" => "",
+	        "label" => "Tem resumo?",
+	        "inputType" => "checkbox",
+	    ),
+	    /*
+	     * Resumo
+	     */
+	    'nova_categoria' => array(
+	        "value" => "",
+	        "label" => "Permite criar categoria?",
+	        "inputType" => "checkbox",
+	    ),
+	    /*
+	     * Resumo
+	     */
+	    'modo_de_visualizacao' => array(
+	        "value" => "",
+	        "label" => "Opção Modo de Visualização?",
+	        "inputType" => "checkbox",
+            'help' => ''
+	    ),		
+	),
+
     /**
      * RESPONSER
      *

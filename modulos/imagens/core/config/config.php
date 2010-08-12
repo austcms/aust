@@ -83,7 +83,47 @@ $modInfo = array(
         'create' => 'Inserir',
         'listing' => 'Listar',
     ),
-
+	
+	'configurations' => array(
+   		'ordenate' => array(
+	        "value" => "",
+	        "label" => "Ordenado",
+	        "inputType" => "checkbox",
+	    ),
+	    /*
+	     * Resumo
+	     */
+	    'resumo' => array(
+	        "propriedade" => "resumo", // nome da propriedade
+	        "value" => "",
+	        "label" => "Tem resumo?",
+	        "inputType" => "checkbox",
+	    ),
+	    /*
+	     * Tem data de expiração (quando deixará de aparecer a imagem).
+	     */
+	    'expireTime' => array(
+	        "value" => "",
+	        "label" => "Tem expireTime?",
+	        "inputType" => "checkbox",
+	    ),
+	    /*
+	     * Tem Descrição?
+	     */
+	    'descricao' => array(
+	        "value" => "",
+	        "label" => "Tem descrição?",
+	        "inputType" => "checkbox",
+	    ),
+	    /*
+	     * Tem Link?
+	     */
+	    'link' => array(
+	        "value" => "",
+	        "label" => "Tem link?",
+	        "inputType" => "checkbox",
+	    ),		
+	),
     /**
      * RESPONSER
      *
