@@ -84,6 +84,15 @@ $modInfo = array(
         'listing' => 'Listar',
     ),
 
+	'configurations' => array(
+	    'enquete' => array(
+	        "value" => "",
+	        "label" => "É uma enquete? (considera ser 1 pergunta apenas)",
+	        "inputType" => "checkbox",
+	    ),
+		
+	),
+
     /**
      * RESPONSER
      *

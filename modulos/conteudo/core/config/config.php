@@ -131,7 +131,7 @@ $modInfo = array(
                       '<li>%title_encoded = título encoded</li>'.
                       '<li>%category = categoria</li>'.
                       '</ul>'.
-                      'Exemplo: http://meusite.com.br/noticias/%id'
+                      'Exemplo: http://meusite.com.br/noticias/%id.'
         ),
     ),
     

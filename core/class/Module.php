@@ -1174,7 +1174,6 @@ class Module
      * @return <array>
      */
     function loadModConf($params = "") {
-
         /*
          * Array: Várias opções podem ser passadas
          */
@@ -1212,7 +1211,7 @@ class Module
 			 * menos itens que as definidas estaticamente.
 			 */
             $sql = "SELECT * FROM config WHERE tipo='mod_conf' AND local='".$params."' LIMIT 200";
-            
+
             $queryTmp = $this->connection->query($sql, "ASSOC");
 
             $query = array();

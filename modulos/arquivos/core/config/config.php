@@ -82,6 +82,49 @@ $modInfo = array(
         'listing' => 'Listar',
     ),
 
+	/*
+	 * Configurations
+	 */
+	'configurations' => array(
+		 'upload_path' => array(
+		     "value" => "",
+		     "label" => "Qual path destino do upload?",
+		     "inputType" => "input",
+		 ),
+		 /*
+		  * Ordenate
+		  */
+		 'semcategoria' => array(
+		     "value" => "",
+		     "label" => "Sem seleção de categoria",
+		     "inputType" => "checkbox",
+		 ),
+		 /*
+		  * Resumo
+		  */
+		 'nova_categoria' => array(
+		     "value" => "",
+		     "label" => "Permite criar categoria?",
+		     "inputType" => "checkbox",
+		 ),
+		 /*
+		  * Resumo
+		  */
+		 'descricao' => array(
+		     "value" => "",
+		     "label" => "Tem descrição?",
+		     "inputType" => "checkbox",
+		 ),
+		 /*
+		  * show_path_to_link
+		  */
+		 'show_path_to_link' => array(
+		     "value" => "",
+		     "label" => "Mostrar path para link?",
+		     "inputType" => "checkbox",
+		 ),
+	),
+
     /**
      * RESPONSER
      *
