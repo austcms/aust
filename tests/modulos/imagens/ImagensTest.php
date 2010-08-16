@@ -18,14 +18,14 @@ class ImagensTest extends PHPUnit_Framework_TestCase
          *
          * Diretório do módulo
          */
-        $mod = 'imagens';
+        $this->mod = 'imagens';
 
         /*
          * Informações de conexão com banco de dados
          */
 
-        include 'modulos/'.$mod.'/'.MOD_CONFIG;
-        include_once 'modulos/'.$mod.'/'.$modInfo['className'].'.php';
+        include 'modulos/'.$this->mod.'/'.MOD_CONFIG;
+        include_once 'modulos/'.$this->mod.'/'.$modInfo['className'].'.php';
 
         $this->obj->testMode = true;
         $this->obj = new $modInfo['className'];//new $modInfo['className']();
@@ -125,6 +125,20 @@ class ImagensTest extends PHPUnit_Framework_TestCase
 
 
     }
+
+	/*
+	 * verifica se todas as configurações do arquivo config.php existem no método
+	 * loadModConf()
+	 */
+	function testConfigurationsExists(){
+		
+        include 'modulos/'.$this->mod.'/'.MOD_CONFIG;
+		$configurations = $this->obj->loadModConf();
+		foreach( $modInfo['configurations'] as $key=>$value ){
+			$this->assertArrayHasKey($key, $configurations);
+		}
+	}
+
 
 }
 ?>
