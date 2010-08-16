@@ -16,14 +16,14 @@ class ArquivosTest extends PHPUnit_Framework_TestCase
          *
          * Diretório do módulo
          */
-        $mod = 'arquivos';
+        $this->mod = 'arquivos';
 
         /*
          * Informações de conexão com banco de dados
          */
 
-        include 'modulos/'.$mod.'/'.MOD_CONFIG;
-        include_once 'modulos/'.$mod.'/'.$modInfo['className'].'.php';
+        include 'modulos/'.$this->mod.'/'.MOD_CONFIG;
+        include_once 'modulos/'.$this->mod.'/'.$modInfo['className'].'.php';
         
         $this->obj = new $modInfo['className'];//new $modInfo['className']();
         $this->obj->testMode = true;
@@ -44,6 +44,19 @@ class ArquivosTest extends PHPUnit_Framework_TestCase
     function testGetSystemUrl(){
         $this->assertEquals(getcwd().'/file/path', $this->obj->_getSystemUrl('/file/path'));
     }
+
+	/*
+	 * verifica se todas as configurações do arquivo config.php existem no método
+	 * loadModConf()
+	 */
+	function testConfigurationsExists(){
+		
+        include 'modulos/'.$this->mod.'/'.MOD_CONFIG;
+		$configurations = $this->obj->loadModConf();
+		foreach( $modInfo['configurations'] as $key=>$value ){
+			$this->assertArrayHasKey($key, $configurations);
+		}
+	}
 
     /*
      * Não testa o upload propriamente disto, pois para isto é necessário
