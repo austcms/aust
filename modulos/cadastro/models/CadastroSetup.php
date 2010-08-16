@@ -336,5 +336,38 @@ class CadastroSetup extends ModsSetup {
             "('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",".$params['author'].",0,0,1,0,1,'$class',".$this->getFieldOrder().")";
 		return $sql;
 	}
+	
+	/*
+	 *
+	 * END FILES CREATION
+	 *
+	 */
+	
+	/*
+	 *
+	 * MAIN TABLE
+	 *
+	 */
+	function createMainTableSql($params = array()){
+		if( empty($params) ) return false;
+		
+		$fields = array();
+		foreach( $params as $key=>$value ){
+			if( !is_numeric($key) ) continue;
+			
+			$fields[] = $this->encodeFieldName($value['name']).' '.$this->getFieldPhysicalType($value['type']).' '.$this->setCommentForSql($value['description']);
+		}
+		
+        $sql = 'CREATE TABLE '.$this->mainTable.'('.
+                   'id int auto_increment,'.
+                   implode(",", $fields).','.
+                   'blocked varchar(120),'.
+                   'approved int,'.
+                   'created_on datetime,'.
+                   'updated_on datetime,'.
+                   'PRIMARY KEY (id), UNIQUE id (id)'.
+                ')';
+		return $sql;
+	}
 }
 ?>

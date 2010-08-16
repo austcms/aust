@@ -357,20 +357,28 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 		}
 
 	// sql para criação da tabela da nova estrutura propriamente dita
-	function testCreateTableSql(){
-		$this->obj->mainTable = 'testunit';
+	function testCreateMainTableSql(){
 		$params = $this->fieldsForCreation();
+		$this->obj->mainTable = 'testunit';
 		
         $sql = 'CREATE TABLE testunit('.
                    'id int auto_increment,'.
-                   'oi,'.
+                   'campo_1 varchar(250) COMMENT \'Campo 1 descrição\','.
+                   'campo_2 text COMMENT \'Campo 2 descrição\','.
+                   'campo_3 varchar(250) COMMENT \'Campo 3 descrição\','.
+                   'campo_4 date COMMENT \'Campo 4 descrição\','.
+                   'campo_5 text COMMENT \'Campo 5 descrição\','.
+                   'campo_6 int COMMENT \'Campo 6 descrição\','.
+                   'campo_7 int COMMENT \'Campo 7 descrição\','.
                    'blocked varchar(120),'.
                    'approved int,'.
                    'created_on datetime,'.
                    'updated_on datetime,'.
                    'PRIMARY KEY (id), UNIQUE id (id)'.
                 ')';
+
 		$this->assertEquals($sql, $this->obj->createMainTableSql($params));
+		
 		$this->assertFalse($this->obj->createMainTableSql(array()));
 	}
 	
@@ -381,37 +389,37 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 			array(
 				'name' => 'Campo 1',
 				'type' => 'string',
-				'fieldDescription' => 'Campo 1 descrição',
+				'description' => 'Campo 1 descrição',
 			),
 			// field 2
 			array(
 				'name' => 'Campo 2',
 				'type' => 'text',
-				'fieldDescription' => 'Campo 2 descrição',
+				'description' => 'Campo 2 descrição',
 			),
 			// field 3
 			array(
 				'name' => 'Campo 3',
 				'type' => 'pw',
-				'fieldDescription' => 'Campo 3 descrição',
+				'description' => 'Campo 3 descrição',
 			),
 			// field 4
 			array(
 				'name' => 'Campo 4',
 				'type' => 'date',
-				'fieldDescription' => 'Campo 4 descrição',
+				'description' => 'Campo 4 descrição',
 			),
 			// field 5
 			array(
 				'name' => 'Campo 5',
 				'type' => 'file',
-				'fieldDescription' => 'Campo 5 descrição',
+				'description' => 'Campo 5 descrição',
 			),
 			// field 6
 			array(
 				'name' => 'Campo 6',
 				'type' => 'relacional_umparaum',
-				'fieldDescription' => 'Campo 6 descrição',
+				'description' => 'Campo 6 descrição',
 				'refTable' => 'reftable',
 				'refField' => 'reffield',
 			),
@@ -419,7 +427,7 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 			array(
 				'name' => 'Campo 7',
 				'type' => 'relacional_umparamuitos',
-				'fieldDescription' => 'Campo 7 descrição',
+				'description' => 'Campo 7 descrição',
 				'refTable' => 'reftable',
 				'refField' => 'reffield',
 			),
@@ -429,6 +437,17 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 
 	// salva dados da nova estrutura na tabela 'categorias'
 	function testSaveStructureIntoDatabase(){
+		
+		$params = array(
+			'name' => 'Teste777',
+			'name_encoded' => 'teste777',
+			'patriarca' => '',
+			'subordinadoid' => '777',
+			'classe' => 'estrutura',
+			'tipo' => 'cadastro',
+			'' => '',
+			
+		);
 		$this->fail();
 	}
 

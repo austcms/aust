@@ -40,6 +40,8 @@ class ModsSetup
 	function encodeString($str){
 		return encodeString($str);
 	}
+	
+	
 
 	/**
 	 * encodeTableName
