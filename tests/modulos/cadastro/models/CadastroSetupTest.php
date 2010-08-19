@@ -372,7 +372,6 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 
 			$this->assertEquals($sql, $this->obj->createMainTableSql($params));
 
-//			$this->assertFalse($this->obj->createMainTableSql(array()));
 		}
 
 		public function fieldsForCreation(){
@@ -507,6 +506,11 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 			$this->obj->austNode = '7777';
 			$this->obj->createMainTable();
 		}
+		function destroyTests(){
+			$this->obj->connection->query("DROP TABLE testunit");
+			$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='7777'");
+			$this->obj->connection->exec("DELETE FROM categorias WHERE nome='TestUnit'");
+		}
 		
 		/*
 		 * 
@@ -530,7 +534,7 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 				
 					$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'campo_1') );
 					$this->assertArrayHasKey('0', $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_1' AND categorias_id='7777'") );
-					$this->restartTable();
+					$this->destroyTests();
 			}
 		
 			function testAddFieldText(){
@@ -548,7 +552,7 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 		
 					$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'campo_1'), 'Text: campo_1 not created.' );
 					$this->assertArrayHasKey('0', $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_1' AND categorias_id='7777'") );
-					$this->restartTable();
+					$this->destroyTests();
 			}
 		
 			function testAddFieldPassword(){
@@ -568,7 +572,7 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_1' AND categorias_id='7777'");
 					$this->assertArrayHasKey('0', $conf );
 					$this->assertEquals('password', $conf[0]['especie'] );
-					$this->restartTable();
+					$this->destroyTests();
 			}
 		
 			function testAddFieldDate(){
@@ -597,10 +601,11 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 							$this->fail('Date is NOT of type \'date\'');
 						}
 					}
-					$this->restartTable();
+					$this->destroyTests();
 			}
 		
 			function testAddFieldFile(){
+				$this->obj->connection->exec("DROP TABLE testunit_arquivos");
 				$this->restartTable();
 			
 				// test FILE
@@ -618,7 +623,9 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_1' AND categorias_id='7777'");
 					$this->assertArrayHasKey('0', $conf );
 					$this->assertEquals('arquivo', $conf[0]['especie'] );
-					$this->restartTable();
+					$this->obj->connection->exec("DROP TABLE testunit_arquivos");
+					
+					$this->destroyTests();
 			}
 
 		
@@ -652,11 +659,12 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					$this->assertArrayHasKey('0', $conf );
 					$this->assertEquals('ref_table', $conf[0]['ref_tabela'] );
 					$this->assertEquals('ref_field', $conf[0]['ref_campo'] );
-					$this->restartTable();
+					$this->destroyTests();
 			}
 
 		
 			function testAddFieldRelationalOneToMany(){
+				$this->obj->connection->exec("DROP TABLE testunit_ref_field_ref_table");
 				$this->restartTable();
 				$this->obj->mainTable = 'testunit';
 			
@@ -679,8 +687,10 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					$this->assertArrayHasKey('0', $conf );
 					$this->assertEquals('ref_table', $conf[0]['ref_tabela'] );
 					$this->assertEquals('ref_field', $conf[0]['ref_campo'] );
+					
+					$this->obj->connection->exec("DROP TABLE testunit_ref_field_ref_table");
 
-					$this->restartTable();
+					$this->destroyTests();
 			}
 
 
@@ -736,7 +746,8 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 	    function testCreateStructure(){
 		
 			$this->obj->connection->exec("DROP TABLE testunit");
-			$this->obj->connection->exec("DELETE FROM categorias WHERE nome='TestUnit' AND subordinado_nome='testepai777'");
+			$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='7777' OR comentario='haha777' OR valor='testunit' OR valor='haha777' ");
+			$this->obj->connection->exec("DELETE FROM categorias WHERE nome='TestUnit' AND subordinado_nome_encoded='testepai777'");
 			$this->obj->connection->exec("DELETE FROM categorias WHERE nome='testunit'");
 			$this->obj->connection->query("INSERT INTO categorias (nome,classe) VALUES ('TestePai777','categoria-chefe')");
 			$lastInsert = $this->obj->connection->lastInsertId();
@@ -753,11 +764,25 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 						'type' => 'string',
 						'description' => 'haha777',
 					),
+					array(
+						'name' => 'Campo 2',
+						'type' => 'relational_onetoone',
+						'description' => 'haha777',
+						'refTable' => 'ref_table',
+						'refField' => 'ref_field',
+					),
+					array(
+						'name' => 'Campo 3',
+						'type' => 'relational_onetomany',
+						'description' => 'haha777',
+						'refTable' => 'ref_table',
+						'refField' => 'ref_field',
+					),
 				),
 				'options' => array(
-					'approval' => 1,
-					'pre_password' => '123',
-					'description' => 'description',
+					'approval' => 'haha777',
+					'pre_password' => 'haha777',
+					'description' => 'haha777',
 				),
 				
 			);
@@ -782,17 +807,17 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 				// test 3.1
 				$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE chave='descricao' AND tipo='config' AND categorias_id='$austNode'");
 				$this->assertArrayHasKey('0', $conf );
-				$this->assertEquals('description', $conf[0]['valor'], 'Did not save description. #3.1' );
+				$this->assertEquals('haha777', $conf[0]['valor'], 'Did not save description. #3.1' );
 				$this->assertEquals($austNode, $conf[0]['categorias_id'], 'Did not save austNode.' );
 				// test 3.2
 				$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE chave='pre_senha' AND tipo='config' AND categorias_id='$austNode'");
 				$this->assertArrayHasKey('0', $conf );
-				$this->assertEquals('123', $conf[0]['valor'], 'Did not save pre_password. #3.2' );
+				$this->assertEquals('haha777', $conf[0]['valor'], 'Did not save pre_password. #3.2' );
 				$this->assertEquals($austNode, $conf[0]['categorias_id'], 'Did not save austNode.' );
 				// test 3.3
 				$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE chave='aprovacao' AND tipo='config' AND categorias_id='$austNode'");
 				$this->assertArrayHasKey('0', $conf );
-				$this->assertEquals('1', $conf[0]['valor'], 'Did not save approval. #3.3' );
+				$this->assertEquals('haha777', $conf[0]['valor'], 'Did not save approval. #3.3' );
 				$this->assertEquals($austNode, $conf[0]['categorias_id'], 'Did not save austNode.' );
 				// test 3.4
 				$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE chave='tabela' AND tipo='estrutura' AND categorias_id='$austNode'");
@@ -802,18 +827,38 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 			
 			// verifica configurações dos campos
 			$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'campo_1') );
+			$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'campo_2') );
+			$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'campo_3') );
 				// test 4.1
 				$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE chave='campo_1' AND tipo='campo' AND categorias_id='$austNode'");
 				$this->assertArrayHasKey('0', $conf );
 				$this->assertEquals('Campo 1', $conf[0]['valor'], 'Did not save field campo_1. #4.1' );
 				$this->assertEquals('haha777', $conf[0]['comentario'], 'Did not save field campo_1. #4.1' );
 				$this->assertEquals($austNode, $conf[0]['categorias_id'], 'Did not save austNode.' );
+				// test 4.2 - relational_onetoone
+				$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE chave='campo_2' AND tipo='campo' AND categorias_id='$austNode'");
+				$this->assertArrayHasKey('0', $conf );
+				$this->assertEquals('Campo 2', $conf[0]['valor'], 'Did not save field campo_1. #4.2' );
+				$this->assertEquals('haha777', $conf[0]['comentario'], 'Did not save field campo_1. #4.2' );
+				$this->assertEquals('ref_table', $conf[0]['ref_tabela'] );
+				$this->assertEquals('ref_field', $conf[0]['ref_campo'] );
+				$this->assertEquals($austNode, $conf[0]['categorias_id'], 'Did not save austNode.' );
+				// test 4.3 - relational_onetomany
+				$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE chave='campo_3' AND tipo='campo' AND categorias_id='$austNode'");
+				$this->assertArrayHasKey('0', $conf );
+				$this->assertEquals('Campo 3', $conf[0]['valor'], 'Did not save field campo_1. #4.3' );
+				$this->assertEquals('haha777', $conf[0]['comentario'], 'Did not save field campo_1. #4.3' );
+				$this->assertEquals('ref_table', $conf[0]['ref_tabela'] );
+				$this->assertEquals('ref_field', $conf[0]['ref_campo'] );
+				$this->assertEquals($austNode, $conf[0]['categorias_id'], 'Did not save austNode.' );
+				$this->assertTrue( $this->obj->connection->hasTable('testunit_ref_field_ref_table') );
 			
 			
 			$this->obj->connection->exec("DELETE FROM categorias WHERE nome='TestePai777'");
-			$this->obj->connection->exec("DELETE FROM categorias WHERE nome='TestUnit' AND subordinado_nome='testepai777'");
-			$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='$austNode'");
+			$this->obj->connection->exec("DELETE FROM categorias WHERE nome='TestUnit' AND subordinado_nome_encoded='testepai777'");
+			$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='$austNode' OR comentario='haha777' OR valor='testunit' OR valor='haha777' ");
 			$this->obj->connection->exec("DROP TABLE testunit");
+			$this->obj->connection->exec("DROP TABLE testunit_ref_field_ref_table");
 	    }
 	
 }

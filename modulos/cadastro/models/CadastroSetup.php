@@ -206,6 +206,7 @@ class CadastroSetup extends ModsSetup {
 				$params['referenceField'] = $params['refField'];
 				$params['referenceTable'] = $this->createReferenceTableName_RelationalOneToMany($params);
 				
+				$this->addColumn($params);
 				$sql = $this->createFieldConfigurationSql_RelationalOneToMany($params);
 				$this->connection->exec($sql);
 				

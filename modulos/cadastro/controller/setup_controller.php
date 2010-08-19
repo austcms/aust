@@ -27,7 +27,7 @@ class SetupController extends ModsController
      */
     function setuppronto(){
         
-//        pr($_POST);
+        pr($_POST);
         $this->loadModel("CadastroSetup");
 		
         global $aust_charset;
@@ -35,16 +35,30 @@ class SetupController extends ModsController
         $this->autoRender = false;
 		
 		$fields = array();
+		$i = 0;
 		// prepara array com campos
 		foreach( $_POST['campo'] as $key=>$value ){
 			if( empty($value) )
 				continue;
 			
-			$fields[] = array(
+			$fields[$i] = array(
 				'name' => $value,
 				'type' => $_POST['campo_tipo'][$key],
 				'description' => $_POST['campo_descricao'][$key],
 			);
+			
+			/*
+			 * Campos relacionados têm informações sobre quais campos são
+			 * relacionados.
+			 */
+			if( !empty($_POST['relacionado_tabela_'.($key+1)])
+				AND !empty($_POST['relacionado_campo_'.($key+1)]) )
+			{
+				$fields[$i]['refTable'] = $_POST['relacionado_tabela_'.($key+1)];
+				$fields[$i]['refField'] = $_POST['relacionado_campo_'.($key+1)];
+			}
+			
+			$i++;
 		}
         /**
          * Parâmetros para gravar uma nova estrutura no DB.
@@ -62,6 +76,8 @@ class SetupController extends ModsController
 				'description' => $_POST['descricao'],
 			),
         );
+
+		pr($params);
 
 		if( $this->CadastroSetup->createStructure($params) ){
 			echo "O sistema de cadastro foi criado com sucesso.";
