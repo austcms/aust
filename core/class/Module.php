@@ -372,7 +372,6 @@ class Module
      * Retorna simplesmente o SQL para então executar Query
      */
     public function loadSql($options = array()){
-
         /*
          * SET DEFAULT OPTIONS
          */
@@ -388,9 +387,8 @@ class Module
             print("Argumento <strong>categorias</strong> ultrapassada em \$modulo->loadSql. Use \$options['austNode'].");
             exit(0);
         }
-
 		/* gera sql para descobrir o número total de rows */
-		if( !empty($options['countTotalRows']) AND $options['countTotalRows'] ){
+		if( is_array($options) AND !empty($options['countTotalRows']) AND $options['countTotalRows'] ){
 			$options['limit'] = false;
 			$options['page'] = false;
 			$options['countTotalRows'] = true;
@@ -406,7 +404,6 @@ class Module
         $page = null;
         $customWhere = null;
         $order = 'id DESC';
-
 
         if( is_array($options) ){
             $id = empty($options['id']) ? '' : $options['id'];
@@ -428,7 +425,6 @@ class Module
             $id = $options;
             $limit = $defaultLimit;
         }
-
 
         if( !empty($options)
             AND !is_array($options) )
@@ -688,7 +684,6 @@ class Module
             if( count($this->lastQuery) >= 1 ){
                 $lastQuery = reset($this->lastQuery);
             }
-
             if( !empty($lastQuery['titulo_encoded']) ){
                 $titleEncoded = $lastQuery['titulo_encoded'];
 

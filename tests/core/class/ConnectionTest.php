@@ -60,6 +60,14 @@ class ConnectionTest extends PHPUnit_Framework_TestCase
 	function testHasTable(){
 		$this->assertTrue( $this->conexao->hasTable($this->standardTableName) );
 	}
+	
+	function testTableHasField(){
+		$table = reset( reset( $this->conexao->query('SHOW TABLES') ) );
+		$fields = reset($this->conexao->query('DESCRIBE '.$table));
+		
+		$this->assertTrue( $this->conexao->tableHasField($table, $fields['Field']) );
+		$this->assertFalse( $this->conexao->tableHasField($table, 'tabela_com_campo_inexistente_test') );
+	}
 
 }
 ?>

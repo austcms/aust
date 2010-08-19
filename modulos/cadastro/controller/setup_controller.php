@@ -27,33 +27,54 @@ class SetupController extends ModsController
      */
     function setuppronto(){
         
-        pr($_POST);
+//        pr($_POST);
         $this->loadModel("CadastroSetup");
 		
         global $aust_charset;
 
-		$this->CadastroSetup->createStructure();
         $this->autoRender = false;
 		
-
-		return true;
+		$fields = array();
+		// prepara array com campos
+		foreach( $_POST['campo'] as $key=>$value ){
+			if( empty($value) )
+				continue;
+			
+			$fields[] = array(
+				'name' => $value,
+				'type' => $_POST['campo_tipo'][$key],
+				'description' => $_POST['campo_descricao'][$key],
+			);
+		}
         /**
          * Parâmetros para gravar uma nova estrutura no DB.
          */
         $params = array(
-            'nome' => $_POST['nome'],
-            'categoriaChefe' => $_POST['categoria_chefe'],
-            'estrutura' => 'estrutura',
-            'moduloPasta' => $_POST['modulo'],
-            'autor' => $this->administrador->LeRegistro('id')
+            'name' => $_POST['nome'],
+            'father' => $_POST['categoria_chefe'],
+            'class' => 'estrutura',
+            'type' => $_POST['modulo'],
+            'author' => $this->administrador->LeRegistro('id'),
+			'fields' => $fields,
+			'options' => array(
+				'approval' => $_POST['aprovacao'],
+				'password' => $_POST['pre_senha'],
+				'description' => $_POST['descricao'],
+			),
         );
+
+		$this->CadastroSetup->createStructure($params);
+		
+		
+exit();
         /**
          * CRIA ESTRUTURA (Aust)
          *
          * Verifica se consegue gravar a estrutura (provavelmente na tabela
          * 'categorias').
          */
-        if( $status_insert = $this->aust->gravaEstrutura( $params ) ){
+		$status_insert = $this->CadastroSetup->create( $params );
+        if( $status_insert ){
             
             $status_setup[] = "Categoria criada com sucesso.";
 

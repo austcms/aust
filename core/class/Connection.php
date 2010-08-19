@@ -325,7 +325,7 @@ class Connection extends SQLObject {
              */
             if( in_array( $mode, array('CREATE_TABLE', 'CREATE TABLE') ) ){
                 if($result == 0 AND !is_bool($result)){
-                    return 1;
+                    return true;
                 } else {
                     return false;
                 }
@@ -428,6 +428,18 @@ class Connection extends SQLObject {
 		$this->_acquireTablesList();
 		
 		return in_array($tableName, $this->tables);
+	}
+	
+	function tableHasField($table, $field){
+		$fields = $this->query('DESCRIBE '.$table);
+		
+		foreach( $fields as $key=>$value ){
+			if( $value['Field'] == $field )
+				return true;
+		}
+		
+		return false;
+		
 	}
 
     public function VerificaAdmin(){

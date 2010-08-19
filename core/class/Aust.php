@@ -23,6 +23,7 @@ class Aust {
      *
      * @var class Classe responsável pela conexão com o banco de dados
      */
+    public $connection;
     protected $conexao;
 
     public $_recursiveLimit = 50;
@@ -30,6 +31,7 @@ class Aust {
 
     function __construct($conexao = array()){
         $this->conexao = Connection::getInstance();
+        $this->connection = Connection::getInstance();
         unset($this->AustCategorias);
     }
 
@@ -56,18 +58,26 @@ class Aust {
      *
      * CATEGORIAS
      *
-    */
-    public function newCategory($params) {
+     */
 
-        $catName = (empty($params['catName'])) ? false : addslashes( str_replace("\n", "", $params['catName']) );
+	/**
+	 * create()
+	 * 
+	 * cria uma nova categoria ou estrutura
+	 *
+	 * @return int id criado
+	 */
+    public function create($params) {
+
+        $catName = (empty($params['name'])) ? false : addslashes( str_replace("\n", "", $params['name']) );
         $father = (empty($params['father'])) ? false : $params['father'];
-        $descricao = (empty($params['descricao'])) ? false : addslashes( $params['descricao'] );
-        $autor = (empty($params['autor'])) ? false : $params['autor'];
-        $permissao = (empty($params['permissao'])) ? false : $params['permissao'];
-        $classe = (empty($params['classe'])) ? 'categoria' : $params['classe'];
+        $descricao = (empty($params['description'])) ? false : addslashes( $params['description'] );
+        $autor = (empty($params['author'])) ? false : $params['author'];
+        $permissao = (empty($params['permission'])) ? false : $params['permission'];
+        $classe = (empty($params['class'])) ? 'categoria' : $params['class'];
 
-        $tipo = (empty($params['tipo'])) ? '' : $params['tipo'];
-        $tipoLegivel = (empty($params['tipoLegivel'])) ? '' : $params['tipoLegivel'];
+        $tipo = (empty($params['type'])) ? '' : $params['type'];
+        $tipoLegivel = (empty($params['type_name'])) ? '' : $params['type_name'];
 
         if( !$catName ) return false;
         if( !$father ) return false;
@@ -77,7 +87,7 @@ class Aust {
          * desta nova categoria a ser cadastrada.
          */
         $i = 0;
-        $subordinadoidtmp = $_POST['frmsubordinadoid'];
+        $subordinadoidtmp = $father;
 
         while( $i < 1 ) {
             $sql = "SELECT
@@ -89,6 +99,10 @@ class Aust {
                     ";
 
             $query = $this->conexao->query($sql);
+			
+			if( empty($query[0]) )
+				return false;
+				
             $dados = $query[0];
 
             if( empty($tipo) ) {
@@ -140,11 +154,11 @@ class Aust {
                         '".$autor."'
                     )";
         if( $this->conexao->exec($sql) ) {
-            return $this->conexao->lastInsertId();
+            return (int) $this->conexao->lastInsertId();
         }
 
-        return 0;
-    }
+        return false;
+    } // end create()
 
     public function getPatriarch($id) {
 

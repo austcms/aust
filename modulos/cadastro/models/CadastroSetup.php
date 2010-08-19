@@ -57,7 +57,121 @@ class CadastroSetup extends ModsSetup {
 	
 	public $filesTableCreated = false;
 	
+	public $SqlToRun = array();
+	
+	public $createTable = false;
 //    function  __construct() {  }
+
+
+	/*
+	 * SUPER METHODS
+	 *
+	 * Métodos que executam todas as funções de instalação
+	 */
+	function createStructure($params){
+		
+		$this->start();
+		$this->setMainTableName = $this->encodeTableName($params['name']);
+		
+		$this->setCreateTableMode();
+		
+		//pr( $this->createMainTableSql($params['fields']) );
+		$this->createMainTable($params['fields']);
+		$this->addField($params['fields']);
+		
+		
+		//$this->saveStructure($params);
+		
+			
+		
+		//pr($params);
+	}
+
+	/**
+	 * createMainTable()
+	 *
+	 *
+	 * @return bool
+	 */
+	function createMainTable($fields = array()){
+		$sql = $this->createMainTableSql($fields);
+		$this->setCreateTableMode();
+		return $this->connection->exec($sql, 'CREATE_TABLE');
+	}
+	
+	function start(){
+		$this->SqlToRun = array();
+		
+		return true;
+	}
+	
+	// novos cadastros, cria novas tabelas. cadastro antigo, somente
+	// adiciona campos
+	function setCreateTableMode(){
+		$this->createTable = true;
+	}
+	
+	/**
+	 * addField()
+	 * 
+	 * Insere um novo campo na tabela do cadastro
+	 * 
+	 */
+	function addField($fields){
+
+		/*
+		 * Verifica o formato de $fields e transforma em array adequado
+		 */
+		if( !array_key_exists('0', $fields) AND !empty($fields['name']) ){
+			$fields = array(
+				0 => $fields,
+			);
+		} else if( !array_key_exists('0', $fields) )
+			return false;
+			
+		foreach( $fields as $key=>$value ){
+			
+			$type = $value['type'];
+			$params['name'] = $this->encodeFieldName($value['name']);
+			$params['label'] = $value['name'];
+			$params['austNode'] = $this->austNode;
+			$params['type'] = $value['type'];
+			$params['comment'] = $value['description'];
+			$params['author'] = $this->user;
+			
+			if( $type == 'string' ){
+				
+				$sql = $this->createFieldConfigurationSql_String($params);
+				$this->addColumn($params);
+				$this->connection->query($sql);
+				
+			} else if( $type == 'text' ) {
+				$sql = $this->createFieldConfigurationSql_String($params);
+			} else if( $type == 'date' ) {
+				$sql = $this->createFieldConfigurationSql_String($params);
+			} else if( $type == 'pw' ) {
+				$sql = $this->createFieldConfigurationSql_Password($params);
+			} else if( $type == 'file' ) {
+				$sql = $this->createFieldConfigurationSql_File($params);
+			} else if( $type == 'relacional_umparaum' ) {
+				$sql = $this->createFieldConfigurationSql_RelationalOneToOne($params);
+			} else if( $type == 'relacional_umparamuitos' ) {
+				$sql = $this->createFieldConfigurationSql_RelationalOneToMany($params);
+			}
+			
+		}
+		
+	}
+	
+	function addColumn($params){
+		
+		$sql = "ALTER TABLE ".$this->mainTable." ADD COLUMN ".$params['name']." ".$this->fieldTypes[$params['type']]['type']." ";
+		if( !empty($params['comment']) )
+			$sql.= $this->setCommentForSql($params['comment']);
+		
+		$this->connection->exec($sql);
+		
+	}
 
 	/**
 	 * isAllowedFieldType()
@@ -349,18 +463,21 @@ class CadastroSetup extends ModsSetup {
 	 *
 	 */
 	function createMainTableSql($params = array()){
+		/*
 		if( empty($params) ) return false;
 		
 		$fields = array();
 		foreach( $params as $key=>$value ){
 			if( !is_numeric($key) ) continue;
 			
-			$fields[] = $this->encodeFieldName($value['name']).' '.$this->getFieldPhysicalType($value['type']).' '.$this->setCommentForSql($value['description']);
+			$fields[] = $this->encodeFieldName($value['name']).' '.
+						$this->getFieldPhysicalType($value['type']).' '.
+						$this->setCommentForSql($value['description']);
 		}
+		*/
 		
         $sql = 'CREATE TABLE '.$this->mainTable.'('.
                    'id int auto_increment,'.
-                   implode(",", $fields).','.
                    'blocked varchar(120),'.
                    'approved int,'.
                    'created_on datetime,'.
@@ -369,5 +486,25 @@ class CadastroSetup extends ModsSetup {
                 ')';
 		return $sql;
 	}
+
+	/**
+	 * saveStructure()
+	 *
+	 * Cria uma nova estrutura de cadastro
+	 *
+	 * É necessário os seguintes valores em $params:
+	 * 		'name': 	nome da categoria ou estrutura
+	 *		'father': 	quem é o pai da nova categoria
+	 *
+	 * @return bool
+	 */
+	function saveStructure($params = array()){
+		$aust = Aust::getInstance();
+		$return = $aust->create($params);
+		if( is_numeric($return) )
+			$this->austNode = (int) $return;
+			
+		return $return;
+	} // end saveStructure()
 }
 ?>

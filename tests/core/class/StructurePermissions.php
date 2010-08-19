@@ -26,7 +26,7 @@ class StructurePermissionsTest extends PHPUnit_Framework_TestCase
     }
 
     function testWhatever(){
-        
+        $this->assertTrue(true);
     }
 
 

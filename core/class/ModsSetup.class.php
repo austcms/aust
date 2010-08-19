@@ -11,13 +11,18 @@
 class ModsSetup
 {
 
+	public $austNode;
+	
 	public $connection;
 
     function __construct($param = array()){
         $param['controllerName'] = 'setup';
+
+		$user = User::getInstance();
         $param['action'] = (empty($param['action'])) ? "" : $param['action'];
         
 		$this->connection = Connection::getInstance();
+        $this->user = $user->getId();
         //parent::__construct($param);
     }
 
@@ -85,6 +90,10 @@ class ModsSetup
 		$str = "COMMENT '$str'";
 		return $str;
 		
+	}
+	
+	function austNode(){
+		return $this->austNode;
 	}
 
     

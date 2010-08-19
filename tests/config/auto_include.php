@@ -8,6 +8,7 @@ if( !defined('UPLOAD_DIR') )
 if( !defined('THIS_TO_BASEURL') )
     define('THIS_TO_BASEURL', '');
 
+require_once(CORE_DIR."libs/functions/func.php");
 require_once(CORE_DIR."libs/functions/string_treatment.php");
 
 function __autoload($className) {

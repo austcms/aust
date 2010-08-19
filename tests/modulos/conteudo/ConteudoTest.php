@@ -169,9 +169,9 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
         $this->obj->connection->exec($sql);
         $catLastInsertId = $this->obj->connection->lastInsertId();
 
-        //print_r($this->obj->load($catLastInsertId));
+        $load = $this->obj->load($catLastInsertId);
         $this->assertArrayHasKey(0,
-                $this->obj->load($catLastInsertId),
+                $load,
                 "Não carregou por id. \n".$this->obj->lastSql
             );
 
@@ -517,6 +517,7 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
         $lastId = $this->obj->connection->lastInsertId();
         $this->obj->fieldsToLoad = "*";
         $this->obj->load($lastId);
+
 
         /* test #1 */
             $str = "http://mywebsite.com/news/%id/%title_encoded";
