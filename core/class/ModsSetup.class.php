@@ -14,6 +14,11 @@ class ModsSetup
 	public $austNode;
 	
 	public $connection;
+	
+	/**
+	 * @var object contains the user object
+	 */
+	//public $user;
 
     function __construct($param = array()){
         $param['controllerName'] = 'setup';
@@ -23,7 +28,6 @@ class ModsSetup
         
 		$this->connection = Connection::getInstance();
         $this->user = $user->getId();
-        //parent::__construct($param);
     }
 
 	function createStructure($params = array()){

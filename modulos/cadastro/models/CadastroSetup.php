@@ -60,32 +60,26 @@ class CadastroSetup extends ModsSetup {
 	public $SqlToRun = array();
 	
 	public $createTable = false;
-//    function  __construct() {  }
-
-
+	
 	/*
 	 * SUPER METHODS
 	 *
 	 * Métodos que executam todas as funções de instalação
 	 */
 	function createStructure($params){
-		
 		$this->start();
 		$this->setMainTableName( $this->encodeTableName($params['name']) );
 		
 		$this->setCreateTableMode();
 		
-		//pr( $this->createMainTableSql($params['fields']) );
-		$this->createMainTable($params['fields']);
 		$this->saveStructure($params);
+		$this->createMainTable($params);
+		
+		$this->saveStructureConfiguration($params);
 		
 		$this->addField($params['fields']);
 		
-		
-		
-			
 		return true;
-		//pr($params);
 	}
 
 	/**
@@ -94,10 +88,24 @@ class CadastroSetup extends ModsSetup {
 	 *
 	 * @return bool
 	 */
-	function createMainTable($fields = array()){
-		$sql = $this->createMainTableSql($fields);
+	function createMainTable($params = array()){
+		$sql = $this->createMainTableSql();
 		$this->setCreateTableMode();
-		return $this->connection->exec($sql, 'CREATE_TABLE');
+		$table = $this->connection->exec($sql, 'CREATE_TABLE');
+		
+		if( !empty($params['austNode']) )
+			$austNode = $params['austNode'];
+		else
+			$austNode = $this->austNode;
+			
+		$params = array(
+			'table' => $this->mainTable,
+			'austNode' => $austNode,
+		);
+		
+		$this->saveStructureConfiguration($params);
+		
+		return $table;
 	}
 	
 	/**
@@ -112,8 +120,13 @@ class CadastroSetup extends ModsSetup {
 		return true;
 	} // end start()
 	
-	// novos cadastros, cria novas tabelas. cadastro antigo, somente
-	// adiciona campos
+	/**
+	 * setCreateTableMode()
+	 *
+	 * novos cadastros, cria novas tabelas. cadastro antigo, somente
+	 *
+	 * adiciona campos
+	 */
 	function setCreateTableMode(){
 		$this->createTable = true;
 	}
@@ -496,7 +509,6 @@ class CadastroSetup extends ModsSetup {
             "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem) ".
             "VALUES ".
             "('campo','".$params['name']."','".$params['label']."','".$params['comment']."','".$params['austNode']."','".$params['author']."',0,0,1,0,1,'$class',".$this->getFieldOrder().")";
-		echo $sql;
 		return $sql;
 	}
 	
@@ -534,6 +546,76 @@ class CadastroSetup extends ModsSetup {
                    'PRIMARY KEY (id), UNIQUE id (id)'.
                 ')';
 		return $sql;
+	}
+	
+	/**
+	 * saveStructureConfiguration()
+	 *  
+	 * salva dados como aprovação
+	 *  
+	 */
+	function saveStructureConfiguration($params){
+		
+		if( empty($params['austNode']) AND empty($this->austNode) )
+			return false;
+		elseif( !empty($param['austNode']) )
+			$austNode = $param['austNode'];
+		elseif( !empty($this->austNode) )
+			$austNode = $this->austNode;
+			
+		if( array_key_exists('options', $params) ){
+			$params = $params['options'];
+		}
+
+		foreach( $params as $key=>$value ){
+			
+			if( $key == 'approval' ){
+				$this->connection->exec("DELETE FROM cadastros_conf WHERE tipo='config' AND chave='aprovacao' AND categorias_id='$austNode'");
+                $sql =
+	                "INSERT INTO
+	                    cadastros_conf
+	                    (tipo,chave,valor,nome,especie,categorias_id,adddate,autor,desativado,desabilitado,publico,restrito,aprovado)
+	                VALUES
+	                    ('config','aprovacao','".$value."','Aprovação','bool',".$austNode.", '".date('Y-m-d H:i:s')."', '".$this->user."',0,0,1,0,1)
+	                ";
+                $this->connection->exec($sql);
+
+			} else if( $key == 'pre_password' ){
+				$this->connection->exec("DELETE FROM cadastros_conf WHERE tipo='config' AND chave='pre_senha' AND categorias_id='$austNode'");
+                $sql =
+	                "INSERT INTO
+	                    cadastros_conf
+	                    (tipo,chave,valor,nome,especie,categorias_id,adddate,autor,desativado,desabilitado,publico,restrito,aprovado)
+	                VALUES
+	                    ('config','pre_senha','".$value."','Pré-Senha','string',".$austNode.", '".date('Y-m-d H:i:s')."', '".$this->user."',0,0,1,0,1)
+	                ";
+                $this->connection->exec($sql);
+			} else if( $key == 'description' ){
+				$this->connection->exec("DELETE FROM cadastros_conf WHERE tipo='config' AND chave='descricao' AND categorias_id='$austNode'");
+                $sql =
+	                "INSERT INTO
+	                    cadastros_conf
+	                    (tipo,chave,valor,nome,especie,categorias_id,adddate,autor,desativado,desabilitado,publico,restrito,aprovado)
+	                VALUES
+	                    ('config','descricao','".$value."','Descrição','blob',".$austNode.", '".date('Y-m-d H:i:s')."', '".$this->user."',0,0,1,0,1)
+	                ";
+                $this->connection->exec($sql);
+			} else if( $key == 'table' ){
+				$this->connection->exec("DELETE FROM cadastros_conf WHERE tipo='estrutura' AND chave='tabela' AND categorias_id='$austNode'");
+                $sql =
+	                "INSERT INTO
+	                    cadastros_conf
+	                    (tipo,chave,valor,nome,especie,categorias_id,adddate,autor,desativado,desabilitado,publico,restrito,aprovado)
+	                VALUES
+	                    ('estrutura','tabela','".$value."','Tabela Principal','blob',".$austNode.", '".date('Y-m-d H:i:s')."', '".$this->user."',0,0,1,0,1)
+	                ";
+                $this->connection->exec($sql);
+			}
+			
+		}
+		
+		return true;
+		
 	}
 
 	/**

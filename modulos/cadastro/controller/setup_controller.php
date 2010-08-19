@@ -58,7 +58,7 @@ class SetupController extends ModsController
 			'fields' => $fields,
 			'options' => array(
 				'approval' => $_POST['aprovacao'],
-				'password' => $_POST['pre_senha'],
+				'pre_password' => $_POST['pre_senha'],
 				'description' => $_POST['descricao'],
 			),
         );
