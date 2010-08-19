@@ -36,10 +36,10 @@ class CadastroSetup extends ModsSetup {
 		'file' => array(
 			'type' => 'text',
 		),
-		'relacional_umparaum' => array(
+		'relational_onetoone' => array(
 			'type' => 'int',
 		),
-		'relacional_umparamuitos' => array(
+		'relational_onetomany' => array(
 			'type' => 'int',
 		),
 	);
@@ -71,19 +71,20 @@ class CadastroSetup extends ModsSetup {
 	function createStructure($params){
 		
 		$this->start();
-		$this->setMainTableName = $this->encodeTableName($params['name']);
+		$this->setMainTableName( $this->encodeTableName($params['name']) );
 		
 		$this->setCreateTableMode();
 		
 		//pr( $this->createMainTableSql($params['fields']) );
 		$this->createMainTable($params['fields']);
+		$this->saveStructure($params);
+		
 		$this->addField($params['fields']);
 		
 		
-		//$this->saveStructure($params);
 		
 			
-		
+		return true;
 		//pr($params);
 	}
 
@@ -99,11 +100,17 @@ class CadastroSetup extends ModsSetup {
 		return $this->connection->exec($sql, 'CREATE_TABLE');
 	}
 	
+	/**
+	 * start()
+	 * 
+	 * Começa um novo processo de instalação. Isto reinicia todas
+	 * as variáveis necessárias.
+	 */
 	function start(){
 		$this->SqlToRun = array();
 		
 		return true;
-	}
+	} // end start()
 	
 	// novos cadastros, cria novas tabelas. cadastro antigo, somente
 	// adiciona campos
@@ -114,7 +121,7 @@ class CadastroSetup extends ModsSetup {
 	/**
 	 * addField()
 	 * 
-	 * Insere um novo campo na tabela do cadastro
+	 * Insere um novo campo na tabela do cadastro, salvando suas configurações.
 	 * 
 	 */
 	function addField($fields){
@@ -131,6 +138,9 @@ class CadastroSetup extends ModsSetup {
 			
 		foreach( $fields as $key=>$value ){
 			
+			if( empty($value['name']) ) continue;
+			
+			$params = $value;
 			$type = $value['type'];
 			$params['name'] = $this->encodeFieldName($value['name']);
 			$params['label'] = $value['name'];
@@ -139,36 +149,74 @@ class CadastroSetup extends ModsSetup {
 			$params['comment'] = $value['description'];
 			$params['author'] = $this->user;
 			
+			
 			if( $type == 'string' ){
 				
-				$sql = $this->createFieldConfigurationSql_String($params);
 				$this->addColumn($params);
-				$this->connection->query($sql);
+				$this->connection->exec($this->createFieldConfigurationSql_String($params));
 				
 			} else if( $type == 'text' ) {
-				$sql = $this->createFieldConfigurationSql_String($params);
+				
+				$this->addColumn($params);
+				$this->connection->exec($this->createFieldConfigurationSql_String($params));
+				
 			} else if( $type == 'date' ) {
-				$sql = $this->createFieldConfigurationSql_String($params);
+				
+				$this->addColumn($params);
+				$this->connection->exec($this->createFieldConfigurationSql_String($params));
+				
 			} else if( $type == 'pw' ) {
-				$sql = $this->createFieldConfigurationSql_Password($params);
+				
+				$this->addColumn($params);
+				$this->connection->exec($this->createFieldConfigurationSql_Password($params));
+				
 			} else if( $type == 'file' ) {
-				$sql = $this->createFieldConfigurationSql_File($params);
-			} else if( $type == 'relacional_umparaum' ) {
+				
+				$this->addColumn($params);
+				$this->connection->exec($this->createFieldConfigurationSql_File($params));
+				$this->createTableForFiles();
+				$this->connection->exec( $this->createSqlForFileConfiguration() );
+				
+			} else if( $type == 'relational_onetoone' ) {
+				
+				if( empty($params['refTable']) ) continue;
+				$this->addColumn($params);
 				$sql = $this->createFieldConfigurationSql_RelationalOneToOne($params);
-			} else if( $type == 'relacional_umparamuitos' ) {
+				$this->connection->exec($sql);
+				
+			} else if( $type == 'relational_onetomany' ) {
+				
+				if( empty($params['refTable']) ) continue;
+				
+				$params['mainTable'] = $this->mainTable;
+				$params['secondaryTable'] = $params['refTable'];
+				$params['referenceField'] = $params['refField'];
+				$params['referenceTable'] = $this->createReferenceTableName_RelationalOneToMany($params);
+				
 				$sql = $this->createFieldConfigurationSql_RelationalOneToMany($params);
+				$this->connection->exec($sql);
+				
+				$sqlReferenceTable = $this->createReferenceTableSql_RelationalOneToMany($params);
+				$this->connection->exec($sqlReferenceTable);
 			}
 			
 		}
+		return true;
 		
-	}
+	} // end addField()
 	
+	/**
+	 * addColumn()
+	 * 
+	 * Cria uma coluna numa da tabela.
+	 */
 	function addColumn($params){
 		
 		$sql = "ALTER TABLE ".$this->mainTable." ADD COLUMN ".$params['name']." ".$this->fieldTypes[$params['type']]['type']." ";
 		if( !empty($params['comment']) )
 			$sql.= $this->setCommentForSql($params['comment']);
-		
+			
+			
 		$this->connection->exec($sql);
 		
 	}
@@ -225,7 +273,7 @@ class CadastroSetup extends ModsSetup {
             "INSERT INTO cadastros_conf ".
             "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem) ".
             "VALUES ".
-            "('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",".$params['author'].",0,0,1,0,1,'$class',".$this->getFieldOrder().")";
+            "('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",'".$params['author']."',0,0,1,0,1,'$class',".$this->getFieldOrder().")";
 		return $sql;
 	}
 	
@@ -240,7 +288,7 @@ class CadastroSetup extends ModsSetup {
             "INSERT INTO cadastros_conf ".
             "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem) ".
             "VALUES ".
-            "('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",".$params['author'].",0,0,1,0,1,'$class',".$this->getFieldOrder().")";
+            "('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",'".$params['author']."',0,0,1,0,1,'$class',".$this->getFieldOrder().")";
 		return $sql;
 	}
 		
@@ -341,12 +389,12 @@ class CadastroSetup extends ModsSetup {
 			"INSERT INTO cadastros_conf ".
             "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem,ref_tabela,ref_campo) ".
             "VALUES ".
-            "('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",".$params['author'].",0,0,1,0,1,'$class',".$this->getFieldOrder().",'".$params['refTable']."','".$params['refField']."')";
+            "('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",'".$params['author']."',0,0,1,0,1,'$class',".$this->getFieldOrder().",'".$params['refTable']."','".$params['refField']."')";
 		return $sql;
 	}
 	
 	/**
-	 * Relational One to One Field SQL for Configuration
+	 * Relational One to Many Field SQL for Configuration
 	 */
 	function createFieldConfigurationSql_RelationalOneToMany($params){
 		if( empty($params['class']) ) $class = 'relacional_umparamuitos';
@@ -356,7 +404,7 @@ class CadastroSetup extends ModsSetup {
 			"INSERT INTO cadastros_conf ".
             "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem,ref_tabela,ref_campo,referencia) ".
             "VALUES ".
-            "('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",".$params['author'].",0,0,1,0,1,'$class',".$this->getFieldOrder().",'".$params['refTable']."','".$params['refField']."','".$params['referenceTable']."')";
+            "('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",'".$params['author']."',0,0,1,0,1,'$class',".$this->getFieldOrder().",'".$params['refTable']."','".$params['refField']."','".$params['referenceTable']."')";
 		return $sql;
 	}
 		function createReferenceTableName_RelationalOneToMany($params){
@@ -447,7 +495,8 @@ class CadastroSetup extends ModsSetup {
 			"INSERT INTO cadastros_conf ".
             "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem) ".
             "VALUES ".
-            "('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",".$params['author'].",0,0,1,0,1,'$class',".$this->getFieldOrder().")";
+            "('campo','".$params['name']."','".$params['label']."','".$params['comment']."','".$params['austNode']."','".$params['author']."',0,0,1,0,1,'$class',".$this->getFieldOrder().")";
+		echo $sql;
 		return $sql;
 	}
 	

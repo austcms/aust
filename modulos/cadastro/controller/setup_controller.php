@@ -63,10 +63,12 @@ class SetupController extends ModsController
 			),
         );
 
-		$this->CadastroSetup->createStructure($params);
+		if( $this->CadastroSetup->createStructure($params) ){
+			echo "O sistema de cadastro foi criado com sucesso.";
+		}
 		
 		
-exit();
+		return true;
         /**
          * CRIA ESTRUTURA (Aust)
          *

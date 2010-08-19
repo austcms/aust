@@ -33,8 +33,8 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 				array(true, 'date', 					'date'),
 				array(true, 'pw', 						'varchar(250)'),
 				array(true, 'file', 					'text'),
-				array(true, 'relacional_umparaum', 		'int'),
-				array(true, 'relacional_umparamuitos', 	'int'),
+				array(true, 'relational_onetoone', 		'int'),
+				array(true, 'relational_onetomany', 	'int'),
 				array(false, 'uihiaehurg', 				''),
 				array(false, 'uihiaehurg', 				''),
 			);
@@ -488,129 +488,187 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 			$this->assertTrue($saved);
 		}
 		
-		/**
-		 * @depends testCreateMainTable
-		 */
-		function testAddField(){
-			/*
-			 * Testa a criação de cada tipo de campo
-			 * 
-			 */
+		function testAddFieldWithoutName(){
+			$this->assertFalse( $this->obj->addField(array()) );
+		}
+		
+		// usado para reiniciar as tabelas
+		function restartTable(){
 			$this->obj->connection->query("DROP TABLE testunit");
+			$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='7777'");
 			$this->obj->mainTable = 'testunit';
 			$this->obj->austNode = '7777';
 			$this->obj->createMainTable();
-			
-			// test STRING
-				$params = array(
-					'name' => 'Campo 1',
-					'type' => 'string',
-					'description' => ''
-				);
-				$result = $this->obj->addField($params);
-				
-				$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'campo_1') );
-				$this->assertArrayHasKey('0', $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_1' AND categorias_id='7777'") );
-				$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='7777'");
-				$this->obj->connection->exec("ALTER TABLE testunit DROP COLUMN campo_1");
-				
-			
-			// test TEXT
-				$params = array(
-					0 => array(
-						'name' => 'campo1',
-						'type' => 'text',
-						'description' => ''
-					),
-				);
-				$result = $this->obj->addField($params);
-		
-				$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'campo_1') );
-				$this->assertArrayHasKey('0', $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_1' AND categorias_id='7777'") );
-				$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='7777'");
-				$this->obj->connection->exec("ALTER TABLE testunit DROP COLUMN 'campo_1'");
-
-			// test PASSWORD
-				$params = array(
-					0 => array(
-						'name' => 'campo1',
-						'type' => 'pw',
-						'description' => ''
-					),
-				);
-				$result = $this->obj->addField($params);
-
-				$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'campo_1') );
-				$this->assertArrayHasKey('0', $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_1' AND categorias_id='7777'") );
-				$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='7777'");
-				$this->obj->connection->exec("ALTER TABLE testunit DROP COLUMN 'campo_1'");
-
-			// test DATE
-				$params = array(
-					0 => array(
-						'name' => 'campo1',
-						'type' => 'date',
-						'description' => ''
-					),
-				);
-				$result = $this->obj->addField($params);
-
-				$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'campo_1') );
-				$this->assertArrayHasKey('0', $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_1' AND categorias_id='7777'") );
-				$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='7777'");
-				$this->obj->connection->exec("ALTER TABLE testunit DROP COLUMN 'campo_1'");
-
-			// test FILE
-				$params = array(
-					0 => array(
-						'name' => 'campo1',
-						'type' => 'file',
-						'description' => ''
-					),
-				);
-				$result = $this->obj->addField($params);
-
-				$this->assertTrue( $this->obj->connection->hasTable('testunit_arquivos') );
-				$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'campo_1') );
-				$this->assertArrayHasKey('0', $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_1' AND categorias_id='7777'") );
-				$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='7777'");
-				$this->obj->connection->exec("ALTER TABLE testunit DROP COLUMN 'campo_1'");
-
-			// test RELACIONAL_UMPARAUM
-				$params = array(
-					0 => array(
-						'name' => 'campo1',
-						'type' => 'relational_onetoone',
-						'description' => ''
-					),
-				);
-				$result = $this->obj->addField($params);
-
-				$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'campo_1') );
-				$this->assertArrayHasKey('0', $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_1' AND categorias_id='7777'") );
-				$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='7777'");
-				$this->obj->connection->exec("ALTER TABLE testunit DROP COLUMN 'campo_1'");
-
-			// test RELACIONAL_UMPARAMUITOS
-				$params = array(
-					0 => array(
-						'name' => 'campo1',
-						'type' => 'relational_onetomany',
-						'description' => ''
-					),
-				);
-				$result = $this->obj->addField($params);
-
-				$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'campo_1') );
-				$this->assertArrayHasKey('0', $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_1' AND categorias_id='7777'") );
-				$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='7777'");
-				$this->obj->connection->exec("ALTER TABLE testunit DROP COLUMN 'campo_1'");
-
-
-
-			$this->obj->connection->query("DROP TABLE testunit");
-			
 		}
+		
+		/**
+		 * @depends testCreateMainTable
+		 */
+			function testAddFieldString(){
+				$this->restartTable();
+			
+				// test STRING
+					$params = array(
+						'name' => 'Campo 1',
+						'type' => 'string',
+						'description' => ''
+					);
+					$result = $this->obj->addField($params);
+				
+					$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'campo_1') );
+					$this->assertArrayHasKey('0', $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_1' AND categorias_id='7777'") );
+					$this->restartTable();
+			}
+		
+			function testAddFieldText(){
+				$this->restartTable();
+			
+				// test TEXT
+					$params = array(
+						0 => array(
+							'name' => 'Campo 1',
+							'type' => 'text',
+							'description' => ''
+						),
+					);
+					$result = $this->obj->addField($params);
+		
+					$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'campo_1'), 'Text: campo_1 not created.' );
+					$this->assertArrayHasKey('0', $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_1' AND categorias_id='7777'") );
+					$this->restartTable();
+			}
+		
+			function testAddFieldPassword(){
+				$this->restartTable();
+			
+				// test PASSWORD
+					$params = array(
+						0 => array(
+							'name' => 'Campo 1',
+							'type' => 'pw',
+							'description' => ''
+						),
+					);
+					$result = $this->obj->addField($params);
+
+					$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'campo_1') );
+					$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_1' AND categorias_id='7777'");
+					$this->assertArrayHasKey('0', $conf );
+					$this->assertEquals('password', $conf[0]['especie'] );
+					$this->restartTable();
+			}
+		
+			function testAddFieldDate(){
+				$this->restartTable();
+			
+				// test DATE
+					$params = array(
+						0 => array(
+							'name' => 'Campo 1',
+							'type' => 'date',
+							'description' => ''
+						),
+					);
+					$result = $this->obj->addField($params);
+
+					$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'campo_1') );
+					$this->assertArrayHasKey('0', $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_1' AND categorias_id='7777'") );
+				
+					// campo do tipo date?
+					$result = $this->obj->connection->query('DESCRIBE testunit');
+					foreach( $result as $key=>$value ){
+						if( $value['Field'] != 'campo_1' )
+							continue;
+					
+						if( $value['Type'] != 'date' ){
+							$this->fail('Date is NOT of type \'date\'');
+						}
+					}
+					$this->restartTable();
+			}
+		
+			function testAddFieldFile(){
+				$this->restartTable();
+			
+				// test FILE
+					$params = array(
+						0 => array(
+							'name' => 'Campo 1',
+							'type' => 'file',
+							'description' => ''
+						),
+					);
+					$result = $this->obj->addField($params);
+
+					$this->assertTrue( $this->obj->connection->hasTable('testunit_arquivos') );
+					$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'campo_1') );
+					$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_1' AND categorias_id='7777'");
+					$this->assertArrayHasKey('0', $conf );
+					$this->assertEquals('arquivo', $conf[0]['especie'] );
+					$this->restartTable();
+			}
+
+		
+			function testAddFieldRelationalOneToOne(){
+				$this->restartTable();
+			
+				// test RELACIONAL_UMPARAUM
+					$params = array(
+						0 => array(
+							'name' => 'Campo 1',
+							'type' => 'relational_onetoone',
+							'description' => '',
+							'refTable' => 'ref_table',
+							'refField' => 'ref_field',
+						),
+					);
+					$result = $this->obj->addField($params);
+
+					$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'campo_1') );
+					$result = $this->obj->connection->query('DESCRIBE testunit');
+					foreach( $result as $key=>$value ){
+						if( $value['Field'] != 'campo_1' )
+							continue;
+					
+						if( $value['Type'] != 'int(11)' ){
+							$this->fail('Relational One to One is NOT of type \'int\', but of type '.$value['Type']);
+						}
+					}
+					
+					$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_1' AND categorias_id='7777'");
+					$this->assertArrayHasKey('0', $conf );
+					$this->assertEquals('ref_table', $conf[0]['ref_tabela'] );
+					$this->assertEquals('ref_field', $conf[0]['ref_campo'] );
+					$this->restartTable();
+			}
+
+		
+			function testAddFieldRelationalOneToMany(){
+				$this->restartTable();
+				$this->obj->mainTable = 'testunit';
+			
+				// test RELACIONAL_UMPARAMUITOS
+					$params = array(
+						0 => array(
+							'name' => 'Campo 1',
+							'type' => 'relational_onetomany',
+							'description' => '',
+							'refTable' => 'ref_table',
+							'refField' => 'ref_field',
+						),
+					);
+					$result = $this->obj->addField($params);
+
+					$this->assertTrue( $this->obj->connection->hasTable('testunit_ref_field_ref_table') );
+					$this->assertTrue( $this->obj->connection->tableHasField('testunit_ref_field_ref_table', 'testunit_id') );
+					$this->assertTrue( $this->obj->connection->tableHasField('testunit_ref_field_ref_table', 'ref_table_id') );
+					$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_1' AND categorias_id='7777'");
+					$this->assertArrayHasKey('0', $conf );
+					$this->assertEquals('ref_table', $conf[0]['ref_tabela'] );
+					$this->assertEquals('ref_field', $conf[0]['ref_campo'] );
+
+					$this->restartTable();
+			}
 		
 		/*
 
