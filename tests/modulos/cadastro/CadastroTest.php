@@ -16,14 +16,14 @@ class CadastroTest extends PHPUnit_Framework_TestCase
          *
          * Diretório do módulo
          */
-        $mod = 'cadastro';
+        $this->mod = 'cadastro';
 
         /*
          * Informações de conexão com banco de dados
          */
 
-        include 'modulos/'.$mod.'/'.MOD_CONFIG;
-        include_once 'modulos/'.$mod.'/'.$modInfo['className'].'.php';
+        include 'modulos/'.$this->mod.'/'.MOD_CONFIG;
+        include_once 'modulos/'.$this->mod.'/'.$modInfo['className'].'.php';
         
         $_GET['aust_node'] = '777';
         $this->obj = new $modInfo['className'];//new $modInfo['className']();
@@ -136,6 +136,20 @@ class CadastroTest extends PHPUnit_Framework_TestCase
             $this->obj->connection->query($sqlDelete);
 
     }
+
+	/*
+	 * verifica se todas as configurações do arquivo config.php existem no método
+	 * loadModConf()
+	 */
+	function testConfigurationsExists(){
+		
+        include 'modulos/'.$this->mod.'/'.MOD_CONFIG;
+		$configurations = $this->obj->loadModConf();
+		foreach( $modInfo['configurations'] as $key=>$value ){
+			$this->assertArrayHasKey($key, $configurations);
+		}
+	}
+
 
 }
 ?>

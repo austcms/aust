@@ -12,6 +12,7 @@
 /**
  * Cria SESSION
  */
+
 session_name("aust");
 session_start();
 
@@ -112,14 +113,8 @@ if(!$isResponser){
          */
         include("core/config/permissions.php");
 
-        /**
-         * @todo - excluir a linha a seguir em todo o código. Esta linha está
-         * na classe CoreConfig
-         */
-        $aust_table = 'categorias';
         include_once(INC_DIR.'inc_categorias_functions.php');
         
-
         $envParams = array(
             'aust' => $aust,
             'conexao' => $conexao,
@@ -168,7 +163,13 @@ if(!$isResponser){
         /**
          * Mostra a Interface de usuário no browser
          */
-        include(UI_STANDARD_FILE);
+        if( empty($_GET['theme'])
+            OR $_GET['theme'] != 'blank' )
+        {
+            include(UI_STANDARD_FILE);
+        } else {
+            echo $content_for_layout;
+        }
 
     }
 }

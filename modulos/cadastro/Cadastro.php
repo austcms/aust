@@ -127,6 +127,34 @@ class Cadastro extends Module {
     }
 
     /**
+     * getFields()
+     *
+     * Return the list of fields as Array.
+     *
+     *      key = physical field name
+     *      value = human field name
+     *
+     * @return <array>
+     */
+    public function getFields(){
+        $temp = $this->connection->query(
+            "SELECT * FROM cadastros_conf
+             WHERE
+                categorias_id='".$this->austNode."' AND
+                tipo='campo'
+             ORDER BY ordem ASC",
+            PDO::FETCH_ASSOC
+        );
+        
+        foreach( $temp as $chave=>$valor ){
+            if( !empty($valor["chave"]) )
+                $result[ $valor["chave"] ] = $valor["valor"];
+        }
+
+        return $result;
+    }
+
+    /**
      * Retorna todas as informações sobre o cadastro.
      *
      * Pega todas as informações da tabela cadastros_conf onde categorias_id
@@ -197,10 +225,11 @@ class Cadastro extends Module {
     
     public function loadSql($param){
         // configura e ajusta as variáveis
-        $categorias = $param['categorias'];
-        $metodo = $param['metodo'];
-        $search = $param['search'];
-        $w = $param['id'];
+        $categorias = (empty($param['categorias'])) ? '' : $param['categorias'];
+        $metodo = (empty($param['metodo'])) ? '' : $param['metodo'];
+        $search = (empty($param['search'])) ? '' : $param['search'];
+        $searchField = (empty($param['search_field'])) ? '' : $param['search_field'];
+        $w = (empty($param['id'])) ? '' : $param['id'];
 
         /**
          * Se $categorias estiver vazio (nunca deverá acontecer)
@@ -318,13 +347,20 @@ class Cadastro extends Module {
          */
         $searchQuery = "";
         if( !empty($search) ){
-            /*
-             * Faz loop por cada campo do cadastro, criando
-             * o comando SQL Where para busca de dados.
-             */
-            foreach( $campos['chave'] as $campo ){
-                $searchQueryArray[] = $campo." LIKE '%".$search."%'";
+            $search = addslashes($search);
+
+            if( empty($searchField) ){
+                /*
+                 * Faz loop por cada campo do cadastro, criando
+                 * o comando SQL Where para busca de dados.
+                 */
+                foreach( $campos['chave'] as $campo ){
+                    $searchQueryArray[] = $campo." LIKE '%".$search."%'";
+                }
+            } else {
+                $searchQueryArray[] = $searchField." LIKE '%".$search."%'";
             }
+            
             if( !empty($searchQueryArray) )
                 $searchQuery = "AND (".implode(" OR ", $searchQueryArray).")";
             //pr($campos);
@@ -342,12 +378,12 @@ class Cadastro extends Module {
                 $mostrar = implode(",", $mostrar["chave"]).",";
 
             }
+			$fields = "".$tP.".id,
+			            $mostrar
+			            ".implode(", ", $leftJoinCampos).$virgula."
+			            ".$tP.".approved AS des_approved";
 
-            $sql = "SELECT
-                        ".$tP.".id,
-                        $mostrar
-                        ".implode(", ", $leftJoinCampos).$virgula."
-                        ".$tP.".approved AS des_approved
+            $conditions = "    
                     FROM
                         ".$est["tabela"][0]." AS ".$tP."
 
@@ -357,9 +393,14 @@ class Cadastro extends Module {
                         $searchQuery
                     ORDER BY
                         ".$tP.".id DESC
-                    LIMIT 0,50
-
                     ";
+
+			// total rows
+			$countSql = "SELECT count(*) as rows ".$conditions;
+			$this->totalRows = $this->_getTotalRows($countSql);
+			
+			$sql = "SELECT $fields ".$conditions.$this->_limitSql(array('page'=>$this->page()));
+			
         } elseif( $metodo == "edit" ){
             $sql = "SELECT
                         id, ".implode(",", $campos["chave"])."
@@ -369,7 +410,6 @@ class Cadastro extends Module {
                         id=".$w."
                     ";
         }
-        
         return $sql;
     } // fim SQLParaListagem()
 

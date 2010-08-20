@@ -62,7 +62,7 @@
 
 <table cellpadding=0 cellspacing=0 class="form">
     <tr>
-        <td valign="top" class="first"><label>Categoria:</label></td>
+        <td class="first"><label>Categoria:</label></td>
         <td class="second">
             <div id="categoriacontainer">
             <?php
@@ -95,7 +95,7 @@
         </td>
     </tr>
     <tr>
-        <td valign="top"><label>Título:</label></td>
+        <td><label>Título:</label></td>
         <td>
             <INPUT TYPE='text' NAME='frmtitulo' class='text' value='<?php if( !empty($dados['titulo']) ) echo $dados['titulo'];?>' />
             <p class="explanation">
@@ -103,22 +103,34 @@
             </p>
         </td>
     </tr>
-
+    <?php
+    /*
+     * PREVIEW URL
+     */
+    if( $modulo->isEdit() AND $modulo->getStructureConfig("generate_preview_url") ){ ?>
+    <tr>
+        <td valign="top"><label>URL gerada:</label></td>
+        <td>
+            <?php echo $modulo->getGeneratedUrl(); ?>
+            <?php
+            tt('Esta URL é gerada automaticamente e aponta para página deste conteúdo.<br /><br />'.
+               'Em caso de alterações '.
+               'no site principal, será necessário atualizar este valor');
+            ?>
+        </td>
+    </tr>
+    <?php } ?>
     <?php
     /*
      * RESUMO
-     */
-    $showResumo = false;
-    if( !empty($moduloConfig["resumo"]) ){
-        if( $moduloConfig["resumo"]["valor"] == "1" )
-            $showResumo = true;
-    }
-    if( $showResumo ){
+     */ 
+
+    if( $modulo->getStructureConfig("resumo") ){
     ?>
     <tr>
         <td valign="top"><label>Resumo:</label></td>
         <td>
-            <INPUT TYPE='text' NAME='frmresumo' class='text' value='<?php if( !empty($dados['resumo']) ) echo $dados['resumo'];?>' />
+            <textarea name="frmresumo" rows="2"><?php if( !empty($dados['resumo']) ) echo $dados['resumo'];?></textarea>
             <p class="explanation">
 
             </p>

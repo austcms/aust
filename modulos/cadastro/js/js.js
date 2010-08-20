@@ -13,7 +13,7 @@
 function SetupCampoRelacionalTabelas(este, id, inc){
     // se for relacional um-para-um
     //alert(este.value);
-    if( este.value == 'relacional_umparaum' || este.value == 'relacional_umparamuitos' ){
+    if( este.value == 'relational_onetoone' || este.value == 'relational_onetomany' ){
         
         
         

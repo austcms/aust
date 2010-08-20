@@ -223,13 +223,16 @@ class MigrationsMods
 
     }
 
-    /*
+    /**
+     * _comparesActualVersion()
      *
-     *
+     * @param <???> $mod
+     * @return <bool>
      */
     public function _comparesActualVersion($mod){
         $modName = key($mod);
         $mod = reset($mod);
+        $result = false;
         if( !empty($mod['migrationVersion']) ){
             if( $mod['migrationVersion'] <= $this->getActualVersion($modName) ){
                 $result = true;

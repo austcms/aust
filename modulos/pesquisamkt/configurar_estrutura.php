@@ -199,122 +199,71 @@ if(!empty($_GET['function'])){
 
 <div class="widget_group">
 
-    <?php
-    /**
-     * NOVOS CAMPOS
-     *
-     * Form para inserir novos campos em um cadastro
-     */
-    ?>
     <div class="widget">
         <div class="titulo">
-            <h3>Configurações gerais</h3>
+            <h3>Configurações</h3>
         </div>
         <div class="content">
-            <p></p>
-
             <?php
-            /*
-             * CONFIGURAÇÕES AUTOMÁTICAS
-             */
-            /*
-             * Opções do módulo para salvar
-             */
-            $optionsToSave = array(
-                /*
-                 * É pesquisa de Marketing ou Enquete
-                 */
-                array(
-                    "propriedade" => "enquete", // nome da propriedade
-                    "value" => "",
-                    "label" => "É uma enquete? (considera ser 1 pergunta apenas)",
-                    "inputType" => "checkbox",
-                ),
-                /*
-                 * Modo
-                 */
-                /*
-                array(
-                    "propriedade" => "modoexibicao", // nome da propriedade
-                    "value" => "",
-                    "label" => "Mostrar Modo de Exibição?",
-                    "inputType" => "checkbox",
-                ),
-                 * 
-                 */
-            );
+            $configurations = $modulo->loadModConf();
+			//pr($configurations);
+            if( !empty($configurations) && is_array($configurations) ){
+                ?>
 
-
-            $sql = "SELECT *
-                    FROM
-                        config
-                    WHERE
-                        tipo  = 'mod_conf' AND
-                        local = '".$_GET["aust_node"]."'
-                    ";
-            $queryTmp = $modulo->connection->query($sql, "ASSOC");
-
-            foreach($queryTmp as $valor){
-                $query[$valor["propriedade"]] = $valor;
-            }
-
-            ?>
-
-            <form method="post" action="<?php echo $config->self;?>" class="simples pequeno">
+                <p>Configure este módulo.</p>
+                <form method="post" action="adm_main.php?section=conf_modulos&aust_node=<?php echo $_GET['aust_node']; ?>&action=configurar" class="simples pequeno">
                 <input type="hidden" name="conf_type" value="mod_conf" />
                 <input type="hidden" name="aust_node" value="<?php echo $_GET['aust_node']; ?>" />
                 <?php
 
-                if( !empty($optionsToSave) && is_array($optionsToSave) ){
+                foreach( $configurations as $key=>$options ){
+                    ?>
 
-                    foreach( $optionsToSave as $options ){
+                    <div class="campo">
+                        <label><?php echo $options["label"] ?></label>
+                        <div class="input">
+                            <?php
+                            if( $options["inputType"] == "checkbox" ){
 
-                        ?>
-
-                        <div class="campo">
-                            <label><?php echo $options["label"] ?></label>
-                            <div class="input">
-                                <?php
-                                if( $options["inputType"] == "checkbox" ){
-
-                                    /*
-                                     * Verifica valores no banco de dados.
-                                     */
-                                    $checked = "";
-                                    if( !empty($query[$options["propriedade"]]) ){
-                                        if( $query[$options["propriedade"]]["valor"] == "1" ){
-                                            $checked = 'checked="checked"';
-                                        }
+                                /*
+                                 * Verifica valores no banco de dados.
+                                 */
+                                $checked = "";
+                                if( !empty($options['value']) ){
+                                    if( $options["value"] == "1" ){
+                                        $checked = 'checked="checked"';
                                     }
-                                    ?>
-                                    <input type="hidden" name="data[<?php echo $options["propriedade"]; ?>]" value="0" />
-
-                                    <input type="checkbox" name="data[<?php echo $options["propriedade"]; ?>]" <?php echo $checked; ?> value="1" class="input" />
-                                    <?php
-                                }
-
-                                else {
-                                    ?>
-                                    <input type="text" name="nome" class="input" />
-                                    <?php
                                 }
                                 ?>
+                                <input type="hidden" name="data[<?php echo $key; ?>]" value="0" />
 
-                            </div>
+                                <input type="checkbox" name="data[<?php echo $key; ?>]" <?php echo $checked; ?> value="1" class="input" />
+                                <?php
+                            }
+
+                            else {
+                                ?>
+                                <input type="text" name="data[<?php echo $key; ?>]" class="input" value="<?php echo $options['value'] ?>" />
+                                <?php
+                            }
+
+                            if( !empty($options['help']) )
+                                tt($options['help']);
+                            ?>
+
                         </div>
-                        <br clear="both" />
+                    </div>
+                    <br clear="both" />
 
-                        <?php
-
-                    }
-
+                    <?php
                 }
-
                 ?>
+                <input type="submit" name="submit" value="Salvar" />
+                </form>
+                <?php
+            }
+            ?>
 
-                <input type="submit" name="novo_campo" value="Criar!" />
-
-            </form>
         </div>
         <div class="footer"></div>
     </div>

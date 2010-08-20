@@ -12,6 +12,7 @@ class ModController extends ModsController
 {
 
     var $helpers = array('Form');
+	public $doRender = true;
 
     public function listing(){
 
@@ -34,6 +35,9 @@ class ModController extends ModsController
 
         $fields = count($resultado);
         $this->set('fields', $fields);
+        if( $this->modulo->getStructureConfig("has_search") ){
+            $this->set("search_fields", $this->modulo->getFields());
+        }
         //$this->autoRender= false;
     }
 
@@ -167,9 +171,13 @@ class ModController extends ModsController
          * Lança as informações sobre campos para o view
          */
         $this->set('camposForm', $camposForm);
+
+		if( $this->doRender )
+			$this->render('form');
+		else
+			$this->render(false);
         //pr($camposForm);
 
-        $this->render('form');
     }
 
     public function edit(){
@@ -177,7 +185,19 @@ class ModController extends ModsController
         $params = array(
             "w" => $_GET["w"]
         );
+		$this->doRender = false;
         $this->create($params);
+        $this->render('form');
+    }
+
+    public function printing(){
+
+        $params = array(
+            "w" => $_GET["w"]
+        );
+		$this->doRender = false;
+        $this->create($params);
+        $this->render('printing');
         //$this->render('form');
     }
 
@@ -234,7 +254,7 @@ class ModController extends ModsController
                     /*
                      * CAMPO RELACIONAL UM PARA MUITOS
                      */
-                    if( $campos[$campo]["especie"] == "relacional_umparamuitos" ){
+                    if( !empty($campos[$campo]) AND $campos[$campo]["especie"] == "relacional_umparamuitos" ){
                         //echo $campos[$campo]["chave"];
                         //echo $tabela;
                         unset($this->data[$tabela][$campo]);
@@ -255,7 +275,9 @@ class ModController extends ModsController
                     /*
                      * CAMPO DATE
                      */
-                    else if( $infoTabelaFisica[$campos[$campo]["chave"]]['Type'] == "date" ){
+                    else if( !empty( $campos[$campo]["chave"] ) AND
+                             !empty($infoTabelaFisica[$campos[$campo]["chave"]]['Type']) AND
+                             $infoTabelaFisica[$campos[$campo]["chave"]]['Type'] == "date" ){
                         $year = $this->data[$tabela][$campo]['year'];
                         unset($this->data[$tabela][$campo]);
 

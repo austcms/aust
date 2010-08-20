@@ -93,6 +93,14 @@ $modInfo = array(
             "label" => "Tem pesquisa?",
             "inputType" => "checkbox",
         ),
+        /*
+         * Tem sistema de pesquisa?
+         */
+        'has_printing_version' => array(
+            "value" => "",
+            "label" => "Tem versão de impressão?",
+            "inputType" => "checkbox",
+        ),
     ),
 
     /**

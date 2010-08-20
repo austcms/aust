@@ -14,7 +14,6 @@
 <div class="listagem">
 <?php
 
-$cat = $query[0]['nome'];
 ?>
 <p>
     <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
@@ -26,19 +25,6 @@ if((!empty($filter)) AND ($filter <> 'off')){
     $addurl = "&filter=$filter&filterw=" . urlencode($filterw);
 }
 	
-$categorias = $this->aust->LeCategoriasFilhas('',$_GET['aust_node']);
-$categorias[$_GET['aust_node']] = 'Estrutura';
-
-// itens de paginação
-$pagina = (empty($_GET['pagina'])) ? $pagina = 1 : $pagina = $_GET['pagina'];
-$num_por_pagina = '10';//($config->LeOpcao($nome_modulo.'_paginacao')) ? $config->LeOpcao($nome_modulo.'_paginacao') : '10';
-//echo $num_por_pagina;
-// carrega o sql para listagem
-$sql = $modulo->SQLParaListagem($categorias, $pagina, $num_por_pagina);
-		//echo '<br><br>'.$sql .'<br>';
-
-
-$query = $modulo->connection->query($sql);
 
 
 /*********************************
@@ -156,22 +142,22 @@ if(count($query) == 0){
  * mostra painel de navegação para paginação
  */
 
-    $sql = $modulo->SQLParaListagem($categorias);
-    $total_registros = $modulo->connection->count($sql);
+    $total_registros = $modulo->totalRows;
 
-    $total_paginas = $total_registros/$num_por_pagina;
+    $total_paginas = $total_registros/$modulo->limit;
+	$page = $modulo->page();
 
-    $prev = $pagina - 1;
-    $next = $pagina + 1;
+    $prev = $page - 1;
+    $next = $page + 1;
     // se página maior que 1 (um), então temos link para a página anterior
-    if ($pagina > 1) {
+    if ($page > 1) {
         $prev_link = ' <a href="adm_main.php?section='.$_GET['section'].'&action='.$_GET['action'].'&aust_node='.$_GET['aust_node'].'&pagina='.$prev.'">Anterior</a>';
     } else { // senão não há link para a página anterior
         $prev_link = "Anterior";
     }
     // se número total de páginas for maior que a página corrente,
     // então temos link para a próxima página
-    if ($total_paginas > $pagina) {
+    if ($total_paginas > $page) {
         $next_link = ' <a href="adm_main.php?section='.$_GET['section'].'&action='.$_GET['action'].'&aust_node='.$_GET['aust_node'].'&pagina='.$next.'">Próxima</a>';
     } else {
     // senão não há link para a próxima página
@@ -188,7 +174,7 @@ if(count($query) == 0){
     if($total_paginas > 1){
         $painel = "";
         for ($x=1; $x<=$total_paginas; $x++) {
-            if ($x==$pagina) {
+            if ($x==$page) {
                 // se estivermos na página corrente, não exibir o link para visualização desta página
                 $painel .= " $x ";
             } else {

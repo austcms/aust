@@ -27,7 +27,7 @@
         $escala = (empty($escala)) ? '' : $escala;
 
         $aust->EstruturasSemCategorias();
-        echo BuildDDList($aust_table, 'frmsubordinadoid', $escala);
+        echo BuildDDList(Aust::$austTable, 'frmsubordinadoid', $escala);
         ?>
         </div>
         <p class="explanation">

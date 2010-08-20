@@ -49,6 +49,7 @@ define("CORE_DIR", "core/");
      */
     define("UI_PATH", CORE_DIR."user_interface/");
         define("CSS_PATH", UI_PATH."css/");
+        define("IMG_DIR", "core/user_interface/img/");
     define("UI_STANDARD_FILE", UI_PATH."ui.php");
     define("THEMES_DIR", UI_PATH."themes/");
     define("THEMES_SCREENSHOT_FILE", "screenshot");
@@ -87,6 +88,11 @@ define("CORE_DIR", "core/");
      * estão ausentes.
      */
     define('CONTENT_TRIGGERS_DIR', INC_DIR.'conteudo.inc/');
+        define('CREATE_ACTION', 'create');
+        define('EDIT_ACTION', 'edit');
+        define('LISTING_ACTION', 'listing');
+        define('DELETE_ACTION', 'delete');
+        define('SAVE_ACTION', 'save');
 
 
     /**
@@ -175,6 +181,10 @@ define('MOD_CONTROLLER', MOD_CONTROLLER_DIR.'mod_controller.php');
 define('MOD_CONTROLLER_NAME', 'ModController');
 define('MOD_VIEW_DIR', 'view/');
 
+    /*
+     * MODELS
+     */
+    define('MOD_MODELS_DIR', 'models/'); // Diretório do Controller
 
 /*
  * MIGRATIONS

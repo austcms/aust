@@ -165,7 +165,9 @@ class HtmlHelper
                 if( !empty($array[3]) )
                     return false;
 
-                $current[$array[0]] = trim($array[1]);
+                if( !empty( $array[1] ) )
+                    $current[$array[0]] = trim($array[1]);
+                    
                 unset($array);
                 
             }

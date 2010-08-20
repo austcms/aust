@@ -44,9 +44,6 @@ class GaleriaFotos extends Module
         return parent::retornaResumo();
     }
 
-
-
-
     /**
      * @todo - comentar
      *
@@ -71,13 +68,16 @@ class GaleriaFotos extends Module
             }
         }
         $limit = '';
+
+//		$itens_por_pagina = 
+
         if(!empty($pagina)){
             $item_atual = ($pagina * $itens_por_pagina) - $itens_por_pagina;
             $limit = " LIMIT ".$item_atual.",".$itens_por_pagina;
         }
         
         $sql = "SELECT
-                id, titulo, visitantes, categoria AS cat, DATE_FORMAT(adddate, '%d/%m/%Y %H:%i') as adddate,
+                id, titulo, visitantes, categoria AS cat, DATE_FORMAT(adddate, '".$this->date['standardFormat']."') as adddate,
                 (	SELECT
                             nome
                         FROM

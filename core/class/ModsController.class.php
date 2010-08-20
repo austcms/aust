@@ -112,10 +112,12 @@ class ModsController extends Controller
          *
          * Agrega ao objeto atual todos os outros objetos criados
          */
+        
         /**
          * austNode é o ID da estrutura sendo tratada
          */
-        $this->austNode = $param["austNode"];
+        if( !empty($param["austNode"]) AND is_numeric($param["austNode"]) )
+            $this->austNode = $param["austNode"];
         /**
          * $connection: configura a conexão universal a ser usada no controller
          */
@@ -139,7 +141,8 @@ class ModsController extends Controller
          * $controllerName: O nome do controller para carregar a pasta de Views
          * correta
          */
-        $this->controllerName = (empty($param['controllerName'])) ? 'mod' : $param['controllerName'];
+		$selfController = strtolower( str_replace("Controller", "", get_class($this)) );
+        $this->controllerName = (empty($param['controllerName'])) ? $selfController : $param['controllerName'];
 
         /**
          * MODEL
@@ -155,9 +158,9 @@ class ModsController extends Controller
          * Algumas variáveis globais precisam ser acessadas pelas Views
          *
          */
-        $this->set('conexao', $conexao);
+        $this->set('conexao', $this->conexao);
         $this->set('aust', $this->aust);
-        $this->set('modulo', $modulo);
+        $this->set('modulo', $this->modulo);
         $this->set('permissoes', $this->permissoes);
         $this->set('austNode', $this->austNode);
         $this->set('administrador', $this->administrador);
@@ -202,7 +205,7 @@ class ModsController extends Controller
         /**
          * Ajuste de conexão é feito no pai da classe
          */
-        parent::__construct($conexao);
+        parent::__construct($this->conexao);
         /**
          * trigger() é responsável por engatilhar todos os métodos
          * automáticos a serem rodados, como beforeFilter, render, etc.
@@ -289,6 +292,9 @@ class ModsController extends Controller
      */
     protected function render($path, $includeType = ''){
 
+		if( $path === false )
+			return false;
+		
         $includeBaseurl = $this->modDir;
         /**
          * DEFINE VARIÁVEIS PARA AS VIEWS
@@ -336,6 +342,36 @@ class ModsController extends Controller
 
     
     protected function afterFilter(){
+
+        return true;
+    }
+
+    /*
+     *
+     * MODELS
+     *
+     */
+    /**
+     * loadModel()
+     *
+     * Carrega models especiais do módulo atual. O model é alocado
+     * em $this->{nome_do_model}.
+     *
+     * @param <string> $str
+     * @return <bool>
+     */
+    public function loadModel($str = ""){
+
+        if( !empty($this->{$str}) )
+            return false;
+
+        if( empty($str) )
+            return false;
+        if( !is_file(MODULOS_DIR.$this->modDir.MOD_MODELS_DIR.$str.".php") )
+            return false;
+
+        include_once MODULOS_DIR.$this->modDir.MOD_MODELS_DIR.$str.".php";
+        $this->{$str} = new $str;
 
         return true;
     }
