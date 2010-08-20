@@ -29,10 +29,6 @@ class AgendaTest extends PHPUnit_Framework_TestCase
         $this->obj = new $modInfo['className'];//new $modInfo['className']();
     }
 
-    function testNull(){
-        
-    }
-
 	/*
 	 * verifica se todas as configurações do arquivo config.php existem no método
 	 * loadModConf()

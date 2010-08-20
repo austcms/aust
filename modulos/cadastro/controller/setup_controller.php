@@ -8,7 +8,7 @@
  * @since v0.1.6 06/07/2009
  */
 
-class SetupController extends ModsSetup
+class SetupController extends ModsController
 {
 
     function beforeFilter(){
@@ -27,28 +27,72 @@ class SetupController extends ModsSetup
      */
     function setuppronto(){
         
-        //pr($_POST);
-        //var_dump($this->modulo);
-
+        pr($_POST);
+        $this->loadModel("CadastroSetup");
+		
         global $aust_charset;
 
+        $this->autoRender = false;
+		
+		$fields = array();
+		$i = 0;
+		// prepara array com campos
+		foreach( $_POST['campo'] as $key=>$value ){
+			if( empty($value) )
+				continue;
+			
+			$fields[$i] = array(
+				'name' => $value,
+				'type' => $_POST['campo_tipo'][$key],
+				'description' => $_POST['campo_descricao'][$key],
+			);
+			
+			/*
+			 * Campos relacionados têm informações sobre quais campos são
+			 * relacionados.
+			 */
+			if( !empty($_POST['relacionado_tabela_'.($key+1)])
+				AND !empty($_POST['relacionado_campo_'.($key+1)]) )
+			{
+				$fields[$i]['refTable'] = $_POST['relacionado_tabela_'.($key+1)];
+				$fields[$i]['refField'] = $_POST['relacionado_campo_'.($key+1)];
+			}
+			
+			$i++;
+		}
         /**
          * Parâmetros para gravar uma nova estrutura no DB.
          */
         $params = array(
-            'nome' => $_POST['nome'],
-            'categoriaChefe' => $_POST['categoria_chefe'],
-            'estrutura' => 'estrutura',
-            'moduloPasta' => $_POST['modulo'],
-            'autor' => $this->administrador->LeRegistro('id')
+            'name' => $_POST['nome'],
+            'father' => $_POST['categoria_chefe'],
+            'class' => 'estrutura',
+            'type' => $_POST['modulo'],
+            'author' => $this->administrador->LeRegistro('id'),
+			'fields' => $fields,
+			'options' => array(
+				'approval' => $_POST['aprovacao'],
+				'pre_password' => $_POST['pre_senha'],
+				'description' => $_POST['descricao'],
+			),
         );
+
+		pr($params);
+
+		if( $this->CadastroSetup->createStructure($params) ){
+			echo "O sistema de cadastro foi criado com sucesso.";
+		}
+		
+		
+		return true;
         /**
          * CRIA ESTRUTURA (Aust)
          *
          * Verifica se consegue gravar a estrutura (provavelmente na tabela
          * 'categorias').
          */
-        if( $status_insert = $this->aust->gravaEstrutura( $params ) ){
+		$status_insert = $this->CadastroSetup->create( $params );
+        if( $status_insert ){
             
             $status_setup[] = "Categoria criada com sucesso.";
 
