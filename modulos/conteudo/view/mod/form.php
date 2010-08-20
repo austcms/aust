@@ -123,18 +123,14 @@
     <?php
     /*
      * RESUMO
-     */
-    $showResumo = false;
-    if( !empty($moduloConfig["resumo"]) ){
-        if( $moduloConfig["resumo"]["valor"] == "1" )
-            $showResumo = true;
-    }
-    if( $showResumo ){
+     */ 
+
+    if( $modulo->getStructureConfig("resumo") ){
     ?>
     <tr>
         <td valign="top"><label>Resumo:</label></td>
         <td>
-            <INPUT TYPE='text' NAME='frmresumo' class='text' value='<?php if( !empty($dados['resumo']) ) echo $dados['resumo'];?>' />
+            <textarea name="frmresumo" rows="2"><?php if( !empty($dados['resumo']) ) echo $dados['resumo'];?></textarea>
             <p class="explanation">
 
             </p>

@@ -98,14 +98,11 @@ $modInfo = array(
         /*
          * Resumo
          */
-        'resume' => array(
+        'resumo' => array(
             "value" => "",
             "label" => "Tem resumo?",
             "inputType" => "checkbox",
         ),
-        /*
-         * Resumo
-         */
         'nova_categoria' => array(
             "value" => "",
             "label" => "Permite criar categoria?",
@@ -119,9 +116,6 @@ $modInfo = array(
             "label" => "Opção Modo de Visualização?",
             "inputType" => "checkbox",
         ),
-        /*
-         * Há opção para selecionar o modo de visualização?
-         */
         'generate_preview_url' => array(
             "value" => "",
             "label" => "Mostrar Url do conteúdo?",
