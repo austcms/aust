@@ -134,7 +134,6 @@ if(!empty($_GET['action'])){
             'model' => $model,
         );
         $modController = new ModController($param);
-
         if( $action == SAVE_ACTION ){
             $goToUrl = "adm_main.php?section=".$_GET['section'].'&action=listing&aust_node='.$aust_node;
             ?>

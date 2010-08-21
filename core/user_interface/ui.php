@@ -2,7 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta http-equiv="expires" content="Mon, 19 Feb 2024 11:12:01 GMT" />
+	<?php
+	if( !empty($_GET['action']) OR $_GET['action'] != 'listing' ){
+		header("Cache-Control: no-cache");
+		header("Pragma: no-cache");
+		?>
+    	<meta http-equiv="expires" content="Mon, 19 Feb 2024 11:12:01 GMT" />
+		<?php
+	}
+	?>
     <title><?php echo $config->getConfig('site_name'); ?> - Gerenciador<?php /* ifisset($config->LeOpcao('sitename'), 'Aust'); */ ?></title>
 <?php
 /*
