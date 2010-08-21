@@ -42,6 +42,8 @@ class Module
 
 		public $defaultLimit = '25';
 		public $limit;
+		
+		public $viewModes = array();
 
     /*
      *
@@ -169,6 +171,11 @@ class Module
             $this->user = User::getInstance();
 
         $this->config = $this->loadConfig();
+		
+		if( !empty($this->config['viewmodes']) )
+			$this->viewModes = $this->config['viewmodes'];
+		else
+			$this->viewModes = array('list');
 
 		$this->limit = $this->defaultLimit;
     }
@@ -282,11 +289,18 @@ class Module
 
         $embedModules = $this->getRelatedEmbed($austNode);
 
+		function serializeArray($array = array()){
+			$result = array();
+			foreach( $array as $key=>$value ){
+				$result[] = $value;
+			}
+			return $result;
+		}
+		
         if( empty($embedModules)
             OR empty($this->loadedIds) )
         {
-	
-            sort($qry);
+            serializeArray($qry);
             $this->lastQuery = $qry;
             return $qry;
         }
@@ -311,7 +325,7 @@ class Module
             }
         }
         
-        sort($qry);
+        serializeArray($qry);
         $this->lastQuery = $qry;
         return $qry;
     }
@@ -1005,6 +1019,51 @@ class Module
         return THIS_TO_BASEURL.MODULOS_DIR.strtolower( get_class($this) );
     }
 
+	/**
+	 * setViewMode()
+	 *
+	 * Alguns módulos tem viewmodes diferentes, ou seja, listagem de formato
+	 * thumbs ou lista.
+	 */
+	public function setViewMode($viewMode = ''){
+		if( empty($this->viewModes) ) return false;
+		if( empty($viewMode) AND empty($_POST['viewMode']) ) return false;
+		else if( !empty($_POST['viewMode']) )
+			$viewmode = $_POST['viewMode'];
+			
+		if( !in_array($viewmode, $this->viewModes) ) return false;
+		$user = User::getInstance();
+		$params = array(
+	        "conf_type" => "mod_conf",
+	        "aust_node" => $this->austNode,
+			'author' => $user->getId(),
+			'data' => array(
+				'viewmode' => $viewmode
+			)
+		);
+		
+		$result = $this->saveModConf($params);
+		return $result;
+	}
+	
+	/**
+	 * viewmode()
+	 * 
+	 * Retorno o viewmode atual, considerando o usuário atual. 
+	 * 
+	 */
+	public function viewmode(){
+		if( count($this->viewModes) == 1 )
+			return $this->viewModes[0];
+		
+		$user = User::getInstance();
+		$result = $this->loadModConf('viewmode', $user->getId());
+		if( empty($result) )
+			return $this->viewModes[0];
+		else
+			return $result;
+	}
+
 /**
  *
  * VERIFICAÇÕES
@@ -1124,10 +1183,21 @@ class Module
      * Para exemplo de como usar, veja o código de configuração do módulo textos
      *
      * @param array $params
+	 *
+	 * O formato de $params deve ser o seguinte:
+	 *
+	 * 		array(
+	 *			'aust_node' => int,
+	 *			'conf_type' => 'mod_conf',
+	 *			'data' => array(
+	 *				'propriedade_1' => 'valor_1',
+	 *				'propriedade_2' => 'valor_2'
+	 *			)
+	 *		)
+	 *
      * @return bool
      */
     public function saveModConf($params) {
-
         $user = User::getInstance();
 
         /*
@@ -1139,23 +1209,33 @@ class Module
             AND !empty($params['aust_node']) ) {
 
             $data = $params["data"];
-            $this->connection->exec("DELETE FROM config WHERE tipo='mod_conf' AND local='".$params["aust_node"]."'");
+
+			/*
+			 * Se foi definido um usuário específico
+			 */
+			if( !empty($params['author']) AND is_numeric($params['author']) )
+				$whereAuthor = "AND autor='".$params['author']."'";
+			
             foreach( $data as $propriedade=>$valor ) {
+				
+	            $this->connection->exec("DELETE FROM config WHERE tipo='mod_conf' AND local='".$params["aust_node"]."' AND propriedade='$propriedade' $whereAuthor");
 
                 $paramsToSave = array(
                     "table" => "config",
                     "data" => array(
-                    "tipo" => "mod_conf",
-                    "local" => $params["aust_node"],
-                    "autor" => $user->LeRegistro("id"),
-                    "propriedade" => $propriedade,
-                    "valor" => $valor
+	                    "tipo" => "mod_conf",
+	                    "local" => $params["aust_node"],
+	                    "autor" => $user->LeRegistro("id"),
+	                    "propriedade" => $propriedade,
+	                    "valor" => $valor
                     )
                 );
                 $this->connection->exec($this->connection->saveSql($paramsToSave));
             }
-        }
-        return true;
+	        return true;
+        } else {
+			return false;
+		}
     }
 
     /**
@@ -1168,7 +1248,7 @@ class Module
      * @param <mixed> $params
      * @return <array>
      */
-    function loadModConf($params = "") {
+    function loadModConf($params = "", $author = "") {
         /*
          * Array: Várias opções podem ser passadas
          */
@@ -1179,10 +1259,10 @@ class Module
                 return NULL;
 
             if( !empty($params["aust_node"]) )
-                return $this->loadModConf($params["aust_node"]);
+                return $this->loadModConf($params["aust_node"], $author);
 
             if( !empty($params["austNode"]) )
-                return $this->loadModConf($params["austNode"]);
+                return $this->loadModConf($params["austNode"], $author);
 
             return NULL;
 
@@ -1191,7 +1271,6 @@ class Module
          * numeric: Um austNode foi especificado
          */
         else if( is_numeric($params) OR empty($params) ){
-
 			/*
 			 * Carrega as configurações estáticas
 			 */
@@ -1201,12 +1280,15 @@ class Module
             if( empty($params) )
                 $params = $this->austNode;
 			
+			$whereAuthor = '';
+			if( !empty($author) ){
+				$whereAuthor = "AND autor='".$author."'";
+			}
 			/*
 			 * Carrega as configurações já salvas no DB. Pode haver
 			 * menos itens que as definidas estaticamente.
 			 */
-            $sql = "SELECT * FROM config WHERE tipo='mod_conf' AND local='".$params."' LIMIT 200";
-
+            $sql = "SELECT * FROM config WHERE tipo='mod_conf' AND local='".$params."' $whereAuthor LIMIT 300";
             $queryTmp = $this->connection->query($sql, "ASSOC");
 
             $query = array();
@@ -1250,7 +1332,10 @@ class Module
 				}
 			}
 
-            $this->structureConfig = $result;
+			// se é para retorna configurações de um único autor, não
+			// salva configurações em cache
+			if( empty($author))
+            	$this->structureConfig = $result;
             return $result;
         }
         /*
@@ -1265,13 +1350,16 @@ class Module
              *
              * Verifica-se abaixo se não existe ainda, e busca-as.
              */
-            if( empty($this->structureConfig) ){
-                $this->loadModConf($this->austNode);
-                return $this->structureConfig[$params];
+			if( !empty($author) ){
+	            $sql = "SELECT * FROM config WHERE tipo='mod_conf' AND local='".$this->austNode."' AND autor='$author' AND propriedade='$params' LIMIT 1";
+	            $queryTmp = $this->connection->query($sql, "ASSOC");
+				return $queryTmp[0]['valor'];
+			} else if( empty($this->structureConfig) ){
+                $result = $this->loadModConf($this->austNode, $author);
+                return $result[$params];
             } else {
-                
                 if( empty($this->structureConfig[$params]) )
-                    $this->loadModConf($this->austNode);
+                    $this->loadModConf($this->austNode, $author);
                 
                 return $this->structureConfig[$params];
             }
