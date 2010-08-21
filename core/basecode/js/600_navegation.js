@@ -78,6 +78,26 @@ function lightboxClose(){
     }, 400);
 }
 
+// viewmode - thumbs, list
+function changeViewMode(este){
+
+	var url = 'adm_main.php?section=conteudo&action=view_items&page='+page+'&aust_node='+austNode;
+	var viewMode = $(este).attr('name');
+	
+    $('.viewmode').removeClass('pressed');
+    $(este).find('span.viewmode').addClass("pressed");
+	
+    $.post(
+		url, {
+			viewonly: 'yes',
+			viewMode: viewMode
+	    },
+		function(txt){
+	        $('#listing_table').html(txt);
+	    });	
+}
+
+
 
 
 

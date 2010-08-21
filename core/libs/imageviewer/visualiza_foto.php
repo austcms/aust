@@ -70,6 +70,8 @@ $xsize      = (empty($_GET['xsize']))       ? ''        : $_GET['xsize'];       
 $maxxsize   = (empty($_GET['maxxsize']))    ? ''        : $_GET['maxxsize'];    //
 $ysize      = (empty($_GET['ysize']))       ? ''        : $_GET['ysize'];       // ysize: tamanho Y
 $maxysize   = (empty($_GET['maxysize']))    ? ''        : $_GET['maxysize'];    //
+$minxsize   = (empty($_GET['minxsize']))    ? ''        : $_GET['minxsize'];       // ysize: tamanho Y
+$minysize   = (empty($_GET['minysize']))    ? ''        : $_GET['minysize'];    //
 
 if (!empty($myid)){
 	if (empty($myordem))
@@ -118,13 +120,22 @@ if ($conexao->count($sql) > 0){
         $largurao = imagesx($im);// pegar a largura da amostra
         $alturao = imagesy($im);// pegar a altura da amostra
 
-        if(!empty($xsize) AND !empty($ysize)){
+        if( !empty($minxsize) AND !empty($minysize) ){
+	
+            $alturad = $minysize; // calcula a largura da imagem a partir da altura da miniatura
+            $largurad = ($largurao*$alturad)/$alturao; // proporção
+
+			if( $largurad < $minxsize ){
+	            $largurad = $minxsize; // calcula a largura da imagem a partir da altura da miniatura
+                $alturad = ($alturao*$largurad)/$largurao;
+			}
+        } else if(!empty($xsize) AND !empty($ysize)){
             $largurad = $xsize; // definir a altura da miniatura em px
             $alturad = $ysize;// calcula a largura da imagem a partir da altura da miniatura
         } else if(!empty($maxxsize) AND !empty($maxysize)){
             if($largurao > $maxxsize){
                 $largurad = $maxxsize; // definir a altura da miniatura em px
-                $alturad = ($alturao*$largurad)/$largurao;// calcula a largura da imagem a partir da altura da miniatura
+                $alturad = ($alturao*$largurad)/$largurao;
             } else {
                 $largurad = $largurao;
                 $alturad = $alturao;
@@ -146,7 +157,10 @@ if ($conexao->count($sql) > 0){
             $alturad = ($alturao*$largurad)/$largurao;// calcula a largura da imagem a partir da altura da miniatura
         }
 
+
         $nova = imagecreatetruecolor($largurad,$alturad);//criar uma imagem em branco
+
+//        $nova = imagecreatetruecolor($largurad,$alturad);//criar uma imagem em branco
         if(empty($quality)) $quality = 3;
         if($quality > 5) $quality = 3;
         if(empty($resample))
@@ -185,7 +199,7 @@ if ($conexao->count($sql) > 0){
         } else {
 
             if( !empty($resample) AND $resample == "no")
-                imagejpeg($nova, '', 85);
+                imagejpeg($nova, '', 90);
             else
                 imagejpeg($nova);//, '', $quality);
         }

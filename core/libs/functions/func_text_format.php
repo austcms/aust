@@ -117,4 +117,11 @@ function lbCategoria($params){
     </div>
     <?php
 }
+
+/*
+ * LISTING VIEWMODE
+ */
+function viewMode($pressed = ''){
+	
+}
 ?>

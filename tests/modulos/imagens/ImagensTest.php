@@ -113,7 +113,6 @@ class ImagensTest extends PHPUnit_Framework_TestCase
 
 
         $loadResult = $this->obj->load(array( 'id' => $lastInsertId, 'austNode' => '777' ) );
-        //var_dump($loadResult);
         $deleteResult = $this->obj->delete($lastInsertId);
 
         $this->assertTrue($saveResult, $saveResult);
