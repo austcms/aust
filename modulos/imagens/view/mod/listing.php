@@ -11,18 +11,16 @@
  * @since 
  */
 ?>
-<div class="listagem">
     
 <p>
     <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
 </p>
+<a name="list" class="name">&nbsp;</a>
 <h2><?php echo $h1;?></h2>
-<p>Abaixo você encontra a listagem dos últimos itens desta categoria.</p>
 <?php
 if((!empty($filter)) AND ($filter <> 'off')){
     $addurl = "&filter=$filter&filterw=" . urlencode($filterw);
 }
-	
 
 
 
@@ -32,106 +30,56 @@ if((!empty($filter)) AND ($filter <> 'off')){
 *
 *********************************/
 ?>
+<div class="listagem">
+<div id="mod_imagens">
+	
+	
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?section=<?php echo $_GET['section'];?>&action=actions&aust_node=<?php echo $_GET['aust_node'];?>">
-<a name="list">&nbsp;</a>
-<?php
-/*
- * Pode excluir conteúdo?
- */
-if( $permissoes->canDelete($austNode) ){
-    ?>
-    <div class="painel_de_controle"><input type="submit" name="deletar" value="Deletar selecionados" />
-    </div>
-    <?php
-}
-?>
-<table cellspacing="0" cellpadding="10" class="listagem">
-    <tr class="titulo">
-        
-        <?php for($i=0; $i< count($modulo->config['contentHeader']['campos']); $i++) { ?>
-                <td class="<? echo $modulo->config['contentHeader']['campos'][$i]; ?>">
-                    <?php
-                        echo $modulo->config['contentHeader']['camposNome'][$i];
-                    ?>
-                </td>
-        <?php } ?>
-        <td bgcolor="#333333" width="80" align="center">
-            Op&ccedil;&otilde;es
-        </td>
-    </tr>
-<?php
-if(count($query) == 0){
-    ?>
-    <tr class="conteudo">
-        <td colspan="<?php echo $i+1;?>">
-            <strong>Nenhum registro encontrado.</strong>
-        </td>
-    </tr>
-    <?php
-} else {
-    foreach($query as $dados){
-        ?>
-        <tr class="conteudo">
-            <?php
-            /*******************************
-            *
-            *
-            *  LISTAGEM DO DB
-            *
-            *
-            *******************************/
-                for($i=0; $i< count($modulo->config['contentHeader']['campos']); $i++) { ?>
-                    <td>
-                        <?php
-                        if($i == 1){
-                            if( $permissoes->canEdit($_GET['aust_node']) )
-                                echo '<a href="adm_main.php?section='.$_GET['section'].'&action=edit&aust_node='.$_GET['aust_node'].'&w='.$dados["id"].'">';
-                            echo $dados[$modulo->config['contentHeader']['campos'][$i]];
-                            if( $permissoes->canEdit($_GET['aust_node']) )
-                                echo '</a>';
-                        } else {
-                            echo $dados[$modulo->config['contentHeader']['campos'][$i]];
-                        }
-                        ?>
-                    </td>
-            <?php } ?>
-            <td align="center">
-                <?php
-                if( $permissoes->canDelete($austNode) ){
-                    ?>
-                    <input type='checkbox' name='itens[]' value='<?php echo $dados['id'];?>'>
-                    <?php
-                }
-                ?>
-            <!--
-                <a href="adm_main.php?section=<?php echo $_GET['section']?>&action=edit_form&aust_node=<?php echo $austNode;?>&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;"><img src="img/layoutv1/edit.jpg" alt="Editar" border="0" /></a>
-                <?php
-                if($escala == "administrador"
-                OR $escala == "moderador"
-                OR $escala == "webmaster"
-                OR $_SESSION["loginid"] == $dados['autorid']){
 
-                    if((!empty($filter)) AND ($filter <> 'off')){
-                        $addurl = "&filter=$filter&filterw=" . urlencode($filterw);
-                    }
-                    ?>
-                    <a href="adm_main.php?section=<?php echo $_GET['section']?>&action=<?php echo $action;?>&block=delete&aust_node=<?php echo $austNode;?>&w=<?php echo $dados["id"]; ?><?php echo $addurl;?>" style="text-decoration: none;"><img src="img/layoutv1/delete.jpg" alt="Deletar" border="0" /></a>
-                    <?php
-                }
-                ?>
-                <?php
-                // Verifica se tipo conteúdo atual está configurado para usar galeria de fotos
-                if(in_array($cat, $aust_conf['where_gallery'])){ ?>
-                    <a href="adm_main.php?section=<?php echo $_GET['section']?>&action=photo_content_manage&w=<?php echo $dados["id"]; ?>#add" style="text-decoration: none;"><img src="img/layoutv1/fotos.jpg" alt="Adicionar fotos a este conteúdo" border="0" /></a>
-                <?php } ?>
-               -->
-            </td>
-        </tr>
-    <?php
-    } // Fim do While
-}
-?>
-</table>
+<div class="painel_de_controle">
+	<?php
+	// VIEWMODE
+	$thumbsClass = '';
+	$listClass = '';
+	if( $viewMode == 'thumbs' ) $thumbsClass = 'pressed';
+	if( $viewMode == 'list' ) 	$listClass = 'pressed';
+	?>
+	<a href="javascript: void(0)" class="change_viewmode" name="thumbs">
+	<span class="viewmode viewmode_thumbs viewmode_thumbs_<?php echo $austNode?> <?php echo $thumbsClass ?>">
+	</span>
+	</a>
+	<a href="javascript: void(0)" class="change_viewmode" name="list">
+	<span class="viewmode viewmode_list viewmode_list_<?php echo $austNode?> <?php echo $listClass ?>">
+	</span>
+	</a>
+	
+	<?php
+	/*
+	 * Pode excluir conteúdo?
+	 */
+	if( $permissoes->canDelete($austNode) ){
+	    ?>
+	
+		<input type="submit" name="deletar" value="Deletar selecionados" />
+	    <?php
+	}
+	?>
+</div>
+
+	<div id="listing_table">
+	<?php
+	
+	// sets GETS
+	
+	if( empty($viewMode) OR $viewMode == 'list' )
+		include($modulo->getIncludeFolder().'/view/mod/listing_list_view.php');
+	else if( $viewMode == 'thumbs' )
+		include($modulo->getIncludeFolder().'/view/mod/listing_thumbs_view.php');
+		
+		
+	?>
+	</div>
+
 </form>
 <?php
 /*
@@ -187,4 +135,5 @@ if(count($query) == 0){
 <p style="margin-top: 15px;">
 	<a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
 </p>
+</div>
 </div>

@@ -17,6 +17,11 @@ var privilegio_escolhido = false;
 $(document).ready(function(){
     lightbox();
 
+	// changeViewMode
+	$('a[class=change_viewmode]').click(function(e) {
+		changeViewMode(this);
+	});
+	
     
     if($('div.campooptions').length > 0){$('div.campooptions').hide();}
     if($('div.est_options').length > 0){$('div.est_options').hide();}

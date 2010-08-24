@@ -1,3 +1,11 @@
+v0.1.9 (20/8/2010)
+
+	- Módulo Cadastro: Sistema de instalação completamente refatorado, com testes unitários.
+	- Módulo Cadastro: versão para impressão.
+	- Módulo Cadastro: seleção do campo a ser pesquisa.
+	- Módulo Conteúdo: Gerar URL Preview do conteúdo online.
+	- Redireciona usuário automaticamente após inserir conteúdo.
+
 v0.1.8 (8/5/2010)
 
 	- Module::_replaceFieldsValueIfEmpty(). Mostrar 'Sem título' em registros vazios de listagem de módulos

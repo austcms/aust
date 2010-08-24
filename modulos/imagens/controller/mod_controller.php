@@ -11,11 +11,42 @@
 class ModController extends ModsController
 {
 
+	public function getQuery(){
+		
+		$categorias = $this->aust->LeCategoriasFilhas('',$_GET['aust_node']);
+        $categorias[$_GET['aust_node']] = 'Estrutura';
+
+        /*
+         * SQL para listagem
+         */
+        $params = array(
+            'austNode' => $categorias,
+        );
+
+        $query = $this->modulo->load($params);
+		return $query;
+		
+	}
+	
+	public function view_items(){
+		
+		if( !empty($_POST['viewMode']) )
+			$this->modulo->setViewMode();
+			
+		$viewMode = $this->modulo->viewmode();
+		
+		$this->set('viewMode', $viewMode);
+		
+		$query = $this->getQuery();
+        $this->set('query', $query);
+
+		$this->render('listing_'.$viewMode.'_view');
+		
+	}
 
     public function listing(){
 
-
-        $h1 = 'Listando conteúdo: '.$this->aust->leNomeDaEstrutura($_GET['aust_node']);
+        $h1 = ''.$this->aust->leNomeDaEstrutura($_GET['aust_node']);
         $this->set('h1', $h1);
 
         $sql = "SELECT
@@ -29,17 +60,13 @@ class ModController extends ModsController
 
         $cat = $query[0]['nome'];
 
-        $categorias = $this->aust->LeCategoriasFilhas('',$_GET['aust_node']);
-        $categorias[$_GET['aust_node']] = 'Estrutura';
-
-        /*
-         * SQL para listagem
-         */
-        $params = array(
-            'austNode' => $categorias,
-        );
-
-        $query = $this->modulo->load($params);
+		/*
+		 * VIEW MODE
+		 */
+		$viewMode = $this->modulo->viewmode();
+		$this->set('viewMode', $viewMode);
+		
+		$query = $this->getQuery();
         $this->set('query', $query);
     }
 

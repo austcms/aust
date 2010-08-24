@@ -84,6 +84,8 @@ $modInfo = array(
         'listing' => 'Listar',
     ),
 	
+	'viewmodes' => array('thumbs', 'list'),
+	
 	'configurations' => array(
    		'ordenate' => array(
 	        "value" => "",
