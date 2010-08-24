@@ -162,42 +162,71 @@ class CadastroSetup extends ModsSetup {
 			$params['comment'] = $value['description'];
 			$params['author'] = $this->user;
 			
-			
+			/*
+			 * Adding a new field
+			 */
+			/*
+			 * String
+			 */
 			if( $type == 'string' ){
 				
 				$this->addColumn($params);
 				$this->connection->exec($this->createFieldConfigurationSql_String($params));
 				
-			} else if( $type == 'text' ) {
+			}
+			/*
+			 * Text
+			 */
+			else if( $type == 'text' ) {
 				
 				$this->addColumn($params);
 				$this->connection->exec($this->createFieldConfigurationSql_String($params));
 				
-			} else if( $type == 'date' ) {
+			}
+			/*
+			 * date
+			 */
+			else if( $type == 'date' ) {
 				
 				$this->addColumn($params);
 				$this->connection->exec($this->createFieldConfigurationSql_String($params));
 				
-			} else if( $type == 'pw' ) {
+			}
+			/*
+			 * password
+			 */
+			else if( $type == 'pw' ) {
 				
 				$this->addColumn($params);
 				$this->connection->exec($this->createFieldConfigurationSql_Password($params));
 				
-			} else if( $type == 'file' ) {
+			}
+			/*
+			 * File
+			 */
+			else if( $type == 'file' ) {
 				
 				$this->addColumn($params);
 				$this->connection->exec($this->createFieldConfigurationSql_File($params));
 				$this->createTableForFiles();
 				$this->connection->exec( $this->createSqlForFileConfiguration() );
 				
-			} else if( $type == 'relational_onetoone' ) {
+			}
+			/*
+			 * Relational_onetoone
+			 */
+			else if( $type == 'relational_onetoone' ) {
 				
 				if( empty($params['refTable']) ) continue;
 				$this->addColumn($params);
 				$sql = $this->createFieldConfigurationSql_RelationalOneToOne($params);
 				$this->connection->exec($sql);
 				
-			} else if( $type == 'relational_onetomany' ) {
+			}
+			/*
+			 * relational_onetomany
+			 */
+			else if( $type == 'relational_onetomany' ) {
 				
 				if( empty($params['refTable']) ) continue;
 				
@@ -212,6 +241,17 @@ class CadastroSetup extends ModsSetup {
 				
 				$sqlReferenceTable = $this->createReferenceTableSql_RelationalOneToMany($params);
 				$this->connection->exec($sqlReferenceTable);
+			}
+			/*
+			 * images
+			 */
+			else if( $type == 'images' ) {
+				
+				$this->addColumn($params);
+				$this->connection->exec($this->createFieldConfigurationSql_File($params));
+				$this->createTableForImages();
+				$this->connection->exec( $this->createSqlForFileConfiguration() );
+				
 			}
 			
 		}
@@ -257,7 +297,7 @@ class CadastroSetup extends ModsSetup {
 	
 /*
  *
- * CREATING FIELDS
+ * CREATING FIELDS CONFIGURATION
  *
  */
 	/*
@@ -279,6 +319,9 @@ class CadastroSetup extends ModsSetup {
 		return true;
 	}
 	
+	/*
+	 * Configuration: Password
+	 */
 	function createFieldConfigurationSql_Password($params){
 		if( empty($params['class']) ) $class = 'password';
 		else $class = $params['class'];
@@ -290,9 +333,90 @@ class CadastroSetup extends ModsSetup {
             "('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",'".$params['author']."',0,0,1,0,1,'$class',".$this->getFieldOrder().")";
 		return $sql;
 	}
+
+	/*
+	 * Configuration: Images
+	 */
+	function createFieldConfigurationSql_Images($params){
+		if( empty($params['class']) ) $class = 'images';
+		else $class = $params['class'];
+		
+        $sql =
+            "INSERT INTO cadastros_conf ".
+            "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem) ".
+            "VALUES ".
+            "('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",'".$params['author']."',0,0,1,0,1,'$class',".$this->getFieldOrder().")";
+		return $sql;
+	}
+	
+			/*
+			 * Creates the SQL for creating the table of Images.
+			 */
+			function createSqlForImagesTable($mainTable = ''){
+				if( empty($mainTable) AND !empty($this->mainTable) )
+					$mainTable = $this->mainTable;
+				else if( empty($mainTable) )
+					return false;
+		
+				$this->filesTableName = $mainTable.'_arquivos';
+		        $sql =
+		            'CREATE TABLE '.$this->filesTableName.'('.
+		            'id int auto_increment,'.
+		            'titulo varchar(120),'.
+		            'descricao text,'.
+		            'local varchar(80),'.
+		            'url text,'.
+		            'arquivo_nome varchar(250),'.
+		            'arquivo_tipo varchar(250),'.
+		            'arquivo_tamanho varchar(250),'.
+		            'arquivo_extensao varchar(10),'.
+		            'tipo varchar(80),'.
+		            'referencia varchar(120),'.
+		            'categorias_id int,'.
+		            'adddate datetime,'.
+		            'autor int,'.
+		            'PRIMARY KEY (id),'.
+		            'UNIQUE id (id))';
+				return $sql;
+			}
+			
+			/*
+			 * SQL for the configuration of images table
+			 */
+			function createSqlForImagesConfiguration(){
+				if( empty($this->filesTableName) ) return false;
+				if( empty($this->austNode) ) return false;
+	
+		        $sql =
+		             "INSERT INTO ".
+		             "cadastros_conf ".
+		             "(tipo,chave,valor,categorias_id,adddate,desativado,desabilitado,publico,restrito,aprovado) ".
+		             "VALUES ".
+		             "('estrutura','tabela_images','".$this->filesTableName."',".$this->austNode.", '".date('Y-m-d H:i:s')."',0,0,1,0,1)";
+				return $sql;
+			}
+			/*
+			 * Creates the table of files
+			 */
+			function createTableForImages(){
+				if( empty($this->mainTable) ) return false;
+				if( empty($this->austNode) ) return false;
+				if( $this->filesTableCreated ) return false;
+	
+				$sql = $this->createSqlForFilesTable($this->mainTable);
+				$result = $this->connection->exec($sql, 'CREATE TABLE');
+	
+				if( $result ){
+					$this->filesTableCreated = true;
+					return true;
+				}
+	
+				return false;
+	
+			}	
 	
 	/*
-	 * FILES FIELD
+	 * Configuration: Files
 	 */
 	function createFieldConfigurationSql_File($params){
 		if( empty($params['class']) ) $class = 'arquivo';
@@ -390,10 +514,10 @@ class CadastroSetup extends ModsSetup {
 			return false;
 		}
 	// end FILE FIELD TYPE
-
+	
 
 	/**
-	 * Relational One to One Field SQL for Configuration
+	 * Configuration: Relational One to One Field SQL for Configuration
 	 */
 	function createFieldConfigurationSql_RelationalOneToOne($params){
 		if( empty($params['class']) ) $class = 'relacional_umparaum';
@@ -408,7 +532,7 @@ class CadastroSetup extends ModsSetup {
 	}
 	
 	/**
-	 * Relational One to Many Field SQL for Configuration
+	 * Configuration: Relational One to Many Field SQL for Configuration
 	 */
 	function createFieldConfigurationSql_RelationalOneToMany($params){
 		if( empty($params['class']) ) $class = 'relacional_umparamuitos';

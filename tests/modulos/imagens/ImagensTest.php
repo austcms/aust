@@ -90,7 +90,7 @@ class ImagensTest extends PHPUnit_Framework_TestCase
         );
         $_POST = array(
             'method' => 'create',
-            'frmadddate' => '',
+            'frmadddate' => '2010-08-24',
             'frmautor' => '',
             'frmordem' => '777',
             'w' => '',
