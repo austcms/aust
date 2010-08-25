@@ -220,10 +220,11 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 
 				// Execução da criação da tabela relacional de arquivos
 				function testCreateTableForFiles(){
-
+					$this->obj->connection->exec('DROP TABLE minhatabela_arquivos');
 					$this->obj->mainTable = 'minhatabela';
 					$this->obj->austNode = '777';
-					$this->obj->createTableForFiles();
+					$this->assertTrue( $this->obj->createTableForFiles() );
+					$this->assertTrue( $this->obj->filesTableCreated );
 
 					$created = $this->obj->connection->hasTable('minhatabela_arquivos');
 					$this->obj->connection->exec('DROP TABLE minhatabela_arquivos');
@@ -397,15 +398,15 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					}
 
 					// Configurações sobre a tabela relacional de arquivos: SQL
-					function testCreateSqlForConfigurationOfImages(){
-						$this->obj->filesTableName = 'minhatabela_images';
+					function testCreateSqlForImagesConfiguration(){
+						$this->obj->imagesTableName = 'minhatabela_images';
 						$this->obj->austNode = '777';
 						$sql = 
 						    "INSERT INTO ".
 		                    "cadastros_conf ".
 		                    "(tipo,chave,valor,categorias_id,adddate,desativado,desabilitado,publico,restrito,aprovado) ".
 		                    "VALUES ".
-		                    "('estrutura','tabela_images','minhatabela_images',777, '".date('Y-m-d H:i:s')."',0,0,1,0,1)";
+		                    "('estrutura','table_images','minhatabela_images',777, '".date('Y-m-d H:i:s')."',0,0,1,0,1)";
 
 						$this->assertEquals(
 							$sql,
@@ -416,6 +417,7 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					// Execução da criação da tabela relacional de arquivos
 					function testCreateTableForImages(){
 
+						$this->obj->connection->exec('DROP TABLE minhatabela_images');
 						$this->obj->mainTable = 'minhatabela';
 						$this->obj->austNode = '777';
 						$this->obj->createTableForImages();
@@ -434,16 +436,17 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 
 					// Execução da configuração da tabela relacional de arquivos
 					function testCreateConfigurationForImages(){
-						$this->obj->filesTableName = 'minhatabela_images';
+						$this->obj->connection->exec('DROP TABLE minhatabela_images');
+						$this->obj->imagesTableName = 'minhatabela_images';
 						$this->obj->austNode = '777';
 						$this->obj->createConfigurationForImages();
 
-						$created = $this->obj->connection->query("SELECT id FROM cadastros_conf WHERE categorias_id='".$this->obj->austNode."' AND valor='minhatabela_images' AND chave='tabela_images'");
+						$created = $this->obj->connection->query("SELECT id FROM cadastros_conf WHERE categorias_id='".$this->obj->austNode."' AND valor='minhatabela_images' AND chave='table_images'");
 						if( !empty($created) ) $created = true;
 						else $created = false;
 
-						$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='".$this->obj->austNode."' AND valor='minhatabela_images' AND chave='tabela_images'");
-						$deleted = $this->obj->connection->query("SELECT id FROM cadastros_conf WHERE categorias_id='".$this->obj->austNode."' AND valor='minhatabela_images' AND chave='tabela_images'");
+						$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='".$this->obj->austNode."' AND valor='minhatabela_images' AND chave='table_images'");
+						$deleted = $this->obj->connection->query("SELECT id FROM cadastros_conf WHERE categorias_id='".$this->obj->austNode."' AND valor='minhatabela_images' AND chave='table_images'");
 						if( empty($deleted) ) $deleted = true;
 						else $deleted = false;
 

@@ -42,6 +42,9 @@ class CadastroSetup extends ModsSetup {
 		'relational_onetomany' => array(
 			'type' => 'int',
 		),
+		'images' => array(
+			'type' => 'varchar(250)',
+		),
 	);
 	
 	/**
@@ -55,7 +58,15 @@ class CadastroSetup extends ModsSetup {
 	 */
 	public $filesTableName = false;
 	
+	/**
+	 * @var bool Tem a informação se a tabela de arquivos já foi criada
+	 */
 	public $filesTableCreated = false;
+	
+	/**
+	 * @var bool Tem a informação se a tabela de imagens já foi criada
+	 */
+	public $imagesTableCreated = false;
 	
 	public $SqlToRun = array();
 	
@@ -248,9 +259,9 @@ class CadastroSetup extends ModsSetup {
 			else if( $type == 'images' ) {
 				
 				$this->addColumn($params);
-				$this->connection->exec($this->createFieldConfigurationSql_File($params));
+				$this->connection->exec($this->createFieldConfigurationSql_Images($params));
 				$this->createTableForImages();
-				$this->connection->exec( $this->createSqlForFileConfiguration() );
+				$this->connection->exec( $this->createSqlForImagesConfiguration() );
 				
 			}
 			
@@ -265,6 +276,7 @@ class CadastroSetup extends ModsSetup {
 	 * Cria uma coluna numa da tabela.
 	 */
 	function addColumn($params){
+		if( !array_key_exists($params['type'], $this->fieldTypes ) ) return false;
 		
 		$sql = "ALTER TABLE ".$this->mainTable." ADD COLUMN ".$params['name']." ".$this->fieldTypes[$params['type']]['type']." ";
 		if( !empty($params['comment']) )
@@ -358,23 +370,25 @@ class CadastroSetup extends ModsSetup {
 				else if( empty($mainTable) )
 					return false;
 		
-				$this->filesTableName = $mainTable.'_arquivos';
+				$this->imagesTableName = $mainTable.'_images';
 		        $sql =
-		            'CREATE TABLE '.$this->filesTableName.'('.
+		            'CREATE TABLE '.$this->imagesTableName.'('.
 		            'id int auto_increment,'.
-		            'titulo varchar(120),'.
-		            'descricao text,'.
-		            'local varchar(80),'.
+		            'title varchar(250),'.
+		            'description text,'.
+		            'local varchar(180),'.
+		            'systemurl text,'.
 		            'url text,'.
-		            'arquivo_nome varchar(250),'.
-		            'arquivo_tipo varchar(250),'.
-		            'arquivo_tamanho varchar(250),'.
-		            'arquivo_extensao varchar(10),'.
-		            'tipo varchar(80),'.
-		            'referencia varchar(120),'.
-		            'categorias_id int,'.
-		            'adddate datetime,'.
-		            'autor int,'.
+		            'file_name varchar(250),'.
+		            'file_type varchar(250),'.
+		            'file_size varchar(250),'.
+		            'file_ext varchar(10),'.
+		            'type varchar(80),'.
+		            'reference varchar(120),'.
+		            'categoria_id int,'.
+		            'created_on date,'.
+		            'updated_on date,'.
+		            'admin_id int,'.
 		            'PRIMARY KEY (id),'.
 		            'UNIQUE id (id))';
 				return $sql;
@@ -384,7 +398,7 @@ class CadastroSetup extends ModsSetup {
 			 * SQL for the configuration of images table
 			 */
 			function createSqlForImagesConfiguration(){
-				if( empty($this->filesTableName) ) return false;
+				if( empty($this->imagesTableName) ) return false;
 				if( empty($this->austNode) ) return false;
 	
 		        $sql =
@@ -392,7 +406,7 @@ class CadastroSetup extends ModsSetup {
 		             "cadastros_conf ".
 		             "(tipo,chave,valor,categorias_id,adddate,desativado,desabilitado,publico,restrito,aprovado) ".
 		             "VALUES ".
-		             "('estrutura','tabela_images','".$this->filesTableName."',".$this->austNode.", '".date('Y-m-d H:i:s')."',0,0,1,0,1)";
+		             "('estrutura','table_images','".$this->imagesTableName."',".$this->austNode.", '".date('Y-m-d H:i:s')."',0,0,1,0,1)";
 				return $sql;
 			}
 			/*
@@ -401,13 +415,13 @@ class CadastroSetup extends ModsSetup {
 			function createTableForImages(){
 				if( empty($this->mainTable) ) return false;
 				if( empty($this->austNode) ) return false;
-				if( $this->filesTableCreated ) return false;
+				if( $this->imagesTableCreated ) return false;
 	
-				$sql = $this->createSqlForFilesTable($this->mainTable);
+				$sql = $this->createSqlForImagesTable($this->mainTable);
 				$result = $this->connection->exec($sql, 'CREATE TABLE');
 	
 				if( $result ){
-					$this->filesTableCreated = true;
+					$this->imagesTableCreated = true;
 					return true;
 				}
 	
@@ -415,6 +429,23 @@ class CadastroSetup extends ModsSetup {
 	
 			}	
 	
+			/*
+			 * Save the configurations of the files table
+			 */
+			function createConfigurationForImages(){
+				if( empty($this->austNode) ) return false;
+
+				$sql = $this->createSqlForImagesConfiguration();
+
+				if( !$sql ) return false;
+				$result = $this->connection->exec($sql);
+
+				if( $result ){
+					return true;
+				}
+
+				return false;
+			}
 	/*
 	 * Configuration: Files
 	 */
@@ -482,7 +513,7 @@ class CadastroSetup extends ModsSetup {
 		function createTableForFiles(){
 			if( empty($this->mainTable) ) return false;
 			if( empty($this->austNode) ) return false;
-			if( $this->filesTableCreated ) return false;
+			if( $this->filesTableCreated === true ) return false;
 			
 			$sql = $this->createSqlForFilesTable($this->mainTable);
 			$result = $this->connection->exec($sql, 'CREATE TABLE');
