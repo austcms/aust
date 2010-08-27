@@ -88,6 +88,7 @@ foreach( $camposForm as $chave=>$valor ){
     unset($inputType);
     $select = array();
     $checkbox = array();
+	$useInput = false;
 
     if( array_key_exists($valor['nomeFisico'], $divisorTitles) ){
         ?>
@@ -96,6 +97,7 @@ foreach( $camposForm as $chave=>$valor ){
         if( !empty($divisorTitles[$valor['nomeFisico']]['comentario']) ){
             echo '<p>'.$divisorTitles[$valor['nomeFisico']]['comentario'].'</p>';
         }
+		$useInput = true;
     }
 
     /**
@@ -110,6 +112,7 @@ foreach( $camposForm as $chave=>$valor ){
         foreach($selectValues as $tabelaReferenciaResult){
             $select["options"][ $tabelaReferenciaResult["id"] ] = $tabelaReferenciaResult[ $valor["tipo"]["tabelaReferenciaCampo"] ];
         }
+		$useInput = true;
 
     }
     /*
@@ -157,11 +160,45 @@ foreach( $camposForm as $chave=>$valor ){
                 }
             }
         }
+		$useInput = true;
+
+	}
+    /*
+     * Images
+     *
+     * Fields for images field
+     */
+    else if($valor["tipo"]["especie"] == "images") {
+//		pr($valor);
+//		pr($infoCadastro);
+		
+		// nome físico do campo
+		$fieldName = $valor['nomeFisico'];
+		
+		// nome do input
+		$inputName = "data[".$infoCadastro["estrutura"]["tabela"]["valor"]."][".$fieldName."]";
+		?>
+		<div class="input">
+	        <label for="input-<?php echo $fieldName ?>"><?php echo $valor['label'] ?></label>
+	
+	        <div class="input_field input_images input_<?php echo $fieldName ?>">
+	        <input type="file" name="<?php echo $inputName ?>[]" value="<?php echo $inputValue ?>" id="input-<?php echo $fieldName ?>" />
+	        <input type="file" name="<?php echo $inputName ?>[]" value="<?php echo $inputValue ?>" id="input-<?php echo $fieldName ?>" />
+
+			</div>
+		</div>
+		<?php
+		$useInput = false;
+		
     } elseif( $valor['tipo']['tipoFisico'] == 'date' ){
         $inputType = "date";
+		$useInput = true;
     } elseif( $valor['tipo']['tipoFisico'] == 'text' ){
         $inputType = "textarea";
-    }
+		$useInput = true;
+    } else {
+		$useInput = true;
+	}
 
     if( empty($valor["valor"]) ){
         $valor["valor"] = "";
@@ -172,24 +209,28 @@ foreach( $camposForm as $chave=>$valor ){
         $inputType = "";
     }
 
-    //pr($inputType);
-
-    /**
-     * Cria INPUT
-     */
-    echo $form->input( $chave, array(
-                                    "label" => $valor["label"],
-                                    "select" => $select,
-                                    "checkbox" => $checkbox,
-                                    "value" => $valor["valor"],
-                                    "type" => $inputType,
-                                )
-                        );
-    ?>
-    <p class="explanation">
-    <?php echo $valor["comentario"] ?>
-    </p>
-    <?php
+	/*
+	 * $form->input é uma forma automática de criar inputs. Campos do
+	 * tipo images não precisa desta técnica, pois são diferentes.
+	 */
+	if( $useInput ){
+	    /**
+	     * Cria INPUT
+	     */
+	    echo $form->input( $chave, array(
+	                                    "label" => $valor["label"],
+	                                    "select" => $select,
+	                                    "checkbox" => $checkbox,
+	                                    "value" => $valor["valor"],
+	                                    "type" => $inputType,
+	                                )
+	                        );
+	    ?>
+	    <p class="explanation">
+	    <?php echo $valor["comentario"] ?>
+	    </p>
+	    <?php
+	}
 }
 
 

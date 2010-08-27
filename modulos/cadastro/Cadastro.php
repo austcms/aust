@@ -12,6 +12,17 @@ class Cadastro extends Module {
     public $mainTable = "cadastros_conf";
 
     public $dataTable;
+    public $austNode;
+
+	public $data = array();
+	public $relationalData = array();
+	public $images = array();
+
+	public $configurations = array();
+	
+	public $fields = array();
+	
+	public $toDeleteTables = array();
 
     function __construct($param = ''){
 
@@ -23,6 +34,122 @@ class Cadastro extends Module {
          */
         parent::__construct($param);
     }
+
+
+	/**
+	 * SAVING PROCESS
+	 * 	
+	 */
+	
+	public function setRelationalData(){
+	
+		$campos = $this->fields;
+		$relational = array();
+		foreach( $this->data as $tabela=>$dados ){
+	        foreach( $dados as $campo=>$valor ){
+            
+	            /*
+	             * Relational One to Many
+	             */
+	            if( !empty($campos[$campo]) AND $campos[$campo]["especie"] == "relacional_umparamuitos" ){
+	                unset($this->data[$tabela][$campo]);
+
+	                $i = 0;
+	                foreach( $valor as $subArray ){
+	                    if( $subArray != 0 ){
+	                        $relational[$campos[$campo]["referencia"]][$i][$campos[$campo]["ref_tabela"]."_id"] = $subArray;
+	                        $relational[$campos[$campo]["referencia"]][$i]["created_on"] = date("Y-m-d H:i:s");
+	                        $i++;
+	                    }
+	                    $this->toDeleteTables[$campos[$campo]["referencia"]] = 1;
+	                }
+
+	            }
+	            /*
+	             * Date
+	             */
+	            else if( !empty( $campos[$campo]["chave"] ) AND
+	                     !empty($infoTabelaFisica[$campos[$campo]["chave"]]['Type']) AND
+	                     $infoTabelaFisica[$campos[$campo]["chave"]]['Type'] == "date" ){
+	                $year = $this->data[$tabela][$campo]['year'];
+	                unset($this->data[$tabela][$campo]);
+
+	                if( strlen($year) == '4' ){
+	                    $this->data[$tabela][$campo] = $valor['year'].'-'.$valor['month'].'-'.$valor['day'];
+
+	                }
+	            }
+	            /*
+	             * Images
+				 *
+				 * Limpa imagens de $this->data
+	             */
+	            else if( !empty($campos[$campo]) AND $campos[$campo]["especie"] == "images" ){
+					$this->images[$tabela][$campo] = $valor;
+					unset($this->data[$tabela][$campo]);
+	            }
+
+	        }
+	    }
+		$this->relationalData = $relational;
+		return true;
+	
+	}
+	
+	function uploadAndSaveImages($images, $lastInsertId){
+		
+		$imageHandler = Image::getInstance();
+		$user = User::getInstance();
+		$userId = $user->getId();
+		
+		$imageTable = $this->configurations['estrutura']['table_images']['valor'];
+		
+		foreach( $this->images as $table=>$imagesField ){
+			
+			foreach( $imagesField as $field=>$images ){
+				
+				foreach( $images as $key=>$value ){
+					
+					/*
+					 * Realiza upload e salva os dados
+					 */
+					$name = $value['name'];
+					$type = $value['type'];
+					$size = $value['size'];
+					$tmp_name = $value['tmp_name'];
+					
+					$value = $imageHandler->resample($value);
+					$finalName = $imageHandler->upload($value);
+					
+					/*
+					 * Salva SQL da imagem
+					 */
+					$sql = "INSERT INTO $imageTable
+							(
+							maintable_id,path,systempath,
+							file_name,
+							original_file_name,file_type,file_size,file_ext,
+							reference_table,reference_field,
+							categoria_id,
+							created_on, admin_id
+							)
+							VALUES
+							(
+							'".$lastInsertId."', '".$finalName['webPath']."', '".$finalName['systemPath']."',
+							'".$finalName['new_filename']."',
+							'".$value['name']."', '".$value['type']."', '".$value['size']."', '".$imageHandler->getExtension($value['name'])."',
+							'".$this->configurations['estrutura']['tabela']['valor']."', '".$field."',
+							'".$this->austNode."',
+							'".date("Y-m-d H:i:s")."', '".$userId."'
+							)
+							";
+					$this->connection->exec($sql);
+					
+				}
+			}
+		}
+	}
+    
 
     /**
      * loadDivisors()
@@ -176,6 +303,7 @@ class Cadastro extends Module {
             if( !empty($valor["chave"]) )
                 $result[ $valor["tipo"] ][ $valor["chave"] ] = $valor;
         }
+		$this->configurations = $result;
         return $result;
     }
 

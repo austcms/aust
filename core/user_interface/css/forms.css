@@ -121,6 +121,7 @@ form.formHelper { }
     form.formHelper div.input_date input { width: 18px; }
         form.formHelper div.input_date .input_date_year { width: 35px; }
     form.formHelper div.input_checkbox { display: table; }
+    form.formHelper div.input_images { display: table; }
 
 /*
  * Listagem de Pessoas - table com a class listagem e pessoas

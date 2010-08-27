@@ -45,7 +45,7 @@ class FormHelper
          */
         $action = (empty($options["action"])) ? 'save' : $options["action"];
 
-        $conteudo.= '<form method="post" action="adm_main.php?section='.$controller.'&action='.$action.'" class="formHelper">';
+        $conteudo.= '<form method="post" action="adm_main.php?section='.$controller.'&action='.$action.'" class="formHelper" enctype="multipart/form-data">';
 
         /**
          * INPUTS HIDDEN

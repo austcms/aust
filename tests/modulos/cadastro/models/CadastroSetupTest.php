@@ -180,6 +180,7 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					$this->assertEquals(
 						'CREATE TABLE minhatabela_arquivos('.
 	                    'id int auto_increment,'.
+	                    'maintable_id int,'.
 	                    'titulo varchar(120),'.
 	                    'descricao text,'.
 	                    'local varchar(80),'.
@@ -189,6 +190,8 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 	                    'arquivo_tamanho varchar(250),'.
 	                    'arquivo_extensao varchar(10),'.
 	                    'tipo varchar(80),'.
+	                    'reference_table varchar(120),'.
+	                    'reference_field varchar(120),'.
 	                    'referencia varchar(120),'.
 	                    'categorias_id int,'.
 	                    'adddate datetime,'.
@@ -374,6 +377,7 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 						$this->assertEquals(
 							'CREATE TABLE minhatabela_images('.
 		                    'id int auto_increment,'.
+		                    'maintable_id int,'.
 		                    'title varchar(250),'.
 		                    'description text,'.
 		                    'local varchar(180),'.
@@ -385,9 +389,11 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 		                    'file_ext varchar(10),'.
 		                    'type varchar(80),'.
 		                    'reference varchar(120),'.
+		                    'reference_table varchar(120),'.
+		                    'reference_field varchar(120),'.
 		                    'categoria_id int,'.
-		                    'created_on date,'.
-		                    'updated_on date,'.
+		                    'created_on datetime,'.
+		                    'updated_on datetime,'.
 		                    'admin_id int,'.
 		                    'PRIMARY KEY (id),'.
 		                    'UNIQUE id (id))',

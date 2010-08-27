@@ -177,7 +177,7 @@ class ModsController extends Controller
         $this->action = (empty($param['action'])) ? 'index' : $param['action'];
 
         /**
-         * $_POST:
+         * $_POST e $_FILES:
          *
          * 'data': se alguma coisa for enviada para ser salva no DB
          */
@@ -185,6 +185,33 @@ class ModsController extends Controller
             if( is_array($_POST["data"]) ){
                 $this->{"data"} = $_POST["data"];
             }
+        }
+        if( !empty($_FILES["data"]) AND is_array($_FILES["data"])){
+	
+			// percorre os models
+			foreach( $_FILES["data"]['name'] as $model=>$fields ){
+				
+				// percorre os campos de um model
+				foreach( $fields as $fieldName=>$values ){
+					
+					// percorre o valor de cada campo
+					foreach( $values as $key=>$value ){
+						
+						$type = $_FILES["data"]['type'][$model][$fieldName][$key];
+						$tmp_name = $_FILES["data"]['tmp_name'][$model][$fieldName][$key];
+						$error = $_FILES["data"]['error'][$model][$fieldName][$key];
+						$size = $_FILES["data"]['size'][$model][$fieldName][$key];
+						
+						$this->{"data"}[$model][$fieldName][$key]['name'] = $value;
+						$this->{"data"}[$model][$fieldName][$key]['type'] = $type;
+						$this->{"data"}[$model][$fieldName][$key]['tmp_name'] = $tmp_name;
+						$this->{"data"}[$model][$fieldName][$key]['error'] = $error;
+						$this->{"data"}[$model][$fieldName][$key]['size'] = $size;
+					}
+				}
+			}
+	        
+	
         }
         /**
          * $modDir: diretório do módulo
