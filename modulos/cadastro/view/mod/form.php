@@ -11,6 +11,7 @@
  * Informações deste cadastro
  */
 $infoCadastro = $modulo->pegaInformacoesCadastro($austNode);
+$tabelaCadastro = $infoCadastro["estrutura"]['tabela']["valor"];
 
 if( !empty($_GET["w"]) ){
     $w = $_GET['w'];
@@ -35,6 +36,64 @@ if( $_GET['action'] == "edit" ){
     echo $formIntro;
     ?>
 </p>
+
+<?php
+/*
+ * LIGHTBOX
+ *
+ * Serve para inserir outras opções em imagens
+ */
+?>
+	<?php
+	$options = array(
+		'action' => 'edit&aust_node='.$austNode.'&w='.$_GET['w'],
+	);
+	echo $form->create( $infoCadastro["estrutura"]["tabela"]["valor"], $options );
+	?>
+	<div id="lightbox-panel" class="window lb_images">
+		<input type="hidden" name="type" value="image_options" />
+		<input type="hidden" name="aust_node" value="<?php echo $austNode ?>" />
+		<input type="hidden" name="w" value="<?php echo $_GET['w']; ?>" />
+		<input type="hidden" name="mainTable" value="<?php echo $tabelaCadastro ?>" />
+	    <div class="header">
+	        <h2>Propriedades da Imagem</h2>
+	        <a href="#" class="close"></a>
+	    </div>
+	    <div class="lb_content">
+	        <input type="hidden" name="image_id" value="" />
+	        <table class="form">
+	            <tr>
+	                <td valign="top" class="titulo">
+	                    <img id="lb_image" style="margin-right: 15px" />
+	                </td>
+	                <td>
+						<div>
+							Descrição:
+	                        <input name="data[<?php echo $tabelaCadastro ?>][description]" id="image_description" class="text" />
+						</div>
+						<div>
+							Nova Imagem Secundária:
+	                        <input type="file" name="data[<?php echo $tabelaCadastro ?>][secondary_image][]" />
+							<input type="hidden" name="image_field" value="" />
+						</div>
+	                </td>
+	            </tr>
+	            <tr>
+	                <td colspan="2">
+	                <center>
+	                    <button name="submit_category">
+	                        Salvar
+	                    </button>
+	                </center>
+	                </td>
+	            </tr>
+	        </table>
+
+	    </div>
+	    <div class="footer">
+	    </div>
+	</div>
+	</form>
 
 <?php
 echo $form->create( $infoCadastro["estrutura"]["tabela"]["valor"] );
@@ -74,7 +133,6 @@ echo $form->create( $infoCadastro["estrutura"]["tabela"]["valor"] );
  * Campos
  */
 //pr($infoCadastro);
-$tabelaCadastro = $infoCadastro["estrutura"]['tabela']["valor"];
 
 /*
  *
@@ -141,7 +199,6 @@ foreach( $camposForm as $chave=>$valor ){
         /*
          * Se for edição, pega os dados que estão salvos neste campo
          */
-
         if( !empty($w) ){
             $sql = "SELECT
                         t.id, t.".$referencia."_id AS referencia
@@ -164,13 +221,12 @@ foreach( $camposForm as $chave=>$valor ){
 
 	}
     /*
-     * Images
+     * IMAGES
      *
      * Fields for images field
      */
     else if($valor["tipo"]["especie"] == "images") {
-//		pr($valor);
-//		pr($infoCadastro);
+	
 		
 		// nome físico do campo
 		$fieldName = $valor['nomeFisico'];
@@ -181,7 +237,82 @@ foreach( $camposForm as $chave=>$valor ){
 		<div class="input">
 	        <label for="input-<?php echo $fieldName ?>"><?php echo $valor['label'] ?></label>
 	
+	
 	        <div class="input_field input_images input_<?php echo $fieldName ?>">
+			
+			<div class="images">
+				<?php
+				$params = array(
+					'w' => $w,
+					'field' => $fieldName,
+					'austNode' => $austNode,
+				);
+				
+				$images = $modulo->getImages($params);
+				
+				if( !empty($images) ){
+					$thumbsW = 80;
+					$thumbsH = 80;
+					$itemsPerLine = 4;
+					$o = 0;
+					
+					/*
+					 * LIGHTBOX
+					 */
+					?>					
+		
+					
+					<div class="thumbs_view">
+					<table width="100%">
+					<?php
+					foreach( $images as $key=>$image ){
+						$o++;
+						if( $o == 1 ){
+							?>
+							<tr>
+							<?php
+						}
+						?>
+						
+						<td>
+						
+						<a href="javascript: void(0)" class="lightbox-panel" id="image_<?php echo $image['id'] ?>" name="modal" onclick="editImageInLightbox(this, <?php echo $image['id'] ?>, '<?php echo $fieldName ?>')"><img class="thumb" src="<?php echo IMAGE_VIEWER_DIR?>visualiza_foto.php?table=cadastro_teste_1_images&fromfile=true&thumbs=yes&myid=<?php echo $image["id"]; ?>&minxsize=<?php echo $thumbsW?>&minysize=<?php echo $thumbsH?>&r=<?php echo $randomNumber?>" /></a>
+						<input type="hidden" name="image_description_<?php echo $image['id'] ?>" value="<?php echo $image['description'] ?>" />
+						<br clear="all" />
+                        <a href="javascript: void(0);" onclick="if( confirm('Você tem certeza que deseja excluir esta imagem?') ) window.open('adm_main.php?section=<?php echo $_GET["section"]; ?>&action=<?php echo $_GET["action"]; ?>&aust_node=<?php echo $_GET["aust_node"]; ?>&w=<?php echo $_GET["w"];?>&deleteimage=<?php echo $image["id"]; ?>','_top');">
+                            <img src="core/user_interface/img/icons/delete_15x15.png" alt="Excluir" border="0" />
+                            <img src="core/user_interface/img/icons/add_thumb_16x16.png" alt="Adicionar segunda imagem" border="0" />
+                        </a>
+						
+						</td>
+						
+						<?php
+						if( $o == $itemsPerLine ){
+							?>
+							</tr>
+							<?php
+							$o = 0;
+						}
+					}
+
+					if( $o < $itemsPerLine ){
+						for( $i = 0; $i < ($itemsPerLine-$o); $i++ ){
+							?>
+							<td></td>
+							<?php
+						}
+						?>
+						</tr>
+						<?php
+					}
+					?>
+					</table>
+					</div>
+					<?php
+				}
+				?>
+			</div>
+			
 	        <input type="file" name="<?php echo $inputName ?>[]" value="<?php echo $inputValue ?>" id="input-<?php echo $fieldName ?>" />
 	        <input type="file" name="<?php echo $inputName ?>[]" value="<?php echo $inputValue ?>" id="input-<?php echo $fieldName ?>" />
 
@@ -223,12 +354,10 @@ foreach( $camposForm as $chave=>$valor ){
 	                                    "checkbox" => $checkbox,
 	                                    "value" => $valor["valor"],
 	                                    "type" => $inputType,
+										'after' => '<p class="explanation">'.$valor['comentario'].'</p>'
 	                                )
 	                        );
 	    ?>
-	    <p class="explanation">
-	    <?php echo $valor["comentario"] ?>
-	    </p>
 	    <?php
 	}
 }

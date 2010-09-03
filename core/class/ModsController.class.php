@@ -160,7 +160,6 @@ class ModsController extends Controller
          */
         $this->set('conexao', $this->conexao);
         $this->set('aust', $this->aust);
-        $this->set('modulo', $this->modulo);
         $this->set('permissoes', $this->permissoes);
         $this->set('austNode', $this->austNode);
         $this->set('administrador', $this->administrador);
@@ -187,7 +186,6 @@ class ModsController extends Controller
             }
         }
         if( !empty($_FILES["data"]) AND is_array($_FILES["data"])){
-	
 			// percorre os models
 			foreach( $_FILES["data"]['name'] as $model=>$fields ){
 				
@@ -210,7 +208,6 @@ class ModsController extends Controller
 					}
 				}
 			}
-	        
 	
         }
         /**
@@ -318,6 +315,8 @@ class ModsController extends Controller
      * @param string $path Indica qual o view deve ser carregado.
      */
     protected function render($path, $includeType = ''){
+	
+        $this->set('modulo', $this->modulo);
 
 		if( $path === false )
 			return false;

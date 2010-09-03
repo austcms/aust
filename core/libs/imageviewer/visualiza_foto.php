@@ -36,8 +36,6 @@ function fastimagecopyresampled (&$dst_image, $src_image, $dst_x, $dst_y, $src_x
     return true;
 }
 
-//echo 'oaijdoiwad';
-
 /**
  * Caminho deste arquivo até o root
  */
@@ -62,10 +60,10 @@ $conexao = Connection::getInstance();
  * - maxxsize: largura máxima. É necessário especificar maxysize também.
  *
  */
-
 $myid       = (empty($_GET['myid']))        ? ''        : $_GET['myid'];        // id da imagem a ser aberta
 $table      = (empty($_GET['table']))       ? 'imagens' : $_GET['table'];       // tabela onde a imagem se encontra
 $thumbs     = (empty($_GET['thumbs']))      ? ''        : $_GET['thumbs'];      // yes|no: diz se deve ser tratada a imagem
+$fromfile   = (empty($_GET['fromfile']))    ? false     : $_GET['fromfile'];      // yes|no: diz se deve ser tratada a imagem
 $xsize      = (empty($_GET['xsize']))       ? ''        : $_GET['xsize'];       // xsize: tamanho X
 $maxxsize   = (empty($_GET['maxxsize']))    ? ''        : $_GET['maxxsize'];    //
 $ysize      = (empty($_GET['ysize']))       ? ''        : $_GET['ysize'];       // ysize: tamanho Y
@@ -80,14 +78,11 @@ if (!empty($myid)){
 		$ordem = "AND ordem=$myordem";
 	else
 		$ordem = "AND ordem=1";
+		
 	if(empty($idfrom))
 		$idfrom = "id";
         
-//    switch($idfrom){
-//        case "ref" :
-		    $sql = "SELECT * FROM $table WHERE $idfrom='$myid' $ordem";
-//            break; 
-//    }   
+    $sql = "SELECT * FROM $table WHERE $idfrom='$myid' $ordem";
         
 } else {
     $sql = "SELECT id FROM Imagens";
@@ -99,19 +94,21 @@ if (!empty($myid)){
     $sql = "SELECT * FROM $tabelaimg WHERE id=".$ids[rand(0,count($ids)-1)];
 }
 
-//echo $sql;
-
 $query = $conexao->query($sql);
-//print_r($query);
 $dados = $query[0];
 if ($conexao->count($sql) > 0){
 
-    //echo '<pre>';
-    //print_r($query);
-    //echo '</pre>';
-    //echo 'oi';
     $fileType = $dados["tipo"];
-    $fileContent = $dados["dados"];
+
+	/*
+	 * Algumas imagens estão em arquivos, outros em DB
+	 */
+	if( !$fromfile )
+    	$fileContent = $dados["dados"];
+	else
+		$fileContent = file_get_contents($dados["systempath"]);
+	
+	
     if($thumbs == "yes"){
 
         header("Content-Type: ".$fileType);
@@ -120,7 +117,11 @@ if ($conexao->count($sql) > 0){
         $largurao = imagesx($im);// pegar a largura da amostra
         $alturao = imagesy($im);// pegar a altura da amostra
 
-        if( !empty($minxsize) AND !empty($minysize) ){
+		/*
+		 * Supondo uma imagem de 300x200, e deseja-se que o menor tamanho seja
+		 * de 100px. Ajusta-se $minysize=100 e $minxsize=100.
+		 */
+        if( is_numeric($minxsize) AND is_numeric($minysize) ){
 	
             $alturad = $minysize; // calcula a largura da imagem a partir da altura da miniatura
             $largurad = ($largurao*$alturad)/$alturao; // proporção
@@ -201,7 +202,7 @@ if ($conexao->count($sql) > 0){
             if( !empty($resample) AND $resample == "no")
                 imagejpeg($nova, '', 90);
             else
-                imagejpeg($nova);//, '', $quality);
+                imagejpeg($nova, null, 100);//, '', $quality);
         }
         
         

@@ -75,6 +75,20 @@ span.viewmode {
 	span.viewmode_thumbs { background: url('../img/icons/viewmode_thumbs.png'); }
 	span.viewmode_list { background: url('../img/icons/viewmode_list.png'); }
 
+/* Thumbs_view em geral */
+	.thumbs_view { margin: 0 auto; text-align: center; }
+	.thumbs_view td { padding: 0 0 10px 0; }
+	.thumbs_view a { cursor: hand; }
+	.thumbs_view img.thumb {
+		margin-bottom: 4px;
+		border: 1px solid #cccccc;
+		box-shadow: 3px 3px 3px #bbb;
+		-moz-box-shadow: 3px 3px 3px #bbb; 
+		-webkit-box-shadow: 3px 3px 3px #bbb; 
+	}
+	
+	
+
 /* mod_imagens */
 	#mod_imagens #thumbs_view { margin: 0 auto; text-align: center; }
 	#mod_imagens #thumbs_view span.item { width: 100px; display: inline-block; padding: 0px 10px 10px 10px; }

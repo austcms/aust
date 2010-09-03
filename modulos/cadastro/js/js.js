@@ -62,4 +62,14 @@ function SetupCampoRelacionalCampos(tabela, id, inc){
                 
 }
 
-
+// ao clicar em um campo de imagem, pega a imagem e bota no lightbox
+function editImageInLightbox(este, imageId, field){
+	var id = $( este ).attr('id');
+	var src =$("#"+id+" img").attr('src');
+	$("#lb_image").attr('src', src+"&minxsize=&maxxsize=250&maxysize=250");
+	$("#lightbox-panel input[name=image_id]").val(imageId);
+	$("#lightbox-panel input[name=image_field]").val(field);
+	
+	var description = $("input[name=image_description_"+imageId+"]").val();
+	$("#lightbox-panel #image_description").val( description );
+}

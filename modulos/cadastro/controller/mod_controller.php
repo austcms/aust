@@ -59,6 +59,7 @@ class ModController extends ModsController
         /**
          * Verifica se há parâmetros
          */
+		$this->modulo->{"teste"} = "hey";
         if( !empty($params) ){
             $w = ( empty($params["w"]) ? "" : $params["w"] );
         }
@@ -75,7 +76,6 @@ class ModController extends ModsController
          * Pega informações sobre o cadastro na tabela cadastro_conf
          */
         $infoCadastro = $this->modulo->pegaInformacoesCadastro( $this->austNode );
-        //pr($infoCadastro);
         /**
          * Toma informações sobre a tabela física do cadastro
          */
@@ -108,7 +108,11 @@ class ModController extends ModsController
                         ";
                 $dados = $this->connection->query($sql, "ASSOC");
                 $dados = $dados[0];
-            }
+		        $this->set('w', $w);
+
+            } else {
+		        $this->set('w', false);
+			}
             
         $i = 0;
         /**
@@ -154,6 +158,13 @@ class ModController extends ModsController
                 $camposForm[ $valor["chave"] ]["tipo"]["tabelaReferencia"] = $valor["ref_tabela"];
                 $camposForm[ $valor["chave"] ]["tipo"]["tabelaReferenciaCampo"] = $valor["ref_campo"];
                 $camposForm[ $valor["chave"] ]["tipo"]["tipoFisico"] = $infoTabelaFisica[ $valor["chave"] ]["Type"];
+
+				/*
+				 * Campo Images
+				 */
+				if( $valor['especie'] == 'images' ){
+	                $camposForm[ $valor["chave"] ]["tipo"]["tabelaReferencia"] = $infoCadastro['estrutura']["table_images"]['valor'];
+				}
             }
 
             $i++;
@@ -176,15 +187,42 @@ class ModController extends ModsController
 			$this->render('form');
 		else
 			$this->render(false);
-        //pr($camposForm);
 
     }
 
     public function edit(){
 
+		$w = $_GET["w"];
         $params = array(
             "w" => $_GET["w"]
         );
+
+		if( !empty($_POST['type']) AND $_POST['type'] = 'image_options' ){
+			$data = $this->data;
+			$imageId = $_POST['image_id'];
+			
+			$data = reset( $this->data );
+			if( !empty($data['description']) )
+				$data = reset( $this->data );
+				$this->modulo->saveImageDescription( $data['description'], $imageId );
+			
+			if( !empty($data['secondary_image']) ){
+				$options = array(
+					'reference' => $imageId,
+					'type' => 'secondary',
+				);
+				$this->modulo->deleteSecondaryImagesById($imageId);
+				$images['table'][$_POST['image_field']] = $data['secondary_image'];
+				$this->modulo->uploadAndSaveImages( $images, $w, $options );
+			}
+				
+		}
+		
+		
+		if( !empty($_GET['deleteimage']) ){
+			$deletedImage = $this->modulo->deleteImage( $_GET['deleteimage'] );
+		}
+
 		$this->doRender = false;
         $this->create($params);
         $this->render('form');
@@ -244,7 +282,6 @@ class ModController extends ModsController
 		$images = array();
         
         if( $this->data ){
-			
 			$this->modulo->data = $this->data;
 			/*
 			 * PREPARA DADOS PARA POSTERIOR SALVAMENTO DE DADOS
@@ -261,8 +298,7 @@ class ModController extends ModsController
 		 	/*
 		 	 * 		1) Prepara dados relacionados para salvá-los;
 			 */
-//			pr($this->model);
-			$this->modulo->setRelationalData();
+			$this->modulo->setRelationalData(); // ajusta inclusive imagens
 			$this->data = $this->modulo->data;
 			$images = $this->modulo->images;
 			

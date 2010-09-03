@@ -10,6 +10,7 @@
 function tooltip($str = ''){
     if( !empty($str) ){
         $random = substr( sha1( rand(0, 100) ), rand(5,20));
+        ob_start();
         ?>
         <span class="hint">
 
@@ -22,7 +23,10 @@ function tooltip($str = ''){
             </div>
         </span>
         <?php
-        return true;
+    	$content = ob_get_contents();
+    	ob_end_clean();
+		echo $content;
+        return $content;
     }
 }// fim tooltip()
 
@@ -51,9 +55,6 @@ function lbCategoria($params){
             $austNode = $params['austNode'];
         $categoryInput = (empty($params['categoryInput'])) ? 'frmcategoria' : $params['categoryInput'];
     }
-
-
-//    pr($categoryInput);
 
     $random = substr( sha1( rand(0, 100) ), rand(5,20));
     global $administrador;
