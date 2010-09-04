@@ -61,10 +61,14 @@ class Cadastro extends Module {
 		$austNode = $params['austNode'];
 		$field = $params['field'];
 		
+		$tableImage = $this->configurations['estrutura']['table_images']['valor'];
+		
 		$sql = "SELECT
-					*
+					*,
+					( SELECT s.id FROM ".$tableImage." as s WHERE s.reference=t.id AND type='secondary' LIMIT 1 )
+					as secondaryid
 				FROM
-					".$this->configurations['estrutura']['table_images']['valor']."
+					".$tableImage." as t
 				WHERE
 					maintable_id='".$w."' AND
 					reference_field='".$field."' AND
@@ -72,6 +76,7 @@ class Cadastro extends Module {
 					type='main'
 				";
 		$query = $this->connection->query($sql);
+		
 		return $query;
 		
 	} // fim getImages()

@@ -121,7 +121,21 @@ if ($conexao->count($sql) > 0){
 		 * Supondo uma imagem de 300x200, e deseja-se que o menor tamanho seja
 		 * de 100px. Ajusta-se $minysize=100 e $minxsize=100.
 		 */
-        if( is_numeric($minxsize) AND is_numeric($minysize) ){
+		if(!empty($maxxsize) AND !empty($maxysize) ){
+		     if($largurao > $maxxsize){
+		         $largurad = $maxxsize; // definir a altura da miniatura em px
+		         $alturad = ($alturao*$largurad)/$largurao;
+		     } else {
+		         $largurad = $largurao;
+		         $alturad = $alturao;
+		     }
+
+		     if($alturad > $maxysize){
+		         $alturad = $maxysize; // definir a altura da miniatura em px
+		         $largurad = ($largurao*$alturad)/$alturao;// calcula a largura da imagem a partir da altura da miniatura
+		     } 
+		     //echo $alturad;
+        } else if( is_numeric($minxsize) AND is_numeric($minysize) ){
 	
             $alturad = $minysize; // calcula a largura da imagem a partir da altura da miniatura
             $largurad = ($largurao*$alturad)/$alturao; // proporção
@@ -130,27 +144,13 @@ if ($conexao->count($sql) > 0){
 	            $largurad = $minxsize; // calcula a largura da imagem a partir da altura da miniatura
                 $alturad = ($alturao*$largurad)/$largurao;
 			}
-        } else if(!empty($xsize) AND !empty($ysize)){
+        } else if( !empty($xsize) AND !empty($ysize) ){
             $largurad = $xsize; // definir a altura da miniatura em px
             $alturad = $ysize;// calcula a largura da imagem a partir da altura da miniatura
-        } else if(!empty($maxxsize) AND !empty($maxysize)){
-            if($largurao > $maxxsize){
-                $largurad = $maxxsize; // definir a altura da miniatura em px
-                $alturad = ($alturao*$largurad)/$largurao;
-            } else {
-                $largurad = $largurao;
-                $alturad = $alturao;
-            }
-
-            if($alturad > $maxysize){
-                $alturad = $maxysize; // definir a altura da miniatura em px
-                $largurad = ($largurao*$alturad)/$alturao;// calcula a largura da imagem a partir da altura da miniatura
-            } 
-            //echo $alturad;
-        } else if(!empty($xsize)){
+        } else if( !empty($xsize) ){
             $largurad = $xsize; // definir a altura da miniatura em px
             $alturad = ($alturao*$largurad)/$largurao;// calcula a largura da imagem a partir da altura da miniatura
-        } else if(!empty($ysize)){
+        } else if( !empty($ysize) ){
             $alturad = $ysize; // definir a altura da miniatura em px
             $largurad = ($largurao*$alturad)/$alturao;// calcula a largura da imagem a partir da altura da miniatura
         } else {

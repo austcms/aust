@@ -12,6 +12,7 @@
  */
 $infoCadastro = $modulo->pegaInformacoesCadastro($austNode);
 $tabelaCadastro = $infoCadastro["estrutura"]['tabela']["valor"];
+$tabelaImagens = $infoCadastro["estrutura"]['table_images']["valor"];
 
 if( !empty($_GET["w"]) ){
     $w = $_GET['w'];
@@ -64,18 +65,35 @@ if( $_GET['action'] == "edit" ){
 	        <table class="form">
 	            <tr>
 	                <td valign="top" class="titulo">
+						Preview:
+						<br />
 	                    <img id="lb_image" style="margin-right: 15px" />
 	                </td>
 	                <td>
 						<div>
 							Descrição:
+							<br />
 	                        <input name="data[<?php echo $tabelaCadastro ?>][description]" id="image_description" class="text" />
 						</div>
 						<div>
 							Nova Imagem Secundária:
+							<br />
 	                        <input type="file" name="data[<?php echo $tabelaCadastro ?>][secondary_image][]" />
 							<input type="hidden" name="image_field" value="" />
 						</div>
+						<div id="secondary_image_form">
+							Imagem secundária atual:
+							<br />
+							<img src="" name="secondary_image" />
+							<a id="del_secondary_image" href="javascript: void(0);" data-secondaryid="" onclick="if( confirm('Você tem certeza que deseja excluir esta imagem?') ) window.open('adm_main.php?section=<?php echo $_GET["section"]; ?>&action=<?php echo $_GET["action"]; ?>&aust_node=<?php echo $_GET["aust_node"]; ?>&w=<?php echo $_GET["w"];?>&deleteimage='+$(this).attr('data-secondaryid'),'_top');">
+	                            <img src="core/user_interface/img/icons/delete_15x15.png" alt="Excluir" border="0" />
+	                        </a>
+	                        
+						</div>
+						<p id="missing_secondary_image" class="display: none;">
+							<em>Não há uma imagem secundária cadastrada.</em>
+						</p>
+						
 	                </td>
 	            </tr>
 	            <tr>
@@ -265,6 +283,13 @@ foreach( $camposForm as $chave=>$valor ){
 					<div class="thumbs_view">
 					<table width="100%">
 					<?php
+					
+					$imagesPath = IMAGE_VIEWER_DIR."visualiza_foto.php?table=".$tabelaImagens."&fromfile=true&thumbs=yes&minxsize=". $thumbsW."&minysize=". $thumbsH."&r=".$randomNumber."&myid=";
+					?>
+					<script type="text/javascript">
+					var imagesPath = '<?php echo $imagesPath ?>';
+					</script>
+					<?php
 					foreach( $images as $key=>$image ){
 						$o++;
 						if( $o == 1 ){
@@ -276,13 +301,14 @@ foreach( $camposForm as $chave=>$valor ){
 						
 						<td>
 						
-						<a href="javascript: void(0)" class="lightbox-panel" id="image_<?php echo $image['id'] ?>" name="modal" onclick="editImageInLightbox(this, <?php echo $image['id'] ?>, '<?php echo $fieldName ?>')"><img class="thumb" src="<?php echo IMAGE_VIEWER_DIR?>visualiza_foto.php?table=cadastro_teste_1_images&fromfile=true&thumbs=yes&myid=<?php echo $image["id"]; ?>&minxsize=<?php echo $thumbsW?>&minysize=<?php echo $thumbsH?>&r=<?php echo $randomNumber?>" /></a>
+						<a href="javascript: void(0)" class="lightbox-panel" id="image_<?php echo $image['id'] ?>" name="modal" onclick="editImageInLightbox(this, <?php echo $image['id'] ?>, '<?php echo $fieldName ?>')"><img class="thumb" src="<?php echo $imagesPath.$image['id']?>" /></a>
 						<input type="hidden" name="image_description_<?php echo $image['id'] ?>" value="<?php echo $image['description'] ?>" />
+						<input type="hidden" name="image_secondaryid_<?php echo $image['id'] ?>" value="<?php echo $image['secondaryid'] ?>" />
 						<br clear="all" />
                         <a href="javascript: void(0);" onclick="if( confirm('Você tem certeza que deseja excluir esta imagem?') ) window.open('adm_main.php?section=<?php echo $_GET["section"]; ?>&action=<?php echo $_GET["action"]; ?>&aust_node=<?php echo $_GET["aust_node"]; ?>&w=<?php echo $_GET["w"];?>&deleteimage=<?php echo $image["id"]; ?>','_top');">
                             <img src="core/user_interface/img/icons/delete_15x15.png" alt="Excluir" border="0" />
-                            <img src="core/user_interface/img/icons/add_thumb_16x16.png" alt="Adicionar segunda imagem" border="0" />
                         </a>
+                        <img src="core/user_interface/img/icons/add_thumb_16x16.png" alt="Adicionar segunda imagem" border="0" />
 						
 						</td>
 						

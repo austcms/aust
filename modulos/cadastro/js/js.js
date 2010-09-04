@@ -72,4 +72,19 @@ function editImageInLightbox(este, imageId, field){
 	
 	var description = $("input[name=image_description_"+imageId+"]").val();
 	$("#lightbox-panel #image_description").val( description );
+	
+	var secondaryId = $("input[name=image_secondaryid_"+imageId+"]").val();
+	if( secondaryId > 0 ){
+		$("div#secondary_image_form").show();
+		$("img[name=secondary_image]").attr('src', imagesPath+secondaryId+"&maxxsize=90&maxysize=90");
+		$("a#del_secondary_image").attr('data-secondaryid', secondaryId);
+		$("a#del_secondary_image").show();
+		$("p#missing_secondary_image").hide();
+	} else {
+		$("div#secondary_image_form").hide();
+		$("img[name=secondary_image]").attr('src', '');
+		$("a#del_secondary_image").hide();
+		$("p#missing_secondary_image").show();
+	}
+	
 }

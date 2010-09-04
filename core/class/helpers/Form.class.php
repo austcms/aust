@@ -348,7 +348,12 @@ class FormHelper
         $c.= '<input type="text" name="'.$inputName.'[month]" value="'.$inputValueMonth.'" id="input-'.$fieldName.'-month" class="input_date_month input-'.$fieldName.'-month" maxlength="2" />';
         $c.= '-';
         $c.= '<input type="text" name="'.$inputName.'[year]" value="'.$inputValueYear.'" id="input-'.$fieldName.'-year" class="input_date_year input-'.$fieldName.'-year" maxlength="4" />';
-        $c.= tt('<p>Formato: dia-mês-ano (dd-mm-aaaa).</p><p>Exemplo: 21-04-1987.</p>');
+		ob_start();
+		tt('<p>Formato: dia-mês-ano (dd-mm-aaaa).</p><p>Exemplo: 21-04-1987.</p>');
+		$conteudo = ob_get_contents();
+		ob_end_clean();
+        $c.= $conteudo;
+
         return $c;
     }
 
