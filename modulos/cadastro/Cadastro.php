@@ -17,6 +17,8 @@ class Cadastro extends Module {
 	public $data = array();
 	public $relationalData = array();
 	public $images = array();
+	
+	public $tableProperties = array();
 
 	/**
 	 * @var array Contém as configurações sobre campos e estrutura

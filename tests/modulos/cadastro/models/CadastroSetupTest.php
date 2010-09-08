@@ -378,16 +378,17 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 							'CREATE TABLE minhatabela_images('.
 		                    'id int auto_increment,'.
 		                    'maintable_id int,'.
+							'type varchar(80) COMMENT "type=main são as imagens principais",'.
 		                    'title varchar(250),'.
 		                    'description text,'.
 		                    'local varchar(180),'.
-		                    'systemurl text,'.
-		                    'url text,'.
+		                    'systempath text,'.
+		                    'path text,'.
 		                    'file_name varchar(250),'.
+		                    'original_file_name varchar(250),'.
 		                    'file_type varchar(250),'.
 		                    'file_size varchar(250),'.
 		                    'file_ext varchar(10),'.
-		                    'type varchar(80),'.
 		                    'reference varchar(120),'.
 		                    'reference_table varchar(120),'.
 		                    'reference_field varchar(120),'.
