@@ -1388,13 +1388,13 @@ class Module
                 return array();
 
             if( $valueOnly )
-                return $this->structureConfig[$key]['valor'];
+                return $this->structureConfig[$key]['value'];
             
             return $this->structureConfig[$key];
 
         } else if( is_string($key) AND !empty($this->structureConfig) ) {
             if( $valueOnly )
-                return $this->structureConfig[$key]['valor'];
+                return $this->structureConfig[$key]['value'];
             
             return $this->structureConfig[$key];
         }

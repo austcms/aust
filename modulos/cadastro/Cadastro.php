@@ -276,7 +276,7 @@ class Cadastro extends Module {
 			$this->connection->exec($sqlDelete);
 		}
 		
-		return $query['id'];
+		return $query[0]['id'];
 	} // fim secondaryImageId()
 
 	function deleteImage($w = ""){

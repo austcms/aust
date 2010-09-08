@@ -283,6 +283,7 @@ foreach( $camposForm as $chave=>$valor ){
 					<div class="thumbs_view">
 					<table width="100%">
 					<?php
+					$randomNumber = rand(0,10000);
 					
 					$imagesPath = IMAGE_VIEWER_DIR."visualiza_foto.php?table=".$tabelaImagens."&fromfile=true&thumbs=yes&minxsize=". $thumbsW."&minysize=". $thumbsH."&r=".$randomNumber."&myid=";
 					?>

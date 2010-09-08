@@ -98,7 +98,13 @@ $query = $conexao->query($sql);
 $dados = $query[0];
 if ($conexao->count($sql) > 0){
 
-    $fileType = $dados["tipo"];
+	$type = '';
+	if( !empty($dados["tipo"]) )
+		$type = $dados["tipo"];
+	else if( !empty($dados["type"]) )
+		$type = $dados["type"];
+	
+    $fileType = $type;
 
 	/*
 	 * Algumas imagens estão em arquivos, outros em DB
@@ -107,8 +113,7 @@ if ($conexao->count($sql) > 0){
     	$fileContent = $dados["dados"];
 	else
 		$fileContent = file_get_contents($dados["systempath"]);
-	
-	
+
     if($thumbs == "yes"){
 
         header("Content-Type: ".$fileType);
@@ -208,7 +213,7 @@ if ($conexao->count($sql) > 0){
         
         imagedestroy($nova);
     } else {
-        header("Content-Type: ". $dados["tipo"]);
+        header("Content-Type: ". $type);
         echo $dados["dados"];
     }
 } else {

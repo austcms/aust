@@ -408,7 +408,7 @@ class ModsController extends Controller
      * @param string $function Que método foi chamado.
      * @param string $args Que argumentos foram passados.
      */
-    private function __call($function, $args){
+    public function __call($function, $args){
 
         /**
          * Se o arquivo existe no módulo.

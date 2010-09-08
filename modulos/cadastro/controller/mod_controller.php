@@ -302,7 +302,6 @@ class ModController extends ModsController
 			$this->data = $this->modulo->data;
 			$images = $this->modulo->images;
 			
-
 			/*
 			 *		2) Salva dados principais (não relacionados);
 			 */
