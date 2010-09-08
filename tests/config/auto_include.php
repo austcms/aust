@@ -1,4 +1,7 @@
 <?php
+// PHP 5.3 needs this
+date_default_timezone_set('America/Sao_Paulo');
+
 require 'tests/config/database.php';
 require("core/config/variables.php");
 
