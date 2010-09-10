@@ -37,7 +37,7 @@ $aust_charset['db_collate'] = 'utf8_general_ci';
      *      3: debug completo;
      *
      */
-    Registry::write('debugLevel', 2);
+    Registry::write('debugLevel', 0);
     /*
      * Tipo de configuração padrão, visível a todos os usuários.
      */
