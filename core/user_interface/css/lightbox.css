@@ -1,11 +1,11 @@
 #mask {
     position: absolute;
     z-index:9000;
-    background-color: #323232;
+    background-color: black;
     top: 0;
     left: 0;
-    filter: alpha(opacity=90);
-    opacity: 0.9;
+    filter: alpha(opacity=20);
+    opacity: 0.3;
     display: none;
 }
 
@@ -29,7 +29,7 @@
     padding: 10px;
 }
 .window .header {
-    width: 342px;
+    width: 100%;
     height: auto;
     background: white;
     padding: 0px 0 0 0px;
@@ -38,16 +38,17 @@
     margin: 0 0 10px 0;
 }
 	.window .header h2 {
+			width: auto;
             float: left;
             position: static;
-            display: table;
+            display: block;
             margin: 3px 0 0 0px;
 	}
 
 	.window .header a {
             width: 28px;
             height: 29px;
-            display: block;
+            display: table;
             position: absolute;
             right: -20px;
             top: -20px;
@@ -58,9 +59,6 @@
             background-position: 0px -31px;
             padding-right: 0px;
         }
-
-
-
 
 .window .lb_content {
     width: auto;
@@ -77,7 +75,7 @@
     }
 	
 .window .footer {
-    width: 342px;
+    width: auto;
     height: 5px;
     background: white;
     margin: 0;
@@ -98,3 +96,16 @@
             background-position: 0px -22px;
             display: block;
         }
+
+/* LIGHTBOX-PANEL */
+#lightbox-panel {
+	width: 560px;
+	border: 1px solid #cccccc;
+	-moz-border-radius: 3px;
+	border-radius: 8px;
+	box-shadow: 3px 3px 2px #666;
+	-moz-box-shadow: 3px 3px 2px #666; 
+	-webkit-box-shadow: 3px 3px 2px #666; 
+	
+}
+

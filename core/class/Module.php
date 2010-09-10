@@ -289,18 +289,10 @@ class Module
 
         $embedModules = $this->getRelatedEmbed($austNode);
 
-		function serializeArray($array = array()){
-			$result = array();
-			foreach( $array as $key=>$value ){
-				$result[] = $value;
-			}
-			return $result;
-		}
-		
         if( empty($embedModules)
             OR empty($this->loadedIds) )
         {
-            serializeArray($qry);
+            $qry = serializeArray($qry);
             $this->lastQuery = $qry;
             return $qry;
         }
@@ -325,7 +317,7 @@ class Module
             }
         }
         
-        serializeArray($qry);
+        $qry = serializeArray($qry);
         $this->lastQuery = $qry;
         return $qry;
     }
@@ -1396,13 +1388,13 @@ class Module
                 return array();
 
             if( $valueOnly )
-                return $this->structureConfig[$key]['valor'];
+                return $this->structureConfig[$key]['value'];
             
             return $this->structureConfig[$key];
 
         } else if( is_string($key) AND !empty($this->structureConfig) ) {
             if( $valueOnly )
-                return $this->structureConfig[$key]['valor'];
+                return $this->structureConfig[$key]['value'];
             
             return $this->structureConfig[$key];
         }

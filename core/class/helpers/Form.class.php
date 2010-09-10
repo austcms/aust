@@ -45,7 +45,7 @@ class FormHelper
          */
         $action = (empty($options["action"])) ? 'save' : $options["action"];
 
-        $conteudo.= '<form method="post" action="adm_main.php?section='.$controller.'&action='.$action.'" class="formHelper">';
+        $conteudo.= '<form method="post" action="adm_main.php?section='.$controller.'&action='.$action.'" class="formHelper" enctype="multipart/form-data">';
 
         /**
          * INPUTS HIDDEN
@@ -97,6 +97,14 @@ class FormHelper
             $inputValue = "";
         }
 
+        /**
+         * After
+         *
+         */
+     	$after = false;
+        if( !empty($options["after"]) ){
+            $after = $options["after"];
+        }
 
         /**
          * Gera nomes para os inputs
@@ -297,6 +305,12 @@ class FormHelper
             $conteudo.= '<div class="input_field input_text">';
             $conteudo.= '<input type="text" name="'.$inputName.'" value="ERRO NO TIPO DE CAMPO" id="input-'.$fieldName.'">';
         }
+		
+		if( $after ){
+			$conteudo.= '<div class="after">';
+			$conteudo.= $after;
+			$conteudo.= '</div>';
+		}
         $conteudo.= '</div>';
 
 
@@ -334,7 +348,12 @@ class FormHelper
         $c.= '<input type="text" name="'.$inputName.'[month]" value="'.$inputValueMonth.'" id="input-'.$fieldName.'-month" class="input_date_month input-'.$fieldName.'-month" maxlength="2" />';
         $c.= '-';
         $c.= '<input type="text" name="'.$inputName.'[year]" value="'.$inputValueYear.'" id="input-'.$fieldName.'-year" class="input_date_year input-'.$fieldName.'-year" maxlength="4" />';
-        $c.= '<p class="explanation">Formato: dia-mês-ano (dd-mm-aaaa). Exemplo: 21-04-1987</p>';
+		ob_start();
+		tt('<p>Formato: dia-mês-ano (dd-mm-aaaa).</p><p>Exemplo: 21-04-1987.</p>');
+		$conteudo = ob_get_contents();
+		ob_end_clean();
+        $c.= $conteudo;
+
         return $c;
     }
 

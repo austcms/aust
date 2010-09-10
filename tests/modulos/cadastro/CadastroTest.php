@@ -149,6 +149,46 @@ class CadastroTest extends PHPUnit_Framework_TestCase
 			$this->assertArrayHasKey($key, $configurations);
 		}
 	}
+	
+	
+	function testSetRelationalData(){
+		$this->obj->fields = array(
+			'name' => array(
+				'tipo' => 'campo',
+				'chave' => 'name',
+				'valor' => 'Name',
+				'especie' => 'string',
+			),
+			'image' => array(
+				'tipo' => 'campo',
+				'chave' => 'image',
+				'valor' => 'Images',
+				'especie' => 'images',
+			),
+		);
+		
+		$this->obj->data = array(
+			'table_1' => array(
+				'name' => 'alex',
+				'image' => array(
+					array(
+						'name' => 'image_name.jpg',
+						'type' => 'image/jpeg',
+					),
+					array(
+						'name' => 'image_name2.jpg',
+						'type' => 'image/jpeg',
+					)
+				)
+			)
+		);
+		
+		$this->obj->setRelationalData();
+		$this->assertArrayHasKey('image', $this->obj->images['table_1']);
+		$this->assertArrayHasKey('0', $this->obj->images['table_1']['image'] );
+		$this->assertArrayHasKey('1', $this->obj->images['table_1']['image'] );
+		$this->assertArrayNotHasKey('image', $this->obj->data['table_1']);
+	}
 
 
 }

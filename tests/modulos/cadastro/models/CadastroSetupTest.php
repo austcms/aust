@@ -124,6 +124,13 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 				$this->assertEquals('4', $this->obj->getFieldOrder());
 
 			}
+		
+		/*
+		 * CONFIGURATIONS
+		 *
+		 * cada campo tem dados salvos em cadastros_conf
+		 *
+		 */
 
 			function testCreateFieldConfigurationSql_Password(){
 				// data for creating field SQL
@@ -173,6 +180,7 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					$this->assertEquals(
 						'CREATE TABLE minhatabela_arquivos('.
 	                    'id int auto_increment,'.
+	                    'maintable_id int,'.
 	                    'titulo varchar(120),'.
 	                    'descricao text,'.
 	                    'local varchar(80),'.
@@ -182,6 +190,8 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 	                    'arquivo_tamanho varchar(250),'.
 	                    'arquivo_extensao varchar(10),'.
 	                    'tipo varchar(80),'.
+	                    'reference_table varchar(120),'.
+	                    'reference_field varchar(120),'.
 	                    'referencia varchar(120),'.
 	                    'categorias_id int,'.
 	                    'adddate datetime,'.
@@ -213,10 +223,11 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 
 				// Execução da criação da tabela relacional de arquivos
 				function testCreateTableForFiles(){
-
+					$this->obj->connection->exec('DROP TABLE minhatabela_arquivos');
 					$this->obj->mainTable = 'minhatabela';
 					$this->obj->austNode = '777';
-					$this->obj->createTableForFiles();
+					$this->assertTrue( $this->obj->createTableForFiles() );
+					$this->assertTrue( $this->obj->filesTableCreated );
 
 					$created = $this->obj->connection->hasTable('minhatabela_arquivos');
 					$this->obj->connection->exec('DROP TABLE minhatabela_arquivos');
@@ -277,6 +288,10 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 				);
 			}
 
+			// Relational_OneToMany
+			// 		configurações
+			// 		cria tabela de referência
+			// 		teste criação de sql para criação de tabela de referência
 			function testCreateFieldConfigurationSql_RelationalOneToMany(){
 				// data for creating field SQL
 				$field = array(
@@ -332,6 +347,123 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 	                       ')';
 					$this->assertEquals($sql, $this->obj->createReferenceTableSql_RelationalOneToMany($params) );
 				}
+			
+			// Configuração: campo Images
+			function testCreateFieldConfigurationSql_Images(){
+				// data for creating field SQL
+				$field = array(
+					'name' => 'field_one',
+					'label' => 'Field One',
+					'comment' => 'This is a comment',
+					'austNode' => '777',
+					'author' => '777',
+					'class' => 'images'
+				);
+
+				$expectedSql = "INSERT INTO cadastros_conf ".
+	                           "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem) ".
+	                           "VALUES ".
+	                           "('campo','field_one','Field One','This is a comment',777,'777',0,0,1,0,1,'images',1)";
+
+				$this->assertEquals(
+					$expectedSql,
+					$this->obj->createFieldConfigurationSql_Images($field),
+					'SQL para salvar configuração de campo tipo Images.'
+				);
+			}
+			
+					// Criação da tabela relacional de arquivos: SQL
+					function testCreateSqlForImagesTable(){
+						$this->assertEquals(
+							'CREATE TABLE minhatabela_images('.
+		                    'id int auto_increment,'.
+		                    'maintable_id int,'.
+							'type varchar(80) COMMENT "type=main são as imagens principais",'.
+		                    'title varchar(250),'.
+		                    'description text,'.
+		                    'local varchar(180),'.
+		                    'systempath text,'.
+		                    'path text,'.
+		                    'file_name varchar(250),'.
+		                    'original_file_name varchar(250),'.
+		                    'file_type varchar(250),'.
+		                    'file_size varchar(250),'.
+		                    'file_ext varchar(10),'.
+		                    'reference varchar(120),'.
+		                    'reference_table varchar(120),'.
+		                    'reference_field varchar(120),'.
+		                    'categoria_id int,'.
+		                    'created_on datetime,'.
+		                    'updated_on datetime,'.
+		                    'admin_id int,'.
+		                    'PRIMARY KEY (id),'.
+		                    'UNIQUE id (id))',
+							$this->obj->createSqlForImagesTable('minhatabela')
+						);
+
+						$this->assertEquals('minhatabela_images', $this->obj->imagesTableName);
+					}
+
+					// Configurações sobre a tabela relacional de arquivos: SQL
+					function testCreateSqlForImagesConfiguration(){
+						$this->obj->imagesTableName = 'minhatabela_images';
+						$this->obj->austNode = '777';
+						$sql = 
+						    "INSERT INTO ".
+		                    "cadastros_conf ".
+		                    "(tipo,chave,valor,categorias_id,adddate,desativado,desabilitado,publico,restrito,aprovado) ".
+		                    "VALUES ".
+		                    "('estrutura','table_images','minhatabela_images',777, '".date('Y-m-d H:i:s')."',0,0,1,0,1)";
+
+						$this->assertEquals(
+							$sql,
+							$this->obj->createSqlForImagesConfiguration()
+						);
+					}
+
+					// Execução da criação da tabela relacional de arquivos
+					function testCreateTableForImages(){
+
+						$this->obj->connection->exec('DROP TABLE minhatabela_images');
+						$this->obj->mainTable = 'minhatabela';
+						$this->obj->austNode = '777';
+						$this->obj->createTableForImages();
+
+						$created = $this->obj->connection->hasTable('minhatabela_images');
+						$this->obj->connection->exec('DROP TABLE minhatabela_images');
+						$deleted = !$this->obj->connection->hasTable('minhatabela_images');
+
+						// verifica se houve as criações
+						$this->assertTrue($created, "Table not CREATED.");
+						$this->assertTrue($deleted, "Table not DELETED.");
+
+						//novas criações não são permitidas
+						$this->assertFalse( $this->obj->createTableForImages() );
+					}
+
+					// Execução da configuração da tabela relacional de arquivos
+					function testCreateConfigurationForImages(){
+						$this->obj->connection->exec('DROP TABLE minhatabela_images');
+						$this->obj->imagesTableName = 'minhatabela_images';
+						$this->obj->austNode = '777';
+						$this->obj->createConfigurationForImages();
+
+						$created = $this->obj->connection->query("SELECT id FROM cadastros_conf WHERE categorias_id='".$this->obj->austNode."' AND valor='minhatabela_images' AND chave='table_images'");
+						if( !empty($created) ) $created = true;
+						else $created = false;
+
+						$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='".$this->obj->austNode."' AND valor='minhatabela_images' AND chave='table_images'");
+						$deleted = $this->obj->connection->query("SELECT id FROM cadastros_conf WHERE categorias_id='".$this->obj->austNode."' AND valor='minhatabela_images' AND chave='table_images'");
+						if( empty($deleted) ) $deleted = true;
+						else $deleted = false;
+
+
+						// verifica se houve as criações
+						$this->assertTrue($created, "Images' Table, configuration not CREATED.");
+						$this->assertTrue($deleted, "Images' Table, configuration not DELETED.");
+
+					}
+			
 
 
 			function testCreateFieldConfigurationSql_String(){
@@ -422,6 +554,12 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					'description' => 'Campo 7 descrição',
 					'refTable' => 'reftable',
 					'refField' => 'reffield',
+				),
+				// field 8 - images
+				array(
+					'name' => 'Campo 8',
+					'type' => 'images',
+					'description' => 'Campo 8 descrição',
 				),
 
 			);
@@ -692,6 +830,24 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 
 					$this->destroyTests();
 			}
+			
+			function testAddFieldImages(){
+				$this->restartTable();
+			
+				// test TEXT
+					$params = array(
+						0 => array(
+							'name' => 'Campo 1 Images',
+							'type' => 'images',
+							'description' => ''
+						),
+					);
+					$result = $this->obj->addField($params);
+		
+					$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'campo_1_images'), 'Text: campo_1_images not created.' );
+					$this->assertArrayHasKey('0', $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_1_images' AND categorias_id='7777'") );
+					$this->destroyTests();
+			}			
 
 
 

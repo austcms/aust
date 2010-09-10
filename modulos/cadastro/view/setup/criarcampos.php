@@ -55,6 +55,7 @@ foreach($exPOST as $chave=>$valor){
                     <option value="date">Data (ex: data de nascimento)</option>
                     <option value="pw">Senha</option>
                     <option value="arquivo">Arquivo</option>
+                    <option value="images">Imagens</option>
                     <option value="relational_onetoone">Relacional 1-para-1 (tabela)</option>
                     <option value="relational_onetomany">Relacional 1-para-muitos (tabela)</option>
                 </select>
