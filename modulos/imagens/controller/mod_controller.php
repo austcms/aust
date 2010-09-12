@@ -67,6 +67,7 @@ class ModController extends ModsController
 		$this->set('viewMode', $viewMode);
 		
 		$query = $this->getQuery();
+		$query = $this->modulo->replaceFieldsValueIfEmpty($query);
         $this->set('query', $query);
     }
 
@@ -142,7 +143,7 @@ class ModController extends ModsController
                 $_POST["frmordem"] = $ordem;
             } // fim ordem automática
 
-            $_POST["frmcategoria"] = $_POST["aust_node"];
+            $_POST["frmcategoria"] = $_POST["frmcategoria"];
             $_POST['frmtitulo_encoded'] = encodeText($_POST['frmtitulo']);
 
             /*
@@ -172,7 +173,6 @@ class ModController extends ModsController
                 }
 
             }
-            
             $result = $this->modulo->save($_POST);
             $this->set('resultado', $result);
         }

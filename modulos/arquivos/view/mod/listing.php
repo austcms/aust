@@ -31,6 +31,7 @@ $sql = $modulo->loadSql($categorias);
 
 
 $query = $modulo->connection->query($sql);
+$query = $modulo->replaceFieldsValueIfEmpty($query);
 //pr($query);
 
 /*********************************

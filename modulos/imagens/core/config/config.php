@@ -125,7 +125,32 @@ $modInfo = array(
 	        "label" => "Tem link?",
 	        "inputType" => "checkbox",
 	    ),		
+	    /*
+	     * Tem seleção categoria?
+	     */
+	    'category_selection' => array(
+	        "value" => "",
+	        "label" => "Seleção de categoria?",
+	        "inputType" => "checkbox",
+	    ),		
+	    /*
+	     * Pode criar categorias?
+	     */
+	    'category_creation' => array(
+	        "value" => "",
+	        "label" => "Botão criar categoria?",
+	        "inputType" => "checkbox",
+			'help' => 'Só funcionará se puder selecionar a categoria.'
+		)
 	),
+    /*
+     * Se não há valor, substitui campo vazio na listagem
+     * pelos valores abaixo
+     */
+    'replaceFieldsValueIfEmpty' => array(
+        'titulo' => '[Sem título]',
+    ),
+
     /**
      * RESPONSER
      *

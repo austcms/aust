@@ -64,7 +64,7 @@ class ModController extends ModsController
         $query = $this->modulo->load($params);
         $this->set('sql', $this->modulo->lastSql );
         //$config = $this->modulo->loadConfig();
-        //$query = $this->modulo->replaceFieldsValueIfEmpty($query);
+        $query = $this->modulo->replaceFieldsValueIfEmpty($query);
 
         $this->set('query', $query );
 
