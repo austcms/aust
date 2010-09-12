@@ -111,13 +111,11 @@ if(!empty($_GET['action'])){
          * Se for save, redireciona automaticamente
          */
         if( $action == SAVE_ACTION ){
-			/*
             ?>
             <div class="loading_timer">
                 <img src="<?php echo IMG_DIR ?>loading_timer.gif" /> Redirecionando Automaticamente
             </div>
             <?php
-			*/
         }
         $action = $_GET['action'];
         /**
@@ -139,11 +137,10 @@ if(!empty($_GET['action'])){
         if( $action == SAVE_ACTION ){
             $goToUrl = "adm_main.php?section=".$_GET['section'].'&action=listing&aust_node='.$aust_node;
             ?>
-			<p>inc/conteudo.inc.php linha 140</p>
             <script type="text/javascript">
                 var timeToRefresh = 2;
                 setTimeout(function(){
-                    //window.location.href = "<?php echo $goToUrl ?>";
+                    window.location.href = "<?php echo $goToUrl ?>";
                 }, 3800);
             </script>
 

@@ -285,7 +285,6 @@ class Module
             return array();
 
         $qry = $this->_organizesLoadedData($qry);
-        $qry = $this->_replaceFieldsValueIfEmpty($qry);
 
         $embedModules = $this->getRelatedEmbed($austNode);
 
@@ -1402,13 +1401,8 @@ class Module
         return NULL;
     } // end getStructureConfig()
 
-    /*
-     *
-     * MÉTODOS PRIVADOS
-     *
-     */
     /**
-     * _replaceFieldsValueIfEmpty()
+     * replaceFieldsValueIfEmpty()
      *
      * Alguns campos em um resultado de conteúdo do DB não podem estar vazios.
      * Isto é configurado em config.php de cada módulo.
@@ -1418,7 +1412,7 @@ class Module
      * @param <array> $query
      * @return <array> O mesmo $query de entrada, mas tratado
      */
-    public function _replaceFieldsValueIfEmpty($query){
+    public function replaceFieldsValueIfEmpty($query){
 
         $tmp = $query;
 
@@ -1440,15 +1434,22 @@ class Module
                 /*
                  * Substitui campo vazio por valor padrão
                  */
-                if( empty($value[$requiredField]) )
+                if( empty($value[$requiredField]) ){
                     $query[$key][$requiredField] = $standardValue;
+				}
 
             }
         }
 
         return $query;
     }
-    
+
+    /*
+     *
+     * MÉTODOS PRIVADOS
+     *
+     */
+
     /**
      *
      * RESPONSER
