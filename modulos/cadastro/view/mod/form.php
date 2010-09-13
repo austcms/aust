@@ -291,8 +291,15 @@ foreach( $camposForm as $chave=>$valor ){
 					var imagesPath = '<?php echo $imagesPath ?>';
 					</script>
 					<?php
+					$i = 0;
 					foreach( $images as $key=>$image ){
 						$o++;
+						$i++;
+						
+						// somente uma imagem
+						if( !$modulo->getFieldConfig($fieldName, 'multiple_images') AND $i == 2 )
+							break;
+						
 						if( $o == 1 ){
 							?>
 							<tr>
@@ -340,8 +347,21 @@ foreach( $camposForm as $chave=>$valor ){
 				?>
 			</div>
 			
-	        <input type="file" name="<?php echo $inputName ?>[]" value="<?php echo $inputValue ?>" id="input-<?php echo $fieldName ?>" />
-	        <input type="file" name="<?php echo $inputName ?>[]" value="<?php echo $inputValue ?>" id="input-<?php echo $fieldName ?>" />
+			<?php
+			for($i = 1; $i <= 3; $i++){
+
+				$multiple = '';
+				if( $modulo->getFieldConfig($fieldName, 'multiple_images') )
+					$multiple = 'multiple="multiple"';
+				
+				if( !$modulo->getFieldConfig($fieldName, 'multiple_images') AND $i == 2 )
+					break;
+				
+				?>
+		        <input type="file" name="<?php echo $inputName ?>[]" value="<?php echo $inputValue ?>" id="input-<?php echo $fieldName ?>" <?php echo $multiple ?> />
+				<?php
+			}
+			?>
 
 			</div>
 		</div>

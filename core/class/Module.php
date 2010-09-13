@@ -1588,14 +1588,14 @@ class Module
         } else if( is_string($key) AND !empty($this->structureFieldsConfig) ) {
 
             if( $valueOnly ){
-				if( !empty($this->structureFieldsConfig[$key]['value']) )
-                	return $this->structureFieldsConfig[$key]['value'];
-				else if( !empty($this->structureFieldsConfig[$key]['valor']) )
-                	return $this->structureFieldsConfig[$key]['valor'];
+				if( !empty($this->structureFieldsConfig[$field][$key]['value']) )
+                	return $this->structureFieldsConfig[$field][$key]['value'];
+				else if( !empty($this->structureFieldsConfig[$field][$key]['valor']) )
+                	return $this->structureFieldsConfig[$field][$key]['valor'];
 				else
 					return false;
 			}
-            return $this->structureFieldsConfig[$key];
+            return $this->structureFieldsConfig[$field][$key];
         }
 
         return false;
