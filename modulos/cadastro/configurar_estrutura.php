@@ -87,6 +87,8 @@ if( !empty($_POST['conf_type']) AND $_POST['conf_type'] == "mod_conf" ){
     /**
      *
      */
+	
+	//pr($_POST);
     $modulo->saveModConf($_POST);
 }
 
@@ -713,52 +715,74 @@ if(!empty($_GET['function'])){
         <div class="content">
             <?php
             $configurations = $modulo->loadModConf(null,'field');
-//			pr($configurations);
+			$fields = $modulo->getFields(false);
+			//pr($configurations);
             if( !empty($configurations) && is_array($configurations) ){
                 ?>
 
                 <p>Configure os campos abaixo:</p>
                 <form method="post" action="adm_main.php?section=conf_modulos&aust_node=<?php echo $_GET['aust_node']; ?>&action=configurar" class="simples pequeno">
                 <input type="hidden" name="conf_type" value="mod_conf" />
+                <input type="hidden" name="conf_class" value="field" />
                 <input type="hidden" name="aust_node" value="<?php echo $_GET['aust_node']; ?>" />
                 <?php
 
-                foreach( $configurations as $key=>$options ){
+                foreach( $fields as $fieldName=>$fieldOptions ){
                     ?>
 
                     <div class="campo">
-                        <label><?php echo $options["label"] ?></label>
-                        <div class="input">
-                            <?php
-                            if( $options["inputType"] == "checkbox" ){
+                        <div><?php echo $fieldOptions["valor"] ?></div>
+                        <div style="margin-left: 15px">
+	                        <?php
+							if( empty($configurations[$fieldName]) )
+								$configurations[$fieldName] = array();
+							
+							foreach( $configurations[$fieldName] as $key=>$options ){
+								
+								if( !empty($options['field_type'])
+									AND $options['field_type'] != $fieldOptions['especie']
+								)
+									continue;
+								
+								?>
+								<div>
+								<?php
+		                        if( $options["inputType"] == "checkbox" ){
 
-                                /*
-                                 * Verifica valores no banco de dados.
-                                 */
-                                $checked = "";
-                                if( !empty($options['value']) ){
-                                    if( $options["value"] == "1" ){
-                                        $checked = 'checked="checked"';
-                                    }
-                                }
-                                ?>
-                                <input type="hidden" name="data[<?php echo $key; ?>]" value="0" />
+		                            /*
+		                             * Verifica valores no banco de dados.
+		                             */
+		
+		                            $checked = "";
+		                            if( !empty($options['value'])
+										AND $options['ref_field'] == $fieldName
+		 								)
+									{
+		                                if( $options["value"] == "1" ){
+		                                    $checked = 'checked="checked"';
+		                                }
+		                            }
+		                            ?>
+		                            <input type="hidden" name="data[<?php echo $fieldName ?>][<?php echo $key; ?>]" value="0" />
 
-                                <input type="checkbox" name="data[<?php echo $key; ?>]" <?php echo $checked; ?> value="1" class="input" />
-                                <?php
-                            }
+		                            <input type="checkbox" name="data[<?php echo $fieldName ?>][<?php echo $key; ?>]" <?php echo $checked; ?> value="1" class="input" />
+		                            <?php
+		                        }
 
-                            else {
-                                ?>
-                                <input type="text" name="nome" class="input" />
-                                <?php
-                            }
-                            ?>
-
+		                        else {
+		                            ?>
+		                            <input type="text" name="nome" class="input" />
+		                            <?php
+		                        }
+								echo $options['label'];
+								?>
+								
+								</div>
+								<?php
+							}
+	                        ?>
                         </div>
                     </div>
-                    <br clear="both" />
-
                     <?php
                 }
                 ?>

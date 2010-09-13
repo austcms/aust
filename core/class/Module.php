@@ -1205,27 +1205,75 @@ class Module
 
             $data = $params["data"];
 
+			if( is_null($params['conf_class']) OR empty($params['conf_class']) )
+				$confClass = 'module';
+			else
+				$confClass = $params['conf_class'];
+
+			/*
+			 * ajusta o parâmetro da busca SQL
+			 */
+			if( $confClass == 'module' )
+				$classSearchStatement = '( class IS NULL OR class=\'module\')';
+			else
+				$classSearchStatement = 'class=\''.$confClass.'\'';
+
+
 			/*
 			 * Se foi definido um usuário específico
 			 */
 			if( !empty($params['author']) AND is_numeric($params['author']) )
 				$whereAuthor = "AND autor='".$params['author']."'";
-			
-            foreach( $data as $propriedade=>$valor ) {
-				
-	            $this->connection->exec("DELETE FROM config WHERE tipo='mod_conf' AND local='".$params["aust_node"]."' AND propriedade='$propriedade' $whereAuthor");
 
-                $paramsToSave = array(
-                    "table" => "config",
-                    "data" => array(
-	                    "tipo" => "mod_conf",
-	                    "local" => $params["aust_node"],
-	                    "autor" => $user->LeRegistro("id"),
-	                    "propriedade" => $propriedade,
-	                    "valor" => $valor
-                    )
-                );
-                $this->connection->exec($this->connection->saveSql($paramsToSave));
+            foreach( $data as $propriedade=>$valor ) {
+	
+				/*
+				 * Quando o tipo de configuração é 'field', os dados vem
+				 * em um formato diferente, em array.
+				 */
+				if( $confClass == 'field' ){
+					$refField = $propriedade;
+					foreach( $valor as $propriedade=>$valor ){
+						
+						$deleteSQL = "DELETE FROM config WHERE tipo='mod_conf' AND $classSearchStatement AND local='".$params["aust_node"]."' AND propriedade='$propriedade' $whereAuthor";
+			            $this->connection->exec($deleteSQL);
+
+		                $paramsToSave = array(
+		                    "table" => "config",
+		                    "data" => array(
+			                    "tipo" => "mod_conf",
+								'class' => $confClass,
+			                    "local" => $params["aust_node"],
+			                    "autor" => $user->LeRegistro("id"),
+			                    "propriedade" => $propriedade,
+								'ref_field' => $refField,
+			                    "valor" => $valor
+		                    )
+		                );
+		                $this->connection->exec($this->connection->saveSql($paramsToSave));
+					}
+				}
+				/*
+				 * Configurações de módulo acontecem a seguir.
+				 */
+				else {
+				
+					$deleteSQL = "DELETE FROM config WHERE tipo='mod_conf' AND $classSearchStatement AND local='".$params["aust_node"]."' AND propriedade='$propriedade' $whereAuthor";
+		            $this->connection->exec($deleteSQL);
+
+	                $paramsToSave = array(
+	                    "table" => "config",
+	                    "data" => array(
+		                    "tipo" => "mod_conf",
+							'class' => $confClass,
+		                    "local" => $params["aust_node"],
+		                    "autor" => $user->LeRegistro("id"),
+		                    "propriedade" => $propriedade,
+		                    "valor" => $valor
+	                    )
+	                );
+	                $this->connection->exec($this->connection->saveSql($paramsToSave));
+				}
             }
 	        return true;
         } else {
@@ -1312,49 +1360,99 @@ class Module
             $query = array();
 			
 			/*
-			 * Loop pela configurações salvas para preparar a Array para mesclar
-			 * com as configurações estaticas.
+			 * Configurações de campos individuais têm um formato completamente
+			 * diferente de configurações de módulos.
 			 */
-            foreach($queryTmp as $valor) {
+			if( $confClass == 'field' ){
+				$fields = $this->getFields();
+				if( empty($fields) )
+					return array();
+					
+	            foreach($queryTmp as $valor) {
+		
+					// $prop: toma o nome da propriedade
+	                $prop = $valor["ref_field"]; // suas_fotos
+
+					/*
+					 * Se não houver dados salvos no db, retorna o que está no
+					 * arquivo de configuração. Se houver, já mescla ambos os dados.
+					 */
+	                if( !empty($staticConfig) ){
+						foreach( $staticConfig as $configName=>$configValue ){
+
+							/*
+							 * Tipo do campo bate com o field_type da configuração?
+							 */
+							if( !empty($configValue['field_type'])
+								AND $configValue['field_type'] == $fields[$prop]['especie'] )
+							{
+								if( empty($query[$prop][$configName]) ){
+		                    		$query[$prop][$configName] = $configValue;
+								}
+							}
+						}
+	                }
+	
+					if( !empty( $query[$prop][$valor['propriedade']] ) )
+	                	$query[$prop][$valor["propriedade"]] = array_merge( $query[$prop][$valor["propriedade"]] , $valor );
+					else
+                		$query[$prop][$valor["propriedade"]] = $valor;
+	                /**
+	                 * @todo - array $query tem 'value' e 'valor'. Deve-se
+	                 * tirar uma e ficar somente uma.
+	                 */
+	                $query[$prop][$valor["propriedade"]]['value'] = $valor["valor"];
+	            }
+			} else {
+				/*
+				 * Loop pela configurações salvas para preparar a Array para mesclar
+				 * com as configurações estaticas.
+				 */
+	            foreach($queryTmp as $valor) {
 				
-				// $prop: toma o nome da propriedade
-                $prop = $valor["propriedade"];
-                $query[$prop] = array();
+					// $prop: toma o nome da propriedade
+	                $prop = $valor["propriedade"];
+	                $query[$prop] = array();
 
-                if( !empty($staticConfig[$prop]) ){
-                    $query[$prop] = $staticConfig[$prop];
-                }
+	                if( !empty($staticConfig[$prop]) ){
+	                    $query[$prop] = $staticConfig[$prop];
+	                }
 
-                $query[$prop] = array_merge( $query[$prop], $valor );
-                /**
-                 * @todo - array $query tem 'value' e 'valor'. Deve-se
-                 * tirar uma e ficar somente uma.
-                 */
-                $query[$valor["propriedade"]]['value'] = $valor['valor'];
-            }
-
+	                $query[$prop] = array_merge( $query[$prop], $valor );
+	                /**
+	                 * @todo - array $query tem 'value' e 'valor'. Deve-se
+	                 * tirar uma e ficar somente uma.
+	                 */
+	                $query[$valor["propriedade"]]['value'] = $valor['valor'];
+	            }
+			}
+			
 			/*
 			 * Loop pela configurações estáticas para se certificar que todas as
 			 * configurações serão retornadas, mesmo as que não possuem nenhum
 			 * configuração definida.
 			 */
 			$result = array();
-			if( is_array($staticConfig) ){
-				foreach( $staticConfig as $key=>$value ){
-					if( !empty($query[$key]) )
-						$result[$key] = $query[$key];
-					else
-						$result[$key] = $value;
+			
+			if( $confClass == 'module' ){
+				if( is_array($staticConfig) ){
+					foreach( $staticConfig as $key=>$value ){
+						if( !empty($query[$key]) )
+							$result[$key] = $query[$key];
+						else
+							$result[$key] = $value;
+					}
 				}
+			} else {
+				$result = $query;
 			}
 			
-
 			// se é para retorna configurações de um único autor, não
 			// salva configurações em cache
 			if( empty($author) ){
 				if( $confClass == 'field')
             		$this->structureFieldsConfig = $result;
-				elseif( $confClass == 'modulo')
+				elseif( $confClass == 'module')
             		$this->structureConfig = $result;
 			}
 			
@@ -1471,16 +1569,17 @@ class Module
 			AND is_string($field) 
 			AND empty($this->structureFieldsConfig) ) {
             $result = $this->loadModConf($this->austNode, 'field');
-
-            if( empty($this->structureFieldsConfig[$key]) )
+			
+            if( empty($this->structureFieldsConfig[$field][$key]) )
                 return array();
 
             if( $valueOnly )
-                return $this->structureFieldsConfig[$key]['value'];
+                return $this->structureFieldsConfig[$field][$key]['value'];
             
-            return $this->structureFieldsConfig[$key];
+            return $this->structureFieldsConfig[$field][$key];
 
         } else if( is_string($key) AND !empty($this->structureFieldsConfig) ) {
+
             if( $valueOnly ){
 				if( !empty($this->structureFieldsConfig[$key]['value']) )
                 	return $this->structureFieldsConfig[$key]['value'];

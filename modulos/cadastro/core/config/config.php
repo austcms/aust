@@ -111,7 +111,7 @@ $modInfo = array(
          * Múltiplas imagens ou apenas uma?
          */
         'multiple_images' => array(
-			'field_type' => 'image',
+			'field_type' => 'images',
             "value" => "",
             "label" => "Múltiplas imagens?",
             "inputType" => "checkbox",
@@ -123,7 +123,7 @@ $modInfo = array(
          * Tem imagem secundária?
          */
         'has_secondary_image' => array(
-			'field_type' => 'image',
+			'field_type' => 'images',
             "value" => "",
             "label" => "Tem imagem secundária?",
             "inputType" => "checkbox",
