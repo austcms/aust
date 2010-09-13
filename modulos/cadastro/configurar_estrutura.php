@@ -716,7 +716,6 @@ if(!empty($_GET['function'])){
             <?php
             $configurations = $modulo->loadModConf(null,'field');
 			$fields = $modulo->getFields(false);
-			//pr($configurations);
             if( !empty($configurations) && is_array($configurations) ){
                 ?>
 

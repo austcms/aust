@@ -232,6 +232,32 @@ class CadastroTest extends PHPUnit_Framework_TestCase
         $this->obj->connection->query("DELETE FROM cadastro_conf WHERE categorias_id='777' AND nome='teste7777'");
 	}
 	
+	function testLoadModConfWithoutSavedData(){
+		/* FIELDS */
+        $this->obj->connection->query("DELETE FROM config WHERE local='777' AND nome='teste7777'");
+        $this->obj->connection->query("DELETE FROM cadastro_conf WHERE categorias_id='777' AND nome='teste7777'");
+		/*
+		 * Criar o campo de cadastro
+		 */
+	    $sql = "INSERT INTO cadastros_conf
+	                 (tipo,chave,valor,categorias_id,nome, especie)
+	             VALUES
+	                 ('campo','campo_1','Campo 1','777','teste7777', 'images')
+	             ";
+	    $this->obj->connection->query($sql);
+
+		
+        /* start test #1 */
+	        $result = $this->obj->loadModConf(777, 'field');
+	        $this->assertArrayHasKey(
+	                'multiple_images',
+	                $result['campo_1'],
+	                'Teste #1.1 falhou');
+
+        $this->obj->connection->query("DELETE FROM config WHERE local='777' AND nome='teste7777'");
+        $this->obj->connection->query("DELETE FROM cadastro_conf WHERE categorias_id='777' AND nome='teste7777'");
+	}
+	
 	function testGetFieldConfig(){
         $this->obj->connection->query("DELETE FROM config WHERE local='777' AND nome='teste7777'");
         $this->obj->connection->query("DELETE FROM cadastro_conf WHERE categorias_id='777' AND nome='teste7777'");

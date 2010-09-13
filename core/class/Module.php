@@ -1235,7 +1235,7 @@ class Module
 					$refField = $propriedade;
 					foreach( $valor as $propriedade=>$valor ){
 						
-						$deleteSQL = "DELETE FROM config WHERE tipo='mod_conf' AND $classSearchStatement AND local='".$params["aust_node"]."' AND propriedade='$propriedade' $whereAuthor";
+						$deleteSQL = "DELETE FROM config WHERE tipo='mod_conf'  AND $classSearchStatement AND local='".$params["aust_node"]."' AND propriedade='$propriedade' AND ref_field='$refField' $whereAuthor";
 			            $this->connection->exec($deleteSQL);
 
 		                $paramsToSave = array(
@@ -1338,6 +1338,7 @@ class Module
 			 */
             $staticConfig = $this->loadConfig();
 
+
 			if( $confClass == 'module' )
             	$staticConfig = $staticConfig['configurations'];
 			else
@@ -1393,6 +1394,7 @@ class Module
 						}
 	                }
 	
+	
 					if( !empty( $query[$prop][$valor['propriedade']] ) )
 	                	$query[$prop][$valor["propriedade"]] = array_merge( $query[$prop][$valor["propriedade"]] , $valor );
 					else
@@ -1426,14 +1428,13 @@ class Module
 	                $query[$valor["propriedade"]]['value'] = $valor['valor'];
 	            }
 			}
-			
 			/*
 			 * Loop pela configurações estáticas para se certificar que todas as
 			 * configurações serão retornadas, mesmo as que não possuem nenhum
 			 * configuração definida.
 			 */
 			$result = array();
-			
+
 			if( $confClass == 'module' ){
 				if( is_array($staticConfig) ){
 					foreach( $staticConfig as $key=>$value ){
@@ -1444,6 +1445,12 @@ class Module
 					}
 				}
 			} else {
+				if( is_array($staticConfig) ){
+					foreach( $fields as $fieldName=>$fieldInfo ){
+						if( empty($query[$fieldName]) )
+							$query[$fieldName] = $staticConfig;
+					}
+				}
 				$result = $query;
 			}
 			
