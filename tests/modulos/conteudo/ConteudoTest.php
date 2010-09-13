@@ -398,6 +398,7 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
         $config = $this->obj->loadConfig();
         if( !empty($config['replaceFieldsValueIfEmpty']) ){
 
+			$query = $this->obj->replaceFieldsValueIfEmpty($query);
             foreach( $query as $value ){
 
                 foreach( $config['replaceFieldsValueIfEmpty'] as $field=>$fieldRule ){
@@ -412,7 +413,13 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
         //$this->assertArrayHasKey(0, $result, "Module::load() não funcionando" );
     }
 
+	/*
+	 *
+	 * Carrega configurações de módulos e campos (quando existem)
+	 *
+	 */
     function testLoadModConf(){
+        $this->obj->connection->query("DELETE FROM config WHERE local='777' AND nome='teste7777'");
         $sql = "INSERT INTO config
                     (tipo,local,nome,propriedade,valor)
                 VALUES
@@ -433,9 +440,18 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
 	                "label" => "Working?",
 	                "inputType" => "checkbox",
 	            ),
-            )
+            ),
+			'field_configurations' => array(
+			    'teste' => array(
+					'field_type' => 'image',
+			        "value" => "",
+			        "label" => "Working?",
+			        "inputType" => "checkbox",
+			    ),
+			)
         );
-
+		
+		/* MODULE */
         /* start test #1 */
             $result = $this->obj->loadModConf(777);
             $this->assertArrayHasKey(
@@ -482,8 +498,61 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
                     $this->obj->getStructureConfig('working_test', false)
                 );
 
+		/* FIELD */
+	        $sql = "INSERT INTO config
+	                    (tipo,local,nome,propriedade,valor, class)
+	                VALUES
+	                    ('mod_conf','777','teste7777','teste','1', 'field')
+	                ";
+	        $this->obj->connection->query($sql);
+	        $catLastInsertId = $this->obj->connection->lastInsertId();
+		
+        /* start test #4 */
+	        $result = $this->obj->loadModConf(777, 'field');
+	        $this->assertArrayHasKey(
+	                'teste',
+	                $result,
+	                'Teste #4.1 falhou');
+
+	        $this->assertEquals(
+	                '1',
+	                $result['teste']['value'],
+	                'Teste #4.2 falhou');
+
         $this->obj->connection->query("DELETE FROM config WHERE local='777' AND nome='teste7777'");
     }
+
+	function testGetFieldConfig(){
+        $this->obj->connection->query("DELETE FROM config WHERE local='777' AND nome='teste7777'");
+        $sql = "INSERT INTO config
+                    (tipo,local,nome,propriedade,valor, class, ref_field)
+                VALUES
+                    ('mod_conf','777','teste7777','has_conf','1', 'field', 'campo_1')
+                ";
+
+        $this->obj->connection->query($sql);
+        $catLastInsertId = $this->obj->connection->lastInsertId();
+		$this->obj->austNode = '777';
+
+        $this->obj->config = array(
+			'field_configurations' => array(
+			    'has_conf' => array(
+					'field_type' => 'image',
+			        "value" => "",
+			        "label" => "Working?",
+			        "inputType" => "checkbox",
+			    ),
+			)
+        );
+
+		$result = $this->obj->getFieldConfig('campo_1', 'has_conf');
+		$this->assertEquals('1', $result);
+		
+		$result = $this->obj->getFieldConfig('campo_1', 'has_conf2');
+		$this->assertFalse($result);
+		
+        $this->obj->connection->query("DELETE FROM config WHERE local='777' AND nome='teste7777'");
+	}
 
 	/*
 	 * verifica se todas as configurações do arquivo config.php existem no método
@@ -517,7 +586,6 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
         $lastId = $this->obj->connection->lastInsertId();
         $this->obj->fieldsToLoad = "*";
         $this->obj->load($lastId);
-
 
         /* test #1 */
             $str = "http://mywebsite.com/news/%id/%title_encoded";

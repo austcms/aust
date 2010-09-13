@@ -892,7 +892,7 @@ class Cadastro extends Module {
 
     }
 
-    /**
+    /*
      * INTERFACE DE SETUP
      *
      * Métodos para o setup de novas estruturas
@@ -902,6 +902,14 @@ class Cadastro extends Module {
         
     }
 
+	/*
+	 * INTERFACE DE CONFIGURAÇÃO DE ESTRUTURA
+	 *
+	 * 
+	 */
+	public function drawFieldConfiguration(){
+    	$result = '';
+	}
 }
 
 ?>

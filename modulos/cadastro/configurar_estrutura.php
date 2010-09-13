@@ -700,7 +700,78 @@ if(!empty($_GET['function'])){
         </div>
         <div class="footer"></div>
     </div>
-    <?
+
+    <?php
+    /**
+     * CONFIGURAÇÕES ESPECÍFICAS DE CAMPOS
+     */
+    ?>
+    <div class="widget">
+        <div class="titulo">
+            <h3>Configurações de Campos</h3>
+        </div>
+        <div class="content">
+            <?php
+            $configurations = $modulo->loadModConf(null,'field');
+//			pr($configurations);
+            if( !empty($configurations) && is_array($configurations) ){
+                ?>
+
+                <p>Configure os campos abaixo:</p>
+                <form method="post" action="adm_main.php?section=conf_modulos&aust_node=<?php echo $_GET['aust_node']; ?>&action=configurar" class="simples pequeno">
+                <input type="hidden" name="conf_type" value="mod_conf" />
+                <input type="hidden" name="aust_node" value="<?php echo $_GET['aust_node']; ?>" />
+                <?php
+
+                foreach( $configurations as $key=>$options ){
+                    ?>
+
+                    <div class="campo">
+                        <label><?php echo $options["label"] ?></label>
+                        <div class="input">
+                            <?php
+                            if( $options["inputType"] == "checkbox" ){
+
+                                /*
+                                 * Verifica valores no banco de dados.
+                                 */
+                                $checked = "";
+                                if( !empty($options['value']) ){
+                                    if( $options["value"] == "1" ){
+                                        $checked = 'checked="checked"';
+                                    }
+                                }
+                                ?>
+                                <input type="hidden" name="data[<?php echo $key; ?>]" value="0" />
+
+                                <input type="checkbox" name="data[<?php echo $key; ?>]" <?php echo $checked; ?> value="1" class="input" />
+                                <?php
+                            }
+
+                            else {
+                                ?>
+                                <input type="text" name="nome" class="input" />
+                                <?php
+                            }
+                            ?>
+
+                        </div>
+                    </div>
+                    <br clear="both" />
+
+                    <?php
+                }
+                ?>
+                <input type="submit" name="submit" value="Salvar" />
+                </form>
+                <?php
+            }
+            ?>
+
+        </div>
+        <div class="footer"></div>
+    </div>
+    <?php
     /**
      * LISTAGEM DE CAMPOS
      *
