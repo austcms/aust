@@ -85,7 +85,7 @@
                 );
                 foreach($adminsTipos as $valor){
                     ?>
-                    <input type="radio" name="agente" onchange="mostraPermissoes('<?php echo $valor['id']; ?>','userTipo')" id="<?php echo $valor['nome']; ?>" name="<?php echo $valor['id']?>" /> <?php echo $valor['nome']; ?><br />
+                    <input type="radio" name="agente" onclick="javascript: mostraPermissoes('<?php echo $valor['id']; ?>','userTipo')" id="<?php echo $valor['nome']; ?>" name="<?php echo $valor['id']?>" /> <?php echo $valor['nome']; ?><br />
                     <?php
                 }
             ?>
@@ -133,7 +133,7 @@
                 );
                 foreach($adminsTipos as $valor){
                     ?>
-                    <input type="radio" name="agente" onchange="mostraPermissoes('<?php echo $valor['id']; ?>','user')" id="<?php echo $valor['nome']; ?>" name="<?php echo $valor['id']?>" /> <?php echo $valor['nome']; ?><br />
+                    <input type="radio" name="agente" onclick="mostraPermissoes('<?php echo $valor['id']; ?>','user')" id="<?php echo $valor['nome']; ?>" name="<?php echo $valor['id']?>" /> <?php echo $valor['nome']; ?><br />
                     <?php
                 }
             ?>

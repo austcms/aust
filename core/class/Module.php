@@ -40,9 +40,14 @@ class Module
         public $austField = 'categoria';
         public $order = 'id DESC';
 
+		public $defaultLimit = '25';
+		public $limit;
+		
+		public $viewModes = array();
+
     /*
      *
-     * VARIÁVEIS DE AMBIENTE
+     * VARIÁVEIS DE QUERY
      *
      */
         /**
@@ -56,6 +61,28 @@ class Module
          * @var <array>
          */
         public $loadedIds;
+
+        /**
+         *
+         * @var <string> Contém a última SQL criada.
+         */
+        public $lastSql;
+        /**
+         *
+         * @var <string> Contém a última SQL criada para contar quantos registros
+		 * há no DB.
+         */
+        public $lastCountSql;
+        /**
+         *
+         * @var <int> Total de registros no DB.
+         */
+        public $totalRows;
+        /**
+         *
+         * @var <array> Último resultado de query executado.
+         */
+        public $lastQuery;
     
     /**
      * VARIÁVEIS DO MÓDULO
@@ -102,6 +129,11 @@ class Module
          * @var array Configurações estáticas do módulo
          */
         public $structureConfig;
+        /**
+         *
+         * @var array Configurações estáticas do módulo
+         */
+        public $structureFieldsConfig;
 
         public $params;
 
@@ -131,6 +163,9 @@ class Module
         
         $this->austNode = $_GET['aust_node'];
 
+        if( !empty($_GET['w']) AND is_numeric($_GET['w']) )
+            $this->w = $_GET['w'];
+
         /**
          * Ajusta a conexao para o módulo
          */
@@ -141,6 +176,13 @@ class Module
             $this->user = User::getInstance();
 
         $this->config = $this->loadConfig();
+		
+		if( !empty($this->config['viewmodes']) )
+			$this->viewModes = $this->config['viewmodes'];
+		else
+			$this->viewModes = array('list');
+
+		$this->limit = $this->defaultLimit;
     }
 
     /*
@@ -215,28 +257,47 @@ class Module
         $this->loadedIds = array();
         
         $paramForLoadSql = $param;
-        
+
+        /*
+         * austNode é um conjunto de arrays
+         */
         if( is_array($param['austNode']) ){
             $austNode = reset( array_keys( $param['austNode'] ) );
-        } else {
+        }
+        /*
+         * $params contém mais condições para a busca
+         */
+        elseif( is_array($param) ){
             $austNode = array($param['austNode']=>'');
             $paramForLoadSql['austNode'] = array($param['austNode']=>'');
         }
+        /*
+         * Se $params é um número, significa que é um número
+         */
+        elseif( is_numeric($param) ){
+            $austNode = array( 'austNode' => '' );
+            $paramForLoadSql['id'] = $param;
 
-        $qry = $this->connection->query($this->loadSql($paramForLoadSql));
+        }
+
+		// counts rows
+		$this->totalRows = $this->_getTotalRows($paramForLoadSql);
+		
+		$sql = $this->loadSql($paramForLoadSql);
+		
+        $qry = $this->connection->query($sql);
         if( empty($qry) )
             return array();
 
         $qry = $this->_organizesLoadedData($qry);
-        $qry = $this->_replaceFieldsValueIfEmpty($qry);
 
         $embedModules = $this->getRelatedEmbed($austNode);
-
 
         if( empty($embedModules)
             OR empty($this->loadedIds) )
         {
-            sort($qry);
+            $qry = serializeArray($qry);
+            $this->lastQuery = $qry;
             return $qry;
         }
 
@@ -260,9 +321,35 @@ class Module
             }
         }
         
-        sort($qry);
+        $qry = serializeArray($qry);
+        $this->lastQuery = $qry;
         return $qry;
     }
+
+    /**
+     * _totalRows()
+     *
+     * Organiza uma array com os dados carregados de um db, botando
+     * como chave de cada índice da array o id do registro.
+     *
+     * @param <mixed> $param O SQL para contar registros ou opções Array
+     * @return <int>
+     */
+	function _getTotalRows($param){
+		if( is_array($param) ){
+			$param['countTotalRows'] = true;
+			$param = $this->loadSql($param);
+		}
+		
+		if( is_string($param) ){
+			$result = reset( $this->connection->query($param) );
+			$total = ( is_numeric($result['rows']) ) ? $result['rows'] : 0;
+		} else {
+			return 0;
+		}
+		
+		return $total;
+	}
 
     /**
      * _organizesLoadedData()
@@ -302,23 +389,51 @@ class Module
         /*
          * Default options
          */
-        if( !empty($options['categorias']) ){
+        if( !empty($options['categorias'])
+            AND is_array($options) )
+        {
+            print $options['categorias'];
+
             print("Argumento <strong>categorias</strong> ultrapassada em \$modulo->loadSql. Use \$options['austNode'].");
             exit(0);
         }
+		/* gera sql para descobrir o número total de rows */
+		if( is_array($options) AND !empty($options['countTotalRows']) AND $options['countTotalRows'] ){
+			$options['limit'] = false;
+			$options['page'] = false;
+			$options['countTotalRows'] = true;
+		}
+        /*
+         * $options sendo array, pode ter várias condições. se $options é
+         * numérico, busca por id.
+         */
+		$defaultLimit = $this->defaultLimit;
 
-        $id = empty($options['id']) ? '' : $options['id'];
-        $austNode = empty($options['austNode']) ? array() : $options['austNode'];
-        $page = empty($options['page']) ? '1' : $options['page'];
-        $limit = empty($options['limit']) ? '25' : $options['limit'];
-        $customWhere = empty($options['where']) ? '' : ' '.$options['where'];
+        $id = null;
+        $austNode = null;
+        $page = null;
+        $customWhere = null;
+        $order = 'id DESC';
 
-        if( empty($options['order']) ){
-            if( empty($this->order) )
-                $order = 'id DESC';
-            $order = $this->order;
-        } else {
-            $order = $options['order'];
+        if( is_array($options) ){
+            $id = empty($options['id']) ? '' : $options['id'];
+            $austNode = empty($options['austNode']) ? array() : $options['austNode'];
+            $page = empty($options['page']) ? false : $options['page'];
+            $limit = empty($options['limit']) ? $defaultLimit : $options['limit'];
+            $customWhere = empty($options['where']) ? '' : ' '.$options['where'];
+
+
+            if( empty($options['order']) ){
+                if( empty($this->order) )
+                    $order = 'id DESC';
+                $order = $this->order;
+            } elseif( is_string($options['order']) ) {
+                $order = $options['order'];
+            }
+
+        } elseif( is_numeric($options) ){
+            $id = $options;
+            $limit = $defaultLimit;
         }
 
         if( !empty($options)
@@ -346,14 +461,26 @@ class Module
             $where = $where . " AND ".$this->austField." IN ('".$austNodeForSql."')";
         }
 
-        /*
-         * Paginação?
-         */
-            if( $page == 0 )
-                $page = 1;
-            
-            $pageLimit = (($page-1) * $limit);
-            $limit = " LIMIT ".$pageLimit.",".$limit;
+		/*
+		 * Limit
+		 */
+		$limitStr = '';
+		$limitParams = array(
+			'page' => ( empty($page) ) ? false : $page,
+			'limit' => ( empty($limit) ) ? false : $limit,
+		);
+		/*
+		 * Limit definido?
+		 */
+		if( !empty($limit) AND empty($options['countTotalRows']) ){
+            $limitStr = $this->_limitSql( $limitParams );
+		}
+		/*
+		 * Contando rows somente
+		 */
+		elseif( !empty($options['countTotalRows']) AND $options['countTotalRows'] ) {
+			$limitStr = ' LIMIT 0,1';
+		}
 
         if( empty($this->describedTable[$this->useThisTable()]) ){
             $tempDescribe = $this->connection->query('DESCRIBE '.$this->useThisTable());
@@ -363,23 +490,43 @@ class Module
         }
 
         $fieldsInSql = array();
-        $fields = '';
+        $fields = 'id, ';
         if( !empty( $this->describedTable[$this->useThisTable()] ) ){
-            foreach( $this->fieldsToLoad as $field ){
-                if( array_key_exists($field, $this->describedTable[$this->useThisTable()]) ){
+
+            $fieldsToLoad = $this->fieldsToLoad;
+            if( !is_array($fieldsToLoad) ){
+                $fieldsToLoad = array($fieldsToLoad);
+            }
+
+            foreach( $fieldsToLoad as $field ){
+                //if( array_key_exists($field, $this->describedTable[$this->useThisTable()]) ){
+                if( $field == "*"){
+                    unset($fieldsInSql);
+                    $fieldsInSql[] = "*";
+                    $fields = "";
+                    break;
+                } else {
                     $fieldsInSql[] = $field;
                 }
             }
+
         }
 
         if( !empty($fieldsInSql) )
-            $fields = implode(', ', $fieldsInSql).',';
+            $fields.= implode(', ', $fieldsInSql).',';
 
+		/*
+		 * countTotalRows
+		 */
+		if( !empty($options['countTotalRows']) AND $options['countTotalRows'] === true )
+			$fields = 'count(id) as rows, ';
+		
+		
         /*
          * Sql para listagem
          */
         $sql = "SELECT
-                    id, $fields
+                    $fields
                     ".$this->austField." AS cat,
                     DATE_FORMAT(".$this->date['created_on'].", '".$this->date['standardFormat']."') as adddate,
                     (	SELECT
@@ -394,9 +541,60 @@ class Module
                 WHERE 1=1$id".
                 $where."".$customWhere.
                 " ORDER BY ".$order."
-                $limit";
+                $limitStr";
+
+		if( empty($options['countTotalRows']) )
+        	$this->lastSql = $sql;
+		else
+			$this->lastCountSql = $sql;
+			
         return $sql;
     }
+
+    /**
+     * _limitSql()
+     *
+     * Retorna o LIMIT de um sql
+     *
+     * @param <array> $params
+     * @return <string>
+     */
+	function _limitSql($params){
+		
+		// page
+		if( empty($params['page']) OR !is_numeric($params['page']) ){
+			$page = $this->page();
+		} else {
+			$page = $params['page'];
+		}
+			
+        if( $page <= 0 OR !is_numeric($page) )
+            $page = 1;
+		
+		if( empty($params['limit']) OR !is_numeric($params['limit']) ){
+			$limit = $this->defaultLimit;
+		} else {
+			$limit = $params['limit'];
+			$this->limit = $limit;
+		}
+		
+        $pageLimit = (($page-1) * $limit);
+
+        $result = " LIMIT ".$pageLimit.",".$limit;
+
+		return $result;
+	} // fim _limitSql()
+	
+	function page(){
+		$page = 1;
+		if( !empty($_GET['page']) )
+			$page = $_GET['page'];
+		elseif( !empty($_GET['pagina']) )
+			$page = $_GET['pagina'];
+			
+		return $page;
+	}
+
     /**
      * delete()
      *
@@ -477,8 +675,33 @@ class Module
                     VALUES ({$sqlvalorstr})";
         }
 
-
         return $sql;
+    }
+
+    public function getGeneratedUrl($w = ""){
+
+        $result = $this->getStructureConfig('generate_preview_url');
+		
+        if( empty($w) AND empty($this->w) )
+            return false;
+        else if( empty($w) AND is_numeric($this->w)){
+            $w = $this->w;
+
+            $result = str_replace("%id", $w, $result);
+
+            $lastQuery = array();
+            if( count($this->lastQuery) >= 1 ){
+                $lastQuery = reset($this->lastQuery);
+            }
+            if( !empty($lastQuery['titulo_encoded']) ){
+                $titleEncoded = $lastQuery['titulo_encoded'];
+
+                $result = str_replace("%title_encoded", $titleEncoded, $result);
+            }
+            
+        }
+
+        return $result;
     }
 
     /**
@@ -789,61 +1012,86 @@ class Module
      */
     public function getIncludeFolder(){
         return THIS_TO_BASEURL.MODULOS_DIR.strtolower( get_class($this) );
-        //return THIS_TO_BASEURL.MODULOS_DIR.$modDir.MOD_CONFIG;
     }
 
-    /**
-     * @todo - criar unit test para o método getConfigurations() abaixo.
-     */
-    /**
-     * getConfigurations()
-     *
-     * Retorna as configurações do módulo.
-     *
-     * @return <array>
-     */
-    public function getConfigurations(){
-
-        $configurations = $this->loadConfig();
-        if( empty($configurations['configurations']) )
-            return array();
-        
-        $configurations = $configurations['configurations'];
-
-        $sql = "SELECT
-                    *
-                FROM
-                    config
-                WHERE
-                    tipo  = 'mod_conf' AND
-                    local = '".$this->austNode."'
-                ";
-        $queryTmp = $this->connection->query($sql, "ASSOC");
-
-        $query = array();
-        foreach( $queryTmp as $value ){
-            $query[$value["propriedade"]] = $value;
-        }
-
-        $result = array();
-        foreach( $configurations as $key=>$configuration ){
-            
-            $result[$key] = $configuration;
-
-            if( array_key_exists($key, $query) ){
-                $result[$key]['value'] = $query[$key]['valor'];
-            }
-        }
-
-
-        return $result;
-    } // end getConfigurations()
+	/**
+	 * setViewMode()
+	 *
+	 * Alguns módulos tem viewmodes diferentes, ou seja, listagem de formato
+	 * thumbs ou lista.
+	 */
+	public function setViewMode($viewMode = ''){
+		if( empty($this->viewModes) ) return false;
+		if( empty($viewMode) AND empty($_POST['viewMode']) ) return false;
+		else if( !empty($_POST['viewMode']) )
+			$viewmode = $_POST['viewMode'];
+			
+		if( !in_array($viewmode, $this->viewModes) ) return false;
+		$user = User::getInstance();
+		$params = array(
+	        "conf_type" => "mod_conf",
+	        "aust_node" => $this->austNode,
+			'author' => $user->getId(),
+			'data' => array(
+				'viewmode' => $viewmode
+			)
+		);
+		
+		$result = $this->saveModConf($params);
+		return $result;
+	}
+	
+	/**
+	 * viewmode()
+	 * 
+	 * Retorno o viewmode atual, considerando o usuário atual. 
+	 * 
+	 */
+	public function viewmode(){
+		if( count($this->viewModes) == 1 )
+			return $this->viewModes[0];
+		
+		$user = User::getInstance();
+		$result = $this->loadModConf('viewmode', null, $user->getId());
+		if( empty($result) )
+			return $this->viewModes[0];
+		else
+			return $result;
+	}
 
 /**
  *
  * VERIFICAÇÕES
  *
  */
+
+    /**
+     * isCreate()
+     *
+     * Verifica se é formulário de criação.
+     *
+     * @return <bool>
+     */
+    public function isCreate(){
+        if( $_GET['action'] == CREATE_ACTION )
+            return true;
+
+        return false;
+    }
+    /**
+     * isEdit()
+     *
+     * Verifica se é formulário de edição.
+     *
+     * @return <bool>
+     */
+    public function isEdit(){
+        if( $_GET['action'] == EDIT_ACTION )
+            return true;
+
+        return false;
+    }
+
     /**
      * hasSchema()
      *
@@ -930,10 +1178,21 @@ class Module
      * Para exemplo de como usar, veja o código de configuração do módulo textos
      *
      * @param array $params
+	 *
+	 * O formato de $params deve ser o seguinte:
+	 *
+	 * 		array(
+	 *			'aust_node' => int,
+	 *			'conf_type' => 'mod_conf',
+	 *			'data' => array(
+	 *				'propriedade_1' => 'valor_1',
+	 *				'propriedade_2' => 'valor_2'
+	 *			)
+	 *		)
+	 *
      * @return bool
      */
     public function saveModConf($params) {
-
         $user = User::getInstance();
 
         /*
@@ -945,85 +1204,405 @@ class Module
             AND !empty($params['aust_node']) ) {
 
             $data = $params["data"];
-            $this->connection->exec("DELETE FROM config WHERE tipo='mod_conf' AND local='".$params["aust_node"]."'");
-            foreach( $data as $propriedade=>$valor ) {
 
-                $paramsToSave = array(
-                    "table" => "config",
-                    "data" => array(
-                    "tipo" => "mod_conf",
-                    "local" => $params["aust_node"],
-                    "autor" => $user->LeRegistro("id"),
-                    "propriedade" => $propriedade,
-                    "valor" => $valor
-                    )
-                );
-                $this->connection->exec($this->connection->saveSql($paramsToSave));
+			if( is_null($params['conf_class']) OR empty($params['conf_class']) )
+				$confClass = 'module';
+			else
+				$confClass = $params['conf_class'];
+
+			/*
+			 * ajusta o parâmetro da busca SQL
+			 */
+			if( $confClass == 'module' )
+				$classSearchStatement = '( class IS NULL OR class=\'module\')';
+			else
+				$classSearchStatement = 'class=\''.$confClass.'\'';
+
+
+			/*
+			 * Se foi definido um usuário específico
+			 */
+			if( !empty($params['author']) AND is_numeric($params['author']) )
+				$whereAuthor = "AND autor='".$params['author']."'";
+
+            foreach( $data as $propriedade=>$valor ) {
+	
+				/*
+				 * Quando o tipo de configuração é 'field', os dados vem
+				 * em um formato diferente, em array.
+				 */
+				if( $confClass == 'field' ){
+					$refField = $propriedade;
+					foreach( $valor as $propriedade=>$valor ){
+						
+						$deleteSQL = "DELETE FROM config WHERE tipo='mod_conf'  AND $classSearchStatement AND local='".$params["aust_node"]."' AND propriedade='$propriedade' AND ref_field='$refField' $whereAuthor";
+			            $this->connection->exec($deleteSQL);
+
+		                $paramsToSave = array(
+		                    "table" => "config",
+		                    "data" => array(
+			                    "tipo" => "mod_conf",
+								'class' => $confClass,
+			                    "local" => $params["aust_node"],
+			                    "autor" => $user->LeRegistro("id"),
+			                    "propriedade" => $propriedade,
+								'ref_field' => $refField,
+			                    "valor" => $valor
+		                    )
+		                );
+		                $this->connection->exec($this->connection->saveSql($paramsToSave));
+					}
+				}
+				/*
+				 * Configurações de módulo acontecem a seguir.
+				 */
+				else {
+				
+					$deleteSQL = "DELETE FROM config WHERE tipo='mod_conf' AND $classSearchStatement AND local='".$params["aust_node"]."' AND propriedade='$propriedade' $whereAuthor";
+		            $this->connection->exec($deleteSQL);
+
+	                $paramsToSave = array(
+	                    "table" => "config",
+	                    "data" => array(
+		                    "tipo" => "mod_conf",
+							'class' => $confClass,
+		                    "local" => $params["aust_node"],
+		                    "autor" => $user->LeRegistro("id"),
+		                    "propriedade" => $propriedade,
+		                    "valor" => $valor
+	                    )
+	                );
+	                $this->connection->exec($this->connection->saveSql($paramsToSave));
+				}
             }
-        }
-        return true;
+	        return true;
+        } else {
+			return false;
+		}
     }
 
-    function loadModConf($params) {
+    /**
+     * loadModConf()
+     *
+     * Carrega configurações dinâmicas do módulo atual.
+     *
+     * Exemplo de configuração: mostrar resumo, sim ou não?
+     * Estas opções não são estáticas, mas dinâmicas, de acordo
+     * os administradores.
+     *
+     * No caso de ter $author, diz respeito àquelas configurações
+     * específicas de um usuário.
+     *
+     * @param <mixed> $params
+     * @param <string> $confType
+     * @param <string> $author 
+     * @return <array>
+     */
+    function loadModConf($params = "", $confClass = '', $author = "") {
+	
+		if( is_null($confClass) OR empty($confClass) )
+			$confClass = 'module';
+		
+		/*
+		 * ajusta o parâmetro da busca SQL
+		 */
+		if( $confClass == 'module' )
+			$classSearchStatement = '( class IS NULL OR class=\'module\')';
+		else
+			$classSearchStatement = 'class=\''.$confClass.'\'';
+			
+        /*
+         * Array: Várias opções podem ser passadas
+         */
         if( is_array($params) ){
-
 
             if( empty($params["austNode"]) AND
                 empty($params["aust_node"]) )
                 return NULL;
 
             if( !empty($params["aust_node"]) )
-                return $this->loadModConf($params["aust_node"]);
+                return $this->loadModConf($params["aust_node"], $confClass, $author);
 
             if( !empty($params["austNode"]) )
-                return $this->loadModConf($params["austNode"]);
+                return $this->loadModConf($params["austNode"], $confClass, $author);
 
             return NULL;
 
-        } else if( $params > 0 ){
-            $sql = "SELECT * FROM config WHERE tipo='mod_conf' AND local='".$params."' LIMIT 200";
-            
+        }
+        /*
+         * numeric: Um austNode foi especificado
+         */
+        else if( is_numeric($params) OR empty($params) ){
+			/*
+			 * Carrega as configurações estáticas
+			 */
+            $staticConfig = $this->loadConfig();
+
+
+			if( $confClass == 'module' )
+            	$staticConfig = $staticConfig['configurations'];
+			else
+        		$staticConfig = $staticConfig['field_configurations'];
+
+            if( empty($params) )
+                $params = $this->austNode;
+			
+			$whereAuthor = '';
+			if( !empty($author) ){
+				$whereAuthor = "AND autor='".$author."'";
+			}
+			/*
+			 * Carrega as configurações já salvas no DB. Pode haver
+			 * menos itens que as definidas estaticamente.
+			 */
+            $sql = "SELECT * FROM config WHERE tipo='mod_conf' AND $classSearchStatement AND local='".$params."' $whereAuthor LIMIT 300";
             $queryTmp = $this->connection->query($sql, "ASSOC");
 
-            foreach($queryTmp as $valor) {
-                $query[$valor["propriedade"]] = $valor;
-            }
-            $this->structureConfig = $query;
-            return $query;
-        } else if( is_string($params) AND empty($this->structureConfig) ) {
-            $this->loadModConf($this->austNode);
-            return $this->structureConfig[$params];
-        } else if( is_string($params) AND !empty($this->structureConfig) ) {
-            return $this->structureConfig[$params];
+            $query = array();
+			
+			/*
+			 * Configurações de campos individuais têm um formato completamente
+			 * diferente de configurações de módulos.
+			 */
+			if( $confClass == 'field' ){
+				$fields = $this->getFields();
+				if( empty($fields) )
+					return array();
+					
+	            foreach($queryTmp as $valor) {
+		
+					// $prop: toma o nome da propriedade
+	                $prop = $valor["ref_field"]; // suas_fotos
+
+					/*
+					 * Se não houver dados salvos no db, retorna o que está no
+					 * arquivo de configuração. Se houver, já mescla ambos os dados.
+					 */
+	                if( !empty($staticConfig) ){
+						foreach( $staticConfig as $configName=>$configValue ){
+
+							/*
+							 * Tipo do campo bate com o field_type da configuração?
+							 */
+							if( !empty($configValue['field_type'])
+								AND $configValue['field_type'] == $fields[$prop]['especie'] )
+							{
+								if( empty($query[$prop][$configName]) ){
+		                    		$query[$prop][$configName] = $configValue;
+								}
+							}
+						}
+	                }
+	
+	
+					if( !empty( $query[$prop][$valor['propriedade']] ) )
+	                	$query[$prop][$valor["propriedade"]] = array_merge( $query[$prop][$valor["propriedade"]] , $valor );
+					else
+                		$query[$prop][$valor["propriedade"]] = $valor;
+	                /**
+	                 * @todo - array $query tem 'value' e 'valor'. Deve-se
+	                 * tirar uma e ficar somente uma.
+	                 */
+	                $query[$prop][$valor["propriedade"]]['value'] = $valor["valor"];
+	            }
+			} else {
+				/*
+				 * Loop pela configurações salvas para preparar a Array para mesclar
+				 * com as configurações estaticas.
+				 */
+	            foreach($queryTmp as $valor) {
+				
+					// $prop: toma o nome da propriedade
+	                $prop = $valor["propriedade"];
+	                $query[$prop] = array();
+
+	                if( !empty($staticConfig[$prop]) ){
+	                    $query[$prop] = $staticConfig[$prop];
+	                }
+
+	                $query[$prop] = array_merge( $query[$prop], $valor );
+	                /**
+	                 * @todo - array $query tem 'value' e 'valor'. Deve-se
+	                 * tirar uma e ficar somente uma.
+	                 */
+	                $query[$valor["propriedade"]]['value'] = $valor['valor'];
+	            }
+			}
+			/*
+			 * Loop pela configurações estáticas para se certificar que todas as
+			 * configurações serão retornadas, mesmo as que não possuem nenhum
+			 * configuração definida.
+			 */
+			$result = array();
+
+			if( $confClass == 'module' ){
+				if( is_array($staticConfig) ){
+					foreach( $staticConfig as $key=>$value ){
+						if( !empty($query[$key]) )
+							$result[$key] = $query[$key];
+						else
+							$result[$key] = $value;
+					}
+				}
+			} else {
+				if( is_array($staticConfig) ){
+					foreach( $fields as $fieldName=>$fieldInfo ){
+						if( empty($query[$fieldName]) )
+							$query[$fieldName] = $staticConfig;
+					}
+				}
+				$result = $query;
+			}
+			
+			// se é para retorna configurações de um único autor, não
+			// salva configurações em cache
+			if( empty($author) ){
+				if( $confClass == 'field')
+            		$this->structureFieldsConfig = $result;
+				elseif( $confClass == 'module')
+            		$this->structureConfig = $result;
+			}
+			
+            return $result;
         }
+        /*
+         * string: quando se deseja uma opção em especial. Leva-se em
+         * consideração $this->austNode
+         */
+        else if( is_string($params) ) {
+            /*
+             * As configurações encontradas são salvas em $this->structureConfig
+             * para que não seja necessário buscá-las novamente no DB.
+             *
+             * Verifica-se abaixo se não existe ainda, e busca-as.
+             */
+			if( !empty($author) ){
+	            $sql = "SELECT * FROM config WHERE tipo='mod_conf' AND local='".$this->austNode."' AND autor='$author' AND propriedade='$params' LIMIT 1";
+	            $queryTmp = $this->connection->query($sql, "ASSOC");
+				return $queryTmp[0]['valor'];
+			} else if( empty($this->structureConfig) ){
+                $result = $this->loadModConf($this->austNode, $confClass, $author);
+                return $result[$params];
+            } else {
+                if( empty($this->structureConfig[$params]) )
+                    $this->loadModConf($this->austNode, $confClass, $author);
+                
+                return $this->structureConfig[$params];
+            }
+        }
+
+        return array();
     }
 
-    function getStructureConfig($key, $valueOnly = true) {
+    /**
+     * getStructureConfig()
+     *
+     * Há configurações específicas de uma estrutura, como:
+     *
+     *      Mostrar categoria?
+     *      Tem resumo?
+     *      Mostrar URL Gerada?
+     *
+     * Este método retorna o valor de uma configuração requisitada em $key.
+     *
+     * NOTA: Subtitui $this->loadModConfig() para pegar valores de configuração
+     * da estrutura.
+     *
+     * O método getFieldConfig() é semelhante, exceto que busca informações
+     * sobre um determinado campo.
+     *
+     * @param <string> $key
+     * @param <bool> $valueOnly
+     * @return <mixed> Se $valueOnly, retorna somente string com valor, senão
+     * array com todo o valor.
+     */
+    public function getStructureConfig($key, $valueOnly = true) {
+
         if( is_string($key) AND empty($this->structureConfig) ) {
             $this->loadModConf($this->austNode);
 
+            if( empty($this->structureConfig[$key]) )
+                return array();
+
             if( $valueOnly )
-                return $this->structureConfig[$key]['valor'];
+                return $this->structureConfig[$key]['value'];
             
             return $this->structureConfig[$key];
 
         } else if( is_string($key) AND !empty($this->structureConfig) ) {
-            if( $valueOnly )
-                return $this->structureConfig[$key]['valor'];
+            if( $valueOnly ){
+				if( !empty($this->structureConfig[$key]['value']) )
+                	return $this->structureConfig[$key]['value'];
+				else if( !empty($this->structureConfig[$key]['valor']) )
+                	return $this->structureConfig[$key]['valor'];
+				else
+					return NULL;
+
+			}
             
             return $this->structureConfig[$key];
         }
 
         return NULL;
-    }
+    } // end getStructureConfig()
 
-    /*
-     *
-     * MÉTODOS PRIVADOS
-     *
-     */
     /**
-     * _replaceFieldsValueIfEmpty()
+     * getFieldConfig()
+     *
+     * Há configurações específicas de um campo de uma estrutura,
+	 * geralmente do Módulo Cadastro:
+     *
+     *      Campo X tem imagem secundária?
+     *      Campo Y tem descrição?
+     *      Campo Z tem múltiplas imagens?
+     *
+     * Este método retorna o valor de uma configuração requisitada em $key.
+     *
+     * NOTA: Subtitui $this->loadModConfig() para pegar valores de configuração
+     * de um campo de estrutura.
+     *
+     * O método getStructureConfig() é semelhante, exceto que busca informações
+     * sobre uma determinada estrutura.
+     *
+     * @param <string> $field
+     * @param <string> $key
+     * @param <bool> $valueOnly
+     * @return <mixed> Se $valueOnly, retorna somente string com valor, senão
+     * array com todo o valor.
+     */
+    public function getFieldConfig($field, $key, $valueOnly = true) {
+
+        if( is_string($key) 
+			AND is_string($field) 
+			AND empty($this->structureFieldsConfig) ) {
+            $result = $this->loadModConf($this->austNode, 'field');
+			
+            if( empty($this->structureFieldsConfig[$field][$key]) )
+                return array();
+
+            if( $valueOnly )
+                return $this->structureFieldsConfig[$field][$key]['value'];
+            
+            return $this->structureFieldsConfig[$field][$key];
+
+        } else if( is_string($key) AND !empty($this->structureFieldsConfig) ) {
+
+            if( $valueOnly ){
+				if( !empty($this->structureFieldsConfig[$field][$key]['value']) )
+                	return $this->structureFieldsConfig[$field][$key]['value'];
+				else if( !empty($this->structureFieldsConfig[$field][$key]['valor']) )
+                	return $this->structureFieldsConfig[$field][$key]['valor'];
+				else
+					return false;
+			}
+            return $this->structureFieldsConfig[$field][$key];
+        }
+
+        return false;
+    } // end getFieldConfig()
+
+    /**
+     * replaceFieldsValueIfEmpty()
      *
      * Alguns campos em um resultado de conteúdo do DB não podem estar vazios.
      * Isto é configurado em config.php de cada módulo.
@@ -1033,7 +1612,7 @@ class Module
      * @param <array> $query
      * @return <array> O mesmo $query de entrada, mas tratado
      */
-    public function _replaceFieldsValueIfEmpty($query){
+    public function replaceFieldsValueIfEmpty($query){
 
         $tmp = $query;
 
@@ -1055,15 +1634,22 @@ class Module
                 /*
                  * Substitui campo vazio por valor padrão
                  */
-                if( empty($value[$requiredField]) )
+                if( empty($value[$requiredField]) ){
                     $query[$key][$requiredField] = $standardValue;
+				}
 
             }
         }
 
         return $query;
     }
-    
+
+    /*
+     *
+     * MÉTODOS PRIVADOS
+     *
+     */
+
     /**
      *
      * RESPONSER

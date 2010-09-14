@@ -17,8 +17,8 @@
 /*
  * Ajusta variáveis iniciais
  */
-    $austNode = (!empty($_GET['aust_node'])) ? $_GET['aust_node'] : '';
     $w = (!empty($_GET['w'])) ? $_GET['w'] : '';
+	$austNode = $_GET['aust_node'];
 
 /*
  * [Se novo conteúdo]
@@ -37,6 +37,7 @@
         $sql = "
                 SELECT
                     id,
+					categoria,
                     titulo,
                     titulo_encoded,
                     subtitulo,
@@ -63,7 +64,13 @@
                 ";
         $query = $modulo->connection->query($sql, "ASSOC");
         $dados = $query[0];
+		$frmcategory = $dados['categoria'];
     }
+
+    $frmcategory = ( empty($frmcategory) )
+				? $austNode
+				: $frmcategory;
+
 ?>
 <p>
     <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
@@ -87,23 +94,47 @@
 <?php }?>
 <input type="hidden" name="w" value="<?php ifisset( $dados['id'] );?>">
 <input type="hidden" name="aust_node" value="<?php echo $austNode; ?>">
+<input type="hidden" name="frmcategoria" value="<?php echo $frmcategory; ?>">
 <table border=0 cellpadding=0 cellspacing=0 class="form">
     <col width="200">
     <col width="470">
 
 
     <?php
+	/*
+	 * CATEGORY_SELECTION
+	 *
+	 */
+	if( $modulo->getStructureConfig('category_selection') ){
+		?>
+	    <tr>
+	        <td class="first"><label>Categoria:</label></td>
+	        <td class="second">
+	            <div id="categoriacontainer">
+
+                <?php
+	            echo BuildDDList( Registry::read('austTable') ,'frmcategoria', $administrador->tipo , $austNode, $frmcategory);
+	            ?>
+
+
+	            </div>
+	            <?php
+				if( $modulo->getStructureConfig('category_creation') ){
+                	lbCategoria($austNode);
+				}
+	            ?>
+	        </td>
+	    </tr>
+		<?php
+	}
+	
+	
     /*
-     * EXPIRETIME
+     * EXPIRETIME PANEL
      *
      * Se expireTime está ativo, mostra que o tempo está expirado
      */
-    $showExpireTime = false;
-    if( !empty($moduloConfig["expireTime"]) ){
-        if( $moduloConfig["expireTime"]["valor"] == "1" )
-            $showExpireTime = true;
-    }
-    if( $showExpireTime ){
+    if( $modulo->getStructureConfig("expireTime") ){
 
         if( !empty($dados["expiredate"]) ){
             $date = date('Y-m-d', strtotime($dados["expiredate"]));
@@ -178,12 +209,7 @@
     /*
      * DESCRIÇÃO
      */
-    $showLink = true; // por padrão, mostra
-    if( !empty($moduloConfig["link"]) ){
-        if( $moduloConfig["link"]["valor"] == "0" )
-            $showLink = false;
-    }
-    if( $showLink ){
+    if( $modulo->getStructureConfig("link") ){
         ?>
         <tr>
             <td valign="top"><label>Link:</label></td>
@@ -203,12 +229,7 @@
     /*
      * RESUMO
      */
-    $showResumo = false;
-    if( !empty($moduloConfig["resumo"]) ){
-        if( $moduloConfig["resumo"]["valor"] == "1" )
-            $showResumo = true;
-    }
-    if( $showResumo ){
+    if( $modulo->getStructureConfig("resumo") ){
     ?>
     <tr>
         <td valign="top"><label>Resumo:</label></td>
@@ -227,12 +248,7 @@
     /*
      * ORDEM
      */
-    $showOrdem = false; // por padrão, não mostra
-    if( !empty($moduloConfig["ordenate"]) ){
-        if( $moduloConfig["ordenate"]["valor"] == "1" )
-            $showOrdem = true;
-    }
-    if( $showOrdem ){
+    if( $modulo->getStructureConfig("ordem") ){
     ?>
     <tr>
         <td valign="top"><label>Ordem:</label></td>
@@ -263,12 +279,7 @@
     /*
      * DESCRIÇÃO
      */
-    $showDesc = true; // por padrão, não mostra
-    if( !empty($moduloConfig["descricao"]) ){
-        if( $moduloConfig["descricao"]["valor"] == "0" )
-            $showDesc = false;
-    }
-    if( $showDesc ){
+    if( $modulo->getStructureConfig("descricao") ){
         ?>
         <tr>
             <td valign="top"><label>Descrição da galeria: </label>

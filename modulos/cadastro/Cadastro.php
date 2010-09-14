@@ -12,6 +12,22 @@ class Cadastro extends Module {
     public $mainTable = "cadastros_conf";
 
     public $dataTable;
+    public $austNode;
+
+	public $data = array();
+	public $relationalData = array();
+	public $images = array();
+	
+	public $tableProperties = array();
+
+	/**
+	 * @var array Contém as configurações sobre campos e estrutura
+	 */
+	public $configurations = array();
+	
+	public $fields = array();
+	
+	public $toDeleteTables = array();
 
     function __construct($param = ''){
 
@@ -24,6 +40,270 @@ class Cadastro extends Module {
         parent::__construct($param);
     }
 
+
+	/*
+	 * LOADING PROCESS
+	 * 	
+	 */
+	/**
+	 * getImages()
+	 * 
+	 * 
+	 * @param $params array É onde contém o id, austNode e campo a qual a imagem
+	 * se refere
+	 * @return array imagens, com path e id
+	 */
+	public function getImages($params){
+		
+		if( empty($params['w']) ) return false;
+		if( empty($params['austNode']) ) return false;
+		if( empty($params['field']) ) return false;
+		
+		$w = $params['w'];
+		$austNode = $params['austNode'];
+		$field = $params['field'];
+		
+		$tableImage = $this->configurations['estrutura']['table_images']['valor'];
+		
+		$sql = "SELECT
+					*,
+					( SELECT s.id FROM ".$tableImage." as s WHERE s.reference=t.id AND type='secondary' LIMIT 1 )
+					as secondaryid
+				FROM
+					".$tableImage." as t
+				WHERE
+					maintable_id='".$w."' AND
+					reference_field='".$field."' AND
+					categoria_id='".$austNode."' AND
+					type='main'
+				ORDER BY t.id DESC
+				";
+		$query = $this->connection->query($sql);
+		
+		return $query;
+		
+	} // fim getImages()
+	
+	/*
+	 * SAVING PROCESS
+	 * 	
+	 */
+	/**
+	 * setRelationalData()
+	 * 
+	 * Separa/prepara todos os dados, sendo que os relacionais que não serão salvos
+	 * na tabela principal são guardados em uma variável separada.
+	 * 
+	 * 		Ajusta:
+	 * 
+	 * 			_ Relational One To Many
+	 * 			- Date
+	 * 			- Images
+	 * 
+	 * 
+	 */
+	public function setRelationalData(){
+	
+		$infoTabelaFisica = $this->tableProperties;
+		$campos = $this->fields;
+		$relational = array();
+		foreach( $this->data as $tabela=>$dados ){
+	        foreach( $dados as $campo=>$valor ){
+            
+	            /*
+	             * Relational One to Many
+	             */
+	            if( !empty($campos[$campo]) AND $campos[$campo]["especie"] == "relacional_umparamuitos" ){
+	                unset($this->data[$tabela][$campo]);
+
+	                $i = 0;
+	                foreach( $valor as $subArray ){
+	                    if( $subArray != 0 ){
+	                        $relational[$campos[$campo]["referencia"]][$i][$campos[$campo]["ref_tabela"]."_id"] = $subArray;
+	                        $relational[$campos[$campo]["referencia"]][$i]["created_on"] = date("Y-m-d H:i:s");
+	                        $i++;
+	                    }
+	                    $this->toDeleteTables[$campos[$campo]["referencia"]] = 1;
+	                }
+
+	            }
+	            /*
+	             * Date
+	             */
+	            else if( !empty( $campos[$campo]["chave"] ) AND
+	                     !empty($infoTabelaFisica[$campos[$campo]["chave"]]['Type']) AND
+	                     $infoTabelaFisica[$campos[$campo]["chave"]]['Type'] == "date" ){
+	                $year = $this->data[$tabela][$campo]['year'];
+	                unset($this->data[$tabela][$campo]);
+
+	                if( strlen($year) == '4' ){
+	                    $this->data[$tabela][$campo] = $valor['year'].'-'.$valor['month'].'-'.$valor['day'];
+	                }
+	            }
+	            /*
+	             * Images
+				 *
+				 * Limpa imagens de $this->data
+	             */
+	            else if( !empty($campos[$campo]) AND $campos[$campo]["especie"] == "images" ){
+					$this->images[$tabela][$campo] = $valor;
+					unset($this->data[$tabela][$campo]);
+	            }
+
+	        }
+	    }
+		$this->relationalData = $relational;
+		return true;
+	
+	}
+	
+	/**
+	 * uploadAndSaveImages()
+	 * 
+	 * Realiza o upload de uma imagem e a salva no DB.
+	 * 
+	 * @param $images array contém as imagems a serem enviadas.
+	 * @param $lastInsertId int Anexo um id à imagem inserida.
+	 */
+	function uploadAndSaveImages($images, $lastInsertId, $options = array()){
+		
+		$imageHandler = Image::getInstance();
+		$user = User::getInstance();
+		$userId = $user->getId();
+		
+		if( empty($options['type']) )
+			$type = 'main';
+		else
+			$type = $options['type'];
+		
+		if( empty($options['reference']) )
+			$reference = '';
+		else
+			$reference = $options['reference'];
+		
+		if( empty($images) ){
+			$images = $this->images;
+		}
+		
+		$imageTable = $this->configurations['estrutura']['table_images']['valor'];
+		foreach( $images as $table=>$imagesField ){
+			
+			foreach( $imagesField as $field=>$images ){
+				
+				foreach( $images as $key=>$value ){
+					if( empty($value['name']) OR
+						empty($value['size']) OR
+						empty($value['tmp_name'])
+					){
+						continue;
+					}
+					
+					/*
+					 * Realiza upload e salva os dados
+					 */
+					$imageHandler->prependedPath = $this->getStructureConfig('image_save_path');
+					$value = $imageHandler->resample($value);
+					$finalName = $imageHandler->upload($value);
+					
+					/*
+					 * Salva SQL da imagem
+					 */
+					$sql = "INSERT INTO $imageTable
+							(
+							maintable_id,path,systempath,
+							file_name,
+							original_file_name,file_type,file_size,file_ext,
+							type,
+							reference_table,reference_field,
+							reference,
+							categoria_id,
+							created_on, admin_id
+							)
+							VALUES
+							(
+							'".$lastInsertId."', '".$finalName['webPath']."', '".$finalName['systemPath']."',
+							'".$finalName['new_filename']."',
+							'".$value['name']."', '".$value['type']."', '".$value['size']."', '".$imageHandler->getExtension($value['name'])."',
+							'$type',
+							'".$this->configurations['estrutura']['tabela']['valor']."', '".$field."',
+							'".$reference."',
+							'".$this->austNode."',
+							'".date("Y-m-d H:i:s")."', '".$userId."'
+							)
+							";
+					$this->connection->exec($sql);
+					
+				}
+			}
+		}
+	} // uploadAndSaveImages()
+	
+	function saveImageDescription($string, $imageId){
+		$string = addslashes($string);
+		
+		$this->configurations();
+		$imageTable = $this->configurations['estrutura']['table_images']['valor'];
+		
+		$sql = "UPDATE $imageTable SET description='$string' WHERE id='$imageId'";
+		return $this->connection->exec($sql);
+	}
+    
+	/**
+	 * secondaryImageId() 
+	 *
+	 * Dado uma image, verifica o id de uma possível imagem secundária.
+	 * 
+	 */
+	function deleteSecondaryImagesById($w = ""){
+		if( !is_numeric($w) )
+			return false;
+		
+		$configurations = $this->configurations();
+		$imagesTable = $configurations['estrutura']['table_images']['valor'];
+		$sql = "SELECT
+					id, systempath
+				FROM
+					".$imagesTable."
+				WHERE
+					reference='".$w."' AND
+					type='secondary'
+				";
+		
+		$query = $this->connection->query($sql);
+		foreach( $query as $key=>$value ){
+			if( file_exists($value['systempath']) )
+				unlink( $value['systempath'] );
+			$sqlDelete = "DELETE FROM $imagesTable WHERE id='".$value['id']."'";
+			$this->connection->exec($sqlDelete);
+		}
+		
+		return $query[0]['id'];
+	} // fim secondaryImageId()
+
+	function deleteImage($w = ""){
+		if( !is_numeric($w) )
+			return false;
+		
+		$configurations = $this->configurations();
+		$imagesTable = $configurations['estrutura']['table_images']['valor'];
+		$sql = "SELECT
+					*
+				FROM
+					".$imagesTable."
+				WHERE
+					id='".$w."'
+				";
+		
+		$query = reset( $this->connection->query($sql) );
+		
+		if( file_exists($query['systempath']) )
+			unlink( $query['systempath'] );
+		$sqlDelete = "DELETE FROM $imagesTable WHERE id='".$w."'";
+		$this->connection->exec($sqlDelete);
+		
+		return true;
+	}
+	
     /**
      * loadDivisors()
      *
@@ -127,6 +407,60 @@ class Cadastro extends Module {
     }
 
     /**
+     * getFields()
+     *
+     * Return the list of fields as Array.
+     *
+     *      key = physical field name
+     *      value = human field name
+     *
+     * @return <array>
+     */
+    public function getFields($fieldNamesOnly = false){
+		$sql = "SELECT * FROM cadastros_conf
+				WHERE
+				   categorias_id='".$this->austNode."' AND
+				   tipo='campo'
+				ORDER BY ordem ASC";
+        $temp = $this->connection->query(
+            $sql,
+            PDO::FETCH_ASSOC
+        );
+
+		$result = array();
+        foreach( $temp as $chave=>$valor ){
+            if( !empty($valor["chave"]) ){
+
+				/*
+				 * O usuário pode querer somente o nome do campo,
+				 * mas também pode querer a informação completa.
+				 */
+				if( $fieldNamesOnly )
+                	$result[ $valor["chave"] ] = $valor["valor"];
+				else
+                	$result[ $valor["chave"] ] = $valor;
+
+			}
+        }
+
+        return $result;
+    }
+
+	/**
+	 * configurations()
+	 * 
+	 * Retorna configurações. Se já existe, não carrega duas vezes.
+	 * 
+	 * @return array Toda a configuração do Módulo Cadastro
+	 */
+	public function configurations(){
+		if( !empty($this->configurations) )
+			return $this->configurations;
+		
+		$this->pegaInformacoesCadastro( $this->austNode );
+		return $this->configurations;
+	}
+    /**
      * Retorna todas as informações sobre o cadastro.
      *
      * Pega todas as informações da tabela cadastros_conf onde categorias_id
@@ -148,6 +482,7 @@ class Cadastro extends Module {
             if( !empty($valor["chave"]) )
                 $result[ $valor["tipo"] ][ $valor["chave"] ] = $valor;
         }
+		$this->configurations = $result;
         return $result;
     }
 
@@ -186,6 +521,8 @@ class Cadastro extends Module {
             $result = $temp;
         }
 
+		$this->tableProperties = $result;
+
         return $result;
     }
 
@@ -197,10 +534,11 @@ class Cadastro extends Module {
     
     public function loadSql($param){
         // configura e ajusta as variáveis
-        $categorias = $param['categorias'];
-        $metodo = $param['metodo'];
-        $search = $param['search'];
-        $w = $param['id'];
+        $categorias = (empty($param['categorias'])) ? '' : $param['categorias'];
+        $metodo = (empty($param['metodo'])) ? '' : $param['metodo'];
+        $search = (empty($param['search'])) ? '' : $param['search'];
+        $searchField = (empty($param['search_field'])) ? '' : $param['search_field'];
+        $w = (empty($param['id'])) ? '' : $param['id'];
 
         /**
          * Se $categorias estiver vazio (nunca deverá acontecer)
@@ -318,13 +656,20 @@ class Cadastro extends Module {
          */
         $searchQuery = "";
         if( !empty($search) ){
-            /*
-             * Faz loop por cada campo do cadastro, criando
-             * o comando SQL Where para busca de dados.
-             */
-            foreach( $campos['chave'] as $campo ){
-                $searchQueryArray[] = $campo." LIKE '%".$search."%'";
+            $search = addslashes($search);
+
+            if( empty($searchField) ){
+                /*
+                 * Faz loop por cada campo do cadastro, criando
+                 * o comando SQL Where para busca de dados.
+                 */
+                foreach( $campos['chave'] as $campo ){
+                    $searchQueryArray[] = $campo." LIKE '%".$search."%'";
+                }
+            } else {
+                $searchQueryArray[] = $searchField." LIKE '%".$search."%'";
             }
+            
             if( !empty($searchQueryArray) )
                 $searchQuery = "AND (".implode(" OR ", $searchQueryArray).")";
             //pr($campos);
@@ -342,12 +687,12 @@ class Cadastro extends Module {
                 $mostrar = implode(",", $mostrar["chave"]).",";
 
             }
+			$fields = "".$tP.".id,
+			            $mostrar
+			            ".implode(", ", $leftJoinCampos).$virgula."
+			            ".$tP.".approved AS des_approved";
 
-            $sql = "SELECT
-                        ".$tP.".id,
-                        $mostrar
-                        ".implode(", ", $leftJoinCampos).$virgula."
-                        ".$tP.".approved AS des_approved
+            $conditions = "    
                     FROM
                         ".$est["tabela"][0]." AS ".$tP."
 
@@ -357,9 +702,14 @@ class Cadastro extends Module {
                         $searchQuery
                     ORDER BY
                         ".$tP.".id DESC
-                    LIMIT 0,50
-
                     ";
+
+			// total rows
+			$countSql = "SELECT count(*) as rows ".$conditions;
+			$this->totalRows = $this->_getTotalRows($countSql);
+			
+			$sql = "SELECT $fields ".$conditions.$this->_limitSql(array('page'=>$this->page()));
+			
         } elseif( $metodo == "edit" ){
             $sql = "SELECT
                         id, ".implode(",", $campos["chave"])."
@@ -369,7 +719,6 @@ class Cadastro extends Module {
                         id=".$w."
                     ";
         }
-        
         return $sql;
     } // fim SQLParaListagem()
 
@@ -556,7 +905,7 @@ class Cadastro extends Module {
 
     }
 
-    /**
+    /*
      * INTERFACE DE SETUP
      *
      * Métodos para o setup de novas estruturas
@@ -566,6 +915,14 @@ class Cadastro extends Module {
         
     }
 
+	/*
+	 * INTERFACE DE CONFIGURAÇÃO DE ESTRUTURA
+	 *
+	 * 
+	 */
+	public function drawFieldConfiguration(){
+    	$result = '';
+	}
 }
 
 ?>

@@ -18,11 +18,11 @@ if( $_GET['lib'] == 'new_category'
 
     $params = array(
         'father' => $givenAN,
-        'catName' => $catName,
-        'autor' => $administrador->getId(),
+        'name' => $catName,
+        'author' => $administrador->getId(),
     );
 
-    echo $aust->newCategory($params);
+    echo $aust->create($params);
 
 
 }

@@ -15,15 +15,15 @@ class ModController extends ModsController
         $this->set('h2', 'Listando conteúdo: '.$this->aust->leNomeDaEstrutura($_GET['aust_node']) );
         $this->set('nome_modulo', $this->aust->LeModuloDaEstrutura($_GET['aust_node']) );
 
-        $sql = "SELECT
-                    id,nome
-                FROM
-                    ".Aust::$austTable."
-                WHERE
-                    id='".$_GET['aust_node']."'";
+		$categorias = $this->aust->LeCategoriasFilhas('',$_GET['aust_node']);
+		$categorias[$_GET['aust_node']] = 'Estrutura';
 
-
-        $query = $this->modulo->connection->query($sql);
+		$params = array(
+			'austNode' => $categorias
+		);
+		
+		$query = $this->modulo->load($params);
+		
         $this->set('query', $query);
     }
 

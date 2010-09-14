@@ -83,6 +83,28 @@ $modInfo = array(
         'create' => 'Novo',
         'listing' => 'Listar',
     ),
+	'configurations' => array(
+		'ordenate' => array(
+		    "value" => "",
+		    "label" => "Ordenado",
+		    "inputType" => "checkbox",
+		),
+		'resumo' => array(
+		    "value" => "",
+		    "label" => "Tem resumo?",
+		    "inputType" => "checkbox",
+		),
+		'categorias' => array(
+		    "value" => "",
+		    "label" => "Tem categorias?",
+		    "inputType" => "checkbox",
+		),
+		'descricao' => array(
+		    "value" => "",
+		    "label" => "Tem descrição?",
+		    "inputType" => "checkbox",
+		),
+	),
 
     /**
      * RESPONSER
@@ -94,7 +116,6 @@ $modInfo = array(
         'table' => 'textos',
         'foreignKey' => 'categoria',
     ),
-
 
     /**
      * '': 

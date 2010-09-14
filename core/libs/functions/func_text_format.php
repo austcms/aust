@@ -10,6 +10,7 @@
 function tooltip($str = ''){
     if( !empty($str) ){
         $random = substr( sha1( rand(0, 100) ), rand(5,20));
+        ob_start();
         ?>
         <span class="hint">
 
@@ -22,7 +23,10 @@ function tooltip($str = ''){
             </div>
         </span>
         <?php
-        return true;
+    	$content = ob_get_contents();
+    	ob_end_clean();
+		echo $content;
+        return $content;
     }
 }// fim tooltip()
 
@@ -52,9 +56,6 @@ function lbCategoria($params){
         $categoryInput = (empty($params['categoryInput'])) ? 'frmcategoria' : $params['categoryInput'];
     }
 
-
-//    pr($categoryInput);
-
     $random = substr( sha1( rand(0, 100) ), rand(5,20));
     global $administrador;
     /**
@@ -82,7 +83,7 @@ function lbCategoria($params){
                         <label for="lb_input_categoria_<?php echo $random; ?>">Título:</label>
                     </td>
                     <td>
-                        <input name="lb[frmcategoria]" id="lb_input_categoria_<?php echo $random; ?>" class="text lb_focus" />
+                        <input name="lb[frmcategoria]" onkeydown="if (event.keyCode == 13) { newCategory('lb_categoria_<?php echo $random; ?>'); return false; }" id="lb_input_categoria_<?php echo $random; ?>" class="text lb_focus" />
                         <p class="explanation">
                             Digite o nome de uma nova categoria. Ex.: 'Geral'
                         </p>
@@ -94,8 +95,9 @@ function lbCategoria($params){
                 <tr>
                     <td colspan="2">
                     <center>
-                        <input type="submit" value="Salvar"
-                               onclick="newCategory('lb_categoria_<?php echo $random; ?>'); return false;" />
+                        <button name="submit_category" onmousedown="newCategory('lb_categoria_<?php echo $random; ?>'); return false;">
+                            Salvar
+                        </button>
                     </center>
                     </td>
                 </tr>
@@ -115,5 +117,12 @@ function lbCategoria($params){
         <a href="#box" name="modal" class="lb_categoria_<?php echo $random; ?>"></a>
     </div>
     <?php
+}
+
+/*
+ * LISTING VIEWMODE
+ */
+function viewMode($pressed = ''){
+	
 }
 ?>

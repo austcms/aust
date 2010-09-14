@@ -83,6 +83,73 @@ $modInfo = array(
         'create' => 'Inserir',
         'listing' => 'Listar',
     ),
+	
+	'viewmodes' => array('thumbs', 'list'),
+	
+	'configurations' => array(
+   		'ordenate' => array(
+	        "value" => "",
+	        "label" => "Ordenado",
+	        "inputType" => "checkbox",
+	    ),
+	    /*
+	     * Resumo
+	     */
+	    'resumo' => array(
+	        "propriedade" => "resumo", // nome da propriedade
+	        "value" => "",
+	        "label" => "Tem resumo?",
+	        "inputType" => "checkbox",
+	    ),
+	    /*
+	     * Tem data de expiração (quando deixará de aparecer a imagem).
+	     */
+	    'expireTime' => array(
+	        "value" => "",
+	        "label" => "Tem expireTime?",
+	        "inputType" => "checkbox",
+	    ),
+	    /*
+	     * Tem Descrição?
+	     */
+	    'descricao' => array(
+	        "value" => "",
+	        "label" => "Tem descrição?",
+	        "inputType" => "checkbox",
+	    ),
+	    /*
+	     * Tem Link?
+	     */
+	    'link' => array(
+	        "value" => "",
+	        "label" => "Tem link?",
+	        "inputType" => "checkbox",
+	    ),		
+	    /*
+	     * Tem seleção categoria?
+	     */
+	    'category_selection' => array(
+	        "value" => "",
+	        "label" => "Seleção de categoria?",
+	        "inputType" => "checkbox",
+	    ),		
+	    /*
+	     * Pode criar categorias?
+	     */
+	    'category_creation' => array(
+	        "value" => "",
+	        "label" => "Botão criar categoria?",
+	        "inputType" => "checkbox",
+			'help' => 'Só funcionará se puder selecionar a categoria.'
+		)
+	),
+    /*
+     * Se não há valor, substitui campo vazio na listagem
+     * pelos valores abaixo
+     */
+    'replaceFieldsValueIfEmpty' => array(
+        'titulo' => '[Sem título]',
+    ),
 
     /**
      * RESPONSER

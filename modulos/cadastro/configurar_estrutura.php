@@ -87,6 +87,8 @@ if( !empty($_POST['conf_type']) AND $_POST['conf_type'] == "mod_conf" ){
     /**
      *
      */
+	
+	//pr($_POST);
     $modulo->saveModConf($_POST);
 }
 
@@ -642,7 +644,7 @@ if(!empty($_GET['function'])){
         </div>
         <div class="content">
             <?php
-            $configurations = $modulo->getConfigurations();
+            $configurations = $modulo->loadModConf();
             if( !empty($configurations) && is_array($configurations) ){
                 ?>
 
@@ -679,7 +681,7 @@ if(!empty($_GET['function'])){
 
                             else {
                                 ?>
-                                <input type="text" name="nome" class="input" />
+	                            <input type="text" name="data[<?php echo $key; ?>]" value="<?php echo $options['value'] ?>" class="input" />
                                 <?php
                             }
                             ?>
@@ -700,7 +702,109 @@ if(!empty($_GET['function'])){
         </div>
         <div class="footer"></div>
     </div>
-    <?
+
+    <?php
+    /**
+     * CONFIGURAÇÕES ESPECÍFICAS DE CAMPOS
+     */
+    ?>
+    <div class="widget">
+        <div class="titulo">
+            <h3>Configurações de Campos</h3>
+        </div>
+        <div class="content">
+            <?php
+            $configurations = $modulo->loadModConf(null,'field');
+			$fields = $modulo->getFields(false);
+            if( !empty($configurations) && is_array($configurations) ){
+                ?>
+
+                <p>Configure os campos abaixo:</p>
+                <form method="post" action="adm_main.php?section=conf_modulos&aust_node=<?php echo $_GET['aust_node']; ?>&action=configurar" class="simples pequeno">
+                <input type="hidden" name="conf_type" value="mod_conf" />
+                <input type="hidden" name="conf_class" value="field" />
+                <input type="hidden" name="aust_node" value="<?php echo $_GET['aust_node']; ?>" />
+                <?php
+
+                foreach( $fields as $fieldName=>$fieldOptions ){
+                    ?>
+
+                    <div class="campo">
+                        <div><?php echo $fieldOptions["valor"] ?></div>
+                        <div style="margin-left: 15px">
+	                        <?php
+							if( empty($configurations[$fieldName]) )
+								$configurations[$fieldName] = array();
+							
+							foreach( $configurations[$fieldName] as $key=>$options ){
+								
+								if( !empty($options['field_type'])
+									AND $options['field_type'] != $fieldOptions['especie']
+								)
+									continue;
+								
+								?>
+								<div>
+								<?php
+		                        if( $options["inputType"] == "checkbox" ){
+
+		                            /*
+		                             * Verifica valores no banco de dados.
+		                             */
+		
+		                            $checked = "";
+		                            if( !empty($options['value'])
+										AND $options['ref_field'] == $fieldName
+		 								)
+									{
+		                                if( $options["value"] == "1" ){
+		                                    $checked = 'checked="checked"';
+		                                }
+		                            }
+		                            ?>
+		                            <input type="hidden" name="data[<?php echo $fieldName ?>][<?php echo $key; ?>]" value="0" />
+
+		                            <input type="checkbox" name="data[<?php echo $fieldName ?>][<?php echo $key; ?>]" <?php echo $checked; ?> value="1" class="input" />
+						
+		                            <?php
+		                        }
+
+		                        else {
+									$size = '';
+									if( $options['size'] == 'small' )
+										$size = '5';
+		                            ?>
+		                            <input type="text" size="<?php echo $size?>" name="data[<?php echo $fieldName ?>][<?php echo $key; ?>]" value="<?php echo $options['value'] ?>" class="input" />
+		                            <?php
+		                        }
+								if( !empty($options['label']) ){
+									echo $options['label'];
+								} else {
+									echo "não possui label.";
+								}
+								if( !empty($options["help"]) )
+									tt($options["help"]);
+								?>
+								
+								</div>
+								<?php
+							}
+	                        ?>
+                        </div>
+                    </div>
+                    <?php
+                }
+                ?>
+                <input type="submit" name="submit" value="Salvar" />
+                </form>
+                <?php
+            }
+            ?>
+
+        </div>
+        <div class="footer"></div>
+    </div>
+    <?php
     /**
      * LISTAGEM DE CAMPOS
      *

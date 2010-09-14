@@ -16,14 +16,14 @@ class CadastroTest extends PHPUnit_Framework_TestCase
          *
          * Diretório do módulo
          */
-        $mod = 'cadastro';
+        $this->mod = 'cadastro';
 
         /*
          * Informações de conexão com banco de dados
          */
 
-        include 'modulos/'.$mod.'/'.MOD_CONFIG;
-        include_once 'modulos/'.$mod.'/'.$modInfo['className'].'.php';
+        include 'modulos/'.$this->mod.'/'.MOD_CONFIG;
+        include_once 'modulos/'.$this->mod.'/'.$modInfo['className'].'.php';
         
         $_GET['aust_node'] = '777';
         $this->obj = new $modInfo['className'];//new $modInfo['className']();
@@ -136,6 +136,174 @@ class CadastroTest extends PHPUnit_Framework_TestCase
             $this->obj->connection->query($sqlDelete);
 
     }
+
+	/*
+	 * verifica se todas as configurações do arquivo config.php existem no método
+	 * loadModConf()
+	 */
+	function testConfigurationsExists(){
+		
+        include 'modulos/'.$this->mod.'/'.MOD_CONFIG;
+		$configurations = $this->obj->loadModConf();
+		foreach( $modInfo['configurations'] as $key=>$value ){
+			$this->assertArrayHasKey($key, $configurations);
+		}
+	}
+	
+	
+	function testSetRelationalData(){
+		$this->obj->fields = array(
+			'name' => array(
+				'tipo' => 'campo',
+				'chave' => 'name',
+				'valor' => 'Name',
+				'especie' => 'string',
+			),
+			'image' => array(
+				'tipo' => 'campo',
+				'chave' => 'image',
+				'valor' => 'Images',
+				'especie' => 'images',
+			),
+		);
+		
+		$this->obj->data = array(
+			'table_1' => array(
+				'name' => 'alex',
+				'image' => array(
+					array(
+						'name' => 'image_name.jpg',
+						'type' => 'image/jpeg',
+					),
+					array(
+						'name' => 'image_name2.jpg',
+						'type' => 'image/jpeg',
+					)
+				)
+			)
+		);
+		
+		$this->obj->setRelationalData();
+		$this->assertArrayHasKey('image', $this->obj->images['table_1']);
+		$this->assertArrayHasKey('0', $this->obj->images['table_1']['image'] );
+		$this->assertArrayHasKey('1', $this->obj->images['table_1']['image'] );
+		$this->assertArrayNotHasKey('image', $this->obj->data['table_1']);
+	}
+
+
+
+	function testLoadModConf(){
+		/* FIELDS */
+        $this->obj->connection->query("DELETE FROM config WHERE local='777' AND nome='teste7777'");
+        $this->obj->connection->query("DELETE FROM cadastro_conf WHERE categorias_id='777' AND nome='teste7777'");
+
+			/*
+			 * Criar o campo de cadastro
+			 */
+		    $sql = "INSERT INTO cadastros_conf
+		                 (tipo,chave,valor,categorias_id,nome, especie)
+		             VALUES
+		                 ('campo','campo_1','Campo 1','777','teste7777', 'images')
+		             ";
+		    $this->obj->connection->query($sql);
+		
+	        $sql = "INSERT INTO config
+	                    (tipo,local,nome,propriedade,valor, class, ref_field)
+	                VALUES
+	                    ('mod_conf','777','teste7777','teste','1', 'field', 'campo_1')
+	                ";
+	        $this->obj->connection->query($sql);
+	        $catLastInsertId = $this->obj->connection->lastInsertId();
+		
+        /* start test #4 */
+	        $result = $this->obj->loadModConf(777, 'field');
+	
+	        $this->assertArrayHasKey(
+	                'campo_1',
+	                $result,
+	                'Teste #4.1 falhou');
+
+	        $this->assertEquals(
+	                '1',
+	                $result['campo_1']['teste']['value'],
+	                'Teste #4.2 falhou');
+	
+        $this->obj->connection->query("DELETE FROM config WHERE local='777' AND nome='teste7777'");
+        $this->obj->connection->query("DELETE FROM cadastro_conf WHERE categorias_id='777' AND nome='teste7777'");
+	}
+	
+	function testLoadModConfWithoutSavedData(){
+		/* FIELDS */
+        $this->obj->connection->query("DELETE FROM config WHERE local='777' AND nome='teste7777'");
+        $this->obj->connection->query("DELETE FROM cadastro_conf WHERE categorias_id='777' AND nome='teste7777'");
+		/*
+		 * Criar o campo de cadastro
+		 */
+	    $sql = "INSERT INTO cadastros_conf
+	                 (tipo,chave,valor,categorias_id,nome, especie)
+	             VALUES
+	                 ('campo','campo_1','Campo 1','777','teste7777', 'images')
+	             ";
+	    $this->obj->connection->query($sql);
+
+		
+        /* start test #1 */
+	        $result = $this->obj->loadModConf(777, 'field');
+	        $this->assertArrayHasKey(
+	                'image_field_limit_quantity',
+	                $result['campo_1'],
+	                'Teste #1.1 falhou');
+
+        $this->obj->connection->query("DELETE FROM config WHERE local='777' AND nome='teste7777'");
+        $this->obj->connection->query("DELETE FROM cadastro_conf WHERE categorias_id='777' AND nome='teste7777'");
+	}
+	
+	function testGetFieldConfig(){
+        $this->obj->connection->query("DELETE FROM config WHERE local='777' AND nome='teste7777'");
+        $this->obj->connection->query("DELETE FROM cadastro_conf WHERE categorias_id='777' AND nome='teste7777'");
+
+		/*
+		 * Criar os campos
+		 */
+	    $sql = "INSERT INTO cadastros_conf
+	                 (tipo,chave,valor,categorias_id,nome, especie)
+	             VALUES
+	                 ('campo','campo_1','Campo 1','777','teste7777', 'images')
+	             ";
+	    $this->obj->connection->query($sql);
+		
+
+        $sql = "INSERT INTO config
+                    (tipo,local,nome,propriedade,valor, class, ref_field)
+                VALUES
+                    ('mod_conf','777','teste7777','has_conf','1', 'field', 'campo_1')
+                ";
+
+        $this->obj->connection->query($sql);
+        $catLastInsertId = $this->obj->connection->lastInsertId();
+		$this->obj->austNode = '777';
+
+        $this->obj->config = array(
+			'field_configurations' => array(
+			    'has_conf' => array(
+					'field_type' => 'images',
+			        "value" => "",
+			        "label" => "Working?",
+			        "inputType" => "checkbox",
+			    ),
+			)
+        );
+
+		$result = $this->obj->getFieldConfig('campo_1', 'has_conf');
+		$this->assertEquals('1', $result);
+		
+		$result = $this->obj->getFieldConfig('campo_1', 'has_conf2');
+		$this->assertFalse($result);
+		
+        $this->obj->connection->query("DELETE FROM config WHERE local='777' AND nome='teste7777'");
+	    $this->obj->connection->query("DELETE FROM cadastro_conf WHERE categorias_id='777' AND nome='teste7777'");
+    }
+
 
 }
 ?>

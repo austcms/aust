@@ -32,7 +32,7 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
     <?
     // se estiver confirmada a exclusão
     } else if($_GET['confirm'] == "delete"){
-        $itens = $_POST[itens];
+        $itens = $_POST['itens'];
         $c = 0;
         foreach($itens as $key=>$valor){
             if($c > 0){
@@ -104,7 +104,7 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
     <?
     // se estiver confirmada a ação
     } else if($_GET['confirm'] == "aprovar"){
-        $itens = $_POST[itens];
+        $itens = $_POST['itens'];
         $c = 0;
         foreach($itens as $key=>$valor){
             if($c > 0){

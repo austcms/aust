@@ -50,13 +50,14 @@ foreach($exPOST as $chave=>$valor){
             </td>
             <td valign="top">
                 <select name="campo_tipo[]" onchange="javascript: SetupCampoRelacionalTabelas(this, '<?php echo 'campooption'.$i?>', '<?php echo $i?>')">
-                    <option value="varchar(200)">Texto pequeno (ex: nome, idade)</option>
+                    <option value="string">Texto pequeno (ex: nome, idade)</option>
                     <option value="text">Texto grande (ex: descrição, biografia)</option>
                     <option value="date">Data (ex: data de nascimento)</option>
                     <option value="pw">Senha</option>
                     <option value="arquivo">Arquivo</option>
-                    <option value="relacional_umparaum">Relacional 1-para-1 (tabela)</option>
-                    <option value="relacional_umparamuitos">Relacional 1-para-muitos (tabela)</option>
+                    <option value="images">Imagens</option>
+                    <option value="relational_onetoone">Relacional 1-para-1 (tabela)</option>
+                    <option value="relational_onetomany">Relacional 1-para-muitos (tabela)</option>
                 </select>
             <div class="campooptions" id="<?php echo 'campooption'.$i?>">
                 <?

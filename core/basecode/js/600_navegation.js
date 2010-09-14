@@ -17,7 +17,7 @@ function lightbox(){
         
         currentLbId = id;
         currentLbHtml = $(id+' .lb_content').html();
-
+		
         /*
          * Armazena a largura e a altura da tela
          */
@@ -32,8 +32,7 @@ function lightbox(){
         /*
          * Efeito de transição
          */
-        $('#mask').fadeIn(400);
-        $('#mask').fadeTo("slow", 0.9);
+        $('#mask').fadeIn(200);
         
         /*
          * Armazena a largura e a altura da janela
@@ -50,7 +49,7 @@ function lightbox(){
         $( id ).css('top', top);
         $( id ).css('left', left);
 
-        $(id).fadeIn(800);
+        $(id).fadeIn(200);
         $(id+' input.lb_focus').focus();
         $(id).keydown( function( e ) {
             if( e.which == 27) {  // escape, close box
@@ -69,14 +68,42 @@ function lightbox(){
         lightboxClose();
     });
 
+	// clicar fora do lightbox fecha tudo
+    $('#mask').click(function(e){
+        e.preventDefault();
+        lightboxClose();
+    });
+
 }
 
 function lightboxClose(){
-    $('#mask, .window').fadeOut("normal");
+    $('#mask, .window').fadeOut("fast");
     setTimeout(function(){
-        $(currentLbId+' .lb_content').html(currentLbHtml);
-    }, 400);
+		if( !$('currentLbId+' .lb_content).is(':visible') ){
+        	$(currentLbId+' .lb_content').html(currentLbHtml);
+		}
+    }, 200);
 }
+
+// viewmode - thumbs, list
+function changeViewMode(este){
+
+	var url = 'adm_main.php?section=conteudo&action=view_items&page='+page+'&aust_node='+austNode;
+	var viewMode = $(este).attr('name');
+	
+    $('.viewmode').removeClass('pressed');
+    $(este).find('span.viewmode').addClass("pressed");
+	
+    $.post(
+		url, {
+			viewonly: 'yes',
+			viewMode: viewMode
+	    },
+		function(txt){
+	        $('#listing_table').html(txt);
+	    });	
+}
+
 
 
 

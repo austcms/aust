@@ -1,11 +1,16 @@
-<?php
-define("IMG_DIR", "core/user_interface/img/");
-?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta http-equiv="expires" content="Mon, 19 Feb 2024 11:12:01 GMT" />
+	<?php
+	if( !empty($_GET['action']) OR $_GET['action'] != 'listing' ){
+		header("Cache-Control: no-cache");
+		header("Pragma: no-cache");
+		?>
+    	<meta http-equiv="expires" content="Mon, 19 Feb 2024 11:12:01 GMT" />
+		<?php
+	}
+	?>
     <title><?php echo $config->getConfig('site_name'); ?> - Gerenciador<?php /* ifisset($config->LeOpcao('sitename'), 'Aust'); */ ?></title>
 <?php
 /*
@@ -44,10 +49,18 @@ define("IMG_DIR", "core/user_interface/img/");
      * @todo - o comando abaixo é perigoso, pois permite que um usuário altere
      * informações de outro usuário.
      */
+	if( !empty($_GET['page']) )
+		$page = $_GET['page'];
+	else if( !empty($_GET['pagina']) )
+		$page = $_GET['pagina'];
+	else
+		$page = 1;
     ?>
     <script type="text/javascript">
-        var userId = '<?php echo $administrador->getId() ?>';
+	    var userId = '<?php echo $administrador->getId() ?>';
+	    var austNode = '<?php echo $_GET["aust_node"] ?>';
         var IMG_DIR = '<?php echo IMG_DIR ?>';
+		var page = '<?php echo $page ?>';
     </script>
 
     <?php

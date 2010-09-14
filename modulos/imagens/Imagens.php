@@ -22,7 +22,8 @@ class Imagens extends Module
         'updated_on' => 'addate'
     );
 
-
+	public $defaultLimit = 25;
+	
     function __construct($param = ''){
 
         /**

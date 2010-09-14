@@ -12,6 +12,10 @@
 /**
  * Cria SESSION
  */
+
+// PHP 5.3 needs this
+date_default_timezone_set('America/Sao_Paulo');
+
 session_name("aust");
 session_start();
 
@@ -112,14 +116,8 @@ if(!$isResponser){
          */
         include("core/config/permissions.php");
 
-        /**
-         * @todo - excluir a linha a seguir em todo o código. Esta linha está
-         * na classe CoreConfig
-         */
-        $aust_table = 'categorias';
         include_once(INC_DIR.'inc_categorias_functions.php');
         
-
         $envParams = array(
             'aust' => $aust,
             'conexao' => $conexao,
@@ -165,10 +163,35 @@ if(!$isResponser){
         $content_for_layout = ob_get_contents();
         ob_end_clean();
         
+		// show only view?
+		$viewOnly = false;
+		if( (
+				!empty($_GET['viewonly'])
+				AND $_GET['viewonly'] == 'yes'
+			)
+			OR 
+			(
+				!empty($_POST['viewonly'])
+				AND $_POST['viewonly'] == 'yes'
+			)
+		)
+		{
+			$viewOnly = true;
+		}
         /**
          * Mostra a Interface de usuário no browser
          */
-        include(UI_STANDARD_FILE);
+        if( $viewOnly == false
+			AND (
+				empty($_GET['theme'])
+            	OR $_GET['theme'] != 'blank'
+			)
+		)
+        {
+            include(UI_STANDARD_FILE);
+        } else {
+            echo $content_for_layout;
+        }
 
     }
 }

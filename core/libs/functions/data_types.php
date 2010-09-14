@@ -34,4 +34,12 @@ function getDataInArray($options = array(), $key = '', $default = ''){
     }
 }
 
+function serializeArray($array = array()){
+	$result = array();
+	foreach( $array as $key=>$value ){
+		$result[] = $value;
+	}
+	return $result;
+}
+
 ?>

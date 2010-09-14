@@ -40,33 +40,31 @@ class ModController extends ModsController
         /*
          * Página atual
          */
-        $pagina = (empty($_GET['pagina'])) ? $pagina = 1 : $pagina = $_GET['pagina'];
+        $pagina = (empty($_GET['pagina'])) ? 1 : $_GET['pagina'];
         /*
          * Resultados por página
          */
         $num_por_pagina = '20';
         $this->set('numPorPagina', $num_por_pagina);//($config->LeOpcao($nome_modulo.'_paginacao')) ? $config->LeOpcao($nome_modulo.'_paginacao') : '10';
+        $this->set('page', $pagina);//($config->LeOpcao($nome_modulo.'_paginacao')) ? $config->LeOpcao($nome_modulo.'_paginacao') : '10';
 
         /*
          * SQL para listagem
          */
         $params = array(
             'austNode' => $categorias,
-            'pagina' => $pagina,
-            'resultadosPorPagina' => $num_por_pagina
+            'page' => $pagina,
+            'limit' => $num_por_pagina
         );
-        $sql = $this->modulo->loadSql($params);
-        $this->set('sql', $sql );
 
         /*
          * Query com resultado
          */
 
-        //$query = $this->modulo->connection->query($sql);
-
         $query = $this->modulo->load($params);
+        $this->set('sql', $this->modulo->lastSql );
         //$config = $this->modulo->loadConfig();
-        //$query = $this->modulo->replaceFieldsValueIfEmpty($query);
+        $query = $this->modulo->replaceFieldsValueIfEmpty($query);
 
         $this->set('query', $query );
 

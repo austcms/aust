@@ -200,3 +200,12 @@ table.debug {
     table.debug tr.list td.result { text-align: center; }
 
     table.debug tr.error { color: red; font-style: italic; }
+
+/* ELEMENTOS MENORES */
+
+div.loading_timer {
+    margin: 15px 0 15px 0;
+    color: #666666;
+}
+    div.loading_timer img { margin: 0px 3px 0px 0; }
+

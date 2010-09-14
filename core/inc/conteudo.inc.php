@@ -78,7 +78,7 @@ if(!empty($_GET['action'])){
         $param = array(
             'config' => $modInfo,
             'user' => $administrador,
-            'modDbSchema' => $modDbSchema,
+            //'modDbSchema' => $modDbSchema,
         );
         $modulo = new $moduloNome($param);
         unset( $modDbSchema );
@@ -107,7 +107,17 @@ if(!empty($_GET['action'])){
             }
         }
 
-
+        /*
+         * Se for save, redireciona automaticamente
+         */
+        if( $action == SAVE_ACTION ){
+            ?>
+            <div class="loading_timer">
+                <img src="<?php echo IMG_DIR ?>loading_timer.gif" /> Redirecionando Automaticamente
+            </div>
+            <?php
+        }
+        $action = $_GET['action'];
         /**
          * Prepara os argumentos para instanciar a classe e depois
          * chama o Controller que cuidará de toda a arquitetura MVC do módulo
@@ -118,12 +128,26 @@ if(!empty($_GET['action'])){
             'permissoes' => $permissoes,
             'administrador' => $administrador,
             'aust' => $aust,
-            'action' => $_GET['action'],
+            'action' => $action,
             'modDir' => $modDir,
             'austNode' => $aust_node,
             'model' => $model,
         );
         $modController = new ModController($param);
+        if( $action == SAVE_ACTION ){
+            $goToUrl = "adm_main.php?section=".$_GET['section'].'&action=listing&aust_node='.$aust_node;
+            ?>
+            <script type="text/javascript">
+                var timeToRefresh = 2;
+                setTimeout(function(){
+                    window.location.href = "<?php echo $goToUrl ?>";
+                }, 3800);
+            </script>
+
+
+            <?php
+        }
+
     }
     /**
      * Não possui estrutura MVC

@@ -1,11 +1,19 @@
 <?php
+// PHP 5.3 needs this
+date_default_timezone_set('America/Sao_Paulo');
+
 require 'tests/config/database.php';
+require("core/config/variables.php");
 
 if( !defined('UPLOAD_DIR') )
     define('UPLOAD_DIR', 'tests/test_files/uploaded_files/');
 
 if( !defined('THIS_TO_BASEURL') )
     define('THIS_TO_BASEURL', '');
+
+require_once(CORE_DIR."libs/functions/func.php");
+require_once(CORE_DIR."libs/functions/data_types.php");
+require_once(CORE_DIR."libs/functions/string_treatment.php");
 
 function __autoload($className) {
     if( is_file('core/class/'.$className.'.php') )

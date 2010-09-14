@@ -58,7 +58,21 @@ $modInfo = array(
      */
     'embedownform' => false,
 
-
+	'configurations' => array(
+	    'only_content' => array(
+	        "value" => "",
+	        "label" => "Privilégios se aplicam somente a conteúdos específicos",
+	        "inputType" => "checkbox",
+	    ),
+	    /*
+	     * Tem descrição?
+	     */
+	    'has_description' => array(
+	        "value" => "",
+	        "label" => "Tem descrição?",
+	        "inputType" => "checkbox",
+	    ),
+	),
 
     /**
      * RESPONSER

@@ -84,6 +84,46 @@ $modInfo = array(
         'listing' => 'Listar',
     ),
 
+	'configurations' => array(
+    	'ordenate' => array(
+	        "value" => "",
+	        "label" => "Ordenado",
+	        "inputType" => "checkbox",
+	    ),
+	    /*
+	     * Resumo
+	     */
+	    'resumo' => array(
+	        "value" => "",
+	        "label" => "Tem resumo?",
+	        "inputType" => "checkbox",
+	    ),
+	    /*
+	     * Tem data de expiração (quando deixará de aparecer a imagem).
+	     */
+	    'expireTime' => array(
+	        "value" => "",
+	        "label" => "Tem expireTime?",
+	        "inputType" => "checkbox",
+	    ),
+	    /*
+	     * Descrição
+	     */
+	    'descricao' => array(
+	        "value" => "",
+	        "label" => "Tem descrição?",
+	        "inputType" => "checkbox",
+	    ),
+	    /*
+	     * Descrição
+	     */
+	    'commented_images' => array(
+	        "value" => "",
+	        "label" => "Cada foto tem descrição",
+	        "inputType" => "checkbox",
+	    ),		
+	),
+
     /**
      * RESPONSER
      *
@@ -93,6 +133,13 @@ $modInfo = array(
     'arquitetura' => array(
         'table' => 'textos',
         'foreignKey' => 'categoria',
+    ),
+    /*
+     * Se não há valor, substitui campo vazio na listagem
+     * pelos valores abaixo
+     */
+    'replaceFieldsValueIfEmpty' => array(
+        'titulo' => '[Sem título]',
     ),
 
 
