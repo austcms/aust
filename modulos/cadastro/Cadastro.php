@@ -76,6 +76,7 @@ class Cadastro extends Module {
 					reference_field='".$field."' AND
 					categoria_id='".$austNode."' AND
 					type='main'
+				ORDER BY t.id DESC
 				";
 		$query = $this->connection->query($sql);
 		
@@ -200,7 +201,7 @@ class Cadastro extends Module {
 					/*
 					 * Realiza upload e salva os dados
 					 */
-					
+					$imageHandler->prependedPath = $this->getStructureConfig('image_save_path');
 					$value = $imageHandler->resample($value);
 					$finalName = $imageHandler->upload($value);
 					

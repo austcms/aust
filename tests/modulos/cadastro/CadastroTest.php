@@ -250,7 +250,7 @@ class CadastroTest extends PHPUnit_Framework_TestCase
         /* start test #1 */
 	        $result = $this->obj->loadModConf(777, 'field');
 	        $this->assertArrayHasKey(
-	                'multiple_images',
+	                'image_field_limit_quantity',
 	                $result['campo_1'],
 	                'Teste #1.1 falhou');
 
