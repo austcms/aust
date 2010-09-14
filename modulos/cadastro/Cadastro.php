@@ -76,6 +76,7 @@ class Cadastro extends Module {
 					reference_field='".$field."' AND
 					categoria_id='".$austNode."' AND
 					type='main'
+				ORDER BY t.id DESC
 				";
 		$query = $this->connection->query($sql);
 		
@@ -200,7 +201,7 @@ class Cadastro extends Module {
 					/*
 					 * Realiza upload e salva os dados
 					 */
-					
+					$imageHandler->prependedPath = $this->getStructureConfig('image_save_path');
 					$value = $imageHandler->resample($value);
 					$finalName = $imageHandler->upload($value);
 					
@@ -415,19 +416,31 @@ class Cadastro extends Module {
      *
      * @return <array>
      */
-    public function getFields(){
+    public function getFields($fieldNamesOnly = false){
+		$sql = "SELECT * FROM cadastros_conf
+				WHERE
+				   categorias_id='".$this->austNode."' AND
+				   tipo='campo'
+				ORDER BY ordem ASC";
         $temp = $this->connection->query(
-            "SELECT * FROM cadastros_conf
-             WHERE
-                categorias_id='".$this->austNode."' AND
-                tipo='campo'
-             ORDER BY ordem ASC",
+            $sql,
             PDO::FETCH_ASSOC
         );
-        
+
+		$result = array();
         foreach( $temp as $chave=>$valor ){
-            if( !empty($valor["chave"]) )
-                $result[ $valor["chave"] ] = $valor["valor"];
+            if( !empty($valor["chave"]) ){
+
+				/*
+				 * O usuário pode querer somente o nome do campo,
+				 * mas também pode querer a informação completa.
+				 */
+				if( $fieldNamesOnly )
+                	$result[ $valor["chave"] ] = $valor["valor"];
+				else
+                	$result[ $valor["chave"] ] = $valor;
+
+			}
         }
 
         return $result;
@@ -892,7 +905,7 @@ class Cadastro extends Module {
 
     }
 
-    /**
+    /*
      * INTERFACE DE SETUP
      *
      * Métodos para o setup de novas estruturas
@@ -902,6 +915,14 @@ class Cadastro extends Module {
         
     }
 
+	/*
+	 * INTERFACE DE CONFIGURAÇÃO DE ESTRUTURA
+	 *
+	 * 
+	 */
+	public function drawFieldConfiguration(){
+    	$result = '';
+	}
 }
 
 ?>

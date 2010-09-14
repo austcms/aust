@@ -124,7 +124,7 @@ class Arquivos extends Module
             /*
              * Verifica se o mime-type do arquivo é válido
              */
-            if( eregi("^image\/(".$this->invalidExtensions.")$", $file["type"]) ){
+            if( preg_match("/^image\/(".$this->invalidExtensions.")$/i", $file["type"]) ){
                 $this->status['uploadFile'][$file['name']] = 'invalid_extension';
                 return false;
             }

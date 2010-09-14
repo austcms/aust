@@ -20,6 +20,7 @@ if( !empty($_GET["w"]) ){
 
 //pr($infoCadastro);
 ?>
+
 <h2>Cadastro: <?php echo $this->aust->leNomeDaEstrutura($_GET['aust_node'])?></h2>
 <?php
 if( $_GET['action'] == "edit" ){
@@ -70,11 +71,12 @@ if( $_GET['action'] == "edit" ){
 	                    <img id="lb_image" style="margin-right: 15px" />
 	                </td>
 	                <td>
-						<div>
+						<div class="description">
 							Descrição:
 							<br />
 	                        <input name="data[<?php echo $tabelaCadastro ?>][description]" id="image_description" class="text" />
 						</div>
+						<div class="secondary_image">
 						<div>
 							Nova Imagem Secundária:
 							<br />
@@ -93,6 +95,7 @@ if( $_GET['action'] == "edit" ){
 						<p id="missing_secondary_image" class="display: none;">
 							<em>Não há uma imagem secundária cadastrada.</em>
 						</p>
+						</div>
 						
 	                </td>
 	            </tr>
@@ -291,26 +294,58 @@ foreach( $camposForm as $chave=>$valor ){
 					var imagesPath = '<?php echo $imagesPath ?>';
 					</script>
 					<?php
+					$i = 0;
 					foreach( $images as $key=>$image ){
 						$o++;
+						$i++;
+						
+						// somente uma imagem
+						if(
+							$i > $modulo->getFieldConfig($fieldName, 'image_field_limit_quantity') AND
+							$modulo->getFieldConfig($fieldName, 'image_field_limit_quantity') > 0
+						)
+							break;
+						
 						if( $o == 1 ){
 							?>
 							<tr>
 							<?php
 						}
 						?>
+						<script type="text/javascript">
+						/* DEFINIÇÕES DE CAMPOS IMAGES */
+						imageHasDescription['image_<?php echo $image['id']?>'] = "<?php echo $modulo->getFieldConfig($fieldName, 'image_field_has_description')?>";
+						imageHasSecondaryImage['image_<?php echo $image['id']?>'] = "<?php echo $modulo->getFieldConfig($fieldName, 'image_field_has_secondary_image')?>";
+						
+						/*
+						if( imageHasDescription['image_<?php echo $image['id']?>'] != '1' AND
+						 	imageHasSecondaryImage['image_<?php echo $image['id']?>'] != '1' )
+							imageHasLightbox['image_<?php echo $image['id']?>'] = true;
+						else
+							imageHasLightbox['image_<?php echo $image['id']?>'] = false;
+						*/
+						</script>
 						
 						<td>
 						
-						<a href="javascript: void(0)" class="lightbox-panel" id="image_<?php echo $image['id'] ?>" name="modal" onclick="editImageInLightbox(this, <?php echo $image['id'] ?>, '<?php echo $fieldName ?>')"><img class="thumb" src="<?php echo $imagesPath.$image['id']?>" /></a>
+						<img class="thumb" name="image_<?php echo $image['id']?>" src="<?php echo $imagesPath.$image['id']?>" />
 						<input type="hidden" name="image_description_<?php echo $image['id'] ?>" value="<?php echo $image['description'] ?>" />
 						<input type="hidden" name="image_secondaryid_<?php echo $image['id'] ?>" value="<?php echo $image['secondaryid'] ?>" />
 						<br clear="all" />
                         <a href="javascript: void(0);" onclick="if( confirm('Você tem certeza que deseja excluir esta imagem?') ) window.open('adm_main.php?section=<?php echo $_GET["section"]; ?>&action=<?php echo $_GET["action"]; ?>&aust_node=<?php echo $_GET["aust_node"]; ?>&w=<?php echo $_GET["w"];?>&deleteimage=<?php echo $image["id"]; ?>','_top');">
-                            <img src="core/user_interface/img/icons/delete_15x15.png" alt="Excluir" border="0" />
+                            <img src="core/user_interface/img/icons/delete_15x15.png" alt="Excluir" title="Excluir" border="0" />
                         </a>
-                        <img src="core/user_interface/img/icons/add_thumb_16x16.png" alt="Adicionar segunda imagem" border="0" />
-						
+						<?php
+						if( $modulo->getFieldConfig($fieldName, 'image_field_has_description') OR
+						 	$modulo->getFieldConfig($fieldName, 'image_field_has_secondary_image') )
+						{
+							?>
+							<a href="javascript: void(0)" class="lightbox-panel" id="image_<?php echo $image['id'] ?>" name="modal" onclick="editImageInLightbox(this, <?php echo $image['id'] ?>, '<?php echo $fieldName ?>')">
+	                        	<img src="core/user_interface/img/icons/add_thumb_16x16.png" alt="Editar Informações" title="Editar Informações" border="0" />
+							</a>
+							<?php
+						}
+						?>
 						</td>
 						
 						<?php
@@ -340,8 +375,25 @@ foreach( $camposForm as $chave=>$valor ){
 				?>
 			</div>
 			
-	        <input type="file" name="<?php echo $inputName ?>[]" value="<?php echo $inputValue ?>" id="input-<?php echo $fieldName ?>" />
-	        <input type="file" name="<?php echo $inputName ?>[]" value="<?php echo $inputValue ?>" id="input-<?php echo $fieldName ?>" />
+			<?php
+			for($i = 1; $i <= 3; $i++){
+
+				$multiple = '';
+				if( $modulo->getFieldConfig($fieldName, 'image_field_limit_quantity') != 1 )
+					$multiple = 'multiple="multiple"';
+				
+				// somente uma imagem
+				if(
+					$i > $modulo->getFieldConfig($fieldName, 'image_field_limit_quantity') AND
+					$modulo->getFieldConfig($fieldName, 'image_field_limit_quantity') > 0
+				)
+					break;
+				
+				?>
+		        <input type="file" name="<?php echo $inputName ?>[]" value="<?php echo $inputValue ?>" id="input-<?php echo $fieldName ?>" <?php echo $multiple ?> />
+				<?php
+			}
+			?>
 
 			</div>
 		</div>

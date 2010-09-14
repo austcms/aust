@@ -398,6 +398,7 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
         $config = $this->obj->loadConfig();
         if( !empty($config['replaceFieldsValueIfEmpty']) ){
 
+			$query = $this->obj->replaceFieldsValueIfEmpty($query);
             foreach( $query as $value ){
 
                 foreach( $config['replaceFieldsValueIfEmpty'] as $field=>$fieldRule ){
@@ -412,7 +413,13 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
         //$this->assertArrayHasKey(0, $result, "Module::load() não funcionando" );
     }
 
+	/*
+	 *
+	 * Carrega configurações de módulos e campos (quando existem)
+	 *
+	 */
     function testLoadModConf(){
+        $this->obj->connection->query("DELETE FROM config WHERE local='777' AND nome='teste7777'");
         $sql = "INSERT INTO config
                     (tipo,local,nome,propriedade,valor)
                 VALUES
@@ -433,9 +440,18 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
 	                "label" => "Working?",
 	                "inputType" => "checkbox",
 	            ),
-            )
+            ),
+			'field_configurations' => array(
+			    'teste' => array(
+					'field_type' => 'image',
+			        "value" => "",
+			        "label" => "Working?",
+			        "inputType" => "checkbox",
+			    ),
+			)
         );
-
+		
+		/* MODULE */
         /* start test #1 */
             $result = $this->obj->loadModConf(777);
             $this->assertArrayHasKey(
@@ -517,7 +533,6 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
         $lastId = $this->obj->connection->lastInsertId();
         $this->obj->fieldsToLoad = "*";
         $this->obj->load($lastId);
-
 
         /* test #1 */
             $str = "http://mywebsite.com/news/%id/%title_encoded";
