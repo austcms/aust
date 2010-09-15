@@ -14,6 +14,7 @@ $infoCadastro = $modulo->pegaInformacoesCadastro($austNode);
 $tabelaCadastro = $infoCadastro["estrutura"]['tabela']["valor"];
 $tabelaImagens = $infoCadastro["estrutura"]['table_images']["valor"];
 
+$w = '';
 if( !empty($_GET["w"]) ){
     $w = $_GET['w'];
 }
@@ -46,15 +47,16 @@ if( $_GET['action'] == "edit" ){
  */
 ?>
 	<?php
+	
 	$options = array(
-		'action' => 'edit&aust_node='.$austNode.'&w='.$_GET['w'],
+		'action' => 'edit&aust_node='.$austNode.'&w='.$w,
 	);
 	echo $form->create( $infoCadastro["estrutura"]["tabela"]["valor"], $options );
 	?>
 	<div id="lightbox-panel" class="window lb_images">
 		<input type="hidden" name="type" value="image_options" />
 		<input type="hidden" name="aust_node" value="<?php echo $austNode ?>" />
-		<input type="hidden" name="w" value="<?php echo $_GET['w']; ?>" />
+		<input type="hidden" name="w" value="<?php echo $w; ?>" />
 		<input type="hidden" name="mainTable" value="<?php echo $tabelaCadastro ?>" />
 	    <div class="header">
 	        <h2>Propriedades da Imagem</h2>

@@ -312,7 +312,7 @@ class Connection extends SQLObject {
             /**
              * Executa e retorna resultado
              */
-
+			
             $result = $this->conn->exec($sql);
             if( $result === false){
                 $debugResult = end( $this->conn->errorInfo() );

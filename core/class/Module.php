@@ -1201,9 +1201,23 @@ class Module
 
             $data = $params["data"];
 
+			if( empty($params['conf_class']) OR is_null($params['conf_class']) )
+				$confClass = 'module';
+			else
+				$confClass = $params['conf_class'];
+
+			/*
+			 * ajusta o parâmetro da busca SQL
+			 */
+			if( $confClass == 'module' )
+				$classSearchStatement = '( class IS NULL OR class=\'module\')';
+			else
+				$classSearchStatement = 'class=\''.$confClass.'\'';
+
 			/*
 			 * Se foi definido um usuário específico
 			 */
+			$whereAuthor = '';
 			if( !empty($params['author']) AND is_numeric($params['author']) )
 				$whereAuthor = "AND autor='".$params['author']."'";
 			

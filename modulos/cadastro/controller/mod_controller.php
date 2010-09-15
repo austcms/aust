@@ -320,6 +320,7 @@ class ModController extends ModsController
 			 *		4) Salva dados relacionados no DB.
 			 */
 			$relational = $this->modulo->relationalData;
+
             if( !empty($relational) AND !empty($lastInsertId) ){
 
                 unset($sql);

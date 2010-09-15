@@ -204,6 +204,9 @@ class Cadastro extends Module {
 					$value = $imageHandler->resample($value);
 					$finalName = $imageHandler->upload($value);
 					
+					$finalName['systemPath'] = addslashes($finalName['systemPath']);
+					$finalName['webPath'] = addslashes($finalName['webPath']);
+					
 					/*
 					 * Salva SQL da imagem
 					 */
