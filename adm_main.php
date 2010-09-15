@@ -13,6 +13,9 @@
  * Cria SESSION
  */
 
+// PHP 5.3 needs this
+date_default_timezone_set('America/Sao_Paulo');
+
 session_name("aust");
 session_start();
 
@@ -160,11 +163,30 @@ if(!$isResponser){
         $content_for_layout = ob_get_contents();
         ob_end_clean();
         
+		// show only view?
+		$viewOnly = false;
+		if( (
+				!empty($_GET['viewonly'])
+				AND $_GET['viewonly'] == 'yes'
+			)
+			OR 
+			(
+				!empty($_POST['viewonly'])
+				AND $_POST['viewonly'] == 'yes'
+			)
+		)
+		{
+			$viewOnly = true;
+		}
         /**
          * Mostra a Interface de usuário no browser
          */
-        if( empty($_GET['theme'])
-            OR $_GET['theme'] != 'blank' )
+        if( $viewOnly == false
+			AND (
+				empty($_GET['theme'])
+            	OR $_GET['theme'] != 'blank'
+			)
+		)
         {
             include(UI_STANDARD_FILE);
         } else {

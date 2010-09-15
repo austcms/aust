@@ -11,6 +11,8 @@
  * @version 0.1.5
  * @since 25/07/2009
  */
+date_default_timezone_set('America/Sao_Paulo');
+
 session_name("aust");
 session_start();
 

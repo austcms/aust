@@ -36,8 +36,6 @@ function fastimagecopyresampled (&$dst_image, $src_image, $dst_x, $dst_y, $src_x
     return true;
 }
 
-//echo 'oaijdoiwad';
-
 /**
  * Caminho deste arquivo até o root
  */
@@ -62,14 +60,16 @@ $conexao = Connection::getInstance();
  * - maxxsize: largura máxima. É necessário especificar maxysize também.
  *
  */
-
 $myid       = (empty($_GET['myid']))        ? ''        : $_GET['myid'];        // id da imagem a ser aberta
 $table      = (empty($_GET['table']))       ? 'imagens' : $_GET['table'];       // tabela onde a imagem se encontra
 $thumbs     = (empty($_GET['thumbs']))      ? ''        : $_GET['thumbs'];      // yes|no: diz se deve ser tratada a imagem
+$fromfile   = (empty($_GET['fromfile']))    ? false     : $_GET['fromfile'];      // yes|no: diz se deve ser tratada a imagem
 $xsize      = (empty($_GET['xsize']))       ? ''        : $_GET['xsize'];       // xsize: tamanho X
 $maxxsize   = (empty($_GET['maxxsize']))    ? ''        : $_GET['maxxsize'];    //
 $ysize      = (empty($_GET['ysize']))       ? ''        : $_GET['ysize'];       // ysize: tamanho Y
 $maxysize   = (empty($_GET['maxysize']))    ? ''        : $_GET['maxysize'];    //
+$minxsize   = (empty($_GET['minxsize']))    ? ''        : $_GET['minxsize'];       // ysize: tamanho Y
+$minysize   = (empty($_GET['minysize']))    ? ''        : $_GET['minysize'];    //
 
 if (!empty($myid)){
 	if (empty($myordem))
@@ -78,14 +78,11 @@ if (!empty($myid)){
 		$ordem = "AND ordem=$myordem";
 	else
 		$ordem = "AND ordem=1";
+		
 	if(empty($idfrom))
 		$idfrom = "id";
         
-//    switch($idfrom){
-//        case "ref" :
-		    $sql = "SELECT * FROM $table WHERE $idfrom='$myid' $ordem";
-//            break; 
-//    }   
+    $sql = "SELECT * FROM $table WHERE $idfrom='$myid' $ordem";
         
 } else {
     $sql = "SELECT id FROM Imagens";
@@ -97,19 +94,26 @@ if (!empty($myid)){
     $sql = "SELECT * FROM $tabelaimg WHERE id=".$ids[rand(0,count($ids)-1)];
 }
 
-//echo $sql;
-
 $query = $conexao->query($sql);
-//print_r($query);
 $dados = $query[0];
 if ($conexao->count($sql) > 0){
 
-    //echo '<pre>';
-    //print_r($query);
-    //echo '</pre>';
-    //echo 'oi';
-    $fileType = $dados["tipo"];
-    $fileContent = $dados["dados"];
+	$type = '';
+	if( !empty($dados["tipo"]) )
+		$type = $dados["tipo"];
+	else if( !empty($dados["type"]) )
+		$type = $dados["type"];
+	
+    $fileType = $type;
+
+	/*
+	 * Algumas imagens estão em arquivos, outros em DB
+	 */
+	if( !$fromfile )
+    	$fileContent = $dados["dados"];
+	else
+		$fileContent = file_get_contents($dados["systempath"]);
+
     if($thumbs == "yes"){
 
         header("Content-Type: ".$fileType);
@@ -118,27 +122,40 @@ if ($conexao->count($sql) > 0){
         $largurao = imagesx($im);// pegar a largura da amostra
         $alturao = imagesy($im);// pegar a altura da amostra
 
-        if(!empty($xsize) AND !empty($ysize)){
+		/*
+		 * Supondo uma imagem de 300x200, e deseja-se que o menor tamanho seja
+		 * de 100px. Ajusta-se $minysize=100 e $minxsize=100.
+		 */
+		if(!empty($maxxsize) AND !empty($maxysize) ){
+		     if($largurao > $maxxsize){
+		         $largurad = $maxxsize; // definir a altura da miniatura em px
+		         $alturad = ($alturao*$largurad)/$largurao;
+		     } else {
+		         $largurad = $largurao;
+		         $alturad = $alturao;
+		     }
+
+		     if($alturad > $maxysize){
+		         $alturad = $maxysize; // definir a altura da miniatura em px
+		         $largurad = ($largurao*$alturad)/$alturao;// calcula a largura da imagem a partir da altura da miniatura
+		     } 
+		     //echo $alturad;
+        } else if( is_numeric($minxsize) AND is_numeric($minysize) ){
+	
+            $alturad = $minysize; // calcula a largura da imagem a partir da altura da miniatura
+            $largurad = ($largurao*$alturad)/$alturao; // proporção
+
+			if( $largurad < $minxsize ){
+	            $largurad = $minxsize; // calcula a largura da imagem a partir da altura da miniatura
+                $alturad = ($alturao*$largurad)/$largurao;
+			}
+        } else if( !empty($xsize) AND !empty($ysize) ){
             $largurad = $xsize; // definir a altura da miniatura em px
             $alturad = $ysize;// calcula a largura da imagem a partir da altura da miniatura
-        } else if(!empty($maxxsize) AND !empty($maxysize)){
-            if($largurao > $maxxsize){
-                $largurad = $maxxsize; // definir a altura da miniatura em px
-                $alturad = ($alturao*$largurad)/$largurao;// calcula a largura da imagem a partir da altura da miniatura
-            } else {
-                $largurad = $largurao;
-                $alturad = $alturao;
-            }
-
-            if($alturad > $maxysize){
-                $alturad = $maxysize; // definir a altura da miniatura em px
-                $largurad = ($largurao*$alturad)/$alturao;// calcula a largura da imagem a partir da altura da miniatura
-            } 
-            //echo $alturad;
-        } else if(!empty($xsize)){
+        } else if( !empty($xsize) ){
             $largurad = $xsize; // definir a altura da miniatura em px
             $alturad = ($alturao*$largurad)/$largurao;// calcula a largura da imagem a partir da altura da miniatura
-        } else if(!empty($ysize)){
+        } else if( !empty($ysize) ){
             $alturad = $ysize; // definir a altura da miniatura em px
             $largurad = ($largurao*$alturad)/$alturao;// calcula a largura da imagem a partir da altura da miniatura
         } else {
@@ -146,7 +163,10 @@ if ($conexao->count($sql) > 0){
             $alturad = ($alturao*$largurad)/$largurao;// calcula a largura da imagem a partir da altura da miniatura
         }
 
+
         $nova = imagecreatetruecolor($largurad,$alturad);//criar uma imagem em branco
+
+//        $nova = imagecreatetruecolor($largurad,$alturad);//criar uma imagem em branco
         if(empty($quality)) $quality = 3;
         if($quality > 5) $quality = 3;
         if(empty($resample))
@@ -185,15 +205,15 @@ if ($conexao->count($sql) > 0){
         } else {
 
             if( !empty($resample) AND $resample == "no")
-                imagejpeg($nova, '', 85);
+                imagejpeg($nova, '', 90);
             else
-                imagejpeg($nova);//, '', $quality);
+                imagejpeg($nova, null, 100);//, '', $quality);
         }
         
         
         imagedestroy($nova);
     } else {
-        header("Content-Type: ". $dados["tipo"]);
+        header("Content-Type: ". $type);
         echo $dados["dados"];
     }
 } else {

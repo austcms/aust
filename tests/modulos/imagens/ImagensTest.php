@@ -90,7 +90,7 @@ class ImagensTest extends PHPUnit_Framework_TestCase
         );
         $_POST = array(
             'method' => 'create',
-            'frmadddate' => '',
+            'frmadddate' => '2010-08-24',
             'frmautor' => '',
             'frmordem' => '777',
             'w' => '',
@@ -113,7 +113,6 @@ class ImagensTest extends PHPUnit_Framework_TestCase
 
 
         $loadResult = $this->obj->load(array( 'id' => $lastInsertId, 'austNode' => '777' ) );
-        //var_dump($loadResult);
         $deleteResult = $this->obj->delete($lastInsertId);
 
         $this->assertTrue($saveResult, $saveResult);

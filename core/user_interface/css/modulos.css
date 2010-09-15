@@ -60,4 +60,53 @@ div.listing table.calendar td.day div.agenda_day_actor { color: black; font-weig
 div.listing table.calendar td.day div.agenda_day_actor_itself { color: brown; }
 div.listing table.calendar td.day div.agenda_day_time {  }
 
+/* div#listing_table */
+div#listing_table { clear: both; display: block; }
 
+
+span.viewmode { 
+	height: 21px;
+	width: 30px;
+	display: table;
+	float: left;
+	background-color: red;
+}
+	span.viewmode.pressed { background-position: 0px 21px; }
+	span.viewmode_thumbs { background: url('../img/icons/viewmode_thumbs.png'); }
+	span.viewmode_list { background: url('../img/icons/viewmode_list.png'); }
+
+/* Thumbs_view em geral */
+	.thumbs_view { margin: 0 auto; text-align: center; }
+	.thumbs_view td { padding: 0 0 10px 0; }
+	.thumbs_view a { cursor: hand; }
+	.thumbs_view img.thumb {
+		margin-bottom: 4px;
+		border: 1px solid #cccccc;
+		box-shadow: 3px 3px 3px #bbb;
+		-moz-box-shadow: 3px 3px 3px #bbb; 
+		-webkit-box-shadow: 3px 3px 3px #bbb; 
+	}
+	
+	
+
+/* mod_imagens */
+	#mod_imagens #thumbs_view { margin: 0 auto; text-align: center; }
+	#mod_imagens #thumbs_view span.item { width: 100px; display: inline-block; padding: 0px 10px 10px 10px; }
+	#mod_imagens #thumbs_view span.item a { text-decoration: none; color: #9B9B9B;  }
+	#mod_imagens #thumbs_view span.item a:hover { background: #eeeeee; cursor: hand; }
+	#mod_imagens #thumbs_view span.item div.info { font-size: 0.8em; }
+	#mod_imagens #thumbs_view span.item div.image {
+		margin-bottom: 3px;
+		background-repeat: no-repeat;
+		background-position: center;
+		display: block;
+		border: 1px solid #cccccc;
+		-moz-border-radius: 8px;
+		border-radius: 8px;
+		box-shadow: 3px 3px 3px #bbb;
+		-moz-box-shadow: 3px 3px 3px #bbb; 
+		-webkit-box-shadow: 3px 3px 3px #bbb; 
+		height: 100px;
+		width: 100px;
+	}
+	#mod_imagens #thumbs_view span.item div.image img { border: none; }

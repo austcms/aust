@@ -17,6 +17,13 @@ var privilegio_escolhido = false;
 $(document).ready(function(){
     lightbox();
 
+//	$("a[name=modal]").first().click();
+
+	// changeViewMode
+	$('a[class=change_viewmode]').click(function(e) {
+		changeViewMode(this);
+	});
+	
     
     if($('div.campooptions').length > 0){$('div.campooptions').hide();}
     if($('div.est_options').length > 0){$('div.est_options').hide();}
@@ -65,6 +72,19 @@ $(document).ready(function(){
             }
         })
     });
+
+	// Tooltips
+	/*
+	$(".tooltip-test").tooltip( {
+		effect: 'fade',
+		position: "bottom center",
+		relative: false,
+        events: {
+            def: 'click, click'
+        }
+		
+	});
+	*/
 
     // Panes
     // perform JavaScript after the document is scriptable.

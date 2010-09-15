@@ -134,6 +134,13 @@ $modInfo = array(
         'table' => 'textos',
         'foreignKey' => 'categoria',
     ),
+    /*
+     * Se não há valor, substitui campo vazio na listagem
+     * pelos valores abaixo
+     */
+    'replaceFieldsValueIfEmpty' => array(
+        'titulo' => '[Sem título]',
+    ),
 
 
     /**
