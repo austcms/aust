@@ -317,7 +317,7 @@ class Image
 		if( !is_string($fileType) )
 			return false;
 		
-        if( eregi("^image\/(tiff|pjpeg|jpeg|png|gif|bmp)$", $fileType) ){
+        if( preg_match("/^image\/(tiff|pjpeg|jpeg|png|gif|bmp)$/i", $fileType) ){
             return true;
         }
 

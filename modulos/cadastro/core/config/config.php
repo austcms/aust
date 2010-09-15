@@ -103,6 +103,35 @@ $modInfo = array(
         ),
     ),
 
+    /*
+     * CONFIGURAÇÕES POR CAMPO INDIVIDUAL
+     */
+    'field_configurations' => array(
+        /*
+         * Múltiplas imagens ou apenas uma?
+         */
+        'multiple_images' => array(
+			'field_type' => 'images',
+            "value" => "",
+            "label" => "Múltiplas imagens?",
+            "inputType" => "checkbox",
+			'help' => 'Por padrão, apenas uma imagem pode ser '.
+					  'inserida. Se marcar este checkbox, múltiplas poderão '.
+					  'ser inseridas.'
+        ),
+        /*
+         * Tem imagem secundária?
+         */
+        'has_secondary_image' => array(
+			'field_type' => 'images',
+            "value" => "",
+            "label" => "Tem imagem secundária?",
+            "inputType" => "checkbox",
+			'help' => 'Por padrão, apenas uma imagem pode ser '.
+					  'inserida. Se marcar este checkbox, múltiplas poderão '.
+					  'ser inseridas.'
+        ),
+    ),
     /**
      * RESPONSER
      *
