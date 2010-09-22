@@ -627,7 +627,8 @@ class Module
      */
     public function generateSqlFromForm($post, $method = 'new'){
 
-        if( !empty($post['w']) )
+        if( !empty($post['w']) OR
+			!empty($post['id']) )
             $method = 'edit';
 
         $c = 0;
