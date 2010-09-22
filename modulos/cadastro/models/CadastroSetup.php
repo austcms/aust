@@ -379,6 +379,7 @@ class CadastroSetup extends ModsSetup {
 		            'title varchar(250),'.
 		            'description text,'.
 		            'local varchar(180),'.
+                    'link text,'.
 		            'systempath text,'.
 		            'path text,'.
 		            'file_name varchar(250),'.
