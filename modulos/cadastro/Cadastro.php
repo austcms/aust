@@ -683,7 +683,7 @@ class Cadastro extends Module {
         if( $metodo == "listing" ){
 
             if( empty($mostrar) ){
-                $mostrar = "id,";
+                $mostrar = "";
 
             } else {
                 $mostrar = implode(",", $mostrar["chave"]).",";
