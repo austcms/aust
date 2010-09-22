@@ -61,7 +61,7 @@ class Model extends Aust
                          */
                         else if( is_string($campo) ){
                             $camposStr[] = $campo;
-                            $valorStr[] = $valor;
+                            $valorStr[] = addslashes( $valor);
                         }
                     }
 
@@ -94,7 +94,7 @@ class Model extends Aust
                      */
                     foreach( $campos as $campo=>$valor ){
                         if( $campo != "id" ){
-                            $camposStr[] = $campo."='".$valor."'";
+                            $camposStr[] = $campo."='".addslashes($valor)."'";
                         }
                         
                     }
@@ -113,7 +113,6 @@ class Model extends Aust
                 }
             }
             
-            //pr($sql);
             if( count($sql) > 0 ){
                 foreach( $sql as $instrucao ){
 
