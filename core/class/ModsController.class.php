@@ -200,6 +200,12 @@ class ModsController extends Controller
 						$error = $_FILES["data"]['error'][$model][$fieldName][$key];
 						$size = $_FILES["data"]['size'][$model][$fieldName][$key];
 						
+						if( empty($value) OR
+							$size == 0 OR
+							empty($tmp_name) OR
+							empty($type) )
+							continue;
+							
 						$this->{"data"}[$model][$fieldName][$key]['name'] = $value;
 						$this->{"data"}[$model][$fieldName][$key]['type'] = $type;
 						$this->{"data"}[$model][$fieldName][$key]['tmp_name'] = $tmp_name;
