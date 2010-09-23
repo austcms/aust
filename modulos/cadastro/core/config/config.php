@@ -88,6 +88,18 @@ $modInfo = array(
         /*
          * Tem sistema de pesquisa?
          */
+        'image_save_path' => array(
+            "value" => "",
+            "label" => "URL para salvar?",
+            "inputType" => "text",
+			'help' => 'Por padrão, sempre serão salvar dentro do diretório '.
+					  'uploads/. Se você escrever ../, então as imagens serão '.
+					  'salvas dentro de ../uploads/, o que provavelmente será '.
+					  'a raiz do site principal.'
+        ),
+        /*
+         * Tem sistema de pesquisa?
+         */
         'has_search' => array(
             "value" => "",
             "label" => "Tem pesquisa?",
@@ -110,19 +122,29 @@ $modInfo = array(
         /*
          * Múltiplas imagens ou apenas uma?
          */
-        'multiple_images' => array(
+        'image_field_limit_quantity' => array(
+			'field_type' => 'images',
+            "value" => "1",
+            "label" => "Limite de imagens?",
+            "inputType" => "text",
+            "size" => "small",
+			'help' => 'Por padrão, apenas uma imagem pode ser '.
+					  'inserida. Se definir 0, então não há limites.'
+        ),
+        /*
+         * Imagem tem descrição
+         */
+        'image_field_has_description' => array(
 			'field_type' => 'images',
             "value" => "",
-            "label" => "Múltiplas imagens?",
+            "label" => "Tem descrição?",
             "inputType" => "checkbox",
-			'help' => 'Por padrão, apenas uma imagem pode ser '.
-					  'inserida. Se marcar este checkbox, múltiplas poderão '.
-					  'ser inseridas.'
+			'help' => 'Este campo de imagem tem descrição? ',
         ),
         /*
          * Tem imagem secundária?
          */
-        'has_secondary_image' => array(
+        'image_field_has_secondary_image' => array(
 			'field_type' => 'images',
             "value" => "",
             "label" => "Tem imagem secundária?",

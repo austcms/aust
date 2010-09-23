@@ -22,6 +22,7 @@ class Image
 	     */
 	    public $path = 'uploads/';
 
+	    public $prependedPath = '';
 	    /**
 	     * Tamanho máximo permitido do arquivo. Valor em bytes.
 	     *
@@ -99,6 +100,12 @@ class Image
 
     }
 
+	/**
+	 * @TODO - testunit
+	 */
+	function path(){
+		return $this->prependedPath.$this->path;
+	}
 
     /**
      * upload()
@@ -132,7 +139,7 @@ class Image
         /*
          * Caminho de onde a imagem ficará
          */
-        $fileDir = $this->path ;
+        $fileDir = $this->path();
 
         /*
          * autoOrganizaFolders

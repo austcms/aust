@@ -681,7 +681,7 @@ if(!empty($_GET['function'])){
 
                             else {
                                 ?>
-                                <input type="text" name="nome" class="input" />
+	                            <input type="text" name="data[<?php echo $key; ?>]" value="<?php echo $options['value'] ?>" class="input" />
                                 <?php
                             }
                             ?>
@@ -765,15 +765,25 @@ if(!empty($_GET['function'])){
 		                            <input type="hidden" name="data[<?php echo $fieldName ?>][<?php echo $key; ?>]" value="0" />
 
 		                            <input type="checkbox" name="data[<?php echo $fieldName ?>][<?php echo $key; ?>]" <?php echo $checked; ?> value="1" class="input" />
+						
 		                            <?php
 		                        }
 
 		                        else {
+									$size = '';
+									if( $options['size'] == 'small' )
+										$size = '5';
 		                            ?>
-		                            <input type="text" name="nome" class="input" />
+		                            <input type="text" size="<?php echo $size?>" name="data[<?php echo $fieldName ?>][<?php echo $key; ?>]" value="<?php echo $options['value'] ?>" class="input" />
 		                            <?php
 		                        }
-								echo $options['label'];
+								if( !empty($options['label']) ){
+									echo $options['label'];
+								} else {
+									echo "não possui label.";
+								}
+								if( !empty($options["help"]) )
+									tt($options["help"]);
 								?>
 								
 								</div>
