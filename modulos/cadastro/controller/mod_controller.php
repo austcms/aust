@@ -301,7 +301,7 @@ class ModController extends ModsController
 			$this->modulo->setRelationalData(); // ajusta inclusive imagens
 			$this->data = $this->modulo->data;
 			$images = $this->modulo->images;
-			
+
 			/*
 			 *		2) Salva dados principais (não relacionados);
 			 */
