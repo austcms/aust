@@ -22,6 +22,10 @@ class Imagens extends Module
         'updated_on' => 'addate'
     );
 
+	public $fieldsToLoad = array(
+	    'titulo', 'visitantes', 'systempath'
+	);
+
 	public $defaultLimit = 25;
 	
     function __construct($param = ''){

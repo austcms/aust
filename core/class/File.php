@@ -9,7 +9,7 @@
  * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @since v0.1.9, 26/08/2009
  */
-class Image extends File
+class File
 {
 
     /*
@@ -30,18 +30,6 @@ class Image extends File
 	     */
 	    public $max_filesize = "100000000"; // in bytes
 
-	    /**
-	     * Largura máxima permitida caso o arquivo seja imagem.
-	     *
-	     * @var string
-	     */
-	    public $max_width;
-	    /**
-	     * Altura máxima permitida caso o arquivo seja imagem.
-	     *
-	     * @var string
-	     */
-	    public $max_height;
 
 	    public $filenameType = "sha1";
 	    /**
@@ -77,6 +65,10 @@ class Image extends File
 	     */
 	    public $autoOrganizeFolders = true;
 
+    function __construct() {
+	
+    }
+
     /**
      * getInstance()
      *
@@ -89,7 +81,7 @@ class Image extends File
         static $instance;
 
         if( !$instance ){
-            $instance[0] = new Image;
+            $instance[0] = new File;
         }
 
         return $instance[0];
@@ -116,14 +108,7 @@ class Image extends File
             return false;
 
         /*
-         * VALIDAÇÃO
-         */
-        if( !$this->validate($file) ){
-            return false;
-		}
-
-        /*
-         * Gera um nome único para a imagem SHA1
+         * Gera um nome único para o arquivo SHA1
          */
         if( $this->filenameType == "sha1" )
             $fileName = sha1(uniqid(time())) . "." . $this->getExtension($file["name"]);
@@ -174,145 +159,14 @@ class Image extends File
     }
 
     /**
-     * trataImagem
+     * isFlash()
      *
-     * Trata uma imagem
-     *
-     * @param array $files O mesmo $_FILE vindo de um formulário
-     * @param string $width Valor padrão de largura
-     * @param string $height Valor padrão de altura
-     * @return array
-     */
-    function resample($files, $width = "1280", $height = "1024"){
-
-        /*
-         * Toma dados de $files
-         */
-        $frmarquivo = $files['tmp_name'];
-        $frmarquivo_name = $files['name'];
-        $frmarquivo_type = $files['type'];
-
-        /*
-         * Abre o arquivo e tomas as informações
-         */
-        $fppeq = fopen($frmarquivo,"rb");
-        $arquivo = fread($fppeq, filesize($frmarquivo));
-        fclose($fppeq);
-
-        /*
-         * Cria a imagem e toma suas proporções
-         */
-        $im = imagecreatefromstring($arquivo); //criar uma amostra da imagem original
-        $largurao = imagesx($im);// pegar a largura da amostra
-        $alturao = imagesy($im);// pegar a altura da amostra
-
-        /*
-         * Configura o tamanho da nova imagem
-         */
-        if($largurao > $width)
-            $largurad = $width;
-        else
-            $largurad = $largurao; // definir a altura da miniatura em px
-
-        $alturad = ($alturao*$largurad)/$largurao; // calcula a largura da imagem a partir da altura da miniatura
-        $nova = imagecreatetruecolor($largurad,$alturad); // criar uma imagem em branco
-        //imagecopyresized($nova,$im,0,0,0,0,$largurad,$alturad,$largurao,$alturao);
-        imagecopyresampled($nova,$im,0,0,0,0,$largurad,$alturad,$largurao,$alturao);
-
-        ob_start();
-        imagejpeg($nova, null, 100);
-        $mynewimage = ob_get_contents();
-        ob_end_clean();
-
-        /*
-         * Prepara dados resultados para retornar
-         */
-        imagedestroy($nova);
-
-        $fhandle = fopen($frmarquivo,"w+b");
-        fwrite($fhandle, $mynewimage);
-        fclose($fhandle);
-
-        $result["size"] = strlen($mynewimage);
-        $result["tmp_name"] = $files['tmp_name'];
-        $result["name"] = $files['name'];
-        $result["type"] = 'image/jpeg';
-        $result["error"] = '0';
-
-        return $result;
-
-    }
-
-    /*
-     *
-     * VALIDAÇÃO
-     *
-     * Valida se o arquivo pode ser uploaded
-     *
-     */
-    public function validate($file){
-
-        $valid = true;
-
-		if( empty($file['tmp_name']) ){
-            $this->_setError("max_filesize");
-            return false;
-		}
-        /*
-         * Verifica tamanho do arquivo
-         */
-        if($file["size"] > $this->max_filesize ){
-            $this->_setError("max_filesize");
-            $valid = false;
-        }
-
-        /*
-         * SE IMAGEM
-         */
-        /*
-         * É imagem
-         *
-         * Verifica se o mime-type do arquivo é de imagem
-         */
-        if( $this->isImage($file["type"]) ){
-
-            /*
-             * Dimensões da imagem
-             */
-            $imageSize = getimagesize($file["tmp_name"]);
-
-            /*
-             * Verifica largura do arquivo
-             */
-            if( !empty($this->max_width)
-                AND $imageSize[0] > $this->max_width ){
-                $this->_setError("max_width");
-                $valid = false;
-            }
-
-            /*
-             * Verifica altura do arquivo
-             */
-            if( !empty($this->max_height)
-                AND $imageSize[1] > $this->max_height ){
-                $this->_setError("max_height");
-                $valid = false;
-            }
-        }
-
-        return $valid;
-
-    }
-
-    /**
-     * isImage()
-     *
-     * Verifica se um arquivo é imagem.
+     * Verifica se um arquivo é Flash.
      *
      * @param string $fileType O tipo mimetype do arquivo
      * @return bool
      */
-    public function isImage($fileType){
+    public function isFlash($fileType){
 		
 		if( is_array($fileType) AND !empty($fileType['type']) )
 			$fileType = $fileType['type'];
@@ -320,7 +174,7 @@ class Image extends File
 		if( !is_string($fileType) )
 			return false;
 		
-        if( preg_match("/^image\/(tiff|pjpeg|jpeg|png|gif|bmp)$/i", $fileType) ){
+        if( preg_match("/^application\/(x-shockwave-flash)$/i", $fileType) ){
             return true;
         }
 

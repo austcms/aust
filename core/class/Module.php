@@ -492,7 +492,6 @@ class Module
         $fieldsInSql = array();
         $fields = 'id, ';
         if( !empty( $this->describedTable[$this->useThisTable()] ) ){
-
             $fieldsToLoad = $this->fieldsToLoad;
             if( !is_array($fieldsToLoad) ){
                 $fieldsToLoad = array($fieldsToLoad);

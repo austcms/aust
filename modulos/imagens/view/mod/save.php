@@ -2,7 +2,15 @@
 /**
  * Save items
  */
-    if($resultado) {
+	if( is_array($resultado) ){
+		if( $resultado['class'] == 'error' ){
+        	$status['classe'] = 'insucesso';
+		} else {
+        	$status['classe'] = 'sucesso';
+		}
+		
+        $status['mensagem'] = $resultado['msg'];
+	} else if( $resultado ) {
         $status['classe'] = 'sucesso';
         $status['mensagem'] = '<strong>Sucesso: </strong> As informações foram salvas com sucesso.';
     } else {

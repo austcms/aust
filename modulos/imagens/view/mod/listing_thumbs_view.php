@@ -10,6 +10,10 @@
 
 	foreach( $query as $key=>$value){
 		
+		$fromFile = '';
+		if( !empty($value['systempath']) )
+			$fromFile = '&fromfile=1';
+		
 		if( $i == 0 ){
 			?>
 			<tr>
@@ -27,7 +31,7 @@
 			}
 			$randomNumber = rand(0,10000);
 			?>
-			<div class="image" style="background-image: url(<?php echo IMAGE_VIEWER_DIR?>visualiza_foto.php?table=imagens&thumbs=yes&myid=<?php echo $value["id"]; ?>&minxsize=<?php echo $thumbsW?>&minysize=<?php echo $thumbsH?>&r=<?php echo $randomNumber?>)">
+			<div class="image" style="background-image: url(<?php echo IMAGE_VIEWER_DIR?>visualiza_foto.php?table=imagens&thumbs=yes&myid=<?php echo $value["id"]; ?>&minxsize=<?php echo $thumbsW?>&minysize=<?php echo $thumbsH?>&r=<?php echo $randomNumber?><?php echo $fromFile; ?>)">
 			</div>
 			<?php
 			if( $permissoes->canEdit($_GET['aust_node']) ){ 
