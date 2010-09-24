@@ -118,10 +118,12 @@ if ($conexao->count($sql) > 0){
 		
     	$fileContent = file_get_contents($noVisualizationFile);
 		$fileType = 'image/jpeg';
-	} else if( !$fromfile )
-    	$fileContent = $dados["dados"];
-	else
+	} else if( $fromfile )
 		$fileContent = file_get_contents($dados["systempath"]);
+	else if( !empty($dados["systempath"]) )
+		$fileContent = file_get_contents($dados["systempath"]);
+	else
+    	$fileContent = $dados["dados"];
 
     if($thumbs == "yes"){
 

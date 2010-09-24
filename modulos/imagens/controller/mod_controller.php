@@ -132,6 +132,20 @@ class ModController extends ModsController
 					 * pode-se salvar as imagens no banco de dados.
 					 */
 					if( $this->modulo->getStructureConfig('save_files_to_db') == '1' ){
+						
+						if( $editing ){
+							$oldFile = reset( $this->modulo->load($id) );
+							if( !empty($oldFile['systempath']) ){
+								$oldFile = $oldFile['systempath'];
+								if( file_exists($oldFile) ){
+									unlink($oldFile);
+								}
+							}
+						}
+						
+		                $_POST["frmsystempath"] = '';
+		                $_POST["frmpath"] = '';
+		
 		                $_POST["frmbytes"] = $value["size"];
 		                $_POST["frmdados"] = file_get_contents($value["tmp_name"]);
 		                $_POST["frmnome"] = $value["name"];
@@ -140,12 +154,15 @@ class ModController extends ModsController
 						$paths = $imageHandler->upload($_FILES['frmarquivo']);
 						if( $editing ){
 							$oldFile = reset( $this->modulo->load($id) );
-							$oldFile = $oldFile['systempath'];
-							if( file_exists($oldFile) ){
-								unlink($oldFile);
+							if( !empty($oldFile['systempath']) ){
+								$oldFile = $oldFile['systempath'];
+								if( file_exists($oldFile) ){
+									unlink($oldFile);
+								}
 							}
 						}
 
+		                $_POST["frmdados"] 		= '';
 						$_POST['frmsystempath'] = $paths['systemPath'];
 						$_POST['frmpath'] 		= $paths['webPath'];
 		                $_POST["frmbytes"] 		= $value["size"];
@@ -160,12 +177,15 @@ class ModController extends ModsController
 					$path = $fileHandler->upload($_FILES['frmarquivo']);
 					if( $editing ){
 						$oldFile = reset( $this->modulo->load($id) );
-						$oldFile = $oldFile['systempath'];
-						if( file_exists($oldFile) ){
-							unlink($oldFile);
+						if( !empty($oldFile['systempath']) ){
+							$oldFile = $oldFile['systempath'];
+							if( file_exists($oldFile) ){
+								unlink($oldFile);
+							}
 						}
 					}
 					
+	                $_POST["frmdados"] 		= '';
 					$_POST['frmsystempath'] = $path['systemPath'];
 					$_POST['frmpath'] 		= $path['webPath'];
 	                $_POST["frmbytes"] 		= $value["size"];
