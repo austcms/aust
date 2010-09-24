@@ -153,6 +153,16 @@ $modInfo = array(
 					  'inserida. Se marcar este checkbox, múltiplas poderão '.
 					  'ser inseridas.'
         ),
+        /*
+         * Tem link?
+         */
+        'image_field_has_link' => array(
+			'field_type' => 'images',
+            "value" => "",
+            "label" => "Tem link?",
+            "inputType" => "checkbox",
+			'help' => 'Por padrão, imagens não têm link. ',
+        ),
     ),
     /**
      * RESPONSER

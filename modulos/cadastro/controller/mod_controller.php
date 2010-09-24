@@ -201,10 +201,19 @@ class ModController extends ModsController
 			$data = $this->data;
 			$imageId = $_POST['image_id'];
 			
+			// os keys são os campos (description, secondary_image etc)
 			$data = reset( $this->data );
-			if( !empty($data['description']) )
+			
+			// descrição
+			if( !empty($data['description']) ){
 				$data = reset( $this->data );
 				$this->modulo->saveImageDescription( $data['description'], $imageId );
+			}
+			
+			if( !empty($data['link']) ){
+				$data = reset( $this->data );
+				$this->modulo->saveImageLink( $data['link'], $imageId );
+			}
 			
 			if( !empty($data['secondary_image']) ){
 				$options = array(

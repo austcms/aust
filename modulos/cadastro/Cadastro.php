@@ -240,7 +240,15 @@ class Cadastro extends Module {
 			}
 		}
 	} // uploadAndSaveImages()
-	
+
+	/**
+	 * saveImageDescription()
+	 *
+	 * Salva a descrição de uma imagem.
+	 *
+	 * @param $string string é o valor da descrição
+	 * @param $imageId int É o id da imagem
+	 */
 	function saveImageDescription($string, $imageId){
 		$string = addslashes($string);
 		
@@ -248,6 +256,24 @@ class Cadastro extends Module {
 		$imageTable = $this->configurations['estrutura']['table_images']['valor'];
 		
 		$sql = "UPDATE $imageTable SET description='$string' WHERE id='$imageId'";
+		return $this->connection->exec($sql);
+	}
+    
+	/**
+	 * saveImageLink()
+	 *
+	 * Salva o link de uma imagem.
+	 *
+	 * @param $string string É o valor do link
+	 * @param $imageId int É o id da imagem
+	 */
+	function saveImageLink($string, $imageId){
+		$string = addslashes($string);
+		
+		$this->configurations();
+		$imageTable = $this->configurations['estrutura']['table_images']['valor'];
+		
+		$sql = "UPDATE $imageTable SET link='$string' WHERE id='$imageId'";
 		return $this->connection->exec($sql);
 	}
     
