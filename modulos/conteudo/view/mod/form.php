@@ -12,7 +12,10 @@
     );
     $moduloConfig = $modulo->loadModConf($params);
 
-    $modulo->loadHtmlEditor();
+	$editorPlugins = '';
+	if( $modulo->getStructureConfig('upload_inline_images') == '1' )
+		$editorPlugins = 'imagemanager';
+    $modulo->loadHtmlEditor($editorPlugins);
 
 
 /*
@@ -181,7 +184,7 @@
     </tr>
     <tr>
         <td colspan="2">
-            <textarea name="frmtexto" id="jseditor" rows="20"><?php if( !empty($dados['texto']) ) echo $dados['texto'];?></textarea>
+            <textarea name="frmtexto" id="jseditor"><?php if( !empty($dados['texto']) ) echo $dados['texto'];?></textarea>
         <br />
         </td>
     </tr>

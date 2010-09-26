@@ -1755,8 +1755,8 @@ class Module
      * INTERFACE
      *
      */
-    public function loadHtmlEditor(){
-        return loadHtmlEditor();
+    public function loadHtmlEditor($plugins = ""){
+        return loadHtmlEditor($plugins);
     }
 
     /**

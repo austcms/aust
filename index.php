@@ -38,8 +38,12 @@ require("core/config/installation/dbschema.php");
 
 $conexao = Connection::getInstance();
 
-
-
+if( !is_dir('uploads') ){
+	mkdir('uploads', 0777);
+}
+if( !is_dir('uploads/editor') ){
+	mkdir('uploads/editor', 0777);
+}
 require_once("core/load_core.php");
 //pr( $conexao->query('SELECT * FROM admins') );
 /**
