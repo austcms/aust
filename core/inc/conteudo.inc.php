@@ -152,7 +152,7 @@ if(!empty($_GET['action'])){
                 var timeToRefresh = 2;
                 setTimeout(function(){
                     window.location.href = "<?php echo $goToUrl ?>";
-                }, 3800);
+                }, 2300);
             </script>
 
 

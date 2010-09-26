@@ -185,6 +185,9 @@ class ModController extends ModsController
 						}
 					}
 					
+					// links não são permitidos em arquivos Flash
+					$_POST['frmlink'] 		= '';
+					
 	                $_POST["frmdados"] 		= '';
 					$_POST['frmsystempath'] = $path['systemPath'];
 					$_POST['frmpath'] 		= $path['webPath'];
