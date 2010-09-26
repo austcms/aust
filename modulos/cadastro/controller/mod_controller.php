@@ -201,10 +201,19 @@ class ModController extends ModsController
 			$data = $this->data;
 			$imageId = $_POST['image_id'];
 			
+			// os keys são os campos (description, secondary_image etc)
 			$data = reset( $this->data );
-			if( !empty($data['description']) )
+			
+			// descrição
+			if( !empty($data['description']) ){
 				$data = reset( $this->data );
 				$this->modulo->saveImageDescription( $data['description'], $imageId );
+			}
+			
+			if( !empty($data['link']) ){
+				$data = reset( $this->data );
+				$this->modulo->saveImageLink( $data['link'], $imageId );
+			}
 			
 			if( !empty($data['secondary_image']) ){
 				$options = array(
@@ -301,7 +310,7 @@ class ModController extends ModsController
 			$this->modulo->setRelationalData(); // ajusta inclusive imagens
 			$this->data = $this->modulo->data;
 			$images = $this->modulo->images;
-			
+
 			/*
 			 *		2) Salva dados principais (não relacionados);
 			 */
@@ -320,6 +329,7 @@ class ModController extends ModsController
 			 *		4) Salva dados relacionados no DB.
 			 */
 			$relational = $this->modulo->relationalData;
+
             if( !empty($relational) AND !empty($lastInsertId) ){
 
                 unset($sql);

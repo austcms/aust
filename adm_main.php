@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Este é o Bootstrap do sistema, carregando configurações, classes e as interfaces de usuário
  *

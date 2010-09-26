@@ -492,7 +492,6 @@ class Module
         $fieldsInSql = array();
         $fields = 'id, ';
         if( !empty( $this->describedTable[$this->useThisTable()] ) ){
-
             $fieldsToLoad = $this->fieldsToLoad;
             if( !is_array($fieldsToLoad) ){
                 $fieldsToLoad = array($fieldsToLoad);
@@ -627,7 +626,8 @@ class Module
      */
     public function generateSqlFromForm($post, $method = 'new'){
 
-        if( !empty($post['w']) )
+        if( !empty($post['w']) OR
+			!empty($post['id']) )
             $method = 'edit';
 
         $c = 0;
@@ -1205,7 +1205,7 @@ class Module
 
             $data = $params["data"];
 
-			if( is_null($params['conf_class']) OR empty($params['conf_class']) )
+			if( empty($params['conf_class']) OR is_null($params['conf_class']) )
 				$confClass = 'module';
 			else
 				$confClass = $params['conf_class'];
@@ -1218,10 +1218,10 @@ class Module
 			else
 				$classSearchStatement = 'class=\''.$confClass.'\'';
 
-
 			/*
 			 * Se foi definido um usuário específico
 			 */
+			$whereAuthor = '';
 			if( !empty($params['author']) AND is_numeric($params['author']) )
 				$whereAuthor = "AND autor='".$params['author']."'";
 

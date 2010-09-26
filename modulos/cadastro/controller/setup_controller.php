@@ -27,7 +27,6 @@ class SetupController extends ModsController
      */
     function setuppronto(){
         
-        pr($_POST);
         $this->loadModel("CadastroSetup");
 		
         global $aust_charset;

@@ -382,6 +382,7 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 		                    'title varchar(250),'.
 		                    'description text,'.
 		                    'local varchar(180),'.
+		                    'link text,'.
 		                    'systempath text,'.
 		                    'path text,'.
 		                    'file_name varchar(250),'.

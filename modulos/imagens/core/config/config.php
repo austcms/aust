@@ -87,6 +87,19 @@ $modInfo = array(
 	'viewmodes' => array('thumbs', 'list'),
 	
 	'configurations' => array(
+	    /*
+	     * Salva arquivo no DB (por padrão, salva arquivos fisicamente)
+	     */
+	    'save_files_to_db' => array(
+	        "propriedade" => "save_files_to_db", // nome da propriedade
+	        "value" => "",
+	        "label" => "Salvar arquivo no Banco de Dados?",
+	        "inputType" => "checkbox",
+			'help' => 'Por padrão, os arquivos são salvos fisicamente. Arquivos Flash '.
+			 		  'são obrigatoriamente salvos fisicamente, mesmo que esta opção '.
+					  'esteja selecionada.',
+	    ),
+	
    		'ordenate' => array(
 	        "value" => "",
 	        "label" => "Ordenado",
@@ -141,6 +154,15 @@ $modInfo = array(
 	        "label" => "Botão criar categoria?",
 	        "inputType" => "checkbox",
 			'help' => 'Só funcionará se puder selecionar a categoria.'
+		),
+	    /*
+	     * Permite SWF?
+	     */
+	    'allow_flash_upload' => array(
+	        "value" => "",
+	        "label" => "Permite upload de Flash (.swf)?",
+	        "inputType" => "checkbox",
+			'help' => 'Arquivos Flash têm a extensão swf.'
 		)
 	),
     /*

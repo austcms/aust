@@ -14,6 +14,7 @@ $infoCadastro = $modulo->pegaInformacoesCadastro($austNode);
 $tabelaCadastro = $infoCadastro["estrutura"]['tabela']["valor"];
 $tabelaImagens = $infoCadastro["estrutura"]['table_images']["valor"];
 
+$w = '';
 if( !empty($_GET["w"]) ){
     $w = $_GET['w'];
 }
@@ -47,15 +48,16 @@ if( $_GET['action'] == "edit" ){
  */
 ?>
 	<?php
+	
 	$options = array(
-		'action' => 'edit&aust_node='.$austNode.'&w='.$_GET['w'],
+		'action' => 'edit&aust_node='.$austNode.'&w='.$w,
 	);
 	echo $form->create( $infoCadastro["estrutura"]["tabela"]["valor"], $options );
 	?>
 	<div id="lightbox-panel" class="window lb_images">
 		<input type="hidden" name="type" value="image_options" />
 		<input type="hidden" name="aust_node" value="<?php echo $austNode ?>" />
-		<input type="hidden" name="w" value="<?php echo $_GET['w']; ?>" />
+		<input type="hidden" name="w" value="<?php echo $w; ?>" />
 		<input type="hidden" name="mainTable" value="<?php echo $tabelaCadastro ?>" />
 	    <div class="header">
 	        <h2>Propriedades da Imagem</h2>
@@ -76,14 +78,22 @@ if( $_GET['action'] == "edit" ){
 							<br />
 	                        <input name="data[<?php echo $tabelaCadastro ?>][description]" id="image_description" class="text" />
 						</div>
+						<div class="link">
+							Link:
+							<br />
+	                        <input name="data[<?php echo $tabelaCadastro ?>][link]" id="image_link" class="text" />
+							<p class="explanation">
+								Não se esqueça de inserir http:// no início.
+							</p>
+						</div>
 						<div class="secondary_image">
-						<div>
+						<div id="secondary_image_actual">
 							Nova Imagem Secundária:
 							<br />
 	                        <input type="file" name="data[<?php echo $tabelaCadastro ?>][secondary_image][]" />
 							<input type="hidden" name="image_field" value="" />
 						</div>
-						<div id="secondary_image_form">
+						<div id="secondary_image_actual">
 							Imagem secundária atual:
 							<br />
 							<img src="" name="secondary_image" />
@@ -312,24 +322,17 @@ foreach( $camposForm as $chave=>$valor ){
 							<?php
 						}
 						?>
+						<td>
 						<script type="text/javascript">
 						/* DEFINIÇÕES DE CAMPOS IMAGES */
 						imageHasDescription['image_<?php echo $image['id']?>'] = "<?php echo $modulo->getFieldConfig($fieldName, 'image_field_has_description')?>";
+						imageHasLink['image_<?php echo $image['id']?>'] = "<?php echo $modulo->getFieldConfig($fieldName, 'image_field_has_link')?>";
 						imageHasSecondaryImage['image_<?php echo $image['id']?>'] = "<?php echo $modulo->getFieldConfig($fieldName, 'image_field_has_secondary_image')?>";
-						
-						/*
-						if( imageHasDescription['image_<?php echo $image['id']?>'] != '1' AND
-						 	imageHasSecondaryImage['image_<?php echo $image['id']?>'] != '1' )
-							imageHasLightbox['image_<?php echo $image['id']?>'] = true;
-						else
-							imageHasLightbox['image_<?php echo $image['id']?>'] = false;
-						*/
 						</script>
-						
-						<td>
 						
 						<img class="thumb" name="image_<?php echo $image['id']?>" src="<?php echo $imagesPath.$image['id']?>" />
 						<input type="hidden" name="image_description_<?php echo $image['id'] ?>" value="<?php echo $image['description'] ?>" />
+						<input type="hidden" name="image_link_<?php echo $image['id'] ?>" value="<?php echo $image['link'] ?>" />
 						<input type="hidden" name="image_secondaryid_<?php echo $image['id'] ?>" value="<?php echo $image['secondaryid'] ?>" />
 						<br clear="all" />
                         <a href="javascript: void(0);" onclick="if( confirm('Você tem certeza que deseja excluir esta imagem?') ) window.open('adm_main.php?section=<?php echo $_GET["section"]; ?>&action=<?php echo $_GET["action"]; ?>&aust_node=<?php echo $_GET["aust_node"]; ?>&w=<?php echo $_GET["w"];?>&deleteimage=<?php echo $image["id"]; ?>','_top');">
@@ -337,6 +340,7 @@ foreach( $camposForm as $chave=>$valor ){
                         </a>
 						<?php
 						if( $modulo->getFieldConfig($fieldName, 'image_field_has_description') OR
+							$modulo->getFieldConfig($fieldName, 'image_field_has_link') OR
 						 	$modulo->getFieldConfig($fieldName, 'image_field_has_secondary_image') )
 						{
 							?>
