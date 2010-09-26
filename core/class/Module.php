@@ -1359,7 +1359,6 @@ class Module
             $queryTmp = $this->connection->query($sql, "ASSOC");
 
             $query = array();
-			
 			/*
 			 * Configurações de campos individuais têm um formato completamente
 			 * diferente de configurações de módulos.
