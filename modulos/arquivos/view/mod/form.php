@@ -56,6 +56,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
 
     <input type="hidden" name="w" value="<?php ifisset($_GET['w']);?>">
     <input type="hidden" name="aust_node" value="<?php echo $austNode;?>">
+    <input type="hidden" name="frmcategoria_id" value="<?php echo $austNode;?>">
     <input type="hidden" name="frmcreated_on" value="<?php echo date("Y-m-d H:i:s"); ?>">
 
     <input type="hidden" name="frmurl" value="<?php ifisset($dados['url']); ?>">
@@ -69,12 +70,8 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
     /*
      * CATEGORIA
      */
-    $showCategoria = true; // por padrão, não mostra
-    if( !empty($moduloConfig["semcategoria"]) ){
-        if( $moduloConfig["semcategoria"]["valor"] == "1" )
-            $showCategoria = false;
-    }
-    if( $showCategoria ){
+
+    if( $modulo->getStructureConfig('select_category') == 1 ){
         ?>
         <tr>
             <td valign="top">Selecione a categoria: </td>
@@ -91,12 +88,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
                 /*
                  * Nova_Categoria?
                  */
-                $showNovaCategoria = false;
-                if( !empty($moduloConfig["nova_categoria"]) ){
-                    if( $moduloConfig["nova_categoria"]["valor"] == "1" )
-                        $showNovaCategoria = true;
-                }
-                if( $showNovaCategoria ){
+                if( $modulo->getStructureConfig('nova_categoria') == 1 ){
                     $param = array(
                         'austNode' => $austNode,
                         'categoryInput' => 'frmcategoria_id',
