@@ -93,16 +93,17 @@ function editImageInLightbox(este, imageId, field){
 	
 	// secondaryId
 	var secondaryId = $("input[name=image_secondaryid_"+imageId+"]").val();
-	if( secondaryId > 0 ){
+	if( secondaryId > 0 ){ // tem imagem secundaria
+		alert( secondaryId );
 		$("div#secondary_image_form").show();
 		$("img[name=secondary_image]").attr('src', imagesPath+secondaryId+"&maxxsize=90&maxysize=90");
 		$("a#del_secondary_image").attr('data-secondaryid', secondaryId);
 		$("a#del_secondary_image").show();
 		$("p#missing_secondary_image").hide();
 	} else {
-		$("div#secondary_image_form").hide();
+		$("div#secondary_image_form").show();
+		$("div#secondary_image_actual").hide();
 		$("img[name=secondary_image]").attr('src', '');
-		$("a#del_secondary_image").hide();
 		$("p#missing_secondary_image").show();
 	}
 	

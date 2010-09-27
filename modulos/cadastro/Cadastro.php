@@ -358,6 +358,10 @@ class Cadastro extends Module {
 		$this->configurations();
 		$imageTable = $this->configurations['estrutura']['table_images']['valor'];
 		
+		if( empty($images) OR
+			!is_array($images) )
+			return false;
+		
 		foreach( $images as $key=>$field ){
 			
 			$limit = $this->getFieldConfig($field, 'image_field_limit_quantity');
@@ -369,6 +373,8 @@ class Cadastro extends Module {
 			$sql = "
 				SELECT id
 				FROM $imageTable
+				WHERE
+					reference_field='$field'
 				ORDER BY id DESC
 				LIMIT $limit, 999999999999999
 			";

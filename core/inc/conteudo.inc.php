@@ -118,6 +118,7 @@ if(!empty($_GET['action'])){
             }
         }
 
+        $action = $_GET['action'];
         /*
          * Se for save, redireciona automaticamente
          */
@@ -128,7 +129,6 @@ if(!empty($_GET['action'])){
             </div>
             <?php
         }
-        $action = $_GET['action'];
         /**
          * Prepara os argumentos para instanciar a classe e depois
          * chama o Controller que cuidará de toda a arquitetura MVC do módulo
