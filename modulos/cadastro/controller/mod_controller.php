@@ -201,10 +201,19 @@ class ModController extends ModsController
 			$data = $this->data;
 			$imageId = $_POST['image_id'];
 			
+			// os keys são os campos (description, secondary_image etc)
 			$data = reset( $this->data );
-			if( !empty($data['description']) )
+			
+			// descrição
+			if( !empty($data['description']) ){
 				$data = reset( $this->data );
 				$this->modulo->saveImageDescription( $data['description'], $imageId );
+			}
+			
+			if( !empty($data['link']) ){
+				$data = reset( $this->data );
+				$this->modulo->saveImageLink( $data['link'], $imageId );
+			}
 			
 			if( !empty($data['secondary_image']) ){
 				$options = array(
@@ -301,7 +310,7 @@ class ModController extends ModsController
 			$this->modulo->setRelationalData(); // ajusta inclusive imagens
 			$this->data = $this->modulo->data;
 			$images = $this->modulo->images;
-			
+
 			/*
 			 *		2) Salva dados principais (não relacionados);
 			 */
@@ -399,126 +408,17 @@ class ModController extends ModsController
             
         }
 
+		/*
+		 * EXCLUI IMAGENS EXTRAS
+		 */
+		foreach( $images as $imageFields ){
+			foreach( $imageFields as $field=>$values ){
+				$postedImageFields[] = $field;
+			}
+		}
+		$this->modulo->deleteExtraImages($postedImageFields);
+		
         $this->set('resultado', $resultado);
-        /**
-         *
-         * GRAVAR
-         * Variáveis necessárias:
-         *      $_POST -> contendo dados provenientes de formulário
-         */
-
-        /*
-        $c = 0;
-        if(!empty($_POST)){
-
-            $_POST['frmtitulo_encoded'] = encodeText($_POST['frmtitulo']);
-
-            foreach($_POST as $key=>$valor){
-                // se o argumento $_POST contém 'frm' no início
-                if(strpos($key, 'frm') === 0){
-                    $sqlcampo[] = str_replace('frm', '', $key);
-                    $sqlvalor[] = $valor;
-                    // ajusta os campos da tabela nos quais serão gravados dados
-                    $valor = addslashes($valor);
-                    if($_POST['metodo'] == 'criar'){
-                        if($c > 0){
-                            $sqlcampostr = $sqlcampostr.','.str_replace('frm', '', $key);
-                            $sqlvalorstr = $sqlvalorstr.",'".$valor."'";
-                        } else {
-                            $sqlcampostr = str_replace('frm', '', $key);
-                            $sqlvalorstr = "'".$valor."'";
-                        }
-                    } else if($_POST['metodo'] == 'editar'){
-                        if($c > 0){
-                            $sqlcampostr = $sqlcampostr.','.str_replace('frm', '', $key).'=\''.$valor.'\'';
-                        } else {
-                            $sqlcampostr = str_replace('frm', '', $key).'=\''.$valor.'\'';
-                        }
-                    }
-
-                    $c++;
-                }
-            }
-
-
-
-
-            if($_POST['metodo'] == 'criar'){
-                $sql = "INSERT INTO
-                            ".$this->modulo->tabela_criar."
-                            ($sqlcampostr)
-                        VALUES
-                            ($sqlvalorstr)
-                            ";
-
-
-                $h1 = 'Criando: '.$this->aust->leNomeDaEstrutura($_GET['aust_node']);
-            } else if($_POST['metodo'] == 'editar'){
-                $sql = "UPDATE
-                            ".$this->modulo->tabela_criar."
-                        SET
-                            $sqlcampostr
-                        WHERE
-                            id='".$_POST['w']."'
-                            ";
-                $h1 = 'Editando: '.$this->aust->leNomeDaEstrutura($_GET['aust_node']);
-            }
-            //echo $sql;
-            $query = $this->modulo->connection->exec($sql);
-            if($query){
-                $resultado = TRUE;
-
-                // se estiver criando um registro, guarda seu id para ser usado por módulos embed a seguir
-                if($_POST['metodo'] == 'criar'){
-                    $_POST['w'] = $this->modulo->connection->conn->lastInsertId();
-                }
-
-
-                /*
-                 * carrega módulos que contenham propriedade embed
-                 *
-                $embed = $this->modulo->LeModulosEmbed();
-
-                // salva o objeto do módulo atual para fazer embed
-                if( !empty($embed) ){
-                    /*
-                     * Caso tenha embed, serão carregados modulos embed. O objeto do módulo atual
-                     * é $modulo, sendo que dos embed também. Então guardamos $modulo,
-                     * fazemos unset nele e reccaregamos no final do script.
-                     *
-
-                    $tempmodulo = $modulo;
-                    unset($modulo);
-                    foreach($embed AS $chave=>$valor){
-                        foreach($valor AS $chave2=>$valor2){
-                            if($chave2 == 'pasta'){
-                                if(is_file($valor2.'/embed/gravar.php')){
-                                    include($valor2.'/index.php');
-                                    include($valor2.'/embed/gravar.php');
-                                }
-                            }
-                        }
-                    }
-                    $modulo = $tempmodulo;
-                } // fim do embed
-
-            } else {
-                $resultado = FALSE;
-            }
-
-            if($resultado){
-                $status['classe'] = 'sucesso';
-                $status['mensagem'] = '<strong>Sucesso: </strong> As informações foram salvas com sucesso.';
-            } else {
-                $status['classe'] = 'insucesso';
-                $status['mensagem'] = '<strong>Erro: </strong> Ocorreu um erro ao salvar informações. Se você tentou copiar um texto do Microsoft Word, provavelmente há letras/caracteres neste texto que não podem ser lidos por seu navegador. Experimente verificar se não há nada de estranho (alguma letra) entre este texto. Se houver, entre em contato com o administrador e explique o que está acontecendo.';
-            }
-            EscreveBoxMensagem($status);
-
-        }
-         * 
-         */
-
 
     }
     

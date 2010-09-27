@@ -110,3 +110,8 @@ span.viewmode {
 		width: 100px;
 	}
 	#mod_imagens #thumbs_view span.item div.image img { border: none; }
+
+/* mod_cadastro */
+	#lightbox-panel img {
+		border: 1px solid #ddd;
+	}

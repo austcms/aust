@@ -189,7 +189,10 @@
     <tr>
         <td valign="top"><label>Arquivo:</label></td>
         <td>
-            <input type="file" name="frmarquivo" />
+            <input type="file" name="frmarquivo" onchange="validateFile();" />
+			<script type="text/javascript">
+				var fileMimeType = '<?php echo $dados["tipo"] ?>';
+			</script>
             <p class="explanation">
             Selecione a imagem que será carregada.
             </p>
@@ -214,11 +217,21 @@
         <tr>
             <td valign="top"><label>Link:</label></td>
             <td>
-                <INPUT TYPE='text' NAME='frmlink' class='text' value='<?php if( !empty($dados['link']) ) echo $dados['link'];?>' />
-                <p class="explanation">
+                <INPUT TYPE='text' id='link' NAME='frmlink' class='text' value='<?php if( !empty($dados['link']) ) echo $dados['link'];?>' />
+                <p class="explanation link_explanation" id="explanation_link_file_is_image">
                 Se você deseja que, ao clicar na imagem, o usuário seja levado a
-                um endereço específico, digite-o acima. (ex.: http://www.meusite.com.br/noticia/27)
+                um endereço específico, digite-o acima (ex.: http://www.meusite.com.br/noticia/27). Não
+				se esqueça de inserir http:// no início.
                 </p>
+                <p class="explanation link_explanation" id="explanation_link_file_is_flash">
+                Se você quer inserir links em animações Flash, você precisa fazer isto dentro
+				do próprio arquivo Flash (usando ActionScript).
+                </p>
+
+				<?php /* this span serves javascript purposes */ ?>
+                <span id="post_link"></span>
+				<script type="text/javascript"> validateFile(); </script>
+
             </td>
         </tr>
         <?php

@@ -45,8 +45,19 @@ if(!empty($_GET['action'])){
     /*
      * Tem permissão?
      */
-    if( !$permissoes->verify($aust_node, $_GET['action']) )
+    if( !$permissoes->verify($aust_node, $_GET['action']) ){
+	
+		echo '<p>Sem permissão para esta operação.</p><!-- conteudo.inc -->';
+		
+		// tests post and alerts about post_max_size
+		$data = file_get_contents('php://input');
+		if( !empty($data) ){
+			echo '<p>Provavelmente o tamanho dos dados enviados seja '+
+				'maior do que o permitido. Verifique post_max_size, upload_max_filesize e max_file_uploads.</p>';
+		}
+		
         exit();
+	}
 
     /**
      * Identifica qual é a pasta do módulo responsável por esta
@@ -141,7 +152,7 @@ if(!empty($_GET['action'])){
                 var timeToRefresh = 2;
                 setTimeout(function(){
                     window.location.href = "<?php echo $goToUrl ?>";
-                }, 3800);
+                }, 2300);
             </script>
 
 

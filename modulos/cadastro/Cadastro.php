@@ -240,7 +240,15 @@ class Cadastro extends Module {
 			}
 		}
 	} // uploadAndSaveImages()
-	
+
+	/**
+	 * saveImageDescription()
+	 *
+	 * Salva a descrição de uma imagem.
+	 *
+	 * @param $string string é o valor da descrição
+	 * @param $imageId int É o id da imagem
+	 */
 	function saveImageDescription($string, $imageId){
 		$string = addslashes($string);
 		
@@ -252,14 +260,40 @@ class Cadastro extends Module {
 	}
     
 	/**
+	 * saveImageLink()
+	 *
+	 * Salva o link de uma imagem.
+	 *
+	 * @param $string string É o valor do link
+	 * @param $imageId int É o id da imagem
+	 */
+	function saveImageLink($string, $imageId){
+		$string = addslashes($string);
+		
+		$this->configurations();
+		$imageTable = $this->configurations['estrutura']['table_images']['valor'];
+		
+		$sql = "UPDATE $imageTable SET link='$string' WHERE id='$imageId'";
+		return $this->connection->exec($sql);
+	}
+    
+
+	/**
 	 * secondaryImageId() 
 	 *
 	 * Dado uma image, verifica o id de uma possível imagem secundária.
 	 * 
 	 */
-	function deleteSecondaryImagesById($w = ""){
-		if( !is_numeric($w) )
+	function deleteSecondaryImagesById($references = ""){
+		if( !is_numeric($references) ) return false;
+		return $this->deleteSecondaryImages( array('references' => $references) );
+	}
+		
+	function deleteSecondaryImages($params = array()){
+		if( !is_numeric($params['references'] ) )
 			return false;
+		
+		$references = $params['references'];
 		
 		$configurations = $this->configurations();
 		$imagesTable = $configurations['estrutura']['table_images']['valor'];
@@ -268,7 +302,7 @@ class Cadastro extends Module {
 				FROM
 					".$imagesTable."
 				WHERE
-					reference='".$w."' AND
+					reference='".$references."' AND
 					type='secondary'
 				";
 		
@@ -280,7 +314,7 @@ class Cadastro extends Module {
 			$this->connection->exec($sqlDelete);
 		}
 		
-		return $query[0]['id'];
+		return true;
 	} // fim secondaryImageId()
 
 	function deleteImage($w = ""){
@@ -305,6 +339,50 @@ class Cadastro extends Module {
 		$this->connection->exec($sqlDelete);
 		
 		return true;
+	}
+	
+	/**
+	 * deleteExtraImages()
+	 *
+	 * Imagens extras são aquelas que estão cadastradas no banco de dados,
+	 * mas não deveriam.
+	 *
+	 * Suponha que o usuário possa inserir 1 imagem. Quando ele inserir a
+	 * próxima, ele terá 2. Este método excluir a(s) imagem(ns) anterior(es).
+	 *
+	 * @param $images array Contém o nome dos campos dos quais devem
+	 * ser excluidas as imagens extras.
+	 */
+	function deleteExtraImages( $images ){
+		
+		$this->configurations();
+		$imageTable = $this->configurations['estrutura']['table_images']['valor'];
+		
+		foreach( $images as $key=>$field ){
+			
+			$limit = $this->getFieldConfig($field, 'image_field_limit_quantity');
+
+			if( $limit == '0' OR
+				empty($limit) )
+				continue;
+			
+			$sql = "
+				SELECT id
+				FROM $imageTable
+				ORDER BY id DESC
+				LIMIT $limit, 999999999999999
+			";
+			
+			$result = $this->connection->query($sql);
+			foreach( $result as $value ){
+				$this->deleteImage($value['id']);
+				$this->deleteSecondaryImagesById($value['id']);
+			}
+			
+		}
+		
+		return true;
+		
 	}
 	
     /**

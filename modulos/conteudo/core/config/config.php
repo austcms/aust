@@ -127,6 +127,14 @@ $modInfo = array(
                       '</ul>'.
                       'Exemplo: http://meusite.com.br/noticias/%id.'
         ),
+        /*
+         * Há opção para selecionar o modo de visualização?
+         */
+        'upload_inline_images' => array(
+            "value" => "0",
+            "label" => "Permitir upload de imagens no TinyMCE?",
+            "inputType" => "checkbox",
+        ),
     ),
     
     /*

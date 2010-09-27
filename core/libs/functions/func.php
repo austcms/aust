@@ -340,8 +340,14 @@ function PegaExtensao($param){
     return $ext[0];
 }
 
-function loadHtmlEditor(){
-    include(THIS_TO_BASEURL.BASECODE_JS.'html_editor.php');
+function loadHtmlEditor($plugins = ""){
+	if( !empty( $plugins ) ) $plugins = ','.$plugins;
+	
+	echo '<script type="text/javascript">';
+	echo 'var pluginsToLoad = "safari,paste'.$plugins.'";';
+	echo '</script>';
+	
+    include_once(THIS_TO_BASEURL.BASECODE_JS.'html_editor.php');
 }
 
 /*

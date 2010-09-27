@@ -5,7 +5,7 @@
 /**
  * Contém o schema das tabelas necessárias ao módulo
  *
-/**
+ *
  * Palavras reservadas
  *      - dbSchemaTableProperties: contém informações sobre Keys serem criadas
  *      - dbSchemaSQLQuery: SQLs que devem ser executados na criação da tabela

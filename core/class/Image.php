@@ -9,7 +9,7 @@
  * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @since v0.1.9, 26/08/2009
  */
-class Image
+class Image extends File
 {
 
     /*
@@ -76,10 +76,6 @@ class Image
 	     * @var bool
 	     */
 	    public $autoOrganizeFolders = true;
-
-    function __construct() {
-	
-    }
 
     /**
      * getInstance()

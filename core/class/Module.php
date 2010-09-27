@@ -492,7 +492,6 @@ class Module
         $fieldsInSql = array();
         $fields = 'id, ';
         if( !empty( $this->describedTable[$this->useThisTable()] ) ){
-
             $fieldsToLoad = $this->fieldsToLoad;
             if( !is_array($fieldsToLoad) ){
                 $fieldsToLoad = array($fieldsToLoad);
@@ -1360,7 +1359,6 @@ class Module
             $queryTmp = $this->connection->query($sql, "ASSOC");
 
             $query = array();
-			
 			/*
 			 * Configurações de campos individuais têm um formato completamente
 			 * diferente de configurações de módulos.
@@ -1757,8 +1755,8 @@ class Module
      * INTERFACE
      *
      */
-    public function loadHtmlEditor(){
-        return loadHtmlEditor();
+    public function loadHtmlEditor($plugins = ""){
+        return loadHtmlEditor($plugins);
     }
 
     /**

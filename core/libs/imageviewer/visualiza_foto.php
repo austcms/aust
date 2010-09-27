@@ -109,10 +109,21 @@ if ($conexao->count($sql) > 0){
 	/*
 	 * Algumas imagens estão em arquivos, outros em DB
 	 */
-	if( !$fromfile )
-    	$fileContent = $dados["dados"];
-	else
+	if( $dados["tipo"] == 'application/x-shockwave-flash' ){
+		
+		$noVisualizationFile = str_replace(
+			IMAGE_VIEWER_DIR.basename(__FILE__),
+			IMG_DIR.'flash_sem_visualizacao.png',
+			__FILE__);
+		
+    	$fileContent = file_get_contents($noVisualizationFile);
+		$fileType = 'image/jpeg';
+	} else if( $fromfile )
 		$fileContent = file_get_contents($dados["systempath"]);
+	else if( !empty($dados["systempath"]) )
+		$fileContent = file_get_contents($dados["systempath"]);
+	else
+    	$fileContent = $dados["dados"];
 
     if($thumbs == "yes"){
 

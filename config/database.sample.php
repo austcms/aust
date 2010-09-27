@@ -11,11 +11,11 @@ class DATABASE_CONFIG
 {
     static $dbConn = array(
         'server' => 'localhost',
-        'port' => '8888',
         'database' => 'aust',
         'username' => 'root',
-        'password' => 'root',
+        'password' => '', 
         'encoding' => 'utf8',
+		// 'port' => '8888', // if you ever need special port access
     );
 }
 

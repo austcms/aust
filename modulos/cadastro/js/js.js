@@ -5,6 +5,7 @@
  */
 
 var imageHasDescription = new Array();
+var imageHasLink = new Array();
 var imageHasSecondaryImage = new Array();
 var imageHasLightbox = new Array();
 
@@ -15,15 +16,12 @@ var imageHasLightbox = new Array();
 // Função que mostra os cadastros no formato <select>
 function SetupCampoRelacionalTabelas(este, id, inc){
     // se for relacional um-para-um
-    //alert(este.value);
     if( este.value == 'relational_onetoone' || este.value == 'relational_onetomany' ){
         
         
         
         $('#'+id+'_tabela').html('<p>Selecione o cadastro existente:</p>');
-        // $('#'+id).append('<optgroup label="Escolhe uma tabela"></optgroup>');
         $('#'+id).slideDown();
-        //$('#'+id+'_campo').html('<p>pooooooooo</p>');
         $('#'+id+'_campo').show();
         $.post(include_baseurl+"/js/ajax.php", {
                         action: "LeCadastros"
@@ -38,10 +36,6 @@ function SetupCampoRelacionalTabelas(este, id, inc){
                         SetupCampoRelacionalCampos($('#campooptions_tabela option:selected').val(), id, inc);
                     })
 
-        //$('#'+id).html('Selecione o cadastro existente:');
-        //$('#'+id).css({'font-size': '12px', 'padding': '10px', 'visibility': 'visible'});
-        //$('#'+id).fadein();
-        //$('#'+id).html('Escolhido');
     } else {
         $('#'+id).slideUp();
     }
@@ -49,11 +43,6 @@ function SetupCampoRelacionalTabelas(este, id, inc){
 
 // função para mostrar campos do cadastro
 function SetupCampoRelacionalCampos(tabela, id, inc){
-    // se for relacional um-para-um
-    //alert(este + ' - ' +id);
-//alert(id);
-
-    //$('#'+id+'_campo').html('oi2')
     $.post(include_baseurl+"/js/ajax.php", {
                     action: "LeCampos",
                     tabela: tabela
@@ -79,15 +68,30 @@ function editImageInLightbox(este, imageId, field){
 	else
 		$("#lightbox-panel div.description").hide();
 	
+	// imagem tem link?
+	if( imageHasLink[id] == "1" )
+		$("#lightbox-panel div.link").show();
+	else
+		$("#lightbox-panel div.link").hide();
+	
 	// imagem tem imagem secundária?
 	if( imageHasSecondaryImage[id] == "1" )
 		$("#lightbox-panel div.secondary_image").show();
 	else
 		$("#lightbox-panel div.secondary_image").hide();
 			
+	/*
+	 * ajusta valores dos inputs lightbox
+	 */
+	// descrição
 	var description = $("input[name=image_description_"+imageId+"]").val();
 	$("#lightbox-panel #image_description").val( description );
 	
+	// link
+	var link = $("input[name=image_link_"+imageId+"]").val();
+	$("#lightbox-panel #image_link").val( link );
+	
+	// secondaryId
 	var secondaryId = $("input[name=image_secondaryid_"+imageId+"]").val();
 	if( secondaryId > 0 ){
 		$("div#secondary_image_form").show();

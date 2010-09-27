@@ -1,7 +1,5 @@
 <?php
 /**
- * Descrição deste arquivo
- *
  * @package ModController
  * @name nome
  * @author Alexandre <chavedomundo@gmail.com>
@@ -85,26 +83,137 @@ class ModController extends ModsController
 
     public function save(){
         
+		$editing = false;
+		$creating = false;
         if( $_POST["metodo"] == "create" AND !empty($_FILES) AND $_FILES["frmarquivo"]["size"] > 0 ){
             $save = true;
+			$creating = true;
         } else if( $_POST["metodo"] == "edit" ) {
             $save = true;
+			$editing = true;
+			$id = $_POST['w'];
         } else {
             $save = false;
         }
 
+		$imageHandler = Image::getInstance();
+		$fileHandler = File::getInstance();
+
         if( !empty($_POST) AND $save  ) {
+	
+			/*
+			 * [Se imagem foi enviada para upload...]
+			 */
             if( !empty($_FILES) AND
                 $_FILES["frmarquivo"]["size"] > 0 AND
                 $this->testMode == false )
             {
-                $imagem = $this->modulo->trataImagem($_FILES);
-                $_POST["frmbytes"] = $imagem["filesize"];
-                $_POST["frmdados"] = $imagem["filedata"];
-                $_POST["frmnome"] = $imagem["filename"];
-                $_POST["frmtipo"] = $imagem["filetype"];
+				$file = $_FILES['frmarquivo'];
 
+				/*
+				 * É um arquivo do tipo IMAGEM
+				 */
+				
+				$value = array(
+					'size' 		=> $file['size'],
+					'tmp_name' 	=> $file['tmp_name'],
+					'name' 		=> $file['name'],
+					'type' 		=> $file['type'],
+				);
+				if( $imageHandler->isImage($file['type']) ){
+				
+					// resample?
+					if( $this->modulo->getStructureConfig('resample_images') != '0' ){
+						$value = $imageHandler->resample($file);
+					} 
+						
+					/*
+					 * Por padrão, as imagens são salvas fisicamente. Opcionalmente,
+					 * pode-se salvar as imagens no banco de dados.
+					 */
+					if( $this->modulo->getStructureConfig('save_files_to_db') == '1' ){
+						
+						if( $editing ){
+							$oldFile = reset( $this->modulo->load($id) );
+							if( !empty($oldFile['systempath']) ){
+								$oldFile = $oldFile['systempath'];
+								if( file_exists($oldFile) ){
+									unlink($oldFile);
+								}
+							}
+						}
+						
+		                $_POST["frmsystempath"] = '';
+		                $_POST["frmpath"] = '';
+		
+		                $_POST["frmbytes"] = $value["size"];
+		                $_POST["frmdados"] = file_get_contents($value["tmp_name"]);
+		                $_POST["frmnome"] = $value["name"];
+		                $_POST["frmtipo"] = $value["type"];
+					} else {
+						$paths = $imageHandler->upload($_FILES['frmarquivo']);
+						if( $editing ){
+							$oldFile = reset( $this->modulo->load($id) );
+							if( !empty($oldFile['systempath']) ){
+								$oldFile = $oldFile['systempath'];
+								if( file_exists($oldFile) ){
+									unlink($oldFile);
+								}
+							}
+						}
+
+		                $_POST["frmdados"] 		= '';
+						$_POST['frmsystempath'] = $paths['systemPath'];
+						$_POST['frmpath'] 		= $paths['webPath'];
+		                $_POST["frmbytes"] 		= $value["size"];
+		                $_POST["frmnome"] 		= $value["name"];
+		                $_POST["frmtipo"] 		= $value["type"];
+					}
+
+				} else if( $fileHandler->isFlash($_FILES['frmarquivo']['type']) AND 
+						   $this->modulo->getStructureConfig('allow_flash_upload') == '1' )
+				{
+					
+					$path = $fileHandler->upload($_FILES['frmarquivo']);
+					if( $editing ){
+						$oldFile = reset( $this->modulo->load($id) );
+						if( !empty($oldFile['systempath']) ){
+							$oldFile = $oldFile['systempath'];
+							if( file_exists($oldFile) ){
+								unlink($oldFile);
+							}
+						}
+					}
+					
+					// links não são permitidos em arquivos Flash
+					$_POST['frmlink'] 		= '';
+					
+	                $_POST["frmdados"] 		= '';
+					$_POST['frmsystempath'] = $path['systemPath'];
+					$_POST['frmpath'] 		= $path['webPath'];
+	                $_POST["frmbytes"] 		= $value["size"];
+	                $_POST["frmnome"] 		= $value["name"];
+	                $_POST["frmtipo"] 		= $value["type"];
+					
+				} else {
+					/**
+					 * @todo - quando não for imagem nem flash, deve-se mostrar
+					 * o erro ao usuário, e não simplesmente dizer que não foi
+					 * possível fazer o upload.
+					 */
+					$result = array(
+						'class' => 'error',
+						'msg' => 'O arquivo enviado não é permitido. Envie uma imagem.'
+					);
+	            	$this->set('resultado', $result);
+					return false;
+				}
+
+				/*
+				 * É um arquivo do tipo FLASH
+				 */
             }
+
             /*
              * Prepara a ordem da imagem
              */

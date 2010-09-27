@@ -33,7 +33,7 @@
 	// General filesystem options
 	$mcImageManagerConfig['filesystem'] = "Moxiecode_LocalFileImpl";
 	$mcImageManagerConfig['filesystem.path'] = ''; // absolute or relative from this script path, optional.
-	$mcImageManagerConfig['filesystem.rootpath'] = '/home/fvt/public_html/global/'; // absolute or relative from this script path, required.
+	$mcImageManagerConfig['filesystem.rootpath'] = '../../../../../../uploads/editor/'; // absolute or relative from this script path, required.
 	$mcImageManagerConfig['filesystem.datefmt'] = "Y-m-d H:i";
 	$mcImageManagerConfig['filesystem.include_directory_pattern'] = '';
 	$mcImageManagerConfig['filesystem.exclude_directory_pattern'] = '/^mcith$/i';
