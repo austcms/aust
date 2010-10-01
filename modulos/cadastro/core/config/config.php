@@ -119,50 +119,69 @@ $modInfo = array(
      * CONFIGURAÇÕES POR CAMPO INDIVIDUAL
      */
     'field_configurations' => array(
-        /*
-         * Múltiplas imagens ou apenas uma?
-         */
-        'image_field_limit_quantity' => array(
-			'field_type' => 'images',
-            "value" => "1",
-            "label" => "Limite de imagens?",
-            "inputType" => "text",
-            "size" => "small",
-			'help' => 'Por padrão, apenas uma imagem pode ser '.
-					  'inserida. Se definir 0, então não há limites.'
-        ),
-        /*
-         * Imagem tem descrição
-         */
-        'image_field_has_description' => array(
-			'field_type' => 'images',
-            "value" => "",
-            "label" => "Tem descrição?",
-            "inputType" => "checkbox",
-			'help' => 'Este campo de imagem tem descrição? ',
-        ),
-        /*
-         * Tem imagem secundária?
-         */
-        'image_field_has_secondary_image' => array(
-			'field_type' => 'images',
-            "value" => "",
-            "label" => "Tem imagem secundária?",
-            "inputType" => "checkbox",
-			'help' => 'Por padrão, apenas uma imagem pode ser '.
-					  'inserida. Se marcar este checkbox, múltiplas poderão '.
-					  'ser inseridas.'
-        ),
-        /*
-         * Tem link?
-         */
-        'image_field_has_link' => array(
-			'field_type' => 'images',
-            "value" => "",
-            "label" => "Tem link?",
-            "inputType" => "checkbox",
-			'help' => 'Por padrão, imagens não têm link. ',
-        ),
+	
+		/*
+		 * CAMPOS IMAGES
+		 */
+	        /*
+	         * Múltiplas imagens ou apenas uma?
+	         */
+	        'image_field_limit_quantity' => array(
+				'field_type' => 'images',
+	            "value" => "1",
+	            "label" => "Limite de imagens?",
+	            "inputType" => "text",
+	            "size" => "small",
+				'help' => 'Por padrão, apenas uma imagem pode ser '.
+						  'inserida. Se definir 0, então não há limites.'
+	        ),
+	        /*
+	         * Imagem tem descrição
+	         */
+	        'image_field_has_description' => array(
+				'field_type' => 'images',
+	            "value" => "",
+	            "label" => "Tem descrição?",
+	            "inputType" => "checkbox",
+				'help' => 'Este campo de imagem tem descrição? ',
+	        ),
+	        /*
+	         * Tem imagem secundária?
+	         */
+	        'image_field_has_secondary_image' => array(
+				'field_type' => 'images',
+	            "value" => "",
+	            "label" => "Tem imagem secundária?",
+	            "inputType" => "checkbox",
+				'help' => 'Por padrão, apenas uma imagem pode ser '.
+						  'inserida. Se marcar este checkbox, múltiplas poderão '.
+						  'ser inseridas.'
+	        ),
+	        /*
+	         * Tem link?
+	         */
+	        'image_field_has_link' => array(
+				'field_type' => 'images',
+	            "value" => "",
+	            "label" => "Tem link?",
+	            "inputType" => "checkbox",
+				'help' => 'Por padrão, imagens não têm link. ',
+	        ),
+
+		/*
+		 * CAMPOS TEXTOS
+		 */
+		    /*
+		     * Tem editor?
+		     */
+			'text_has_editor' => array(
+				'field_type' => 'text',
+				"value" => "",
+				"label" => "Ativar editor de texto rico",
+				"inputType" => "checkbox",
+				'help' => 'Inserir um editor de texto (negrito/itálico/etc) neste campo. ',
+		    ),
+
     ),
     /**
      * RESPONSER

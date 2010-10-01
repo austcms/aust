@@ -530,8 +530,73 @@ class Cadastro extends Module {
 			}
         }
 
+		// pega tipo físico para o caso de type=string, pois pode ser
+		// text
+		$described = $this->getPhysicalFields();
+		foreach( $described as $fieldName=>$value ){
+			$result[$fieldName]['physical_type'] = $value['Type'];
+
+			if( $value['Type'] == 'text' )
+				$result[$fieldName]['especie'] = 'text';
+		}
+		
         return $result;
     }
+
+    /**
+	 * getPhysicalFields()
+	 *
+     * Retorna informações sobre tipagem física da respectiva
+     * tabela.
+     *
+     * @param array $params
+     *      'tabela': qual tabela deve ser analisada
+     *      'by': indica qual o índice deve ser usado
+     *          ex.: se 'Field', o índice de retorno é o nome do
+     *          campo.
+     * @return array Retorna as características físicas da tabela
+     */
+
+	function getPhysicalFields( $params = array() ){
+        /**
+         * DESCRIBE tabela
+         *
+         * Toma informações físicas sobre a tabela
+         */
+
+        if ( !empty( $params["tabela"] ) )
+			$tabela = $params["tabela"];
+        else
+			$tabela = $this->getTable();
+			
+        $temp = $this->connection->query("DESCRIBE ".$tabela, "ASSOC");
+
+        if ( empty( $params["by"] ) )
+	        $params["by"] = "Field";
+			
+        /**
+         * $param["by"]
+         *
+         * Se o resultado deve ser retornado com uma determinada informação
+         * como índice.
+         */
+        if( !empty($params["by"]) ){
+            foreach($temp as $chave=>$valor){
+                $result[ $valor[ $params["by"] ] ] = $valor;
+            }
+        } else {
+            $result = $temp;
+        }
+
+		$this->tableProperties = $result;
+
+        return $result;
+		
+	}
+		// deprecated
+    	public function pegaInformacoesTabelaFisica( $params = array() ){
+			return $this->getPhysicalFields($params);
+	    }	
 
 	/**
 	 * configurations()
@@ -547,6 +612,22 @@ class Cadastro extends Module {
 		$this->pegaInformacoesCadastro( $this->austNode );
 		return $this->configurations;
 	}
+	
+	function getTable(){
+		$this->configurations();
+		$table = $this->configurations['estrutura']['tabela']['valor'];
+		return $table;
+	}
+	
+		// alias
+		function table(){ return $this->dataTable(); }
+	
+	function imagesTable(){
+		$this->configurations();
+		$table = $this->configurations['estrutura']['table_images']['valor'];
+		return $table;
+	}
+	
     /**
      * Retorna todas as informações sobre o cadastro.
      *
@@ -570,46 +651,6 @@ class Cadastro extends Module {
                 $result[ $valor["tipo"] ][ $valor["chave"] ] = $valor;
         }
 		$this->configurations = $result;
-        return $result;
-    }
-
-    /**
-     * Retorna informações sobre tipagem física da respectiva
-     * tabela.
-     *
-     * @param array $params
-     *      'tabela': qual tabela deve ser analisada
-     *      'by': indica qual o índice deve ser usado
-     *          ex.: se 'Field', o índice de retorno é o nome do
-     *          campo.
-     * @return array Retorna as características físicas da tabela
-     */
-    public function pegaInformacoesTabelaFisica( $params ){
-        /**
-         * DESCRIBE tabela
-         *
-         * Toma informações físicas sobre a tabela
-         */
-        if ( !empty( $params["tabela"] ) ){
-            $temp = $this->connection->query("DESCRIBE ".$params["tabela"], "ASSOC");
-        }
-
-        /**
-         * $param["by"]
-         *
-         * Se o resultado deve ser retornado com uma determinada informação
-         * como índice.
-         */
-        if( !empty($params["by"]) ){
-            foreach($temp as $chave=>$valor){
-                $result[ $valor[ $params["by"] ] ] = $valor;
-            }
-        } else {
-            $result = $temp;
-        }
-
-		$this->tableProperties = $result;
-
         return $result;
     }
 
