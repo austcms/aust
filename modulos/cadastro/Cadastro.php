@@ -353,7 +353,7 @@ class Cadastro extends Module {
 	 * @param $images array Contém o nome dos campos dos quais devem
 	 * ser excluidas as imagens extras.
 	 */
-	function deleteExtraImages( $images ){
+	function deleteExtraImages( $id, $images ){
 		
 		$this->configurations();
 		$imageTable = $this->configurations['estrutura']['table_images']['valor'];
@@ -374,7 +374,9 @@ class Cadastro extends Module {
 				SELECT id
 				FROM $imageTable
 				WHERE
-					reference_field='$field'
+					reference_field='$field' AND
+					maintable_id='".$id."' AND
+					categoria_id='".$this->austNode."'
 				ORDER BY id DESC
 				LIMIT $limit, 999999999999999
 			";
@@ -642,10 +644,12 @@ class Cadastro extends Module {
          * Busca na tabela cadastros_conf por informações relacionadas ao
          * austNode selecionado.
          */
+		$sql = "SELECT * FROM cadastros_conf WHERE categorias_id='".$austNode."' ORDER BY ordem ASC";
         $temp = $this->connection->query(
-            "SELECT * FROM cadastros_conf WHERE categorias_id='".$austNode."' ORDER BY ordem ASC",
+            $sql,
             PDO::FETCH_ASSOC
         );
+
         foreach( $temp as $chave=>$valor ){
             if( !empty($valor["chave"]) )
                 $result[ $valor["tipo"] ][ $valor["chave"] ] = $valor;

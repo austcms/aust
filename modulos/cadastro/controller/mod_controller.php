@@ -416,7 +416,7 @@ class ModController extends ModsController
 				$postedImageFields[] = $field;
 			}
 		}
-		$this->modulo->deleteExtraImages($postedImageFields);
+		$this->modulo->deleteExtraImages($lastInsertId, $postedImageFields);
 		
         $this->set('resultado', $resultado);
 

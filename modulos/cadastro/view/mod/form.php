@@ -180,7 +180,7 @@ echo $form->create( $infoCadastro["estrutura"]["tabela"]["valor"] );
  * O formulário é criado automaticamente
  *
  */
-	
+//	pr($camposForm);
 foreach( $camposForm as $chave=>$valor ){
 
     unset($inputType);
@@ -410,6 +410,9 @@ foreach( $camposForm as $chave=>$valor ){
 			}
 			?>
 
+			<br />
+			<p class="explanation"><?php echo $valor['comentario'] ?></p>
+			<br />
 			</div>
 		</div>
 		<?php
@@ -465,7 +468,12 @@ foreach( $camposForm as $chave=>$valor ){
 /*
  * LOAD TINYMCE
  */
-	$elementsEditor = implode(',', $elementsEditor);
+
+	if( empty($elementsEditor) )
+		$elementsEditor = array();
+	else
+		$elementsEditor = implode(',', $elementsEditor);
+	
 	$params = array(
 		'elements' => $elementsEditor
 	);
