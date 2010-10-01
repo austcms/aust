@@ -87,7 +87,7 @@ if( $_GET['action'] == "edit" ){
 							</p>
 						</div>
 						<div class="secondary_image">
-						<div id="secondary_image_actual">
+						<div id="secondary_image_form">
 							Nova Imagem Secundária:
 							<br />
 	                        <input type="file" name="data[<?php echo $tabelaCadastro ?>][secondary_image][]" />
