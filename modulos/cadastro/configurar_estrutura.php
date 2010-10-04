@@ -354,23 +354,9 @@ if(!empty($_GET['function'])){
             <p>A seguir, você tem a lista dos campos existentes neste cadastro.</p>
             <ul>
             <?php
-            // busca todos os campos da tabela do cadastro
-            $sql = "SELECT
-                        *
-                    FROM
-                        ".$tabela_da_estrutura."
-                    LIMIT 0,1
-                    ";
-            $mysql = $modulo->connection->query($sql, 'ASSOC');
-            $mysql = $mysql[0];
-            /**
-             * Pega o valor físico do campo da tabela
-             */
-            $fields = count($mysql);
-            if( !is_array($mysql) )
-                $mysql = array();
+			$fields = $modulo->getFields(false);
 
-            foreach($mysql as $chave=>$valor){
+            foreach($fields as $chave=>$valor){
                 /**
                  * Verifica se o campo é editável ou infra-estrutura (ex. de campos: id, adddate, aprovado)
                  */
@@ -822,6 +808,7 @@ if(!empty($_GET['function'])){
         <div class="content">
             <?php
             $configurations = $modulo->loadModConf(null,'field');
+			
 			$fields = $modulo->getFields(false);
             if( !empty($configurations) && is_array($configurations) ){
                 ?>

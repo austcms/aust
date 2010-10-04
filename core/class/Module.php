@@ -1357,7 +1357,7 @@ class Module
 			 */
             $sql = "SELECT * FROM config WHERE tipo='mod_conf' AND $classSearchStatement AND local='".$params."' $whereAuthor LIMIT 300";
             $queryTmp = $this->connection->query($sql, "ASSOC");
-
+			
             $query = array();
 			/*
 			 * Configurações de campos individuais têm um formato completamente
