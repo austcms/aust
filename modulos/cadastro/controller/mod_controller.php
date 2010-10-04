@@ -310,6 +310,14 @@ class ModController extends ModsController
 			$this->modulo->setRelationalData(); // ajusta inclusive imagens
 			$this->data = $this->modulo->data;
 			$images = $this->modulo->images;
+			
+			// insert date
+			$table = reset(array_keys($this->data));
+
+			if( empty($w) )
+				$this->data[$table]['created_on'] = date("Y-m-d H:i:s");
+			else
+				$this->data[$table]['updated_on'] = date("Y-m-d H:i:s");
 
 			/*
 			 *		2) Salva dados principais (não relacionados);

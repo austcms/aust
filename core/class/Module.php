@@ -217,7 +217,6 @@ class Module
         else if( !empty($post['metodo']) )
             $method = $post['metodo'];
 
-        //pr($post);
         /*
          * Gera SQL
          */

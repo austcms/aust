@@ -4,7 +4,7 @@
     background-color: black;
     top: 0;
     left: 0;
-    filter: alpha(opacity=20);
+    filter: alpha(opacity=30) !important;
     opacity: 0.3;
     display: none;
 }
