@@ -14,6 +14,14 @@ $infoCadastro = $modulo->pegaInformacoesCadastro($austNode);
 $tabelaCadastro = $infoCadastro["estrutura"]['tabela']["valor"];
 $tabelaImagens = $infoCadastro["estrutura"]['table_images']["valor"];
 
+/*
+ * ...
+ * 
+ * TinyMCE é carregado ao final deste código
+ *
+ * ...
+ */
+
 $w = '';
 if( !empty($_GET["w"]) ){
     $w = $_GET['w'];
@@ -172,12 +180,15 @@ echo $form->create( $infoCadastro["estrutura"]["tabela"]["valor"] );
  * O formulário é criado automaticamente
  *
  */
+//	pr($camposForm);
 foreach( $camposForm as $chave=>$valor ){
 
     unset($inputType);
     $select = array();
     $checkbox = array();
 	$useInput = false;
+	$class = "";
+	$elementId = '';
 
     if( array_key_exists($valor['nomeFisico'], $divisorTitles) ){
         ?>
@@ -399,6 +410,9 @@ foreach( $camposForm as $chave=>$valor ){
 			}
 			?>
 
+			<br />
+			<p class="explanation"><?php echo $valor['comentario'] ?></p>
+			<br />
 			</div>
 		</div>
 		<?php
@@ -409,6 +423,12 @@ foreach( $camposForm as $chave=>$valor ){
 		$useInput = true;
     } elseif( $valor['tipo']['tipoFisico'] == 'text' ){
         $inputType = "textarea";
+		
+		if( $modulo->getFieldConfig($chave, 'text_has_editor') == "1" ){
+			$elementId = 'input-'.$chave;
+			$elementsEditor[] = $elementId;
+		}
+		
 		$useInput = true;
     } else {
 		$useInput = true;
@@ -444,6 +464,20 @@ foreach( $camposForm as $chave=>$valor ){
 	    <?php
 	}
 }
+
+/*
+ * LOAD TINYMCE
+ */
+
+	if( empty($elementsEditor) )
+		$elementsEditor = array();
+	else
+		$elementsEditor = implode(',', $elementsEditor);
+	
+	$params = array(
+		'elements' => $elementsEditor
+	);
+	loadHtmlEditor($params);
 
 
 echo $form->end();

@@ -79,7 +79,7 @@ class ModController extends ModsController
         /**
          * Toma informações sobre a tabela física do cadastro
          */
-        $infoTabelaFisica = $this->modulo->pegaInformacoesTabelaFisica(
+        $infoTabelaFisica = $this->modulo->getPhysicalFields(
             array(
                 "tabela" => $infoCadastro["estrutura"]["tabela"]["valor"],
                 "by" => "Field",
@@ -277,7 +277,7 @@ class ModController extends ModsController
         /**
          * Toma informações sobre a tabela física do cadastro
          */
-        $infoTabelaFisica = $this->modulo->pegaInformacoesTabelaFisica(
+        $infoTabelaFisica = $this->modulo->getPhysicalFields(
             array(
                 "tabela" => $infoCadastro["estrutura"]["tabela"]["valor"],
                 "by" => "Field",
@@ -416,7 +416,7 @@ class ModController extends ModsController
 				$postedImageFields[] = $field;
 			}
 		}
-		$this->modulo->deleteExtraImages($postedImageFields);
+		$this->modulo->deleteExtraImages($lastInsertId, $postedImageFields);
 		
         $this->set('resultado', $resultado);
 

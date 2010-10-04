@@ -829,14 +829,14 @@ if(!empty($_GET['function'])){
 	                        <?php
 							if( empty($configurations[$fieldName]) )
 								$configurations[$fieldName] = array();
-							
+
 							foreach( $configurations[$fieldName] as $key=>$options ){
 								
 								if( !empty($options['field_type'])
 									AND $options['field_type'] != $fieldOptions['especie']
 								)
 									continue;
-								
+									
 								?>
 								<div>
 								<?php
