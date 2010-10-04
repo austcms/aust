@@ -33,7 +33,8 @@ define("CORE_DIR", "core/");
     /**
      * Define o diretório onde estão os arquivos de configuração do core
      */
-    define("CORE_CONFIG_DIR", CORE_DIR."config/");
+	 define("CORE_CONFIG_DIR", CORE_DIR."config/");
+	 define("VERSION_FILE", CORE_CONFIG_DIR."version.php");
     /**
      * Define o caminho para a pasta de instalação
      */
