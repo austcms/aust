@@ -10,7 +10,7 @@
 }
 
 .window {
-    position:absolute;
+    position: fixed;
     width:350px;
     /*height:394px;*/
     display:none;
@@ -102,7 +102,7 @@
 	width: 560px;
 	border: 1px solid #cccccc;
 	-moz-border-radius: 3px;
-	border-radius: 8px;
+	border-radius: 3px;
 	box-shadow: 3px 3px 2px #666;
 	-moz-box-shadow: 3px 3px 2px #666; 
 	-webkit-box-shadow: 3px 3px 2px #666; 
