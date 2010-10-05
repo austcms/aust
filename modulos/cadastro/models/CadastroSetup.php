@@ -1,6 +1,13 @@
 <?php
 /* 
  * INSTALLATION MODEL
+ *
+ * This class contains all the mechanisms for creating a new Structure. 
+ *
+ * Fields Available:
+ *
+ * 		String, Text, password, date, image, file, relationals
+ *
  */
 
 /**

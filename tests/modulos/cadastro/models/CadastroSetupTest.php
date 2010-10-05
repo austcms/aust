@@ -162,13 +162,13 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					'comment' => 'This is a comment',
 					'austNode' => '777',
 					'author' => '777',
-					'class' => 'arquivo',
+					'class' => 'file',
 				);
 
 				$expectedSql = "INSERT INTO cadastros_conf ".
 	                           "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem) ".
 	                           "VALUES ".
-	                           "('campo','field_one','Field One','This is a comment',777,'777',0,0,1,0,1,'arquivo',1)";
+	                           "('campo','field_one','Field One','This is a comment',777,'777',0,0,1,0,1,'file',1)";
 
 				$this->assertEquals(
 					$expectedSql,
@@ -178,24 +178,28 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 				// Criação da tabela relacional de arquivos: SQL
 				function testCreateSqlForFileTable(){
 					$this->assertEquals(
-						'CREATE TABLE minhatabela_arquivos('.
+						'CREATE TABLE minhatabela_files('.
 	                    'id int auto_increment,'.
 	                    'maintable_id int,'.
-	                    'titulo varchar(120),'.
-	                    'descricao text,'.
-	                    'local varchar(80),'.
-	                    'url text,'.
-	                    'arquivo_nome varchar(250),'.
-	                    'arquivo_tipo varchar(250),'.
-	                    'arquivo_tamanho varchar(250),'.
-	                    'arquivo_extensao varchar(10),'.
-	                    'tipo varchar(80),'.
+						'type varchar(80),'.
+	                    'title varchar(250),'.
+	                    'description text,'.
+	                    'local varchar(180),'.
+	                    'link text,'.
+	                    'systempath text,'.
+	                    'path text,'.
+	                    'file_name varchar(250),'.
+	                    'original_file_name varchar(250),'.
+	                    'file_type varchar(250),'.
+	                    'file_size varchar(250),'.
+	                    'file_ext varchar(10),'.
+	                    'reference varchar(120),'.
 	                    'reference_table varchar(120),'.
 	                    'reference_field varchar(120),'.
-	                    'referencia varchar(120),'.
-	                    'categorias_id int,'.
-	                    'adddate datetime,'.
-	                    'autor int,'.
+	                    'categoria_id int,'.
+	                    'created_on datetime,'.
+	                    'updated_on datetime,'.
+	                    'admin_id int,'.
 	                    'PRIMARY KEY (id),'.
 	                    'UNIQUE id (id))',
 						$this->obj->createSqlForFilesTable('minhatabela')
