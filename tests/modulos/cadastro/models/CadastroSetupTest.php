@@ -183,6 +183,7 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 	                    'id int auto_increment,'.
 	                    'maintable_id int,'.
 						'type varchar(80),'.
+						'order_nr int COMMENT "Contém o número da ordenação deste registro",'.
 	                    'title varchar(250),'.
 	                    'description text,'.
 	                    'local varchar(180),'.
@@ -384,6 +385,7 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 		                    'id int auto_increment,'.
 		                    'maintable_id int,'.
 							'type varchar(80) COMMENT "type=main são as imagens principais",'.
+							'order_nr int COMMENT "Contém o número da ordenação deste registro",'.
 		                    'title varchar(250),'.
 		                    'description text,'.
 		                    'local varchar(180),'.
@@ -755,7 +757,7 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 				// test FILE
 					$params = array(
 						0 => array(
-							'name' => 'Campo 1',
+							'name' => 'file_field',
 							'type' => 'files',
 							'description' => ''
 						),
@@ -763,8 +765,8 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					$result = $this->obj->addField($params);
 
 					$this->assertTrue( $this->obj->connection->hasTable('testunit_files') );
-					$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'campo_1') );
-					$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_1' AND categorias_id='7777'");
+					$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'file_field') );
+					$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='file_field' AND categorias_id='7777'");
 					$this->assertArrayHasKey('0', $conf );
 					$this->assertEquals('files', $conf[0]['especie'] );
 					$this->obj->connection->exec("DROP TABLE testunit_files");

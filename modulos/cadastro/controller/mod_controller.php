@@ -310,6 +310,7 @@ class ModController extends ModsController
 			$this->modulo->setRelationalData(); // ajusta inclusive imagens
 			$this->data = $this->modulo->data;
 			$images = $this->modulo->images;
+			$files = $this->modulo->files;
 			
 			// insert date
 			$table = reset(array_keys($this->data));
@@ -332,6 +333,7 @@ class ModController extends ModsController
 		 	 *		3) Salva dados físicos (como arquivos).
 			 */
 			$this->modulo->uploadAndSaveImages($images, $lastInsertId);
+			$this->modulo->uploadAndSaveFiles($files, $lastInsertId);
 			
 			/*
 			 *		4) Salva dados relacionados no DB.
@@ -425,6 +427,16 @@ class ModController extends ModsController
 			}
 		}
 		$this->modulo->deleteExtraImages($lastInsertId, $postedImageFields);
+		
+		/*
+		 * EXCLUI ARQUIVOS EXTRAS
+		 */
+		foreach( $files as $fileFields ){
+			foreach( $fileFields as $field=>$values ){
+				$postedFileFields[] = $field;
+			}
+		}
+		$this->modulo->deleteExtraFiles($lastInsertId, $postedFileFields);
 		
         $this->set('resultado', $resultado);
 

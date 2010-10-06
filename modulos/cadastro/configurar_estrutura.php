@@ -808,8 +808,8 @@ if(!empty($_GET['function'])){
         <div class="content">
             <?php
             $configurations = $modulo->loadModConf(null,'field');
-			
 			$fields = $modulo->getFields(false);
+			//pr($fields);
             if( !empty($configurations) && is_array($configurations) ){
                 ?>
 
@@ -832,8 +832,8 @@ if(!empty($_GET['function'])){
 
 							foreach( $configurations[$fieldName] as $key=>$options ){
 								
-								if( !empty($options['field_type'])
-									AND $options['field_type'] != $fieldOptions['especie']
+								if( !empty($options['field_type']) AND
+									$options['field_type'] != $fieldOptions['especie']
 								)
 									continue;
 									

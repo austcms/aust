@@ -383,6 +383,7 @@ class CadastroSetup extends ModsSetup {
 		            'id int auto_increment,'.
 		            'maintable_id int,'.
 		            'type varchar(80) COMMENT "type=main são as imagens principais",'.
+					'order_nr int COMMENT "Contém o número da ordenação deste registro",'.
 		            'title varchar(250),'.
 		            'description text,'.
 		            'local varchar(180),'.
@@ -488,6 +489,7 @@ class CadastroSetup extends ModsSetup {
                 'id int auto_increment,'.
                 'maintable_id int,'.
 				'type varchar(80),'.
+				'order_nr int COMMENT "Contém o número da ordenação deste registro",'.
                 'title varchar(250),'.
                 'description text,'.
                 'local varchar(180),'.
@@ -536,7 +538,7 @@ class CadastroSetup extends ModsSetup {
 			
 			$sql = $this->createSqlForFilesTable($this->mainTable);
 			$result = $this->connection->exec($sql, 'CREATE TABLE');
-			
+
 			if( $result ){
 				$this->filesTableCreated = true;
 				return true;
