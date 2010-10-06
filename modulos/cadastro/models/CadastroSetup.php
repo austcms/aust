@@ -40,7 +40,7 @@ class CadastroSetup extends ModsSetup {
 		'pw' => array(
 			'type' => 'varchar(250)',
 		),
-		'file' => array(
+		'files' => array(
 			'type' => 'text',
 		),
 		'relational_onetoone' => array(
@@ -222,7 +222,7 @@ class CadastroSetup extends ModsSetup {
 			/*
 			 * File
 			 */
-			else if( $type == 'file' ) {
+			else if( $type == 'files' ) {
 				
 				$this->addColumn($params);
 				$this->connection->exec($this->createFieldConfigurationSql_File($params));
@@ -462,9 +462,9 @@ class CadastroSetup extends ModsSetup {
 	 * Configuration: Files
 	 */
 	function createFieldConfigurationSql_File($params){
-		if( empty($params['class']) ) $class = 'arquivo';
+		if( empty($params['class']) ) $class = 'files';
 		else $class = $params['class'];
-		
+
         $sql =
             "INSERT INTO cadastros_conf ".
             "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem) ".
@@ -482,26 +482,30 @@ class CadastroSetup extends ModsSetup {
 			else if( empty($mainTable) )
 				return false;
 			
-			$this->filesTableName = $mainTable.'_arquivos';
+			$this->filesTableName = $mainTable.'_files';
 	        $sql =
 	            'CREATE TABLE '.$this->filesTableName.'('.
-	            'id int auto_increment,'.
-	            'maintable_id int,'.
-	            'titulo varchar(120),'.
-	            'descricao text,'.
-	            'local varchar(80),'.
-	            'url text,'.
-	            'arquivo_nome varchar(250),'.
-	            'arquivo_tipo varchar(250),'.
-	            'arquivo_tamanho varchar(250),'.
-	            'arquivo_extensao varchar(10),'.
-	            'tipo varchar(80),'.
-	            'reference_table varchar(120),'.
-	            'reference_field varchar(120),'.
-	            'referencia varchar(120),'.
-	            'categorias_id int,'.
-	            'adddate datetime,'.
-	            'autor int,'.
+                'id int auto_increment,'.
+                'maintable_id int,'.
+				'type varchar(80),'.
+                'title varchar(250),'.
+                'description text,'.
+                'local varchar(180),'.
+                'link text,'.
+                'systempath text,'.
+                'path text,'.
+                'file_name varchar(250),'.
+                'original_file_name varchar(250),'.
+                'file_type varchar(250),'.
+                'file_size varchar(250),'.
+                'file_ext varchar(10),'.
+                'reference varchar(120),'.
+                'reference_table varchar(120),'.
+                'reference_field varchar(120),'.
+                'categoria_id int,'.
+                'created_on datetime,'.
+                'updated_on datetime,'.
+                'admin_id int,'.
 	            'PRIMARY KEY (id),'.
 	            'UNIQUE id (id))';
 			return $sql;
@@ -519,7 +523,7 @@ class CadastroSetup extends ModsSetup {
                  "cadastros_conf ".
                  "(tipo,chave,valor,categorias_id,adddate,desativado,desabilitado,publico,restrito,aprovado) ".
                  "VALUES ".
-                 "('estrutura','tabela_arquivos','".$this->filesTableName."',".$this->austNode.", '".date('Y-m-d H:i:s')."',0,0,1,0,1)";
+                 "('estrutura','table_files','".$this->filesTableName."',".$this->austNode.", '".date('Y-m-d H:i:s')."',0,0,1,0,1)";
 			return $sql;
 		}
 		/*

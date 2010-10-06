@@ -32,7 +32,8 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 				array(true, 'text', 					'text'),
 				array(true, 'date', 					'date'),
 				array(true, 'pw', 						'varchar(250)'),
-				array(true, 'file', 					'text'),
+				array(false, 'file', 					'text'),
+				array(true, 'files', 					'text'),
 				array(true, 'relational_onetoone', 		'int'),
 				array(true, 'relational_onetomany', 	'int'),
 				array(false, 'uihiaehurg', 				''),
@@ -162,13 +163,13 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					'comment' => 'This is a comment',
 					'austNode' => '777',
 					'author' => '777',
-					'class' => 'file',
+					'class' => 'files',
 				);
 
 				$expectedSql = "INSERT INTO cadastros_conf ".
 	                           "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem) ".
 	                           "VALUES ".
-	                           "('campo','field_one','Field One','This is a comment',777,'777',0,0,1,0,1,'file',1)";
+	                           "('campo','field_one','Field One','This is a comment',777,'777',0,0,1,0,1,'files',1)";
 
 				$this->assertEquals(
 					$expectedSql,
@@ -205,19 +206,19 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 						$this->obj->createSqlForFilesTable('minhatabela')
 					);
 
-					$this->assertEquals('minhatabela_arquivos', $this->obj->filesTableName);
+					$this->assertEquals('minhatabela_files', $this->obj->filesTableName);
 				}
 
 				// Configurações sobre a tabela relacional de arquivos: SQL
 				function testCreateSqlForConfigurationOfFiles(){
-					$this->obj->filesTableName = 'minhatabela_arquivos';
+					$this->obj->filesTableName = 'minhatabela_files';
 					$this->obj->austNode = '777';
 					$sql = 
 					    "INSERT INTO ".
 	                    "cadastros_conf ".
 	                    "(tipo,chave,valor,categorias_id,adddate,desativado,desabilitado,publico,restrito,aprovado) ".
 	                    "VALUES ".
-	                    "('estrutura','tabela_arquivos','minhatabela_arquivos',777, '".date('Y-m-d H:i:s')."',0,0,1,0,1)";
+	                    "('estrutura','table_files','minhatabela_files',777, '".date('Y-m-d H:i:s')."',0,0,1,0,1)";
 
 					$this->assertEquals(
 						$sql,
@@ -227,15 +228,15 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 
 				// Execução da criação da tabela relacional de arquivos
 				function testCreateTableForFiles(){
-					$this->obj->connection->exec('DROP TABLE minhatabela_arquivos');
+					$this->obj->connection->exec('DROP TABLE minhatabela_files');
 					$this->obj->mainTable = 'minhatabela';
 					$this->obj->austNode = '777';
 					$this->assertTrue( $this->obj->createTableForFiles() );
 					$this->assertTrue( $this->obj->filesTableCreated );
 
-					$created = $this->obj->connection->hasTable('minhatabela_arquivos');
-					$this->obj->connection->exec('DROP TABLE minhatabela_arquivos');
-					$deleted = !$this->obj->connection->hasTable('minhatabela_arquivos');
+					$created = $this->obj->connection->hasTable('minhatabela_files');
+					$this->obj->connection->exec('DROP TABLE minhatabela_files');
+					$deleted = !$this->obj->connection->hasTable('minhatabela_files');
 
 					// verifica se houve as criações
 					$this->assertTrue($created, "Table not CREATED.");
@@ -247,16 +248,16 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 
 				// Execução da configuração da tabela relacional de arquivos
 				function testCreateConfigurationForFiles(){
-					$this->obj->filesTableName = 'minhatabela_arquivos';
+					$this->obj->filesTableName = 'minhatabela_files';
 					$this->obj->austNode = '777';
 					$this->obj->createConfigurationForFiles();
 
-					$created = $this->obj->connection->query("SELECT id FROM cadastros_conf WHERE categorias_id='".$this->obj->austNode."' AND valor='minhatabela_arquivos' AND chave='tabela_arquivos'");
+					$created = $this->obj->connection->query("SELECT id FROM cadastros_conf WHERE categorias_id='".$this->obj->austNode."' AND valor='minhatabela_files' AND chave='table_files'");
 					if( !empty($created) ) $created = true;
 					else $created = false;
 
-					$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='".$this->obj->austNode."' AND valor='minhatabela_arquivos' AND chave='tabela_arquivos'");
-					$deleted = $this->obj->connection->query("SELECT id FROM cadastros_conf WHERE categorias_id='".$this->obj->austNode."' AND valor='minhatabela_arquivos' AND chave='tabela_arquivos'");
+					$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='".$this->obj->austNode."' AND valor='minhatabela_files' AND chave='table_files'");
+					$deleted = $this->obj->connection->query("SELECT id FROM cadastros_conf WHERE categorias_id='".$this->obj->austNode."' AND valor='minhatabela_files' AND chave='table_files'");
 					if( empty($deleted) ) $deleted = true;
 					else $deleted = false;
 
@@ -748,25 +749,25 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 			}
 		
 			function testAddFieldFile(){
-				$this->obj->connection->exec("DROP TABLE testunit_arquivos");
+				$this->obj->connection->exec("DROP TABLE testunit_files");
 				$this->restartTable();
 			
 				// test FILE
 					$params = array(
 						0 => array(
 							'name' => 'Campo 1',
-							'type' => 'file',
+							'type' => 'files',
 							'description' => ''
 						),
 					);
 					$result = $this->obj->addField($params);
 
-					$this->assertTrue( $this->obj->connection->hasTable('testunit_arquivos') );
+					$this->assertTrue( $this->obj->connection->hasTable('testunit_files') );
 					$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'campo_1') );
 					$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_1' AND categorias_id='7777'");
 					$this->assertArrayHasKey('0', $conf );
-					$this->assertEquals('arquivo', $conf[0]['especie'] );
-					$this->obj->connection->exec("DROP TABLE testunit_arquivos");
+					$this->assertEquals('files', $conf[0]['especie'] );
+					$this->obj->connection->exec("DROP TABLE testunit_files");
 					
 					$this->destroyTests();
 			}
