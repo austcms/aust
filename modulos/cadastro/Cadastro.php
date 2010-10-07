@@ -799,12 +799,11 @@ class Cadastro extends Module {
          *
          * Toma informações físicas sobre a tabela
          */
-
         if ( !empty( $params["tabela"] ) )
 			$tabela = $params["tabela"];
         else
 			$tabela = $this->getTable();
-			
+
         $temp = $this->connection->query("DESCRIBE ".$tabela, "ASSOC");
 
         if ( empty( $params["by"] ) )
@@ -1293,5 +1292,4 @@ class Cadastro extends Module {
     	$result = '';
 	}
 }
-
 ?>
