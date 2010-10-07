@@ -197,6 +197,7 @@ class ModController extends ModsController
             "w" => $_GET["w"]
         );
 
+		// IMAGES
 		if( !empty($_POST['type']) AND $_POST['type'] = 'image_options' ){
 			$data = $this->data;
 			$imageId = $_POST['image_id'];
@@ -209,7 +210,8 @@ class ModController extends ModsController
 				$data = reset( $this->data );
 				$this->modulo->saveImageDescription( $data['description'], $imageId );
 			}
-			
+
+			// link 
 			if( !empty($data['link']) ){
 				$data = reset( $this->data );
 				$this->modulo->saveImageLink( $data['link'], $imageId );
@@ -232,6 +234,10 @@ class ModController extends ModsController
 			$deletedImage = $this->modulo->deleteImage( $_GET['deleteimage'] );
 		}
 
+		if( !empty($_GET['deletefile']) ){
+			$deletedFile = $this->modulo->deleteFile( $_GET['deletefile'] );
+		}
+		
 		$this->doRender = false;
         $this->create($params);
         $this->render('form');
