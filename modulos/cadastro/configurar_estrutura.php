@@ -17,7 +17,12 @@
 /**
  * INICIALIZAÇÃO
  */
-$tabela_da_estrutura = $modulo->LeTabelaDaEstrutura($_GET['aust_node']);
+$tabela_da_estrutura = $modulo->getTable();
+
+include_once $modulo->getIncludeFolder().'/'.MOD_MODELS_DIR.'CadastroSetup.php';
+$setup = new CadastroSetup();
+$setup->austNode = $_GET['aust_node'];
+$setup->mainTable = $modulo->getTable();
 
 /*
  * VERIFICAÇÕES $_POST
@@ -28,12 +33,13 @@ $tabela_da_estrutura = $modulo->LeTabelaDaEstrutura($_GET['aust_node']);
  * Insere um novo campo na tabela do cadastro
  */
 	if(!empty($_POST['add_field'])){
-		$param = array(
-			'name' => $_POST['name'],
+		$params = array(
+			'name' => $_POST['data'],
 			'type' => $_POST['name'],
-			'name' => $_POST['name'],
+			'order' => $_POST['order'],
 		);
-		$modulo->addField
+//		var_dump($modulo);
+		$setup->addField($_POST['data']);
 	}
 
 /*
@@ -428,6 +434,7 @@ if(!empty($_GET['function'])){
                         <option value="text">Texto médio ou grande</option>
                         <option value="date">Data</option>
                         <option value="pw">Senha</option>
+                        <option value="images">Imagens</option>
                         <option value="files">Arquivo</option>
 						<?php
 						/*
@@ -471,26 +478,19 @@ if(!empty($_GET['function'])){
                     <select name="data[order]">
                         <?php
 
-                        // busca todos os campos da tabela do cadastro e mostra em um <select>
-                        $sql = "SELECT
-                                    *
-                                FROM
-                                    ".$tabela_da_estrutura."
-                                LIMIT 0,1
-                                ";
-                        $dados = $modulo->connection->query($sql,"ASSOC");
-                        $dados = $dados[0];
+
                         // pega o valor físico do campo da tabela
-                        //$fields = mysql_num_fields($mysql);
+                        $fields = $modulo->getFields();
                         $i = 0;
-                        foreach($dados as $campo=>$valor){
+                        foreach($fields as $campo=>$valor){
                             // verifica se o campo é editável ou infra-estrutura (ex. de campos: id, adddate, aprovado)
                             $sql = "SELECT
-                                        valor
+                                        valor, chave
                                     FROM
                                         cadastros_conf
                                     WHERE
-                                        chave='".$campo."'
+                                        chave='".$campo."' AND
+										categorias_id='".$_GET['aust_node']."'
                                     LIMIT 0,2
                                     ";
                             $result = $modulo->connection->query($sql,"ASSOC");
@@ -501,7 +501,7 @@ if(!empty($_GET['function'])){
                                 if($i == "1"){
                                     echo '<option value="first_field">Antes de '.$result["valor"].'</option>';
                                 }
-                                echo '<option value="'.$result["valor"].'">Depois de '.$result["valor"].'</option>';
+                                echo '<option value="'.$result["chave"].'">Depois de '.$result["valor"].'</option>';
                             }
 
                         }

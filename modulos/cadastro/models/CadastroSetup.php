@@ -256,7 +256,6 @@ class CadastroSetup extends ModsSetup {
 				$this->connection->exec($this->createFieldConfigurationSql_File($params));
 				$this->createTableForFiles();
 				$this->connection->exec( $this->createSqlForFileConfiguration() );
-				
 			}
 			/*
 			 * Relational_onetoone
@@ -591,6 +590,9 @@ class CadastroSetup extends ModsSetup {
 			if( empty($mainTable) AND !empty($this->mainTable) )
 				$mainTable = $this->mainTable;
 			else if( empty($mainTable) )
+				$mainTable = $this->getTable();
+			
+			if( empty($mainTable) )
 				return false;
 			
 			$this->filesTableName = $mainTable.'_files';
