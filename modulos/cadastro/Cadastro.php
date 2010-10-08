@@ -617,6 +617,9 @@ class Cadastro extends Module {
 	
 	function getTable(){
 		$this->configurations();
+		if( empty($this->configurations['estrutura']['tabela']['valor']) )
+			return false;
+		
 		$table = $this->configurations['estrutura']['tabela']['valor'];
 		return $table;
 	}

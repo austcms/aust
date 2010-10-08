@@ -50,6 +50,7 @@ class CadastroTest extends PHPUnit_Framework_TestCase
 				id int auto_increment,
 				systempath text,
 				type varchar(80),
+				maintable_id int,
 				reference varchar(120),
 				reference_table varchar(120),
 				reference_field varchar(120),
@@ -247,12 +248,39 @@ class CadastroTest extends PHPUnit_Framework_TestCase
 	}
 
 
+	/*
+	 * SUPPORT FUNCTION
+	 *
+	 * Alguns testes precisam de tabelas criadas.
+	 */
+		function createTemporaryTable(){
+			$this->deleteTemporaryTable();
+			// cria configuração da tabela
+		    $sql = "INSERT INTO cadastros_conf
+		                 (tipo,chave,valor,categorias_id)
+		             VALUES
+		                 ('estrutura','tabela','tabela_1','777')
+		             ";
+		    $this->obj->connection->exec($sql);
+	
+			// cria tabela física
+		    $sql = "CREATE TABLE tabela_1 (campo_1 varchar(250))";
+		    $this->obj->connection->exec($sql, 'CREATE_TABLE');
+		
+		}
+	
+		function deleteTemporaryTable(){
+	        $this->obj->connection->query("DELETE FROM cadastro_conf WHERE categorias_id='777' OR categorias_id='7777'");
+	        $this->obj->connection->query("DROP TABLE tabela_1");
+		
+		}
 
 	function testLoadModConf(){
 		/* FIELDS */
         $this->obj->connection->query("DELETE FROM config WHERE local='777' AND nome='teste7777'");
         $this->obj->connection->query("DELETE FROM cadastro_conf WHERE categorias_id='777' AND nome='teste7777'");
 
+		$this->createTemporaryTable();
 			/*
 			 * Criar o campo de cadastro
 			 */
@@ -261,8 +289,9 @@ class CadastroTest extends PHPUnit_Framework_TestCase
 		             VALUES
 		                 ('campo','campo_1','Campo 1','777','teste7777', 'images')
 		             ";
-		    $this->obj->connection->query($sql);
-		
+		    $this->obj->connection->exec($sql);
+
+			
 	        $sql = "INSERT INTO config
 	                    (tipo,local,nome,propriedade,valor, class, ref_field)
 	                VALUES
@@ -286,12 +315,17 @@ class CadastroTest extends PHPUnit_Framework_TestCase
 	
         $this->obj->connection->query("DELETE FROM config WHERE local='777' AND nome='teste7777'");
         $this->obj->connection->query("DELETE FROM cadastro_conf WHERE categorias_id='777' AND nome='teste7777'");
+
+		$this->deleteTemporaryTable();
 	}
 	
 	function testLoadModConfWithoutSavedData(){
 		/* FIELDS */
         $this->obj->connection->query("DELETE FROM config WHERE local='777' AND nome='teste7777'");
         $this->obj->connection->query("DELETE FROM cadastro_conf WHERE categorias_id='777' AND nome='teste7777'");
+
+		$this->createTemporaryTable();
+	
 		/*
 		 * Criar o campo de cadastro
 		 */
@@ -312,12 +346,15 @@ class CadastroTest extends PHPUnit_Framework_TestCase
 
         $this->obj->connection->query("DELETE FROM config WHERE local='777' AND nome='teste7777'");
         $this->obj->connection->query("DELETE FROM cadastro_conf WHERE categorias_id='777' AND nome='teste7777'");
+
+		$this->deleteTemporaryTable();
 	}
 	
 	function testGetFieldConfig(){
         $this->obj->connection->query("DELETE FROM config WHERE local='777' AND nome='teste7777'");
         $this->obj->connection->query("DELETE FROM cadastro_conf WHERE categorias_id='777' AND nome='teste7777'");
 
+		$this->createTemporaryTable();
 		/*
 		 * Criar os campos
 		 */
@@ -358,6 +395,8 @@ class CadastroTest extends PHPUnit_Framework_TestCase
 		
         $this->obj->connection->query("DELETE FROM config WHERE local='777' AND nome='teste7777'");
 	    $this->obj->connection->query("DELETE FROM cadastro_conf WHERE categorias_id='777' AND nome='teste7777'");
+	
+		$this->deleteTemporaryTable();
     }
 
 	/*
@@ -377,9 +416,9 @@ class CadastroTest extends PHPUnit_Framework_TestCase
 
 		$sqlImages =
 			"INSERT INTO table_for_unittests_images
-				(type,reference_table,reference_field,categoria_id)
+				(type,reference_table,reference_field,categoria_id,maintable_id)
 				VALUES
-				('main','table_for_unittests','test_field','7777')
+				('main','table_for_unittests','test_field','7777','7777')
 			";
 		
         $this->obj->config = array(
@@ -435,7 +474,7 @@ class CadastroTest extends PHPUnit_Framework_TestCase
 			$this->assertEquals('4', count($allIds) );
 
 			$params = array('test_field');
-			$this->obj->deleteExtraImages( $params );
+			$this->obj->deleteExtraImages('7777', $params );
 		
 			// verifica se ids foram relamente excluidos como deveriam
 			$images = $this->obj->connection->query('SELECT id FROM table_for_unittests_images');
@@ -467,7 +506,7 @@ class CadastroTest extends PHPUnit_Framework_TestCase
 			$oldCount = count($images);
 
 			$params = array('test_field');
-			$this->obj->deleteExtraImages( $params );
+			$this->obj->deleteExtraImages( '7777', $params );
 			$images = $this->obj->connection->query('SELECT id FROM table_for_unittests_images');
 			$newCount = count($images);
 
