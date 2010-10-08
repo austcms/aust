@@ -340,11 +340,28 @@ function PegaExtensao($param){
     return $ext[0];
 }
 
-function loadHtmlEditor($plugins = ""){
-	if( !empty( $plugins ) ) $plugins = ','.$plugins;
+function loadHtmlEditor($params = ""){
+	
+	if( !empty( $params ) &&
+		is_string($params) )
+	{
+		$plugins = ','.$params;
+	} else if( !empty( $params ) &&
+				is_array($params) )
+	{
+		$plugins = '';
+		$elements = '';
+		if( !empty($params['plugins']) )
+			$plugins = ','.$params['plugins'];
+
+		if( !empty($params['elements']) )
+			$elements = ','.$params['elements'];
+
+	}
 	
 	echo '<script type="text/javascript">';
-	echo 'var pluginsToLoad = "safari,paste'.$plugins.'";';
+	echo 'var pluginsToLoad = "'.$plugins.'";';
+	echo 'var elementsToLoad = "'.$elements.'";';
 	echo '</script>';
 	
     include_once(THIS_TO_BASEURL.BASECODE_JS.'html_editor.php');

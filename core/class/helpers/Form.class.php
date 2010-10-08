@@ -197,7 +197,7 @@ class FormHelper
             if( !array_key_exists("cols", $extraOptions) )
                 $cols = 'cols="20"';
 
-            $conteudo.= '<textarea name="'.$inputName.'" '.$rows.' '.$cols.'>';
+            $conteudo.= '<textarea name="'.$inputName.'" '.$rows.' '.$cols.' id="input-'.$fieldName.'">';
             $conteudo.= $inputValue;//$fieldTextValue;
             $conteudo.= '</textarea>';
         }

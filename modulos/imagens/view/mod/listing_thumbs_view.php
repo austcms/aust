@@ -1,4 +1,12 @@
 <div id="thumbs_view">
+	
+<?php
+if(count($query) == 0){
+    ?>
+	<strong>Nenhum registro encontrado.</strong>
+    <?php
+} else {
+	?>	
 	<table width="100%">
 	<?php
 
@@ -68,4 +76,8 @@
 	
 	?>
 	</table>
+	
+	<?php
+}	
+?>
 </div>
