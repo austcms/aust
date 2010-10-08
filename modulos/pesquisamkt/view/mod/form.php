@@ -469,7 +469,20 @@ if( !empty($perguntasQuantidade) ):
                                 ?>
                                 <div style="margin: 3px;">
                                     <div style="display: table; text-align: right; margin-left: 0px; width: 150px; float: left;">
-                                        Alternativa:&nbsp;
+										
+										<?php
+										if( $modulo->getStructureConfig('first_alternative_right') == '1' AND
+											$r == 1 )
+										{
+											?>
+                                        	Alternativa Correta:&nbsp;
+											<?php
+										} else {
+											?>
+	                                        Alternativa:&nbsp;
+											<?php
+										}
+										?>
                                     </div>
                                     <input type="text" size="40" name="resposta[<?php echo $pid ?>][<?php echo $prid ?>]" value="<? if(!empty($prtitulo)) echo $prtitulo; ?>" />
                                     <br clear="both" />

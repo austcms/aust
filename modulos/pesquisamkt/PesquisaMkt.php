@@ -134,21 +134,21 @@ class PesquisaMkt extends Module
 		}
 		
 		$sql = "SELECT
-					id, texto AS text
+					id, pesqmkt_id, texto AS text
 				FROM
 					pesqmkt_perguntas
 				WHERE
-					id IN ('".implode("','", $ids)."')
+					pesqmkt_id IN ('".implode("','", $ids)."')
 				GROUP BY
 					pesqmkt_id
 				ORDER BY
 					id ASC
                 ";
 		$questions = $this->connection->query($sql);
+
 		foreach( $questions as $value ){
-			$query[ $questionKeys[$value['id']] ]['question'] = $value;
+			$query[ $questionKeys[$value['pesqmkt_id']] ]['question'] = $value;
 		}
-		
 		$result = $query;
 		
 		return $result;

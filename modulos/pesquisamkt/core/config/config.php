@@ -119,6 +119,13 @@ $modInfo = array(
 			'help' => 'No caso de enquetes/pesquisas, há resultados a serem mostrados. '.
 					  'Este item desativa esta amostragem.'
 	    ),
+	    'first_alternative_right' => array(
+	        "value" => "",
+	        "label" => "Primeira alternativa está certa",
+	        "inputType" => "checkbox",
+			'help' => 'No caso de enquetes/pesquisas, não resultados corretos. Em jogos, entretanto, '.
+					  'há. Esta será a primeira alternativa.'
+	    ),
 		
 	),
 
