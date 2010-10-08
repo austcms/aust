@@ -50,6 +50,7 @@ $sql = $modulo->SQLParaListagem($categorias, $pagina, $num_por_pagina);
 
 
 $query = $modulo->connection->query($sql);
+$query = $modulo->loadFirstQuestions($query);
 
 
 /*********************************
@@ -61,6 +62,7 @@ $query = $modulo->connection->query($sql);
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?section=<?php echo $_GET['section'];?>&action=actions&aust_node=<?php echo $_GET['aust_node'];?>">
 <a name="list">&nbsp;</a>
 <?php
+
 /*
  * Pode excluir conteúdo?
  */
@@ -113,10 +115,16 @@ if(count($query) == 0){
                             if( $permissoes->canEdit($_GET['aust_node']) )
                                 echo '<a href="adm_main.php?section='.$_GET['section'].'&action=edit&aust_node='.$_GET['aust_node'].'&w='.$dados["id"].'">';
                             $titulo = $dados[$modulo->config['contentHeader']['campos'][$i]];
-                            if( empty($titulo) )
-                                echo "Sem título";
-                            else
-                                echo $titulo;
+
+							if( $modulo->getStructureConfig('has_no_title') ){
+                                echo $dados['question']['text'];
+							} else {
+	                            if( empty($titulo) )
+	                                echo "<em>Sem título</em>";
+	                            else
+	                                echo $titulo;
+							}
+							
                             if( $permissoes->canEdit($_GET['aust_node']) )
                                 echo '</a>';
                         } else {

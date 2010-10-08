@@ -90,6 +90,35 @@ $modInfo = array(
 	        "label" => "É uma enquete? (considera ser 1 pergunta apenas)",
 	        "inputType" => "checkbox",
 	    ),
+	    'has_no_title' => array(
+	        "value" => "0",
+	        "label" => "Não tem título",
+	        "inputType" => "checkbox",
+	    ),
+	    'has_description' => array(
+	        "value" => "0",
+	        "label" => "Tem descrição?",
+	        "inputType" => "checkbox",
+	    ),
+	    'has_no_visibility_option' => array(
+	        "value" => "0",
+	        "label" => "Não tem opção de visibilidade",
+	        "inputType" => "checkbox",
+			'help' => 'O botão "Esta pesquisa está visível?" não é necessária.'
+	    ),
+	    'can_not_add_alternatives' => array(
+	        "value" => "1",
+	        "label" => "Não pode inserir alternativas",
+	        "inputType" => "checkbox",
+			'help' => 'Há um botão "+ alternativa".'
+	    ),
+	    'do_not_show_result' => array(
+	        "value" => "",
+	        "label" => "Não mostrar resultados",
+	        "inputType" => "checkbox",
+			'help' => 'No caso de enquetes/pesquisas, há resultados a serem mostrados. '.
+					  'Este item desativa esta amostragem.'
+	    ),
 		
 	),
 

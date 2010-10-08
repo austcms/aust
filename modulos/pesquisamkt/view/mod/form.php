@@ -251,68 +251,67 @@
 <?php
 if( $_GET["action"] == "edit" ){
     ?>
-<p>
-    Aqui você pode editar as informações sobre esta pesquisa.
-</p>
+	<?php
+	/*
+	 *
+	 * RESULTADOS
+	 *
+	 */
 
-<?php
-/*
- *
- * RESULTADOS
- *
- */
-?>
-<div class="resultados" style="width: 99%; display: block;">
-    <div class="resultados_content" style="margin: 5px; padding: 10px 20px 10px 20px; width: 93%; background: #faf9f9; display: table;">
-    <h3>Resultados</h3>
-    <p>
-        A seguir, o resultado da pesquisa: <em><?php echo $dados['titulo'] ?></em>
-    </p>
-        <?php
-        foreach($perguntas as $chave=>$pergunta){
-            ?>
-            <div style="margin-bottom: 15px;">
-                <strong>Questão: </strong><?php echo $pergunta["texto"] ?>
-                <br />
-                <span style="margin-left: 20px; display: table;">
-                <?php
-                foreach($respostas[$pergunta["id"]] as $resposta){
+	if( $modulo->getStructureConfig('do_not_show_result') != '1' ){
+		?>
+		<div class="resultados" style="width: 99%; display: block;">
+		    <div class="resultados_content" style="margin: 5px; padding: 10px 20px 10px 20px; width: 93%; background: #faf9f9; display: table;">
+		    <h3>Resultados</h3>
+		    <p>
+		        A seguir, o resultado da pesquisa: <em><?php echo $dados['titulo'] ?></em>
+		    </p>
+		        <?php
+		        foreach($perguntas as $chave=>$pergunta){
+		            ?>
+		            <div style="margin-bottom: 15px;">
+		                <strong>Questão: </strong><?php echo $pergunta["texto"] ?>
+		                <br />
+		                <span style="margin-left: 20px; display: table;">
+		                <?php
+		                foreach($respostas[$pergunta["id"]] as $resposta){
 
-                    if( $pergunta["tipo"] == "fechada" ){
-                        ?>
-                        <?php
-                        if( $resposta["totalVotos"] > 0 )
-                            echo str_replace(".",",", number_format($resposta["votos"]/$resposta["totalVotos"]*100, "1") )."%";
-                        else
-                            echo "0";
+		                    if( $pergunta["tipo"] == "fechada" ){
+		                        ?>
+		                        <?php
+		                        if( $resposta["totalVotos"] > 0 )
+		                            echo str_replace(".",",", number_format($resposta["votos"]/$resposta["totalVotos"]*100, "1") )."%";
+		                        else
+		                            echo "0";
 
-                        ?> -
-                        <?php echo $resposta["titulo"] ?> -
-                        <span style="color: #999999; font-style: italic;"><?php echo $resposta["votos"] ?> voto(s)</span>
-                        <br />
-                        <?php
-                    } else {
-                        ?>
-                        <div style="margin-top: 15px;" id="resultados_perguntaaberta_<?php echo $pergunta["id"]; ?>">
-                        Esta pergunta contém respostas no formato texto. Deseja visualizá-los?
-                        <br><em>Obs.: Dependendo da quantidade de resultados, o processo pode demorar alguns instantes.</em>
-                        <br>
+		                        ?> -
+		                        <?php echo $resposta["titulo"] ?> -
+		                        <span style="color: #999999; font-style: italic;"><?php echo $resposta["votos"] ?> voto(s)</span>
+		                        <br />
+		                        <?php
+		                    } else {
+		                        ?>
+		                        <div style="margin-top: 15px;" id="resultados_perguntaaberta_<?php echo $pergunta["id"]; ?>">
+		                        Esta pergunta contém respostas no formato texto. Deseja visualizá-los?
+		                        <br><em>Obs.: Dependendo da quantidade de resultados, o processo pode demorar alguns instantes.</em>
+		                        <br>
 
-                        <a href="javascript: void(0);" onclick="mostraResultadosPerguntaAberta(<?php echo $pergunta["id"];?>)">Mostrar resultados desta questão</a>
-                        </div>
-                        <?php
+		                        <a href="javascript: void(0);" onclick="mostraResultadosPerguntaAberta(<?php echo $pergunta["id"];?>)">Mostrar resultados desta questão</a>
+		                        </div>
+		                        <?php
 
-                    }
-                }
-                ?>
-                </span>
-            </div>
-            <?php
-        }
-        ?>
-    </div>
-</div>
-    <?
+		                    }
+		                }
+		                ?>
+		                </span>
+		            </div>
+		            <?php
+		        }
+		        ?>
+		    </div>
+		</div>
+	    <?
+	} // fim id(!do_not_show_result)
 }
 ?>
 
@@ -337,18 +336,24 @@ if( !empty($perguntasQuantidade) ):
     <table border=0 cellpadding=0 cellspacing=0 class="form">
         <col width="200">
         <col width="470">
-        <tr>
-            <td valign="top" class="first"><label>Título da pesquisa:</label></td>
-            <td class="second">
-                <INPUT TYPE='text' NAME='frmtitulo' class='text' value='<?php if( !empty($dados['titulo']) ) echo $dados['titulo'];?>' />
-                <p class="explanation">
-                    Um título para a pesquisa.
-                </p>
-            </td>
-        </tr>
-        <?php
 
-        ?>
+		<?php
+		if( $modulo->getStructureConfig('has_no_title') != '1' ){
+			?>
+	        <tr>
+	            <td valign="top" class="first"><label>Título da pesquisa:</label></td>
+	            <td class="second">
+	                <INPUT TYPE='text' NAME='frmtitulo' class='text' value='<?php if( !empty($dados['titulo']) ) echo $dados['titulo'];?>' />
+	                <p class="explanation">
+	                    Um título para a pesquisa.
+	                </p>
+	            </td>
+	        </tr>
+	        <?php
+		}
+
+		if( $modulo->getStructureConfig('has_no_visibility_option') != '1' ){
+			?>
         <tr>
             <td valign="top"><label>Pesquisa ativa:</label></td>
             <td>
@@ -363,75 +368,10 @@ if( !empty($perguntasQuantidade) ):
             </td>
         </tr>
         <?php
-        /*
-         * RESUMO
-         */
-        $showResumo = false;
-        if( !empty($moduloConfig["resumo"]) ){
-            if( $moduloConfig["resumo"]["valor"] == "1" )
-                $showResumo = true;
-        }
-        if( $showResumo ){
-        ?>
-        <tr>
-            <td valign="top"><label>Resumo:</label></td>
-            <td>
-                <INPUT TYPE='text' NAME='frmresumo' class='text' value='<?php if( !empty($dados['resumo']) ) echo $dados['resumo'];?>' />
-                <p class="explanation">
-
-                </p>
-            </td>
-        </tr>
-        <?php
-        }
-        ?>
-
-        <?php
-        /*
-         * ORDEM
-         */
-        $showOrdem = false; // por padrão, não mostra
-        if( !empty($moduloConfig["ordenate"]) ){
-            if( $moduloConfig["ordenate"]["valor"] == "1" )
-                $showOrdem = true;
-        }
-        if( $showOrdem ){
-        ?>
-        <tr>
-            <td valign="top"><label>Ordem:</label></td>
-            <td>
-                <select name="frmordem" class="select">
-                    <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '10'); ?> value="10">10</option>
-                    <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '9'); ?> value="9">9</option>
-                    <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '8'); ?> value="8">8</option>
-                    <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '7'); ?> value="7">7</option>
-                    <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '6'); ?> value="6">6</option>
-                    <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '5'); ?> value="5">5</option>
-                    <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '4'); ?> value="4">4</option>
-                    <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '3'); ?> value="3">3</option>
-                    <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '2'); ?> value="2">2</option>
-                    <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '1'); ?> value="1">1</option>
-                </select>
-                <p class="explanation">
-                    Selecione um número que representa a importância deste item.
-                    Quanto maior o número, maior a prioridade.
-                </p>
-            </td>
-        </tr>
-        <?php
-        }
-        ?>
-        <?php
-        /*
-         * Texto
-         */
-        $showTexto = true; // por padrão, não mostra
-        if( !empty($moduloConfig["texto"]) ){
-            if( $moduloConfig["texto"]["valor"] == "0" )
-                $showTexto = false;
-        }
-        if( $showTexto ){
-            ?>
+		}
+		
+		if( $modulo->getStructureConfig('has_description') == '1' ){
+			?>
             <tr>
                 <td valign="top"><label>Texto sobre a pesquisa: </label>
                 </td>
@@ -475,7 +415,11 @@ if( !empty($perguntasQuantidade) ):
                     ?>
                     <div style="margin: 3px;">
                         <div style="font-size: 1.2em; font-weight: bold; display: table; text-align: right; margin-left: 0px; width: 150px; float: left;">
-                            Questão <?php echo $i+1 ?>:&nbsp;
+                            Questão<?php 
+							if( $modulo->getStructureConfig('enquete') != '1' ){
+							echo $i+1;
+							}
+							?>:&nbsp;
                         </div>
                         <input type="text" size="43" name="perguntas[<?php echo $pid ?>]" value="<? if(!empty($pergunta)) echo $pergunta["texto"]; ?>" />
                         <br clear="both" />
@@ -560,13 +504,17 @@ if( !empty($perguntasQuantidade) ):
                             ?>
                             Tipo de resposta: <input name="resposta_tipo[<?php echo $pid ?>]" <?php if($perguntaTipo=="aberta")echo 'checked="checked"'; ?> value="aberta" type="radio" onclick='$("#alternativa_<?php echo $pid ?>").html("<div style=\"font-style: italic; margin-left: 160px; width: 330px; margin-bottom: 10px\">Esta será uma pergunta aberta, portanto não serão apresentadas alternativas ao usuário, mas sim uma caixa de texto para escrever sua resposta.</div>"); $(".add_alternativa_<?php echo $pid ?>").hide()' /> Texto
                             <input type="radio" name="resposta_tipo[<?php echo $pid ?>]" <?php if($perguntaTipo=="fechada")echo 'checked="checked"'; ?> value="fechada" onclick='restauraAlternativas(<?php echo $pid ?>)' /> Múltipla Escolha
-                            <span class="add_alternativa_<?php echo $pid ?>">| <a href="javascript: void(0);" onclick='somaAlternativa(<?php echo $pid ?>)'>+ alternativa</a></span>
-                            <?php
+                            <?php if( $modulo->getStructureConfig('can_not_add_alternatives') != '1' ){ ?>
+                            	<span class="add_alternativa_<?php echo $pid ?>">| <a href="javascript: void(0);" onclick='somaAlternativa(<?php echo $pid ?>)'>+ alternativa</a></span>
+							<?php
+							}
                         } else {
                             ?>
                             <input type="hidden" name="resposta_tipo[<?php echo $pid ?>]" value="fechada" />
-                            <span class="add_alternativa_<?php echo $pid ?>"><a href="javascript: void(0);" onclick='somaAlternativa(<?php echo $pid ?>)'>+ alternativa</a></span>
+                            <?php if( $modulo->getStructureConfig('can_not_add_alternatives') != '1' ){ ?>
+                            	<span class="add_alternativa_<?php echo $pid ?>"><a href="javascript: void(0);" onclick='somaAlternativa(<?php echo $pid ?>)'>+ alternativa</a></span>
                             <?php
+							}
                         }
                         ?>
 
