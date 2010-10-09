@@ -99,7 +99,8 @@ class PesquisaMkt extends Module
             $limit = " LIMIT ".$item_atual.",".$itens_por_pagina;
         }
 		$sql = "SELECT
-					id, titulo, visitantes, categoria AS cat, DATE_FORMAT(adddate, '%d/%m/%Y %H:%i') as adddate,
+					id, titulo, visitantes, categoria AS cat,
+					DATE_FORMAT(adddate, '".$this->date['standardFormat']."') as adddate,
 					(	SELECT
 							nome
 						FROM
@@ -115,10 +116,44 @@ class PesquisaMkt extends Module
 		return $sql;
 	
 	}
-     
-     
+    
+	/**
+	 * loadFirstQuestions()
+	 *
+	 * Carrega a primeira questão de cada pergunta.
+	 *
+	 * @param $query array Resultado de uma query
+	 */
+    function loadFirstQuestions($query){
+		if( empty($query) ) return $query;
+		
+		// pega ids
+		foreach( $query as $key=>$value ){
+			$ids[] = $value['id'];
+			$questionKeys[$value['id']] = $key;
+		}
+		
+		$sql = "SELECT
+					id, pesqmkt_id, texto AS text
+				FROM
+					pesqmkt_perguntas
+				WHERE
+					pesqmkt_id IN ('".implode("','", $ids)."')
+				GROUP BY
+					pesqmkt_id
+				ORDER BY
+					id ASC
+                ";
+		$questions = $this->connection->query($sql);
 
-	
+		foreach( $questions as $value ){
+			$query[ $questionKeys[$value['pesqmkt_id']] ]['question'] = $value;
+		}
+		$result = $query;
+		
+		return $result;
+	} // end loadFirstQuestions()
+
 }
 
 ?>
