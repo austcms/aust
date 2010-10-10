@@ -182,6 +182,8 @@ class CadastroSetup extends ModsSetup {
 		foreach( $fields as $key=>$value ){
 			
 			if( empty($value['name']) ) continue;
+			if( empty($value['description']) ) 
+				$value['description'] = '';
 			
 			$params = $value;
 			
