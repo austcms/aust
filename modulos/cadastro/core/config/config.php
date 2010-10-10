@@ -90,7 +90,19 @@ $modInfo = array(
          */
         'image_save_path' => array(
             "value" => "",
-            "label" => "URL para salvar?",
+            "label" => "URL para salvar imagens?",
+            "inputType" => "text",
+			'help' => 'Por padrão, sempre serão salvar dentro do diretório '.
+					  'uploads/. Se você escrever ../, então as imagens serão '.
+					  'salvas dentro de ../uploads/, o que provavelmente será '.
+					  'a raiz do site principal.'
+        ),
+        /*
+         * Tem sistema de pesquisa?
+         */
+        'files_save_path' => array(
+            "value" => "",
+            "label" => "URL para salvar arquivos?",
             "inputType" => "text",
 			'help' => 'Por padrão, sempre serão salvar dentro do diretório '.
 					  'uploads/. Se você escrever ../, então as imagens serão '.
@@ -167,6 +179,22 @@ $modInfo = array(
 	            "inputType" => "checkbox",
 				'help' => 'Por padrão, imagens não têm link. ',
 	        ),
+		
+		/*
+		 * FILES
+		 */
+		    /*
+		     * Múltiplas imagens ou apenas uma?
+		     */
+			'files_field_limit_quantity' => array(
+				'field_type' => 'files',
+		        "value" => "1",
+		        "label" => "Limite de arquivos?",
+		        "inputType" => "text",
+		        "size" => "small",
+				'help' => 'Por padrão, apenas um arquivo pode ser '.
+						  'inserido. Se definir 0, então não há limites.'
+		    ),
 
 		/*
 		 * CAMPOS TEXTOS
