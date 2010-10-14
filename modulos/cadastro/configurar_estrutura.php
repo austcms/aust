@@ -38,7 +38,13 @@ $setup->mainTable = $modulo->getTable();
 			'type' => $_POST['name'],
 			'order' => $_POST['order'],
 		);
-//		var_dump($modulo);
+		
+		if( !empty($_POST['relacionado_tabela_0']) )
+			$_POST['data']['refTable'] = $_POST['relacionado_tabela_0'];
+
+		if( !empty($_POST['relacionado_campo_0']) )
+			$_POST['data']['refField'] = $_POST['relacionado_campo_0'];
+			
 		$setup->addField($_POST['data']);
 	}
 
@@ -429,13 +435,14 @@ if(!empty($_GET['function'])){
                 ?>
                 <div class="campo">
                     <label>Tipo: </label>
-                    <select name="data[type]">
+                    <select name="data[type]" onchange="javascript: SetupCampoRelacionalTabelas(this, '<?php echo 'campooption0'?>', '0')">
                         <option value="string">Texto pequeno</option>
                         <option value="text">Texto médio ou grande</option>
                         <option value="date">Data</option>
                         <option value="pw">Senha</option>
                         <option value="images">Imagens</option>
                         <option value="files">Arquivo</option>
+	                    <option value="relational_onetomany">Relacional 1-para-muitos (tabela)</option>
 						<?php
 						/*
 						 * faltam os campos relacionais

@@ -279,6 +279,16 @@ class CadastroSetup extends ModsSetup {
 				
 				$params['mainTable'] = $this->mainTable;
 				$params['secondaryTable'] = $params['refTable'];
+				
+				// campo pai e campo filho
+				$params['refParentField'] = $params['mainTable'].'_id';
+				
+				if( $params['mainTable'] == $params['secondaryTable'] )
+					$params['refParentField'] = 'parent_'.$params['refParentField'];
+					
+				$params['refChildField'] = $params['secondaryTable'].'_id';
+				
+				
 				$params['referenceField'] = $params['refField'];
 				$params['referenceTable'] = $this->createReferenceTableName_RelationalOneToMany($params);
 				
@@ -287,7 +297,7 @@ class CadastroSetup extends ModsSetup {
 				$this->connection->exec($sql);
 				
 				$sqlReferenceTable = $this->createReferenceTableSql_RelationalOneToMany($params);
-				$this->connection->exec($sqlReferenceTable);
+				$this->connection->exec($sqlReferenceTable, 'CREATE TABLE');
 			}
 			/*
 			 * images
@@ -712,9 +722,11 @@ class CadastroSetup extends ModsSetup {
 
         $sql =
 			"INSERT INTO cadastros_conf ".
-            "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem,ref_tabela,ref_campo,referencia) ".
+            "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem,".
+				"ref_tabela,ref_campo,referencia,ref_parent_field,ref_child_field) ".
             "VALUES ".
-            "('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",'".$params['author']."',0,0,1,0,1,'$class',".$params['order'].",'".$params['refTable']."','".$params['refField']."','".$params['referenceTable']."')";
+            "('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",'".$params['author']."',0,0,1,0,1,'$class',".$params['order'].",'".
+				$params['refTable']."','".$params['refField']."','".$params['referenceTable']."','".$params['refParentField']."','".$params['refChildField']."')";
 		return $sql;
 	}
 		function createReferenceTableName_RelationalOneToMany($params){
@@ -781,16 +793,23 @@ class CadastroSetup extends ModsSetup {
 		}
 		
 		function createReferenceTableSql_RelationalOneToMany($params){
+			$tableOne = $params['refParentField'];
+			$tableTwo = $params['refChildField'];
+			
+			if( $tableOne == $tableTwo ){
+				$tableOne = 'parent_'.$tableOne;
+			}
+			
 	        $sql = 'CREATE TABLE '.$params['referenceTable'].'('.
 	               'id int auto_increment,'.
-	               $params['mainTable'].'_id int,'.
-	               $params['secondaryTable'].'_id int,'.
+	               $tableOne.' int,'.
+	               $tableTwo.' int,'.
 	               'blocked varchar(120),'.
 	               'approved int,'.
 	               'created_on datetime,'.
 	               'updated_on datetime,'.
 	               'PRIMARY KEY (id), UNIQUE id (id))';
-	
+			
 			return $sql;
 		}
 

@@ -11,7 +11,8 @@
  */
 class Migrations
 {
-    var $conexao;
+    var $conexao; // refatorar: verificar se não está sendo usado e retirar
+    var $connection;
 
     /**
      * Versão do Migration atual.
@@ -28,6 +29,7 @@ class Migrations
 
     function __construct($modName, $conexao){
         $this->conexao = $conexao;
+        $this->connection = $conexao;
         $this->modName = $modName;
 
         $regexp = "/([0-9]{14})/";

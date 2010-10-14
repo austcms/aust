@@ -347,6 +347,7 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 	                       'id int auto_increment,'.
 	                       'tabelaum_id int,'.
 	                       'tabeladois_id int,'.
+						   'order_nr int,'.
 	                       'blocked varchar(120),'.
 	                       'approved int,'.
 	                       'created_on datetime,'.
@@ -813,6 +814,7 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 		
 			function testAddFieldRelationalOneToMany(){
 				$this->obj->connection->exec("DROP TABLE testunit_ref_field_ref_table");
+				$this->obj->connection->exec("DROP TABLE testunit_id_testunit");
 				$this->restartTable();
 				$this->obj->mainTable = 'testunit';
 			
@@ -835,10 +837,58 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					$this->assertArrayHasKey('0', $conf );
 					$this->assertEquals('ref_table', $conf[0]['ref_tabela'] );
 					$this->assertEquals('ref_field', $conf[0]['ref_campo'] );
+					$this->assertEquals('testunit_id', $conf[0]['ref_parent_field'] );
+					$this->assertEquals('ref_table_id', $conf[0]['ref_child_field'] );
 					
+				// test relacional para si próprio
+					$params = array(
+						0 => array(
+							'name' => 'Campo 2',
+							'type' => 'relational_onetomany',
+							'description' => '',
+							'refTable' => 'testunit',
+							'refField' => 'id',
+						),
+					);
+					
+					// testa SQL para criação da tabela intermediária
+						$relationalTableParams = array(
+							'referenceTable' => 'testunit_id_testunit',
+							'mainTable' => 'testunit',
+							'secondaryTable' => 'testunit',
+							'refParentField' => 'parent_testunit_id',
+							'refChildField' => 'testunit_id',
+						);
+		            	$sql = 'CREATE TABLE testunit_id_testunit('.
+		                       'id int auto_increment,'.
+		                       'parent_testunit_id int,'.
+		                       'testunit_id int,'.
+							   'order_nr int,'.
+		                       'blocked varchar(120),'.
+		                       'approved int,'.
+		                       'created_on datetime,'.
+		                       'updated_on datetime,'.
+		                       'PRIMARY KEY (id), UNIQUE id (id)'.
+		                       ')';
+						$this->assertEquals($sql, $this->obj->createReferenceTableSql_RelationalOneToMany($relationalTableParams) );
+					
+					$result = $this->obj->addField($params);
+					$this->assertTrue( $this->obj->connection->hasTable('testunit_id_testunit') );
+					$this->assertTrue( $this->obj->connection->tableHasField('testunit_id_testunit', 'parent_testunit_id') );
+					$this->assertTrue( $this->obj->connection->tableHasField('testunit_id_testunit', 'testunit_id') );
+					$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_2' AND categorias_id='7777'");
+					$this->assertArrayHasKey('0', $conf );
+					$this->assertEquals('testunit', $conf[0]['ref_tabela'] );
+					$this->assertEquals('id', $conf[0]['ref_campo'] );
+					$this->assertEquals('parent_testunit_id', $conf[0]['ref_parent_field'] );
+					$this->assertEquals('testunit_id', $conf[0]['ref_child_field'] );
+
+
+					$this->obj->connection->exec("DROP TABLE testunit_id_testunit");
 					$this->obj->connection->exec("DROP TABLE testunit_ref_field_ref_table");
 
-					$this->destroyTests();
+				// fim, destrói
+				$this->destroyTests();
 			}
 			
 			function testAddFieldImages(){

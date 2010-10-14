@@ -155,6 +155,7 @@ class Cadastro extends Module {
 		$infoTabelaFisica = $this->tableProperties;
 		$campos = $this->fields;
 		$relational = array();
+
 		foreach( $this->data as $tabela=>$dados ){
 	        foreach( $dados as $campo=>$valor ){
             
@@ -167,16 +168,18 @@ class Cadastro extends Module {
 	                $i = 0;
 	                foreach( $valor as $subArray ){
 	                    if( $subArray != 0 ){
-	                        $relational[$campos[$campo]["referencia"]][$i][$campos[$campo]["ref_tabela"]."_id"] = $subArray;
-	                        $relational[$campos[$campo]["referencia"]][$i]["created_on"] = date("Y-m-d H:i:s");
+	                        $relational[$campo][$campos[$campo]["referencia"]][$i][$campos[$campo]["ref_tabela"]."_id"] = $subArray;
+	                        $relational[$campo][$campos[$campo]["referencia"]][$i]["created_on"] = date("Y-m-d H:i:s");
 	                        $i++;
 	                    }
-	                    $this->toDeleteTables[$campos[$campo]["referencia"]] = 1;
+	                    $this->toDeleteTables[$campo][$campos[$campo]["referencia"]] = 1;
 	                }
 
 	            }
 	            /*
 	             * Date
+				 *
+				 * *não mexe em $relational*
 	             */
 	            else if( !empty( $campos[$campo]["chave"] ) AND
 	                     !empty($infoTabelaFisica[$campos[$campo]["chave"]]['Type']) AND
@@ -192,6 +195,8 @@ class Cadastro extends Module {
 	             * Images
 				 *
 				 * Limpa imagens de $this->data
+				 *
+				 * *não mexe em $relational*
 	             */
 	            else if( !empty($campos[$campo]) AND $campos[$campo]["especie"] == "images" ){
 					$this->images[$tabela][$campo] = $valor;
@@ -201,6 +206,8 @@ class Cadastro extends Module {
 	             * Files
 				 *
 				 * Limpa files de $this->data
+				 *
+				 * *não mexe em $relational*
 	             */
 	            else if( !empty($campos[$campo]) AND $campos[$campo]["especie"] == "files" ){
 					$this->files[$tabela][$campo] = $valor;
