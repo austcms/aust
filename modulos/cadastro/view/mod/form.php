@@ -180,7 +180,7 @@ echo $form->create( $infoCadastro["estrutura"]["tabela"]["valor"] );
  * O formulário é criado automaticamente
  *
  */
-	pr($camposForm);
+//	pr($camposForm);
 foreach( $camposForm as $chave=>$valor ){
 
     unset($inputType);
@@ -267,9 +267,9 @@ foreach( $camposForm as $chave=>$valor ){
      *
      * Fields for images
      */
-    else if($valor["tipo"]["especie"] == "file") {
+    else if($valor["tipo"]["especie"] == "files") {
 	
-        include($modulo->getIncludeFolder().'/view/mod/_form_field_images.php');
+        include($modulo->getIncludeFolder().'/view/mod/_form_field_files.php');
 
 	}
     /*
@@ -279,7 +279,7 @@ foreach( $camposForm as $chave=>$valor ){
      */
     else if($valor["tipo"]["especie"] == "images") {
 
-        include($modulo->getIncludeFolder().'/view/mod/_form_field_files.php');
+        include($modulo->getIncludeFolder().'/view/mod/_form_field_images.php');
 
     } elseif( $valor['tipo']['tipoFisico'] == 'date' ){
         $inputType = "date";

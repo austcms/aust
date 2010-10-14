@@ -57,7 +57,7 @@ class CadastroSetup extends ModsSetup {
 	/**
 	 * @var $fieldOrder integer O número do campo criado atualmente.
 	 */
-	public $fieldOrder = 1;
+	public $fieldOrder;
 	
 	/**
 	 * @var $filesTableName string Diz o nome da tabela que contém o endereço
@@ -120,7 +120,6 @@ class CadastroSetup extends ModsSetup {
 			'table' => $this->mainTable,
 			'austNode' => $austNode,
 		);
-		
 		$this->saveStructureConfiguration($params);
 		
 		return $table;
@@ -154,6 +153,19 @@ class CadastroSetup extends ModsSetup {
 	 * 
 	 * Insere um novo campo na tabela do cadastro, salvando suas configurações.
 	 * 
+	 * @param $fields array
+	 *
+	 *		Os valores que devem vir são os seguintes:
+	 *
+	 *			'name' => 'Nome do campo',
+	 *			'type' => 'string',
+	 *			'description' => 'Descrição',
+	 *
+	 *		Caso seja relational, os seguintes valores devem existir:
+	 *
+	 *			'refTable' => 'tabela_de_referencia',
+	 *			'refField' => 'campo_de_referencia',
+	 *
 	 */
 	function addField($fields){
 
@@ -170,8 +182,26 @@ class CadastroSetup extends ModsSetup {
 		foreach( $fields as $key=>$value ){
 			
 			if( empty($value['name']) ) continue;
+			if( empty($value['description']) ) 
+				$value['description'] = '';
 			
 			$params = $value;
+			
+			if( !empty($value['order']) ){
+				if( $value['order'] == 'first_field' ){
+					$params['order'] = 1;
+					$this->fieldOrder = '';
+
+				} else {
+					$params['order'] = $this->getFieldOrder($value['order']) + 1;
+				}
+
+				$this->updateAboveOrders($params['order']);
+				
+			} else {
+				$params['order'] = $this->getFieldOrder();
+			}
+			
 			$type = $value['type'];
 			$params['name'] = $this->encodeFieldName($value['name']);
 			$params['label'] = $value['name'];
@@ -214,7 +244,7 @@ class CadastroSetup extends ModsSetup {
 			 * password
 			 */
 			else if( $type == 'pw' ) {
-				
+
 				$this->addColumn($params);
 				$this->connection->exec($this->createFieldConfigurationSql_Password($params));
 				
@@ -228,7 +258,6 @@ class CadastroSetup extends ModsSetup {
 				$this->connection->exec($this->createFieldConfigurationSql_File($params));
 				$this->createTableForFiles();
 				$this->connection->exec( $this->createSqlForFileConfiguration() );
-				
 			}
 			/*
 			 * Relational_onetoone
@@ -280,7 +309,12 @@ class CadastroSetup extends ModsSetup {
 	/**
 	 * addColumn()
 	 * 
-	 * Cria uma coluna numa da tabela.
+	 * Cria uma coluna numa da tabela física.
+	 *
+	 * Obs.: Você não deveria precisar chamar este método. Use
+	 * $this->addField().
+	 * 
+	 * @param $params array
 	 */
 	function addColumn($params){
 		if( !array_key_exists($params['type'], $this->fieldTypes ) ) return false;
@@ -322,11 +356,79 @@ class CadastroSetup extends ModsSetup {
 	/*
 	 * Support methods for creating fields.
 	 */
-	
-	function getFieldOrder(){
+	/**
+	 * getFieldOrder()
+	 *
+	 * Esta funções retorna a ordem de um campo ou a próxima ordem.
+	 *
+	 * @param $field string Campo que se deseja saber a ordem.
+	 */
+	function getFieldOrder($field = ''){
+		
+		if( !empty($field) ){
+			$sql = "SELECT ordem
+					FROM cadastros_conf
+					WHERE
+						categorias_id='".$this->austNode."' AND
+						tipo='campo' AND
+						chave='".$field."'
+						";
+			$query = reset($this->connection->query($sql));
+
+			if( empty($query['ordem']) )
+				return false;
+			else {
+				$this->fieldOrder = '';
+				return $query['ordem'];
+			}
+		}
+		
+		/*
+		 * Se não há uma ordenação ajustada, busca qual é o último
+		 * valor no DB. Se não há, supõe que seja o primeiro registro
+		 * e atribui ordem 1.
+		 */
+		if( empty($this->fieldOrder) ){
+			$sql = "SELECT MAX(ordem) as ordem
+					FROM cadastros_conf
+					WHERE categorias_id='".$this->austNode."'";
+			$query = reset($this->connection->query($sql));
+
+			if( empty($query['ordem']) )
+				$this->fieldOrder = 1;
+			else
+				$this->fieldOrder = $query['ordem']+1;
+		}
+		
 		$fieldOrder = $this->fieldOrder;
 		$this->fieldOrder++;
+		
 		return $fieldOrder;
+	}
+	
+	/**
+	 * updateAboveOrders()
+	 *
+	 * Digamos que tenhamos os registros com ordem 1, 2, 3 e 4. Se
+	 * inserirmos um registro com ordem 2, então temos de fazer com que
+	 * os registros 2, 3 e 4 sejam incrementados, se tornando 3, 4 e 5.
+	 *
+	 * Após isto, poderemos salvar o registro com ordem 2, resultando em
+	 * 1, 2 (novo registro), 3, 4 e 5.
+	 *
+	 * @param $int integer Ordem base (no exemplo acima, seria 2)
+	 */
+	function updateAboveOrders($int){
+		$sql = "UPDATE
+					cadastros_conf
+				SET
+					ordem=ordem+1
+				WHERE
+					categorias_id='".$this->austNode."' AND
+					ordem >= $int
+				";
+
+		return $this->connection->exec($sql);
 	}
 	
 	function decreaseFieldOrder(){
@@ -345,11 +447,14 @@ class CadastroSetup extends ModsSetup {
 		if( empty($params['class']) ) $class = 'password';
 		else $class = $params['class'];
 		
+		if( empty($params['order']) )
+			$params['order'] = $this->getFieldOrder();
+
         $sql =
             "INSERT INTO cadastros_conf ".
             "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem) ".
             "VALUES ".
-            "('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",'".$params['author']."',0,0,1,0,1,'$class',".$this->getFieldOrder().")";
+            "('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",'".$params['author']."',0,0,1,0,1,'$class',".$params['order'].")";
 		return $sql;
 	}
 
@@ -360,11 +465,14 @@ class CadastroSetup extends ModsSetup {
 		if( empty($params['class']) ) $class = 'images';
 		else $class = $params['class'];
 		
+		if( empty($params['order']) )
+			$params['order'] = $this->getFieldOrder();
+
         $sql =
             "INSERT INTO cadastros_conf ".
             "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem) ".
             "VALUES ".
-            "('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",'".$params['author']."',0,0,1,0,1,'$class',".$this->getFieldOrder().")";
+            "('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",'".$params['author']."',0,0,1,0,1,'$class',".$params['order'].")";
 		return $sql;
 	}
 	
@@ -383,6 +491,7 @@ class CadastroSetup extends ModsSetup {
 		            'id int auto_increment,'.
 		            'maintable_id int,'.
 		            'type varchar(80) COMMENT "type=main são as imagens principais",'.
+					'order_nr int COMMENT "Contém o número da ordenação deste registro",'.
 		            'title varchar(250),'.
 		            'description text,'.
 		            'local varchar(180),'.
@@ -465,11 +574,14 @@ class CadastroSetup extends ModsSetup {
 		if( empty($params['class']) ) $class = 'files';
 		else $class = $params['class'];
 
+		if( empty($params['order']) )
+			$params['order'] = $this->getFieldOrder();
+
         $sql =
             "INSERT INTO cadastros_conf ".
             "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem) ".
             "VALUES ".
-            "('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",'".$params['author']."',0,0,1,0,1,'$class',".$this->getFieldOrder().")";
+            "('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",'".$params['author']."',0,0,1,0,1,'$class',".$params['order'].")";
 		return $sql;
 	}
 		
@@ -480,6 +592,9 @@ class CadastroSetup extends ModsSetup {
 			if( empty($mainTable) AND !empty($this->mainTable) )
 				$mainTable = $this->mainTable;
 			else if( empty($mainTable) )
+				$mainTable = $this->getTable();
+			
+			if( empty($mainTable) )
 				return false;
 			
 			$this->filesTableName = $mainTable.'_files';
@@ -488,6 +603,7 @@ class CadastroSetup extends ModsSetup {
                 'id int auto_increment,'.
                 'maintable_id int,'.
 				'type varchar(80),'.
+				'order_nr int COMMENT "Contém o número da ordenação deste registro",'.
                 'title varchar(250),'.
                 'description text,'.
                 'local varchar(180),'.
@@ -536,7 +652,7 @@ class CadastroSetup extends ModsSetup {
 			
 			$sql = $this->createSqlForFilesTable($this->mainTable);
 			$result = $this->connection->exec($sql, 'CREATE TABLE');
-			
+
 			if( $result ){
 				$this->filesTableCreated = true;
 				return true;
@@ -573,11 +689,14 @@ class CadastroSetup extends ModsSetup {
 		if( empty($params['class']) ) $class = 'relacional_umparaum';
 		else $class = $params['class'];
 		
+		if( empty($params['order']) )
+			$params['order'] = $this->getFieldOrder();
+
         $sql =
 			"INSERT INTO cadastros_conf ".
             "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem,ref_tabela,ref_campo) ".
             "VALUES ".
-            "('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",'".$params['author']."',0,0,1,0,1,'$class',".$this->getFieldOrder().",'".$params['refTable']."','".$params['refField']."')";
+            "('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",'".$params['author']."',0,0,1,0,1,'$class',".$params['order'].",'".$params['refTable']."','".$params['refField']."')";
 		return $sql;
 	}
 	
@@ -588,11 +707,14 @@ class CadastroSetup extends ModsSetup {
 		if( empty($params['class']) ) $class = 'relacional_umparamuitos';
 		else $class = $params['class'];
 		
+		if( empty($params['order']) )
+			$params['order'] = $this->getFieldOrder();
+
         $sql =
 			"INSERT INTO cadastros_conf ".
             "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem,ref_tabela,ref_campo,referencia) ".
             "VALUES ".
-            "('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",'".$params['author']."',0,0,1,0,1,'$class',".$this->getFieldOrder().",'".$params['refTable']."','".$params['refField']."','".$params['referenceTable']."')";
+            "('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",'".$params['author']."',0,0,1,0,1,'$class',".$params['order'].",'".$params['refTable']."','".$params['refField']."','".$params['referenceTable']."')";
 		return $sql;
 	}
 		function createReferenceTableName_RelationalOneToMany($params){
@@ -678,12 +800,15 @@ class CadastroSetup extends ModsSetup {
 	function createFieldConfigurationSql_String($params){
 		if( empty($params['class']) ) $class = 'string';
 		else $class = $params['class'];
+		
+		if( empty($params['order']) )
+			$params['order'] = $this->getFieldOrder();
 
         $sql =
 			"INSERT INTO cadastros_conf ".
             "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem) ".
             "VALUES ".
-            "('campo','".$params['name']."','".$params['label']."','".$params['comment']."','".$params['austNode']."','".$params['author']."',0,0,1,0,1,'$class',".$this->getFieldOrder().")";
+            "('campo','".$params['name']."','".$params['label']."','".$params['comment']."','".$params['austNode']."','".$params['author']."',0,0,1,0,1,'$class',".$params['order'].")";
 		return $sql;
 	}
 	

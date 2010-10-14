@@ -115,3 +115,7 @@ span.viewmode {
 	#lightbox-panel img {
 		border: 1px solid #ddd;
 	}
+	
+	.filename {
+		font-size: 0.9em;
+	}

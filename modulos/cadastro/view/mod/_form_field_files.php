@@ -18,13 +18,13 @@ $inputName = "data[".$infoCadastro["estrutura"]["tabela"]["valor"]."][".$fieldNa
 			'field' => $fieldName,
 			'austNode' => $austNode,
 		);
+
+		$files = $modulo->getFiles($params);
 		
-		$images = $modulo->getImages($params);
-		
-		if( !empty($images) ){
+		if( !empty($files) ){
 			$thumbsW = 80;
 			$thumbsH = 80;
-			$itemsPerLine = 4;
+			$itemsPerLine = 3;
 			$o = 0;
 			
 			/*
@@ -36,16 +36,8 @@ $inputName = "data[".$infoCadastro["estrutura"]["tabela"]["valor"]."][".$fieldNa
 			<div class="thumbs_view">
 			<table width="100%">
 			<?php
-			$randomNumber = rand(0,10000);
-			
-			$imagesPath = IMAGE_VIEWER_DIR."visualiza_foto.php?table=".$tabelaImagens."&fromfile=true&thumbs=yes&minxsize=". $thumbsW."&minysize=". $thumbsH."&r=".$randomNumber."&myid=";
-			?>
-			<script type="text/javascript">
-			var imagesPath = '<?php echo $imagesPath ?>';
-			</script>
-			<?php
 			$i = 0;
-			foreach( $images as $key=>$image ){
+			foreach( $files as $key=>$file ){
 				$o++;
 				$i++;
 				
@@ -63,33 +55,21 @@ $inputName = "data[".$infoCadastro["estrutura"]["tabela"]["valor"]."][".$fieldNa
 				}
 				?>
 				<td>
-				<script type="text/javascript">
-				/* DEFINIÇÕES DE CAMPOS IMAGES */
-				imageHasDescription['image_<?php echo $image['id']?>'] = "<?php echo $modulo->getFieldConfig($fieldName, 'image_field_has_description')?>";
-				imageHasLink['image_<?php echo $image['id']?>'] = "<?php echo $modulo->getFieldConfig($fieldName, 'image_field_has_link')?>";
-				imageHasSecondaryImage['image_<?php echo $image['id']?>'] = "<?php echo $modulo->getFieldConfig($fieldName, 'image_field_has_secondary_image')?>";
-				</script>
 				
-				<img class="thumb" name="image_<?php echo $image['id']?>" src="<?php echo $imagesPath.$image['id']?>" />
-				<input type="hidden" name="image_description_<?php echo $image['id'] ?>" value="<?php echo $image['description'] ?>" />
-				<input type="hidden" name="image_link_<?php echo $image['id'] ?>" value="<?php echo $image['link'] ?>" />
-				<input type="hidden" name="image_secondaryid_<?php echo $image['id'] ?>" value="<?php echo $image['secondaryid'] ?>" />
+				<img class="thumb" src="" />
 				<br clear="all" />
-                <a href="javascript: void(0);" onclick="if( confirm('Você tem certeza que deseja excluir esta imagem?') ) window.open('adm_main.php?section=<?php echo $_GET["section"]; ?>&action=<?php echo $_GET["action"]; ?>&aust_node=<?php echo $_GET["aust_node"]; ?>&w=<?php echo $_GET["w"];?>&deleteimage=<?php echo $image["id"]; ?>','_top');">
+				<span class="filename">
+				<?php
+				// $file['file_type'];
+				// $file['file_size'];
+				echo $file['original_file_name'];
+				?>
+				</span>
+				<br clear="all" />
+				
+                <a href="javascript: void(0);" onclick="if( confirm('Você tem certeza que deseja excluir este arquivo?') ) window.open('adm_main.php?section=<?php echo $_GET["section"]; ?>&action=<?php echo $_GET["action"]; ?>&aust_node=<?php echo $_GET["aust_node"]; ?>&w=<?php echo $_GET["w"];?>&deletefile=<?php echo $file["id"]; ?>','_top');">
                     <img src="core/user_interface/img/icons/delete_15x15.png" alt="Excluir" title="Excluir" border="0" />
                 </a>
-				<?php
-				if( $modulo->getFieldConfig($fieldName, 'image_field_has_description') OR
-					$modulo->getFieldConfig($fieldName, 'image_field_has_link') OR
-				 	$modulo->getFieldConfig($fieldName, 'image_field_has_secondary_image') )
-				{
-					?>
-					<a href="javascript: void(0)" class="lightbox-panel" id="image_<?php echo $image['id'] ?>" name="modal" onclick="editImageInLightbox(this, <?php echo $image['id'] ?>, '<?php echo $fieldName ?>')">
-                    	<img src="core/user_interface/img/icons/add_thumb_16x16.png" alt="Editar Informações" title="Editar Informações" border="0" />
-					</a>
-					<?php
-				}
-				?>
 				</td>
 				
 				<?php
@@ -123,13 +103,13 @@ $inputName = "data[".$infoCadastro["estrutura"]["tabela"]["valor"]."][".$fieldNa
 	for($i = 1; $i <= 3; $i++){
 
 		$multiple = '';
-		if( $modulo->getFieldConfig($fieldName, 'image_field_limit_quantity') != 1 )
+		if( $modulo->getFieldConfig($fieldName, 'files_field_limit_quantity') != 1 )
 			$multiple = 'multiple="multiple"';
 		
 		// somente uma imagem
 		if(
-			$i > $modulo->getFieldConfig($fieldName, 'image_field_limit_quantity') AND
-			$modulo->getFieldConfig($fieldName, 'image_field_limit_quantity') > 0
+			$i > $modulo->getFieldConfig($fieldName, 'files_field_limit_quantity') AND
+			$modulo->getFieldConfig($fieldName, 'files_field_limit_quantity') > 0
 		)
 			break;
 		
