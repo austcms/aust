@@ -54,6 +54,49 @@
 
     }
 
+	function retrieveFile($path = "", $type = '', $filename = ''){
+		if( empty($path) )
+			return false;
+		
+		return LIBS_DIR.'functions/retrieve_file.php?path='.$path.'&type='.$type.'&filename='.$filename;
+	}
+	
+	function getFileIcon($ext){
+		$ext = PegaExtensao($ext);
+		
+		$icons = array(
+			'file_doc.png' => array(
+				'doc', 'docx', 'otf', 'pages', 'dotx'
+			),
+			'file_ppt.png' => array(
+				'ppt', 'pptx', 'pps', 'keynote'
+			),
+			'file_xls.png' => array(
+				'xls', 'xlsx', 'numbers'
+			),
+			'file_zip.png' => array(
+				'zip', 'tar', 'gz', 'ace', 'rar',
+				'cab'
+			),
+			'file_pdf.png' => array(
+				'pdf'
+			),
+			'file_jpg.png' => array(
+				'jpg', 'png', 'gif', 'jpeg', 'bmp',
+				'psd', 'tiff', 'graffle'
+			),
+		);
+		$url = 'file.png';
+		
+		foreach( $icons as $file=>$extensions ){
+			if( in_array($ext, $extensions) ){
+				$url = $file;
+				break;
+			}
+		}
+		return IMG_DIR.'icons/files/'.$url;
+	}
+	
     /**
      *
      * @param array $status

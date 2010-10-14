@@ -119,3 +119,11 @@ span.viewmode {
 	.filename {
 		font-size: 0.9em;
 	}
+	
+	.files_view table tr td {
+		text-align: center;
+		padding-bottom: 10px;
+	}
+	.files_view a img {
+		border: 0;
+	}
