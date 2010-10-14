@@ -719,6 +719,9 @@ class CadastroSetup extends ModsSetup {
 		
 		if( empty($params['order']) )
 			$params['order'] = $this->getFieldOrder();
+			
+		if( empty($params['refChildField']) ) $params['refChildField'] = '';
+		if( empty($params['refParentField']) ) $params['refParentField'] = '';
 
         $sql =
 			"INSERT INTO cadastros_conf ".
@@ -804,6 +807,7 @@ class CadastroSetup extends ModsSetup {
 	               'id int auto_increment,'.
 	               $tableOne.' int,'.
 	               $tableTwo.' int,'.
+				   'order_nr int,'.
 	               'blocked varchar(120),'.
 	               'approved int,'.
 	               'created_on datetime,'.

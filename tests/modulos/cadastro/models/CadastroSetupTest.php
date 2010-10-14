@@ -311,13 +311,15 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					'class' => 'relacional_umparamuitos',
 					'refTable' => 'categorias',
 					'refField' => 'nome',
+					'refParentField' => 'parent',
+					'refChildField' => 'child',
 					'referenceTable' => 'tabelaum_tabelarelacional_categorias'
 				);
 
 				$expectedSql = "INSERT INTO cadastros_conf ".
-	                           "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem,ref_tabela,ref_campo,referencia) ".
+	                           "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem,ref_tabela,ref_campo,referencia,ref_parent_field,ref_child_field) ".
 	                           "VALUES ".
-	                           "('campo','field_one','Field One','This is a comment',777,'777',0,0,1,0,1,'relacional_umparamuitos',1,'categorias','nome','tabelaum_tabelarelacional_categorias')";
+	                           "('campo','field_one','Field One','This is a comment',777,'777',0,0,1,0,1,'relacional_umparamuitos',1,'categorias','nome','tabelaum_tabelarelacional_categorias','parent','child')";
 
 				$this->assertEquals(
 					$expectedSql,
@@ -341,6 +343,8 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 						'referenceTable' => 'tabelaum_campo_tabeladois',
 						'mainTable' => 'tabelaum',
 						'secondaryTable' => 'tabeladois',
+						'refParentField' => 'tabelaum_id',
+						'refChildField' => 'tabeladois_id',
 					);
 
 	            	$sql = 'CREATE TABLE tabelaum_campo_tabeladois('.
