@@ -63,6 +63,28 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
             $resultado = FALSE;
         }
 
+		$sql = "SELECT *
+				FROM cadastros_conf
+				WHERE 
+					tipo='campo' AND
+					(
+						especie='relacional_umparamuitos' OR
+						especie='relational_onetomany'
+					) AND
+					categorias_id = '".$modulo->austNode."'
+				";
+
+		$tables = $this->connection->query($sql);
+		
+		foreach( $tables as $table ){
+			$sqlDelete = "
+						DELETE FROM ".$table['referencia']."
+						WHERE ".$table['ref_parent_field']." IN ('".implode("','", $itens)."')
+						";
+
+        	$this->connection->exec($sqlDelete);
+		}
+
         if($resultado){
             $status['classe'] = 'sucesso';
             $status['mensagem'] = '<strong>Sucesso: </strong> Os dados foram excluídos com sucesso.';
