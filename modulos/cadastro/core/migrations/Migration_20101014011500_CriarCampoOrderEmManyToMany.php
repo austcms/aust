@@ -14,7 +14,6 @@ class Migration_20101014011500_CriarCampoOrderEmManyToMany extends Migrations
 				FROM cadastros_conf
 				WHERE 
 					tipo='campo' AND
-					chave='relacionamentos' AND
 					(
 						especie='relacional_umparamuitos' OR
 						especie='relational_onetomany'
@@ -42,7 +41,6 @@ class Migration_20101014011500_CriarCampoOrderEmManyToMany extends Migrations
 				FROM cadastros_conf
 				WHERE 
 					tipo='campo' AND
-					chave='relacionamentos' AND
 					(
 						especie='relacional_umparamuitos' OR
 						especie='relational_onetomany'

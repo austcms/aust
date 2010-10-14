@@ -42,6 +42,8 @@ class ModController extends ModsController
     }
 
     public function actions(){
+//		echo 'hey';
+//		return true;
     }
 
     /**
