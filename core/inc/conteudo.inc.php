@@ -151,7 +151,7 @@ if(!empty($_GET['action'])){
             <script type="text/javascript">
                 var timeToRefresh = 2;
                 setTimeout(function(){
-                    window.location.href = "<?php echo $goToUrl ?>";
+                    //window.location.href = "<?php echo $goToUrl ?>";
                 }, 2300);
             </script>
 

@@ -170,11 +170,12 @@ class Cadastro extends Module {
 	                    if( $subArray != 0 ){
 	                        $relational[$campo][$campos[$campo]["referencia"]][$i][$campos[$campo]["ref_tabela"]."_id"] = $subArray;
 	                        $relational[$campo][$campos[$campo]["referencia"]][$i]["created_on"] = date("Y-m-d H:i:s");
+	                        $relational[$campo][$campos[$campo]["referencia"]][$i]["order_nr"] = $i+1;
 	                        $i++;
 	                    }
-	                    $this->toDeleteTables[$campo][$campos[$campo]["referencia"]] = 1;
 	                }
-
+                    $this->toDeleteTables[$campo][$campos[$campo]["referencia"]] = 1;
+//					pr($this->toDeleteTables);
 	            }
 	            /*
 	             * Date

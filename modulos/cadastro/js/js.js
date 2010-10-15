@@ -108,3 +108,43 @@ function editImageInLightbox(este, imageId, field){
 	}
 	
 }
+
+/* search1n */
+function search1n(_this){
+	var field = $(_this).attr('data-field');
+	var austNode = $(_this).attr('data-austnode');
+	var checked_boxes = $('#search1n_'+field+'_result input[type=checkbox]:checked').serialize().replace(/%5B/g, '[').replace(/%5D/g, ']');
+	
+    $.post(
+		include_baseurl+"/js/ajax.php?"+checked_boxes,
+		{
+	        query: $(_this).val(),
+	        field: field,
+			austNode: austNode,
+			w: $(_this).attr('data-w'),
+//			checked_boxes: ,
+			relational_table: $(_this).attr('data-relational_table'),
+			table: $(_this).attr('data-table'),
+			ref_table: $(_this).attr('data-ref_table'),
+			ref_field: $(_this).attr('data-ref_field'),
+			inputName: $(_this).attr('data-input_name'),
+			childField: $(_this).attr('data-child_field'),
+			parentField: $(_this).attr('data-parent_field'),
+			action: 'search1n'
+        },
+		function(response){
+			$('#search1n_'+field+'_result input[type=checkbox]')
+				.not(':checked, .original').parent().remove();
+				
+			$('#search1n_'+field+'_result p.explanation').remove();
+				
+			if( response == '' ){
+				$('#search1n_'+field+'_result').append('<p class="explanation">Termo não encontrado</p>');
+			} else {
+			
+				$('#search1n_'+field+'_result').append(response);
+			}
+				
+        }
+	);
+}

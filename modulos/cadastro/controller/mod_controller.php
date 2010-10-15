@@ -352,7 +352,12 @@ class ModController extends ModsController
 			$relational = $this->modulo->relationalData;
 			
 
-            if( !empty($relational) AND !empty($lastInsertId) ){
+            if( (
+				!empty($relational) ||
+				!empty($this->modulo->toDeleteTables)
+				)
+				AND
+ 				!empty($lastInsertId) ){
 
                 unset($sql);
                 foreach( $relational as $field=>$dados ){
@@ -385,13 +390,12 @@ class ModController extends ModsController
 							$ref_field = $infoCadastro['campo'][$field]['ref_parent_field'];
 						else
 							$ref_field = $infoCadastro["estrutura"]["tabela"]["valor"]."_id";
-							
+
 	                    $sql = "DELETE FROM
 	                                $key
 	                            WHERE
 	                                ".$ref_field."='$w'
 	                                ";
-	                    $this->modulo->connection->exec($sql);
 	                    unset($sql);
 					}
                 }

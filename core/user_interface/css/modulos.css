@@ -119,3 +119,13 @@ span.viewmode {
 	.filename {
 		font-size: 0.9em;
 	}
+	/* field: relational_one_to_many */
+	.search_1n {
+		padding: 7px;
+		border: 1px solid #ddd;
+		-moz-border-radius: 8px;
+		border-radius: 8px;
+		background: #FFF4D6;
+		margin: 0 0 7px 0;
+		display: table;
+	}

@@ -221,58 +221,8 @@ foreach( $camposForm as $chave=>$valor ){
      * Monta checkboxes do campo que é do tipo relacional um-para-muitos
      */
     else if($valor["tipo"]["especie"] == "relacional_umparamuitos") {
-        
-		$referencia = $valor["tipo"]["tabelaReferencia"];
-        $tabelaRelacional = $valor["tipo"]["referencia"];
-        $campo = $valor["tipo"]["tabelaReferenciaCampo"];
 
-		if( !empty($valor["tipo"]["refParentField"]) )
-			$parentField = $valor["tipo"]["refParentField"];
-		else
-			$parentField = $referencia.'_id';
-		
-		if( !empty($valor["tipo"]["refChildField"]) )
-			$childField = $valor["tipo"]["refChildField"];
-		else
-			$childField = $referencia.'_id';
-			
-        $sql = "SELECT
-                    t.id, t.$campo
-                FROM
-                    ".$referencia." AS t
-                ORDER BY t.$campo ASC
-                ";
-
-        $checkboxes = $modulo->connection->query($sql);
-        $inputType = "checkbox";
-        foreach($checkboxes as $tabelaReferenciaResult){
-            $checkbox["options"][ $tabelaReferenciaResult["id"] ] = $tabelaReferenciaResult[ $campo ];
-        }
-		
-        /*
-         * Se for edição, pega os dados que estão salvos neste campo
-         */
-        if( !empty($w) ){
-            $sql = "SELECT
-                        t.id, t.".$childField." AS referencia
-                    FROM
-                        ".$tabelaRelacional." AS t
-					WHERE
-						t.".$parentField."='".$w."'
-                    ORDER BY
-                        t.id ASC
-                    ";
-
-            $values = $modulo->connection->query($sql);
-            if( empty($values)){
-                $values = array();
-            } else {
-                foreach( $values as $id ){
-                    $valor["valor"][] = $id["referencia"];
-                }
-            }
-        }
-		$useInput = true;
+        include($modulo->getIncludeFolder().'/view/mod/_form_field_relational_one_to_many.php');
 
 	}
     /*
