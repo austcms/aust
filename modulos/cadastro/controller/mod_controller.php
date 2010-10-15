@@ -396,6 +396,7 @@ class ModController extends ModsController
 	                            WHERE
 	                                ".$ref_field."='$w'
 	                                ";
+						$this->connection->exec($sql);
 	                    unset($sql);
 					}
                 }

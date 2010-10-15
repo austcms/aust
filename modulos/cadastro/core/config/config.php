@@ -197,6 +197,20 @@ $modInfo = array(
 		    ),
 
 		/*
+		 * RELATIONAL ONE-TO-MANY
+		 */
+		    /*
+		     * Múltiplas imagens ou apenas uma?
+		     */
+			'1n_has_dragdrop' => array(
+				'field_type' => 'relacional_umparamuitos',
+		        "value" => "",
+		        "label" => "Permite drag&drop",
+		        "inputType" => "checkbox",
+				'help' => 'Com drag&drop ativado, é possível alterar a ordem '.
+						  'dos itens selecionados.'
+		    ),
+		/*
 		 * CAMPOS TEXTOS
 		 */
 		    /*

@@ -207,10 +207,11 @@ elseif($_POST['action'] == 'search1n'){
 	
 	foreach( $results as $result ){
 		?>
-		<input type="hidden" value="0" name="<?php echo $_POST['inputName']?>">
+		<div>
 		<div class="input_checkbox_each">
 			<input type="checkbox" value="<?php echo $result['ref_id'] ?>" name="<?php echo $_POST['inputName']?>">
 			<?php echo $result['ref_value'] ?>
+		</div>
 		</div>
 		<?php
 	}

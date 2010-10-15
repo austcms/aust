@@ -134,7 +134,7 @@ function search1n(_this){
         },
 		function(response){
 			$('#search1n_'+field+'_result input[type=checkbox]')
-				.not(':checked, .original').parent().remove();
+				.not(':checked, .original').parent().parent().remove();
 				
 			$('#search1n_'+field+'_result p.explanation').remove();
 				

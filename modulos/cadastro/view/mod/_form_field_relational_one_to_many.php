@@ -58,6 +58,10 @@ if( !empty($w) ){
     }
 }
 
+$dragdrop = '';
+if( $modulo->getFieldConfig($chave, '1n_has_dragdrop') == '1' )
+	$dragdrop = 'dragdrop';
+
 /*
  * PESQUISAR
  */
@@ -80,16 +84,18 @@ if( !empty($w) ){
 				data-parent_field="<?php echo $parentField ?>"
 			/></label>
 		</div>
-		<div id="search1n_<?php echo $chave; ?>_result">
+		
+		
+		<div id="search1n_<?php echo $chave; ?>_result" class="<?php echo $dragdrop ?>">
 			<?php
 			foreach( $values as $value ){
 				?>
-				<input type="hidden" value="0" name="<?php echo $inputName ?>">
+				<div>
 				<div class="input_checkbox_each input_checkbox_<?php echo $chave ?>">
 					<input type="checkbox" class="original checkbox_<?php echo chave;?>" value="<?php echo $value['ref_id'] ?>" checked="checked"
 						name="<?php echo $inputName ?>"> <?php echo $value['ref_value'] ?>
 				</div>
-				
+				</div>
 				<?php
 			}
 			?>

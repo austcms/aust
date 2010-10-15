@@ -4,6 +4,10 @@
 *	BODY = CORPO
 *
 ***************************/
+.dragdrop {
+	cursor: move;
+}
+
 div.body {
     width: 760px;
     text-align: left;

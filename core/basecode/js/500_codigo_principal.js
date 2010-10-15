@@ -60,6 +60,18 @@ $(document).ready(function(){
 
     });
 
+	// .dragdrop
+	
+    $(".dragdrop").sortable({
+//        handle: 'h3',
+        opacity: 0.4,
+//        containment: 'document',
+        dropOnEmpty: true,
+        stop: function () {
+        }
+
+    });
+	
     // Hints
     $("span.hint a").each(function(){
         $(this).tooltip({
