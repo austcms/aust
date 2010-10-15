@@ -116,7 +116,7 @@ form.formHelper { }
 
     form.formHelper div.input { margin-bottom: 5px; }
     form.formHelper label { width: 160px; margin-right: 5px; float: left; }
-    form.formHelper div.input_field {  }
+    form.formHelper div.input_field {  width: 540px; }
     form.formHelper div.input_textarea textarea { width: 500px; height: 90px; margin: 0; }
     form.formHelper div.input_date input { width: 18px; }
         form.formHelper div.input_date .input_date_year { width: 35px; }

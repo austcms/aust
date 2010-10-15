@@ -199,6 +199,8 @@ elseif($_POST['action'] == 'search1n'){
 				AND
 				r.id!='".$w."'
 				$queryCheckedBoxes
+			GROUP BY
+				r.id
             ORDER BY
                 t.order_nr ASC, t.id ASC
 			LIMIT 10

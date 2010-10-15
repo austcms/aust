@@ -71,7 +71,9 @@ if( $modulo->getFieldConfig($chave, '1n_has_dragdrop') == '1' )
 	
 	<div class="input_field input_checkbox input_relacionamentos">
 		<div id="search1n_<?php echo $chave; ?>" class="search_1n">
-			<label>Pesquisar: <input type="text" name="search" onkeyup="javascript: search1n(this)"
+			<label>Pesquisar: <input type="text" name="search" onkeyup="javascript: search1n(this);"
+				autocomplete='off'
+				onkeydown="javascript: if( event.keyCode == 13) return false;"
 				data-austnode="<?php echo $austNode; ?>"
 				data-field="<?php echo $chave; ?>"
 				data-relational_table="<?php echo $tabelaRelacional; ?>"
@@ -86,7 +88,7 @@ if( $modulo->getFieldConfig($chave, '1n_has_dragdrop') == '1' )
 		</div>
 		
 		
-		<div id="search1n_<?php echo $chave; ?>_result" class="<?php echo $dragdrop ?>">
+		<div id="search1n_<?php echo $chave; ?>_result" class="search1n_result <?php echo $dragdrop ?>">
 			<?php
 			foreach( $values as $value ){
 				?>
