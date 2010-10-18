@@ -33,7 +33,7 @@ $inputName = "data[".$infoCadastro["estrutura"]["tabela"]["valor"]."][".$fieldNa
 			?>					
 
 			
-			<div class="thumbs_view">
+			<div class="files_view">
 			<table width="100%">
 			<?php
 			$i = 0;
@@ -54,14 +54,17 @@ $inputName = "data[".$infoCadastro["estrutura"]["tabela"]["valor"]."][".$fieldNa
 					<?php
 				}
 				?>
-				<td>
+				<td valign="top" class="icon">
 				
-				<img class="thumb" src="" />
+				<a href="<?php echo retrieveFile($file['systempath'], $file['file_type'], $file['original_file_name']) ?>">
+				<img class="thumb" src="<?php echo getFileIcon($file['original_file_name']) ?>" />
+				</a>
 				<br clear="all" />
 				<span class="filename">
 				<?php
 				// $file['file_type'];
-				// $file['file_size'];
+//				 echo $file['file_ext'];
+//				 $file['file_size'];
 				echo $file['original_file_name'];
 				?>
 				</span>

@@ -50,7 +50,7 @@ define("CORE_DIR", "core/");
      */
     define("UI_PATH", CORE_DIR."user_interface/");
         define("CSS_PATH", UI_PATH."css/");
-        define("IMG_DIR", "core/user_interface/img/");
+        define("IMG_DIR", UI_PATH."img/");
     define("UI_STANDARD_FILE", UI_PATH."ui.php");
     define("THEMES_DIR", UI_PATH."themes/");
     define("THEMES_SCREENSHOT_FILE", "screenshot");

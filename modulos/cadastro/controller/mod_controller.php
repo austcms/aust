@@ -42,6 +42,8 @@ class ModController extends ModsController
     }
 
     public function actions(){
+//		echo 'hey';
+//		return true;
     }
 
     /**
@@ -156,6 +158,8 @@ class ModController extends ModsController
                 $camposForm[ $valor["chave"] ]["tipo"]["especie"] = $valor["especie"];
                 $camposForm[ $valor["chave"] ]["tipo"]["referencia"] = $valor["referencia"];
                 $camposForm[ $valor["chave"] ]["tipo"]["tabelaReferencia"] = $valor["ref_tabela"];
+                $camposForm[ $valor["chave"] ]["tipo"]["refParentField"] = $valor["ref_parent_field"];
+                $camposForm[ $valor["chave"] ]["tipo"]["refChildField"] = $valor["ref_child_field"];
                 $camposForm[ $valor["chave"] ]["tipo"]["tabelaReferenciaCampo"] = $valor["ref_campo"];
                 $camposForm[ $valor["chave"] ]["tipo"]["tipoFisico"] = $infoTabelaFisica[ $valor["chave"] ]["Type"];
 
@@ -295,7 +299,8 @@ class ModController extends ModsController
 		$this->modulo->fields = $campos;
         $relational = array();
 		$images = array();
-        
+
+
         if( $this->data ){
 			$this->modulo->data = $this->data;
 			/*
@@ -345,17 +350,26 @@ class ModController extends ModsController
 			 *		4) Salva dados relacionados no DB.
 			 */
 			$relational = $this->modulo->relationalData;
+			
 
             if( !empty($relational) AND !empty($lastInsertId) ){
 
                 unset($sql);
-                foreach( $relational as $tabela => $dados ){
-                    foreach($dados as $campo=>$valor){
-                        $relational[$tabela][$campo][$infoCadastro["estrutura"]["tabela"]["valor"]."_id"] = $lastInsertId;
-                    }
-
+                foreach( $relational as $field=>$dados ){
+					foreach( $dados as $tabela=>$dados ){
+	                    foreach($dados as $campo=>$valor){
+	
+							if( !empty($infoCadastro['campo'][$field]['ref_parent_field']) )
+								$ref_field = $infoCadastro['campo'][$field]['ref_parent_field'];
+							else
+								$ref_field = $infoCadastro["estrutura"]["tabela"]["valor"]."_id";
+						
+						
+	                        $relational[$field][$tabela][$campo][$ref_field] = $lastInsertId;
+	                    }
+					}
                 }
-
+				
                 /*
                  * Exclui todos os dados expecificados em $toDeleteTables para salvá-los novamente
                  * 
@@ -364,54 +378,64 @@ class ModController extends ModsController
                  * começar a salvar o que foi enviado.
 				 *
                  */
-                foreach( $this->modulo->toDeleteTables as $key=>$value ){
-                    $sql = "DELETE FROM
-                                $key
-                            WHERE
-                                ".$infoCadastro["estrutura"]["tabela"]["valor"]."_id='$w'
-                                ";
-                    $this->modulo->connection->exec($sql);
-                    unset($sql);
+             	foreach( $this->modulo->toDeleteTables as $field=>$value ){
+                	foreach( $value as $key=>$value ){
+					
+						if( !empty($infoCadastro['campo'][$field]['ref_parent_field']) )
+							$ref_field = $infoCadastro['campo'][$field]['ref_parent_field'];
+						else
+							$ref_field = $infoCadastro["estrutura"]["tabela"]["valor"]."_id";
+							
+	                    $sql = "DELETE FROM
+	                                $key
+	                            WHERE
+	                                ".$ref_field."='$w'
+	                                ";
+	                    $this->modulo->connection->exec($sql);
+	                    unset($sql);
+					}
                 }
 
 				/*
 				 * Começa a salvar cada um
 				 */
-                foreach( $relational as $tabela => $dados ){
+             	foreach( $relational as $field=>$dados ){
+	                foreach( $dados as $tabela=>$dados ){
 
-                    foreach( $dados as $campo=>$valor ){
+	                    foreach( $dados as $campo=>$valor ){
 
-                        /*
-                         * Múltiplos Inserts
-                         */
-                        if( is_int($campo) ){
-                            //pr($valor);
-                            foreach( $valor as $multipleInsertsCampo=>$multipleInsertsValor ){
-                                $camposStrMultiplo[] = $multipleInsertsCampo;
-                                $valorStrMultiplo[] = $multipleInsertsValor;
-                            }
+	                        /*
+	                         * Múltiplos Inserts
+	                         */
+	                        if( is_int($campo) ){
+	                            //pr($valor);
+	                            foreach( $valor as $multipleInsertsCampo=>$multipleInsertsValor ){
+	                                $camposStrMultiplo[] = $multipleInsertsCampo;
+	                                $valorStrMultiplo[] = $multipleInsertsValor;
+	                            }
 
-                            /*
-                             * Insere no DB os Checkboxes marcados
-                             */
-                            $tempSql = "INSERT INTO
-                                            ".$tabela."
-                                                (".implode(",", $camposStrMultiplo).")
-                                        VALUES
-                                            ('".implode("','", $valorStrMultiplo)."')
-                                        ";
-                            /**
-                             * SQL deste campo
-                             */
-                            $sql[] = $tempSql;
+	                            /*
+	                             * Insere no DB os Checkboxes marcados
+	                             */
+	                            $tempSql = "INSERT INTO
+	                                            ".$tabela."
+	                                                (".implode(",", $camposStrMultiplo).")
+	                                        VALUES
+	                                            ('".implode("','", $valorStrMultiplo)."')
+	                                        ";
+	                            /**
+	                             * SQL deste campo
+	                             */
+	                            $sql[] = $tempSql;
 
-                            unset($valorStrMultiplo);
-                            unset($camposStrMultiplo);
-                            unset($tempSql);
+	                            unset($valorStrMultiplo);
+	                            unset($camposStrMultiplo);
+	                            unset($tempSql);
 
-                        }
-                    }
-                }
+	                        }
+	                    }
+	                }
+				}
             }
 
             if( !empty($sql) ){
