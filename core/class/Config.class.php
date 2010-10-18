@@ -366,16 +366,22 @@ class Config {
                             ('".implode("','", $infos)."')";
             }
 
-            //echo $sql."<br>";
             if( !$this->conexao->exec($sql) ) {
                 $erro[] = key($valor);
             }
         }
 
         if(count($erro) == 0) {
-            return '<span style="color: green;">Configuração salva com sucesso!</span>';
+            return array(
+				'classe' => 'sucesso',
+				'mensagem' => 'Configuração salva com sucesso!'
+			);
         } else {
-            return '<span style="color: red;">Ocorreu um erro desconhecido. Algumas opções não foram salvas.</span>';
+            return array(
+				'classe' => 'insucesso',
+				'mensagem' => 'Ocorreu um erro desconhecido. Algumas opções não foram salvas.'
+			);
+
         }
 
     }

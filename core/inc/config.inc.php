@@ -80,7 +80,6 @@ $options = $config->getConfigs(
     if( !empty($status) )
         EscreveBoxMensagem($status);
 ?>
-
 <h2>Configurações</h2>
 <p>
     Nesta tela estão as principais configurações do sistema.
@@ -183,7 +182,7 @@ $options = $config->getConfigs(
  * NOVA CONFIGURAÇÃO
  *
  */
-if( $administrador->tipo == "Webmaster" AND 1==0 ){
+if( $administrador->tipo == "Webmaster" AND 1==1 ){
     ?>
 
     <?php
@@ -198,47 +197,7 @@ if( $administrador->tipo == "Webmaster" AND 1==0 ){
         );
     }
 
-    $options = $config->getOptions($params);
-    pr($options);
-    if( $options ){
-        ?>
-        <form method="post" action="adm_main.php?section=<?php echo $_GET['section'];?>" class="simples">
-        <?php
-
-            foreach($options as $dados ){
-                $tipo = $dados['tipo'];
-
-                if($tipo <> $tipo_anterior){
-                    echo '<h2>'.$tipo.'</h2>';
-                }
-
-                echo '<div class="campo">';
-                echo '<label>';
-
-                if( empty($dados['nome']) ){
-                    echo $dados['propriedade'];
-                } else {
-                    echo $dados['nome'];
-                }
-                echo '</label>';
-                echo '<input type="text" name="'.$dados['id'].'" value="'.$dados['valor'].'" class="text" />';
-                echo '</div>';
-                $tipo_anterior = $tipo;
-            }
-
-        ?>
-        <input type="submit" name="gravar" value="Enviar" class="submit" />
-        </form>
-    <?php } else { ?>
-    <br clear="all" />
-        <p class="alerta">
-            Nenhuma configuração ajustada ainda.
-        </p>
-    <?php } ?>
-    <p>
-        <a href="javascript: history.back();"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
-    </p>
-
+?>
 
 
     <h2>Nova configuração</h2>
@@ -260,7 +219,7 @@ if( $administrador->tipo == "Webmaster" AND 1==0 ){
     <div class="campo">
         <label>Tipo:</label>
         <select name="tipo">
-            <option value="global">Global (todos tem acesso)</option>
+            <option value="Geral">Geral (todos tem acesso)</option>
             <option value="mod_conf">mod_conf - configuração de módulos</option>
         </select>
     </div>
