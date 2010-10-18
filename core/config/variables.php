@@ -93,6 +93,7 @@ define("CORE_DIR", "core/");
         define('EDIT_ACTION', 'edit');
         define('LISTING_ACTION', 'listing');
         define('DELETE_ACTION', 'delete');
+        define('ACTIONS_ACTION', 'actions');
         define('SAVE_ACTION', 'save');
 
 

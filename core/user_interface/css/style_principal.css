@@ -70,13 +70,13 @@ div.body {
                     margin-right: 0px;
                     margin-bottom: 10px;
             }
-            div.box { width: 100%; background: #dddddd; padding-bottom: 1px; }
+            div.box { width: 710px; background: #dddddd; padding-bottom: 1px; }
             div.box div.titulo { padding: 5px; }
             div.box div.titulo h2 { font-size: 1.2em; margin: 0; }
             div.box div.corpo { margin: 1px; margin-bottom: 0; padding: 10px; background: white; }
             div.box div.rodape { margin: 10px; padding: 10px; background: white; }
             div.alerta { background: #ffee60; padding: 5px; border: 1px solid orange; margin-bottom: 10px; }
-            div.pergunta { background: yellow; padding: 15px; border: 1px solid orange; text-align: center; }
+            div.pergunta { background: yellow; padding: 15px 0; border: 0px solid yellow; text-align: center; }
             div.sucesso { background: #D9FFD9; color: #006413; padding: 5px; border: 1px solid #009900 }
             div.insucesso { background: #f68585; padding: 5px; border: 1px solid #db4343 }
 

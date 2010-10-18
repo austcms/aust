@@ -11,7 +11,7 @@ $precisa_aprovacao = $modulo->pegaConfig(Array('estrutura'=>$_GET['aust_node'], 
 ?>
 
 <p><a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a></p>
-<h3>Listando conteúdo: <?php echo $aust->leNomeDaEstrutura($_GET['aust_node']);?></h3>
+<h2><?php echo $aust->leNomeDaEstrutura($_GET['aust_node']);?></h2>
 <p>A seguir você vê a lista de registros sob o cadastro "<?php echo $aust->leNomeDaEstrutura($_GET['aust_node'])?>".</p>
 
 

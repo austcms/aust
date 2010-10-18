@@ -122,7 +122,7 @@ if(!empty($_GET['action'])){
         /*
          * Se for save, redireciona automaticamente
          */
-        if( $action == SAVE_ACTION ){
+        if( in_array($action, array(SAVE_ACTION, ACTIONS_ACTION)) ){
             ?>
             <div class="loading_timer">
                 <img src="<?php echo IMG_DIR ?>loading_timer.gif" /> Redirecionando Automaticamente
@@ -145,7 +145,7 @@ if(!empty($_GET['action'])){
             'model' => $model,
         );
         $modController = new ModController($param);
-        if( $action == SAVE_ACTION ){
+        if( in_array($action, array(SAVE_ACTION, ACTIONS_ACTION)) ){
             $goToUrl = "adm_main.php?section=".$_GET['section'].'&action=listing&aust_node='.$aust_node;
             ?>
             <script type="text/javascript">
