@@ -236,7 +236,7 @@ if( $administrador->tipo == "Webmaster" AND 1==0 ){
         </p>
     <?php } ?>
     <p>
-        <a href="javascript: history.back();"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+        <a href="javascript: history.back();"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
     </p>
 
 
@@ -271,7 +271,7 @@ if( $administrador->tipo == "Webmaster" AND 1==0 ){
 
     </form>
     <p>
-        <a href="javascript: history.back();"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+        <a href="javascript: history.back();"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
     </p>
     <?php
 }

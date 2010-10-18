@@ -127,7 +127,9 @@ div.body {
         table tr td div.est_options div.campooptions_campo {  }
         table tr td span.est_options_info { color: #666666; }
 
-	
+/* Formatação em geral */
+.filesize { font-size: 0.85em; color: #666; }
+
 /***************************
 *
 *	RODAPÉ

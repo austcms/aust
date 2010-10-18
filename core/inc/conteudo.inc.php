@@ -122,7 +122,9 @@ if(!empty($_GET['action'])){
         /*
          * Se for save, redireciona automaticamente
          */
-        if( in_array($action, array(SAVE_ACTION, ACTIONS_ACTION)) ){
+	     if( in_array($action, array(SAVE_ACTION)) ||
+				( $action == ACTIONS_ACTION && $_GET['confirm'] == 'delete' ) )
+			{
             ?>
             <div class="loading_timer">
                 <img src="<?php echo IMG_DIR ?>loading_timer.gif" /> Redirecionando Automaticamente
@@ -145,7 +147,9 @@ if(!empty($_GET['action'])){
             'model' => $model,
         );
         $modController = new ModController($param);
-        if( in_array($action, array(SAVE_ACTION, ACTIONS_ACTION)) ){
+        if( in_array($action, array(SAVE_ACTION)) ||
+ 			( $action == ACTIONS_ACTION && $_GET['confirm'] == 'delete' ) )
+		{
             $goToUrl = "adm_main.php?section=".$_GET['section'].'&action=listing&aust_node='.$aust_node;
             ?>
             <script type="text/javascript">
@@ -247,7 +251,7 @@ if(!empty($_GET['action'])){
                 } else {
                     echo '<h2>Ops... Erro nesta ação!</h2>';
                     echo '<p>O arquivo requisitado não existe. Entre em contato com o responsável pelo sistema.</p>';
-                    echo '<p><a href="adm_main.php?section='.$_GET['section'].'"><img src="img/layoutv1/voltar.gif" border="0" /></a></p>';
+                    echo '<p><a href="adm_main.php?section='.$_GET['section'].'"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a></p>';
                 }
 
                 break;

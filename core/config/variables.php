@@ -38,11 +38,11 @@ define("CORE_DIR", "core/");
     /**
      * Define o caminho para a pasta de instalação
      */
-    define("RELATIVE_PATH_TO_INSTALLATION", CORE_CONFIG_DIR."installation/");
+    define("INSTALLATION_DIR", CORE_CONFIG_DIR."installation/");
     /**
      * DBSCHEMA: arquivo
      */
-    define("DBSCHEMA_FILE_PATH", CORE_DIR.RELATIVE_PATH_TO_INSTALLATION."dbschema.php");
+    define("DBSCHEMA_FILE_PATH", CORE_DIR.INSTALLATION_DIR."dbschema.php");
     /**
      * USER INTERFACE
      *
@@ -73,7 +73,7 @@ define("CORE_DIR", "core/");
      *
      * Define o diretório onde estão os arquivos Javascript
      */
-    define("BASECODE_JS", CORE_DIR."basecode/js/");
+    define("BASECODE_JS", LIB_DIR."js/");
     /**
      * Diretório dos módu1os
      */

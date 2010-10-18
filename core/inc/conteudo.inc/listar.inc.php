@@ -36,7 +36,7 @@ $specsection['list_content_description'] =
 ?>
 <h2><?php echo $h1;?></h2>
 <p>
-    <a href="adm_main.php?section=<?php echo $section;?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+    <a href="adm_main.php?section=<?php echo $section;?>"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
 </p>
 <?php
     if((!empty($filter)) AND ($filter <> 'off')){
@@ -70,10 +70,10 @@ if($block == "block"){
                     <p style="color: white; margin: 0px;">
                         <a href="adm_main.php?section=<?php echo $section;?>&action=<?php echo $action;?>&block=delete&w=<?php echo $w; ?><?php echo $addurl;?>" style="text-decoration: underline; color: white;">-> Clique aqui para apagar o conte&uacute;do definitivamente <- </a>
                     </p>
-                <? } ?>
+                <?php } ?>
             </div>
         </div>
-    <?
+    <?php
     } else {
         echo '<p style="color: red;">Ocorreu um erro desconhecido ao editar as informações do usuário, tente novamente.</p>';
     }
@@ -94,7 +94,7 @@ if($block == "block"){
                 </p>
             </div>
         </div>
-    <?
+    <?php
     } else {
         echo '<p style="color: red;">Ocorreu um erro desconhecido ao editar as informações do usuário, tente novamente.</p>';
     }
@@ -113,7 +113,7 @@ if($block == "block"){
                 </p>
             </div>
         </div>
-    <?
+    <?php
     } else if($confirm == "delete"){
 
         $verifysql = "
@@ -156,7 +156,7 @@ if($block == "block"){
                         </p>
                     </div>
                 </div>
-                <?
+                <?php
 
             } else {
                 echo '<p style="color: red;">Ocorreu um erro desconhecido ao deletar as informações, tente novamente.</p>';
@@ -164,8 +164,6 @@ if($block == "block"){
         }
     }
 }
-?>
-<?php
 
     $categorias = $aust->LeCategoriasFilhas('',$_GET[aust_node]);
     $categorias[$_GET[aust_node]] = 'Estrutura';
@@ -180,7 +178,7 @@ if($block == "block"){
         <tr class="titulo">
 
             <?php for($i=0; $i< count($content_header[campos]); $i++) { ?>
-                    <td bgcolor="#333333" class="<? echo $content_header[campos][$i]; ?>">
+                    <td bgcolor="#333333" class="<?php echo $content_header[campos][$i]; ?>">
                         <?php
                             echo $content_header[campos_nome][$i];
                         ?>
@@ -190,7 +188,7 @@ if($block == "block"){
                 Op&ccedil;&otilde;es
             </td>
         </tr>
-<?
+<?php
     while($dados = mysql_fetch_array($mysql)){
 ?>
         <tr class="conteudo">
@@ -216,8 +214,7 @@ if($block == "block"){
                     </td>
             <?php } ?>
             <td>
-                <!-- <a href="adm_main.php?section=<?php echo $section;?>&action=see_info&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;"><img src="img/layoutv1/lupa.jpg" alt="Ver Informações" border="0" /></a> -->
-                <a href="adm_main.php?section=<?php echo $section;?>&action=edit_form&aust_node=<?php echo $aust_node;?>&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;"><img src="img/layoutv1/edit.jpg" alt="Editar" border="0" /></a>
+                <a href="adm_main.php?section=<?php echo $section;?>&action=edit_form&aust_node=<?php echo $aust_node;?>&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;"><img src="<?php echo IMG_DIR?>layoutv1/edit.jpg" alt="Editar" border="0" /></a>
                 <?php
                 if($escala == "administrador"
                 OR $escala == "moderador"
@@ -228,22 +225,22 @@ if($block == "block"){
                         $addurl = "&filter=$filter&filterw=" . urlencode($filterw);
                     }
                     ?>
-                    <a href="adm_main.php?section=<?php echo $section;?>&action=<?php echo $action;?>&block=delete&aust_node=<?php echo $aust_node;?>&w=<?php echo $dados["id"]; ?><?php echo $addurl;?>" style="text-decoration: none;"><img src="img/layoutv1/delete.jpg" alt="Deletar" border="0" /></a>
+                    <a href="adm_main.php?section=<?php echo $section;?>&action=<?php echo $action;?>&block=delete&aust_node=<?php echo $aust_node;?>&w=<?php echo $dados["id"]; ?><?php echo $addurl;?>" style="text-decoration: none;"><img src="<?php echo IMG_DIR?>layoutv1/delete.jpg" alt="Deletar" border="0" /></a>
                     <?php
                 }
                 ?>
                 <?php
                 // Verifica se tipo conteúdo atual está configurado para usar galeria de fotos
                 if(in_array($cat, $aust_conf['where_gallery'])){ ?>
-                    <a href="adm_main.php?section=<?php echo $section;?>&action=photo_content_manage&w=<?php echo $dados["id"]; ?>#add" style="text-decoration: none;"><img src="img/layoutv1/fotos.jpg" alt="Adicionar fotos a este conteúdo" border="0" /></a>
+                    <a href="adm_main.php?section=<?php echo $section;?>&action=photo_content_manage&w=<?php echo $dados["id"]; ?>#add" style="text-decoration: none;"><img src="<?php echo IMG_DIR?>layoutv1/fotos.jpg" alt="Adicionar fotos a este conteúdo" border="0" /></a>
                 <?php } ?>
             </td>
         </tr>
-    <?
+    <?php
     }
     echo '</table>';
 ?>
 
 <p style="margin-top: 15px;">
-    <a href="adm_main.php?section=<?php echo $section;?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+    <a href="adm_main.php?section=<?php echo $section;?>"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
 </p>
