@@ -368,7 +368,7 @@ class Aust {
          * Structures of given site
         */
         $sql = "SELECT
-                    lp.id, lp.subordinadoid, lp.nome, lp.tipo as tipo,
+                    lp.id, lp.subordinadoid, lp.nome, lp.nome as name, lp.tipo as tipo,
                     ( SELECT COUNT(*)
                     FROM
                     ".self::$austTable." As clp

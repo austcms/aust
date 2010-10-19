@@ -1,25 +1,4 @@
 <?php
-/**
- * Arquivo que contém interface para configurar estrutura que usa este módulo depois de já estar instalado.
- *
- * Ex: Inserir novos campos
- *
- * Inicialmente há todo o código PHP para executar as funções requisitadas e o FORM html está no final do documento. O action
- * dos FORMs enviam as informações para a própria página
- *
- * @package Módulos
- * @category Cadastro
- * @name Configurar Estrutura
- * @author Alexandre de Oliveira <chavedomundo@gmail.com>
- * @since v0.1.6 16/08/2009
- */
-
-/**
- * INICIALIZAÇÃO
- */
-$tabela_da_estrutura = $modulo->LeTabelaDaEstrutura($_GET['aust_node']);
-
-
 
 /*
  * MOD_CONF
@@ -210,65 +189,9 @@ if(!empty($_GET['function'])){
             <h3>Configurações</h3>
         </div>
         <div class="content">
-            <?php
-            $configurations = $modulo->loadModConf();
-			//pr($configurations);
-            if( !empty($configurations) && is_array($configurations) ){
-                ?>
-
-                <p>Configure este módulo.</p>
-                <form method="post" action="adm_main.php?section=conf_modulos&aust_node=<?php echo $_GET['aust_node']; ?>&action=configurar" class="simples pequeno">
-                <input type="hidden" name="conf_type" value="mod_conf" />
-                <input type="hidden" name="aust_node" value="<?php echo $_GET['aust_node']; ?>" />
-                <?php
-
-                foreach( $configurations as $key=>$options ){
-                    ?>
-
-                    <div class="campo">
-                        <label><?php echo $options["label"] ?></label>
-                        <div class="input">
-                            <?php
-                            if( $options["inputType"] == "checkbox" ){
-
-                                /*
-                                 * Verifica valores no banco de dados.
-                                 */
-                                $checked = "";
-                                if( !empty($options['value']) ){
-                                    if( $options["value"] == "1" ){
-                                        $checked = 'checked="checked"';
-                                    }
-                                }
-                                ?>
-                                <input type="hidden" name="data[<?php echo $key; ?>]" value="0" />
-
-                                <input type="checkbox" name="data[<?php echo $key; ?>]" <?php echo $checked; ?> value="1" class="input" />
-                                <?php
-                            }
-
-                            else {
-                                ?>
-                                <input type="text" name="data[<?php echo $key; ?>]" class="input" value="<?php echo $options['value'] ?>" />
-                                <?php
-                            }
-
-                            if( !empty($options['help']) )
-                                tt($options['help']);
-                            ?>
-
-                        </div>
-                    </div>
-                    <br clear="both" />
-
-                    <?php
-                }
-                ?>
-                <input type="submit" name="submit" value="Salvar" />
-                </form>
-                <?php
-            }
-            ?>
+            <p>
+				teste
+			</p>
 
         </div>
         <div class="footer"></div>
@@ -280,6 +203,9 @@ if(!empty($_GET['function'])){
         </div>
         <div class="content">
             <p>
+	            <p>
+					teste
+				</p>
                 
             </p>
 
@@ -298,10 +224,10 @@ if(!empty($_GET['function'])){
     ?>
     <div class="widget">
         <div class="titulo">
-            <h3></h3>
+            <h3>vasdv</h3>
         </div>
         <div class="content">
-            <p></p>
+            <p>avds</p>
 
         </div>
         <div class="footer"></div>
@@ -313,7 +239,7 @@ if(!empty($_GET['function'])){
     ?>
     <div class="widget">
         <div class="titulo">
-            <h3></h3>
+            <h3>asdv</h3>
         </div>
         <div class="content">
             <p></p>
