@@ -882,7 +882,13 @@ class Cadastro extends Module {
      * @param int $austNode
      * @return array
      */
-    public function pegaInformacoesCadastro( $austNode ){
+    public function pegaInformacoesCadastro( $austNode = '' ){
+	
+		if( empty($austNode) && empty($this->austNode) )
+			return false;
+		else if( empty($austNode) )
+			$austNode = $this->austNode;
+		
         /**
          * Busca na tabela cadastros_conf por informações relacionadas ao
          * austNode selecionado.
@@ -1298,5 +1304,7 @@ class Cadastro extends Module {
 	public function drawFieldConfiguration(){
     	$result = '';
 	}
+	
+
 }
 ?>

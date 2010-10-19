@@ -7,9 +7,17 @@
  * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @since v0.1.6, 09/07/2009
  */
-class CadastroExport {
+class CadastroExport extends ModuleExport {
 
+	/*
+	 * EXPORT
+	 */
+	public function export(){
 
+		$data = $this->module->pegaInformacoesCadastro();
+
+		return array( $data );
+	}
 
 }
 ?>

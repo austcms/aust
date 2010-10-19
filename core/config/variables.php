@@ -77,7 +77,8 @@ define("CORE_DIR", "core/");
     /**
      * Diretório dos módu1os
      */
-    define('MODULOS_DIR', 'modulos/');
+	 define('MODULES_DIR', 'modulos/');
+	 define('MODULOS_DIR', MODULES_DIR);
     /**
      * Diretório de inclusão de arquivos ('inc')
      */

@@ -304,6 +304,7 @@ class Connection extends SQLObject {
          * Timer init
          */
         $sT = microtime(true);
+		$debugResult = false;
         
         /**
          * Se a extensão PDO está ativada
@@ -365,6 +366,7 @@ class Connection extends SQLObject {
                 Registry::add('debug',$debugVars);
             }
         }
+		$this->debug = $debugResult;
 
         return $result;
 
