@@ -65,7 +65,7 @@ if( !empty($_GET['current_theme']) ){
 ?>
 <br clear="all" />
 <p>
-    <a href="adm_main.php"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+    <a href="adm_main.php"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
 </p>
 
 

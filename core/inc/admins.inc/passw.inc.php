@@ -56,7 +56,7 @@ if ($_POST['metodo'] == 'gravar'){
 								Parabéns! Senha modificada com sucesso.
 							</p>
 							<p>
-								<a href="adm_main.php"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+								<a href="adm_main.php"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
 							</p>
 							
 							';
@@ -84,7 +84,7 @@ if ($_POST['metodo'] == 'gravar'){
 				Ocorreu um erro ao modificar sua senha.
 				</p>
 				<p>
-					<a href="adm_main.php"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+					<a href="adm_main.php"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
 				</p>
 				';
 	}
@@ -157,7 +157,7 @@ if ($_POST['metodo'] == 'gravar'){
     </form>
 
     <p>
-        <a href="adm_main.php"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+        <a href="adm_main.php"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
     </p>
 <?php } ?>
 

@@ -125,13 +125,6 @@ $modInfo = array(
 		    "inputType" => "checkbox",
 		),
 	),
-    /*
-     * Se não há valor, substitui campo vazio na listagem
-     * pelos valores abaixo
-     */
-    'replaceFieldsValueIfEmpty' => array(
-        'titulo' => '[Sem título]',
-    ),
 
     /**
      * RESPONSER

@@ -13,7 +13,7 @@
 ?>
     
 <p>
-    <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+    <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
 </p>
 <a name="list" class="name">&nbsp;</a>
 <h2><?php echo $h1;?></h2>
@@ -133,7 +133,7 @@ if((!empty($filter)) AND ($filter <> 'off')){
 ?>
 
 <p style="margin-top: 15px;">
-	<a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+	<a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
 </p>
 </div>
 </div>

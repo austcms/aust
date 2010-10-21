@@ -46,7 +46,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
 
 <h2><?php echo $h1?></h2>
 <p>
-    <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+    <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
 </p>
 
 <p>Envie um arquivo para o site.</p>
@@ -121,11 +121,31 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
             <?php } ?>
         </td>
         <td class="second">
-            <?php if($fm == "edit"){ ?>
-                <span style="font-weight: bold;">
-                    <?php echo $dados['arquivo_nome'] ?>
+            <?php
+			/*
+			 * EDIT: filename
+			 */
+			if( $fm == "edit"){
+				?>
+				<img src="<?php echo getFileIcon($dados['arquivo_nome']);?>" align="left" />
+                <span style="position: relative; left: 7px; top: 4px; display: block">
+                    <strong>
+					<?php
+					if( empty($dados['original_filename']) )
+						echo lineWrap($dados['arquivo_nome'], 64);
+					else
+						echo lineWrap($dados['original_filename'], 64);
+					?>
+					</strong>
+					<br />
+					<span class="filesize">
+						<?php echo convertFilesize( $dados['arquivo_tamanho'] ); ?>Mb
+					</span>
                 </span>
-            <?php }else{ ?>
+				<br />
+            	<?php
+			} else {
+				?>
                 <INPUT TYPE="file" NAME="arquivo" class="text">
                 <p class="explanation">
                     Localize o arquivo que você deseja realizar upload.
@@ -238,6 +258,6 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
 
 
 <p>
-    <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+    <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
 </p>
 

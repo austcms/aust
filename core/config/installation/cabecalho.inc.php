@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title><?php echo $page_title; ?></title>
-<link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.RELATIVE_PATH_TO_INSTALLATION; ?>style.css" type="text/css" />
+<link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.INSTALLATION_DIR; ?>style.css" type="text/css" />
 </head>
 
 <body>

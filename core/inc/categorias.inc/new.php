@@ -1,7 +1,7 @@
 
 <h2>Nova Categoria</h2>
 <p>
-    <a href="javascript: history.back();"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+    <a href="javascript: history.back();"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
 </p>
 <?php
     if(!empty($specsection['formnew_description'])){
@@ -81,5 +81,5 @@
 
 </form>
 <p>
-    <a href="javascript: history.back();"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+    <a href="javascript: history.back();"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
 </p>
