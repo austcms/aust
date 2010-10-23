@@ -801,6 +801,8 @@ class Cadastro extends Module {
      */
 
 	function getPhysicalFields( $params = array() ){
+		
+		$result = array();
         /**
          * DESCRIBE tabela
          *

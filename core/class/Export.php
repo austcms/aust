@@ -5,7 +5,7 @@
  * Responsible for exporting structure datas.
  *
  * @package Classes
- * @name Image
+ * @name Export
  * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @since v0.2, 19/10/2010
  */
@@ -46,6 +46,27 @@ class Export
 
     }
 
+	/**
+	 * getStructures()
+	 * 
+	 * Pega todos os sites, estruturas e suas configurações (mod_conf)
+	 * e retorna no formato Array.
+	 *
+	 * Os seguintes dados são exportados:
+	 *
+	 *		'Site'
+	 *		   |
+	 *		   \___ 'Estruturas'
+	 *					  |
+	 *					  |---- 'Configurações específicas', como é o caso
+	 *					  |						do módulo Cadastro
+	 *					  |
+	 *					  \---- 'Configurações' contendo dados do tipo 'mod_conf'
+	 *										    da tabela 'config'
+	 * 
+	 * @param $params Array Opcional, pode ter as seguintes chaves:
+	 *		- 'site' int: id do site único e específico que deseja-se exportar
+	 */
 	function getStructures($params = array()){
 		$aust = Aust::getInstance();
 		$data = $aust->getStructures($params);
@@ -70,30 +91,47 @@ class Export
 						unset($data[$key]['Structures'][$stKey][$fieldName]);
 					}
 				}
-				
+				$stId = $st['id'];
+
+				/*
+				 * EXPORT DATA CONFIGURATIONS
+				 */
 				if( file_exists(MODULES_DIR.$st['tipo'].'/'.MOD_CONFIG) ){
 					
 					require(MODULES_DIR.$st['tipo'].'/'.MOD_CONFIG);
-					if( !file_exists(MODULES_DIR.$st['tipo'].'/'.MOD_MODELS_DIR.''.$modInfo['className'].'Export.php') )
-						continue;
+					if( file_exists(MODULES_DIR.$st['tipo'].'/'.MOD_MODELS_DIR.''.$modInfo['className'].'Export.php') ){
 					
-					require_once MODULES_DIR.$st['tipo'].'/'.MOD_MODELS_DIR.''.$modInfo['className'].'Export.php';
-			        include_once MODULES_DIR.$st['tipo'].'/'.$modInfo['className'].'.php';
+						require_once MODULES_DIR.$st['tipo'].'/'.MOD_MODELS_DIR.''.$modInfo['className'].'Export.php';
+				        include_once MODULES_DIR.$st['tipo'].'/'.$modInfo['className'].'.php';
 
-					require(MODULES_DIR.$st['tipo'].'/'.MOD_CONFIG);
+						require(MODULES_DIR.$st['tipo'].'/'.MOD_CONFIG);
 					
-					$exportModel = $modInfo['className']."Export";
-			        $modExport = new $exportModel($modInfo['className'], $st['id']);
+						$exportModel = $modInfo['className']."Export";
+				        $modExport = new $exportModel($modInfo['className'], $st['id']);
 		
-					$exportData = $modExport->export();
-					if( $exportData ){
-						$data[$key]['Structures'][$stKey]['exportData'] = $exportData;
+						$exportData = $modExport->export();
+						if( $exportData ){
+							$data[$key]['Structures'][$stKey]['exportData'] = $exportData;
+						}
 					}
+				}
+				
+				/*
+				 * EXPORT STRUCTURE CONFIGURATIONS
+				 */
+				$sqlConfig = "SELECT * FROM config WHERE tipo='mod_conf' AND local='$stId'";
+//				print($sqlConfig."\n");
+				$configs = array();
+				$configs = $this->connection->query($sqlConfig);
+				if( !empty($configs) ){
+//					print 'FOUND'."\n";
+					//pr($configs);
+					$data[$key]['Structures'][$stKey]['modConfig'] = $configs;
 					
 				}
 			}
 		}
-//		pr($data);
+
 		return $data;
 	}
 	
@@ -112,16 +150,45 @@ class Export
 		return $json;
 	}
 	
+	function getConfigData(){
+		
+		
+	}
+	
+	/**
+	 * export()
+	 *
+	 * Exporta dados do DB para um formato JSON.
+	 *
+	 * @param $params array Opcional, pode conter o id do site que deseja-se exportar
+	 */
 	function export($params = array()){
 		$structures = $this->getStructures($params);
 		$json = $this->json($structures);
+		
+		$handle = fopen(EXPORTED_FILE, 'w' );
+		fwrite($handle, "<?php \$json = '".$json."'; ?>");
+		fclose($handle);
+		
 		return $json;
 	}
+	
 	
 	/*
 	 * IMPORTATION
 	 */
-	function import($data){
+	function import($data = ''){
+		
+		if( empty($data) ){
+			include(EXPORTED_FILE);
+			if( empty($json) )
+				return false;
+			
+			$data = $json;
+			
+		}
+		
+		
 		if( is_string($data) )
 			$data = $this->jsonToArray($data);
 		
@@ -130,6 +197,22 @@ class Export
 		}
 	}
 	
+	/**
+	 * importSite()
+	 *
+	 * Importa estruturas, categorias e suas configurações.
+	 *
+	 * @param $site Array
+	 *		O formato é um array com duas chaves, 'Site' e 'Structures'.
+	 *		
+	 *		Structures é array possuindo chaves numéricas, cada um representando
+	 *		uma estrutura. Se uma das chaves da estrutura for 'exportData', significa
+	 * 		que são dados que precisam ser importados usando uma classe especial do módulo.
+	 *
+	 *		O módulo Cadastro, por exemplo, possui a tabela cadastros_conf. O tratamento
+	 *		dos dados desta tabela específica precisa ser feito por uma classe de
+	 *		importação especial do módulo Cadastro.
+	 */
 	function importSite($site = array()){
 		if( empty($site) ) return false;
 		
@@ -157,6 +240,9 @@ class Export
 
 		$hasSite = $this->connection->query($sqlSite);
 		
+		/*
+		 * Importando ou não, $siteId é igual ao id do site
+		 */
 		if( !empty($hasSite['0']['id']) )
 			$siteId = $hasSite['0']['id'];
 		else {
@@ -177,9 +263,23 @@ class Export
 			
 			
 			$exportData = false;
+			$modConfig = false;
+			/*
+			 * Retira a chave 'exportData' da array. 'exportData' possui
+			 * possui dados especiais, como configurações.
+			 */
 			if( !empty($st['exportData']) ){
 				$exportData = $st['exportData'];
 				unset($st['exportData']);
+			}
+			
+			/*
+			 * Retira a chave 'exportData' da array. 'exportData' possui
+			 * possui dados especiais, como configurações.
+			 */
+			if( !empty($st['modConfig']) ){
+				$modConfig = $st['modConfig'];
+				unset($st['modConfig']);
 			}
 			
 			$st['subordinadoid'] = $siteId;
@@ -204,8 +304,12 @@ class Export
 
 			$hasSt = $this->connection->query($sqlSt);
 
+			
 			if( !empty($hasSt['0']['id']) )
 				$stId = $hasSt['0']['id'];
+			/*
+			 * Cria estrutura inexistente.
+			 */
 			else {
 
 				$sql = 
@@ -217,7 +321,60 @@ class Export
 
 				$this->connection->exec($sql);
 				$stId = $this->connection->lastInsertId();
-			}			
+			}
+			
+			/*
+			 * Importa 'modConfig'
+			 */
+			if( !empty($modConfig) ){
+				$i = 0;
+				$fieldNames = array();
+				$fieldValues = array();
+				foreach( $modConfig as $key=>$value ){
+
+					unset($value['id']);
+					$value['local'] = $stId;
+					foreach( $value as $fieldName=>$fieldValue ){
+						
+						$fieldNames[$i][] = $fieldName;
+						$fieldValues[$i][] = $fieldValue;
+					}
+					$i++;
+				}
+				
+				$values = array();
+				foreach( $fieldNames as $key=>$fields ){
+					$fieldsStr = implode(',', $fields);
+					$values[] = "('".implode("','", $fieldValues[$key])."')";
+				}
+
+				$sql = "DELETE FROM config WHERE tipo='mod_conf' AND local='$stId'";
+				$this->connection->exec($sql);
+				$sql = "INSERT INTO config (".$fieldsStr.") VALUES ".implode(",", $values);
+				$this->connection->exec($sql);
+			}
+			
+			/*
+			 * Inicia importação de dados de 'exportData'
+			 */
+			if( $exportData ){
+				if( file_exists(MODULES_DIR.$st['tipo'].'/'.MOD_CONFIG) ){
+					
+					require(MODULES_DIR.$st['tipo'].'/'.MOD_CONFIG);
+					if( file_exists(MODULES_DIR.$st['tipo'].'/'.MOD_MODELS_DIR.''.$modInfo['className'].'Export.php') ){
+					
+						require_once MODULES_DIR.$st['tipo'].'/'.MOD_MODELS_DIR.''.$modInfo['className'].'Export.php';
+				        include_once MODULES_DIR.$st['tipo'].'/'.$modInfo['className'].'.php';
+
+						require(MODULES_DIR.$st['tipo'].'/'.MOD_CONFIG);
+					
+						$exportModel = $modInfo['className']."Export";
+				        $modExport = new $exportModel($modInfo['className'], $st['id']);
+		
+						$modExport->import($exportData, $stId);
+					}
+				}				
+			}
 		}
 		
 	}

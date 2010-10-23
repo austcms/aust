@@ -49,7 +49,7 @@ class ExportTest extends PHPUnit_Framework_TestCase
 	}
 
 	function populate(){
-		$this->aust->connection->query("INSERT INTO categorias (nome,classe,subordinadoid) VALUES ('TestePai777','categoria-chefe','0')");
+		$this->aust->connection->exec("INSERT INTO categorias (nome,classe,subordinadoid) VALUES ('TestePai777','categoria-chefe','0')");
 		$lastInsert = $this->aust->connection->lastInsertId();
 		$this->lastSite = $lastInsert;
 		
@@ -99,6 +99,12 @@ class ExportTest extends PHPUnit_Framework_TestCase
 			
 		);
 		
+		// Pega ID da estrutura salva
+		$st = reset($this->aust->connection->query("SELECT id FROM categorias WHERE nome='Teste777Conteudo'"));
+		
+		$stId = $st['id'];
+		$this->aust->connection->exec("INSERT INTO config (tipo,local,propriedade,valor) VALUES('mod_conf','$stId','teste777777','teste777777')");
+		
 		$result = $this->CadastroSetup->createStructure($params);		
     }
 
@@ -108,6 +114,7 @@ class ExportTest extends PHPUnit_Framework_TestCase
 		$this->obj->connection->exec("DELETE FROM categorias WHERE nome='TestePai777'");
 		$this->obj->connection->exec("DELETE FROM categorias WHERE nome='Teste777'");
 		$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='".$this->lastSite."' OR comentario='haha777' OR valor IN ('haha777','teste777cadastro')");
+		$this->obj->connection->exec("DELETE FROM config WHERE propriedade='teste777777'");
 		$this->obj->connection->exec("DROP TABLE teste777cadastro");
 		$this->obj->connection->exec("DROP TABLE teste777cadastro_ref_field_ref_table");
 		
@@ -120,6 +127,7 @@ class ExportTest extends PHPUnit_Framework_TestCase
 		$hasSite = false;
 		$hasConteudo = false;
 		$hasCadastro = false;
+		$hasConfig = false;
 		
 		foreach( $structures as $value ){
 			
@@ -141,6 +149,10 @@ class ExportTest extends PHPUnit_Framework_TestCase
 					
 				} else if( in_array($structure['nome'], array('Teste777Conteudo') ) ){
 					$hasConteudo = true;
+					
+					$config = $structure['modConfig'][0];
+					if( $config['valor'] == 'teste777777' )
+						$hasConfig = true;
 				}
 				
 			}
@@ -148,6 +160,7 @@ class ExportTest extends PHPUnit_Framework_TestCase
 		
 		$this->assertTrue($hasSite, 'not saving the site');
 		$this->assertTrue($hasConteudo, 'not creating Conteudo');
+		$this->assertTrue($hasConfig, 'not creating Configuration');
 		$this->assertTrue($hasCadastro, 'not creating Cadastro');
 
 		$this->resetTables();
@@ -157,7 +170,7 @@ class ExportTest extends PHPUnit_Framework_TestCase
 		$this->populate();
 		
 		$structures = $this->obj->getStructuresBySite($this->lastSite);
-//		pr($structures);
+//		pr(json_encode($structures));
 		foreach( $structures as $value ){
 			
 			if( $value['Site']['nome'] != 'TestePai777' )
@@ -166,7 +179,7 @@ class ExportTest extends PHPUnit_Framework_TestCase
 			foreach( $value['Structures'] as $key=>$structure ){
 				
 				if( !in_array($structure['nome'], array('Teste777Cadastro', 'Teste777Conteudo') ) )
-					$this->fail('getting structures other then the requested site');
+					$this->fail('failed getting structures other then the requested site');
 				
 			}
 		}
@@ -177,22 +190,26 @@ class ExportTest extends PHPUnit_Framework_TestCase
 		$this->populate();
 		
 		$structures = $this->obj->getStructuresBySite($this->lastSite);
-		$json = $this->obj->json($structures);
+		$generatedJson = $this->obj->json($structures);
 
-		$this->assertRegExp("/(id\":\"[0..9]\")/i", $json);
-		$this->assertRegExp("/(nome\":\"TestePai777\")/i", $json);
-		$this->assertRegExp("/(nome\":\"Teste777Cadastro\")/i", $json);
-		$this->assertRegExp("/(nome\":\"Teste777Conteudo\")/i", $json);
-		$this->assertNotRegExp("/(name\":\"TestePai777)/i", $json, 'tem name na variável do site');
-		$this->assertNotRegExp("/(name\":\"Teste777)/i", $json, 'tem name na variável das estruturas');
-		$this->assertRegExp("/(referencia\":\"teste777cadastro_ref_field_ref_table\")/i", $json);
+		$this->assertRegExp("/(id\":\"[0..9]\")/i", $generatedJson);
+		$this->assertRegExp("/(nome\":\"TestePai777\")/i", $generatedJson);
+		$this->assertRegExp("/(nome\":\"Teste777Cadastro\")/i", $generatedJson);
+		$this->assertRegExp("/(nome\":\"Teste777Conteudo\")/i", $generatedJson);
+		$this->assertNotRegExp("/(name\":\"TestePai777)/i", $generatedJson, 'tem name na variável do site');
+		$this->assertNotRegExp("/(name\":\"Teste777)/i", $generatedJson, 'tem name na variável das estruturas');
+		$this->assertRegExp("/(referencia\":\"teste777cadastro_ref_field_ref_table\")/i", $generatedJson);
 		
 		// complete export
-		$json = $this->obj->export(array('site'=>$this->lastSite));
+		$newJson = $this->obj->export(array('site'=>$this->lastSite));
+		
+		include( EXPORTED_FILE );
+		$this->assertEquals( $json, $newJson, 'Not creating file with exported data.' );
 		$this->resetTables();
 	}
 	
 	function testImportation(){
+		$this->resetTables();
 		include(dirname(__FILE__).'/ExportPopulate.php');
 		
 		$importData = $this->obj->jsonToArray($json);
@@ -201,23 +218,37 @@ class ExportTest extends PHPUnit_Framework_TestCase
 		$testData = reset( $importData );
 		$testData = $testData['Site'];
 		$this->assertEquals( 'TestePai777', $testData['nome']);
+		
 
 		$this->obj->importSite(reset(json_decode($json, true)));
 		
 		// salvou o site?
-		$conf = $this->obj->connection->query("SELECT * FROM categorias WHERE nome='TestePai777'");
-		$this->assertEquals('0', $conf[0]['subordinadoid'], 'Did not save the site.' );
-		$siteId = $conf[0]['id'];
+			$conf = $this->obj->connection->query("SELECT * FROM categorias WHERE nome='TestePai777'");
+			$this->assertEquals('0', $conf[0]['subordinadoid'], 'Did not save the site.' );
+			$siteId = $conf[0]['id'];
+
+		// CONTEUDO
+			$conf = $this->obj->connection->query("SELECT * FROM categorias WHERE nome='Teste777Conteudo'");
+			$this->assertEquals($siteId, $conf[0]['subordinadoid'], 'Did not save the conteudo.' );
+			$this->assertEquals('estrutura', $conf[0]['classe'], 'Did not save the conteudo.' );
+			$conteudoId = $conf[0]['id'];
 		
-		$conf = $this->obj->connection->query("SELECT * FROM categorias WHERE nome='Teste777Conteudo'");
-		$this->assertEquals($siteId, $conf[0]['subordinadoid'], 'Did not save the conteudo.' );
-		$this->assertEquals('estrutura', $conf[0]['classe'], 'Did not save the conteudo.' );
+			// CONTEUDO MODCONFIG
+				$conf = $this->obj->connection->query("SELECT * FROM config WHERE local='$conteudoId' AND propriedade='teste777777' LIMIT 1");
+				$this->assertEquals('teste777777', $conf[0]['valor'], 'Not importing modConfig.' );
+				
+		// CADASTRO
+			$conf = $this->obj->connection->query("SELECT * FROM categorias WHERE nome='Teste777Cadastro'");
+			$this->assertEquals($siteId, $conf[0]['subordinadoid'], 'Did not save the cadastro.' );
+			$this->assertEquals('estrutura', $conf[0]['classe'], 'Did not save the cadastro.' );
+			$stId = $conf[0]['id'];
 		
-		$conf = $this->obj->connection->query("SELECT * FROM categorias WHERE nome='Teste777Cadastro'");
-		$this->assertEquals($siteId, $conf[0]['subordinadoid'], 'Did not save the cadastro.' );
-		$this->assertEquals('estrutura', $conf[0]['classe'], 'Did not save the cadastro.' );
-		
-//		pr($importData);
+			$conf = $this->Cadastro->pegaInformacoesCadastro($stId);
+			$this->assertEquals('teste777cadastro', $conf['estrutura']['tabela']['valor'], 'Did not save the cadastro\' conf.' );
+			$this->assertEquals('campo_1', $conf['campo']['campo_1']['chave'], 'Did not save the cadastro\' field.' );
+			$this->assertEquals('campo_2', $conf['campo']['campo_2']['chave'], 'Did not save the cadastro\' field.' );
+			$this->assertEquals('campo_3', $conf['campo']['campo_3']['chave'], 'Did not save the cadastro\' field.' );
+			$this->assertEquals( $stId, $conf['campo']['campo_3']['categorias_id'], 'Did not save the austNode.' );
 		
 		$this->resetTables();
 	}

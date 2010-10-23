@@ -3,156 +3,24 @@
 /*
  * MOD_CONF
  */
-if( !empty($_POST['conf_type']) AND $_POST['conf_type'] == "mod_conf" ){
-    /**
-     *
-     */
-    $modulo->saveModConf($_POST);
-}
-
-/**
- * FUNÇÃO
- *
- * Campo necessário? Desativar campo? Usar em listagem?
- *
- * Se $_GET['function'] existir
- */
-if(!empty($_GET['function'])){
-    /**
-     * DESATIVAR CAMPO
-     */
-    if($_GET['function'] == "desativar"){
-        $sql = "
-                UPDATE
-                    cadastros_conf
-                SET
-                    desativado='1'
-                WHERE
-                    chave='".$_GET['w']."' AND
-                    categorias_id='".$_GET['aust_node']."'
-        ";
-        if($modulo->connection->exec($sql))
-            $status[] = "Campo desativado com sucesso";
-        else
-            $status[] = "Erro ao desativar campo.";
-    }
-    /**
-     * ATIVAR CAMPO
-     */
-    if($_GET['function'] == "ativar"){
-        $sql = "
-                UPDATE
-                    cadastros_conf
-                SET
-                    desativado='0'
-                WHERE
-                    chave='".$_GET['w']."' AND
-                    categorias_id='".$_GET['aust_node']."'
-        ";
-        if($modulo->connection->exec($sql))
-            $status[] = "Campo ativado com sucesso";
-        else
-            $status[] = "Erro ao ativar campo.";
-    }
-
-    /**
-     * NECESSARIO
-     */
-    if($_GET['function'] == "necessario"){
-        $sql = "
-                UPDATE
-                    cadastros_conf
-                SET
-                    necessario='1'
-                WHERE
-                    chave='".$_GET['w']."' AND
-                    categorias_id='".$_GET['aust_node']."'
-        ";
-        if($modulo->connection->exec($sql))
-            $status[] = "Preenchimento do campo ajustado para necessário com sucesso.";
-        else
-            $status[] = "Erro ao executar ação.";
-    }
-
-    /**
-     * CAMPO NÃO OBRIGATÓRIO
-     */
-    if($_GET['function'] == "desnecessario"){
-        $sql = "
-                UPDATE
-                    cadastros_conf
-                SET
-                    necessario='0'
-                WHERE
-                    chave='".$_GET['w']."' AND
-                    categorias_id='".$_GET['aust_node']."'
-        ";
-        if($modulo->connection->exec($sql))
-            $status[] = "Não é necessário preenchimento obrigatório do campo ajustado com sucesso.";
-        else
-            $status[] = "Erro ao executar ação.";
-    }
-
-    /**
-     * LISTAR
-     *
-     * Campo deve aparecer em listagens
-     */
-    if($_GET['function'] == "listar"){
-        $sql = "
-                UPDATE
-                    cadastros_conf
-                SET
-                    listagem='1'
-                WHERE
-                    chave='".$_GET['w']."' AND
-                    categorias_id='".$_GET['aust_node']."'
-        ";
-        if($modulo->connection->exec($sql))
-            $status[] = "Campo aparecerá na listagem de cadastro.";
-        else
-            $status[] = "Erro ao executar ação.";
-    }
-
-    /**
-     * NÃO LISTAR
-     *
-     * Campo não deve aparecer em listagens
-     */
-    if($_GET['function'] == "naolistar"){
-        $sql = "
-                UPDATE
-                    cadastros_conf
-                SET
-                    listagem='0'
-                WHERE
-                    chave='".$_GET['w']."' AND
-                    categorias_id='".$_GET['aust_node']."'
-        ";
-        if($modulo->connection->exec($sql))
-            $status[] = "O campo selecionado não aparecerá mais em listagens.";
-        else
-            $status[] = "Erro ao executar ação.";
-    }
-
-}
-
-/**
- * Desativar campos
- */
-if(!empty($_GET['function'])){
-    if($_GET['function'] == 'desativar' AND !empty($_GET['w'])){
-        $sql = "
-                UPDATE
-                    cadastros_conf
-                SET
-                    tipo='campodesativado'
-
-
-";
-    }
+if( !empty($_GET['export']) ){
+	$export = Export::getInstance();
+	if( $_GET['export'] == "true" ){
+	    /**
+	     *
+	     */
+	    $export->export();
+	} else if( $_GET['export'] == "clean" ){
+		$handle = fopen(EXPORTED_FILE, "w");
+		fwrite( $handle, '');
+		fclose($handle);
+		
+	} else if( $_GET['export'] == "import" ){
+	    $export->import();
+	}
 }
 ?>
+
 
 <h2>Configuração: <?php echo $aust->leNomeDaEstrutura($_GET['aust_node'])?></h2>
 <?php if(!empty($status)){ ?>
@@ -186,11 +54,31 @@ if(!empty($_GET['function'])){
     ?>
     <div class="widget">
         <div class="titulo">
-            <h3>Configurações</h3>
+            <h3>Exportar Estruturas</h3>
         </div>
         <div class="content">
             <p>
-				teste
+				<a href="adm_main.php?section=<?php echo $_GET['section'] ?>&export=true">
+					Exportar dados agora
+				</a>
+			</p>
+			<p>
+				<?php
+				if( !is_writable(EXPORTED_FILE) ){
+					?>
+					<span style="color: red">
+					Sem permissão de escrita no arquivo <?php echo EXPORTED_FILE; ?>
+					</span>
+					<?php
+				} else {
+					?>
+					<span style="color: green">
+					Arquivo <?php echo EXPORTED_FILE; ?> com permissão de escrita.
+					</span>
+					<?php
+				}
+				
+				?>
 			</p>
 
         </div>
@@ -199,13 +87,13 @@ if(!empty($_GET['function'])){
 
     <div class="widget">
         <div class="titulo">
-            <h3></h3>
+            <h3>Outras opções</h3>
         </div>
         <div class="content">
             <p>
-	            <p>
-					teste
-				</p>
+				<a href="adm_main.php?section=<?php echo $_GET['section'] ?>&export=clean">
+					Limpar dados exportados
+				</a>
                 
             </p>
 
@@ -224,28 +112,14 @@ if(!empty($_GET['function'])){
     ?>
     <div class="widget">
         <div class="titulo">
-            <h3>vasdv</h3>
+            <h3>Importar</h3>
         </div>
         <div class="content">
-            <p>avds</p>
-
-        </div>
-        <div class="footer"></div>
-    </div>
-    <?
-    /*
-     * Opções gerais do cadastro
-     */
-    ?>
-    <div class="widget">
-        <div class="titulo">
-            <h3>asdv</h3>
-        </div>
-        <div class="content">
-            <p></p>
-            <form method="post" action="<?php echo $config->self;?>" class="simples pequeno">
-
-            </form>
+            <p>
+				<a href="adm_main.php?section=<?php echo $_GET['section'] ?>&export=import">
+					Importar dados agora
+				</a>
+			</p>
 
         </div>
         <div class="footer"></div>
