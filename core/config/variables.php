@@ -77,7 +77,8 @@ define("CORE_DIR", "core/");
     /**
      * Diretório dos módu1os
      */
-    define('MODULOS_DIR', 'modulos/');
+	 define('MODULES_DIR', 'modulos/');
+	 define('MODULOS_DIR', MODULES_DIR);
     /**
      * Diretório de inclusão de arquivos ('inc')
      */
@@ -120,14 +121,19 @@ define("CORE_DIR", "core/");
  * Configurações gerais 
  */
 define('CONFIG_DIR', 'config/');
-/**
- * Endereço do arquivo de configurações da base de dados
- */
-define('CONFIG_DATABASE_FILE', CONFIG_DIR.'database.php');
-/**
- * Configurações do Core
- */
-define('CONFIG_CORE_FILE', CONFIG_DIR.'core.php');
+	/**
+	 * Endereço do arquivo de configurações da base de dados
+	 */
+	define('CONFIG_DATABASE_FILE', CONFIG_DIR.'database.php');
+	/**
+	 * Configurações do Core
+	 */
+	define('CONFIG_CORE_FILE', CONFIG_DIR.'core.php');
+	/**
+	 * Exported Data
+	 */
+	define('EXPORTED_DIR', CONFIG_DIR.'export/');
+	define('EXPORTED_FILE', EXPORTED_DIR.'exported_data.php');
 
 
 /**

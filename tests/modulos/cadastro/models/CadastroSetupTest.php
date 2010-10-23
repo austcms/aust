@@ -704,7 +704,10 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					$result = $this->obj->addField($params);
 		
 					$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'campo_1'), 'Text: campo_1 not created.' );
-					$this->assertArrayHasKey('0', $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_1' AND categorias_id='7777'") );
+					$query = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_1' AND categorias_id='7777'");
+					$this->assertArrayHasKey('0', $query );
+					$query = reset($query);
+					$this->assertEquals('text', $query['especie'] );
 					$this->destroyTests();
 			}
 		
