@@ -22,7 +22,7 @@ class ConnectionTest extends PHPUnit_Framework_TestCase
         /*
          * Informações de conexão com banco de dados
          */
-        require('tests/config/database.php');
+        
         
         $this->conexao = Connection::getInstance();
 		$this->conexao->exec('create table '.$this->standardTableName.'(id int)');

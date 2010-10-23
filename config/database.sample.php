@@ -10,7 +10,7 @@
 class DATABASE_CONFIG
 {
     static $dbConn = array(
-        'server' => 'localhost',
+        'server' => '127.0.0.1',
         'database' => 'aust',
         'username' => 'root',
         'password' => '', 

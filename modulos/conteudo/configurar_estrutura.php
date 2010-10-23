@@ -288,7 +288,7 @@ if(!empty($_GET['function'])){
     </div>
 </div>
 
-<div class="painel-metade painel-dois">
+<div class="widget_group">
     <?
     /**
      * LISTAGEM DE CAMPOS

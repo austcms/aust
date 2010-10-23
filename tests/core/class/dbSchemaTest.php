@@ -21,7 +21,7 @@ class dbSchemaTest extends PHPUnit_Framework_TestCase
          * Informações de conexão com banco de dados
          */
 
-        require('tests/config/database.php');
+        
         
         $this->conexao = Connection::getInstance();
 
