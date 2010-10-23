@@ -26,7 +26,6 @@ class ExportTest extends PHPUnit_Framework_TestCase
         /*
          * Informações de conexão com banco de dados
          */
-        require('tests/config/database.php');
 
         // Conteúdos
         include 'modulos/conteudo/'.MOD_CONFIG;
@@ -72,19 +71,19 @@ class ExportTest extends PHPUnit_Framework_TestCase
             'author' => 1,
 			'fields' => array(
 				array(
-					'name' => 'Campo 1',
+					'name' => 'Campo 1777',
 					'type' => 'string',
 					'description' => 'haha777',
 				),
 				array(
-					'name' => 'Campo 2',
+					'name' => 'Campo 2777',
 					'type' => 'relational_onetoone',
 					'description' => 'haha777',
 					'refTable' => 'ref_table',
 					'refField' => 'ref_field',
 				),
 				array(
-					'name' => 'Campo 3',
+					'name' => 'Campo 3777',
 					'type' => 'relational_onetomany',
 					'description' => 'haha777',
 					'refTable' => 'ref_table',
@@ -113,7 +112,14 @@ class ExportTest extends PHPUnit_Framework_TestCase
 		$this->obj->connection->exec("DELETE FROM categorias WHERE nome='Teste777Conteudo'");
 		$this->obj->connection->exec("DELETE FROM categorias WHERE nome='TestePai777'");
 		$this->obj->connection->exec("DELETE FROM categorias WHERE nome='Teste777'");
-		$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='".$this->lastSite."' OR comentario='haha777' OR valor IN ('haha777','teste777cadastro')");
+		$this->obj->connection->exec(
+			"DELETE FROM
+				cadastros_conf
+			WHERE
+				categorias_id='".$this->lastSite."' OR
+				comentario='haha777' OR
+				nome='haha777' OR
+				valor IN ('haha777','teste777cadastro', 'Campo 1777', 'Campo 2777', 'Campo 3777')");
 		$this->obj->connection->exec("DELETE FROM config WHERE propriedade='teste777777'");
 		$this->obj->connection->exec("DROP TABLE teste777cadastro");
 		$this->obj->connection->exec("DROP TABLE teste777cadastro_ref_field_ref_table");
@@ -241,15 +247,51 @@ class ExportTest extends PHPUnit_Framework_TestCase
 			$conf = $this->obj->connection->query("SELECT * FROM categorias WHERE nome='Teste777Cadastro'");
 			$this->assertEquals($siteId, $conf[0]['subordinadoid'], 'Did not save the cadastro.' );
 			$this->assertEquals('estrutura', $conf[0]['classe'], 'Did not save the cadastro.' );
+			
+			// criou tabelas tb?
+			$this->assertTrue( $this->obj->connection->hasTable('teste777cadastro'), 'Não criou tabelas do cadastro.' );
+			$this->assertTrue( $this->obj->connection->hasTable('teste777cadastro_ref_field_ref_table'), 'Não criou tabelas de referência do cadastro.' );
 			$stId = $conf[0]['id'];
 		
-			$conf = $this->Cadastro->pegaInformacoesCadastro($stId);
-			$this->assertEquals('teste777cadastro', $conf['estrutura']['tabela']['valor'], 'Did not save the cadastro\' conf.' );
-			$this->assertEquals('campo_1', $conf['campo']['campo_1']['chave'], 'Did not save the cadastro\' field.' );
-			$this->assertEquals('campo_2', $conf['campo']['campo_2']['chave'], 'Did not save the cadastro\' field.' );
-			$this->assertEquals('campo_3', $conf['campo']['campo_3']['chave'], 'Did not save the cadastro\' field.' );
-			$this->assertEquals( $stId, $conf['campo']['campo_3']['categorias_id'], 'Did not save the austNode.' );
+		$conf = $this->Cadastro->pegaInformacoesCadastro($stId);
+		$this->assertEquals('teste777cadastro', $conf['estrutura']['tabela']['valor'], 'Did not save the cadastro\' conf.' );
+		$this->assertEquals('campo_1777', $conf['campo']['campo_1777']['chave'], 'Did not save the cadastro\' field.' );
+		$this->assertEquals('campo_2777', $conf['campo']['campo_2777']['chave'], 'Did not save the cadastro\' field.' );
+		$this->assertEquals('campo_3777', $conf['campo']['campo_3777']['chave'], 'Did not save the cadastro\' field.' );
+		$this->assertEquals( $stId, $conf['campo']['campo_3777']['categorias_id'], 'Did not save the austNode.' );
 		
+		$this->resetTables();
+	}
+	
+	function testImportTwice(){
+		$this->resetTables();
+		include(dirname(__FILE__).'/ExportPopulate.php');
+		
+		$importData = $this->obj->jsonToArray($json);
+
+		// verifica integridade do JSON
+		$testData = reset( $importData );
+		$testData = $testData['Site'];
+		$this->assertEquals( 'TestePai777', $testData['nome']);
+		
+
+		$this->obj->importSite(reset(json_decode($json, true)));
+		$this->obj->importSite(reset(json_decode($json, true)));
+
+		$conf = $this->obj->connection->query("SELECT * FROM categorias WHERE classe='estrutura'");
+		
+		$existentSt = array();
+		foreach( $conf as $value ){
+			if( in_array($value['nome'], $existentSt) ){
+				$this->fail('Salvando estrutura repetida.');
+				break;
+			}
+			$existentSt[] = $value['nome'];
+		}
+
+		$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE chave='campo_1777'");
+		$this->assertEquals(1, count($conf), 'Salvando várias vezes a mesma configuração');
+
 		$this->resetTables();
 	}
 

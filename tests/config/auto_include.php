@@ -2,7 +2,7 @@
 // PHP 5.3 needs this
 date_default_timezone_set('America/Sao_Paulo');
 
-require 'tests/config/database.php';
+include_once 'tests/config/database.php';
 require("core/config/variables.php");
 
 if( !defined('UPLOAD_DIR') )

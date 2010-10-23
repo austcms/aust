@@ -444,6 +444,21 @@ class Connection extends SQLObject {
 		
 	}
 
+	function describeTable($table, $fieldAsKey = false){
+		$fields = $this->query('DESCRIBE '.$table);
+		
+		if( $fieldAsKey ){
+			$result = array();
+			foreach( $fields as $key=>$value ){
+				$result[$value['Field']] = $value;
+			}
+		} else {
+			$result = $fields;
+		}
+		
+		return $result;
+	}
+	
     public function VerificaAdmin(){
             $sql = "SELECT admins.id
                             FROM

@@ -185,9 +185,7 @@ class Export
 				return false;
 			
 			$data = $json;
-			
 		}
-		
 		
 		if( is_string($data) )
 			$data = $this->jsonToArray($data);
@@ -297,13 +295,12 @@ class Export
 				WHERE
 					nome LIKE '".$st['nome']."' AND
 					classe='estrutura' AND
-					tipo = '".$st['nome']."'
+					tipo = '".$st['tipo']."'
 				LIMIT
 					1
 				";
 
 			$hasSt = $this->connection->query($sqlSt);
-
 			
 			if( !empty($hasSt['0']['id']) )
 				$stId = $hasSt['0']['id'];
@@ -369,9 +366,9 @@ class Export
 						require(MODULES_DIR.$st['tipo'].'/'.MOD_CONFIG);
 					
 						$exportModel = $modInfo['className']."Export";
-				        $modExport = new $exportModel($modInfo['className'], $st['id']);
-		
-						$modExport->import($exportData, $stId);
+				        $modExport = new $exportModel($modInfo['className'], $stId);
+						$st['id'] = $stId;
+						$modExport->import($exportData, $st);
 					}
 				}				
 			}
