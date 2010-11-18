@@ -59,7 +59,7 @@ if( !empty($_GET['export']) ){
         <div class="content">
             <p>
 				<a href="adm_main.php?section=<?php echo $_GET['section'] ?>&export=true">
-					Exportar dados agora
+					Exportar para arquivo no código-fonte
 				</a>
 			</p>
 			<p>
@@ -79,6 +79,11 @@ if( !empty($_GET['export']) ){
 				}
 				
 				?>
+			</p>
+            <p>
+				<a href="<?php  ?>">
+					Exportar para download
+				</a>
 			</p>
 
         </div>
