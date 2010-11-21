@@ -133,20 +133,20 @@ if ( $result > 0 ){
     echo '<p style="color: green;">As informações foram salvas com sucesso!</p>';
     echo '
         <p>
-            <a href="adm_main.php?section='.$_GET['section'].'&action=list_content"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+            <a href="adm_main.php?section='.$_GET['section'].'&action=list_content"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
         </p>';
 
 } elseif ( is_int($result) AND $result == 0 ){
     echo '<p style="color: green;">Os valores entrados já existém. Nenhuma alteração feita.</p>';
     echo '
         <p>
-            <a href="adm_main.php?section='.$_GET['section'].'&action=list_content"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+            <a href="adm_main.php?section='.$_GET['section'].'&action=list_content"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
         </p>';
 } else {
     echo '<p style="color: red;">Ocorreu um erro desconhecido ao salvar as informações. Tente novamente.</p>';
     echo '
         <p>
-            <a href="adm_main.php?section='.$_GET['section'].'"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+            <a href="adm_main.php?section='.$_GET['section'].'"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
         </p>';
 }
 

@@ -35,7 +35,7 @@ if($fm == 'editar'){
 ?>
 
 <p style="margin-top: 15px;">
-    <a href="adm_main.php?section=admins"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+    <a href="adm_main.php?section=admins"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
 </p>
 <h2>Novo Usuário</h2>
 <p>
@@ -219,5 +219,5 @@ if($fm == 'criar'){ ?>
 
 </form>
 <p style="margin-top: 15px;">
-    <a href="adm_main.php?section=admins"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+    <a href="adm_main.php?section=admins"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
 </p>

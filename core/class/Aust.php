@@ -317,16 +317,21 @@ class Aust {
      *
      * @return <array>
      */
-    public function getStructures() {
+    public function getStructures($params = array()) {
+	
+		$where = '';
+		if( !empty($params['site']) && is_numeric($params['site']) )
+			$where = "AND id='".$params['site']."'";
         /**
          * SITES
          */
         $sql = "SELECT
-                    id,nome as name
+                    *, nome as name
                 FROM
                     categorias
                 WHERE
                     subordinadoid='0'
+					$where
                 ";
 
         $query = $this->conexao->query($sql);
@@ -335,8 +340,7 @@ class Aust {
          * Each site
         */
         foreach( $query as $key=>$sites) {
-            $result[$key]['Site']['id'] = $sites['id'];
-            $result[$key]['Site']['name'] = $sites['name'];
+            $result[$key]['Site'] = $sites;
 
             /*
              * Get Structures of each site
@@ -368,7 +372,7 @@ class Aust {
          * Structures of given site
         */
         $sql = "SELECT
-                    lp.id, lp.subordinadoid, lp.nome, lp.tipo as tipo,
+                    lp.*, lp.nome as name, lp.tipo as tipo,
                     ( SELECT COUNT(*)
                     FROM
                     ".self::$austTable." As clp
