@@ -177,7 +177,8 @@ class Arquivos extends Module
              */
             $urlBaseDir = str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']).$this->relativeDir;
             $frmurl = $urlBaseDir.$upload_dir .'/'.$newFilename;
-             $this->forPost[$filename]['frmurl'] = $frmurl;
+            $this->forPost[$filename]['frmurl'] = $frmurl;
+            $this->forPost[$filename]['frmoriginal_filename'] = $file['name'];
 
             /*
              * System path

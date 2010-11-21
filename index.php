@@ -45,39 +45,6 @@ if( !is_dir('uploads/editor') ){
 	mkdir('uploads/editor', 0777);
 }
 require_once("core/load_core.php");
-//pr( $conexao->query('SELECT * FROM admins') );
-/**
- * SCHEMA TEST
- */
-/*
-pr($dbSchema->verificaSchema());
-
-$verificaSchema = $dbSchema->verificaSchema();
-
-if($verificaSchema == 1){
-    echo 'tudo ok';
-} elseif($verificaSchema == 0) {
-    echo 'Faltando tabelas';
-    echo '<br />';
-    if($dbSchema->instalarSchema() == 1){
-        echo 'instalado';
-        echo '<br />';
-    } else {
-        echo 'alguns erros na instalação';
-        echo '<br />';
-    }
-
-} elseif($verificaSchema == -1){
-    echo 'campos faltando<br />';
-} elseif($verificaSchema == -2){
-    echo 'tabelas faltando<br />';
-}
-
-echo '<br />';
-echo '<br />';
-echo '<br />';
-
-*/
 
 // verifica se banco de dados existe
 if($conexao->DBExiste){
@@ -98,19 +65,19 @@ if($conexao->DBExiste){
 
             // Se deve-se criar um admin no sistema (pois não há um)
             if( !empty($_POST['configurar']) AND ($_POST['configurar'] == 'criar_admin') OR (!$conexao->VerificaAdmin()) ){
-                require('core/config/installation/criar_admin.inc.php');
+                require(INSTALLATION_DIR.'criar_admin.inc.php');
 
             // Deve-se configurar o sistema
             } elseif(isset($_GET['configurar'])){
-                require('core/config/installation/configurar.inc.php');
+                require(INSTALLATION_DIR.'configurar.inc.php');
 
             // Verificar se usuário (username&password) existe para login
             } elseif(!empty($_GET['login']) AND $_GET['login'] == 'verify') {
-                require('core/login/login_engine.php');
+                require(LOGIN_PATH.'login_engine.php');
 
             // Página inicial, formulário de login
             } else {
-                require('core/login/login_form.php');
+                require(LOGIN_PATH.'login_form.php');
             }
 
     } else {

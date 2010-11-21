@@ -2071,6 +2071,14 @@ class Module
         return true;
     }
 
+	
+	/*
+	 * EXPORT
+	 */
+	function export($params = ''){
+		return false;
+	}
+
 
 }
 

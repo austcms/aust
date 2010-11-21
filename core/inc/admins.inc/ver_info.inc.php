@@ -17,7 +17,7 @@
     $dados = $query[0];
 ?>
 <p>
-    <a href="javascript: history.go(-1);"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+    <a href="javascript: history.go(-1);"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
 </p>
 <h2>Ver informações</h2>
 <p>
@@ -36,7 +36,7 @@
     Cadastrado desde <?php echo $dados["adddate"];?>
 </p>
 <p>
-    <a href="javascript: history.go(-1);"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+    <a href="javascript: history.go(-1);"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
 </p>
 
 

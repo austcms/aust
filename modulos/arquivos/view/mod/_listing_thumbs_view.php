@@ -38,8 +38,7 @@ if(count($query) == 0){
 			}
 			$randomNumber = rand(0,10000);
 			?>
-			<div class="image" style="background-image: url(<?php echo IMAGE_VIEWER_DIR?>visualiza_foto.php?table=imagens&thumbs=yes&myid=<?php echo $value["id"]; ?>&minxsize=<?php echo $thumbsW?>&minysize=<?php echo $thumbsH?>&r=<?php echo $randomNumber?><?php echo $fromFile; ?>)">
-			</div>
+			<img src="<?php echo getFileIcon($value['arquivo_nome']);?>" />
 			<?php
 			if( $permissoes->canEdit($_GET['aust_node']) ){ 
 				?>
@@ -48,8 +47,23 @@ if(count($query) == 0){
 			}
 			?>
 			<div class="info">
-				<input type="checkbox" name="itens[]" value="<?php echo $value['id'];?>" />
-				<?php echo $value['titulo'] ?>
+				<?php
+				if( $permissoes->canDelete($austNode) ){
+					?>
+					<input type="checkbox" name="itens[]" value="<?php echo $value['id'];?>" />
+					<?php
+				}
+				?>
+				<?php
+				if( !empty($value['titulo']) )
+					$title = $value['titulo'];
+				else if( !empty($value['original_filename']) )
+					$title = $value['original_filename'];
+				else
+					$title = $value['arquivo_nome'];
+					
+				echo lineWrap($title);
+				?>
 			</div>
 		</span>
 		</td>
