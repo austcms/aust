@@ -261,7 +261,7 @@
     /*
      * ORDEM
      */
-    if( $modulo->getStructureConfig("ordem") ){
+    if( $modulo->getStructureConfig("ordem") || $modulo->getStructureConfig("ordenate") ){
     ?>
     <tr>
         <td valign="top"><label>Ordem:</label></td>

@@ -68,6 +68,7 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 
 			function possibleTableNames(){
 				return array(
+					array('ex_alunos', 'Ex-alunos'),
 					array('minha_tabela', 'Minha Tabela'),
 					array('tabela_com_c_cedilha', 'tábéla cOm ç ÇedilhA'),
 					array('aaaaa_eeee_iiii_oooo_uuuu', 'áâäãà éêëè íîïì óôöò úûüù'),
