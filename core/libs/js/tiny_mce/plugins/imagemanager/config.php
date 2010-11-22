@@ -1,5 +1,6 @@
 <?php
-	require_once($basepath . "ImageManager/ImageManagerPlugin.php");
+require_once($basepath . "ImageManager/ImageManagerPlugin.php");
+
 
 	// * * * * ImageManager config
 
@@ -33,7 +34,22 @@
 	// General filesystem options
 	$mcImageManagerConfig['filesystem'] = "Moxiecode_LocalFileImpl";
 	$mcImageManagerConfig['filesystem.path'] = ''; // absolute or relative from this script path, optional.
-	$mcImageManagerConfig['filesystem.rootpath'] = '../../../../../../uploads/editor/'; // absolute or relative from this script path, required.
+
+//	$mcImageManagerConfig['filesystem.rootpath'] = THIS_TO_BASEURL.Registry::read('imagemanager.filesystem.rootpath'); // absolute or relative from this script path, required.
+
+
+	// MUTRETA PRA CARREGAR PATH DE IMG DINAMICAMENTE
+	ob_start();
+	$oneMoreDir = '';
+	$isJs = array_reverse( explode('/', getcwd() ) );
+	if( reset($isJs) )
+		$oneMoreDir = '../';
+	$thisToBaseUrl = '../../../../../../';
+	$concat = file_get_contents($basepath.$thisToBaseUrl.$oneMoreDir.'config/tiny_mce');
+	ob_end_clean();
+
+	$mcImageManagerConfig['filesystem.rootpath'] = '../../../../../../'.$concat;//.$_SESSION['imagemanager']['filesystem.rootpath']; // absolute or relative from this script path, required.
+	
 	$mcImageManagerConfig['filesystem.datefmt'] = "Y-m-d H:i";
 	$mcImageManagerConfig['filesystem.include_directory_pattern'] = '';
 	$mcImageManagerConfig['filesystem.exclude_directory_pattern'] = '/^mcith$/i';

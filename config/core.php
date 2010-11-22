@@ -28,7 +28,7 @@ $aust_charset['db_collate'] = 'utf8_general_ci';
  */
 
     Registry::write('austTable','categorias');
-
+	
     /*
      * DEBUG LEVEL
      *
@@ -44,6 +44,7 @@ $aust_charset['db_collate'] = 'utf8_general_ci';
 
     Registry::write('configStandardType','Geral');
     Registry::write('defaultTheme','classic_blue');
+
     /*
      * Configurações que devem ser instaladas automaticamente.
      */

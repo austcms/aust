@@ -1,5 +1,8 @@
 <?php
 
+session_name('aust');
+session_start();
+
 /*
 // Use specified session instead
 if (isset($_REQUEST['sessionid']))
