@@ -1,5 +1,6 @@
 nbproject/
 config/database.php
+config/tinymce
 uploads/
 core/cache/*
 core/user_interface/cache/*
