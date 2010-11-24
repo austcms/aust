@@ -24,6 +24,10 @@ $(document).ready(function(){
 		changeViewMode(this);
 	});
 	
+	// Confirmation alerts
+	$(".js_confirm").live('click', function(){
+		return confirm('Você tem certeza desta decisão?');
+	});
     
     if($('div.campooptions').length > 0){$('div.campooptions').hide();}
     if($('div.est_options').length > 0){$('div.est_options').hide();}

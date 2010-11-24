@@ -66,7 +66,7 @@ $query = $modulo->connection->query($sql);
  */
 if( $permissoes->canDelete($austNode) ){
     ?>
-    <div class="painel_de_controle"><input type="submit" name="deletar" value="Deletar selecionados" />
+    <div class="painel_de_controle"><input type="submit" class="js_confirm" name="deletar" value="Deletar selecionados" />
     </div>
     <?php
 }
