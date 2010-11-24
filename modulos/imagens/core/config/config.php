@@ -130,6 +130,14 @@ $modInfo = array(
 	        "label" => "Tem descrição?",
 	        "inputType" => "checkbox",
 	    ),
+		    /*
+		     * Tem editor rico de texto em descrição?
+		     */
+		    'description_has_rich_editor' => array(
+		        "value" => "",
+		        "label" => "Descrição tem editor de texto rico?",
+		        "inputType" => "checkbox",
+		    ),
 	    /*
 	     * Tem Link?
 	     */

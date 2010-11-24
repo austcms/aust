@@ -1,7 +1,7 @@
 <?php
 
-session_name('aust');
-session_start();
+//session_name('aust');
+//session_start();
 
 /*
 // Use specified session instead

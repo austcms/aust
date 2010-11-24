@@ -13,6 +13,10 @@
 
     $moduloConfig = $modulo->loadModConf($params);
 
+	// tem editor?
+	if( $modulo->getStructureConfig('description_has_rich_editor') == '1' )
+		$modulo->loadHtmlEditor();
+    
 
 /*
  * Ajusta variáveis iniciais
@@ -295,7 +299,7 @@
     if( $modulo->getStructureConfig("descricao") ){
         ?>
         <tr>
-            <td valign="top"><label>Descrição da galeria: </label>
+            <td valign="top"><label>Descrição: </label>
             </td>
             <td>
                 <textarea name="frmtexto" id="jseditor" rows="8" style="width: 400px"><?php if( !empty($dados['texto']) ) echo $dados['texto'];?></textarea>

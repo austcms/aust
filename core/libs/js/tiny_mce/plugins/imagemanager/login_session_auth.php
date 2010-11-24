@@ -1,5 +1,4 @@
 <?php
-session_name('aust');
 session_start();
 $_SESSION['isLoggedIn'] = true;
 $_SESSION['user'] = "Administrador";

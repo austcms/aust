@@ -41,14 +41,38 @@ require_once($basepath . "ImageManager/ImageManagerPlugin.php");
 	// MUTRETA PRA CARREGAR PATH DE IMG DINAMICAMENTE
 	ob_start();
 	$oneMoreDir = '';
-	$isJs = array_reverse( explode('/', getcwd() ) );
-	if( reset($isJs) )
-		$oneMoreDir = '../';
 	$thisToBaseUrl = '../../../../../../';
-	$concat = file_get_contents($basepath.$thisToBaseUrl.$oneMoreDir.'config/tiny_mce');
+	$isJs = array_reverse( explode('/', getcwd() ) );
+	
+	$concat = file_get_contents($basepath.$thisToBaseUrl.'../config/tiny_mce');
+	if( reset($isJs) == 'js' )
+		$thisToBaseUrl.= '../';
 	ob_end_clean();
 
-	$mcImageManagerConfig['filesystem.rootpath'] = '../../../../../../'.$concat;//.$_SESSION['imagemanager']['filesystem.rootpath']; // absolute or relative from this script path, required.
+//	var_dump( is_file($basepath.$thisToBaseUrl.'config/tiny_mce' ) );
+/*
+echo $concat;
+	echo "<br>\n";
+	echo "<br>\n";
+	echo "<br>\n";
+	echo "<br>\n";
+	echo "<br>\n";
+	echo "<br>\n";
+	echo "<br>\n";
+echo "<br>\n";
+echo "<br>\n";
+
+chdir($thisToBaseUrl.$concat);
+
+echo "<br>";
+var_dump( getcwd() );
+
+//echo $concat;
+
+exit();
+*/
+//	$mcImageManagerConfig['filesystem.rootpath'] = '../../../../../../';//.$_SESSION['imagemanager']['filesystem.rootpath']; // absolute or relative from this script path, required.
+	$mcImageManagerConfig['filesystem.rootpath'] = $thisToBaseUrl.$concat;//.$_SESSION['imagemanager']['filesystem.rootpath']; // absolute or relative from this script path, required.
 	
 	$mcImageManagerConfig['filesystem.datefmt'] = "Y-m-d H:i";
 	$mcImageManagerConfig['filesystem.include_directory_pattern'] = '';

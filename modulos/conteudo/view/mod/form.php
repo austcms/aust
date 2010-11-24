@@ -15,6 +15,7 @@
 	$editorPlugins = '';
 	if( $modulo->getStructureConfig('upload_inline_images') == '1' )
 		$editorPlugins = 'imagemanager';
+	
     $modulo->loadHtmlEditor($editorPlugins);
 
 
@@ -250,6 +251,8 @@
      */
 
         include(INC_DIR.'conteudo.inc/form_embedownform.php');
+
+
 ?>
 
 
