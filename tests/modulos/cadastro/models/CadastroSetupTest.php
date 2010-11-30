@@ -514,11 +514,12 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 
 	        $sql = 'CREATE TABLE testunit('.
 	                   'id int auto_increment,'.
+	                   'node_id int,'.
 	                   'blocked varchar(120),'.
 	                   'approved int,'.
 	                   'created_on datetime,'.
 	                   'updated_on datetime,'.
-	                   'PRIMARY KEY (id), UNIQUE id (id)'.
+	                   'PRIMARY KEY (id), UNIQUE id (id), INDEX (node_id)'.
 	                ')';
 
 			$this->assertEquals($sql, $this->obj->createMainTableSql($params));
@@ -917,6 +918,29 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 		
 					$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'campo_1_images'), 'Text: campo_1_images not created.' );
 					$this->assertArrayHasKey('0', $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_1_images' AND categorias_id='7777'") );
+					$this->destroyTests();
+			}
+
+			
+			function testHasStandardFields(){
+				$this->restartTable();
+			
+				// test TEXT
+					$params = array(
+						0 => array(
+							'name' => 'Campo 1 Images',
+							'type' => 'images',
+							'description' => ''
+						),
+					);
+					$result = $this->obj->addField($params);
+		
+					$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'created_on'), 'Missing field: created_on' );
+					$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'updated_on'), 'Missing field: updated_on' );
+					$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'blocked'), 'Missing field: blocked' );
+					$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'approved'), 'Missing field: approved' );
+					$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'id'), 'Missing field: id' );
+					$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'node_id'), 'Missing field: node_id' );
 					$this->destroyTests();
 			}
 

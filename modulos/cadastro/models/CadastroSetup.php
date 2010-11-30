@@ -905,11 +905,12 @@ class CadastroSetup extends ModsSetup {
 		
         $sql = 'CREATE TABLE '.$this->mainTable.'('.
                    'id int auto_increment,'.
+                   'node_id int,'.
                    'blocked varchar(120),'.
                    'approved int,'.
                    'created_on datetime,'.
                    'updated_on datetime,'.
-                   'PRIMARY KEY (id), UNIQUE id (id)'.
+                   'PRIMARY KEY (id), UNIQUE id (id), INDEX (node_id)'.
                 ')';
 		return $sql;
 	}

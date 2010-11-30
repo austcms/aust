@@ -2,8 +2,7 @@
 /**
  * MOD MIGRATION
  * 
- * As tabelas relacionais Many-to-Many devem ter o campo order, mas em versões
- * anteriores não existia. Este migration ajusta isso.
+ * Ajusta para text o tipo que antes chamava-se string
  * 
  */
 class Migration_20101023063300_ConvertStringToText extends Migrations
