@@ -28,7 +28,7 @@ class Image extends File
 	     *
 	     * @var string
 	     */
-	    public $max_filesize = "100000000"; // in bytes
+	    public $max_filesize = "10000000"; // in bytes
 
 	    /**
 	     * Largura máxima permitida caso o arquivo seja imagem.
@@ -165,6 +165,7 @@ class Image extends File
             $this->lastWebPath = $webFilePath;
             return array(
 				'new_filename' => $fileName,
+				'extension' => $this->getExtension($file['name']),
 				'webPath' => $webFilePath,
 				'systemPath' => $systemFilePath,
 			);

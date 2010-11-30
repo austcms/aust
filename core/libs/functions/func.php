@@ -423,6 +423,10 @@ function FormatarStringNumCaracteres($string, $caracteres) {
 // pega extensão de nome de arquivo
 
 function PegaExtensao($param){
+	return getExtension($params);
+}
+
+function getExtension($param){
     $ext = explode('.',$param);
     $ext = array_reverse($ext);
     return $ext[0];

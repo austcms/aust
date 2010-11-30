@@ -125,7 +125,7 @@ if($conexao->DBExiste){
                 <h2>Tabelas corrompidas</h2>
                 <p>O seguinte erro foi encontrado: <strong style="color:red">campos necessários não encontrados.</strong></p>
                 <p>
-                    O seguintes campos não foram encontrados:
+                    O seguintes campos não foram encontrados. Tentaremos criá-los automaticamente.
                 </p>
 
                     <?php
@@ -135,14 +135,25 @@ if($conexao->DBExiste){
                         echo '<ul>';
                         foreach($campo as $nome=>$propriedade){
                             echo '<li>';
-                            echo ''.$nome.': '.$propriedade;
+                            echo ''.$nome;
                             echo '</li>';
                         }
                         echo '</ul>';
 
                         ?>
                         <p>
-                            <em><?php echo $dbSchema->sqlForMissingFields(array($tabela=>$campo)); ?></em>
+                            <em>Criação dos campos:
+								<?php
+								$sql = $dbSchema->sqlForMissingFields(array($tabela=>$campo));
+								if( $conexao->exec( $sql, "CREATE_TABLE") ){
+									echo "sucesso.";
+								} else {
+									echo "não foi possível rodar este SQL. Rode-o manualmente.";
+									echo "<br /><br />";
+									echo $sql;
+								}
+								?>
+							</em>
                         </p>
                         <?php
 
