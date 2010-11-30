@@ -168,6 +168,9 @@ if( $modulo->getStructureConfig("category_selectable") ){
 	 * Nova_Categoria?
 	 */
 	if( $modulo->getStructureConfig("category_creatable") ){
+
+		if( empty($nodeId) )
+			$nodeId = $austNode;
 	    lbCategoria(array('austNode'=>$nodeId, 'categoryInput' => $nodeIdFieldName) );
 	}
 	
