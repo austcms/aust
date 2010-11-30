@@ -98,10 +98,10 @@ class ModController extends ModsController
          * Agora será feita uma busca na respectiva tabela para tomar os
          * dados gravados e escrevê-los nos respectivos inputs.
          */
-
+			$nodeId = $this->austNode;
             if( !empty($w) ){
                 $sql = "SELECT
-                            ".implode(",", array_keys($campos))."
+                            node_id, ".implode(",", array_keys($campos))."
                         FROM
                             ".$infoCadastro["estrutura"]["tabela"]["valor"]."
                         WHERE
@@ -110,6 +110,7 @@ class ModController extends ModsController
                 $dados = $this->connection->query($sql, "ASSOC");
                 $dados = $dados[0];
 		        $this->set('w', $w);
+				$this->set('nodeId', $dados['node_id']);
 
             } else {
 		        $this->set('w', false);

@@ -140,6 +140,7 @@ echo $form->create( $infoCadastro["estrutura"]["tabela"]["valor"] );
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?<?php echo $_SERVER['QUERY_STRING'];?>&action=gravar">
  * 
  */
+$nodeIdFieldName = 'data['.$infoCadastro["estrutura"]["tabela"]["valor"].'][node_id]';
 ?>
 <input type="hidden" name="metodo" value="<?php echo $_GET["action"];?>" />
 <input type="hidden" name="frmcreated_on" value="<?php echo date("Y-m-d H:i:s"); ?>">
@@ -147,9 +148,34 @@ echo $form->create( $infoCadastro["estrutura"]["tabela"]["valor"] );
 <input type="hidden" name="w" value="<?php ifisset($_GET['w']);?>">
 <input type="hidden" name="aust_node" value="<?php echo $austNode;?>">
 
-
 <?php
-
+if( $modulo->getStructureConfig("category_selectable") ){
+	
+    if( $_GET['action'] == EDIT_ACTION ){
+        $current_node = $dados['categoria'];
+        ?>
+        <input type="hidden" name="<?php echo $nodeIdFieldName; ?>" value="<?php echo $nodeId; ?>">
+        <?php
+    }
+	?>
+	<div class="input"><label for="input-teste">Categoria</label><div class="input_field input_select">
+	<?php
+    echo BuildDDList( Registry::read('austTable') , $nodeIdFieldName, $administrador->tipo ,$austNode, $nodeId);
+	?>
+	<div class="after">
+	<?php
+	/*
+	 * Nova_Categoria?
+	 */
+	if( $modulo->getStructureConfig("category_creatable") ){
+	    lbCategoria(array('austNode'=>$nodeId, 'categoryInput' => $nodeIdFieldName) );
+	}
+	
+	?>
+	<p class="explanation"></p></div></div></div>
+	<?php
+	
+}
 /**
  * MOSTRA FORMULÁRIO DINÂMICO
  */

@@ -19,6 +19,7 @@ $(document).ready(function(){
 
 //	$("a[name=modal]").first().click();
 
+//	window.status = $("[name='data[teste][node_id]']").length;
 	// changeViewMode
 	$('a[class=change_viewmode]').click(function(e) {
 		changeViewMode(this);
@@ -177,13 +178,13 @@ function updateCategorySelect(id, node, selected){
         complete: function(response){
 
             if( response.responseText != '' ){
-                $('select#'+id).html(response.responseText);
+                $("select[id='"+id+"']").html(response.responseText);
             } else {
                 location.reload();
             }
         },
         beforeSend: function(){
-            $('#'+id).html('<option value="">Processando...</option>');
+            $("[id='"+id+"']").html('<option value="">Processando...</option>');
         },
         error: function(){
             location.reload();

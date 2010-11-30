@@ -125,6 +125,20 @@ $modInfo = array(
             "label" => "Tem versão de impressão?",
             "inputType" => "checkbox",
         ),
+
+        /*
+         * Categoria selecionável?
+         */
+        'category_selectable' => array(
+            "value" => "",
+            "label" => "Categoria selecionável?",
+            "inputType" => "checkbox",
+        ),
+	    'category_creatable' => array(
+	        "value" => "",
+	        "label" => "Categoria criável?",
+	        "inputType" => "checkbox",
+	    ),
     ),
 
     /*
