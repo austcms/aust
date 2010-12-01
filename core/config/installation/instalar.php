@@ -145,12 +145,10 @@ if($conexao->DBExiste){
                             <em>Criação dos campos:
 								<?php
 								$sql = $dbSchema->sqlForMissingFields(array($tabela=>$campo));
-								if( $conexao->exec( $sql, "CREATE_TABLE") ){
-									echo "sucesso.";
-								} else {
-									echo "não foi possível rodar este SQL. Rode-o manualmente.";
+								$conexao->exec( $sql, "CREATE_TABLE");
+									echo "SQL executado. Pressione F5 para verificar seu sucesso.";
 									echo "<br /><br />";
-									echo $sql;
+									echo '<span style="font-size: 0.9em">'.$sql.'</span>';
 								}
 								?>
 							</em>
