@@ -25,8 +25,10 @@ if($_POST['gravar']){
         );
 
         $msg = $config->updateOptions($params);
+
         unset($params);
     }
+
     header("Location: ".$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&status=1');
     $status = $msg;
 }

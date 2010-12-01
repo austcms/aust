@@ -22,11 +22,8 @@ if(!empty($_FILES['arquivo'])){
 
 /**
  * Se uma imagem foi enviada, faz todo o processamento
- * @todo - fazer funcionar com PHP-PDO
  */
 if( !empty($_FILES['arquivo']) ){
-
-	
 
 	$file = $_FILES['arquivo'];
 	

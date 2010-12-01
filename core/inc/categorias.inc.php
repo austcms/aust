@@ -58,6 +58,50 @@ switch($_GET['action']){
                         } else {
                             $resultado = FALSE;
                         }
+						
+						$lastInsertId = $conexao->lastInsertId();
+						/**
+						 * Se uma imagem foi enviada, faz todo o processamento
+						 */
+						if( !empty($_FILES['arquivo']) ){
+
+							$file = $_FILES['arquivo'];
+
+							$imageHandler = Image::getInstance();
+							$aust = Aust::getInstance();
+							$user = User::getInstance();
+
+							if( !empty($lastInsertId) )
+								$aust->deleteNodeImages( $lastInsertId );
+
+							$newFile = $imageHandler->resample($file);
+							$finalName = $imageHandler->upload($newFile);
+
+							$finalName['systemPath'] = addslashes($finalName['systemPath']);
+
+							$sql = "INSERT INTO 
+									austnode_images
+									(
+									node_id, 
+									file_size, systempath, file_name, original_file_name,
+									file_type, file_ext, 
+									created_on, updated_on, admin_id
+									)
+									VALUES
+									('".$lastInsertId."',
+									'".$newFile['size']."', '".$finalName['systemPath']."', '".$finalName['new_filename']."', '".$newFile['name']."',
+									'".$newFile['type']."','".$finalName['extension']."',
+									'".date("Y-m-d H:i:s")."', '".date("Y-m-d H:i:s")."', ".$user->getId().")";
+
+							// insere no DB
+							if ($conexao->exec($sql)){
+							    $status_imagem = true;
+							} else {
+							    $status_imagem = false;
+							}
+
+						}
+
 
                         if($resultado){
                             $status['classe'] = 'sucesso';
