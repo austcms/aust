@@ -63,7 +63,9 @@ switch($_GET['action']){
 						/**
 						 * Se uma imagem foi enviada, faz todo o processamento
 						 */
-						if( !empty($_FILES['arquivo']) ){
+						if( !empty($_FILES['arquivo']) &&
+						 	!empty($_FILES['arquivo']['name']) )
+						{
 
 							$file = $_FILES['arquivo'];
 
