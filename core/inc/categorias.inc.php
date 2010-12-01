@@ -47,8 +47,8 @@ switch($_GET['action']){
 							}
 						}
 
-						$sql = "INSERT INTO ".$_GET['section']." (nome,patriarca,subordinadoid,descricao,classe,tipo,tipo_legivel,autor)
-                                VALUES('{$_POST['frmnome']}','$patriarca','{$_POST['frmsubordinadoid']}','$texto','{$_POST['frmclasse']}','{$tipo}','{$tipo_legivel}','".$administrador->LeRegistro('id')."')";
+						$sql = "INSERT INTO ".$_GET['section']." (nome,patriarca,patriarca_encoded, subordinadoid,descricao,classe,tipo,tipo_legivel,autor)
+                                VALUES('{$_POST['frmnome']}','$patriarca','".encodeText( $patriarca )."','{$_POST['frmsubordinadoid']}','$texto','{$_POST['frmclasse']}','{$tipo}','{$tipo_legivel}','".$administrador->LeRegistro('id')."')";
 
                         /**
                          * Se insere com sucesso
