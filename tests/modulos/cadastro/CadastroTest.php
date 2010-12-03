@@ -21,7 +21,6 @@ class CadastroTest extends PHPUnit_Framework_TestCase
         /*
          * Informações de conexão com banco de dados
          */
-
         include 'modulos/'.$this->mod.'/'.MOD_CONFIG;
         include_once 'modulos/'.$this->mod.'/'.$modInfo['className'].'.php';
         
