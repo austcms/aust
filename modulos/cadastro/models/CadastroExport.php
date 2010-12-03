@@ -46,7 +46,7 @@ class CadastroExport extends ModuleExport {
 		 * Cria tabelas e campos físicos
 		 */
 		if(class_exists('CadastroSetup') != true)
-			include_once(__DIR__.'/CadastroSetup.php');
+			include_once(dirname(__FILE__).'/CadastroSetup.php');
 		
 		$setup = CadastroSetup::getInstance();
 		$setup->austNode = $stId;
