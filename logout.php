@@ -1,4 +1,4 @@
-<?    
+<?php    
     session_name("aust");
     session_start();
     session_destroy();

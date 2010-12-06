@@ -42,6 +42,8 @@ class ModController extends ModsController
     }
 
     public function actions(){
+//		echo 'hey';
+//		return true;
     }
 
     /**
@@ -79,7 +81,7 @@ class ModController extends ModsController
         /**
          * Toma informações sobre a tabela física do cadastro
          */
-        $infoTabelaFisica = $this->modulo->pegaInformacoesTabelaFisica(
+        $infoTabelaFisica = $this->modulo->getPhysicalFields(
             array(
                 "tabela" => $infoCadastro["estrutura"]["tabela"]["valor"],
                 "by" => "Field",
@@ -156,6 +158,8 @@ class ModController extends ModsController
                 $camposForm[ $valor["chave"] ]["tipo"]["especie"] = $valor["especie"];
                 $camposForm[ $valor["chave"] ]["tipo"]["referencia"] = $valor["referencia"];
                 $camposForm[ $valor["chave"] ]["tipo"]["tabelaReferencia"] = $valor["ref_tabela"];
+                $camposForm[ $valor["chave"] ]["tipo"]["refParentField"] = $valor["ref_parent_field"];
+                $camposForm[ $valor["chave"] ]["tipo"]["refChildField"] = $valor["ref_child_field"];
                 $camposForm[ $valor["chave"] ]["tipo"]["tabelaReferenciaCampo"] = $valor["ref_campo"];
                 $camposForm[ $valor["chave"] ]["tipo"]["tipoFisico"] = $infoTabelaFisica[ $valor["chave"] ]["Type"];
 
@@ -197,6 +201,7 @@ class ModController extends ModsController
             "w" => $_GET["w"]
         );
 
+		// IMAGES
 		if( !empty($_POST['type']) AND $_POST['type'] = 'image_options' ){
 			$data = $this->data;
 			$imageId = $_POST['image_id'];
@@ -209,7 +214,8 @@ class ModController extends ModsController
 				$data = reset( $this->data );
 				$this->modulo->saveImageDescription( $data['description'], $imageId );
 			}
-			
+
+			// link 
 			if( !empty($data['link']) ){
 				$data = reset( $this->data );
 				$this->modulo->saveImageLink( $data['link'], $imageId );
@@ -232,6 +238,10 @@ class ModController extends ModsController
 			$deletedImage = $this->modulo->deleteImage( $_GET['deleteimage'] );
 		}
 
+		if( !empty($_GET['deletefile']) ){
+			$deletedFile = $this->modulo->deleteFile( $_GET['deletefile'] );
+		}
+		
 		$this->doRender = false;
         $this->create($params);
         $this->render('form');
@@ -277,7 +287,7 @@ class ModController extends ModsController
         /**
          * Toma informações sobre a tabela física do cadastro
          */
-        $infoTabelaFisica = $this->modulo->pegaInformacoesTabelaFisica(
+        $infoTabelaFisica = $this->modulo->getPhysicalFields(
             array(
                 "tabela" => $infoCadastro["estrutura"]["tabela"]["valor"],
                 "by" => "Field",
@@ -289,7 +299,8 @@ class ModController extends ModsController
 		$this->modulo->fields = $campos;
         $relational = array();
 		$images = array();
-        
+
+
         if( $this->data ){
 			$this->modulo->data = $this->data;
 			/*
@@ -310,6 +321,15 @@ class ModController extends ModsController
 			$this->modulo->setRelationalData(); // ajusta inclusive imagens
 			$this->data = $this->modulo->data;
 			$images = $this->modulo->images;
+			$files = $this->modulo->files;
+			
+			// insert date
+			$table = reset(array_keys($this->data));
+
+			if( empty($w) )
+				$this->data[$table]['created_on'] = date("Y-m-d H:i:s");
+			else
+				$this->data[$table]['updated_on'] = date("Y-m-d H:i:s");
 
 			/*
 			 *		2) Salva dados principais (não relacionados);
@@ -324,22 +344,32 @@ class ModController extends ModsController
 		 	 *		3) Salva dados físicos (como arquivos).
 			 */
 			$this->modulo->uploadAndSaveImages($images, $lastInsertId);
+			$this->modulo->uploadAndSaveFiles($files, $lastInsertId);
 			
 			/*
 			 *		4) Salva dados relacionados no DB.
 			 */
 			$relational = $this->modulo->relationalData;
+			
 
             if( !empty($relational) AND !empty($lastInsertId) ){
 
                 unset($sql);
-                foreach( $relational as $tabela => $dados ){
-                    foreach($dados as $campo=>$valor){
-                        $relational[$tabela][$campo][$infoCadastro["estrutura"]["tabela"]["valor"]."_id"] = $lastInsertId;
-                    }
-
+                foreach( $relational as $field=>$dados ){
+					foreach( $dados as $tabela=>$dados ){
+	                    foreach($dados as $campo=>$valor){
+	
+							if( !empty($infoCadastro['campo'][$field]['ref_parent_field']) )
+								$ref_field = $infoCadastro['campo'][$field]['ref_parent_field'];
+							else
+								$ref_field = $infoCadastro["estrutura"]["tabela"]["valor"]."_id";
+						
+						
+	                        $relational[$field][$tabela][$campo][$ref_field] = $lastInsertId;
+	                    }
+					}
                 }
-
+				
                 /*
                  * Exclui todos os dados expecificados em $toDeleteTables para salvá-los novamente
                  * 
@@ -348,54 +378,64 @@ class ModController extends ModsController
                  * começar a salvar o que foi enviado.
 				 *
                  */
-                foreach( $this->modulo->toDeleteTables as $key=>$value ){
-                    $sql = "DELETE FROM
-                                $key
-                            WHERE
-                                ".$infoCadastro["estrutura"]["tabela"]["valor"]."_id='$w'
-                                ";
-                    $this->modulo->connection->exec($sql);
-                    unset($sql);
+             	foreach( $this->modulo->toDeleteTables as $field=>$value ){
+                	foreach( $value as $key=>$value ){
+					
+						if( !empty($infoCadastro['campo'][$field]['ref_parent_field']) )
+							$ref_field = $infoCadastro['campo'][$field]['ref_parent_field'];
+						else
+							$ref_field = $infoCadastro["estrutura"]["tabela"]["valor"]."_id";
+							
+	                    $sql = "DELETE FROM
+	                                $key
+	                            WHERE
+	                                ".$ref_field."='$w'
+	                                ";
+	                    $this->modulo->connection->exec($sql);
+	                    unset($sql);
+					}
                 }
 
 				/*
 				 * Começa a salvar cada um
 				 */
-                foreach( $relational as $tabela => $dados ){
+             	foreach( $relational as $field=>$dados ){
+	                foreach( $dados as $tabela=>$dados ){
 
-                    foreach( $dados as $campo=>$valor ){
+	                    foreach( $dados as $campo=>$valor ){
 
-                        /*
-                         * Múltiplos Inserts
-                         */
-                        if( is_int($campo) ){
-                            //pr($valor);
-                            foreach( $valor as $multipleInsertsCampo=>$multipleInsertsValor ){
-                                $camposStrMultiplo[] = $multipleInsertsCampo;
-                                $valorStrMultiplo[] = $multipleInsertsValor;
-                            }
+	                        /*
+	                         * Múltiplos Inserts
+	                         */
+	                        if( is_int($campo) ){
+	                            //pr($valor);
+	                            foreach( $valor as $multipleInsertsCampo=>$multipleInsertsValor ){
+	                                $camposStrMultiplo[] = $multipleInsertsCampo;
+	                                $valorStrMultiplo[] = $multipleInsertsValor;
+	                            }
 
-                            /*
-                             * Insere no DB os Checkboxes marcados
-                             */
-                            $tempSql = "INSERT INTO
-                                            ".$tabela."
-                                                (".implode(",", $camposStrMultiplo).")
-                                        VALUES
-                                            ('".implode("','", $valorStrMultiplo)."')
-                                        ";
-                            /**
-                             * SQL deste campo
-                             */
-                            $sql[] = $tempSql;
+	                            /*
+	                             * Insere no DB os Checkboxes marcados
+	                             */
+	                            $tempSql = "INSERT INTO
+	                                            ".$tabela."
+	                                                (".implode(",", $camposStrMultiplo).")
+	                                        VALUES
+	                                            ('".implode("','", $valorStrMultiplo)."')
+	                                        ";
+	                            /**
+	                             * SQL deste campo
+	                             */
+	                            $sql[] = $tempSql;
 
-                            unset($valorStrMultiplo);
-                            unset($camposStrMultiplo);
-                            unset($tempSql);
+	                            unset($valorStrMultiplo);
+	                            unset($camposStrMultiplo);
+	                            unset($tempSql);
 
-                        }
-                    }
-                }
+	                        }
+	                    }
+	                }
+				}
             }
 
             if( !empty($sql) ){
@@ -416,7 +456,17 @@ class ModController extends ModsController
 				$postedImageFields[] = $field;
 			}
 		}
-		$this->modulo->deleteExtraImages($postedImageFields);
+		$this->modulo->deleteExtraImages($lastInsertId, $postedImageFields);
+		
+		/*
+		 * EXCLUI ARQUIVOS EXTRAS
+		 */
+		foreach( $files as $fileFields ){
+			foreach( $fileFields as $field=>$values ){
+				$postedFileFields[] = $field;
+			}
+		}
+		$this->modulo->deleteExtraFiles($lastInsertId, $postedFileFields);
 		
         $this->set('resultado', $resultado);
 

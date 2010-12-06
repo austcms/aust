@@ -3,7 +3,7 @@ tinyMCE.init({
 	mode : "exact",
 	    relative_urls : false,
 	    convert_urls : 0, // default 1
-    elements : "jseditor",
+    elements : "jseditor"+elementsToLoad,
 	theme_advanced_buttons1 : "newdocument,|,bold,italic,underline,strikethrough,forecolor,|,justifyleft,justifycenter,justifyright,justifyfull,|,fontsizeselect",
 	theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,bullist,numlist,|,outdent,indent,|,undo,redo,|,link,unlink,cleanup,|,insertdate,inserttime,preview",
 	theme_advanced_buttons3_add : "pastetext,pasteword,selectall",
@@ -14,10 +14,10 @@ tinyMCE.init({
 	theme_advanced_statusbar_location : "bottom",
 	theme_advanced_resizing : true,
 	theme_advanced_resize_horizontal : false,
-	theme_advanced_resizing_min_height : 250, // altura mínima
-	height : '450',
+	theme_advanced_resizing_min_height : 200, // altura mínima
+	height : '350',
 	convert_fonts_to_spans : true,
 	font_size_style_values : "8pt,10pt,12pt,14pt,18pt,24pt,36pt",
 	language : "pt",
-	plugins : pluginsToLoad // imagemanager
+	plugins : 'safari,paste'+pluginsToLoad // imagemanager
 });

@@ -40,5 +40,5 @@ include(THIS_TO_BASEURL.CONFIG_DIR."database.php");
 /**
  * Carrega o setup
  */
-require(THIS_TO_BASEURL.RELATIVE_PATH_TO_INSTALLATION.'instalar.php');
+require(THIS_TO_BASEURL.INSTALLATION_DIR.'instalar.php');
 ?>

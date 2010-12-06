@@ -16,7 +16,16 @@ class Cadastro extends Module {
 
 	public $data = array();
 	public $relationalData = array();
+	
+	/**
+	 * @var array Guarda os arquivos de imagens para upload
+	 */
 	public $images = array();
+	
+	/**
+	 * @var array Guarda os arquivos (files) para upload
+	 */
+	public $files = array();
 	
 	public $tableProperties = array();
 
@@ -45,6 +54,45 @@ class Cadastro extends Module {
 	 * LOADING PROCESS
 	 * 	
 	 */
+
+	/**
+	 * getFiles()
+	 * 
+	 * 
+	 * @param $params array É onde contém o id, austNode e campo a qual o arquivo
+	 * se refere
+	 * @return array arquivos, com path e id
+	 */
+	public function getFiles($params){
+		
+		if( empty($params['w']) ) return false;
+		if( empty($params['austNode']) ) return false;
+		if( empty($params['field']) ) return false;
+		
+		$w = $params['w'];
+		$austNode = $params['austNode'];
+		$field = $params['field'];
+		
+		$tableFiles = $this->configurations['estrutura']['table_files']['valor'];
+		
+		$sql = "SELECT
+					*
+				FROM
+					".$tableFiles." as t
+				WHERE
+					maintable_id='".$w."' AND
+					reference_field='".$field."' AND
+					categoria_id='".$austNode."' AND
+					type='main'
+				ORDER BY t.id DESC
+				";
+
+		$query = $this->connection->query($sql);
+		
+		return $query;
+		
+	} // fim getFiles()
+	
 	/**
 	 * getImages()
 	 * 
@@ -107,6 +155,7 @@ class Cadastro extends Module {
 		$infoTabelaFisica = $this->tableProperties;
 		$campos = $this->fields;
 		$relational = array();
+
 		foreach( $this->data as $tabela=>$dados ){
 	        foreach( $dados as $campo=>$valor ){
             
@@ -119,16 +168,18 @@ class Cadastro extends Module {
 	                $i = 0;
 	                foreach( $valor as $subArray ){
 	                    if( $subArray != 0 ){
-	                        $relational[$campos[$campo]["referencia"]][$i][$campos[$campo]["ref_tabela"]."_id"] = $subArray;
-	                        $relational[$campos[$campo]["referencia"]][$i]["created_on"] = date("Y-m-d H:i:s");
+	                        $relational[$campo][$campos[$campo]["referencia"]][$i][$campos[$campo]["ref_tabela"]."_id"] = $subArray;
+	                        $relational[$campo][$campos[$campo]["referencia"]][$i]["created_on"] = date("Y-m-d H:i:s");
 	                        $i++;
 	                    }
-	                    $this->toDeleteTables[$campos[$campo]["referencia"]] = 1;
+	                    $this->toDeleteTables[$campo][$campos[$campo]["referencia"]] = 1;
 	                }
 
 	            }
 	            /*
 	             * Date
+				 *
+				 * *não mexe em $relational*
 	             */
 	            else if( !empty( $campos[$campo]["chave"] ) AND
 	                     !empty($infoTabelaFisica[$campos[$campo]["chave"]]['Type']) AND
@@ -144,11 +195,24 @@ class Cadastro extends Module {
 	             * Images
 				 *
 				 * Limpa imagens de $this->data
+				 *
+				 * *não mexe em $relational*
 	             */
 	            else if( !empty($campos[$campo]) AND $campos[$campo]["especie"] == "images" ){
 					$this->images[$tabela][$campo] = $valor;
 					unset($this->data[$tabela][$campo]);
 	            }
+	            /*
+	             * Files
+				 *
+				 * Limpa files de $this->data
+				 *
+				 * *não mexe em $relational*
+	             */
+	            else if( !empty($campos[$campo]) AND $campos[$campo]["especie"] == "files" ){
+					$this->files[$tabela][$campo] = $valor;
+					unset($this->data[$tabela][$campo]);
+				}
 
 	        }
 	    }
@@ -158,11 +222,176 @@ class Cadastro extends Module {
 	}
 	
 	/**
+	 * uploadAndSaveFiles()
+	 * 
+	 * Realiza o upload de um arquivo e a salva no DB.
+	 * 
+	 * @param $files array contém os arquivos a serem enviadas.
+	 * @param $lastInsertId int Anexo um id ao arquivo inserido.
+	 */
+	function uploadAndSaveFiles($files, $lastInsertId, $options = array()){
+		
+		$fileHandler = File::getInstance();
+		$user = User::getInstance();
+		$userId = $user->getId();
+		
+		if( empty($options['type']) )
+			$type = 'main';
+		else
+			$type = $options['type'];
+		
+		if( empty($options['reference']) )
+			$reference = '';
+		else
+			$reference = $options['reference'];
+		
+		if( empty($files) ){
+			$files = $this->files;
+		}
+		
+		$filesTable = $this->configurations['estrutura']['table_files']['valor'];
+		foreach( $files as $table=>$filesField ){
+			
+			foreach( $filesField as $field=>$files ){
+				
+				foreach( $files as $key=>$value ){
+					if( empty($value['name']) OR
+						empty($value['size']) OR
+						empty($value['tmp_name'])
+					){
+						continue;
+					}
+					
+					/*
+					 * Realiza upload e salva os dados
+					 */
+					$fileHandler->prependedPath = $this->getStructureConfig('files_save_path');
+					$finalName = $fileHandler->upload($value);
+					
+					$finalName['systemPath'] = addslashes($finalName['systemPath']);
+					$finalName['webPath'] = addslashes($finalName['webPath']);
+					
+					/*
+					 * Salva SQL da imagem
+					 */
+					$sql = "INSERT INTO $filesTable
+							(
+							maintable_id,path,systempath,
+							file_name,
+							original_file_name,file_type,file_size,file_ext,
+							type,
+							reference_table,reference_field,
+							reference,
+							categoria_id,
+							created_on, admin_id
+							)
+							VALUES
+							(
+							'".$lastInsertId."', '".$finalName['webPath']."', '".$finalName['systemPath']."',
+							'".$finalName['new_filename']."',
+							'".$value['name']."', '".$value['type']."', '".$value['size']."', '".$fileHandler->getExtension($value['name'])."',
+							'$type',
+							'".$this->getTable()."', '".$field."',
+							'".$reference."',
+							'".$this->austNode."',
+							'".date("Y-m-d H:i:s")."', '".$userId."'
+							)";
+					
+					$this->connection->exec($sql);
+					
+				}
+			}
+		}
+	} // uploadAndSaveFiles()
+	
+	/**
+	 * deleteExtraFiles()
+	 *
+	 * Arquivos extras são aqueles que estão cadastradas no banco de dados,
+	 * mas não deveriam.
+	 *
+	 * Suponha que o usuário possa inserir 1 arquivo. Quando ele inserir o
+	 * próximo, ele terá 2. Este método excluirá o(s) arquivo(s) anterior(es).
+	 *
+	 * @param $files array Contém o nome dos campos dos quais devem
+	 * ser excluidos os arquivos extras.
+	 */
+	function deleteExtraFiles( $id, $files ){
+		
+		$this->configurations();
+		$filesTable = $this->configurations['estrutura']['table_files']['valor'];
+		
+		if( empty($files) OR
+			!is_array($files) )
+			return false;
+		
+		foreach( $files as $key=>$field ){
+			
+			$limit = $this->getFieldConfig($field, 'files_field_limit_quantity');
+
+			if( $limit == '0' OR
+				empty($limit) )
+				continue;
+			
+			$sql = "
+				SELECT id
+				FROM $filesTable
+				WHERE
+					reference_field='$field' AND
+					maintable_id='".$id."' AND
+					categoria_id='".$this->austNode."'
+				ORDER BY id DESC
+				LIMIT $limit, 999999999999999
+			";
+			
+			$result = $this->connection->query($sql);
+			foreach( $result as $value ){
+				$this->deleteFile($value['id']);
+			}
+			
+		}
+		
+		return true;
+		
+	} // deleteExtraFiles
+	
+	/**
+	 * deleteFile()
+	 *
+	 * Exclui um arquivo segundo seu ID, excluindo fisicamente e do DB.
+	 *
+	 * @param $id int Id do arquivo
+	 */
+	function deleteFile($w = ""){
+		if( !is_numeric($w) )
+			return false;
+		
+		$configurations = $this->configurations();
+		$filesTable = $configurations['estrutura']['table_files']['valor'];
+		$sql = "SELECT
+					*
+				FROM
+					".$filesTable."
+				WHERE
+					id='".$w."'
+				";
+		
+		$query = reset( $this->connection->query($sql) );
+		
+		if( file_exists($query['systempath']) )
+			unlink( $query['systempath'] );
+		$sqlDelete = "DELETE FROM $filesTable WHERE id='".$w."'";
+		$this->connection->exec($sqlDelete);
+		
+		return true;
+	} // deleteFile()
+		
+	/**
 	 * uploadAndSaveImages()
 	 * 
 	 * Realiza o upload de uma imagem e a salva no DB.
 	 * 
-	 * @param $images array contém as imagems a serem enviadas.
+	 * @param $images array contém as imagens a serem enviadas.
 	 * @param $lastInsertId int Anexo um id à imagem inserida.
 	 */
 	function uploadAndSaveImages($images, $lastInsertId, $options = array()){
@@ -353,7 +582,7 @@ class Cadastro extends Module {
 	 * @param $images array Contém o nome dos campos dos quais devem
 	 * ser excluidas as imagens extras.
 	 */
-	function deleteExtraImages( $images ){
+	function deleteExtraImages( $id, $images ){
 		
 		$this->configurations();
 		$imageTable = $this->configurations['estrutura']['table_images']['valor'];
@@ -374,7 +603,9 @@ class Cadastro extends Module {
 				SELECT id
 				FROM $imageTable
 				WHERE
-					reference_field='$field'
+					reference_field='$field' AND
+					maintable_id='".$id."' AND
+					categoria_id='".$this->austNode."'
 				ORDER BY id DESC
 				LIMIT $limit, 999999999999999
 			";
@@ -504,11 +735,14 @@ class Cadastro extends Module {
      * @return <array>
      */
     public function getFields($fieldNamesOnly = false){
-		$sql = "SELECT * FROM cadastros_conf
+		$sql = "SELECT
+					*
+				FROM
+					cadastros_conf
 				WHERE
 				   categorias_id='".$this->austNode."' AND
 				   tipo='campo'
-				ORDER BY ordem ASC";
+					ORDER BY ordem ASC";
         $temp = $this->connection->query(
             $sql,
             PDO::FETCH_ASSOC
@@ -530,50 +764,31 @@ class Cadastro extends Module {
 			}
         }
 
-        return $result;
-    }
+		// pega tipo físico para o caso de type=string, pois pode ser
+		// text
+		$described = $this->getPhysicalFields();
+		foreach( $described as $fieldName=>$value ){
+			$result[$fieldName]['physical_type'] = $value['Type'];
 
-	/**
-	 * configurations()
-	 * 
-	 * Retorna configurações. Se já existe, não carrega duas vezes.
-	 * 
-	 * @return array Toda a configuração do Módulo Cadastro
-	 */
-	public function configurations(){
-		if( !empty($this->configurations) )
-			return $this->configurations;
-		
-		$this->pegaInformacoesCadastro( $this->austNode );
-		return $this->configurations;
-	}
-    /**
-     * Retorna todas as informações sobre o cadastro.
-     *
-     * Pega todas as informações da tabela cadastros_conf onde categorias_id
-     * é igual ao austNode especificado.
-     *
-     * @param int $austNode
-     * @return array
-     */
-    public function pegaInformacoesCadastro( $austNode ){
-        /**
-         * Busca na tabela cadastros_conf por informações relacionadas ao
-         * austNode selecionado.
-         */
-        $temp = $this->connection->query(
-            "SELECT * FROM cadastros_conf WHERE categorias_id='".$austNode."' ORDER BY ordem ASC",
-            PDO::FETCH_ASSOC
-        );
-        foreach( $temp as $chave=>$valor ){
-            if( !empty($valor["chave"]) )
-                $result[ $valor["tipo"] ][ $valor["chave"] ] = $valor;
-        }
-		$this->configurations = $result;
+			/*
+			 * Ambos os campos text e string possuem o campo 'especie'
+			 * igual a 'string', não sendo possível saber quando é
+			 * um textarea ou não.
+			 *
+			 * O código abaixo faz com que 'especie' seja igual a text,
+			 * enquanto os demais continuam sendo 'string'
+			 */
+			if( $value['Type'] == 'text' AND
+			 	$result[$fieldName]['especie'] == 'string' )
+				$result[$fieldName]['especie'] = 'text';
+		}
+
         return $result;
     }
 
     /**
+	 * getPhysicalFields()
+	 *
      * Retorna informações sobre tipagem física da respectiva
      * tabela.
      *
@@ -584,16 +799,25 @@ class Cadastro extends Module {
      *          campo.
      * @return array Retorna as características físicas da tabela
      */
-    public function pegaInformacoesTabelaFisica( $params ){
+
+	function getPhysicalFields( $params = array() ){
+		
+		$result = array();
         /**
          * DESCRIBE tabela
          *
          * Toma informações físicas sobre a tabela
          */
-        if ( !empty( $params["tabela"] ) ){
-            $temp = $this->connection->query("DESCRIBE ".$params["tabela"], "ASSOC");
-        }
+        if ( !empty( $params["tabela"] ) )
+			$tabela = $params["tabela"];
+        else
+			$tabela = $this->getTable();
 
+        $temp = $this->connection->query("DESCRIBE ".$tabela, "ASSOC");
+
+        if ( empty( $params["by"] ) )
+	        $params["by"] = "Field";
+			
         /**
          * $param["by"]
          *
@@ -610,6 +834,78 @@ class Cadastro extends Module {
 
 		$this->tableProperties = $result;
 
+        return $result;
+		
+	}
+		// deprecated
+    	public function pegaInformacoesTabelaFisica( $params = array() ){
+			return $this->getPhysicalFields($params);
+	    }	
+
+	/**
+	 * configurations()
+	 * 
+	 * Retorna configurações. Se já existe, não carrega duas vezes.
+	 * 
+	 * @return array Toda a configuração do Módulo Cadastro
+	 */
+	public function configurations(){
+		if( !empty($this->configurations) )
+			return $this->configurations;
+		
+		$this->pegaInformacoesCadastro( $this->austNode );
+		return $this->configurations;
+	}
+	
+	function getTable(){
+		$this->configurations();
+		if( empty($this->configurations['estrutura']['tabela']['valor']) )
+			return false;
+		
+		$table = $this->configurations['estrutura']['tabela']['valor'];
+		return $table;
+	}
+	
+		// alias
+		function table(){ return $this->dataTable(); }
+	
+	function imagesTable(){
+		$this->configurations();
+		$table = $this->configurations['estrutura']['table_images']['valor'];
+		return $table;
+	}
+	
+    /**
+     * Retorna todas as informações sobre o cadastro.
+     *
+     * Pega todas as informações da tabela cadastros_conf onde categorias_id
+     * é igual ao austNode especificado.
+     *
+     * @param int $austNode
+     * @return array
+     */
+    public function pegaInformacoesCadastro( $austNode = '' ){
+	
+		if( empty($austNode) && empty($this->austNode) )
+			return false;
+		else if( empty($austNode) )
+			$austNode = $this->austNode;
+		
+        /**
+         * Busca na tabela cadastros_conf por informações relacionadas ao
+         * austNode selecionado.
+         */
+		$sql = "SELECT * FROM cadastros_conf WHERE categorias_id='".$austNode."' ORDER BY ordem ASC";
+        $temp = $this->connection->query(
+            $sql,
+            PDO::FETCH_ASSOC
+        );
+
+        foreach( $temp as $chave=>$valor ){
+            if( !empty($valor["chave"]) )
+                $result[ $valor["tipo"] ][ $valor["chave"] ] = $valor;
+        }
+		$this->configurations = $result;
         return $result;
     }
 
@@ -1010,6 +1306,7 @@ class Cadastro extends Module {
 	public function drawFieldConfiguration(){
     	$result = '';
 	}
-}
+	
 
+}
 ?>

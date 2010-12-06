@@ -6,6 +6,7 @@ require_once 'tests/config/auto_include.php';
 require_once 'core/class/SQLObject.class.php';
 require_once 'core/config/variables.php';
 #####################################
+include_once 'modulos/cadastro/Cadastro.php';
 
 class CadastroSetupTest extends PHPUnit_Framework_TestCase
 {
@@ -13,9 +14,10 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
     function setUp(){
         $modelName = 'CadastroSetup';
         $mod = 'Cadastro';
-        require_once 'modulos/'.$mod.'/'.MOD_MODELS_DIR.$modelName.'.php';
+        include_once 'modulos/'.$mod.'/'.MOD_MODELS_DIR.$modelName.'.php';
         
         $this->obj = new $modelName;
+        $this->Cadastro = new $mod;
 
     }
 
@@ -32,7 +34,8 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 				array(true, 'text', 					'text'),
 				array(true, 'date', 					'date'),
 				array(true, 'pw', 						'varchar(250)'),
-				array(true, 'file', 					'text'),
+				array(false, 'file', 					'text'),
+				array(true, 'files', 					'text'),
 				array(true, 'relational_onetoone', 		'int'),
 				array(true, 'relational_onetomany', 	'int'),
 				array(false, 'uihiaehurg', 				''),
@@ -162,13 +165,13 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					'comment' => 'This is a comment',
 					'austNode' => '777',
 					'author' => '777',
-					'class' => 'arquivo',
+					'class' => 'files',
 				);
 
 				$expectedSql = "INSERT INTO cadastros_conf ".
 	                           "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem) ".
 	                           "VALUES ".
-	                           "('campo','field_one','Field One','This is a comment',777,'777',0,0,1,0,1,'arquivo',1)";
+	                           "('campo','field_one','Field One','This is a comment',777,'777',0,0,1,0,1,'files',1)";
 
 				$this->assertEquals(
 					$expectedSql,
@@ -178,42 +181,47 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 				// Criação da tabela relacional de arquivos: SQL
 				function testCreateSqlForFileTable(){
 					$this->assertEquals(
-						'CREATE TABLE minhatabela_arquivos('.
+						'CREATE TABLE minhatabela_files('.
 	                    'id int auto_increment,'.
 	                    'maintable_id int,'.
-	                    'titulo varchar(120),'.
-	                    'descricao text,'.
-	                    'local varchar(80),'.
-	                    'url text,'.
-	                    'arquivo_nome varchar(250),'.
-	                    'arquivo_tipo varchar(250),'.
-	                    'arquivo_tamanho varchar(250),'.
-	                    'arquivo_extensao varchar(10),'.
-	                    'tipo varchar(80),'.
+						'type varchar(80),'.
+						'order_nr int COMMENT "Contém o número da ordenação deste registro",'.
+	                    'title varchar(250),'.
+	                    'description text,'.
+	                    'local varchar(180),'.
+	                    'link text,'.
+	                    'systempath text,'.
+	                    'path text,'.
+	                    'file_name varchar(250),'.
+	                    'original_file_name varchar(250),'.
+	                    'file_type varchar(250),'.
+	                    'file_size varchar(250),'.
+	                    'file_ext varchar(10),'.
+	                    'reference varchar(120),'.
 	                    'reference_table varchar(120),'.
 	                    'reference_field varchar(120),'.
-	                    'referencia varchar(120),'.
-	                    'categorias_id int,'.
-	                    'adddate datetime,'.
-	                    'autor int,'.
+	                    'categoria_id int,'.
+	                    'created_on datetime,'.
+	                    'updated_on datetime,'.
+	                    'admin_id int,'.
 	                    'PRIMARY KEY (id),'.
 	                    'UNIQUE id (id))',
 						$this->obj->createSqlForFilesTable('minhatabela')
 					);
 
-					$this->assertEquals('minhatabela_arquivos', $this->obj->filesTableName);
+					$this->assertEquals('minhatabela_files', $this->obj->filesTableName);
 				}
 
 				// Configurações sobre a tabela relacional de arquivos: SQL
 				function testCreateSqlForConfigurationOfFiles(){
-					$this->obj->filesTableName = 'minhatabela_arquivos';
+					$this->obj->filesTableName = 'minhatabela_files';
 					$this->obj->austNode = '777';
 					$sql = 
 					    "INSERT INTO ".
 	                    "cadastros_conf ".
 	                    "(tipo,chave,valor,categorias_id,adddate,desativado,desabilitado,publico,restrito,aprovado) ".
 	                    "VALUES ".
-	                    "('estrutura','tabela_arquivos','minhatabela_arquivos',777, '".date('Y-m-d H:i:s')."',0,0,1,0,1)";
+	                    "('estrutura','table_files','minhatabela_files',777, '".date('Y-m-d H:i:s')."',0,0,1,0,1)";
 
 					$this->assertEquals(
 						$sql,
@@ -223,15 +231,15 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 
 				// Execução da criação da tabela relacional de arquivos
 				function testCreateTableForFiles(){
-					$this->obj->connection->exec('DROP TABLE minhatabela_arquivos');
+					$this->obj->connection->exec('DROP TABLE minhatabela_files');
 					$this->obj->mainTable = 'minhatabela';
 					$this->obj->austNode = '777';
 					$this->assertTrue( $this->obj->createTableForFiles() );
 					$this->assertTrue( $this->obj->filesTableCreated );
 
-					$created = $this->obj->connection->hasTable('minhatabela_arquivos');
-					$this->obj->connection->exec('DROP TABLE minhatabela_arquivos');
-					$deleted = !$this->obj->connection->hasTable('minhatabela_arquivos');
+					$created = $this->obj->connection->hasTable('minhatabela_files');
+					$this->obj->connection->exec('DROP TABLE minhatabela_files');
+					$deleted = !$this->obj->connection->hasTable('minhatabela_files');
 
 					// verifica se houve as criações
 					$this->assertTrue($created, "Table not CREATED.");
@@ -243,16 +251,16 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 
 				// Execução da configuração da tabela relacional de arquivos
 				function testCreateConfigurationForFiles(){
-					$this->obj->filesTableName = 'minhatabela_arquivos';
+					$this->obj->filesTableName = 'minhatabela_files';
 					$this->obj->austNode = '777';
 					$this->obj->createConfigurationForFiles();
 
-					$created = $this->obj->connection->query("SELECT id FROM cadastros_conf WHERE categorias_id='".$this->obj->austNode."' AND valor='minhatabela_arquivos' AND chave='tabela_arquivos'");
+					$created = $this->obj->connection->query("SELECT id FROM cadastros_conf WHERE categorias_id='".$this->obj->austNode."' AND valor='minhatabela_files' AND chave='table_files'");
 					if( !empty($created) ) $created = true;
 					else $created = false;
 
-					$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='".$this->obj->austNode."' AND valor='minhatabela_arquivos' AND chave='tabela_arquivos'");
-					$deleted = $this->obj->connection->query("SELECT id FROM cadastros_conf WHERE categorias_id='".$this->obj->austNode."' AND valor='minhatabela_arquivos' AND chave='tabela_arquivos'");
+					$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='".$this->obj->austNode."' AND valor='minhatabela_files' AND chave='table_files'");
+					$deleted = $this->obj->connection->query("SELECT id FROM cadastros_conf WHERE categorias_id='".$this->obj->austNode."' AND valor='minhatabela_files' AND chave='table_files'");
 					if( empty($deleted) ) $deleted = true;
 					else $deleted = false;
 
@@ -303,13 +311,15 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					'class' => 'relacional_umparamuitos',
 					'refTable' => 'categorias',
 					'refField' => 'nome',
+					'refParentField' => 'parent',
+					'refChildField' => 'child',
 					'referenceTable' => 'tabelaum_tabelarelacional_categorias'
 				);
 
 				$expectedSql = "INSERT INTO cadastros_conf ".
-	                           "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem,ref_tabela,ref_campo,referencia) ".
+	                           "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem,ref_tabela,ref_campo,referencia,ref_parent_field,ref_child_field) ".
 	                           "VALUES ".
-	                           "('campo','field_one','Field One','This is a comment',777,'777',0,0,1,0,1,'relacional_umparamuitos',1,'categorias','nome','tabelaum_tabelarelacional_categorias')";
+	                           "('campo','field_one','Field One','This is a comment',777,'777',0,0,1,0,1,'relacional_umparamuitos',1,'categorias','nome','tabelaum_tabelarelacional_categorias','parent','child')";
 
 				$this->assertEquals(
 					$expectedSql,
@@ -333,12 +343,15 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 						'referenceTable' => 'tabelaum_campo_tabeladois',
 						'mainTable' => 'tabelaum',
 						'secondaryTable' => 'tabeladois',
+						'refParentField' => 'tabelaum_id',
+						'refChildField' => 'tabeladois_id',
 					);
 
 	            	$sql = 'CREATE TABLE tabelaum_campo_tabeladois('.
 	                       'id int auto_increment,'.
 	                       'tabelaum_id int,'.
 	                       'tabeladois_id int,'.
+						   'order_nr int,'.
 	                       'blocked varchar(120),'.
 	                       'approved int,'.
 	                       'created_on datetime,'.
@@ -379,6 +392,7 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 		                    'id int auto_increment,'.
 		                    'maintable_id int,'.
 							'type varchar(80) COMMENT "type=main são as imagens principais",'.
+							'order_nr int COMMENT "Contém o número da ordenação deste registro",'.
 		                    'title varchar(250),'.
 		                    'description text,'.
 		                    'local varchar(180),'.
@@ -638,18 +652,18 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 		}
 		
 		// usado para reiniciar as tabelas
-		function restartTable(){
-			$this->obj->connection->query("DROP TABLE testunit");
-			$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='7777'");
-			$this->obj->mainTable = 'testunit';
-			$this->obj->austNode = '7777';
-			$this->obj->createMainTable();
-		}
-		function destroyTests(){
-			$this->obj->connection->query("DROP TABLE testunit");
-			$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='7777'");
-			$this->obj->connection->exec("DELETE FROM categorias WHERE nome='TestUnit'");
-		}
+			function restartTable(){
+				$this->obj->connection->query("DROP TABLE testunit");
+				$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='7777'");
+				$this->obj->mainTable = 'testunit';
+				$this->obj->austNode = '7777';
+				$this->obj->createMainTable();
+			}
+			function destroyTests(){
+				$this->obj->connection->query("DROP TABLE testunit");
+				$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='7777'");
+				$this->obj->connection->exec("DELETE FROM categorias WHERE nome='TestUnit'");
+			}
 		
 		/*
 		 * 
@@ -690,7 +704,10 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					$result = $this->obj->addField($params);
 		
 					$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'campo_1'), 'Text: campo_1 not created.' );
-					$this->assertArrayHasKey('0', $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_1' AND categorias_id='7777'") );
+					$query = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_1' AND categorias_id='7777'");
+					$this->assertArrayHasKey('0', $query );
+					$query = reset($query);
+					$this->assertEquals('text', $query['especie'] );
 					$this->destroyTests();
 			}
 		
@@ -744,25 +761,25 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 			}
 		
 			function testAddFieldFile(){
-				$this->obj->connection->exec("DROP TABLE testunit_arquivos");
+				$this->obj->connection->exec("DROP TABLE testunit_files");
 				$this->restartTable();
 			
 				// test FILE
 					$params = array(
 						0 => array(
-							'name' => 'Campo 1',
-							'type' => 'file',
+							'name' => 'file_field',
+							'type' => 'files',
 							'description' => ''
 						),
 					);
 					$result = $this->obj->addField($params);
 
-					$this->assertTrue( $this->obj->connection->hasTable('testunit_arquivos') );
-					$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'campo_1') );
-					$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_1' AND categorias_id='7777'");
+					$this->assertTrue( $this->obj->connection->hasTable('testunit_files') );
+					$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'file_field') );
+					$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='file_field' AND categorias_id='7777'");
 					$this->assertArrayHasKey('0', $conf );
-					$this->assertEquals('arquivo', $conf[0]['especie'] );
-					$this->obj->connection->exec("DROP TABLE testunit_arquivos");
+					$this->assertEquals('files', $conf[0]['especie'] );
+					$this->obj->connection->exec("DROP TABLE testunit_files");
 					
 					$this->destroyTests();
 			}
@@ -804,6 +821,7 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 		
 			function testAddFieldRelationalOneToMany(){
 				$this->obj->connection->exec("DROP TABLE testunit_ref_field_ref_table");
+				$this->obj->connection->exec("DROP TABLE testunit_id_testunit");
 				$this->restartTable();
 				$this->obj->mainTable = 'testunit';
 			
@@ -826,10 +844,58 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					$this->assertArrayHasKey('0', $conf );
 					$this->assertEquals('ref_table', $conf[0]['ref_tabela'] );
 					$this->assertEquals('ref_field', $conf[0]['ref_campo'] );
+					$this->assertEquals('testunit_id', $conf[0]['ref_parent_field'] );
+					$this->assertEquals('ref_table_id', $conf[0]['ref_child_field'] );
 					
+				// test relacional para si próprio
+					$params = array(
+						0 => array(
+							'name' => 'Campo 2',
+							'type' => 'relational_onetomany',
+							'description' => '',
+							'refTable' => 'testunit',
+							'refField' => 'id',
+						),
+					);
+					
+					// testa SQL para criação da tabela intermediária
+						$relationalTableParams = array(
+							'referenceTable' => 'testunit_id_testunit',
+							'mainTable' => 'testunit',
+							'secondaryTable' => 'testunit',
+							'refParentField' => 'parent_testunit_id',
+							'refChildField' => 'testunit_id',
+						);
+		            	$sql = 'CREATE TABLE testunit_id_testunit('.
+		                       'id int auto_increment,'.
+		                       'parent_testunit_id int,'.
+		                       'testunit_id int,'.
+							   'order_nr int,'.
+		                       'blocked varchar(120),'.
+		                       'approved int,'.
+		                       'created_on datetime,'.
+		                       'updated_on datetime,'.
+		                       'PRIMARY KEY (id), UNIQUE id (id)'.
+		                       ')';
+						$this->assertEquals($sql, $this->obj->createReferenceTableSql_RelationalOneToMany($relationalTableParams) );
+					
+					$result = $this->obj->addField($params);
+					$this->assertTrue( $this->obj->connection->hasTable('testunit_id_testunit') );
+					$this->assertTrue( $this->obj->connection->tableHasField('testunit_id_testunit', 'parent_testunit_id') );
+					$this->assertTrue( $this->obj->connection->tableHasField('testunit_id_testunit', 'testunit_id') );
+					$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_2' AND categorias_id='7777'");
+					$this->assertArrayHasKey('0', $conf );
+					$this->assertEquals('testunit', $conf[0]['ref_tabela'] );
+					$this->assertEquals('id', $conf[0]['ref_campo'] );
+					$this->assertEquals('parent_testunit_id', $conf[0]['ref_parent_field'] );
+					$this->assertEquals('testunit_id', $conf[0]['ref_child_field'] );
+
+
+					$this->obj->connection->exec("DROP TABLE testunit_id_testunit");
 					$this->obj->connection->exec("DROP TABLE testunit_ref_field_ref_table");
 
-					$this->destroyTests();
+				// fim, destrói
+				$this->destroyTests();
 			}
 			
 			function testAddFieldImages(){
@@ -848,8 +914,61 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'campo_1_images'), 'Text: campo_1_images not created.' );
 					$this->assertArrayHasKey('0', $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_1_images' AND categorias_id='7777'") );
 					$this->destroyTests();
-			}			
+			}
 
+			function testAddFieldChangingOrders(){
+				$this->restartTable();
+			
+				// test TEXT
+					$params = array(
+						array(
+							'name' => 'Field 1',
+							'type' => 'string',
+							'order' => 'first_field'
+						),
+						array(
+							'name' => 'Field 2',
+							'type' => 'text',
+							'order' => 'first_field'
+						),
+						array(
+							'name' => 'Field 3',
+							'type' => 'string',
+							'order' => 'field_2'
+						),
+					);
+					
+					$result = $this->obj->addField($params);
+					$this->Cadastro->austNode = '7777';
+		
+					$fields = $this->Cadastro->getFields();
+					$this->assertEquals('3', $fields['field_1']['ordem'] );
+					$this->assertEquals('1', $fields['field_2']['ordem'] );
+					$this->assertEquals('2', $fields['field_3']['ordem'] );
+					
+					$new_field = array(
+						'name' => 'Field 4',
+						'type' => 'string',
+					);
+					$result = $this->obj->addField($new_field);
+					$fields = $this->Cadastro->getFields();
+					$this->assertEquals('4', $fields['field_4']['ordem'] );
+					
+					$new_field = array(
+						'name' => 'Field 5',
+						'type' => 'string',
+						'order' => 'field_1'
+					);
+					$result = $this->obj->addField($new_field);
+					$fields = $this->Cadastro->getFields();
+					$this->assertEquals('4', $fields['field_5']['ordem'] );
+					$this->assertEquals('5', $fields['field_4']['ordem'] );
+					
+					
+					//$this->assertTrue(  );
+//					$this->assertArrayHasKey('0', $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='field_1' AND categorias_id='7777'") );
+					$this->destroyTests();
+			}
 
 
 		function testSaveStructureConfiguration(){
@@ -1010,11 +1129,33 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 				$this->assertEquals($austNode, $conf[0]['categorias_id'], 'Did not save austNode.' );
 				$this->assertTrue( $this->obj->connection->hasTable('testunit_ref_field_ref_table') );
 			
+			/*
+			 * INSERE UM NOVO CAMPO
+			 *
+			 * Teste #5
+			 */
+				$newField = array(
+					'name' => 'New Field',
+					'type' => 'files',
+					'description' => 'my description'
+				);
+				$this->obj->addField($newField);
+			
+				$this->assertTrue( $this->obj->connection->hasTable('testunit_files') );
+				$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE chave='new_field' AND tipo='campo' AND categorias_id='$austNode'");
+				$this->assertArrayHasKey('0', $conf );
+				$this->assertEquals('New Field', $conf[0]['valor'], 'Did not save New Field configuration. #5' );
+				$this->assertEquals('files', $conf[0]['especie'], 'Did not save New Field as "file". #5' );
+				$this->assertEquals('4', $conf[0]['ordem'], 'Did not save New Field as "file". #5' );
+			
+			
 			
 			$this->obj->connection->exec("DELETE FROM categorias WHERE nome='TestePai777'");
 			$this->obj->connection->exec("DELETE FROM categorias WHERE nome='TestUnit' AND subordinado_nome_encoded='testepai777'");
 			$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='$austNode' OR comentario='haha777' OR valor='testunit' OR valor='haha777' ");
 			$this->obj->connection->exec("DROP TABLE testunit");
+			$this->obj->connection->exec("DROP TABLE testunit_files");
+			$this->obj->connection->exec("DROP TABLE testunit_images");
 			$this->obj->connection->exec("DROP TABLE testunit_ref_field_ref_table");
 	    }
 	

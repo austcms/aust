@@ -134,29 +134,6 @@ if(count($resultado) > 0){
                     <?php
                 }
                 ?>
-                <!-- <a href="adm_main.php?section=<?php echo $_GET['section']?>&action=see_info&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;"><img src="img/layoutv1/lupa.jpg" alt="Ver Informações" border="0" /></a> -->
-            <!--
-                <a href="adm_main.php?section=<?php echo $_GET['section']?>&action=edit_form&aust_node=<?php echo $austNode;?>&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;"><img src="img/layoutv1/edit.jpg" alt="Editar" border="0" /></a>
-                <?php
-                if($escala == "administrador"
-                OR $escala == "moderador"
-                OR $escala == "webmaster"
-                OR $_SESSION["loginid"] == $dados[autorid]){
-
-                    if((!empty($filter)) AND ($filter <> 'off')){
-                        $addurl = "&filter=$filter&filterw=" . urlencode($filterw);
-                    }
-                    ?>
-                    <a href="adm_main.php?section=<?php echo $_GET['section']?>&action=<?php echo $action;?>&block=delete&aust_node=<?php echo $austNode;?>&w=<?php echo $dados["id"]; ?><?php echo $addurl;?>" style="text-decoration: none;"><img src="img/layoutv1/delete.jpg" alt="Deletar" border="0" /></a>
-                    <?php
-                }
-                ?>
-                <?php
-                // Verifica se tipo conteúdo atual está configurado para usar galeria de fotos
-                if(in_array($cat, $aust_conf['where_gallery'])){ ?>
-                    <a href="adm_main.php?section=<?php echo $_GET['section']?>&action=photo_content_manage&w=<?php echo $dados["id"]; ?>#add" style="text-decoration: none;"><img src="img/layoutv1/fotos.jpg" alt="Adicionar fotos a este conteúdo" border="0" /></a>
-                <?php } ?>
-               -->
             </td>
         </tr>
     <?php

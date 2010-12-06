@@ -13,7 +13,8 @@
 **********************************/
 
 $c = 0;
-if(!empty($_POST) AND !empty($_POST["perguntas"]) AND !empty($_POST["frmtitulo"]) ){
+
+if(!empty($_POST) AND !empty($_POST["perguntas"]) ){
 
     $_POST['frmtitulo_encoded'] = encodeText($_POST['frmtitulo']);
     $_POST['frmcategoria'] = $_POST["aust_node"];
@@ -97,6 +98,7 @@ if(!empty($_POST) AND !empty($_POST["perguntas"]) AND !empty($_POST["frmtitulo"]
      * Cria a pesquisa no DB
      */
     $query = $this->modulo->connection->exec($sql);
+
     if($query OR $_POST["metodo"] == "edit" ){
         $resultado = TRUE;
 
@@ -397,7 +399,8 @@ if(!empty($_POST) AND !empty($_POST["perguntas"]) AND !empty($_POST["frmtitulo"]
 
 }
 ?>
+
 <br />
 <p>
-	<a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+	<a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
 </p>

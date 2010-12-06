@@ -39,4 +39,3 @@ if(empty($_GET['section']))
 </ul>
 
 </div>
-

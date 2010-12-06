@@ -1,4 +1,12 @@
 <div id="thumbs_view">
+	
+<?php
+if(count($query) == 0){
+    ?>
+	<strong>Nenhum registro encontrado.</strong>
+    <?php
+} else {
+	?>	
 	<table width="100%">
 	<?php
 
@@ -6,7 +14,6 @@
 	$thumbsH = 100;
 	$perLine = 5;
 	$i = 0;
-//	pr($query);
 
 	foreach( $query as $key=>$value){
 		
@@ -68,4 +75,8 @@
 	
 	?>
 	</table>
+	
+	<?php
+}	
+?>
 </div>

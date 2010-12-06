@@ -17,14 +17,13 @@
 /**
  * INICIALIZAÇÃO
  */
-$tabela_da_estrutura = $modulo->LeTabelaDaEstrutura($_GET['aust_node']);
+$tabela_da_estrutura = $modulo->getTable();
 
-/**
- * Explicação do código a seguir:
- *
- * A parte de lógica está separada da parte de código de amostragem HTML. O
- * código a seguir verifica cada item que deve ser mostrado posteriormente.
- */
+include_once $modulo->getIncludeFolder().'/'.MOD_MODELS_DIR.'CadastroSetup.php';
+$setup = new CadastroSetup();
+$setup->austNode = $_GET['aust_node'];
+$setup->mainTable = $modulo->getTable();
+
 /*
  * VERIFICAÇÕES $_POST
  * Faz verificações de $_POST o que deve ser feito
@@ -33,52 +32,21 @@ $tabela_da_estrutura = $modulo->LeTabelaDaEstrutura($_GET['aust_node']);
  * NOVO CAMPO
  * Insere um novo campo na tabela do cadastro
  */
-if(!empty($_POST['novo_campo'])){
-    if($_POST['campo_tipo'] == 'pw'){
-        $campo_tipo = "varchar(80)";
-        $tipo = 'campopw';
-    } elseif($_POST['campo_tipo'] == 'arquivo'){
-        $campo_tipo = "varchar(80)";
-        $tipo = 'campoarquivo';
-        if( $modulo->CriaTabelaArquivo(Array('tabela' => $_POST['tabela'])) ){
-            $status[] = 'Tabela de arquivos criada com sucesso!';
-        } else {
-            $status[] = 'Tabela de arquivos não foi criada. Talvez esta tabela já exista.';
-        }
-    } elseif($_POST['campo_tipo'] == 'relacional_umparaum'){
-        $campo_tipo = "int";
-        $tipo = 'camporelacional_umparaum';
-    } else {
-        $campo_tipo = $_POST['campo_tipo'];
-        $tipo = 'campo';
-    }
+	if(!empty($_POST['add_field'])){
+		$params = array(
+			'name' => $_POST['data'],
+			'type' => $_POST['name'],
+			'order' => $_POST['order'],
+		);
+		
+		if( !empty($_POST['relacionado_tabela_0']) )
+			$_POST['data']['refTable'] = $_POST['relacionado_tabela_0'];
 
-    $campo = RetiraAcentos(strtolower(str_replace(' ', '_', $_POST['nome'])));
-
-    $sql = "INSERT INTO cadastros_conf
-                        (tipo,chave,valor,comentario,categorias_id,ref_tabela,ref_campo,autor,desativado,desabilitado,publico,restrito,aprovado)
-                    VALUES
-                        ('{$tipo}','".$campo."','".$_POST['nome']."','".$_POST['campo_descricao']."',".$_GET['aust_node'].", '".$_POST['relacionado_tabela_0']."', '".$_POST['relacionado_campo_0']."', ".$administrador->LeRegistro('id').",0,0,1,0,1)";
-//    echo $sql;
-
-
-    if($modulo->connection->exec($sql)){
-        $status[] = 'As informações sobre o campo foram gravadas!';
-
-        $sql = "ALTER TABLE
-                    ".$_POST['tabela']."
-                ADD COLUMN
-                    {$campo} {$campo_tipo}
-                ".$_POST['campo_local'];
-        if($modulo->connection->exec($sql)){
-            $status[] = "Campo criado na tabela com sucesso.";
-        } else {
-            $status[] = "<span style=\"color:red;\">Erro na criação do campo <strong>{$campo}</strong> na tabela.";
-        }
-    } else {
-        $status[] = "Erro ao gravar informações sobre o novo campo. Nada foi criado.";
-    }
-}
+		if( !empty($_POST['relacionado_campo_0']) )
+			$_POST['data']['refField'] = $_POST['relacionado_campo_0'];
+			
+		$setup->addField($_POST['data']);
+	}
 
 /*
  * MOD_CONF
@@ -341,6 +309,99 @@ if(!empty($_GET['function'])){
 
     <?php
     /**
+     * GERENCIAMENTO DE CAMPOS
+     *
+     * Listagem dos campos deste cadastro e configuração destes
+     */
+    ?>
+    <div class="widget">
+        <div class="titulo">
+            <h3>Gerenciamento dos campos</h3>
+        </div>
+        <div class="content">
+            <p>A seguir, você tem a lista dos campos existentes neste cadastro.</p>
+            <ul>
+            <?php
+			$fields = $modulo->getFields(false);
+
+            foreach($fields as $chave=>$valor){
+                /**
+                 * Verifica se o campo é editável ou infra-estrutura (ex. de campos: id, adddate, aprovado)
+                 */
+                $sql = "SELECT
+                            valor, desativado, listagem, IFNULL(necessario, '0') as necessario
+                        FROM
+                            cadastros_conf
+                        WHERE
+                            chave='".$chave."' AND
+                            categorias_id='".$_GET['aust_node']."'
+                        LIMIT 0,2
+                        ";
+                $result = $modulo->connection->query($sql);
+                if( count($result) > 0 ){
+                    $dados = $result[0];
+                    ?>
+                    <li>
+                    <?php echo $chave; ?>
+                    <?php
+                    if($dados['desativado'] == '1'){
+                        ?>
+                        <a href="adm_main.php?section=<?php echo $_GET['section']?>&aust_node=<?php echo $_GET['aust_node']?>&action=<?php echo $_GET['action']?>&function=ativar&w=<?php echo $chave; ?>">
+                            Ativar
+                        </a>
+                        <?
+                    } else {
+                    ?>
+                        <a href="adm_main.php?section=<?php echo $_GET['section']?>&aust_node=<?php echo $_GET['aust_node']?>&action=<?php echo $_GET['action']?>&function=desativar&w=<?php echo $chave; ?>">
+                            Desativar
+                        </a>
+                    <?
+                    }
+                    ?> -
+                    <?php
+                    if($dados['necessario'] == '0'){
+                        ?>
+                        <a href="adm_main.php?section=<?php echo $_GET['section']?>&aust_node=<?php echo $_GET['aust_node']?>&action=<?php echo $_GET['action']?>&function=necessario&w=<?php echo $chave; ?>">
+                            Necessario
+                        </a>
+                        <?
+                    } else {
+                    ?>
+                        <a href="adm_main.php?section=<?php echo $_GET['section']?>&aust_node=<?php echo $_GET['aust_node']?>&action=<?php echo $_GET['action']?>&function=desnecessario&w=<?php echo $chave; ?>">
+                            Não necessário
+                        </a>
+                    <?
+                    }
+                    ?> -
+                    <?php
+                    if( $dados['listagem'] < '1' ){
+                        ?>
+                        <a href="adm_main.php?section=<?php echo $_GET['section']?>&aust_node=<?php echo $_GET['aust_node']?>&action=<?php echo $_GET['action']?>&function=listar&w=<?php echo $chave; ?>">
+                            Listar
+                        </a>
+                        <?php
+                    } else {
+                        ?>
+                        <a href="adm_main.php?section=<?php echo $_GET['section']?>&aust_node=<?php echo $_GET['aust_node']?>&action=<?php echo $_GET['action']?>&function=naolistar&w=<?php echo $chave; ?>">
+                            Não Listar
+                        </a>
+                        <?
+                    }
+                    ?>
+                    </li>
+                    <?php
+
+                }
+            }
+            ?>
+            </ul>
+
+        </div>
+        <div class="footer"></div>
+    </div>
+
+    <?php
+    /**
      * NOVOS CAMPOS
      *
      * Form para inserir novos campos em um cadastro
@@ -348,12 +409,12 @@ if(!empty($_GET['function'])){
     ?>
     <div class="widget">
         <div class="titulo">
-            <h3>Novo campo</h3>
+            <h3>Novo Campo</h3>
         </div>
         <div class="content">
-            <p>Insira um novo campo no cadastro.</p>
+            <p>Insira um novo campo.</p>
             <form method="post" action="<?php echo $config->self;?>" class="simples pequeno">
-                <input type="hidden" name="tabela" value="<?php echo $tabela_da_estrutura?>" />
+                <input type="hidden" name="add_field" value="1" />
 
                 <?php
                 /*
@@ -361,9 +422,9 @@ if(!empty($_GET['function'])){
                  */
                 ?>
                 <div class="campo">
-                    <label>Nome do campo:</label>
+                    <label>Nome:</label>
                     <div class="input">
-                        <input type="text" name="nome" class="input" />
+                        <input type="text" name="data[name]" class="input" />
                     </div>
                 </div>
                 <br clear="both" />
@@ -373,17 +434,23 @@ if(!empty($_GET['function'])){
                  */
                 ?>
                 <div class="campo">
-                    <label>Tipo do campo: </label>
-                    <select name="campo_tipo"  onchange="javascript: SetupCampoRelacionalTabelas(this, '<?php echo 'campooption0'?>', '0')">
-                        <option value="varchar(200)">Texto pequeno</option>
+                    <label>Tipo: </label>
+                    <select name="data[type]" onchange="javascript: SetupCampoRelacionalTabelas(this, '<?php echo 'campooption0'?>', '0')">
+                        <option value="string">Texto pequeno</option>
                         <option value="text">Texto médio ou grande</option>
                         <option value="date">Data</option>
                         <option value="pw">Senha</option>
-                        <option value="arquivo">Arquivo</option>
-        				<option value="relacional_umparaum">Relacional Um-para-um (tabela)</option>
+                        <option value="images">Imagens</option>
+                        <option value="files">Arquivo</option>
+	                    <option value="relational_onetomany">Relacional 1-para-muitos (tabela)</option>
+						<?php
+						/*
+						 * faltam os campos relacionais
+						 */
+						?>
                     </select>
                 </div>
-                <? // <select> em ajax ?>
+                <?php // <select> em ajax ?>
                 <div class="campooptions" id="<?php echo 'campooption0'?>">
                     <?
                     /*
@@ -405,7 +472,7 @@ if(!empty($_GET['function'])){
                 <br clear="both" />
                 <div class="campo_descricao">
                     <label>Descrição: </label>
-                    <input type="text" name="campo_descricao" />
+                    <input type="text" name="data[description]" />
                 </div>
                 <br clear="both" />
                 <?php
@@ -415,29 +482,22 @@ if(!empty($_GET['function'])){
                 ?>
                 <div class="campo">
                     <label>Local de inserção do novo campo: </label>
-                    <select name="campo_local">
+                    <select name="data[order]">
                         <?php
 
-                        // busca todos os campos da tabela do cadastro e mostra em um <select>
-                        $sql = "SELECT
-                                    *
-                                FROM
-                                    ".$tabela_da_estrutura."
-                                LIMIT 0,1
-                                ";
-                        $dados = $modulo->connection->query($sql,"ASSOC");
-                        $dados = $dados[0];
+
                         // pega o valor físico do campo da tabela
-                        //$fields = mysql_num_fields($mysql);
+                        $fields = $modulo->getFields();
                         $i = 0;
-                        foreach($dados as $campo=>$valor){
+                        foreach($fields as $campo=>$valor){
                             // verifica se o campo é editável ou infra-estrutura (ex. de campos: id, adddate, aprovado)
                             $sql = "SELECT
-                                        valor
+                                        valor, chave
                                     FROM
                                         cadastros_conf
                                     WHERE
-                                        chave='".$campo."'
+                                        chave='".$campo."' AND
+										categorias_id='".$_GET['aust_node']."'
                                     LIMIT 0,2
                                     ";
                             $result = $modulo->connection->query($sql,"ASSOC");
@@ -446,9 +506,9 @@ if(!empty($_GET['function'])){
                                 $i++;
                                 // se for primeiro registro, escreve <option> com opção de "ANTES DE <campo>"
                                 if($i == "1"){
-                                    echo '<option value="FIRST">Antes de '.$result["valor"].'</option>';
+                                    echo '<option value="first_field">Antes de '.$result["valor"].'</option>';
                                 }
-                                echo '<option value="AFTER '.$result["valor"].'">Depois de '.$result["valor"].'</option>';
+                                echo '<option value="'.$result["chave"].'">Depois de '.$result["valor"].'</option>';
                             }
 
                         }
@@ -716,6 +776,7 @@ if(!empty($_GET['function'])){
             <?php
             $configurations = $modulo->loadModConf(null,'field');
 			$fields = $modulo->getFields(false);
+			//pr($fields);
             if( !empty($configurations) && is_array($configurations) ){
                 ?>
 
@@ -735,14 +796,14 @@ if(!empty($_GET['function'])){
 	                        <?php
 							if( empty($configurations[$fieldName]) )
 								$configurations[$fieldName] = array();
-							
+
 							foreach( $configurations[$fieldName] as $key=>$options ){
 								
-								if( !empty($options['field_type'])
-									AND $options['field_type'] != $fieldOptions['especie']
+								if( !empty($options['field_type']) AND
+									$options['field_type'] != $fieldOptions['especie']
 								)
 									continue;
-								
+									
 								?>
 								<div>
 								<?php
@@ -804,112 +865,7 @@ if(!empty($_GET['function'])){
         </div>
         <div class="footer"></div>
     </div>
-    <?php
-    /**
-     * LISTAGEM DE CAMPOS
-     *
-     * Listagem dos campos deste cadastro e configuração destes
-     */
-    ?>
-    <div class="widget">
-        <div class="titulo">
-            <h3>Campos deste cadastro</h3>
-        </div>
-        <div class="content">
-            <p>A seguir, você tem a lista dos campos existentes neste cadastro.</p>
-            <ul>
-            <?php
-            // busca todos os campos da tabela do cadastro
-            $sql = "SELECT
-                        *
-                    FROM
-                        ".$tabela_da_estrutura."
-                    LIMIT 0,1
-                    ";
-            $mysql = $modulo->connection->query($sql, 'ASSOC');
-            $mysql = $mysql[0];
-            /**
-             * Pega o valor físico do campo da tabela
-             */
-            $fields = count($mysql);
-            if( !is_array($mysql) )
-                $mysql = array();
 
-            foreach($mysql as $chave=>$valor){
-                /**
-                 * Verifica se o campo é editável ou infra-estrutura (ex. de campos: id, adddate, aprovado)
-                 */
-                $sql = "SELECT
-                            valor, desativado, listagem, IFNULL(necessario, '0') as necessario
-                        FROM
-                            cadastros_conf
-                        WHERE
-                            chave='".$chave."' AND
-                            categorias_id='".$_GET['aust_node']."'
-                        LIMIT 0,2
-                        ";
-                $result = $modulo->connection->query($sql);
-                if( count($result) > 0 ){
-                    $dados = $result[0];
-                    ?>
-                    <li>
-                    <?php echo $chave; ?>
-                    <?php
-                    if($dados['desativado'] == '1'){
-                        ?>
-                        <a href="adm_main.php?section=<?php echo $_GET['section']?>&aust_node=<?php echo $_GET['aust_node']?>&action=<?php echo $_GET['action']?>&function=ativar&w=<?php echo $chave; ?>">
-                            Ativar
-                        </a>
-                        <?
-                    } else {
-                    ?>
-                        <a href="adm_main.php?section=<?php echo $_GET['section']?>&aust_node=<?php echo $_GET['aust_node']?>&action=<?php echo $_GET['action']?>&function=desativar&w=<?php echo $chave; ?>">
-                            Desativar
-                        </a>
-                    <?
-                    }
-                    ?> -
-                    <?php
-                    if($dados['necessario'] == '0'){
-                        ?>
-                        <a href="adm_main.php?section=<?php echo $_GET['section']?>&aust_node=<?php echo $_GET['aust_node']?>&action=<?php echo $_GET['action']?>&function=necessario&w=<?php echo $chave; ?>">
-                            Necessario
-                        </a>
-                        <?
-                    } else {
-                    ?>
-                        <a href="adm_main.php?section=<?php echo $_GET['section']?>&aust_node=<?php echo $_GET['aust_node']?>&action=<?php echo $_GET['action']?>&function=desnecessario&w=<?php echo $chave; ?>">
-                            Não necessário
-                        </a>
-                    <?
-                    }
-                    ?> -
-                    <?php
-                    if( $dados['listagem'] < '1' ){
-                        ?>
-                        <a href="adm_main.php?section=<?php echo $_GET['section']?>&aust_node=<?php echo $_GET['aust_node']?>&action=<?php echo $_GET['action']?>&function=listar&w=<?php echo $chave; ?>">
-                            Listar
-                        </a>
-                        <?php
-                    } else {
-                        ?>
-                        <a href="adm_main.php?section=<?php echo $_GET['section']?>&aust_node=<?php echo $_GET['aust_node']?>&action=<?php echo $_GET['action']?>&function=naolistar&w=<?php echo $chave; ?>">
-                            Não Listar
-                        </a>
-                        <?
-                    }
-                    ?>
-                    </li>
-                    <?php
-
-                }
-            }
-            ?>
-            </ul>
-
-        </div>
-        <div class="footer"></div>
-    </div>
     <?
     /*
      * Opções gerais do cadastro

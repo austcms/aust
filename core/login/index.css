@@ -4,6 +4,8 @@
     padding: 0;
 }
 
+html { background: #f4f4f4; }
+
 body {
     background: #f4f4f4;
     font-family: 'Lucida Grande', 'Lucida Sans', Arial, 'Trebuchet MS', sans-serif;

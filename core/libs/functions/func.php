@@ -54,6 +54,94 @@
 
     }
 
+	/**
+	 * lineWrap()
+	 * 
+	 * Em textos onde há um termo grande, sem espaços, como o seguinte:
+	 * 
+	 * 		este_é_um_texto_grande_sem_espaços
+	 * 
+	 * Pode ocorrer de quebrar a formatação HTML. Esta função quebra a
+	 * palavra ao meio caso necessário.
+	 */
+	function lineWrap($text, $chars = '30'){
+		preg_match('/(http:\/\/[^\s]+)/', $text, $link);
+		$hypertext = "<a href=\"". $link[0] . "\">" . $link[0] . "</a>";
+		$text = preg_replace('/(http:\/\/[^\s]+)/', $hypertext, $text);
+		
+		// trunca termos
+		$text = eregi_replace("([^ <>\"\\-]{".$chars."})"," \\1 ",$text);
+		
+		// tira espaços de uma tag a
+		$text = preg_replace("/(<a href=\")(.*)(\">)/e", '"$1".str_replace(" ", "", "$2")."$3"', $text);
+		
+		return $text;
+	}
+
+	function retrieveFile($path = "", $type = '', $filename = ''){
+		if( empty($path) )
+			return false;
+		
+		return LIBS_DIR.'functions/retrieve_file.php?path='.$path.'&type='.$type.'&filename='.$filename;
+	}
+	
+	function getFileIcon($ext){
+	    $ext = explode('.', $ext);
+	    $ext = reset(array_reverse($ext));
+		
+		$icons = array(
+			'file_doc.png' => array(
+				'doc', 'docx', 'otf', 'pages', 'dotx'
+			),
+			'file_ppt.png' => array(
+				'ppt', 'pptx', 'pps', 'keynote'
+			),
+			'file_xls.png' => array(
+				'xls', 'xlsx', 'numbers'
+			),
+			'file_zip.png' => array(
+				'zip', 'tar', 'gz', 'ace', 'rar',
+				'cab'
+			),
+			'file_pdf.png' => array(
+				'pdf'
+			),
+			'file_jpg.png' => array(
+				'jpg', 'png', 'gif', 'jpeg', 'bmp',
+				'psd', 'tiff', 'graffle'
+			),
+		);
+		$url = 'file.png';
+		
+		foreach( $icons as $file=>$extensions ){
+			if( in_array($ext, $extensions) ){
+				$url = $file;
+				break;
+			}
+		}
+		return IMG_DIR.'icons/files/'.$url;
+	}
+
+	/**
+	 * convertFilesize()
+	 *
+	 * Pega os bytes de um arquivo em formato string e transforma
+	 * para MB.
+	 */
+	function convertFilesize($bytes, $return = 'mb'){
+        $size = $bytes;
+        if( $size < 1000 )
+            $decimals = 4;
+        else if( $size < 10000 )
+            $decimals = 3;
+        else if( $size < 100000 )
+            $decimals = 2;
+        else
+            $decimals = 1;
+        $size = str_replace('.', ',', number_format($size/1000000, $decimals) );
+        echo $size;
+	}
+	
     /**
      *
      * @param array $status
@@ -340,11 +428,28 @@ function PegaExtensao($param){
     return $ext[0];
 }
 
-function loadHtmlEditor($plugins = ""){
-	if( !empty( $plugins ) ) $plugins = ','.$plugins;
+function loadHtmlEditor($params = ""){
+	
+	if( !empty( $params ) &&
+		is_string($params) )
+	{
+		$plugins = ','.$params;
+	} else if( !empty( $params ) &&
+				is_array($params) )
+	{
+		$plugins = '';
+		$elements = '';
+		if( !empty($params['plugins']) )
+			$plugins = ','.$params['plugins'];
+
+		if( !empty($params['elements']) )
+			$elements = ','.$params['elements'];
+
+	}
 	
 	echo '<script type="text/javascript">';
-	echo 'var pluginsToLoad = "safari,paste'.$plugins.'";';
+	echo 'var pluginsToLoad = "'.$plugins.'";';
+	echo 'var elementsToLoad = "'.$elements.'";';
 	echo '</script>';
 	
     include_once(THIS_TO_BASEURL.BASECODE_JS.'html_editor.php');

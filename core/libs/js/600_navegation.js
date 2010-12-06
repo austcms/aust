@@ -43,7 +43,7 @@ function lightbox(){
         /*
          * Centraliza na tela a janela popup
          */
-        var top = (winH - $( id ).height()) / 2;
+        var top = (winH/2 - $( id ).height());
         var left = (winW - $( id ).width()) / 2;
 
         $( id ).css('top', top);
