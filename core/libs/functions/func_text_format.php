@@ -53,6 +53,7 @@ function lbCategoria($params){
             return false;
         else
             $austNode = $params['austNode'];
+
         $categoryInput = (empty($params['categoryInput'])) ? 'frmcategoria' : $params['categoryInput'];
     }
 

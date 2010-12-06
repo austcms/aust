@@ -93,15 +93,43 @@ $dbSchema['categorias'] = array(
     'classe' => 'varchar(200)',
     'tipo' => 'varchar(200)',
     'tipo_legivel' => 'varchar(200)',
-    'permissao' => 'varchar(200)',
+    'editable' => 'varchar(200) default "0"',
     'publico' => 'bool',
     'autor' => 'varchar(120)',
+    'order_nr' => 'int',
     'dbSchemaTableProperties' => array(
         'PRIMARY KEY' => '(id)',
         'UNIQUE' => 'id (id)',
+        'INDEX' => '(nome_encoded)',
     )
 );
 
+$dbSchema['austnode_images'] = array(
+    'id' => 'int NOT NULL auto_increment',
+    'node_id' => 'varchar(240)',
+    'subordinadoid' => 'int',
+    'subordinado_nome_encoded' => 'varchar(240)',
+    'description' => 'text',
+    'class' => 'varchar(200)',
+    'type' => 'varchar(200)',
+	'systempath' => 'text',
+	'file_name' => 'varchar(200)',
+	'original_file_name' => 'varchar(200)',
+	'file_type' => 'varchar(25)',
+	'file_size' => 'varchar(200)',
+	'file_ext' => 'varchar(20)',
+	'created_on' => 'datetime',
+	'updated_on' => 'datetime',
+	
+    'editable' => 'bool default "0"',
+    'public' => 'bool default "1"',
+    'admin_id' => 'int',
+    'dbSchemaTableProperties' => array(
+        'PRIMARY KEY' => '(id)',
+        'UNIQUE' => 'id (id)',
+		'INDEX' => '(node_id)'
+    )
+);
 
 
 

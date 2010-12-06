@@ -13,6 +13,10 @@ if(!defined('THIS_TO_BASEURL')){
     define('THIS_TO_BASEURL', '');
 }
 
+if(!defined('CLASS_FILE_SUFIX')){
+    define('CLASS_FILE_SUFIX', '.class');
+}
+
 /**
  * Função que carrega classes automaticamente
  *

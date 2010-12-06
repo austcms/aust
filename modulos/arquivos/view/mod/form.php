@@ -45,9 +45,6 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
 ?>
 
 <h2><?php echo $h1?></h2>
-<p>
-    <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
-</p>
 
 <p>Envie um arquivo para o site.</p>
 

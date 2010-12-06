@@ -197,6 +197,35 @@ class Aust {
         }
     }
 
+	/**
+	 * deleteNodeImages( $node_id )
+	 * 
+	 * Exclui todas as imagens de um dado node.
+	 * 
+	 * @param int $node_id node_id da categoria
+	 * @return bool
+	 */
+	function deleteNodeImages( $node_id ){
+		
+		$sql = "SELECT
+					id, systempath
+				FROM
+					austnode_images
+				WHERE
+					node_id='".$node_id."'
+				";
+		
+		$query = $this->connection->query($sql);
+		foreach( $query as $key=>$value ){
+			if( file_exists($value['systempath']) )
+				unlink( $value['systempath'] );
+			$sqlDelete = "DELETE FROM austnode_images WHERE id='".$value['id']."'";
+			$this->connection->exec($sqlDelete);
+		}
+		
+		return true;
+	}
+
     /**
      * gravaEstrutura()
      *

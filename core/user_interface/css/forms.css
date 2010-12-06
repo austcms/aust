@@ -56,7 +56,7 @@
         form div.input_painel div.containner div.options { display: table; }
 
 /* Lightbox */
-    .window .lb_content table.form td label { line-height: 24px; margin: 0 5px 0 0; }
+    .window .lb_content table.form td label { line-height: 24px; width: 80px; display: inline-block; margin: 0 5px 0 0; }
     .window .lb_content table.form td input.text { font-size: 1.3em; font-weight: bold; width: 240px; }
 
 /* MÓDULOS */

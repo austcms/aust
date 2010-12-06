@@ -312,8 +312,10 @@ class Config {
     }
 
     function updateOptions($params){
-
-        $this->conexao->exec("UPDATE config SET valor='".$params["valor"]."' WHERE id='".$params["id"]."'");
+		
+		$params = sanitizeString($params);
+		$sql = "UPDATE config SET valor='".$params["valor"]."' WHERE id='".$params["id"]."'";
+        $this->conexao->exec($sql);
 
         return '<span style="color: green;">Configuração salva com sucesso!</span>';
     }

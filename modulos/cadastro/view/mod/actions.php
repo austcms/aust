@@ -10,28 +10,6 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
      */
 
     // se não estiver confirmada a exclusão
-    if(empty($_GET['confirm'])){
-    ?>
-        <form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?<?php echo $_SERVER['QUERY_STRING'];?>&confirm=delete" name="repost">
-        <input type="hidden" name="deletar" value="deletar" />
-        <?php
-        $itens = $_POST['itens'];
-        foreach($itens as $key=>$valor){
-            echo '<input type="hidden" name="itens[]" value="'.$valor.'" />';
-        }
-        $status['classe'] = 'pergunta';
-        $status['mensagem'] = '<strong>
-                Tem certeza que deseja apagar o(s) item(ns) selecionado(s)?
-                </strong>
-                <br />
-                <a href="#" onclick="document.repost.submit(); return false">Sim</a> -
-                <a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&action=listar">N&atilde;o</a>';
-        EscreveBoxMensagem($status);
-        ?>
-        </form>
-    <?
-    // se estiver confirmada a exclusão
-    } else if($_GET['confirm'] == "delete"){
         $itens = $_POST['itens'];
         $c = 0;
         foreach($itens as $key=>$valor){
@@ -93,7 +71,6 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
             $status['mensagem'] = '<strong>Erro: </strong> Ocorreu um erro ao excluir os dados.';
         }
         EscreveBoxMensagem($status);
-    }
 
 /*
  * APROVAR usuário
@@ -102,30 +79,6 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
     /*
      * Identificar tabela que deve ser excluida
      */
-
-    // se não estiver confirmada a exclusão
-    if(empty($_GET['confirm'])){
-    ?>
-        <form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?<?php echo $_SERVER['QUERY_STRING'];?>&confirm=aprovar" name="repost">
-        <input type="hidden" name="aprovar" value="aprovar" />
-        <?php
-        $itens = $_POST['itens'];
-        foreach($itens as $key=>$valor){
-            echo '<input type="hidden" name="itens[]" value="'.$valor.'" />';
-        }
-        $status['classe'] = 'pergunta';
-        $status['mensagem'] = '<strong>
-                Tem certeza que deseja executar a ação requerida?
-                </strong>
-                <br />
-                <a href="#" onclick="document.repost.submit(); return false">Sim</a> -
-                <a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&action=listar">N&atilde;o</a>';
-        EscreveBoxMensagem($status);
-        ?>
-        </form>
-    <?
-    // se estiver confirmada a ação
-    } else if($_GET['confirm'] == "aprovar"){
         $itens = $_POST['itens'];
         $c = 0;
         foreach($itens as $key=>$valor){
@@ -160,7 +113,6 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
             $status['mensagem'] = '<strong>Erro: </strong> Ocorreu um erro ao aprovar usuário(s) os dados.';
         }
         EscreveBoxMensagem($status);
-    }
 }
 
 ?>

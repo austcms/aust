@@ -15,11 +15,14 @@ require_once(CORE_DIR."libs/functions/func.php");
 require_once(CORE_DIR."libs/functions/data_types.php");
 require_once(CORE_DIR."libs/functions/string_treatment.php");
 
-function __autoload($className) {
+function autoload($className) {
     if( is_file('core/class/'.$className.'.php') )
-        require_once 'core/class/'.$className.'.php';
+        require 'core/class/'.$className.'.php';
     else
-        require_once 'core/class/'.$className.'.class.php';
+        require 'core/class/'.$className.'.class.php';
 
 }
+
+spl_autoload_register('autoload');
+
 ?>

@@ -12,10 +12,15 @@ function encodeString($str){
 
 	$unwantedChars = array(
 		'!','@','#','$','%','^','&',
+		'\'', '"', '`', '´', '¨', '^', '~'
 		//'0','1','2','3','4','5','6','7','8','9'
+	);
+	$useUnderline = array(
+		'-', '/', '\\'
 	);
 	
 	$str = str_replace($unwantedChars, "", $str);
+	$str = str_replace($useUnderline, "_", $str);
 
     $str = str_replace(array('à','á','â','ã','ä'), "a", $str);
     $str = str_replace(array('è','é','ê','ë'), "e", $str);
@@ -33,12 +38,6 @@ function encodeString($str){
     $str = str_replace(array('ñ'), "n", $str);
     $str = str_replace(array('Ñ'), "N", $str);
 
-	$str = str_replace("´", "", $str);
-	$str = str_replace("`", "", $str);
-	$str = str_replace("¨", "", $str);
-	$str = str_replace("^", "", $str);
-	$str = str_replace("~", "", $str);
-	$str = str_replace(array("/","\\"), "_", $str);
 	return $str;
 }
 
@@ -77,7 +76,15 @@ function encodeDatabaseFieldName($str){
  * Add slashes and others.
  */
 function sanitizeString($str){
-	$str = addslashes($str);
+	if( is_string($str) ){
+		$str = addslashes($str);
+	} else if( is_array($str) ){
+		
+		foreach( $str as $key=>$value){
+			$str[$key] = addslashes($value);
+		}
+		
+	}
 	return $str;
 }
 ?>

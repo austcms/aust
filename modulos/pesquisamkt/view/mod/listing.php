@@ -27,9 +27,6 @@ $query = $this->connection->query($sql);
 
 $cat = $query[0]['nome'];
 ?>
-<p>
-    <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
-</p>
 <h2><?php echo $h1;?></h2>
 <p>Abaixo você encontra a listagem dos últimos textos desta categoria.</p>
 <?php
@@ -68,7 +65,7 @@ $query = $modulo->loadFirstQuestions($query);
  */
 if( $permissoes->canDelete($austNode) ){
     ?>
-    <div class="painel_de_controle"><input type="submit" name="deletar" value="Deletar selecionados" />
+    <div class="painel_de_controle"><input type="submit" class="js_confirm" name="deletar" value="Deletar selecionados" />
     </div>
     <?php
 }

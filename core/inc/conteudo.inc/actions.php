@@ -100,32 +100,6 @@ if(is_file( Modulos::MOD_DIR .$aust->LeModuloDaEstrutura($_GET['aust_node']).'/'
          * Identificar tabela que deve ser excluida
          */
 
-        // se não estiver confirmada a exclusão
-        if((empty($_GET['confirm'])) AND !empty($_POST['itens']) AND (count($_POST['itens']) > 0)){
-        ?>
-            <form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?<?php echo $_SERVER['QUERY_STRING'];?>&confirm=delete" name="repost">
-            <input type="hidden" name="deletar" value="deletar" />
-            <?php
-            $itens = $_POST['itens'];
-            foreach($itens as $key=>$valor){
-                echo '<input type="hidden" name="itens[]" value="'.$valor.'" />';
-            }
-            $status['classe'] = 'pergunta';
-            $status['mensagem'] = '<strong>
-                    Tem certeza que deseja apagar o(s) item(ns) selecionado(s)?
-                    </strong>
-                    <br />
-                    <a href="#" onclick="document.repost.submit(); return false">Sim</a> -
-                    <a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&action=listar">N&atilde;o</a>';
-            EscreveBoxMensagem($status);
-            ?>
-            </form>
-        <?php
-        /**
-         * CONFIRMADA A EXCLUSÃO
-         */
-        } elseif( $_GET['confirm'] == "delete" AND !empty($_POST['itens']) ){
-
             $itens = $_POST['itens'];
             $c = 0;
             foreach($itens as $key=>$valor){
@@ -162,7 +136,7 @@ if(is_file( Modulos::MOD_DIR .$aust->LeModuloDaEstrutura($_GET['aust_node']).'/'
             $status['mensagem'] = 'Nenhum item selecionado.';
             EscreveBoxMensagem($status);
         }
-    }
+    
 }
 
 ?>

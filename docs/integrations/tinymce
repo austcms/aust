@@ -1,0 +1,26 @@
+ATUALIZAR PATH DE IMG DINAMICANTE
+
+Nos arquivos:
+- tiny_mce/plugins/imagemanager/index.php
+- tiny_mce/plugins/imagemanager/js/index.php
+
+Insira no início:
+
+session_name('aust');
+session_start();
+
+NO ARQUIVO config.php, ANTES DE:
+
+$mcImageManagerConfig['filesystem.rootpath'] = '../../../../../../'.$concat;//.$_SESSION['imagemanager']['filesystem.rootpath']; // absolute or relative from this script path, required.
+
+INSIRA
+
+ob_start();
+$oneMoreDir = '';
+$isJs = array_reverse( explode('/', getcwd() ) );
+if( reset($isJs) )
+	$oneMoreDir = '../';
+$thisToBaseUrl = '../../../../../../';
+$concat = file_get_contents($basepath.$thisToBaseUrl.$oneMoreDir.'config/tiny_mce');
+ob_end_clean();
+

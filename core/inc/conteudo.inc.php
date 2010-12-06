@@ -41,6 +41,7 @@ if(!empty($_GET['action'])){
     }
     // @todo - Módulos devem procurar por $aust_node, não $_GET['aust_node']
     $_GET["aust_node"] = $aust_node;
+	$austNode = $aust_node;
 
     /*
      * Tem permissão?
@@ -119,18 +120,40 @@ if(!empty($_GET['action'])){
         }
 
         $action = $_GET['action'];
-        /*
-         * Se for save, redireciona automaticamente
-         */
-	     if( in_array($action, array(SAVE_ACTION)) ||
-				( $action == ACTIONS_ACTION && $_GET['confirm'] == 'delete' ) )
+
+		/*
+		 * Navegação entre actions de um austNode
+		 */
+		?>
+		<div class="structure_nav_options">
+			<?php
+			$moreOptions = array();
+			foreach( $modInfo['opcoes'] as $actionName=>$humanName ){
+				if( $actionName == $action )
+					continue;
+				$moreOptions[] = '<a href="adm_main.php?section='.$_GET['section'].'&action='.$actionName.'&aust_node='.$austNode.'">'.$humanName.'</a>';
+			}
+			
+			if( !empty($moreOptions) ){
+				?>
+				Navegação: <?php echo implode(", ", $moreOptions); ?>
+				<?php
+			}
+			?>
+		</div>
+		<?php
+	    /*
+	     * Se for save, redireciona automaticamente
+	     */
+	     if( in_array($action, array(SAVE_ACTION, ACTIONS_ACTION)) )
 			{
-            ?>
-            <div class="loading_timer">
-                <img src="<?php echo IMG_DIR ?>loading_timer.gif" /> Redirecionando Automaticamente
-            </div>
-            <?php
-        }
+	        ?>
+	        <div class="loading_timer">
+	            <img src="<?php echo IMG_DIR ?>loading_timer.gif" /> Redirecionando Automaticamente
+	        </div>
+	        <?php
+	    }
+
         /**
          * Prepara os argumentos para instanciar a classe e depois
          * chama o Controller que cuidará de toda a arquitetura MVC do módulo
@@ -147,9 +170,7 @@ if(!empty($_GET['action'])){
             'model' => $model,
         );
         $modController = new ModController($param);
-        if( in_array($action, array(SAVE_ACTION)) ||
- 			( $action == ACTIONS_ACTION && $_GET['confirm'] == 'delete' ) )
-		{
+	    if( in_array($action, array(SAVE_ACTION, ACTIONS_ACTION)) ){
             $goToUrl = "adm_main.php?section=".$_GET['section'].'&action=listing&aust_node='.$aust_node;
             ?>
             <script type="text/javascript">

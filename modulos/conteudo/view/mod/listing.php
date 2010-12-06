@@ -12,9 +12,6 @@
  */
 ?>
 <div class="listagem">
-<p>
-    <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
-</p>
 <h2>
     Listando contéudo: <?php echo $h1;?>
 </h2>
@@ -38,7 +35,7 @@
  */
 if( $permissoes->canDelete($austNode) ){
     ?>
-    <div class="painel_de_controle"><input type="submit" name="deletar" value="Deletar selecionados" />
+    <div class="painel_de_controle"><input type="submit" class="js_confirm" name="deletar" value="Deletar selecionados" />
     </div>
     <?php
 }

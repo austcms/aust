@@ -1,10 +1,14 @@
 <?php
+//session_name('aust');
+//session_start();
+
 	// Use installer
 	if (file_exists("../install"))
 		die("alert('You need to run the installer or rename/remove the \"install\" directory.');");
 
 	error_reporting(E_ALL ^ E_NOTICE);
 
+	
 	require_once("../includes/general.php");
 	require_once('../classes/Utils/JSCompressor.php');
 	require_once("../classes/ManagerEngine.php");

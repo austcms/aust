@@ -25,8 +25,8 @@
  */
     if($_GET['action'] == 'create'){
         $tagh2 = "Criar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
-        $tagp = 'Crie uma nova galeria de fotos a seguir. Primeiro configure as'.
-                'informações básicas da galeria e abaixo as fotos.';
+        $tagp = 'Crie uma nova galeria de fotos a seguir. Comece configurando as '.
+                'informações básicas da galeria e depois suas fotos.';
         $dados = array('id' => '');
     }
 /*
@@ -75,11 +75,8 @@
         $dados = $query[0];
     }
 ?>
-<p>
-    <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
-</p>
 
-<h3><?php echo $tagh2;?></h3>
+<h2><?php echo $tagh2;?></h2>
 <p><?php echo $tagp;?></p>
 
 

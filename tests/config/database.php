@@ -9,7 +9,7 @@ class DATABASE_CONFIG
 {
     static $dbConn = array(
         'server' => '127.0.0.1',
-        'database' => 'aust_test',
+        'database' => 'aust',
         'username' => 'root',
         'password' => '', 
         'encoding' => 'utf8',
