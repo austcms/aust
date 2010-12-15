@@ -215,8 +215,8 @@
                             "SELECT", "UPDATE", "DELETE", "INSERT", "REPLACE",
                             "FROM", "ASC", "WHERE", "ORDER BY", "LIMIT", "TABLES",
                             "LEFT JOIN", "DISTINCT", "COUNT", "ON", "DESCRIBE", "SHOW",
-                            "INTO", "VALUES", "SET",
-                            "IN", "NOT IN", "OR", "AND", "AS", "DESC",
+                            "INTO", "VALUES", "SET", "ALTER",
+                            "IN", "NOT IN", " OR ", " AND ", " AS ", "DESC",
                             " and ", " as "
                         );
                         $boldSqlCommands = array();

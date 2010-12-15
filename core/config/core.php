@@ -12,6 +12,7 @@
                 CACHE_PUBLIC_DIR,
                 CACHE_CSS_CONTENT,
                 CACHE_JS_CONTENT,
+                UPLOADS_DIR,
             ));
 
 /*

@@ -25,8 +25,9 @@ if(!empty($_FILES['arquivo'])){
  */
 if( !empty($_FILES['arquivo']) ){
 
+
 	$file = $_FILES['arquivo'];
-	
+
 	$imageHandler = Image::getInstance();
 	$aust = Aust::getInstance();
 	$user = User::getInstance();
