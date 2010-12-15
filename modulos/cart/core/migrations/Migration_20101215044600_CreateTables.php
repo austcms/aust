@@ -13,7 +13,7 @@ class Migration_20101215044600_CreateTables extends Migrations
         $schema['cart'] = array(
             "id" => "int auto_increment",
             "node_id" => "int",
-            "transaction_id" => "int COMMENT 'unique number.'",
+            "transaction_nr" => "varchar(200) COMMENT 'unique number.'",
             "client_id" => "int",
             "paid" => "int DEFAULT '0' COMMENT 'is paid?'",
             "process" => "int DEFAULT '0' COMMENT 'should be processed?'",
@@ -28,13 +28,13 @@ class Migration_20101215044600_CreateTables extends Migrations
             "admin_id" => "int",
             "dbSchemaTableProperties" => array(
                 "PRIMARY KEY" => "(id)",
-                "INDEX" => "client_id",
+                "INDEX" => "(client_id)",
             )
         );
 	    $schema['cart_line_items'] = array(
 	        "id" => "int auto_increment",
 	        "cart_id" => "int",
-	        "transaction_id" => "int COMMENT 'unique number.'",
+	        "transaction_nr" => "varchar(200) COMMENT 'unique number.'",
 	        "product_id" => "int",
 	        "price" => "decimal",
 	        "quantity" => "decimal",
@@ -44,7 +44,7 @@ class Migration_20101215044600_CreateTables extends Migrations
 	        "admin_id" => "int",
 	        "dbSchemaTableProperties" => array(
 	            "PRIMARY KEY" => "(id)",
-	            "INDEX" => "product_id",
+	            "INDEX" => "(product_id)",
 	        )
 	    );
         $this->createTable( $schema );

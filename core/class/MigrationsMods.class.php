@@ -62,9 +62,6 @@ class MigrationsMods
 
             $migration = new $name($modName, $this->conexao);
             
-            //$migration->up();
-
-            //var_dump( $migration->wasUpped() );
             if( !$migration->goUp() ){
                 echo 'ERRO! Migration '.$name.' com erro!';
                 return false;
