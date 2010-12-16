@@ -129,3 +129,54 @@ span.viewmode {
 	.files_view a img {
 		border: 0;
 	}
+	
+	
+/* MOD_CART */
+.listagem div.transaction {
+	background: #ddd;
+	width: 150px;
+	display: table;
+	margin: 5px;
+	float: left;
+	font-size: 0.9em;
+}
+
+	.listagem div.transaction .status {
+		text-align: center;
+		margin: 0 0 3px 0;
+		text-transform: uppercase;
+	}
+	.listagem div.transaction.pending .status {
+		color: #FD6100;
+	}
+	.listagem div.transaction.ready .status {
+		
+	}
+
+	.listagem div.transaction.pending {
+		background: #FBEC05;
+	}
+	.listagem div.transaction.ready {
+		background: #A6ED99;
+	}
+
+	.listagem div.transaction .containner {
+		margin: 5px;
+	}
+	
+	.listagem div.transaction .number {
+		font-size: 0.9em;
+		text-align: center;
+		font-weight: bold;
+		margin: 0 0 5px 0;
+	}
+
+	.listagem div.transaction .label {
+	}
+	.listagem div.transaction .value {
+		font-style: italic;
+	}
+
+	.listagem div.transaction .scheduled_to {
+		margin: 0 0 5px 0;
+	}

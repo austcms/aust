@@ -76,23 +76,33 @@ class ModController extends ModsController
 
     public function edit(){
 
-        $this->set('tagh2', "Editar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']) );
-        $this->set('tagp', 'Edite o conteúdo abaixo.');
 
-        $w = (!empty($_GET['w'])) ? $_GET['w'] : '';
-        $this->set('w', $w);
-
-
+		$products = $this->modulo->getStructureConfig("aust_products");
         $sql = "
                 SELECT
                     *
                 FROM
-                    ".$this->modulo->getContentTable()."
+                    cart_line_items
                 WHERE
-                    id='$w'
+                    cart_id='".$_GET['w']."'
                 ";
+
         $query = $this->modulo->connection->query($sql);
-        $this->set('dados', $query[0] );
+
+		$cartSql = $this->modulo->loadSql( array('id' => $_GET['w']) );
+		$cart = $this->connection->query($cartSql);
+		$cart = reset($cart);
+		
+		if( !empty($_GET['pending']) ){
+			if( $_GET['pending'] == '1' || $_GET['pending'] == '0' ){
+				$sql = "UPDATE cart SET pending='".$_GET['pending']."' WHERE id='".$_GET['w']."'";
+				$this->connection->exec($sql);
+				$cart['pending'] = $_GET['pending'];
+			}
+		}
+		
+        $this->set('cart', $cart );
+        $this->set('dados', $query );
         
         $this->render('form');
     }

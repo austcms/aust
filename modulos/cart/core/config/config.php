@@ -80,7 +80,7 @@ $modInfo = array(
      */
     'opcoes' => array(
         //'create' => 'Novo',
-        'listing' => 'Listar',
+        'listing' => 'Ver',
     ),
     /*
      * CONFIGURAÇÕES
@@ -94,10 +94,15 @@ $modInfo = array(
             "label" => "Tem resumo?",
             "inputType" => "checkbox",
         ),
-        'nova_categoria' => array(
+	    'aust_products' => array(
+	        "value" => "",
+	        "label" => "Como chama-se a estrutura de produtos?",
+	        "inputType" => "text",
+	    ),
+        'aust_clients' => array(
             "value" => "",
-            "label" => "Permite criar categoria?",
-            "inputType" => "checkbox",
+            "label" => "Como chama-se a estrutura de clientes?",
+            "inputType" => "text",
         ),
 
     ),

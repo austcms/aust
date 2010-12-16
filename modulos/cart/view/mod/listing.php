@@ -11,7 +11,7 @@
  * @since 
  */
 ?>
-<div class="listagem">
+<div class="listagem cart">
 <h2>
     Listando contéudo: <?php echo $h1;?>
 </h2>
@@ -33,81 +33,77 @@
 /*
  * Pode excluir conteúdo?
  */
+/*
 if( $permissoes->canDelete($austNode) ){
     ?>
     <div class="painel_de_controle"><input type="submit" class="js_confirm" name="deletar" value="Deletar selecionados" />
     </div>
     <?php
 }
+*/
 ?>
 <br clear="all" />
-<table cellspacing="0" cellpadding="0" border="0" class="listagem">
-    <tr class="titulo">
-        
-        <?php for($i=0; $i< count($modulo->config['contentHeader']['campos']); $i++) { ?>
-                <td class="<? echo $modulo->config['contentHeader']['campos'][$i]; ?>">
-                    <?php
-                        echo $modulo->config['contentHeader']['camposNome'][$i];
-                    ?>
-                </td>
-        <?php } ?>
-        <td bgcolor="#333333" width="80" align="center">
-            Op&ccedil;&otilde;es
-        </td>
-    </tr>
-<?php
-if(count($query) == 0){
-    ?>
-    <tr class="conteudo">
-        <td colspan="<?php echo $i+1;?>">
-            <strong>Nenhum registro encontrado.</strong>
-        </td>
-    </tr>
-    <?php
-} else {
-    foreach($query as $dados){
-        ?>
-        <tr class="conteudo">
-            <?php
-            /*******************************
-            *
-            *
-            *  LISTAGEM DO DB
-            *
-            *
-            *******************************/
-                for($i=0; $i< count($modulo->config['contentHeader']['campos']); $i++) { ?>
-                    <td>
-                        <?php
-                        if($i == 1){
 
-                            if( $permissoes->canEdit($_GET['aust_node']) )
-                                echo '<a href="adm_main.php?section='.$_GET['section'].'&action=edit&aust_node='.$_GET['aust_node'].'&w='.$dados["id"].'">';
-                            echo $dados[$modulo->config['contentHeader']['campos'][$i]];
-                            if( $permissoes->canEdit($_GET['aust_node']) )
-                                echo '</a>';
-                        } else {
-                            echo $dados[$modulo->config['contentHeader']['campos'][$i]];
-                        }
-                        ?>
-                    </td>
-            <?php } ?>
-            <td align="center">
-                <?php
-                if( $permissoes->canDelete($austNode) ){
-                    ?>
-                    <input type='checkbox' name='itens[]' value='<?php echo $dados['id'];?>'>
-                    <?php
-                }
+<?php
+foreach( $query as $dados ){
+	
+	$statusClass = 'ready';
+	if( $dados['pending'] == '1' ){
+		$statusClass = 'pending';
+	}
+    ?>
+	<div class="transaction <?php echo $statusClass ?>">
+		<div class="containner">
+
+			<div class="status">
+				<?php
+				if( $dados['pending'] == '1' ){
+					?>
+					Pendente
+					<?php
+				} else {
+					?>
+					Completa
+					<?php
+				}
+				?>
+				
+			</div>
+			<div class="number">
+			<?php echo $dados['transaction_nr']?>
+			</div>
+			<?php if( !empty($dados['scheduled_on']) ){ ?>
+				<div class="scheduled_to">
+				<div class="label">Agendado: </div>
+				<div class="value"><?php echo $dados['scheduled_on']?></div>
+				</div>
+			<?php } ?>
+			<div class="actions">
+			<a href="adm_main.php?section=conteudo&action=edit&aust_node=<?php echo $austNode?>&w=<?php echo $dados['id']?>">
+				Ver detalhes
+			</a>
+			</div>
+			<div>
+			<?php
+			/*
+            if( $permissoes->canDelete($austNode) ){
                 ?>
-            </td>
-        </tr>
-    <?php
-    } // Fim do While
+                <input type='checkbox' name='itens[]' value='<?php echo $dados['id'];?>'>
+                <?php
+            }
+			*/
+            ?>
+			</div>
+            
+		
+		</div>
+	</div>
+	<?php
 }
 ?>
-</table>
+
 </form>
+<br clear="all" />
 <?php
 /*
  * PAGINAÇÃO
