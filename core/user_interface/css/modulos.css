@@ -153,12 +153,16 @@ span.viewmode {
 		
 	}
 
-	.listagem div.transaction.pending {
-		background: #FBEC05;
-	}
-	.listagem div.transaction.ready {
-		background: #A6ED99;
-	}
+		.listagem div.transaction.pending {
+			background: #FBEC05;
+		}
+		.listagem div.transaction.ready {
+			background: #A6ED99;
+		}
+		.listagem div.transaction.not_paid {
+			background: #eee;
+		}
+
 
 	.listagem div.transaction .containner {
 		margin: 5px;

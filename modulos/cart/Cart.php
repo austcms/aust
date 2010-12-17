@@ -15,7 +15,7 @@ class Cart extends Module
     public $mainTable = "cart";
 
     public $date = array(
-        'standardFormat' => '%d/%m/%Y',
+        'standardFormat' => '%d/%m/%Y %H:%i',
         'scheduled_on' => '%d/%m/%Y %H:%i',
         'created_on' => 'created_on',
         'updated_on' => 'updated_on'
@@ -66,7 +66,7 @@ class Cart extends Module
 					Cart.id as id,
                     ".implode(',', $this->fieldsToLoad).",
                     ".$this->austField." AS cat,
-                    DATE_FORMAT(".$this->date['created_on'].", '".$this->date['standardFormat']."') as adddate,
+                    DATE_FORMAT(".$this->date['created_on'].", '".$this->date['standardFormat']."') as created_on,
                     DATE_FORMAT(scheduled_on, '".$this->date['scheduled_on']."') as scheduled_on
                 FROM
                     Cart

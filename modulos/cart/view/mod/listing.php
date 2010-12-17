@@ -51,13 +51,20 @@ foreach( $query as $dados ){
 	if( $dados['pending'] == '1' ){
 		$statusClass = 'pending';
 	}
+	if( $dados['paid'] == '0' ){
+		$statusClass = 'not_paid';
+	}
     ?>
 	<div class="transaction <?php echo $statusClass ?>">
 		<div class="containner">
 
 			<div class="status">
 				<?php
-				if( $dados['pending'] == '1' ){
+				if( $dados['paid'] == '0' ){
+					?>
+					Não-pago
+					<?php
+				} else if( $dados['pending'] == '1' ){
 					?>
 					Pendente
 					<?php
@@ -72,9 +79,15 @@ foreach( $query as $dados ){
 			<div class="number">
 			<?php echo $dados['transaction_nr']?>
 			</div>
+			<?php if( !empty($dados['created_on']) ){ ?>
+				<div class="date scheduled_to">
+				<div class="label">Realizada em: </div>
+				<div class="value"><?php echo $dados['created_on']?></div>
+				</div>
+			<?php } ?>
 			<?php if( !empty($dados['scheduled_on']) ){ ?>
-				<div class="scheduled_to">
-				<div class="label">Agendado: </div>
+				<div class="date scheduled_to">
+				<div class="label">Agendado para: </div>
 				<div class="value"><?php echo $dados['scheduled_on']?></div>
 				</div>
 			<?php } ?>
