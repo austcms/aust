@@ -245,6 +245,35 @@ if(!empty($_GET['function'])){
 
                                 <input type="checkbox" name="data[<?php echo $key; ?>]" <?php echo $checked; ?> value="1" class="input" />
                                 <?php
+                            } else if( $options["inputType"] == "aust_selection" ){
+
+                                $checked = "";
+                                if( !empty($options['value']) ){
+                                    if( $options["value"] == "1" ){
+                                        $checked = 'selected="select"';
+                                    }
+                                }
+                                ?>
+                                <input type="hidden" name="data[<?php echo $key; ?>]" value="" />
+
+								<?php
+								$sql = "SELECT id, nome FROM categorias WHERE classe='estrutura'";
+								$connection = Connection::getInstance();
+								$query = $connection->query($sql);
+								?>
+								<select name="data[<?php echo $key; ?>]">
+									<?php
+									foreach( $query as $austData ){
+										$selected = '';
+										if( $austData['id'] == $options['value'] )
+											$selected = 'selected="selected"';
+										?>
+										<option value="<?php echo $austData['id']?>" <?php echo $selected; ?>><?php echo $austData['nome']?></option>
+										<?php
+									}
+									?>
+								</select>
+                                <?php
                             }
 
                             else {

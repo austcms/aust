@@ -15,14 +15,19 @@ class Cart extends Module
     public $mainTable = "cart";
 
     public $date = array(
-        'standardFormat' => '%d/%m/%Y %H:%i',
-        'scheduled_on' => '%d/%m/%Y %H:%i',
+        'standardFormat' => '%m/%d/%Y %H:%i:%s',
+        'scheduled_on' => '%m/%d/%Y %H:%i:%s',
         'created_on' => 'created_on',
         'updated_on' => 'updated_on'
     );
 
 	public $fieldsToLoad = array(
-	    "Cart.transaction_nr", "Cart.pending", "Cart.paid"
+	    "Cart.transaction_nr", "Cart.pending", "Cart.paid",
+		"Cart.client_id",
+		"Cart.gateway_analysing",
+		"Cart.gateway_waiting",
+		"Cart.gateway_complete",
+		"Cart.gateway_cancelled",
 	);
 
 	public $austField = 'node_id';
@@ -62,17 +67,37 @@ class Cart extends Module
             }
         }
 		
+		$clientsSt = $this->getStructureConfig('aust_clients_id');
+		$clientsName = $this->getStructureConfig('aust_clients_name_field');
+
+		$client = Aust::getInstance()->getStructureInstance($clientsSt);
+
+		$clientFields = '';
+		$clientLeftJoin = '';
+
+		if( !empty($client) &&
+		 	!empty($clientsName) )
+		{
+			$clientFields = ", Clients.".$clientsName." as 'client_name'";
+			$clientLeftJoin = "LEFT JOIN ".$client->dataTable($clientsSt)." as Clients 
+							   ON Cart.client_id=Clients.id";
+		}
+		
         $sql = "SELECT
+					'$clientsSt' as client_node,
 					Cart.id as id,
-                    ".implode(',', $this->fieldsToLoad).",
-                    ".$this->austField." AS cat,
-                    DATE_FORMAT(".$this->date['created_on'].", '".$this->date['standardFormat']."') as created_on,
-                    DATE_FORMAT(scheduled_on, '".$this->date['scheduled_on']."') as scheduled_on
+                    ".implode(', ', $this->fieldsToLoad).",
+                    Cart.".$this->austField." AS cat,
+                    DATE_FORMAT(Cart.".$this->date['created_on'].", '".$this->date['standardFormat']."') as created_on,
+                    DATE_FORMAT(Cart.scheduled_on, '".$this->date['scheduled_on']."') as scheduled_on
+					$clientFields
                 FROM
                     Cart
+				$clientLeftJoin
                 WHERE 
 					1=1 $id
-                ORDER BY Cart.pending DESC
+                ORDER BY Cart.pending DESC, Cart.paid DESC, Cart.scheduled_on DESC
+				LIMIT 0,50
                 ";
 		
 		return $sql;

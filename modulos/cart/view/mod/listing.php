@@ -13,10 +13,11 @@
 ?>
 <div class="listagem cart">
 <h2>
-    Listando contéudo: <?php echo $h1;?>
+    <?php echo $h1;?>
 </h2>
 <p>
-    Abaixo você encontra a listagem dos últimos textos desta categoria.
+    Os itens abaixo estão cadastrados como pedidos. 
+	Você deve preparar as encomendas assinaladas como pendentes (em amarelo).
 </p>
 <?php
 
@@ -42,7 +43,7 @@ if( $permissoes->canDelete($austNode) ){
 }
 */
 ?>
-<br clear="all" />
+
 
 <?php
 foreach( $query as $dados ){
@@ -54,47 +55,116 @@ foreach( $query as $dados ){
 	if( $dados['paid'] == '0' ){
 		$statusClass = 'not_paid';
 	}
+	if( $dados['gateway_cancelled'] == '1' ){
+		$statusClass = 'cancelled';
+	}
     ?>
 	<div class="transaction <?php echo $statusClass ?>">
+
+		<div class="containner">
+			<div class="number">
+			<?php echo $dados['transaction_nr']?>
+			</div>
+		</div>
+
+		<div class="status">
+			<?php
+			if( $dados['gateway_cancelled'] == '1' ){
+				?>
+				<h2>Cancelado</h2>
+				Pedido não pago 
+				<?php
+			} else if( $dados['paid'] == '0' ){
+				?>
+				<h2>Aguardando</h2>
+				Pedido não pago 
+				<?php
+			} else if( $dados['pending'] == '1' ){
+				if( $dados['paid'] == '1' ){
+					?>
+					<h2>Pago e Pendente</h2>
+					Entrega pendente
+					<?php
+				} else if( $dados['paid'] == '0' ){
+					?>
+					<h2>Pendente, não pago</h2>
+					<?php
+				}
+			} else {
+				?>
+				<h2>Completa</h2>
+				Nada pendente
+				<?php
+			}
+			?>
+			
+		</div>
 		<div class="containner">
 
-			<div class="status">
+			<div class="gateway">
 				<?php
-				if( $dados['paid'] == '0' ){
+				if( $dados['gateway_complete'] == '1' ){
 					?>
-					Não-pago
+					<span class="paid">Gateway confirmou pagamento</span>
 					<?php
-				} else if( $dados['pending'] == '1' ){
+				} else if( $dados['gateway_cancelled'] == '1' ){
 					?>
-					Pendente
+					<span class="cancelled">Pedido cancelado pelo gateway</span>
+					<?php
+				} else if( $dados['gateway_analysing'] == '1' ){
+					?>
+					<span class="analysing">Gateway analisando pagamento</span>
+					<?php
+				} else if( $dados['gateway_waiting'] == '1' ){
+					?>
+					<span class="waiting">Gateway está aguardando pagamento</span>
 					<?php
 				} else {
 					?>
-					Completa
+					<span class="no_response">Gateway não enviou dados ainda</span>
 					<?php
 				}
 				?>
 				
-			</div>
-			<div class="number">
-			<?php echo $dados['transaction_nr']?>
-			</div>
+			</div>			
 			<?php if( !empty($dados['created_on']) ){ ?>
 				<div class="date scheduled_to">
 				<div class="label">Realizada em: </div>
-				<div class="value"><?php echo $dados['created_on']?></div>
+				<div class="value"><?php echo dateName($dados['created_on'], "Hoje", "Ontem") ?></div>
 				</div>
 			<?php } ?>
 			<?php if( !empty($dados['scheduled_on']) ){ ?>
 				<div class="date scheduled_to">
 				<div class="label">Agendado para: </div>
-				<div class="value"><?php echo $dados['scheduled_on']?></div>
+				<div class="value"><?php echo ucfirst( dateName($dados['scheduled_on']) );?></div>
 				</div>
 			<?php } ?>
+			
+			<?php
+			
+			if( empty($dados['client_name']) ){
+				?>
+				<em>Sem cliente definido</em>
+				<?php
+			} else {
+				?>
+				<div class="client_name">
+					<span class="label">
+						Ao cliente:
+					</span>
+					<span class="value name">
+						<a href="adm_main.php?section=conteudo&action=edit&aust_node=<?php echo $dados['client_node'] ?>&w=<?php echo $dados['client_id']?>">
+							<?php echo $dados['client_name']; ?>
+						</a>
+					</span>
+				</div>
+				<?php
+			}
+			?>
 			<div class="actions">
-			<a href="adm_main.php?section=conteudo&action=edit&aust_node=<?php echo $austNode?>&w=<?php echo $dados['id']?>">
-				Ver detalhes
-			</a>
+				<a href="adm_main.php?section=conteudo&action=edit&aust_node=<?php echo $austNode?>&w=<?php echo $dados['id']?>">
+					Ver detalhes
+				</a>
 			</div>
 			<div>
 			<?php

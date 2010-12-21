@@ -66,11 +66,6 @@ if(!empty($_GET['action'])){
      */
     $modDir = $aust->LeModuloDaEstrutura($aust_node).'/';
 
-    /**
-     * Carrega arquivos principal do módulo requerido
-     */
-	//include(MODULOS_DIR.$modDir.'index.php');
-
     /*
      *
      * INSTANCIA MÓDULO
@@ -80,7 +75,6 @@ if(!empty($_GET['action'])){
      * Carrega arquivos principal do módulo requerido
      */
         include(MODULOS_DIR.$modDir.MOD_CONFIG);
-        //include(MODULOS_DIR.$modDir.MOD_DBSCHEMA);
         /**
          * Carrega classe do módulo e cria objeto
          */
@@ -90,10 +84,10 @@ if(!empty($_GET['action'])){
         $param = array(
             'config' => $modInfo,
             'user' => $administrador,
-            //'modDbSchema' => $modDbSchema,
         );
         $modulo = new $moduloNome($param);
         unset( $modDbSchema );
+
     /**
      * MVC?
      *
@@ -124,24 +118,20 @@ if(!empty($_GET['action'])){
 		/*
 		 * Navegação entre actions de um austNode
 		 */
-		?>
-		<div class="structure_nav_options">
-			<?php
-			$moreOptions = array();
-			foreach( $modInfo['opcoes'] as $actionName=>$humanName ){
-				if( $actionName == $action )
-					continue;
-				$moreOptions[] = '<a href="adm_main.php?section='.$_GET['section'].'&action='.$actionName.'&aust_node='.$austNode.'">'.$humanName.'</a>';
-			}
-			
-			if( !empty($moreOptions) ){
-				?>
-				Navegação: <?php echo implode(", ", $moreOptions); ?>
-				<?php
-			}
+
+		$moreOptions = array();
+		foreach( $modInfo['opcoes'] as $actionName=>$humanName ){
+			if( $actionName == $action )
+				continue;
+			$moreOptions[] = '<a href="adm_main.php?section='.$_GET['section'].'&action='.$actionName.'&aust_node='.$austNode.'">'.$humanName.'</a>';
+		}
+		if( !empty($moreOptions) ){
 			?>
-		</div>
-		<?php
+			<div class="structure_nav_options">
+				Navegação: <?php echo implode(", ", $moreOptions); ?>
+			</div>
+			<?php
+		}
 	    /*
 	     * Se for save, redireciona automaticamente
 	     */
@@ -179,8 +169,6 @@ if(!empty($_GET['action'])){
                     window.location.href = "<?php echo $goToUrl ?>";
                 }, 2300);
             </script>
-
-
             <?php
         }
 

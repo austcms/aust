@@ -918,7 +918,7 @@ class Cadastro extends Module {
     public function loadSql($param){
         // configura e ajusta as variáveis
         $categorias = (empty($param['categorias'])) ? '' : $param['categorias'];
-        $metodo = (empty($param['metodo'])) ? '' : $param['metodo'];
+        $metodo = (empty($param['metodo'])) ? 'listing' : $param['metodo'];
         $search = (empty($param['search'])) ? '' : $param['search'];
         $searchField = (empty($param['search_field'])) ? '' : $param['search_field'];
         $w = (empty($param['id'])) ? '' : $param['id'];
@@ -1057,7 +1057,7 @@ class Cadastro extends Module {
                 $searchQuery = "AND (".implode(" OR ", $searchQueryArray).")";
             //pr($campos);
         }
-
+		
         /**
          * Novo SQL
          */
@@ -1143,6 +1143,9 @@ class Cadastro extends Module {
         return $dados['valor'];
     }
 
+	function dataTable($param){
+		return $this->LeTabelaDeDados($param);
+	}
     /*
      * Função para retornar o nome da tabela de dados de uma estrutura da cadastro
      */

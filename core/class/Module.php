@@ -184,6 +184,10 @@ class Module
 
 		$this->limit = $this->defaultLimit;
     }
+	
+	function setAustNode($id){
+		$this->austNode = $id;
+	}
 
     /*
      *
@@ -282,6 +286,7 @@ class Module
 		// counts rows
 		$this->totalRows = $this->_getTotalRows($paramForLoadSql);
 		
+
 		$sql = $this->loadSql($paramForLoadSql);
 		
         $qry = $this->connection->query($sql);

@@ -59,7 +59,40 @@ class Aust {
      * CATEGORIAS
      *
      */
+	function getStructureInstance($austNode){
+	    /**
+	     * Identifica qual é a pasta do módulo responsável por esta
+	     * estrutura/categoria
+	     */
+	    $modDir = $this->LeModuloDaEstrutura($austNode).'/';
 
+	    /*
+	     *
+	     * INSTANCIA MÓDULO
+	     *
+	     */
+	    /**
+	     * Carrega arquivos principal do módulo requerido
+	     */
+	        include(MODULOS_DIR.$modDir.MOD_CONFIG);
+	        /**
+	         * Carrega classe do módulo e cria objeto
+	         */
+	        $module = (empty($modInfo['className'])) ? 'Classe' : $modInfo['className'];
+	        include_once(MODULOS_DIR.$modDir.$module.'.php');
+
+	        $param = array(
+	            'config' => $modInfo,
+	            'user' => $administrador,
+	        );
+
+			
+	        $object = new $module($param);
+			$object->setAustNode($austNode);
+			
+			return $object;
+	}
+	
 	/**
 	 * create()
 	 * 

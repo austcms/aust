@@ -60,8 +60,8 @@ class ModController extends ModsController
         /*
          * Query com resultado
          */
-
         $query = $this->modulo->load($params);
+
         $this->set('sql', $this->modulo->lastSql );
         //$config = $this->modulo->loadConfig();
         $query = $this->modulo->replaceFieldsValueIfEmpty($query);
@@ -93,7 +93,7 @@ class ModController extends ModsController
 		$cart = $this->connection->query($cartSql);
 		$cart = reset($cart);
 		
-		if( !empty($_GET['pending']) ){
+		if( !empty($_GET['pending']) || is_string($_GET['pending']) ){
 			if( $_GET['pending'] == '1' || $_GET['pending'] == '0' ){
 				$sql = "UPDATE cart SET pending='".$_GET['pending']."' WHERE id='".$_GET['w']."'";
 				$this->connection->exec($sql);

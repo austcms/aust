@@ -97,13 +97,18 @@ $modInfo = array(
 	    'aust_products' => array(
 	        "value" => "",
 	        "label" => "Como chama-se a estrutura de produtos?",
+	        "inputType" => "aust_selection",
+	    ),
+        'aust_clients_id' => array(
+            "value" => "",
+            "label" => "Clientes: nome da estrutura",
+            "inputType" => "aust_selection",
+        ),
+	    'aust_clients_name_field' => array(
+	        "value" => "",
+	        "label" => "Clientes: nome da coluna de nomes",
 	        "inputType" => "text",
 	    ),
-        'aust_clients' => array(
-            "value" => "",
-            "label" => "Como chama-se a estrutura de clientes?",
-            "inputType" => "text",
-        ),
 
     ),
     
