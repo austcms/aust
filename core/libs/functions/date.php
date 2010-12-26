@@ -6,12 +6,14 @@ function dateName($date, $today = 'hoje', $yesterday = 'ontem', $tomorrow = 'ama
 	$date = strtotime($date);
 
 	$reldays = ($date - $todayDate)/86400;
+	$hour = date("H:i", $date);
+
 	if ($reldays >= 0 && $reldays < 1) {
-		$result = $today;
+		$result = $today.' '.$hour;
 	} else if ($reldays >= -1 && $reldays < 0) {
-		$result = $yesterday;
+		$result = $yesterday.' '.$hour;
 	} else if ($reldays >= 1 && $reldays < 2) {
-		$result = $tomorrow;
+		$result = $tomorrow.' '.$hour;
 	} else {
 		$date = date($format, $date);
 		$result = $date;
