@@ -30,4 +30,6 @@
  */
     Registry::write('defaultTheme','classic_blue')
 
+
+
 ?>

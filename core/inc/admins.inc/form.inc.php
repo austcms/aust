@@ -23,11 +23,20 @@ $dados = array(
 
 if($fm == 'editar'){
     $sql = "SELECT
-                *
+                admins.*,
+				admins_photos.id as pid,
+				(
+					SELECT id FROM admins_photos WHERE image_type='secondary' AND admin_id=admins.id
+				) as sid
             FROM
                 admins
+			LEFT JOIN
+				admins_photos
+			ON
+				admins.id=admins_photos.admin_id
+				AND admins_photos.image_type='primary'
             WHERE
-                id='".$w."'";
+                admins.id='".$w."'";
     $query = $conexao->query($sql);
     $dados = $query[0];
     //echo $sql;
@@ -42,7 +51,7 @@ if($fm == 'editar'){
     <strong>Cadastre</strong> a seguir um novo usuário para este gerenciador.
 </p>
 
-<form method="post" action="adm_main.php?section=admins&action=gravar">
+<form method="post" action="adm_main.php?section=admins&action=gravar" enctype="multipart/form-data">
 <input type="hidden" name="metodo" value="<?php echo $fm?>">
 <input type="hidden" name="w" value="<?php ifisset($dados['id'])?>">
 <input type="hidden" name="frmsupervisionado" value="0" />
@@ -50,7 +59,7 @@ if($fm == 'editar'){
 
 <table cellpadding=0 cellspacing="3" class="form">
 <tr>
-    <td class="first" valign="top">Hierarquia de usuário:</td>
+    <td class="first" valign="top">Função:</td>
     <td class="second">
         <div class="input_painel">
             <div class="containner">
@@ -106,21 +115,6 @@ if($fm == 'editar'){
                     <p>
                         <strong><?php echo $result['nome'];?></strong> do sistema.
                     </p>
-                    <p>
-                        <?php
-                        if( $administrador->LeRegistro('id') == $dados['id'] ){
-                            ?>
-                            Você não pode alterar sua própria hierarquia.
-                            <?php
-                        } else {
-                            ?>
-                            Somente <em>administradores</em> podem
-                            modificar a hierarquia de um usuário.
-                            <?php
-                        }
-                        ?>
-                    </p>
-
                 <?php
                 }
                 ?>
@@ -130,9 +124,9 @@ if($fm == 'editar'){
     </td>
 </tr>
 <tr>
-    <td valign="top">Nome pessoal:</td>
+    <td valign="top">Nome completo:</td>
     <td>
-        <input type="text" name="frmnome" value="<?php ifisset($dados['nome'])?>" <?php if($fm == 'criar'){ echo 'onKeyUp="javascript: alreadyexists(this.value, \'nome\', \'Digite o nome completo do usuário que será cadastrado.\',\'#999999\',\'Verifique se este usuário já não existe, pois este nome já foi cadastrado.\',\'red\',\'adm\');"'; } ?> />
+        <input class="text" type="text" name="frmnome" value="<?php ifisset($dados['nome'])?>" <?php if($fm == 'criar'){ echo 'onKeyUp="javascript: alreadyexists(this.value, \'nome\', \'Digite o nome completo do usuário que será cadastrado.\',\'#999999\',\'Verifique se este usuário já não existe, pois este nome já foi cadastrado.\',\'red\',\'adm\');"'; } ?> />
         <p class="explanation" id="exists_nome">
             Digite o nome completo do usuário que será cadastrado.
         </p>
@@ -141,7 +135,7 @@ if($fm == 'editar'){
 <tr>
     <td valign="top">Login (nome de usuário): </td>
     <td>
-        <input type="text" name="frmlogin" value="<?php ifisset($dados['login'])?>" <?php if($fm == 'criar'){ echo ' onKeyUp="javascript: alreadyexists(this.value, \'login\', \'Este nome de usuário está disponível para cadastro.\',\'green\',\'Este nome de usuário já foi cadastrado. Escolha outro.\',\'red\',\'adm\');"'; } ?> />
+        <input class="text" type="text" name="frmlogin" value="<?php ifisset($dados['login'])?>" <?php if($fm == 'criar'){ echo ' onKeyUp="javascript: alreadyexists(this.value, \'login\', \'Este nome de usuário está disponível para cadastro.\',\'green\',\'Este nome de usuário já foi cadastrado. Escolha outro.\',\'red\',\'adm\');"'; } ?> />
         <p class="explanation" id="exists_login">
             Digite um login para este usuário. Isto nada mais é que um nome de usuário
             que será usado para poder entrar no gerenciador.
@@ -179,6 +173,57 @@ if($fm == 'criar'){ ?>
     </tr>
 <?php } ?>
     
+
+<tr>
+    <td valign="top">Twitter: </td>
+    <td>
+        <input class="text" type="text" name="frmtwitter" value="<?php ifisset($dados['twitter'])?>" />
+        <p class="explanation">
+            Você tem Twitter? Ex.: 'usuário' ou '@usuário'.
+        </p>
+    </td>
+</tr>
+<tr>
+    <td valign="top">Foto: </td>
+    <td>
+		<?php
+		$imagesPath = IMAGE_VIEWER_DIR."visualiza_foto.php?table=admins_photos&fromfile=true&thumbs=yes&minxsize=20&minysize=100&myid=";
+		if( !empty($dados['pid']) ){
+			?>
+			<img src="<?php echo $imagesPath.$dados['pid'] ?>">
+			<br />
+			<?php
+		}
+		?>
+        <input class="text" type="file" name="photo" />
+        <p class="explanation" id="exists_login">
+            Deixe em branco para não alterar a atual.
+        </p>
+    </td>
+</tr>
+<?php
+if( $config->getConfig('user_has_secondary_image') ){ ?>
+
+	<tr>
+	    <td valign="top">Foto secundária: </td>
+	    <td>
+			<?php
+			if( !empty($dados['sid']) ){
+				?>
+				<img src="<?php echo $imagesPath.$dados['sid'] ?>">
+				<br />
+				<?php
+			}
+			?>
+		
+	        <input class="text" type="file" name="secondary_photo" />
+	        <p class="explanation" id="exists_login">
+	            Deixe em branco para não alterar a atual.
+	        </p>
+	    </td>
+	</tr>
+
+<?php } ?>
 <?php /*
 <tr>
     <td valign="top">

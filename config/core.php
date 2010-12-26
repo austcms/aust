@@ -57,6 +57,14 @@ $aust_charset['db_collate'] = 'utf8_general_ci';
                 'valor' => 'Modifique o nome do site',
                 'explanation' => 'Este nome aparecerá no título do gerenciador',
             ),
+		    array(
+		        'tipo' => 'Privado',
+		        'local' => '',
+		        'nome' => 'Usuário tem imagem secundária?',
+		        'propriedade' => 'user_has_secondary_image',
+		        'valor' => '0',
+		        'explanation' => 'Em alguns casos, pode ser necessário que administradores tenham uma imagem secundária.',
+		    ),
         );
         Registry::write('neededConfig', $neededConfig);
 

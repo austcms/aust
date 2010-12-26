@@ -41,6 +41,24 @@ $dbSchema['admins'] = array(
     )
 );
 
+	$dbSchema['admins_photos'] = array(
+	    'id' => 'int auto_increment',
+	    'admin_id' => 'int',
+		'image_type' => 'varchar(30)',
+	    'title' => 'text',
+	    'systempath' => 'text',
+	    'path' => 'text',
+	    'file_name' => 'text',
+	    'file_type' => 'varchar(20)',
+	    'file_size' => 'varchar(20)',
+	    'created_on' => 'datetime',
+	    'updated_on' => 'datetime',
+	    'dbSchemaTableProperties' => array(
+	        'PRIMARY KEY' => '(id)',
+	        'INDEX' => '(admin_id)',
+	    )
+	);
+
 $dbSchema['admins_permissions'] = array(
     'id' => 'int auto_increment',
     'admins_id' => 'int',
@@ -101,6 +119,7 @@ $dbSchema['categorias'] = array(
         'PRIMARY KEY' => '(id)',
         'UNIQUE' => 'id (id)',
         'INDEX' => '(nome_encoded)',
+        'INDEX' => '(patriarca_encoded)',
     )
 );
 

@@ -88,7 +88,7 @@ class Config {
                 $type = Registry::read('configStandardType');
                 $field = 'valor';
                 $params = array(
-                    'where' => "tipo='".$type."' AND propriedade='".$property."'",
+                    'where' => "propriedade='".$property."'",
                     'mode' => 'single',
 
                 );

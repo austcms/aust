@@ -162,13 +162,13 @@ class ModController extends ModsController
 
         $_POST['frmadmin_id'] = $user->getId();
 
-        if( empty($_POST['start_date']) OR
-            empty($_POST['end_date']) )
-        {
+        if( empty($_POST['start_date']) ){
             return false;
         }
         $_POST['start_date'] = str_replace("/", "-", $_POST['start_date']);
-        $_POST['end_date'] = str_replace("/", "-", $_POST['end_date']);
+
+		if( !empty($_POST['end_date']) )
+        	$_POST['end_date'] = str_replace("/", "-", $_POST['end_date']);
 
         /*
          * Tem horário específico
@@ -184,7 +184,13 @@ class ModController extends ModsController
 
         $_POST['frmoccurs_all_day'] = $_POST['durationAllDay'];
         $_POST['frmstart_datetime'] = date("Y-m-d", strtotime($_POST['start_date']) ).' '.$start_time;
-        $_POST['frmend_datetime'] = date("Y-m-d", strtotime($_POST['end_date']) ).' '.$end_time;
+
+		if( empty($_POST['end_date']) ){
+        	$_POST['frmend_datetime'] = date("Y-m-d", strtotime($_POST['start_date']) ).' '.$end_time;
+		} else {
+        	$_POST['frmend_datetime'] = date("Y-m-d", strtotime($_POST['end_date']) ).' '.$end_time;
+		}
+		
         //pr($_POST);
 
         $this->set('resultado', $this->modulo->save($_POST));

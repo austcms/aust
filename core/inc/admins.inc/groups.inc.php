@@ -1,0 +1,217 @@
+<div class="pessoas">
+    <h2>Grupos</h2>
+    <p style="width: 500px">
+        Adicione grupos adicionais de usuários. Lembre-se, grupos não podem ser excluídos,
+		pois senão deixarão usuários órfãos (sem grupo).
+    </p>
+<?php
+/* NOVO GRUPO */
+if( !empty($_POST['new_group']) && !empty($_POST['name']) ){
+	
+	$sql = "SELECT id
+	        FROM admins_tipos
+	        WHERE
+	            nome LIKE '".$_POST['name']."'";
+	
+	$query = $conexao->query($sql);
+	if( count($query) < 1 ){
+	
+		$sql = "INSERT INTO
+					admins_tipos
+		        (nome, descricao, publico, data)
+				VALUES
+				('".$_POST['name']."', '".$_POST['description']."', '1', '".date('Y-m-d H:i:s')."')";
+		$query = $conexao->query($sql);
+		?>
+		<p style="color: green">Dados salvos com sucesso.</p>
+		<?php
+	} else {
+		?>
+		<p style="color: red">Já há um grupo com este nome.</p>
+		<?php
+	}
+	
+}
+
+if( !empty($_POST['edit_group']) &&
+	!empty($_POST['name']) &&
+	!empty($_POST['id']) )
+{
+	
+	$sql = "UPDATE
+				admins_tipos
+			SET
+				nome='".$_POST['name']."',
+				descricao='".$_POST['description']."'
+			WHERE
+				id='".$_POST['id']."'
+			";
+	$query = $conexao->query($sql);
+	?>
+	<p style="color: green">Dados salvos com sucesso.</p>
+	<?php
+}
+
+/*
+ * LISTAR ADMINS
+ *
+ * -> Lista os usuários do sistema
+ */
+$w = (!empty($_GET['w'])) ? $_GET['w'] : 'NULL';
+$sql = "SELECT *
+        FROM admins
+        WHERE
+            id='$w'";
+$query = $conexao->query($sql);
+if( !empty($query) ){
+    $dados = $query[0];
+}
+?>
+
+<?php
+$sql = "SELECT
+			*
+        FROM
+            admins_tipos
+        ORDER BY id ASC
+        ";
+$query = $conexao->query($sql);
+//echo $sql;
+
+
+?>
+<script type="text/javascript">
+	var groups = new Array();
+</script>
+<table class="listagem pessoas">
+<tr class="titulo">
+    <td>
+        Nome
+    </td>
+    <td>
+        Tipo
+    </td>
+    <td>
+        Opções
+    </td>
+</tr>
+<?php
+foreach($query as $dados){
+	if( in_array($dados['nome'], array("Webmaster", "Root") ) )
+		continue;
+?>
+    <tr class="conteudo">
+        <td>
+			<script type="text/javascript">
+				groups[<?php echo $dados["id"]?>] = {
+					'name': '<?php echo $dados["nome"]?>',
+					'description' : '<?php echo $dados["descricao"]; ?>'
+				};
+			</script>
+		
+            <?php echo $dados["nome"]?>
+        </td>
+
+        <td style="color: #666; font-size: 0.8em">
+            <?php echo $dados['descricao']; ?>
+        </td>
+        <td>
+            <a href="javascript: void(0)" onclick="editGroup('<?php echo $dados["id"]; ?>')" style="text-decoration: none;" title="Editar"><img src="<?php echo IMG_DIR?>edit.png" alt="Editar" border="0" /></a>
+            <?php
+            if( $dados["login"] <> "kurko"
+                AND strtolower($dados["nome"]) <> "webmaster"
+                AND strtolower($dados["nome"]) <> "administrador"
+            ){
+            }
+            ?>
+        </td>
+    </tr>
+<?php
+}
+?>
+</table>
+
+<br />
+<p>
+	<a href="javascript: void(0)" onclick="$(this).parent().hide(); $('#new_group').show();">Novo grupo</a>
+</p>
+<div id="new_group" style="display: none">
+	<form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?section=admins&action=groups">
+		
+		<input type="hidden" name="id" value="" />
+		Nome do novo grupo:
+		<br />
+		<input type="text" name="name" value="" />
+		<br />
+		Descrição:
+		<br />
+		<textarea name="description"></textarea>
+		<br />
+		
+		<input type="submit" name="new_group" value="Salvar" />
+	</form>
+</div>
+
+<div id="edit_group" style="display: none">
+	<h2>Editar grupo</h2>
+	<form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?section=admins&action=groups">
+		
+		<input type="hidden" name="id" value="" />
+		Alterar nome:
+		<br />
+		<input type="text" name="name" value="" />
+		<br />
+		Alterar descrição:
+		<br />
+		<textarea name="description"></textarea>
+		<br />
+		
+		<input type="submit" name="edit_group" value="Alterar" />
+	</form>
+</div>
+
+<p style="margin-top: 15px;">
+    <a href="adm_main.php?section=admins"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
+</p>
+
+</div>
+
+<div class="divisoria">
+</div>
+<div class="mais_opcoes">
+    <h3>Mais opções</h3>
+    <?php
+    /*
+     * Verifica permissões
+     */
+    /*
+     * Nova pessoa
+     */
+    if( in_array( $administrador->LeRegistro("tipo"), $navPermissoes['admins']['form'] ) ){
+        ?>
+        <div class="botao">
+            <div class="bt_novapessoa">
+                <a href="adm_main.php?section=admins&action=form&fm=criar"></a>
+            </div>
+        </div>
+        <?php
+    }
+    ?>
+    <div class="botao">
+        <div class="bt_grupos">
+            <a href="adm_main.php?section=admins&action=groups"></a>
+        </div>
+    </div>
+    <div class="botao">
+        <div class="bt_permissoes">
+            <a href="adm_main.php?section=permissoes"></a>
+        </div>
+    </div>
+    <div class="botao">
+        <div class="bt_dados">
+            <a href="adm_main.php?section=admins&action=edit&fm=editar"></a>
+        </div>
+    </div>
+
+
+</div>

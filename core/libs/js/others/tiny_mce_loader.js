@@ -18,6 +18,7 @@ tinyMCE.init({
 	height : '350',
 	convert_fonts_to_spans : true,
 	font_size_style_values : "8pt,10pt,12pt,14pt,18pt,24pt,36pt",
+	inline_styles: false,
 	language : "pt",
 	plugins : 'safari,paste'+pluginsToLoad // imagemanager
 });

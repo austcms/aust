@@ -43,7 +43,6 @@ function tt($str = ''){
 }
 
 function lbCategoria($params){
-
     if( is_string($params) ){
         $austNode = $params;
         $categoryInput = 'frmcategoria';
