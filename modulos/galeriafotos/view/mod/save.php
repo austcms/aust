@@ -29,7 +29,8 @@ if( !empty($_POST) AND $save  ) {
      * Prepara campos relativos ao arquivo que foi feito upload
      */
     
-    //pr($_FILES);
+	$imageHandler = Image::getInstance();
+//    pr($_FILES);
     if( !empty($_FILES) ){
 
         if( is_array( $_FILES["frmarquivo"]) ){
@@ -41,7 +42,7 @@ if( !empty($_POST) AND $save  ) {
                         $arquivo[$infoName] = $_FILES["frmarquivo"][$infoName][$chave];
                     }
                     //if($arquivo["filesize"])
-                    $imagem[] = $modulo->trataImagem($arquivo);
+                    $imagem[] = $imageHandler->resample($arquivo);
                 }
                 unset($arquivo);
             }
@@ -132,36 +133,75 @@ if( !empty($_POST) AND $save  ) {
             
             unset($erroImg);
             foreach( $imagem as $chave=>$valor ){
-                $sqlImagem = "INSERT INTO galeria_fotos_imagens
-                                (galeria_foto_id,
-                                ordem,
-                                bytes,
-                                dados,
-                                nome,
-                                tipo,
-                                adddate)
-                                VALUES
-                                (
-                                    '".$_POST['w']."',
-                                    IFNULL( ( SELECT MAX(g.ordem)+1 as gordem FROM galeria_fotos_imagens as g
-                                      WHERE g.galeria_foto_id='".$_POST["w"]."'
-                                      GROUP BY g.ordem ORDER BY gordem DESC LIMIT 1
-                                    ), '1'),
-                                    '".$valor["filesize"]."',
-                                    '".addslashes($valor["filedata"])."',
-                                    '".$valor["filename"]."',
-                                    '".$valor["filetype"]."',
-                                    NOW()
-                                )
-                                ";
+				
+				/*
+				 * PADRÃO : Salva imagem fisicamente.
+				 */
+				if( !$this->modulo->getStructureConfig('save_into_db') ){
+					
+					$finalName = $imageHandler->upload($valor);
+					
+					$finalName['systemPath'] = addslashes($finalName['systemPath']);
+					$finalName['webPath'] = addslashes($finalName['webPath']);
+
+					$sqlBuffer[] = "(
+				                        '".$_POST['w']."',
+				                        IFNULL( ( SELECT MAX(g.ordem)+1 as gordem FROM galeria_fotos_imagens as g
+				                          WHERE g.galeria_foto_id='".$_POST["w"]."'
+				                          GROUP BY g.ordem ORDER BY gordem DESC LIMIT 1
+				                        ), '1'),
+				                        '".$valor["size"]."',
+				                        '".$finalName['systemPath']."',
+				                        '".$finalName['webPath']."',
+				                        '".$valor["name"]."',
+				                        '".$valor["type"]."',
+				                        NOW()
+				                    )";
+					
+				} else {
+	
+	                $sqlImagem = "INSERT INTO galeria_fotos_imagens
+	                                (galeria_foto_id,
+	                                ordem,
+	                                bytes,
+	                                dados,
+	                                nome,
+	                                tipo,
+	                                adddate)
+	                                VALUES
+	                                (
+	                                    '".$_POST['w']."',
+	                                    IFNULL( ( SELECT MAX(g.ordem)+1 as gordem FROM galeria_fotos_imagens as g
+	                                      WHERE g.galeria_foto_id='".$_POST["w"]."'
+	                                      GROUP BY g.ordem ORDER BY gordem DESC LIMIT 1
+	                                    ), '1'),
+	                                    '".$valor["size"]."',
+	                                    '".addslashes(file_get_contents($valor["tmp_name"]) )."',
+	                                    '".$valor["name"]."',
+	                                    '".$valor["type"]."',
+	                                    NOW()
+	                                )
+	                                ";
                 
-                if( ! $this->modulo->connection->exec($sqlImagem) )
-                    $erroImg[] = $valor["filename"];
+	                if( ! $this->modulo->connection->exec($sqlImagem) )
+	                    $erroImg[] = $valor["tmp_name"];
                     
-                unset($sqlImagem);
+	                unset($sqlImagem);
+				} // end save_into_db
             }
 
         }
+
+		if( !empty($sqlBuffer) ){
+			$sql = "INSERT INTO galeria_fotos_imagens
+					(galeria_foto_id, ordem, bytes, systempath, path, nome, tipo, adddate)
+                    VALUES ".implode(",", $sqlBuffer);
+
+            if( ! $this->modulo->connection->exec($sql) )
+                $erroImg[] = 'várias imagens';
+            
+            unset($sqlBuffer);
+		}
 
         if( !empty($erroImg) AND count($erroImg) > 0 ){
             echo "<p>As seguintes imagens não puderam ser salvas:</p>";
@@ -178,6 +218,8 @@ if( !empty($_POST) AND $save  ) {
     } else {
         $resultado = FALSE;
     }
+	//	echo 'hey - '.count($imagem);
+//	exit();
 
     if($resultado) {
         $status['classe'] = 'sucesso';

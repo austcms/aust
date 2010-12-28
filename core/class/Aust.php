@@ -83,7 +83,7 @@ class Aust {
 
 	        $param = array(
 	            'config' => $modInfo,
-	            'user' => $administrador,
+	            'user' => User::getInstance(),
 	        );
 
 			
@@ -383,21 +383,22 @@ class Aust {
 	
 		$where = '';
 		if( !empty($params['site']) && is_numeric($params['site']) )
-			$where = "AND id='".$params['site']."'";
+			$where = "AND c.id='".$params['site']."'";
         /**
          * SITES
          */
         $sql = "SELECT
-                    *, nome as name
+                    c.*, c.nome as name
                 FROM
-                    categorias
+                    categorias AS c
                 WHERE
-                    subordinadoid='0'
+                    c.subordinadoid='0'
 					$where
                 ";
 
         $query = $this->conexao->query($sql);
         $result = array();
+		$stIds = array();
         /*
          * Each site
         */
@@ -410,14 +411,102 @@ class Aust {
             $structures = $this->getStructuresByFather($sites['id']);
             if( is_array($structures) ) {
 
+				foreach( $structures as $sts ){
+					$stIds[] = $sts['id'];
+				}
                 $result[$key]['Structures'] = $structures;
             }
         }
 
+		$slaves = $this->getRelatedSlaves($stIds);
+		$masters = $this->getRelatedMasters($stIds);
+		if( !empty($slaves) ){
+			// loop pelos sites
+			foreach( $result as $siteKey=>$site ){
+				// loop pelas estruturas
+				foreach( $site['Structures'] as $stKey=>$st ){
+					
+					if( array_key_exists($st['id'], $slaves) ){
+						
+						$result[$siteKey]['Structures'][$stKey]['slaves'] = $slaves[$st['id']];
+					}
+					
+				}
+			}
+			
+		}
+		if( !empty($masters) ){
+			// loop pelos sites
+			foreach( $result as $siteKey=>$site ){
+				// loop pelas estruturas
+				foreach( $site['Structures'] as $stKey=>$st ){
+					
+					if( array_key_exists($st['id'], $masters) ){
+						
+						$result[$siteKey]['Structures'][$stKey]['masters'] = $masters[$st['id']];
+					}
+					
+				}
+			}
+			
+		}
         return $result;
 
     } // end getStructures
 
+	function getRelatedSlaves($ids = array()){
+		if( empty($ids) )
+			return array();
+		
+		if( is_string($ids) )
+			$ids = array($ids);
+		
+		$whereStatement = "master_id IN ('".implode("','", $ids)."')";
+		
+		$sql = "SELECT * FROM
+					aust_relations
+				WHERE
+					$whereStatement
+				";
+		
+		$result = $this->connection->query($sql);
+		if( empty($result) )
+			return array();
+		
+		$return = array();
+		foreach( $result as $slave ){
+			$return[$slave['master_id']][] = $slave;
+		}
+		
+		return $return;
+	}
+
+	function getRelatedMasters($ids = array()){
+		if( empty($ids) )
+			return array();
+		
+		if( is_string($ids) )
+			$ids = array($ids);
+		
+		$whereStatement = "slave_id IN ('".implode("','", $ids)."')";
+		
+		$sql = "SELECT * FROM
+					aust_relations
+				WHERE
+					$whereStatement
+				";
+		
+		$result = $this->connection->query($sql);
+		if( empty($result) )
+			return array();
+		
+		$return = array();
+		foreach( $result as $master ){
+			$return[$master['slave_id']][] = $master;
+		}
+		
+		return $return;
+	}	
     /**
      * getStructuresByFather()
      *

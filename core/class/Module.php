@@ -1229,6 +1229,20 @@ class Module
 			if( !empty($params['author']) AND is_numeric($params['author']) )
 				$whereAuthor = "AND autor='".$params['author']."'";
 
+			/*
+			 * Algumas configurações são especiais, como é o caso de estruturas
+			 * relacionadas.
+			 */
+			$moduleConfig = $this->loadConfig();
+			$todayDateTime = date('Y-m-d H:i:s');
+			
+			$sql = "DELETE FROM aust_relations WHERE slave_id='".$params["aust_node"]."'";
+			$this->connection->exec($sql);
+
+			$relationalName = $moduleConfig['nome'];
+			if( !empty($moduleConfig['relationalName']) )
+				$relationalName = $moduleConfig['relationalName'];
+
             foreach( $data as $propriedade=>$valor ) {
 	
 				/*
@@ -1277,6 +1291,23 @@ class Module
 	                    )
 	                );
 	                $this->connection->exec($this->connection->saveSql($paramsToSave));
+	
+					/*
+					 * No caso de relações entre estruturas, salva na devida tabela os dados
+					 * deste relacionamento.
+					 */
+					if( $moduleConfig['configurations'][$propriedade]['inputType'] == 'aust_selection' ){
+						
+						if( !empty($valor) ){
+							$sql = "INSERT INTO
+							 			aust_relations
+							 		(slave_id, slave_name, master_id, created_on, updated_on)
+									VALUES
+									('".$params["aust_node"]."', '".$relationalName."', '".$valor."', '".$todayDateTime."', '".$todayDateTime."')";
+							$this->connection->exec($sql);
+						}
+					}
+	
 				}
             }
 	        return true;

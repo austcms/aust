@@ -261,7 +261,8 @@ class MigrationsMods
                 WHERE module_name="'.$name.'"
                 ORDER BY version DESC
                 LIMIT 1';
-        $result = reset( $this->conexao->query($sql) );
+		$sqlReturn = $this->conexao->query($sql);
+        $result = reset( $sqlReturn );
 
         if( $result['version'] > 0 )
             return $result['version'];

@@ -262,6 +262,7 @@ if(!empty($_GET['function'])){
 								$query = $connection->query($sql);
 								?>
 								<select name="data[<?php echo $key; ?>]">
+									<option value="">Nenhum</option>
 									<?php
 									foreach( $query as $austData ){
 										$selected = '';

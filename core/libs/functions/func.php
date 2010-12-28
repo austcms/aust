@@ -434,6 +434,9 @@ function getExtension($param){
 
 function loadHtmlEditor($params = ""){
 	
+	$plugins = '';
+	$elements = '';
+	
 	if( !empty( $params ) &&
 		is_string($params) )
 	{

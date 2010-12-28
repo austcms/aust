@@ -30,7 +30,8 @@ $modInfo = array(
     /**
      * 'nome': Nome humano do módulo
      */
-    'nome' => 'Galeria de Fotos',
+ 	'nome' => 'Galeria de Fotos',
+    'relationalName' => 'Galeria de Fotos',
     /**
      * 'className': Classe oficial do módulo
      */
@@ -85,11 +86,17 @@ $modInfo = array(
     ),
 
 	'configurations' => array(
-    	'ordenate' => array(
-	        "value" => "",
-	        "label" => "Ordenado",
+		
+		'save_into_db' => array(
+	        "value" => "0",
+	        "label" => "Salvar arquivos no DB",
 	        "inputType" => "checkbox",
 	    ),
+		'ordenate' => array(
+		    "value" => "",
+		    "label" => "Ordenado",
+		    "inputType" => "checkbox",
+		),
 	    /*
 	     * Resumo
 	     */
@@ -121,7 +128,24 @@ $modInfo = array(
 	        "value" => "",
 	        "label" => "Cada foto tem descrição",
 	        "inputType" => "checkbox",
-	    ),		
+	    ),
+
+
+	    'related_to_aust_content' => array(
+	        "value" => "",
+	        "label" => "Deseja relacionar como escravo a alguma estrutura?",
+	        "inputType" => "aust_selection",
+			'help' => 'Em caso da estrutura Notícias, por exemplo, esta galeria '.
+						'relacionar-se-ia a ela e serviria como local para fotos.'
+	    ),
+	    'related_and_visible' => array(
+	        "value" => "1",
+	        "label" => "Se relacionado, visível na listagem de estruturas? ",
+	        "inputType" => "checkbox",
+			'help' => 'Algumas vezes, não deseja-se que apareça na listagem.'
+	    ),
+
+
 	),
 
     /**

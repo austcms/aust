@@ -34,8 +34,99 @@ class ModController extends ModsController
     }
 
     public function edit(){
+		$w = '';
+		if( !empty($_GET['w']) ){
+			$w = $_GET['w'];
+		} else {
+			if( !empty($_GET['related_master']) &&
+			 	!empty($_GET['related_w']) )
+			{
+				// Verifica se há uma galeria atual para o item master.
+				// Caso não exista, criará uma
+				$sql = "SELECT
+							id as w
+						FROM
+							galeria_fotos
+						WHERE
+							ref_id='".$_GET['related_w']."' AND
+							categoria='".$_GET['aust_node']."'
+						";
+				$result = $this->connection->query($sql);
+				if( !empty($result) ){
+					$result = reset($result);
+					$w = $result['w'];
+				}
+				/*
+				 * Master não tem uma galeria ainda
+				 */
+				else {
+					$master = Aust::getInstance()->getStructureInstance($_GET['related_master']);
+			        $sql = "
+			                SELECT
+			                    titulo
+			                FROM
+			                    ".$master->getContentTable()."
+			                WHERE
+			                    id='".$_GET['related_w']."'
+			                ";
 
-        
+			        $query = $master->connection->query($sql);
+					$query = reset($query);
+
+					$sql = "INSERT INTO
+								galeria_fotos
+							(ref_id, categoria, titulo,adddate)
+							VALUES
+							('".$_GET['related_w']."', '".$_GET['aust_node']."', '".addslashes($query['titulo'])."', '".date('Y-m-d H:i:s')."')
+							";
+					$master->connection->exec($sql);
+					$w = $master->connection->lastInsertId();
+				}
+			}
+		}
+		
+        $sql = "
+                SELECT
+                    id,
+                    titulo,
+                    titulo_encoded,
+                    subtitulo,
+                    resumo,
+                    texto,
+                    link,
+                    ordem,
+                    bytes,
+                    nome,
+                    tipo,
+                    ref,
+                    ref_id,
+                    local,
+                    classe,
+                    especie,
+                    adddate,
+                    expiredate,
+                    visitantes,
+                    autor
+                FROM
+                    ".$this->modulo->useThisTable()."
+                WHERE
+                    id='$w'
+                ";
+        $sql = "
+                SELECT
+                    *
+                FROM
+                    ".$this->modulo->useThisTable()."
+                WHERE
+                    id='$w' AND
+					categoria='".$_GET['aust_node']."'
+                ";
+
+        $query = $this->modulo->connection->query($sql, "ASSOC");
+        $dados = reset($query);
+
+		$this->set('dados', $dados);
+		$this->set('w', $w);
         $this->render('form');
     }
 

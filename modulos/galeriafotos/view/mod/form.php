@@ -18,7 +18,6 @@
  * Ajusta variáveis iniciais
  */
     $austNode = (!empty($_GET['aust_node'])) ? $_GET['aust_node'] : '';
-    $w = (!empty($_GET['w'])) ? $_GET['w'] : '';
 
 /*
  * [Se novo conteúdo]
@@ -36,43 +35,7 @@
 
         $tagh2 = "Editar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
         $tagp = 'Edite o conteúdo abaixo.';
-        $sql = "
-                SELECT
-                    id,
-                    titulo,
-                    titulo_encoded,
-                    subtitulo,
-                    resumo,
-                    texto,
-                    link,
-                    ordem,
-                    bytes,
-                    nome,
-                    tipo,
-                    ref,
-                    ref_id,
-                    local,
-                    classe,
-                    especie,
-                    adddate,
-                    expiredate,
-                    visitantes,
-                    autor
-                FROM
-                    ".$modulo->useThisTable()."
-                WHERE
-                    id='$w'
-                ";
-        $sql = "
-                SELECT
-                    *
-                FROM
-                    ".$modulo->useThisTable()."
-                WHERE
-                    id='$w'
-                ";
-        $query = $modulo->connection->query($sql, "ASSOC");
-        $dados = $query[0];
+
     }
 ?>
 
@@ -93,11 +56,51 @@
 <input type="hidden" name="aust_node" value="<?php echo $austNode; ?>">
 <table border=0 cellpadding=0 cellspacing=0 class="form">
 
+	<?php
+	if( (
+			!empty($_GET['related_master']) &&
+			!empty($_GET['related_w'])
+		)
+		||
+		(
+			!empty($dados['ref_id'])
+		)
+	)
+	{
+		
+		if( empty($_GET['related_master']) ||
+			empty($_GET['related_w']) )
+		{
+			$master = Aust::getInstance()->getRelatedMasters($_GET['aust_node']);
+			$master = reset(reset($master));
+			$master = $master['master_id'];
+			$relW = $dados['ref_id'];
+			$relMaster = $master;
+			
+		} else {
+			$relMaster = $_GET['related_master'];
+			$relW = $_GET['related_w'];
+		}
+		
+		?>
+	    <tr>
+	        <td valign="top" class="first"><label>Opções:</label></td>
+	        <td class="second">
+	            <a href="adm_main.php?section=conteudo&action=edit&aust_node=<?php echo $relMaster?>&w=<?php echo $relW ?>">
+				Conteúdo principal
+				</a>
+				<input type="hidden" name="redirect_to" value="<?php echo $_SERVER['REQUEST_URI'] ?>" />
+	        </td>
+	    </tr>
+
+		<?php
+	}
+	?>
     <?php
     /*
      * Mostra imagem preview
      */
-    if( $dados["bytes"] > 0 ){
+    if( !empty($dados["bytes"]) && $dados["bytes"] > 0 ){
         ?>
         <tr>
             <td valign="top" class="first">Imagem atual:</td>
@@ -126,12 +129,7 @@
     /*
      * RESUMO
      */
-    $showResumo = false;
-    if( !empty($moduloConfig["resumo"]) ){
-        if( $moduloConfig["resumo"]["valor"] == "1" )
-            $showResumo = true;
-    }
-    if( $showResumo ){
+    if( $modulo->getStructureConfig('resumo') ){
     ?>
     <tr>
         <td valign="top"><label>Resumo:</label></td>
@@ -150,12 +148,7 @@
     /*
      * ORDEM
      */
-    $showOrdem = false; // por padrão, não mostra
-    if( !empty($moduloConfig["ordenate"]) ){
-        if( $moduloConfig["ordenate"]["valor"] == "1" )
-            $showOrdem = true;
-    }
-    if( $showOrdem ){
+    if( $modulo->getStructureConfig('ordenate') ){
     ?>
     <tr>
         <td valign="top"><label>Ordem:</label></td>
@@ -185,12 +178,7 @@
     /*
      * DESCRIÇÃO
      */
-    $showDesc = true; // por padrão, não mostra
-    if( !empty($moduloConfig["descricao"]) ){
-        if( $moduloConfig["descricao"]["valor"] == "0" )
-            $showDesc = false;
-    }
-    if( $showDesc ){
+ 	if( $modulo->getStructureConfig('descricao') ){
         ?>
         <tr>
             <td valign="top"><label>Descrição da galeria: </label>
@@ -262,14 +250,14 @@
                                         <img src="core/user_interface/img/icons/comment_15x15.png" alt="Comentar" border="0" />
                                     </a>
                                     <div class="image_comment_input" style="display: none;" id="image_comment_input_<?php echo $dados["id"]; ?>">
-                                        <textarea style="margin-top: 3px; width: 130px; display: block;" class="comment_textareas" id="comment_<?php echo $dados["id"]; ?>" name="<?php echo $dados["id"]; ?>" ></textarea>
+                                        <textarea style="margin-top: 3px; width: 130px; display: block;" class="comment_textareas" id="comment_<?php echo $dados["id"]; ?>" name="<?php echo $dados["id"]; ?>" ><?php echo $dados["texto"]; ?></textarea>
                                         <input type="button" id="image_comment_button_<?php echo $dados["id"]; ?>" value="Salvar comentário" onclick="javascript: addCommentInImage(<?php echo $dados["id"]; ?>)" />
                                     </div>
 
                                     <?php
                                 }
                                 ?>
-                                <a href="javascript: void(0);" onclick="if( confirm('Você tem certeza que deseja excluir esta imagem?') ) window.open('adm_main.php?section=<?php echo $_GET["section"]; ?>&action=<?php echo $_GET["action"]; ?>&aust_node=<?php echo $_GET["aust_node"]; ?>&w=<?php echo $_GET["w"];?>&delete=<?php echo $dados["id"]; ?>','_top');">
+                                <a href="javascript: void();" onclick="if( confirm('Você tem certeza que deseja excluir esta imagem?') ) window.open('adm_main.php?section=<?php echo $_GET["section"]; ?>&action=<?php echo $_GET["action"]; ?>&aust_node=<?php echo $_GET["aust_node"]; ?>&w=<?php echo $w;?>&delete=<?php echo $dados["id"]; ?>','_top');">
                                     <img src="core/user_interface/img/icons/delete_15x15.png" alt="Excluir" border="0" />
                                 </a>
 
@@ -310,14 +298,14 @@
 
             <p>Para inserir novas imagens, selecione-as abaixo.</p>
             <?php
-            $loop = 8;
+            $loop = 1;
             for($i = 1; $i <= $loop; $i++){
 
                 $pid = $i;
                 ?>
                 <div style="display: block">
                 <label for="<?php echo $pid; ?>">Arquivo:</label>&nbsp;
-                <input type="file" id="<?php echo $pid; ?>" name="frmarquivo[<?php echo $pid; ?>]" />
+                <input type="file" id="<?php echo $pid; ?>" name="frmarquivo[]" multiple="multiple" />
                 </div>
                 <br />
                 <?php

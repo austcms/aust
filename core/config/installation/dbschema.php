@@ -112,6 +112,8 @@ $dbSchema['categorias'] = array(
     'tipo' => 'varchar(200)',
     'tipo_legivel' => 'varchar(200)',
     'editable' => 'varchar(200) default "0"',
+    'visible' => 'int default "1"',
+    'related_to' => 'int COMMENT "Galleries related to News, for example, have News\' id on this field"',
     'publico' => 'bool',
     'autor' => 'varchar(120)',
     'order_nr' => 'int',
@@ -120,6 +122,7 @@ $dbSchema['categorias'] = array(
         'UNIQUE' => 'id (id)',
         'INDEX' => '(nome_encoded)',
         'INDEX' => '(patriarca_encoded)',
+        'INDEX' => '(related_to)',
     )
 );
 
@@ -150,6 +153,20 @@ $dbSchema['austnode_images'] = array(
     )
 );
 
+$dbSchema['aust_relations'] = array(
+    'slave_id' 					=> 'int',
+    'slave_name' 				=> 'varchar(240)',
+    'slave_name_encoded'	 	=> 'varchar(240)',
+    'master_id' 				=> 'int',
+    'master_name' 				=> 'varchar(240)',
+    'master_name_encoded' 		=> 'varchar(240)',
+	'created_on' 				=> 'datetime',
+	'updated_on' 				=> 'datetime',
+    'dbSchemaTableProperties' 	=> array(
+        'INDEX' 	=> '(slave_id)',
+        'INDEX' 	=> '(master_id)',
+    )
+);
 
 
 $dbSchema['config'] = array(

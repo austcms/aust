@@ -96,9 +96,10 @@ class Config {
                 return false;
             }
 
+			$config = $this->getConfigs($params);
+			
+            $result = reset( $config );
 
-
-            $result = reset( $this->getConfigs($params) );
             $result = reset($result);
             return $result[$field];
 

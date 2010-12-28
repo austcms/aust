@@ -61,6 +61,27 @@
 <input type="hidden" name="aust_node" value="<?php echo $austNode; ?>">
 
 <table cellpadding=0 cellspacing=0 class="form">
+	
+<?php
+	$slave = Aust::getInstance()->getRelatedSlaves($_GET['aust_node']);
+	if( !empty($slave) ){
+		?>	
+	    <tr>
+	        <td><label>Opções:</label></td>
+	        <td>
+				<?php
+				$slave = Aust::getInstance()->getRelatedSlaves($_GET['aust_node']);
+				$slave = reset($slave);
+				$slave = reset($slave);
+				?>
+	            <a href="adm_main.php?section=conteudo&action=edit&aust_node=<?php echo $slave['slave_id']?>&related_master=<?php echo $_GET['aust_node']?>&related_w=<?php echo $_GET['w']?>">
+				<?php echo $slave['slave_name']; ?>
+				</a>
+	        </td>
+	    </tr>
+		<?php
+	}
+	?>
     <tr>
         <td class="first"><label>Categoria:</label></td>
         <td class="second">

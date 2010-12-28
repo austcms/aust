@@ -7,6 +7,11 @@
  * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @since v0.1.6 25/07/2009
  */
+
+// PHP 5.3 needs this
+date_default_timezone_set('America/Sao_Paulo');
+
+
 /**
  * Cria SESSION
  */
@@ -72,11 +77,11 @@ if($_POST['action'] == 'saveImageComment'){
     $sql = "UPDATE
                 galeria_fotos_imagens
             SET
-                texto='".$_POST['comment']."'
+                texto='".addslashes( $_POST['comment'] )."'
             WHERE
                 id='".$_POST["id"]."'";
     
-    if( $conexao->exec($sql) )
+    if( $conexao->exec($sql) !== false )
         echo "1";
     else
         echo "0";

@@ -125,7 +125,20 @@ if(!empty($_GET['action'])){
 				continue;
 			$moreOptions[] = '<a href="adm_main.php?section='.$_GET['section'].'&action='.$actionName.'&aust_node='.$austNode.'">'.$humanName.'</a>';
 		}
-		if( !empty($moreOptions) ){
+		
+		$visibleNav = true;
+		$relatedMasters = Aust::getInstance()->getRelatedMasters(array($austNode));
+
+		if( !empty($relatedMasters) ){
+
+			$module = Aust::getInstance()->getStructureInstance($austNode);
+			if( !$module->getStructureConfig('related_and_visible') ){
+				$visibleNav = false;
+			}
+			
+		}
+		
+		if( !empty($moreOptions) && $visibleNav ){
 			?>
 			<div class="structure_nav_options">
 				Navegação: <?php echo implode(", ", $moreOptions); ?>
@@ -161,7 +174,13 @@ if(!empty($_GET['action'])){
         );
         $modController = new ModController($param);
 	    if( in_array($action, array(SAVE_ACTION, ACTIONS_ACTION)) ){
-            $goToUrl = "adm_main.php?section=".$_GET['section'].'&action=listing&aust_node='.$aust_node;
+
+			if( !empty($_POST['redirect_to']) )
+				$goToUrl = $_POST['redirect_to'];
+			else if( !empty($_GET['redirect_to']) )
+				$goToUrl = $_GET['redirect_to'];
+			else
+            	$goToUrl = "adm_main.php?section=".$_GET['section'].'&action=listing&aust_node='.$aust_node;
             ?>
             <script type="text/javascript">
                 var timeToRefresh = 2;
@@ -342,6 +361,15 @@ else {
                             $type = $structure['tipo'];
                         }
 
+						$module = null;
+						if( !empty($structure['masters']) ){
+
+							$module = Aust::getInstance()->getStructureInstance($structure['id']);
+							if( !$module->getStructureConfig('related_and_visible') )
+								continue;
+							
+						}
+
                         if( !$permissoes->verify($structure['id']) )
                             continue;
                         ?>
@@ -377,7 +405,9 @@ else {
                         </table>
 
                     </div>
-                <?php endforeach; ?>
+                <?php
+				unset($module);
+				endforeach; ?>
         </div>
 
     </div><?php // FIM DO DIV PAINEL GERENCIAR ?>
