@@ -21,7 +21,11 @@ if( $_POST["metodo"] == "create" AND !empty($_FILES) AND $_FILES["frmarquivo"]["
 }
 
 if( !empty($_POST) AND $save  ) {
-//if( false ) {
+	
+	// saving one comment to various images
+	$comments = '';
+	if( !empty($_POST['images_comment']) )
+		$comments = addslashes( $_POST['images_comment'] );
 
     /*
      * FILES
@@ -155,7 +159,7 @@ if( !empty($_POST) AND $save  ) {
 				                        '".$finalName['webPath']."',
 				                        '".$valor["name"]."',
 				                        '".$valor["type"]."',
-				                        NOW()
+				                        NOW(), '".$comments."'
 				                    )";
 					
 				} else {
@@ -194,8 +198,9 @@ if( !empty($_POST) AND $save  ) {
 
 		if( !empty($sqlBuffer) ){
 			$sql = "INSERT INTO galeria_fotos_imagens
-					(galeria_foto_id, ordem, bytes, systempath, path, nome, tipo, adddate)
+					(galeria_foto_id, ordem, bytes, systempath, path, nome, tipo, adddate, texto)
                     VALUES ".implode(",", $sqlBuffer);
+
 
             if( ! $this->modulo->connection->exec($sql) )
                 $erroImg[] = 'várias imagens';

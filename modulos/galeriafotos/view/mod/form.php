@@ -295,27 +295,33 @@
                 }
                 ?>
 
-
-            <p>Para inserir novas imagens, selecione-as abaixo.</p>
-            <?php
-            $loop = 1;
-            for($i = 1; $i <= $loop; $i++){
-
-                $pid = $i;
-                ?>
-                <div style="display: block">
-                <label for="<?php echo $pid; ?>">Arquivo:</label>&nbsp;
-                <input type="file" id="<?php echo $pid; ?>" name="frmarquivo[]" multiple="multiple" />
-                </div>
-                <br />
-                <?php
-            }
-            ?>
-            
+	</tr>
+    <tr>
+        <td colspan="3">
+            <h3>Inserir Imagens</h3>
         </td>
     </tr>
-
-
+	<tr>
+		<td colspan="3">
+           <p>Para inserir novas imagens, selecione-as abaixo.</p>
+		</td>
+	</tr>
+    <tr>
+        <td valign="top" class="first"><label for="file">Arquivo:</label></td>
+        <td class="second">
+            <input type="file" id="file" name="frmarquivo[]" multiple="multiple" />
+        </td>
+    </tr>
+	<?php if( $modulo->getStructureConfig('commented_images') ){ ?>
+	    <tr>
+	        <td valign="top" class="first"><label for="comment">Comentário:</label></td>
+	        <td class="second">
+	            <textarea rows="2" id="comment" name="images_comment"></textarea>
+				<br />
+				<p class="explanation">Todas as imagens selecionadas terão o mesmo comentário.</p>
+	        </td>
+	    </tr>
+	<?php } ?>
 
     <tr>
         <td colspan="2" style="padding-top: 10px;"><center><INPUT TYPE="submit" VALUE="Enviar!" name="submit" class="submit"></center></td>
