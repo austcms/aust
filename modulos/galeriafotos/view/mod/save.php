@@ -197,10 +197,10 @@ if( !empty($_POST) AND $save  ) {
         }
 
 		if( !empty($sqlBuffer) ){
+
 			$sql = "INSERT INTO galeria_fotos_imagens
 					(galeria_foto_id, ordem, bytes, systempath, path, nome, tipo, adddate, texto)
                     VALUES ".implode(",", $sqlBuffer);
-
 
             if( ! $this->modulo->connection->exec($sql) )
                 $erroImg[] = 'várias imagens';
@@ -217,8 +217,6 @@ if( !empty($_POST) AND $save  ) {
             echo "</ul>";
             echo "<p>Esta falha pode ter ocorrido por defeito na imagem.</p>";
         }
-
-
 
     } else {
         $resultado = FALSE;

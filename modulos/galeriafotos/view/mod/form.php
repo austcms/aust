@@ -220,7 +220,8 @@
 
 
                     $sql = "SELECT id, nome, texto FROM galeria_fotos_imagens
-                            WHERE galeria_foto_id='".$w."'";
+                            WHERE galeria_foto_id='".$w."' ORDER BY ordem ASC";
+
                     $query = $modulo->connection->query($sql, "ASSOC");
                     $c = 1;
                     foreach($query as $dados){
