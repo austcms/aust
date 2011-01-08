@@ -689,6 +689,23 @@ class Aust {
         }
     }
 
+    public function getField($node, $field = '') {
+		if( empty($field) )
+			$field = "*";
+			
+        $sql = "SELECT
+                    $field
+                FROM
+                    categorias
+                WHERE
+                    id=$node";
+        $query = $this->conexao->query($sql);
+		if( $field == "*" )
+	        return $query[0];
+		else
+        	return $query[0][$field];
+    }
+
     /**
      * Retorna o nome de estrutura/categoria de acordo com seu ID
      *

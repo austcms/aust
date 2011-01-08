@@ -171,7 +171,7 @@
     /*
      * Mostra imagem preview
      */
-    if( $dados["bytes"] > 0 ){
+    if( !empty($dados["bytes"]) && $dados["bytes"] > 0 ){
         ?>
         <tr>
             <td valign="top">Imagem atual:</td>

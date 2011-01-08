@@ -18,8 +18,8 @@
  *
  * Carrega modulo/actions.php se existir
  */
-if(is_file( Modulos::MOD_DIR .$aust->LeModuloDaEstrutura($_GET['aust_node']).'/'.MOD_ACTIONS.FILE ) ){
-    include( Modulos::MOD_DIR .$aust->LeModuloDaEstrutura($_GET['aust_node']).'/'.MOD_ACTIONS.FILE );
+if(is_file( Modulos::MOD_DIR .$aust->LeModuloDaEstrutura($_GET['aust_node']).'/'.MOD_ACTIONS_FILE ) ){
+    include( Modulos::MOD_DIR .$aust->LeModuloDaEstrutura($_GET['aust_node']).'/'.MOD_ACTIONS_FILE );
 } else {
 
     /**

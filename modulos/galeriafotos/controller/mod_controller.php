@@ -73,45 +73,21 @@ class ModController extends ModsController
 			        $query = $master->connection->query($sql);
 					$query = reset($query);
 
+					$ref = Aust::getInstance()->getField($_GET['related_master'], 'nome_encoded');
+
 					$sql = "INSERT INTO
 								galeria_fotos
-							(ref_id, categoria, titulo,adddate)
+							(ref_id, ref, categoria, titulo,adddate)
 							VALUES
-							('".$_GET['related_w']."', '".$_GET['aust_node']."', '".addslashes($query['titulo'])."', '".date('Y-m-d H:i:s')."')
+							('".$_GET['related_w']."', '".$ref."', '".$_GET['aust_node']."', '".addslashes($query['titulo'])."', '".date('Y-m-d H:i:s')."')
 							";
+
 					$master->connection->exec($sql);
 					$w = $master->connection->lastInsertId();
 				}
 			}
 		}
-		
-        $sql = "
-                SELECT
-                    id,
-                    titulo,
-                    titulo_encoded,
-                    subtitulo,
-                    resumo,
-                    texto,
-                    link,
-                    ordem,
-                    bytes,
-                    nome,
-                    tipo,
-                    ref,
-                    ref_id,
-                    local,
-                    classe,
-                    especie,
-                    adddate,
-                    expiredate,
-                    visitantes,
-                    autor
-                FROM
-                    ".$this->modulo->useThisTable()."
-                WHERE
-                    id='$w'
-                ";
+
         $sql = "
                 SELECT
                     *

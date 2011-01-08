@@ -1513,7 +1513,12 @@ class Module
 			if( !empty($author) ){
 	            $sql = "SELECT * FROM config WHERE tipo='mod_conf' AND local='".$this->austNode."' AND autor='$author' AND propriedade='$params' LIMIT 1";
 	            $queryTmp = $this->connection->query($sql, "ASSOC");
-				return $queryTmp[0]['valor'];
+
+				if( !empty($queryTmp) )
+					return $queryTmp[0]['valor'];
+				else
+					return array();
+					
 			} else if( empty($this->structureConfig) ){
                 $result = $this->loadModConf($this->austNode, $confClass, $author);
                 return $result[$params];

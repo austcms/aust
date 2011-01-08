@@ -5,6 +5,8 @@
 		pois senão deixarão usuários órfãos (sem grupo).
     </p>
 <?php
+$admin = User::getInstance();
+
 /* NOVO GRUPO */
 if( !empty($_POST['new_group']) && !empty($_POST['name']) ){
 	
@@ -117,13 +119,6 @@ foreach($query as $dados){
         </td>
         <td>
             <a href="javascript: void(0)" onclick="editGroup('<?php echo $dados["id"]; ?>')" style="text-decoration: none;" title="Editar"><img src="<?php echo IMG_DIR?>edit.png" alt="Editar" border="0" /></a>
-            <?php
-            if( $dados["login"] <> "kurko"
-                AND strtolower($dados["nome"]) <> "webmaster"
-                AND strtolower($dados["nome"]) <> "administrador"
-            ){
-            }
-            ?>
         </td>
     </tr>
 <?php

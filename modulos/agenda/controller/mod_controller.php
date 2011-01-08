@@ -24,8 +24,6 @@ class ModController extends ModsController
          */
         $this->set('h1', $this->aust->leNomeDaEstrutura($_GET['aust_node']) );
 
-        $this->set('cat', $query[0]['nome'] );
-
         if((!empty($filter)) AND ($filter <> 'off')){
             $addurl = "&filter=$filter&filterw=" . urlencode($filterw);
         }

@@ -36,7 +36,7 @@ if( !empty($_GET['current_theme']) ){
         
     );
 
-    if($_GET['status'] == 'installed' ){
+    if( !empty($_GET['status']) && $_GET['status'] == 'installed' ){
         EscreveBoxMensagem($mensagem);
     }
     

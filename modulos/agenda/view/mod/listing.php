@@ -28,6 +28,8 @@
         $year = date("Y");
     else
         $year = $year_int;
+
+	$day = date("d");
     
     $user = User::getInstance();
 
