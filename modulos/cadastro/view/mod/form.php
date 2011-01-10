@@ -12,7 +12,11 @@
  */
 $infoCadastro = $modulo->pegaInformacoesCadastro($austNode);
 $tabelaCadastro = $infoCadastro["estrutura"]['tabela']["valor"];
-$tabelaImagens = $infoCadastro["estrutura"]['table_images']["valor"];
+
+
+$tabelaImagens = null;
+if( !empty($infoCadastro["estrutura"]['table_images']["valor"]) )
+	$tabelaImagens = $infoCadastro["estrutura"]['table_images']["valor"];
 
 /*
  * ...
