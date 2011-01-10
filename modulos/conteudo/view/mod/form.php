@@ -51,10 +51,8 @@
     <input type="hidden" name="frmadddate" value="<?php echo date("Y-m-d H:i:s"); ?>">
     <input type="hidden" name="frmautor" value="<?php echo $_SESSION['loginid'];?>">
 <?php } else { ?>
-
     <input type="hidden" name="frmadddate" value="<?php ifisset( $dados['adddate'] );?>">
     <input type="hidden" name="frmautor" value="<?php ifisset( $dados['autor'] );?>">
-
 <?php }?>
 
 <input type="hidden" name="w" value="<?php ifisset( $dados['id'] );?>">
@@ -196,6 +194,23 @@
     <?php
     }
     ?>
+
+	<?php
+    if( $modulo->getStructureConfig("manual_date") ){
+    ?>
+    <tr>
+        <td valign="top"><label>Data manual:</label></td>
+        <td>
+		    <input type="text" name="frmadddate" value="<?php echo date("Y-m-d H:i:s"); ?>">
+            <p class="explanation">
+				Configure uma data para o conteúdo manualmente.
+            </p>
+        </td>
+    </tr>
+    <?php
+    }
+    ?>
+
     <tr>
         <td colspan="2"><label>Texto: </label>
         </td>
