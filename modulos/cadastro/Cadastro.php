@@ -249,6 +249,9 @@ class Cadastro extends Module {
 			$files = $this->files;
 		}
 		
+		if( empty($this->configurations['estrutura']['table_files']['valor']) )
+			return false;
+		
 		$filesTable = $this->configurations['estrutura']['table_files']['valor'];
 		foreach( $files as $table=>$filesField ){
 			
@@ -413,6 +416,9 @@ class Cadastro extends Module {
 		if( empty($images) ){
 			$images = $this->images;
 		}
+		
+		if( empty($this->configurations['estrutura']['table_images']['valor']) )
+			return false;
 		
 		$imageTable = $this->configurations['estrutura']['table_images']['valor'];
 		foreach( $images as $table=>$imagesField ){

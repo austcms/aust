@@ -86,7 +86,7 @@
             <div id="categoriacontainer">
             <?php
             $current_node = '';
-            if($_GET['action'] == "editar"){
+            if( $_GET['action'] == "editar" || $_GET['action'] == "edit" ){
                 $current_node = $dados['categoria'];
                 ?>
                 <input type="hidden" name="frmcategoria" value="<?php echo $current_node; ?>">

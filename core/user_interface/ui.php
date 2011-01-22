@@ -41,10 +41,12 @@
 		$page = $_GET['pagina'];
 	else
 		$page = 1;
+		
     ?>
+
     <script type="text/javascript">
 	    var userId = '<?php echo $administrador->getId() ?>';
-	    var austNode = '<?php echo $_GET["aust_node"] ?>';
+	    var austNode = '<?php if( !empty($_GET["aust_node"]) ) echo $_GET["aust_node"]; ?>';
         var IMG_DIR = '<?php echo IMG_DIR ?>';
 		var page = '<?php echo $page ?>';
     </script>

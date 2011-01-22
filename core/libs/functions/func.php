@@ -66,11 +66,13 @@
 	 */
 	function lineWrap($text, $chars = '30'){
 		preg_match('/(http:\/\/[^\s]+)/', $text, $link);
-		$hypertext = "<a href=\"". $link[0] . "\">" . $link[0] . "</a>";
-		$text = preg_replace('/(http:\/\/[^\s]+)/', $hypertext, $text);
+		if( !empty($link) ){
+			$hypertext = "<a href=\"". $link[0] . "\">" . $link[0] . "</a>";
+			$text = preg_replace('/(http:\/\/[^\s]+)/', $hypertext, $text);
+		}
 		
 		// trunca termos
-		$text = eregi_replace("([^ <>\"\\-]{".$chars."})"," \\1 ",$text);
+		$text = preg_replace("/([^ <>\"\\-]{".$chars."})/"," \\1 ",$text);
 		
 		// tira espaços de uma tag a
 		$text = preg_replace("/(<a href=\")(.*)(\">)/e", '"$1".str_replace(" ", "", "$2")."$3"', $text);

@@ -788,6 +788,8 @@ if(!empty($_GET['function'])){
                 <?php
 
                 foreach( $fields as $fieldName=>$fieldOptions ){
+					if( empty($fieldOptions["valor"]) )
+						continue;
                     ?>
 
                     <div class="campo">

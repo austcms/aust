@@ -38,7 +38,7 @@ if($_GET['action'] == 'edit'){
 /*
  * Tamanho máximo do Upload.
  */
-$maxSize = (int) str_replace('M','', ini_get(upload_max_filesize) );
+$maxSize = (int) str_replace('M','', ini_get('upload_max_filesize') );
 if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
     $maxSize = (int) str_replace('M','', ini_get('post_max_size') );
 
@@ -48,19 +48,19 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
 
 <p>Envie um arquivo para o site.</p>
 
-<form method="post" action="adm_main.php?section=<?php echo $_GET['section'];?>&action=save&aust_node=<?php echo $_GET['aust_node']?>" enctype="multipart/form-data">
+<form method="POST" action="adm_main.php?section=<?php echo $_GET['section'];?>&action=save&aust_node=<?php echo $_GET['aust_node']?>" enctype="multipart/form-data">
     <input type="hidden" name="method" value="<?php echo $_GET['action'];?>">
 
-    <input type="hidden" name="w" value="<?php ifisset($_GET['w']);?>">
+    <input type="hidden" name="w" value="<?php if( !empty($_GET['w']) ) echo $_GET['w']; ?>">
     <input type="hidden" name="aust_node" value="<?php echo $austNode;?>">
     <input type="hidden" name="frmcategoria_id" value="<?php echo $austNode;?>">
     <input type="hidden" name="frmcreated_on" value="<?php echo date("Y-m-d H:i:s"); ?>">
 
-    <input type="hidden" name="frmurl" value="<?php ifisset($dados['url']); ?>">
-    <input type="hidden" name="frmarquivo_nome" value="<?php ifisset($dados['arquivo_nome']);?>">
-    <input type="hidden" name="frmarquivo_tipo" value="<?php ifisset($dados['arquivo_tipo']);?>">
-    <input type="hidden" name="frmarquivo_tamanho" value="<?php ifisset($dados['arquivo_tamanho']);?>">
-    <input type="hidden" name="frmadmin_id" value="<?php ifisset($dados['autor'], $administrador->LeRegistro('id'));?>">
+    <input type="hidden" name="frmurl" value="<?php if( !empty($dados['url']) ) echo $dados['url']; ?>">
+    <input type="hidden" name="frmarquivo_nome" value="<?php if( !empty($dados['arquivo_nome']) ) echo $dados['arquivo_nome'];?>">
+    <input type="hidden" name="frmarquivo_tipo" value="<?php if( !empty($dados['arquivo_tipo']) ) echo $dados['arquivo_tipo'];?>">
+    <input type="hidden" name="frmarquivo_tamanho" value="<?php if( !empty($dados['arquivo_tamanho']) ) echo $dados['arquivo_tamanho']; ?>">
+    <input type="hidden" name="frmadmin_id" value="<?php if( !empty($dados['autor']) ) echo $dados['autor']; else echo $administrador->LeRegistro('id');?>">
     
     <table border=0 cellpadding=0 cellspacing=0 class="form">
     <?php
@@ -75,10 +75,11 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
             <td>
                 <div id="categoriacontainer">
                 <?php
+            	$current_node = $austNode;
                 if($fm == "edit"){
                     $current_node = $dados['categoria_id'];
                 }
-                echo BuildDDList( Registry::read('austTable'), 'frmcategoria_id', $escala, $austNode, $current_node );
+                echo BuildDDList( Registry::read('austTable'), 'frmcategoria_id', 0, $austNode, $current_node );
                 ?>
                 </div>
                 <?php
@@ -190,7 +191,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
     <tr>
         <td valign="top" class="first">Título: </td>
         <td class="second">
-            <input type="text" name="frmtitulo" value="<?php ifisset($dados['titulo']);?>" class="text" />
+            <input type="text" name="frmtitulo" value="<?php if( !empty($dados['titulo']) ) echo $dados['titulo'];?>" class="text" />
             <?php tt('Digite um título. Lembre-se, títulos começam com letra maiúscula e não leva
                 ponto final.'); ?>
             <p class="explanation_example">

@@ -205,9 +205,12 @@ class Image extends File
          */
 		if( $files['type'] == 'image/png' )
 	        $im = imagecreatefrompng($frmarquivo); //criar uma amostra da imagem original
-		else if( $files['type'] == 'image/gif' )
+		else if( $files['type'] == 'image/gif' ){
+			// PHP as of 5.3 doesn't support GIF animations
+			return $files;
  	        $im = imagecreatefromgif($frmarquivo); //criar uma amostra da imagem original
-		else
+			
+		} else
 	        $im = imagecreatefromjpeg($frmarquivo); //criar uma amostra da imagem original
 
 

@@ -44,13 +44,15 @@ class Arquivos extends Module
 
     function __construct(){
 
+        parent::__construct();
+
         $this->uploadSubDir = 'uploads/'.date('Y').'/'.date('m').'/';
 
         $this->relativeDir = './';
-        if( !empty($this->modOptions["upload_path"]["valor"]) )
-            $this->relativeDir = $this->modOptions["upload_path"]["valor"];
-                
-        parent::__construct();
+		
+		$hasUploadPath = $this->getStructureConfig("upload_path");
+        if( !empty($hasUploadPath) )
+            $this->relativeDir = $hasUploadPath;
     }
 
     /**
@@ -185,13 +187,12 @@ class Arquivos extends Module
              * Pega $systemurl
              */
             $current_dir = getcwd();
-            chdir($this->relativeDir);
-
             $frmSystemUrl = $this->_getSystemUrl( $upload_dir .'/'.$newFilename );
+			$frmSystemUrl = str_replace("//", "/", $frmSystemUrl);
+			$frmSystemUrl = str_replace("//", "/", $frmSystemUrl);
+
             $this->forPost[$filename]['frmsystemurl'] = $frmSystemUrl;
 
-            //pr($_POST);
-            //exit(0);
             /*
              * Faz o upload da imagem
              */
@@ -356,6 +357,7 @@ class Arquivos extends Module
             $post['frmurl'] = $this->parseUrl($post['frmurl']);
         }
 
+		pr($post);
         return parent::save($post);
 
         return false;
@@ -376,7 +378,7 @@ class Arquivos extends Module
          * Se $categorias estiver vazio (nunca deverá acontecer)
          */
         if(!empty($categorias)) {
-            $order = ' ORDER BY created_on DESC';
+            $order = ' ORDER BY created_on DESC, id DESC';
             $where = ' WHERE ';
             $c = 0;
             foreach($categorias as $key=>$valor) {
@@ -400,6 +402,7 @@ class Arquivos extends Module
                 FROM
                     arquivos AS conf
                 ".$where.$order;
+
         return $sql;
     }
 
@@ -407,7 +410,9 @@ class Arquivos extends Module
      * Função para retonar a tabela de dados de uma estrutura
     */
     public function LeTabelaDaEstrutura() {
-        return $this->tabela_criar;
+		if( !empty($this->tabela_criar) )
+        	return $this->tabela_criar;
+		return '';
     }
 
     /*

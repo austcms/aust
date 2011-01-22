@@ -94,11 +94,16 @@ function lbCategoria($params){
                 </tr>
                 <tr>
                     <td colspan="2">
-                    <center>
-                        <button name="submit_category" onmousedown="newCategory('lb_categoria_<?php echo $random; ?>'); return false;">
-                            Salvar
-                        </button>
-                    </center>
+	                    <center>
+							<a href="javascript: void(0);" name="submit_category" onmousedown="newCategory('lb_categoria_<?php echo $random; ?>'); return false;">Salvar</a>
+							<?php /*
+	                        <input type="button" value="Salvar" name="submit_category" onmousedown="alert('hey'); newCategory('lb_categoria_<?php echo $random; ?>'); return false;">
+	                        <button name="submit_category" onmousedown="alert('hey'); newCategory('lb_categoria_<?php echo $random; ?>'); return false;">
+	                            Salvar
+	                        </button>
+							*/
+							?>
+	                    </center>
                     </td>
                 </tr>
             </table>

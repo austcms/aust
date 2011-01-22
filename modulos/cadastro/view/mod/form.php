@@ -12,7 +12,10 @@
  */
 $infoCadastro = $modulo->pegaInformacoesCadastro($austNode);
 $tabelaCadastro = $infoCadastro["estrutura"]['tabela']["valor"];
-$tabelaImagens = $infoCadastro["estrutura"]['table_images']["valor"];
+
+$tabelaImagens = null;
+if( !empty($infoCadastro["estrutura"]['table_images']["valor"]) )
+	$tabelaImagens = $infoCadastro["estrutura"]['table_images']["valor"];
 
 /*
  * ...
@@ -333,6 +336,10 @@ foreach( $camposForm as $chave=>$valor ){
 			$elementId = 'input-'.$chave;
 			$elementsEditor[] = $elementId;
 		}
+
+		if( $modulo->getFieldConfig($chave, 'text_has_images') == "1" ){
+			$plugins[] = 'imagemanager';
+		}
 		
 		$useInput = true;
     } else {
@@ -378,9 +385,15 @@ foreach( $camposForm as $chave=>$valor ){
 		$elementsEditor = array();
 	else
 		$elementsEditor = implode(',', $elementsEditor);
-	
+
+	if( empty($plugins) )
+		$plugins = array();
+	else
+		$plugins = implode(',', $plugins);
+
 	$params = array(
-		'elements' => $elementsEditor
+		'elements' => $elementsEditor,
+		'plugins' => $plugins
 	);
 	loadHtmlEditor($params);
 

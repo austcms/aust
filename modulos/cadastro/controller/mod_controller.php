@@ -451,22 +451,29 @@ class ModController extends ModsController
 		/*
 		 * EXCLUI IMAGENS EXTRAS
 		 */
-		foreach( $images as $imageFields ){
-			foreach( $imageFields as $field=>$values ){
-				$postedImageFields[] = $field;
+		if( !empty($images) ){
+			foreach( $images as $imageFields ){
+				foreach( $imageFields as $field=>$values ){
+					$postedImageFields[] = $field;
+				}
 			}
-		}
-		$this->modulo->deleteExtraImages($lastInsertId, $postedImageFields);
+			if( !empty($postedImageFields) )
+				$this->modulo->deleteExtraImages($lastInsertId, $postedImageFields);
+		}		
 		
 		/*
 		 * EXCLUI ARQUIVOS EXTRAS
 		 */
-		foreach( $files as $fileFields ){
-			foreach( $fileFields as $field=>$values ){
-				$postedFileFields[] = $field;
+		if( !empty($files) ){
+			foreach( $files as $fileFields ){
+				foreach( $fileFields as $field=>$values ){
+					$postedFileFields[] = $field;
+				}
 			}
+			
+			if( !empty($postedFileFields) )
+				$this->modulo->deleteExtraFiles($lastInsertId, $postedFileFields);
 		}
-		$this->modulo->deleteExtraFiles($lastInsertId, $postedFileFields);
 		
         $this->set('resultado', $resultado);
 

@@ -14,6 +14,7 @@ if(!empty($_POST)) {
     if( empty($_POST['frmsenha']))
         unset($_POST['frmsenha']);
 
+	$c = 0;
     foreach($_POST as $key=>$valor) {
         // se o argumento $_POST contém 'frm' no início
         if(strpos($key, 'frm') === 0) {
@@ -22,7 +23,7 @@ if(!empty($_POST)) {
             // ajusta os campos da tabela nos quais serão gravados dados
             $valor = addslashes($valor);
             if($_POST['metodo'] == 'criar') {
-                if($c > 0) {
+                if( !empty($c) && $c > 0 ) {
                     $sqlcampostr = $sqlcampostr.','.str_replace('frm', '', $key);
                     $sqlvalorstr = $sqlvalorstr.",'".$valor."'";
                 } else {
@@ -30,7 +31,7 @@ if(!empty($_POST)) {
                     $sqlvalorstr = "'".$valor."'";
                 }
             } else if($_POST['metodo'] == 'editar') {
-                if($c > 0) {
+                if( !empty($c) && $c > 0) {
                     $sqlcampostr = $sqlcampostr.','.str_replace('frm', '', $key).'=\''.$valor.'\'';
                 } else {
                     $sqlcampostr = str_replace('frm', '', $key).'=\''.$valor.'\'';

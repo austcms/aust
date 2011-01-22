@@ -1391,7 +1391,7 @@ class Module
 			 * menos itens que as definidas estaticamente.
 			 */
             $sql = "SELECT * FROM config WHERE tipo='mod_conf' AND $classSearchStatement AND local='".$params."' $whereAuthor LIMIT 300";
-            $queryTmp = $this->connection->query($sql, "ASSOC");
+			$queryTmp = $this->connection->query($sql, "ASSOC");
 			
             $query = array();
 			/*
