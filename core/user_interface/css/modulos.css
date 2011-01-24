@@ -130,6 +130,18 @@ span.viewmode {
 		border: 0;
 	}
 	
+	.search_1n {
+	    -moz-border-radius: 8px 8px 8px 8px;
+	    background: none repeat scroll 0 0 #FFF4D6;
+	    border: 1px solid #DDDDDD;
+	    display: table;
+	    margin: 0 7px 7px 0;
+	    padding: 7px;
+	}
+	.search1n_result {
+	    margin: 0 0 5px 12px;
+	    width: 490px;
+	}
 	
 /* MOD_CART */
 .listagem div.transaction {

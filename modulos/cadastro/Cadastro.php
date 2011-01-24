@@ -165,16 +165,22 @@ class Cadastro extends Module {
 	            if( !empty($campos[$campo]) AND $campos[$campo]["especie"] == "relacional_umparamuitos" ){
 	                unset($this->data[$tabela][$campo]);
 
+					// prevents duplicated ids
+					$usedIds = array();
 	                $i = 0;
 	                foreach( $valor as $subArray ){
+						if( in_array($subArray, $usedIds) )
+							continue;
+						
 	                    if( $subArray != 0 ){
+							$usedIds[] = $subArray;
 	                        $relational[$campo][$campos[$campo]["referencia"]][$i][$campos[$campo]["ref_tabela"]."_id"] = $subArray;
 	                        $relational[$campo][$campos[$campo]["referencia"]][$i]["created_on"] = date("Y-m-d H:i:s");
+	                        $relational[$campo][$campos[$campo]["referencia"]][$i]["order_nr"] = $i+1;
 	                        $i++;
 	                    }
-	                    $this->toDeleteTables[$campo][$campos[$campo]["referencia"]] = 1;
 	                }
-
+                    $this->toDeleteTables[$campo][$campos[$campo]["referencia"]] = 1;
 	            }
 	            /*
 	             * Date
