@@ -15,12 +15,6 @@ $precisa_aprovacao = $modulo->pegaConfig(Array('estrutura'=>$_GET['aust_node'], 
 
 
 <?php
-
-//print_r($precisa_aprovacao);
-
-//pr($resultado);
-
-
 /*
  * FILTROS ESPECIAIS
  */

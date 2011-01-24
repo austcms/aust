@@ -10,7 +10,6 @@ function cadastroSearch(este, austNode){
     $('.content_search #loading_image').show();
     searchDelay = window.setTimeout(function(){
         cadastroSearchAfterDelay(este, austNode);
-    $('.content_search #loading_image').hide();
     }, 350);
 }
 
@@ -27,6 +26,7 @@ function cadastroSearchAfterDelay(este, austNode){
             function(txt){
                 //alert(txt);
                 $('#listing_table').html(txt);
+			    $('.content_search #loading_image').hide();
                 //SetupCampoRelacionalCampos($('#campooptions_tabela option:selected').val(), id, inc);
             });
     }

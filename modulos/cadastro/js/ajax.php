@@ -130,6 +130,7 @@ elseif($_POST['action'] == 'search'){
         $searchField = $_POST["field"];
     }
 
+//	$_POST['query'] = str_replace(" ", "%", $_POST['query']);
     $param = array(
         'categorias' => $categorias,
         'metodo' => 'listing',
@@ -138,7 +139,7 @@ elseif($_POST['action'] == 'search'){
     );
 
     $sql = $modulo->loadSql($param);
-    //echo '<br><br>'.$sql .'<br>';
+//    echo '<br><br>'.$sql .'<br>';
 
     $resultado = $modulo->connection->query($sql, "ASSOC");
 
