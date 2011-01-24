@@ -49,11 +49,9 @@ if( !empty($w) ){
             ";
     $values = $modulo->connection->query($sql);
 
-    if( empty($values)){
-        $values = array();
-    } else {
+    if( !empty($values)){
         foreach( $values as $id ){
-            $valor["valor"][] = $id["referencia"];
+            $valor["valor"][] = $id["ref_id"];
         }
     }
 }

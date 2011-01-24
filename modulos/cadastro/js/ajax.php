@@ -197,8 +197,7 @@ elseif($_POST['action'] == 'search1n'){
 					OR
 					t.".$childField." IS NULL
 				)
-				AND
-				r.id!='".$w."'
+				". /*AND r.id!='".$w."' */ "
 				$queryCheckedBoxes
 			GROUP BY
 				r.id
@@ -206,6 +205,7 @@ elseif($_POST['action'] == 'search1n'){
                 t.order_nr ASC, t.id ASC
 			LIMIT 10
             ";
+//echo $sql."<br>--<br>";
 	$results = $modulo->connection->query($sql);
 	
 	foreach( $results as $result ){
