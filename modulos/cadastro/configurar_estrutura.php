@@ -33,10 +33,12 @@ $setup->mainTable = $modulo->getTable();
  * Insere um novo campo na tabela do cadastro
  */
 	if(!empty($_POST['add_field'])){
+
 		$params = array(
-			'name' => $_POST['data'],
-			'type' => $_POST['name'],
-			'order' => $_POST['order'],
+			'name' => $_POST['data']['name'],
+			'type' => $_POST['data']['type'],
+			'order' => $_POST['data']['order'],
+			'description' => $_POST['data']['description'],
 		);
 		
 		if( !empty($_POST['relacionado_tabela_0']) )

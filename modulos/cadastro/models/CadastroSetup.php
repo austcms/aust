@@ -233,7 +233,7 @@ class CadastroSetup extends ModsSetup {
 			$params['label'] = $value['name'];
 			$params['austNode'] = $this->austNode;
 			$params['type'] = $value['type'];
-			$params['comment'] = $value['description'];
+			$params['comment'] = addslashes($value['description']);
 			$params['author'] = $this->user;
 			
 			/*
