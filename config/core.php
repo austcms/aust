@@ -14,12 +14,12 @@
  * @global array $GLOBALS['aust_charset']
  * @name $aust_charset
  */
-//$aust_charset['view'] = 'iso-8859-1';
-//$aust_charset['db'] = 'latin1';
-//$aust_charset['db_collate'] = 'latin1_general_ci';
+
 $aust_charset['view'] = 'utf-8';
 $aust_charset['db'] = 'utf8';
 $aust_charset['db_collate'] = 'utf8_general_ci';
+
+date_default_timezone_set('America/Sao_Paulo');
 
 /**
  * CONFIGURAÇÕES GERAIS
