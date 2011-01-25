@@ -212,7 +212,6 @@ if( $modulo->getStructureConfig("category_selectable") ){
  * O formulário é criado automaticamente
  *
  */
-//	pr($camposForm);
 foreach( $camposForm as $chave=>$valor ){
 
     unset($inputType);
@@ -296,9 +295,11 @@ foreach( $camposForm as $chave=>$valor ){
 		$useInput = true;
 	}
 
-    if( empty($valor["valor"]) ){
+    if( $valor["valor"] == '' ){
         $valor["valor"] = "";
     }
+
+
 
 
     if( empty($inputType) ){
@@ -317,7 +318,7 @@ foreach( $camposForm as $chave=>$valor ){
 	                                    "label" => $valor["label"],
 	                                    "select" => $select,
 	                                    "checkbox" => $checkbox,
-	                                    "value" => $valor["valor"],
+	                                    "value" => (string) $valor["valor"],
 	                                    "type" => $inputType,
 										'after' => '<p class="explanation">'.$valor['comentario'].'</p>'
 	                                )
