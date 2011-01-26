@@ -258,7 +258,6 @@ class Module
      */
     public function load($param = ''){
         $this->loadedIds = array();
-        
         $paramForLoadSql = $param;
 
         /*
@@ -288,7 +287,6 @@ class Module
 		
 
 		$sql = $this->loadSql($paramForLoadSql);
-		
         $qry = $this->connection->query($sql);
         if( empty($qry) )
             return array();
@@ -347,7 +345,7 @@ class Module
 		
 		if( is_string($param) ){
 			$result = reset( $this->connection->query($param) );
-			$total = ( is_numeric($result['rows']) ) ? $result['rows'] : 0;
+			$total = ( !empty($result['rows']) && is_numeric($result['rows']) ) ? $result['rows'] : 0;
 		} else {
 			return 0;
 		}
@@ -998,6 +996,7 @@ class Module
             return $this->config;
 
         $modDir = $this->getIncludeFolder().'/';
+
         include $modDir.MOD_CONFIG;
 
         if( empty($modInfo) )
@@ -1015,7 +1014,13 @@ class Module
      * @return <string>
      */
     public function getIncludeFolder(){
-        return THIS_TO_BASEURL.MODULOS_DIR.strtolower( get_class($this) );
+
+		$str = get_class($this);
+
+		preg_match_all('/[A-Z][^A-Z]*/', $str, $results);
+		$str = implode('_', $results[0]);
+
+        return THIS_TO_BASEURL.MODULOS_DIR.strtolower( $str );
     }
 
 	/**
