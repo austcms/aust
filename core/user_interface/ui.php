@@ -136,6 +136,18 @@
 
     <div class="body">
         <div class="content">
+		<?php if( notice() ){ ?>
+			<div id="notice">
+			<?php echo notice(); ?>
+			</div>
+		<?php } ?>
+
+		<?php if( failure() ){ ?>
+			<div id="failure">
+			<?php echo failure(); ?>
+			</div>
+		<?php } ?>
+		
         <?php echo $content_for_layout; ?>
         
         </div>

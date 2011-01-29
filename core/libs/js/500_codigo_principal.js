@@ -20,6 +20,12 @@ $(document).ready(function(){
 //	$("a[name=modal]").first().click();
 
 //	window.status = $("[name='data[teste][node_id]']").length;
+	$('.check_checkboxes').attr('checked', false).click(function(){
+		
+		window.status = $(this).parents('table').length;
+		$(this).parents('table').find('input[type=checkbox]').attr('checked', $(this).attr('checked'));
+	});
+	
 	// changeViewMode
 	$('a[class=change_viewmode]').click(function(e) {
 		changeViewMode(this);

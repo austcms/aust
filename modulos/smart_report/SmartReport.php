@@ -63,6 +63,8 @@ class SmartReport extends Module
 		
 		if( !empty( $query['filter']['sql_filter'] ) ){
 			$sqlFilter = $query['filter']['sql_filter'];
+
+			$sqlFilter = preg_replace('/^select /i', "SELECT id as '_id', ", $sqlFilter);
 			$filter = $this->connection->query($sqlFilter);
 			$query['results'] = $filter;
 		}

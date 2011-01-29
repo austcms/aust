@@ -1,25 +1,44 @@
+<table cellspacing="0" cellpadding="0" border="0" class="listagem">
 <tr class="titulo">
-	<?php foreach( $query['results'][0] as $field=>$value ){ ?>
+	<?php foreach( $query['results'][0] as $field=>$value ){
+		if( $field == '_id') continue;
+	 	?>
 	<td class="">
 		<?php echo $field ?>
 	</td>
 	<?php } ?>
 
-	<td width="80">
-		Ações
+	<td width="25" align="center">
+        <input type='checkbox' class="check_checkboxes" data-target="class" checked="false" value='<?php echo $item['_id'];?>'>
 	</td>
 	
 </tr>
 <?php foreach($query['results'] as $item){ ?>
     <tr class="conteudo">
-		<?php foreach( $item as $field=>$value ){ ?>
+		<?php foreach( $item as $field=>$value ){
+			if( $field == '_id') continue;
+			?>
 		<td>
 			<?php echo $value; ?>
 		</td>
 		<?php } ?>
-		<td width="80">
 
-		</td>
+        <td align="center">
+            <?php
+//            if( $permissoes->canDelete($austNode) ){
+				
+				$checked = "";
+				if( !empty($_SESSION['selected_items'][$austNode]) &&
+					in_array($item['_id'], $_SESSION['selected_items'][$austNode]['items'])
+				)
+					$checked = 'checked="checked"';
+                ?>
+                <input type='checkbox' name="itens[]" <?php echo $checked; ?> value='<?php echo $item['_id'];?>'>
+                <?php
+//            }
+            ?>
+        </td>
 		
     </tr>
 <?php } ?>
+</table>

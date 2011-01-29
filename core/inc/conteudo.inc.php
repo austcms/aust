@@ -145,18 +145,7 @@ if(!empty($_GET['action'])){
 			</div>
 			<?php
 		}
-	    /*
-	     * Se for save, redireciona automaticamente
-	     */
-	     if( in_array($action, array(SAVE_ACTION, ACTIONS_ACTION)) )
-			{
-	        ?>
-	        <div class="loading_timer">
-	            <img src="<?php echo IMG_DIR ?>loading_timer.gif" /> Redirecionando Automaticamente
-	        </div>
-	        <?php
-	    }
-
+		
         /**
          * Prepara os argumentos para instanciar a classe e depois
          * chama o Controller que cuidará de toda a arquitetura MVC do módulo
@@ -173,7 +162,24 @@ if(!empty($_GET['action'])){
             'model' => $model,
         );
         $modController = new ModController($param);
-	    if( in_array($action, array(SAVE_ACTION, ACTIONS_ACTION)) ){
+
+	    /*
+	     * Se for save, redireciona automaticamente
+	     */
+	    if( in_array($action, array(SAVE_ACTION, ACTIONS_ACTION)) &&
+			(
+				empty($_SESSION['no_redirect']) ||
+				!$_SESSION['no_redirect']
+			)
+	 	)
+		{
+		
+			unset($_SESSION['selected_items']);
+	        ?>
+	        <div class="loading_timer">
+	            <img src="<?php echo IMG_DIR ?>loading_timer.gif" /> Redirecionando Automaticamente
+	        </div>
+	        <?php
 
 			if( !empty($_POST['redirect_to']) )
 				$goToUrl = $_POST['redirect_to'];
@@ -186,11 +192,12 @@ if(!empty($_GET['action'])){
                 var timeToRefresh = 2;
                 setTimeout(function(){
                     window.location.href = "<?php echo $goToUrl ?>";
-                }, 2300);
+                }, 2000);
             </script>
             <?php
         }
 
+		$_SESSION['no_redirect'] = false;
     }
     /**
      * Não possui estrutura MVC
