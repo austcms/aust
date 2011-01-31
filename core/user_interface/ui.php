@@ -41,10 +41,12 @@
 		$page = $_GET['pagina'];
 	else
 		$page = 1;
+		
     ?>
+
     <script type="text/javascript">
 	    var userId = '<?php echo $administrador->getId() ?>';
-	    var austNode = '<?php echo $_GET["aust_node"] ?>';
+	    var austNode = '<?php if( !empty($_GET["aust_node"]) ) echo $_GET["aust_node"]; ?>';
         var IMG_DIR = '<?php echo IMG_DIR ?>';
 		var page = '<?php echo $page ?>';
     </script>
@@ -134,6 +136,18 @@
 
     <div class="body">
         <div class="content">
+		<?php if( notice() ){ ?>
+			<div id="notice">
+			<?php echo notice(); ?>
+			</div>
+		<?php } ?>
+
+		<?php if( failure() ){ ?>
+			<div id="failure">
+			<?php echo failure(); ?>
+			</div>
+		<?php } ?>
+		
         <?php echo $content_for_layout; ?>
         
         </div>
@@ -152,6 +166,7 @@
                 <br />
                     <span class="para_webmaster">Para Webmasters:</span><a href="adm_main.php?section=conf_modulos" class="restrito">Configurar Módulos</a>
                     <a href="adm_main.php?section=categorias" class="restrito">Categorias</a>
+                    <a href="adm_main.php?section=import_export_structures" class="restrito">Importar/Exportar Estruturas</a>
                 <?php
                 if( Registry::read('debugLevel') > 1 ){
 
@@ -214,8 +229,8 @@
                             "SELECT", "UPDATE", "DELETE", "INSERT", "REPLACE",
                             "FROM", "ASC", "WHERE", "ORDER BY", "LIMIT", "TABLES",
                             "LEFT JOIN", "DISTINCT", "COUNT", "ON", "DESCRIBE", "SHOW",
-                            "INTO", "VALUES", "SET",
-                            "IN", "NOT IN", "OR", "AND", "AS", "DESC",
+                            "INTO", "VALUES", "SET", "ALTER",
+                            "IN", "NOT IN", " OR ", " AND ", " AS ", "DESC",
                             " and ", " as "
                         );
                         $boldSqlCommands = array();

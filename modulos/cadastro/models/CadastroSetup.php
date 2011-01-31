@@ -79,6 +79,25 @@ class CadastroSetup extends ModsSetup {
 	
 	public $createTable = false;
 	
+	/**
+     * getInstance()
+     *
+     * Para Singleton
+     *
+     * @staticvar <object> $instance
+     * @return <object>
+     */
+    static function getInstance(){
+        static $instance;
+
+        if( !$instance ){
+            $instance[0] = new CadastroSetup;
+        }
+
+        return $instance[0];
+
+    }
+
 	/*
 	 * SUPER METHODS
 	 *
@@ -86,16 +105,23 @@ class CadastroSetup extends ModsSetup {
 	 */
 	function createStructure($params){
 		$this->start();
+		
+		if( !empty($params['austNode']) )
+			$this->austNode = $params['austNode'];
+		
 		$this->setMainTableName( $this->encodeTableName($params['name']) );
 		
 		$this->setCreateTableMode();
+
+		if( empty($this->austNode) )
+			$this->saveStructure($params);
 		
-		$this->saveStructure($params);
 		$this->createMainTable($params);
 		
 		$this->saveStructureConfiguration($params);
 		
-		$this->addField($params['fields']);
+		if( !empty($params['fields']) )
+			$this->addField($params['fields']);
 		
 		return true;
 	}
@@ -207,7 +233,7 @@ class CadastroSetup extends ModsSetup {
 			$params['label'] = $value['name'];
 			$params['austNode'] = $this->austNode;
 			$params['type'] = $value['type'];
-			$params['comment'] = $value['description'];
+			$params['comment'] = addslashes($value['description']);
 			$params['author'] = $this->user;
 			
 			/*
@@ -228,7 +254,7 @@ class CadastroSetup extends ModsSetup {
 			else if( $type == 'text' ) {
 				
 				$this->addColumn($params);
-				$this->connection->exec($this->createFieldConfigurationSql_String($params));
+				$this->connection->exec($this->createFieldConfigurationSql_Text($params));
 				
 			}
 			/*
@@ -262,7 +288,7 @@ class CadastroSetup extends ModsSetup {
 			/*
 			 * Relational_onetoone
 			 */
-			else if( $type == 'relational_onetoone' ) {
+			else if( in_array($type, array('relational_onetoone','relacional_umparaum') ) ){
 				
 				if( empty($params['refTable']) ) continue;
 				$this->addColumn($params);
@@ -273,7 +299,7 @@ class CadastroSetup extends ModsSetup {
 			/*
 			 * relational_onetomany
 			 */
-			else if( $type == 'relational_onetomany' ) {
+			else if( in_array($type, array('relational_onetomany','relacional_umparamuitos') ) ){
 				
 				if( empty($params['refTable']) ) continue;
 				
@@ -835,6 +861,23 @@ class CadastroSetup extends ModsSetup {
 		return $sql;
 	}
 	
+	/**
+	 * TEXT FIELD SQL for Configuration
+	 */
+	function createFieldConfigurationSql_Text($params){
+		if( empty($params['class']) ) $class = 'text';
+		else $class = $params['class'];
+		
+		if( empty($params['order']) )
+			$params['order'] = $this->getFieldOrder();
+
+        $sql =
+			"INSERT INTO cadastros_conf ".
+            "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem) ".
+            "VALUES ".
+            "('campo','".$params['name']."','".$params['label']."','".$params['comment']."','".$params['austNode']."','".$params['author']."',0,0,1,0,1,'$class',".$params['order'].")";
+		return $sql;
+	}
 	/*
 	 *
 	 * END FILES CREATION
@@ -862,11 +905,12 @@ class CadastroSetup extends ModsSetup {
 		
         $sql = 'CREATE TABLE '.$this->mainTable.'('.
                    'id int auto_increment,'.
+                   'node_id int,'.
                    'blocked varchar(120),'.
                    'approved int,'.
                    'created_on datetime,'.
                    'updated_on datetime,'.
-                   'PRIMARY KEY (id), UNIQUE id (id)'.
+                   'PRIMARY KEY (id), UNIQUE id (id), INDEX (node_id)'.
                 ')';
 		return $sql;
 	}
@@ -944,7 +988,8 @@ class CadastroSetup extends ModsSetup {
 	/**
 	 * saveStructure()
 	 *
-	 * Cria uma nova estrutura de cadastro
+	 * Cria uma nova estrutura de cadastro. Se austNode já existe,
+	 * não faz nada.
 	 *
 	 * É necessário os seguintes valores em $params:
 	 * 		'name': 	nome da categoria ou estrutura
@@ -953,6 +998,14 @@ class CadastroSetup extends ModsSetup {
 	 * @return bool
 	 */
 	function saveStructure($params = array()){
+		
+		if( !empty($this->austNode) &&
+			is_numeric($this->austNode) )
+			return false;
+			
+		if( empty($params) )
+			return false;
+		
 		$aust = Aust::getInstance();
 		$return = $aust->create($params);
 		if( is_numeric($return) )

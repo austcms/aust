@@ -13,6 +13,10 @@
 
     $moduloConfig = $modulo->loadModConf($params);
 
+	// tem editor?
+	if( $modulo->getStructureConfig('description_has_rich_editor') == '1' )
+		$modulo->loadHtmlEditor();
+    
 
 /*
  * Ajusta variáveis iniciais
@@ -72,16 +76,12 @@
 				: $frmcategory;
 
 ?>
-<p>
-    <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
-</p>
-
 <h2><?php echo $tagh1;?></h2>
 <p><?php echo $tagp;?></p>
 
 
 
-<form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?section=<?php echo $_GET["section"] ?>&action=save" enctype="multipart/form-data" >
+<form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?section=<?php echo $_GET["section"] ?>&action=save" enctype="multipart/form-data">
 <input type="hidden" name="metodo" value="<?php echo $_GET['action'];?>">
 <?php if($_GET['action'] == 'create'){ ?>
     <input type="hidden" name="frmadddate" value="<?php echo date("Y-m-d"); ?>">
@@ -171,7 +171,7 @@
     /*
      * Mostra imagem preview
      */
-    if( $dados["bytes"] > 0 ){
+    if( !empty($dados["bytes"]) && $dados["bytes"] > 0 ){
         ?>
         <tr>
             <td valign="top">Imagem atual:</td>
@@ -261,7 +261,7 @@
     /*
      * ORDEM
      */
-    if( $modulo->getStructureConfig("ordem") ){
+    if( $modulo->getStructureConfig("ordem") || $modulo->getStructureConfig("ordenate") ){
     ?>
     <tr>
         <td valign="top"><label>Ordem:</label></td>
@@ -295,7 +295,7 @@
     if( $modulo->getStructureConfig("descricao") ){
         ?>
         <tr>
-            <td valign="top"><label>Descrição da galeria: </label>
+            <td valign="top"><label>Descrição: </label>
             </td>
             <td>
                 <textarea name="frmtexto" id="jseditor" rows="8" style="width: 400px"><?php if( !empty($dados['texto']) ) echo $dados['texto'];?></textarea>
@@ -357,5 +357,5 @@
 
 <br />
 <p>
-    <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+    <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
 </p>

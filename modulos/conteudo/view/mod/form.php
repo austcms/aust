@@ -15,6 +15,7 @@
 	$editorPlugins = '';
 	if( $modulo->getStructureConfig('upload_inline_images') == '1' )
 		$editorPlugins = 'imagemanager';
+	
     $modulo->loadHtmlEditor($editorPlugins);
 
 
@@ -38,10 +39,6 @@
 
     }
 ?>
-<p>
-    <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
-</p>
-
 <h2><?php echo $tagh2;?></h2>
 <p><?php echo $tagp;?></p>
 
@@ -54,23 +51,42 @@
     <input type="hidden" name="frmadddate" value="<?php echo date("Y-m-d H:i:s"); ?>">
     <input type="hidden" name="frmautor" value="<?php echo $_SESSION['loginid'];?>">
 <?php } else { ?>
-
     <input type="hidden" name="frmadddate" value="<?php ifisset( $dados['adddate'] );?>">
     <input type="hidden" name="frmautor" value="<?php ifisset( $dados['autor'] );?>">
-
 <?php }?>
 
 <input type="hidden" name="w" value="<?php ifisset( $dados['id'] );?>">
 <input type="hidden" name="aust_node" value="<?php echo $austNode; ?>">
 
 <table cellpadding=0 cellspacing=0 class="form">
+	
+<?php
+	$slave = Aust::getInstance()->getRelatedSlaves($_GET['aust_node']);
+	if( !empty($slave) ){
+		?>	
+	    <tr>
+	        <td><label>Opções:</label></td>
+	        <td>
+				<?php
+				$slave = Aust::getInstance()->getRelatedSlaves($_GET['aust_node']);
+				$slave = reset($slave);
+				$slave = reset($slave);
+				?>
+	            <a href="adm_main.php?section=conteudo&action=edit&aust_node=<?php echo $slave['slave_id']?>&related_master=<?php echo $_GET['aust_node']?>&related_w=<?php echo $_GET['w']?>">
+				<?php echo $slave['slave_name']; ?>
+				</a>
+	        </td>
+	    </tr>
+		<?php
+	}
+	?>
     <tr>
         <td class="first"><label>Categoria:</label></td>
         <td class="second">
             <div id="categoriacontainer">
             <?php
             $current_node = '';
-            if($_GET['action'] == "editar"){
+            if( $_GET['action'] == "editar" || $_GET['action'] == "edit" ){
                 $current_node = $dados['categoria'];
                 ?>
                 <input type="hidden" name="frmcategoria" value="<?php echo $current_node; ?>">
@@ -178,6 +194,23 @@
     <?php
     }
     ?>
+
+	<?php
+    if( $modulo->getStructureConfig("manual_date") ){
+    ?>
+    <tr>
+        <td valign="top"><label>Data manual:</label></td>
+        <td>
+		    <input type="text" name="frmadddate" value="<?php echo date("Y-m-d H:i:s"); ?>">
+            <p class="explanation">
+				Configure uma data para o conteúdo manualmente.
+            </p>
+        </td>
+    </tr>
+    <?php
+    }
+    ?>
+
     <tr>
         <td colspan="2"><label>Texto: </label>
         </td>
@@ -250,10 +283,12 @@
      */
 
         include(INC_DIR.'conteudo.inc/form_embedownform.php');
+
+
 ?>
 
 
 <br />
 <p>
-    <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+    <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
 </p>

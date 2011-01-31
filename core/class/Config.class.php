@@ -88,7 +88,7 @@ class Config {
                 $type = Registry::read('configStandardType');
                 $field = 'valor';
                 $params = array(
-                    'where' => "tipo='".$type."' AND propriedade='".$property."'",
+                    'where' => "propriedade='".$property."'",
                     'mode' => 'single',
 
                 );
@@ -96,9 +96,10 @@ class Config {
                 return false;
             }
 
+			$config = $this->getConfigs($params);
+			
+            $result = reset( $config );
 
-
-            $result = reset( $this->getConfigs($params) );
             $result = reset($result);
             return $result[$field];
 
@@ -312,8 +313,10 @@ class Config {
     }
 
     function updateOptions($params){
-
-        $this->conexao->exec("UPDATE config SET valor='".$params["valor"]."' WHERE id='".$params["id"]."'");
+		
+		$params = sanitizeString($params);
+		$sql = "UPDATE config SET valor='".$params["valor"]."' WHERE id='".$params["id"]."'";
+        $this->conexao->exec($sql);
 
         return '<span style="color: green;">Configuração salva com sucesso!</span>';
     }
@@ -366,16 +369,22 @@ class Config {
                             ('".implode("','", $infos)."')";
             }
 
-            //echo $sql."<br>";
             if( !$this->conexao->exec($sql) ) {
                 $erro[] = key($valor);
             }
         }
 
         if(count($erro) == 0) {
-            return '<span style="color: green;">Configuração salva com sucesso!</span>';
+            return array(
+				'classe' => 'sucesso',
+				'mensagem' => 'Configuração salva com sucesso!'
+			);
         } else {
-            return '<span style="color: red;">Ocorreu um erro desconhecido. Algumas opções não foram salvas.</span>';
+            return array(
+				'classe' => 'insucesso',
+				'mensagem' => 'Ocorreu um erro desconhecido. Algumas opções não foram salvas.'
+			);
+
         }
 
     }

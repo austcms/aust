@@ -2,7 +2,7 @@
 // PHP 5.3 needs this
 date_default_timezone_set('America/Sao_Paulo');
 
-require 'tests/config/database.php';
+include_once 'tests/config/database.php';
 require("core/config/variables.php");
 
 if( !defined('UPLOAD_DIR') )
@@ -15,11 +15,14 @@ require_once(CORE_DIR."libs/functions/func.php");
 require_once(CORE_DIR."libs/functions/data_types.php");
 require_once(CORE_DIR."libs/functions/string_treatment.php");
 
-function __autoload($className) {
+function autoload($className) {
     if( is_file('core/class/'.$className.'.php') )
-        require_once 'core/class/'.$className.'.php';
+        require 'core/class/'.$className.'.php';
     else
-        require_once 'core/class/'.$className.'.class.php';
+        require 'core/class/'.$className.'.class.php';
 
 }
+
+spl_autoload_register('autoload');
+
 ?>

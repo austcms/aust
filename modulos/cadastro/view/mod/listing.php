@@ -10,18 +10,11 @@ $tabela = $modulo->LeTabelaDeDados($_GET['aust_node']);
 $precisa_aprovacao = $modulo->pegaConfig(Array('estrutura'=>$_GET['aust_node'], 'chave'=>'aprovacao'));
 ?>
 
-<p><a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a></p>
-<h3>Listando conteúdo: <?php echo $aust->leNomeDaEstrutura($_GET['aust_node']);?></h3>
+<h2><?php echo $aust->leNomeDaEstrutura($_GET['aust_node']);?></h2>
 <p>A seguir você vê a lista de registros sob o cadastro "<?php echo $aust->leNomeDaEstrutura($_GET['aust_node'])?>".</p>
 
 
 <?php
-
-//print_r($precisa_aprovacao);
-
-//pr($resultado);
-
-
 /*
  * FILTROS ESPECIAIS
  */
@@ -129,7 +122,7 @@ if( $fields > 0 ){
              * Se este cadastro precisa de aprovação, mostra botão para aprovar usuário
              */
             if($precisa_aprovacao['valor'] == '1'){ ?>
-                <input type="submit" name="aprovar" value="Aprovar" />
+                <input type="submit" class="js_confirm" name="aprovar" value="Aprovar" />
                 <?php
             }
 
@@ -138,7 +131,7 @@ if( $fields > 0 ){
              */
             if( $permissoes->canDelete($austNode) ){
                 ?>
-                <input type="submit" name="deletar" value="Deletar" />
+                <input type="submit" class="js_confirm" name="deletar" value="Deletar" />
                 <?php
             }
             ?>
@@ -221,5 +214,5 @@ if( $fields > 0 ){
 ?>
 
 <p style="margin-top: 15px;">
-	<a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+	<a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
 </p>

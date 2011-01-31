@@ -1,7 +1,7 @@
 
 <h2>Nova Categoria</h2>
 <p>
-    <a href="javascript: history.back();"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+    <a href="javascript: history.back();"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
 </p>
 <?php
     if(!empty($specsection['formnew_description'])){
@@ -9,7 +9,7 @@
     }
 ?>
 
-<form method="post" action="adm_main.php?section=<?php echo $_GET['section'];?>&action=gravar">
+<form method="post" action="adm_main.php?section=<?php echo $_GET['section'];?>&action=gravar" enctype="multipart/form-data">
 <input type="hidden" name="action" value="gravar">
 <input type="hidden" name="frmclasse" value="categoria">
 
@@ -75,11 +75,17 @@
     </td>
 </tr>
 <tr>
+    <td valign="top">Arquivo de Imagem: </td>
+    <td>
+        <input type="file" name="arquivo" value="" />
+    </td>
+</tr>
+<tr>
     <td colspan="2" style="padding-top: 30px;"><center><INPUT TYPE="submit" VALUE="Entrar"></center></td>
 </tr>
 </table>
 
 </form>
 <p>
-    <a href="javascript: history.back();"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+    <a href="javascript: history.back();"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
 </p>

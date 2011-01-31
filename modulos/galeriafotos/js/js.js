@@ -19,18 +19,18 @@ function addCommentInImage(id){
         include_baseurl+"/js/ajax.php",
         { action: "saveImageComment", comment: comment, id: id },
         function(txt){
-            //alert(txt);
-            if(txt == 1){
+            if(txt == 0){
+				alert('Comentário não foi salvo. Tente novamente.');
+			}
                 $("#image_comment_button_"+id).attr('value', buttonText);
                 $("#image_comment_button_"+id).attr('disabled', '');
                 $('#image_comment_input_'+id).hide();
                 $('#image_comment_text_'+id).html(comment);
                 $('#comment_'+id).attr('disabled', '');
-                $('#comment_'+id).val('')
+                $('#comment_'+id).val( comment )
                 $('#image_comment_input_'+id).hide();
                 $('#image_comment_icon_'+id).show();
 
-            }
             //$('#agenda_start_datetime').html(txt);
             //SetupCampoRelacionalCampos($('#campooptions_tabela option:selected').val(), id, inc);
         })

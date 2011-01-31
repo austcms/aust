@@ -18,7 +18,7 @@
 
 <h2>Editar categoria</h2>
 <p>
-    <a href="javascript: history.back();"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+    <a href="javascript: history.back();"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
 </p>
 <?php
     if(!empty($specsection['formnew_description'])){
@@ -54,7 +54,7 @@
 <tr>
     <td valign="top">Descrição: </td>
     <td>
-        <textarea name="frmdescricao" rows="7" cols="40" id="jseditor" style="font-size: 11px; font-family: verdana;"><?php echo $dados['descricao']?></textarea>
+        <textarea name="frmdescricao" rows="3" cols="40" id="jseditor" style="font-size: 11px; font-family: verdana;"><?php echo $dados['descricao']?></textarea>
         <p class="explanation">
             Digite uma breve descrição desta categoria.
         </p>
@@ -75,20 +75,20 @@
         /*
          * Mostra foto da categoria se houver
          */
-        $sql = "SELECT id, nome FROM imagens WHERE classe='categorias' AND ref='".$_GET['w']."' ORDER BY id DESC LIMIT 0,1";
+        $sql = "SELECT id FROM austnode_images WHERE node_id='".$_GET['w']."' ORDER BY id DESC LIMIT 0,1";
         $query = $conexao->query($sql);
         if(count($query)){
             $result = $query[0];
             ?>
             <div style="margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid silver;">
-                <p><img src=<?php echo LIB_DIR.IMAGE_VIEWER_DIR;?>"visualiza_foto.php?myid=<?php echo $result['id']?>&thumbs=yes&ysize=60" /></p>
+                <p><img src="<?php echo IMAGE_VIEWER_DIR;?>visualiza_foto.php?table=austnode_images&fromfile=true&myid=<?php echo $result['id']?>&thumbs=yes&&maxxsize=400&maxysize=400" /></p>
                 <strong>Imagem atual: <?php echo $result['nome']?></strong>
             </div>
             <?php
         }
         ?>
 
-        <p>Se o site necessita de uma imagem para a categoria, escolha o arquivo da imagem abaixo.</p>
+        <p>Altere a imagem da categoria abaixo.</p>
 
     </td>
 </tr>
@@ -105,5 +105,5 @@
 
 </form>
 <p>
-    <a href="javascript: history.back();"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+    <a href="javascript: history.back();"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
 </p>

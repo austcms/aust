@@ -38,11 +38,11 @@ define("CORE_DIR", "core/");
     /**
      * Define o caminho para a pasta de instalação
      */
-    define("RELATIVE_PATH_TO_INSTALLATION", CORE_CONFIG_DIR."installation/");
+    define("INSTALLATION_DIR", CORE_CONFIG_DIR."installation/");
     /**
      * DBSCHEMA: arquivo
      */
-    define("DBSCHEMA_FILE_PATH", CORE_DIR.RELATIVE_PATH_TO_INSTALLATION."dbschema.php");
+    define("DBSCHEMA_FILE_PATH", CORE_DIR.INSTALLATION_DIR."dbschema.php");
     /**
      * USER INTERFACE
      *
@@ -73,11 +73,12 @@ define("CORE_DIR", "core/");
      *
      * Define o diretório onde estão os arquivos Javascript
      */
-    define("BASECODE_JS", CORE_DIR."basecode/js/");
+    define("BASECODE_JS", LIB_DIR."js/");
     /**
      * Diretório dos módu1os
      */
-    define('MODULOS_DIR', 'modulos/');
+	 define('MODULES_DIR', 'modulos/');
+	 define('MODULOS_DIR', MODULES_DIR);
     /**
      * Diretório de inclusão de arquivos ('inc')
      */
@@ -93,6 +94,7 @@ define("CORE_DIR", "core/");
         define('EDIT_ACTION', 'edit');
         define('LISTING_ACTION', 'listing');
         define('DELETE_ACTION', 'delete');
+        define('ACTIONS_ACTION', 'actions');
         define('SAVE_ACTION', 'save');
 
 
@@ -119,14 +121,19 @@ define("CORE_DIR", "core/");
  * Configurações gerais 
  */
 define('CONFIG_DIR', 'config/');
-/**
- * Endereço do arquivo de configurações da base de dados
- */
-define('CONFIG_DATABASE_FILE', CONFIG_DIR.'database.php');
-/**
- * Configurações do Core
- */
-define('CONFIG_CORE_FILE', CONFIG_DIR.'core.php');
+	/**
+	 * Endereço do arquivo de configurações da base de dados
+	 */
+	define('CONFIG_DATABASE_FILE', CONFIG_DIR.'database.php');
+	/**
+	 * Configurações do Core
+	 */
+	define('CONFIG_CORE_FILE', CONFIG_DIR.'core.php');
+	/**
+	 * Exported Data
+	 */
+	define('EXPORTED_DIR', CONFIG_DIR.'export/');
+	define('EXPORTED_FILE', EXPORTED_DIR.'exported_data.php');
 
 
 /**
@@ -202,6 +209,8 @@ define('MOD_VIEW_DIR', 'view/');
  */
     define('CACHE_DIR', CORE_DIR.'cache/');
     define('CACHE_PUBLIC_DIR', UI_PATH.'cache/');
+
+    define('UPLOADS_DIR', 'uploads/');
 
     define('CACHE_CSS_CONTENT', CACHE_PUBLIC_DIR.'style.css');
     define('CACHE_JS_CONTENT', CACHE_PUBLIC_DIR.'javascript.js');

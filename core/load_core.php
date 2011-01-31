@@ -19,11 +19,13 @@ include_once(THIS_TO_BASEURL."core/config/variables.php");
  * Métodos usados pelo sistema
  */
 include_once(THIS_TO_BASEURL.CORE_DIR."libs/functions/func.php");
+include_once(THIS_TO_BASEURL.CORE_DIR."libs/functions/messages.php");
 include_once(THIS_TO_BASEURL.CORE_DIR."libs/functions/data_types.php");
 include_once(THIS_TO_BASEURL.CORE_DIR."libs/functions/string_treatment.php");
 include_once(THIS_TO_BASEURL.CORE_DIR."libs/functions/func_content.php");
 include_once(THIS_TO_BASEURL.CORE_DIR."libs/functions/func_text_format.php");
 include_once(THIS_TO_BASEURL.CORE_DIR."libs/functions/func_form_manipulation.php");
+include_once(THIS_TO_BASEURL.CORE_DIR."libs/functions/date.php");
 /**
  * DBSCHEMA
  * Carrega o $dbschema

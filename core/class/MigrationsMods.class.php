@@ -62,9 +62,6 @@ class MigrationsMods
 
             $migration = new $name($modName, $this->conexao);
             
-            //$migration->up();
-
-            //var_dump( $migration->wasUpped() );
             if( !$migration->goUp() ){
                 echo 'ERRO! Migration '.$name.' com erro!';
                 return false;
@@ -264,7 +261,8 @@ class MigrationsMods
                 WHERE module_name="'.$name.'"
                 ORDER BY version DESC
                 LIMIT 1';
-        $result = reset( $this->conexao->query($sql) );
+		$sqlReturn = $this->conexao->query($sql);
+        $result = reset( $sqlReturn );
 
         if( $result['version'] > 0 )
             return $result['version'];

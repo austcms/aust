@@ -14,7 +14,6 @@ if(count($query) == 0){
 	$thumbsH = 100;
 	$perLine = 5;
 	$i = 0;
-//	pr($query);
 
 	foreach( $query as $key=>$value){
 		

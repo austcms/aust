@@ -28,7 +28,7 @@ class Image extends File
 	     *
 	     * @var string
 	     */
-	    public $max_filesize = "100000000"; // in bytes
+	    public $max_filesize = "10000000"; // in bytes
 
 	    /**
 	     * Largura máxima permitida caso o arquivo seja imagem.
@@ -165,6 +165,7 @@ class Image extends File
             $this->lastWebPath = $webFilePath;
             return array(
 				'new_filename' => $fileName,
+				'extension' => $this->getExtension($file['name']),
 				'webPath' => $webFilePath,
 				'systemPath' => $systemFilePath,
 			);
@@ -202,7 +203,17 @@ class Image extends File
         /*
          * Cria a imagem e toma suas proporções
          */
-        $im = imagecreatefromstring($arquivo); //criar uma amostra da imagem original
+		if( $files['type'] == 'image/png' )
+	        $im = imagecreatefrompng($frmarquivo); //criar uma amostra da imagem original
+		else if( $files['type'] == 'image/gif' ){
+			// PHP as of 5.3 doesn't support GIF animations
+			return $files;
+ 	        $im = imagecreatefromgif($frmarquivo); //criar uma amostra da imagem original
+			
+		} else
+	        $im = imagecreatefromjpeg($frmarquivo); //criar uma amostra da imagem original
+
+
         $largurao = imagesx($im);// pegar a largura da amostra
         $alturao = imagesy($im);// pegar a altura da amostra
 
@@ -216,11 +227,28 @@ class Image extends File
 
         $alturad = ($alturao*$largurad)/$largurao; // calcula a largura da imagem a partir da altura da miniatura
         $nova = imagecreatetruecolor($largurad,$alturad); // criar uma imagem em branco
-        //imagecopyresized($nova,$im,0,0,0,0,$largurad,$alturad,$largurao,$alturao);
+
+		// PNG ou GIF, ajusta transparência
+		if( in_array($files['type'], array('image/png', 'image/gif') ) ){
+			imagealphablending($nova, false);
+			imagesavealpha($nova,true);
+			$transparent = imagecolorallocatealpha($nova, 255, 255, 255, 127);
+			imagefilledrectangle($nova, 0, 0, $largurad, $alturad, $transparent);
+		}
+		
         imagecopyresampled($nova,$im,0,0,0,0,$largurad,$alturad,$largurao,$alturao);
 
+
+//		exit();
         ob_start();
-        imagejpeg($nova, null, 100);
+
+		if( $files['type'] == 'image/png' )
+        	imagepng($nova);
+		else if( $files['type'] == 'image/gif' )
+    		imagegif($nova);
+		else
+        	imagejpeg($nova, null, 100);
+
         $mynewimage = ob_get_contents();
         ob_end_clean();
 
@@ -236,7 +264,7 @@ class Image extends File
         $result["size"] = strlen($mynewimage);
         $result["tmp_name"] = $files['tmp_name'];
         $result["name"] = $files['name'];
-        $result["type"] = 'image/jpeg';
+        $result["type"] = $files['type'];
         $result["error"] = '0';
 
         return $result;

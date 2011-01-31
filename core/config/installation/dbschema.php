@@ -41,6 +41,24 @@ $dbSchema['admins'] = array(
     )
 );
 
+	$dbSchema['admins_photos'] = array(
+	    'id' => 'int auto_increment',
+	    'admin_id' => 'int',
+		'image_type' => 'varchar(30)',
+	    'title' => 'text',
+	    'systempath' => 'text',
+	    'path' => 'text',
+	    'file_name' => 'text',
+	    'file_type' => 'varchar(20)',
+	    'file_size' => 'varchar(20)',
+	    'created_on' => 'datetime',
+	    'updated_on' => 'datetime',
+	    'dbSchemaTableProperties' => array(
+	        'PRIMARY KEY' => '(id)',
+	        'INDEX' => '(admin_id)',
+	    )
+	);
+
 $dbSchema['admins_permissions'] = array(
     'id' => 'int auto_increment',
     'admins_id' => 'int',
@@ -93,16 +111,62 @@ $dbSchema['categorias'] = array(
     'classe' => 'varchar(200)',
     'tipo' => 'varchar(200)',
     'tipo_legivel' => 'varchar(200)',
-    'permissao' => 'varchar(200)',
+    'editable' => 'varchar(200) default "0"',
+    'visible' => 'int default "1"',
+    'related_to' => 'int COMMENT "Galleries related to News, for example, have News\' id on this field"',
     'publico' => 'bool',
     'autor' => 'varchar(120)',
+    'order_nr' => 'int',
     'dbSchemaTableProperties' => array(
         'PRIMARY KEY' => '(id)',
         'UNIQUE' => 'id (id)',
+        'INDEX' => '(nome_encoded)',
+        'INDEX' => '(patriarca_encoded)',
+        'INDEX' => '(related_to)',
     )
 );
 
+$dbSchema['austnode_images'] = array(
+    'id' => 'int NOT NULL auto_increment',
+    'node_id' => 'varchar(240)',
+    'subordinadoid' => 'int',
+    'subordinado_nome_encoded' => 'varchar(240)',
+    'description' => 'text',
+    'class' => 'varchar(200)',
+    'type' => 'varchar(200)',
+	'systempath' => 'text',
+	'file_name' => 'varchar(200)',
+	'original_file_name' => 'varchar(200)',
+	'file_type' => 'varchar(25)',
+	'file_size' => 'varchar(200)',
+	'file_ext' => 'varchar(20)',
+	'created_on' => 'datetime',
+	'updated_on' => 'datetime',
+	
+    'editable' => 'bool default "0"',
+    'public' => 'bool default "1"',
+    'admin_id' => 'int',
+    'dbSchemaTableProperties' => array(
+        'PRIMARY KEY' => '(id)',
+        'UNIQUE' => 'id (id)',
+		'INDEX' => '(node_id)'
+    )
+);
 
+$dbSchema['aust_relations'] = array(
+    'slave_id' 					=> 'int',
+    'slave_name' 				=> 'varchar(240)',
+    'slave_name_encoded'	 	=> 'varchar(240)',
+    'master_id' 				=> 'int',
+    'master_name' 				=> 'varchar(240)',
+    'master_name_encoded' 		=> 'varchar(240)',
+	'created_on' 				=> 'datetime',
+	'updated_on' 				=> 'datetime',
+    'dbSchemaTableProperties' 	=> array(
+        'INDEX' 	=> '(slave_id)',
+        'INDEX' 	=> '(master_id)',
+    )
+);
 
 
 $dbSchema['config'] = array(

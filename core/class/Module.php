@@ -184,6 +184,10 @@ class Module
 
 		$this->limit = $this->defaultLimit;
     }
+	
+	function setAustNode($id){
+		$this->austNode = $id;
+	}
 
     /*
      *
@@ -254,7 +258,6 @@ class Module
      */
     public function load($param = ''){
         $this->loadedIds = array();
-        
         $paramForLoadSql = $param;
 
         /*
@@ -282,8 +285,8 @@ class Module
 		// counts rows
 		$this->totalRows = $this->_getTotalRows($paramForLoadSql);
 		
+
 		$sql = $this->loadSql($paramForLoadSql);
-		
         $qry = $this->connection->query($sql);
         if( empty($qry) )
             return array();
@@ -342,7 +345,7 @@ class Module
 		
 		if( is_string($param) ){
 			$result = reset( $this->connection->query($param) );
-			$total = ( is_numeric($result['rows']) ) ? $result['rows'] : 0;
+			$total = ( !empty($result['rows']) && is_numeric($result['rows']) ) ? $result['rows'] : 0;
 		} else {
 			return 0;
 		}
@@ -993,6 +996,7 @@ class Module
             return $this->config;
 
         $modDir = $this->getIncludeFolder().'/';
+
         include $modDir.MOD_CONFIG;
 
         if( empty($modInfo) )
@@ -1010,7 +1014,13 @@ class Module
      * @return <string>
      */
     public function getIncludeFolder(){
-        return THIS_TO_BASEURL.MODULOS_DIR.strtolower( get_class($this) );
+
+		$str = get_class($this);
+
+		preg_match_all('/[A-Z][^A-Z]*/', $str, $results);
+		$str = implode('_', $results[0]);
+
+        return THIS_TO_BASEURL.MODULOS_DIR.strtolower( $str );
     }
 
 	/**
@@ -1224,6 +1234,20 @@ class Module
 			if( !empty($params['author']) AND is_numeric($params['author']) )
 				$whereAuthor = "AND autor='".$params['author']."'";
 
+			/*
+			 * Algumas configurações são especiais, como é o caso de estruturas
+			 * relacionadas.
+			 */
+			$moduleConfig = $this->loadConfig();
+			$todayDateTime = date('Y-m-d H:i:s');
+			
+			$sql = "DELETE FROM aust_relations WHERE slave_id='".$params["aust_node"]."'";
+			$this->connection->exec($sql);
+
+			$relationalName = $moduleConfig['nome'];
+			if( !empty($moduleConfig['relationalName']) )
+				$relationalName = $moduleConfig['relationalName'];
+
             foreach( $data as $propriedade=>$valor ) {
 	
 				/*
@@ -1272,6 +1296,23 @@ class Module
 	                    )
 	                );
 	                $this->connection->exec($this->connection->saveSql($paramsToSave));
+	
+					/*
+					 * No caso de relações entre estruturas, salva na devida tabela os dados
+					 * deste relacionamento.
+					 */
+					if( $moduleConfig['configurations'][$propriedade]['inputType'] == 'aust_selection' ){
+						
+						if( !empty($valor) ){
+							$sql = "INSERT INTO
+							 			aust_relations
+							 		(slave_id, slave_name, master_id, created_on, updated_on)
+									VALUES
+									('".$params["aust_node"]."', '".$relationalName."', '".$valor."', '".$todayDateTime."', '".$todayDateTime."')";
+							$this->connection->exec($sql);
+						}
+					}
+	
 				}
             }
 	        return true;
@@ -1355,7 +1396,7 @@ class Module
 			 * menos itens que as definidas estaticamente.
 			 */
             $sql = "SELECT * FROM config WHERE tipo='mod_conf' AND $classSearchStatement AND local='".$params."' $whereAuthor LIMIT 300";
-            $queryTmp = $this->connection->query($sql, "ASSOC");
+			$queryTmp = $this->connection->query($sql, "ASSOC");
 			
             $query = array();
 			/*
@@ -1477,7 +1518,12 @@ class Module
 			if( !empty($author) ){
 	            $sql = "SELECT * FROM config WHERE tipo='mod_conf' AND local='".$this->austNode."' AND autor='$author' AND propriedade='$params' LIMIT 1";
 	            $queryTmp = $this->connection->query($sql, "ASSOC");
-				return $queryTmp[0]['valor'];
+
+				if( !empty($queryTmp) )
+					return $queryTmp[0]['valor'];
+				else
+					return array();
+					
 			} else if( empty($this->structureConfig) ){
                 $result = $this->loadModConf($this->austNode, $confClass, $author);
                 return $result[$params];
@@ -2070,6 +2116,14 @@ class Module
         }
         return true;
     }
+
+	
+	/*
+	 * EXPORT
+	 */
+	function export($params = ''){
+		return false;
+	}
 
 
 }

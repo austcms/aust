@@ -3,6 +3,9 @@
  * CONFIGURAÇÕES INTERNAS
  */
 
+// PHP 5.3 needs this
+date_default_timezone_set('America/Sao_Paulo');
+
 /*
  * Diretórios com Permissão de Acesso Necessária
  */
@@ -12,6 +15,7 @@
                 CACHE_PUBLIC_DIR,
                 CACHE_CSS_CONTENT,
                 CACHE_JS_CONTENT,
+                UPLOADS_DIR,
             ));
 
 /*
@@ -28,5 +32,7 @@
  * Tema padrão (quando nenhum outro está selecionado)
  */
     Registry::write('defaultTheme','classic_blue')
+
+
 
 ?>

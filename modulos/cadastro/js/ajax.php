@@ -130,6 +130,7 @@ elseif($_POST['action'] == 'search'){
         $searchField = $_POST["field"];
     }
 
+//	$_POST['query'] = str_replace(" ", "%", $_POST['query']);
     $param = array(
         'categorias' => $categorias,
         'metodo' => 'listing',
@@ -138,7 +139,7 @@ elseif($_POST['action'] == 'search'){
     );
 
     $sql = $modulo->loadSql($param);
-    //echo '<br><br>'.$sql .'<br>';
+//    echo '<br><br>'.$sql .'<br>';
 
     $resultado = $modulo->connection->query($sql, "ASSOC");
 
@@ -196,8 +197,7 @@ elseif($_POST['action'] == 'search1n'){
 					OR
 					t.".$childField." IS NULL
 				)
-				AND
-				r.id!='".$w."'
+				". /*AND r.id!='".$w."' */ "
 				$queryCheckedBoxes
 			GROUP BY
 				r.id
@@ -205,6 +205,7 @@ elseif($_POST['action'] == 'search1n'){
                 t.order_nr ASC, t.id ASC
 			LIMIT 10
             ";
+
 	$results = $modulo->connection->query($sql);
 	
 	foreach( $results as $result ){

@@ -15,7 +15,7 @@ class Registry {
      * @param string $varValor Valor a ser gravado na nova variável.
      * @return bool Se a variável foi gravada com sucesso.
      */
-    public function write($varName, $varValor){
+    static function write($varName, $varValor){
         return self::$config[$varName] = $varValor;
     }
 
@@ -26,7 +26,7 @@ class Registry {
      * @param string|array $varValor Valor a ser gravado na nova variável.
      * @return bool Se a variável foi gravada com sucesso.
      */
-    public function add($varName, $varValor){
+    static function add($varName, $varValor){
         if( empty(self::$config[$varName]) ){
             self::$config[$varName] = null;
         }
@@ -48,7 +48,7 @@ class Registry {
      * @param string $default Valor retornado caso a configuração não exista.
      * @return string
      */
-    public function read($varName, $default = ''){
+    static function read($varName, $default = ''){
         if( !empty(self::$config[$varName]) ){
             return self::$config[$varName];
         } else {

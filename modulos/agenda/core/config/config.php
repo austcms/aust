@@ -90,6 +90,7 @@ $modInfo = array(
 	        "label" => "Ordenado",
 	        "inputType" => "checkbox",
 	    ),
+
 	    /*
 	     * Resumo
 	     */
@@ -98,6 +99,36 @@ $modInfo = array(
 	        "label" => "Tem resumo?",
 	        "inputType" => "checkbox",
 	    ),
+
+	    /*
+	     * Place
+	     */
+	    'has_place' => array(
+	        "value" => "0",
+	        "label" => "Tem lugar?",
+	        "inputType" => "checkbox",
+			"help" => "Caso seja necessário, pode ser necessário especificar
+						um campo com 'lugar' do evento."
+	    ),
+
+	    /*
+	     * Pessoa responsável
+	     */
+	    'has_responsible_person' => array(
+	        "value" => "0",
+	        "label" => "Tem uma pessoa responsável?",
+	        "inputType" => "checkbox",
+	    ),
+
+	    /*
+	     * One day only
+	     */
+	    'one_day_only' => array(
+	        "value" => "1",
+	        "label" => "É um dia apenas?",
+	        "inputType" => "checkbox",
+	    ),
+
 	    /*
 	     * Resumo
 	     */

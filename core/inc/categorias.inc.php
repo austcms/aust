@@ -47,8 +47,8 @@ switch($_GET['action']){
 							}
 						}
 
-						$sql = "INSERT INTO ".$_GET['section']." (nome,patriarca,subordinadoid,descricao,classe,tipo,tipo_legivel,autor)
-                                VALUES('{$_POST['frmnome']}','$patriarca','{$_POST['frmsubordinadoid']}','$texto','{$_POST['frmclasse']}','{$tipo}','{$tipo_legivel}','".$administrador->LeRegistro('id')."')";
+						$sql = "INSERT INTO ".$_GET['section']." (nome,patriarca,patriarca_encoded, subordinadoid,descricao,classe,tipo,tipo_legivel,autor)
+                                VALUES('{$_POST['frmnome']}','$patriarca','".encodeText( $patriarca )."','{$_POST['frmsubordinadoid']}','$texto','{$_POST['frmclasse']}','{$tipo}','{$tipo_legivel}','".$administrador->LeRegistro('id')."')";
 
                         /**
                          * Se insere com sucesso
@@ -58,6 +58,52 @@ switch($_GET['action']){
                         } else {
                             $resultado = FALSE;
                         }
+						
+						$lastInsertId = $conexao->lastInsertId();
+						/**
+						 * Se uma imagem foi enviada, faz todo o processamento
+						 */
+						if( !empty($_FILES['arquivo']) &&
+						 	!empty($_FILES['arquivo']['name']) )
+						{
+
+							$file = $_FILES['arquivo'];
+
+							$imageHandler = Image::getInstance();
+							$aust = Aust::getInstance();
+							$user = User::getInstance();
+
+							if( !empty($lastInsertId) )
+								$aust->deleteNodeImages( $lastInsertId );
+
+							$newFile = $imageHandler->resample($file);
+							$finalName = $imageHandler->upload($newFile);
+
+							$finalName['systemPath'] = addslashes($finalName['systemPath']);
+
+							$sql = "INSERT INTO 
+									austnode_images
+									(
+									node_id, 
+									file_size, systempath, file_name, original_file_name,
+									file_type, file_ext, 
+									created_on, updated_on, admin_id
+									)
+									VALUES
+									('".$lastInsertId."',
+									'".$newFile['size']."', '".$finalName['systemPath']."', '".$finalName['new_filename']."', '".$newFile['name']."',
+									'".$newFile['type']."','".$finalName['extension']."',
+									'".date("Y-m-d H:i:s")."', '".date("Y-m-d H:i:s")."', ".$user->getId().")";
+
+							// insere no DB
+							if ($conexao->exec($sql)){
+							    $status_imagem = true;
+							} else {
+							    $status_imagem = false;
+							}
+
+						}
+
 
                         if($resultado){
                             $status['classe'] = 'sucesso';
@@ -69,7 +115,7 @@ switch($_GET['action']){
                         EscreveBoxMensagem($status);
                         ?>
 						<p style="margin-top: 15px;">
-							<a href="adm_main.php?section=<?php echo $_GET['section'];?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+							<a href="adm_main.php?section=<?php echo $_GET['section'];?>"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
 						</p>
                         <?php
 						break;

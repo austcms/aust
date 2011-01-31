@@ -38,32 +38,29 @@ if($_GET['action'] == 'edit'){
 /*
  * Tamanho máximo do Upload.
  */
-$maxSize = (int) str_replace('M','', ini_get(upload_max_filesize) );
+$maxSize = (int) str_replace('M','', ini_get('upload_max_filesize') );
 if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
     $maxSize = (int) str_replace('M','', ini_get('post_max_size') );
 
 ?>
 
 <h2><?php echo $h1?></h2>
-<p>
-    <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
-</p>
 
 <p>Envie um arquivo para o site.</p>
 
-<form method="post" action="adm_main.php?section=<?php echo $_GET['section'];?>&action=save&aust_node=<?php echo $_GET['aust_node']?>" enctype="multipart/form-data">
+<form method="POST" action="adm_main.php?section=<?php echo $_GET['section'];?>&action=save&aust_node=<?php echo $_GET['aust_node']?>" enctype="multipart/form-data">
     <input type="hidden" name="method" value="<?php echo $_GET['action'];?>">
 
-    <input type="hidden" name="w" value="<?php ifisset($_GET['w']);?>">
+    <input type="hidden" name="w" value="<?php if( !empty($_GET['w']) ) echo $_GET['w']; ?>">
     <input type="hidden" name="aust_node" value="<?php echo $austNode;?>">
     <input type="hidden" name="frmcategoria_id" value="<?php echo $austNode;?>">
     <input type="hidden" name="frmcreated_on" value="<?php echo date("Y-m-d H:i:s"); ?>">
 
-    <input type="hidden" name="frmurl" value="<?php ifisset($dados['url']); ?>">
-    <input type="hidden" name="frmarquivo_nome" value="<?php ifisset($dados['arquivo_nome']);?>">
-    <input type="hidden" name="frmarquivo_tipo" value="<?php ifisset($dados['arquivo_tipo']);?>">
-    <input type="hidden" name="frmarquivo_tamanho" value="<?php ifisset($dados['arquivo_tamanho']);?>">
-    <input type="hidden" name="frmadmin_id" value="<?php ifisset($dados['autor'], $administrador->LeRegistro('id'));?>">
+    <input type="hidden" name="frmurl" value="<?php if( !empty($dados['url']) ) echo $dados['url']; ?>">
+    <input type="hidden" name="frmarquivo_nome" value="<?php if( !empty($dados['arquivo_nome']) ) echo $dados['arquivo_nome'];?>">
+    <input type="hidden" name="frmarquivo_tipo" value="<?php if( !empty($dados['arquivo_tipo']) ) echo $dados['arquivo_tipo'];?>">
+    <input type="hidden" name="frmarquivo_tamanho" value="<?php if( !empty($dados['arquivo_tamanho']) ) echo $dados['arquivo_tamanho']; ?>">
+    <input type="hidden" name="frmadmin_id" value="<?php if( !empty($dados['autor']) ) echo $dados['autor']; else echo $administrador->LeRegistro('id');?>">
     
     <table border=0 cellpadding=0 cellspacing=0 class="form">
     <?php
@@ -78,10 +75,11 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
             <td>
                 <div id="categoriacontainer">
                 <?php
+            	$current_node = $austNode;
                 if($fm == "edit"){
                     $current_node = $dados['categoria_id'];
                 }
-                echo BuildDDList( Registry::read('austTable'), 'frmcategoria_id', $escala, $austNode, $current_node );
+                echo BuildDDList( Registry::read('austTable'), 'frmcategoria_id', 0, $austNode, $current_node );
                 ?>
                 </div>
                 <?php
@@ -121,11 +119,31 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
             <?php } ?>
         </td>
         <td class="second">
-            <?php if($fm == "edit"){ ?>
-                <span style="font-weight: bold;">
-                    <?php echo $dados['arquivo_nome'] ?>
+            <?php
+			/*
+			 * EDIT: filename
+			 */
+			if( $fm == "edit"){
+				?>
+				<img src="<?php echo getFileIcon($dados['arquivo_nome']);?>" align="left" />
+                <span style="position: relative; left: 7px; top: 4px; display: block">
+                    <strong>
+					<?php
+					if( empty($dados['original_filename']) )
+						echo lineWrap($dados['arquivo_nome'], 64);
+					else
+						echo lineWrap($dados['original_filename'], 64);
+					?>
+					</strong>
+					<br />
+					<span class="filesize">
+						<?php echo convertFilesize( $dados['arquivo_tamanho'] ); ?>Mb
+					</span>
                 </span>
-            <?php }else{ ?>
+				<br />
+            	<?php
+			} else {
+				?>
                 <INPUT TYPE="file" NAME="arquivo" class="text">
                 <p class="explanation">
                     Localize o arquivo que você deseja realizar upload.
@@ -173,7 +191,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
     <tr>
         <td valign="top" class="first">Título: </td>
         <td class="second">
-            <input type="text" name="frmtitulo" value="<?php ifisset($dados['titulo']);?>" class="text" />
+            <input type="text" name="frmtitulo" value="<?php if( !empty($dados['titulo']) ) echo $dados['titulo'];?>" class="text" />
             <?php tt('Digite um título. Lembre-se, títulos começam com letra maiúscula e não leva
                 ponto final.'); ?>
             <p class="explanation_example">
@@ -238,6 +256,6 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
 
 
 <p>
-    <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+    <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
 </p>
 

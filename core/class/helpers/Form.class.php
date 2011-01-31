@@ -85,13 +85,12 @@ class FormHelper
 
         $conteudo.= '<div class="input">';
 
-
         /**
          * VALUE
          *
          * Se value não foi especificado
          */
-        if( !empty($options["value"]) ){
+        if( $options["value"] != '' ){
             $inputValue = $options["value"];
         } else {
             $inputValue = "";

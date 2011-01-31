@@ -304,6 +304,7 @@ class Connection extends SQLObject {
          * Timer init
          */
         $sT = microtime(true);
+		$debugResult = false;
         
         /**
          * Se a extensão PDO está ativada
@@ -312,8 +313,8 @@ class Connection extends SQLObject {
             /**
              * Executa e retorna resultado
              */
-			
             $result = $this->conn->exec($sql);
+
             if( $result === false){
                 $debugResult = end( $this->conn->errorInfo() );
             }
@@ -365,6 +366,7 @@ class Connection extends SQLObject {
                 Registry::add('debug',$debugVars);
             }
         }
+		$this->debug = $debugResult;
 
         return $result;
 
@@ -442,6 +444,21 @@ class Connection extends SQLObject {
 		
 	}
 
+	function describeTable($table, $fieldAsKey = false){
+		$fields = $this->query('DESCRIBE '.$table);
+		
+		if( $fieldAsKey ){
+			$result = array();
+			foreach( $fields as $key=>$value ){
+				$result[$value['Field']] = $value;
+			}
+		} else {
+			$result = $fields;
+		}
+		
+		return $result;
+	}
+	
     public function VerificaAdmin(){
             $sql = "SELECT admins.id
                             FROM

@@ -56,7 +56,7 @@
         form div.input_painel div.containner div.options { display: table; }
 
 /* Lightbox */
-    .window .lb_content table.form td label { line-height: 24px; margin: 0 5px 0 0; }
+    .window .lb_content table.form td label { line-height: 24px; width: 80px; display: inline-block; margin: 0 5px 0 0; }
     .window .lb_content table.form td input.text { font-size: 1.3em; font-weight: bold; width: 240px; }
 
 /* MÓDULOS */
@@ -155,47 +155,31 @@ div.mais_opcoes {
         margin: 10px 0 15px 0;
     }
 
+    /* BOTÕES */
     .botao { margin: 13px 0 13px 0; }
+    div.mais_opcoes .botao a {
+        width: 120px;
+        height: 26px;
+        display: block;
+        padding: 0;
+        margin: 0;
+	}
+	    div.mais_opcoes .botao a:hover {
+	        background-position: 0px -26px !important;
+	    }
 
-    /* Botão Nova pessoa*/
         div.mais_opcoes .botao .bt_novapessoa a {
-            width: 120px;
-            height: 26px;
             background: url(../img/bt_novapessoa.png) no-repeat;
-            display: block;
-            padding: 0;
-            margin: 0;
         }
-            div.mais_opcoes .botao .bt_novapessoa a:hover {
-                background-position: 0px -26px;
-                display: block;
-            }
 
-    /* Botão Permissões*/
-            div.mais_opcoes .botao .bt_permissoes a {
-                width: 120px;
-                height: 26px;
-                background: url(../img/bt_permissoes.png) no-repeat;
-                display: block;
-                padding: 0;
-                margin: 0;
-            }
-                div.mais_opcoes .botao .bt_permissoes a:hover {
-                    background-position: 0px -26px;
-                    display: block;
-                }
+		div.mais_opcoes .botao .bt_permissoes a {
+		    background: url(../img/bt_permissoes.png) no-repeat;
+		}
 
-    /* Botão Meus Dados*/
-            div.mais_opcoes .botao .bt_dados a {
-                width: 120px;
-                height: 26px;
-                background: url(../img/bt_dados.png) no-repeat;
-                display: block;
-                padding: 0;
-                margin: 0;
-            }
-                div.mais_opcoes .botao .bt_dados a:hover {
-                    background-position: 0px -26px;
-                    display: block;
-                }
+		div.mais_opcoes .botao .bt_dados a {
+		    background: url(../img/bt_dados.png) no-repeat;
+		}
+		div.mais_opcoes .botao .bt_grupos a {
+		    background: url(../img/bt_grupos.png) no-repeat;
+		}
 

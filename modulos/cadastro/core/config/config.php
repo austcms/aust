@@ -125,6 +125,20 @@ $modInfo = array(
             "label" => "Tem versão de impressão?",
             "inputType" => "checkbox",
         ),
+
+        /*
+         * Categoria selecionável?
+         */
+        'category_selectable' => array(
+            "value" => "",
+            "label" => "Categoria selecionável?",
+            "inputType" => "checkbox",
+        ),
+	    'category_creatable' => array(
+	        "value" => "",
+	        "label" => "Categoria criável?",
+	        "inputType" => "checkbox",
+	    ),
     ),
 
     /*
@@ -222,6 +236,16 @@ $modInfo = array(
 				"label" => "Ativar editor de texto rico",
 				"inputType" => "checkbox",
 				'help' => 'Inserir um editor de texto (negrito/itálico/etc) neste campo. ',
+		    ),
+		    /*
+		     * Pode inserir imagens via editor rico?
+		     */
+			'text_has_images' => array(
+				'field_type' => 'text',
+				"value" => "",
+				"label" => "Ativar imagens em editor rico",
+				"inputType" => "checkbox",
+				'help' => 'Selecionar este item permitirá inserir imagens entre o texto.',
 		    ),
 
     ),

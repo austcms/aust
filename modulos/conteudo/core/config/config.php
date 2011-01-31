@@ -135,6 +135,13 @@ $modInfo = array(
             "label" => "Permitir upload de imagens no TinyMCE?",
             "inputType" => "checkbox",
         ),
+
+	    'manual_date' => array(
+	        "value" => "",
+	        "label" => "Ajustar data manualmente?",
+	        "inputType" => "checkbox",
+	    ),
+
     ),
     
     /*

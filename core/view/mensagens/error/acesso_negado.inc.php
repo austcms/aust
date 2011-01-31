@@ -8,6 +8,6 @@
 <p>Sinto muito, mas se você está vendo esta tela é porque você não tem permissão para ver este conteúdo. Se for o caso, converse
 com seu administrador sobre isto.</p>
 <p>
-    <a href="javascript: history.back();"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+    <a href="javascript: history.back();"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
 </p>
 

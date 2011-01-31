@@ -58,11 +58,16 @@ if( !empty($_GET['block'])
 	EscreveBoxMensagem($status);
 }
 
-if(!empty($_GET['action'])){
+if(	!empty($_GET['action']) ){
     if( $_GET['action'] == 'edit' ){
         $_GET['action'] = 'form';
     }
-    include('admins.inc/'.$_GET['action'].'.inc.php');
+}
+
+if(	!empty($_GET['action']) &&
+ 	file_exists(INC_DIR.'admins.inc/'.$_GET['action'].'.inc.php') )
+{
+    include(INC_DIR.'admins.inc/'.$_GET['action'].'.inc.php');
 } else {
 
     ?>
@@ -141,12 +146,12 @@ if(!empty($_GET['action'])){
                 <?php
                 if($dados["login"] <> "kurko"){
                     ?>
-                    <a href="adm_main.php?section=admins&action=edit&fm=editar&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;" title="Editar"><img src="core/user_interface/img/edit.png" alt="Editar" border="0" /></a>
+                    <a href="adm_main.php?section=admins&action=edit&fm=editar&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;" title="Editar"><img src="<?php echo IMG_DIR?>edit.png" alt="Editar" border="0" /></a>
 
                 <?php
                 }
                 ?>
-                <a href="adm_main.php?section=admins&action=ver_info&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;" title="Ver Informações"><img src="core/user_interface/img/lupa.png" alt="Ver Informações" border="0" /></a>
+                <a href="adm_main.php?section=admins&action=ver_info&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;" title="Ver Informações"><img src="<?php echo IMG_DIR?>lupa.png" alt="Ver Informações" border="0" /></a>
                 <?php
                 if( $dados["login"] <> "kurko"
                     AND strtolower($dados["tipo"]) <> "webmaster"
@@ -157,11 +162,11 @@ if(!empty($_GET['action'])){
                 ){
                     if($dados["is_blocked"] == "1"){
                         ?>
-                        <a href="adm_main.php?section=admins&block=unblock&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;" title="Desbloquear usuário"><img src="img/layoutv1/unblock.jpg" alt="Desbloquear usuário" border="0" /></a>
+                        <a href="adm_main.php?section=admins&block=unblock&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;" title="Desbloquear usuário"><img src="<?php echo IMG_DIR?>layoutv1/unblock.jpg" alt="Desbloquear usuário" border="0" /></a>
                         <?php
                     } else {
                         ?>
-                        <a href="adm_main.php?section=admins&block=block&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;" title="Bloquear usuário"><img src="core/user_interface/img/block.png" alt="Bloquear usuário" border="0" /></a>
+                        <a href="adm_main.php?section=admins&block=block&w=<?php echo $dados["id"]; ?>" style="text-decoration: none;" title="Bloquear usuário"><img src="<?php echo IMG_DIR?>layoutv1/block.png" alt="Bloquear usuário" border="0" /></a>
                         <?php
                     }
                     ?>
@@ -176,7 +181,7 @@ if(!empty($_GET['action'])){
     </table>
 
     <p style="margin-top: 15px;">
-        <a href="adm_main.php?section=admins"><img src="img/layoutv1/voltar.gif" border="0" /></a>
+        <a href="adm_main.php?section=admins"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
     </p>
 
     </div>
@@ -201,7 +206,16 @@ if(!empty($_GET['action'])){
             </div>
             <?php
         }
-        ?>
+        if( in_array( $administrador->LeRegistro("tipo"), array("Webmaster", "Root", "Administrador") ) ){
+	        ?>
+	        <div class="botao">
+	            <div class="bt_grupos">
+	                <a href="adm_main.php?section=admins&action=groups"></a>
+	            </div>
+	        </div>
+			<?php
+		}
+		?>
         <div class="botao">
             <div class="bt_permissoes">
                 <a href="adm_main.php?section=permissoes"></a>
