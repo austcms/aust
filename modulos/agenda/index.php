@@ -38,7 +38,6 @@ include($moduloNome.'.php');
 $param = array(
     'conexao' => $conexao,
     'config' => $modInfo,
-    'modDbSchema' => $modDbSchema,
 );
 
 $modulo = new $moduloNome($param);

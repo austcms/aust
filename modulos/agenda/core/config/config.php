@@ -112,6 +112,24 @@ $modInfo = array(
 	    ),
 
 	    /*
+	     * editor rich edit
+	     */
+	    'description_has_rich_editor' => array(
+	        "value" => "0",
+	        "label" => "Editor rico na descrição",
+	        "inputType" => "checkbox",
+	    ),
+
+        /*
+         * Há opção para selecionar o modo de visualização?
+         */
+        'description_upload_inline_images' => array(
+            "value" => "0",
+            "label" => "Permitir upload de imagens no campo descrição via TinyMCE",
+            "inputType" => "checkbox",
+        ),
+
+	    /*
 	     * Pessoa responsável
 	     */
 	    'has_responsible_person' => array(
