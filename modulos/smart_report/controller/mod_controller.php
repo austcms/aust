@@ -59,6 +59,10 @@ class ModController extends ModsController
 
         $this->set('tagh2', $this->aust->leNomeDaEstrutura($_GET['aust_node']) );
 
+		$this->showControls = false;
+		if( $this->modulo->getStructureConfig('activate_actions') == '1' )
+			$this->showControls = true;
+
         $w = (!empty($_POST['w'])) ? $_POST['w'] : '';
         $w = (empty($w) && !empty($_GET['w'])) ? $_GET['w'] : $w;
         $this->set('w', $w);

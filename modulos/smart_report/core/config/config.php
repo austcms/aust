@@ -37,7 +37,7 @@ $modInfo = array(
     /**
      * 'descricao': Descrição que facilita compreender a função do módulo
      */
-    'descricao' => 'Crie relatórios criando filtros individuais',
+    'descricao' => 'Crie relatórios com filtros individuais',
     /**
      * 'estrutura': Se pode ser instalada como estrutura (Textos podem)
      */
@@ -85,26 +85,27 @@ $modInfo = array(
      * CONFIGURAÇÕES
      */
     'configurations' => array(
+
         /*
-         * Ordenate
+         * activate_actions
          */
-        'ordenate' => array(
+        'activate_actions' => array(
             "value" => "",
-            "label" => "Ordenado",
+            "label" => "Ativar ações",
             "inputType" => "checkbox",
+			"help" => "Este checkbox precisa estar ativado para alguma <em>action</em> funcionar."
         ),
 
-        'generate_preview_url' => array(
+        /*
+         * id_field
+         */
+        'default_id_field' => array(
             "value" => "",
-            "label" => "Mostrar Url do conteúdo?",
+            "label" => "Campo id padrão",
             "inputType" => "text",
-            'help' => 'A seguir, os códigos especiais: <ul>'.
-                      '<li>%id = id do conteúdo</li>'.
-                      '<li>%title_encoded = título encoded</li>'.
-                      '<li>%category = categoria</li>'.
-                      '</ul>'.
-                      'Exemplo: http://meusite.com.br/noticias/%id.'
+			"help" => "Se a tabela principal é <em>textos</em>, escreva </em>textos.id</em>. Isto serve para uso de actions."
         ),
+
 
     ),
     

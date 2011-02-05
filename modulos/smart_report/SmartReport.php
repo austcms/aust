@@ -63,8 +63,14 @@ class SmartReport extends Module
 		
 		if( !empty( $query['filter']['sql_filter'] ) ){
 			$sqlFilter = $query['filter']['sql_filter'];
+			
+			$defaultIdField = "id";
+			$possibleDefaultIdField = $this->getStructureConfig('default_id_field');
+			if( !empty( $possibleDefaultIdField ) )
+				$defaultIdField = $possibleDefaultIdField;
+			
 
-			$sqlFilter = preg_replace('/^select /i', "SELECT id as '_id', ", $sqlFilter);
+			$sqlFilter = preg_replace('/^select /i', "SELECT $defaultIdField as '_id', ", $sqlFilter);
 			$filter = $this->connection->query($sqlFilter);
 			$query['results'] = $filter;
 		}

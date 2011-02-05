@@ -8,9 +8,11 @@
 	</td>
 	<?php } ?>
 
+	<?php if( $this->showControls ){ ?>
 	<td width="25" align="center">
         <input type='checkbox' class="check_checkboxes" data-target="class" checked="false" value='<?php echo $item['_id'];?>'>
 	</td>
+	<?php } ?>
 	
 </tr>
 <?php foreach($query['results'] as $item){ ?>
@@ -23,6 +25,7 @@
 		</td>
 		<?php } ?>
 
+		<?php if( $this->showControls ){ ?>
         <td align="center">
             <?php
 //            if( $permissoes->canDelete($austNode) ){
@@ -38,6 +41,7 @@
 //            }
             ?>
         </td>
+		<?php } ?>
 		
     </tr>
 <?php } ?>
