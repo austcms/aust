@@ -60,7 +60,31 @@
 
 <table cellpadding=0 cellspacing=0 class="form">
 	
-<?php
+    <?php if( $modulo->isEdit() && $modulo->getStructureConfig("show_visits_counter") ){ ?>
+	<tr>
+	    <td><label>Estatísticas:</label></td>
+	    <td>
+			<?php
+			if( $dados['visitantes'] == 0 ){
+				?>
+				Nenhum visitante viu este conteúdo até agora.
+				<?php
+			} else if( $dados['visitantes'] == 1 ){
+				?>
+	         	Apenas <strong>um</strong> visitante viu este conteúdo.
+				<?php
+			} else if( $dados['visitantes'] > 1 ){
+				?>
+	         	Este conteúdo foi visto por <strong><?php echo $dados['visitantes']?></strong> 
+				visitantes.
+				<?php
+			}
+			?>
+	    </td>
+	</tr>
+	<?php } ?>
+
+	<?php
 	$slave = Aust::getInstance()->getRelatedSlaves($_GET['aust_node']);
 	if( !empty($slave) ){
 		?>	
@@ -113,15 +137,15 @@
             ?>
         </td>
     </tr>
-    <tr>
-        <td><label>Título:</label></td>
-        <td>
-            <INPUT TYPE='text' NAME='frmtitulo' class='text' value='<?php if( !empty($dados['titulo']) ) echo $dados['titulo'];?>' />
-            <p class="explanation">
+	<tr>
+	    <td><label>Título:</label></td>
+	    <td>
+	        <INPUT TYPE='text' NAME='frmtitulo' class='text' value='<?php if( !empty($dados['titulo']) ) echo $dados['titulo'];?>' />
+	        <p class="explanation">
 
-            </p>
-        </td>
-    </tr>
+	        </p>
+	    </td>
+	</tr>
     <?php
     /*
      * PREVIEW URL
