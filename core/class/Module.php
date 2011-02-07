@@ -1020,7 +1020,7 @@ class Module
 		preg_match_all('/[A-Z][^A-Z]*/', $str, $results);
 		$tmpStr = implode('_', $results[0]);
 		
-		if( is_dir(THIS_TO_BASEURL.MODULOS_DIR.$tmpStr) )
+		if( is_dir(THIS_TO_BASEURL.MODULOS_DIR.strtolower( $tmpStr) ) )
        		return THIS_TO_BASEURL.MODULOS_DIR.strtolower( $tmpStr );
 		else
        		return THIS_TO_BASEURL.MODULOS_DIR.strtolower( $str );
