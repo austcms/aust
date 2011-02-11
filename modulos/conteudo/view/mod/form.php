@@ -48,10 +48,8 @@
 <input type="hidden" name="metodo" value="<?php echo $_GET['action'];?>">
 
 <?php if($_GET['action'] == 'create'){ ?>
-    <input type="hidden" name="frmadddate" value="<?php echo date("Y-m-d H:i:s"); ?>">
     <input type="hidden" name="frmautor" value="<?php echo $_SESSION['loginid'];?>">
 <?php } else { ?>
-    <input type="hidden" name="frmadddate" value="<?php ifisset( $dados['adddate'] );?>">
     <input type="hidden" name="frmautor" value="<?php ifisset( $dados['autor'] );?>">
 <?php }?>
 
