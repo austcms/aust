@@ -4,10 +4,10 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<?php
 	if( !empty($_GET['action']) OR $_GET['action'] != 'listing' ){
-		header("Cache-Control: no-cache");
-		header("Pragma: no-cache");
+//		header("Cache-Control: no-cache");
+//		header("Pragma: no-cache");
+//    	<meta http-equiv="expires" content="Mon, 19 Feb 2024 11:12:01 GMT" />
 		?>
-    	<meta http-equiv="expires" content="Mon, 19 Feb 2024 11:12:01 GMT" />
 		<?php
 	}
 	?>

@@ -218,7 +218,7 @@
     ?>
 
 	<?php
-    if( $modulo->getStructureConfig("manual_date") ){
+    if( 1 == 0 AND $modulo->getStructureConfig("manual_date") ){
     ?>
     <tr>
         <td valign="top"><label>Data manual:</label></td>

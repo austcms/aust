@@ -96,9 +96,7 @@ class ModController extends ModsController
     }
 
     public function save(){
-		if( $_POST['metodo'] == CREATE_ACTION &&
-		 	empty($_POST['frmadddate']) )
-		{
+		if( $_POST['metodo'] == CREATE_ACTION ){
 			$_POST['frmadddate'] = date("Y-m-d H:i:s");
 		}
 	
