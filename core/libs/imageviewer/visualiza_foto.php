@@ -61,6 +61,7 @@ $conexao = Connection::getInstance();
  *
  */
 $myid       = (empty($_GET['myid']))        ? ''        : $_GET['myid'];        // id da imagem a ser aberta
+$path       = (empty($_GET['path']))        ? ''        : $_GET['path'];        // id da imagem a ser aberta
 $table      = (empty($_GET['table']))       ? 'imagens' : $_GET['table'];       // tabela onde a imagem se encontra
 $thumbs     = (empty($_GET['thumbs']))      ? ''        : $_GET['thumbs'];      // yes|no: diz se deve ser tratada a imagem
 $fromfile   = (empty($_GET['fromfile']))    ? false     : $_GET['fromfile'];      // yes|no: diz se deve ser tratada a imagem
@@ -84,6 +85,10 @@ if (!empty($myid)){
         
     $sql = "SELECT * FROM $table WHERE $idfrom='$myid' $ordem";
         
+} elseif(!empty($path)) {
+	
+	/** @todo */
+	
 } else {
     $sql = "SELECT id FROM Imagens";
     $result = mysql_query($sql);
