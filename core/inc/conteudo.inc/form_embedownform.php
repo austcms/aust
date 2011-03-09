@@ -31,6 +31,9 @@
          */
         foreach($embed AS $chave=>$valor){
 
+			if( !is_file($valor['pasta'].'/embed/embed_info.php') )
+				continue;
+			
             include($valor['pasta'].'/embed/embed_info.php');
             $pastatmp = array_reverse( explode('/', $valor['pasta']));
             $pastatmp = $pastatmp[0];

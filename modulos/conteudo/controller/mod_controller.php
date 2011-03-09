@@ -99,8 +99,8 @@ class ModController extends ModsController
 		if( $_POST['metodo'] == CREATE_ACTION ){
 			$_POST['frmadddate'] = date("Y-m-d H:i:s");
 		}
-	
-        $this->set('resultado', $this->modulo->save($_POST));
+		
+        $this->set('resultado', $this->modulo->save($_POST, $_FILES));
     }
     
 }

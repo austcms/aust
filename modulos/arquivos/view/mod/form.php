@@ -67,7 +67,6 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
     /*
      * CATEGORIA
      */
-
     if( $modulo->getStructureConfig('select_category') == 1 ){
         ?>
         <tr>
@@ -144,7 +143,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
             	<?php
 			} else {
 				?>
-                <INPUT TYPE="file" NAME="arquivo" class="text">
+                <input type="file" name="arquivo">
                 <p class="explanation">
                     Localize o arquivo que você deseja realizar upload.
                     O tamanho máximo aceito neste servidor é <?php echo $maxSize; ?>Mb.

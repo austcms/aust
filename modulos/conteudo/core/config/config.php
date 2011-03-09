@@ -88,6 +88,14 @@ $modInfo = array(
      */
     'configurations' => array(
         /*
+         * Has file
+         */
+        'has_file' => array(
+            "value" => "",
+            "label" => "Tem arquivo?",
+            "inputType" => "checkbox",
+        ),
+        /*
          * Ordenate
          */
         'ordenate' => array(

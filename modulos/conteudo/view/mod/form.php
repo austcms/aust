@@ -38,6 +38,15 @@
     else if($_GET['action'] == 'edit'){
 
     }
+
+/*
+ * Tamanho máximo do Upload.
+ */
+$maxSize = (int) str_replace('M','', ini_get('upload_max_filesize') );
+if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
+    $maxSize = (int) str_replace('M','', ini_get('post_max_size') );
+
+
 ?>
 <h2><?php echo $tagh2;?></h2>
 <p><?php echo $tagp;?></p>
@@ -144,6 +153,56 @@
 	        </p>
 	    </td>
 	</tr>
+	
+    <?php
+    /*
+     * PREVIEW URL
+     */
+    if( $modulo->getStructureConfig("has_file") ){ ?>
+    <tr>
+        <td valign="top"><label>Arquivo:</label></td>
+        <td>
+			<?php
+			if( $_GET['action'] == "edit" && !empty($dados['file_systempath']) ){
+				?>
+				<img src="<?php echo getFileIcon($dados['file_name']);?>" align="left" />
+                <span style="position: relative; left: 7px; top: 12px; display: block">
+                    <strong>
+					<?php
+					if( empty($dados['original_file_name']) )
+						echo lineWrap($dados['file_name'], 64);
+					else
+						echo lineWrap($dados['original_file_name'], 64);
+					?>
+					</strong>
+					<br />
+					<span class="filesize">
+						<?php echo convertFilesize( $dados['file_size'] ); ?>Mb
+					</span>
+                </span>
+
+				<br clear="all"/>
+
+	            <input type="file" name="file" />
+                <p class="explanation">
+                    Selecione um arquivo para substituir o atual.
+					Tamanho máximo: <?php echo $maxSize; ?>Mb.
+                    
+                </p>
+            	<?php
+			} else {
+				?>
+                <input type="file" name="file" />
+                <p class="explanation">
+                    Localize um arquivo se você deseja realizar upload.
+                    Tamanho máximo: <?php echo $maxSize; ?>Mb.
+                </p>
+            <?php } ?>
+	
+        </td>
+    </tr>
+    <?php } ?>
+
     <?php
     /*
      * PREVIEW URL
