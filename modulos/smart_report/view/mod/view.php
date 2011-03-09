@@ -73,7 +73,7 @@
          */
 //        if( $permissoes->canDelete($austNode) ){
             ?>
-            <input type="submit" class="js_confirm" name="action[subtract][10]" value="Subtrair 10" />
+            <input type="submit" class="js_confirm" name="action[subtract][1]" value="Subtrair 1" />
             <input type="submit" name="action[see_data_separated_by_semicolon][email]" value="Ver emails" />
             <?php
 //        }
