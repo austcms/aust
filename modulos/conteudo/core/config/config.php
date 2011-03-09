@@ -142,6 +142,11 @@ $modInfo = array(
 	        "inputType" => "checkbox",
 	    ),
 
+	    'show_visits_counter' => array(
+	        "value" => "",
+	        "label" => "Mostrar contador de visitas",
+	        "inputType" => "checkbox",
+	    ),
     ),
     
     /*

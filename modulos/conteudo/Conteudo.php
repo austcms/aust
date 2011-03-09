@@ -79,7 +79,6 @@ class Conteudo extends Module
             return false;
         $post['frmtitulo_encoded'] = encodeText($post['frmtitulo']);
 
-
         return parent::save($post);
         
     }

@@ -13,6 +13,12 @@
     $moduloConfig = $modulo->loadModConf($params);
 
     //$modulo->loadHtmlEditor();
+	$editorPlugins = '';
+	if( $modulo->getStructureConfig('description_upload_inline_images') )
+		$editorPlugins = 'imagemanager';
+	
+	if( $modulo->getStructureConfig('description_has_rich_editor') )
+    	$modulo->loadHtmlEditor($editorPlugins);
 
 
 /*

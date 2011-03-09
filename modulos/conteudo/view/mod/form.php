@@ -48,10 +48,8 @@
 <input type="hidden" name="metodo" value="<?php echo $_GET['action'];?>">
 
 <?php if($_GET['action'] == 'create'){ ?>
-    <input type="hidden" name="frmadddate" value="<?php echo date("Y-m-d H:i:s"); ?>">
     <input type="hidden" name="frmautor" value="<?php echo $_SESSION['loginid'];?>">
 <?php } else { ?>
-    <input type="hidden" name="frmadddate" value="<?php ifisset( $dados['adddate'] );?>">
     <input type="hidden" name="frmautor" value="<?php ifisset( $dados['autor'] );?>">
 <?php }?>
 
@@ -60,7 +58,31 @@
 
 <table cellpadding=0 cellspacing=0 class="form">
 	
-<?php
+    <?php if( $modulo->isEdit() && $modulo->getStructureConfig("show_visits_counter") ){ ?>
+	<tr>
+	    <td><label>Estatísticas:</label></td>
+	    <td>
+			<?php
+			if( $dados['visitantes'] == 0 ){
+				?>
+				Nenhum visitante viu este conteúdo até agora.
+				<?php
+			} else if( $dados['visitantes'] == 1 ){
+				?>
+	         	Apenas <strong>um</strong> visitante viu este conteúdo.
+				<?php
+			} else if( $dados['visitantes'] > 1 ){
+				?>
+	         	Este conteúdo foi visto por <strong><?php echo $dados['visitantes']?></strong> 
+				visitantes.
+				<?php
+			}
+			?>
+	    </td>
+	</tr>
+	<?php } ?>
+
+	<?php
 	$slave = Aust::getInstance()->getRelatedSlaves($_GET['aust_node']);
 	if( !empty($slave) ){
 		?>	
@@ -113,15 +135,15 @@
             ?>
         </td>
     </tr>
-    <tr>
-        <td><label>Título:</label></td>
-        <td>
-            <INPUT TYPE='text' NAME='frmtitulo' class='text' value='<?php if( !empty($dados['titulo']) ) echo $dados['titulo'];?>' />
-            <p class="explanation">
+	<tr>
+	    <td><label>Título:</label></td>
+	    <td>
+	        <INPUT TYPE='text' NAME='frmtitulo' class='text' value='<?php if( !empty($dados['titulo']) ) echo $dados['titulo'];?>' />
+	        <p class="explanation">
 
-            </p>
-        </td>
-    </tr>
+	        </p>
+	    </td>
+	</tr>
     <?php
     /*
      * PREVIEW URL
@@ -196,7 +218,7 @@
     ?>
 
 	<?php
-    if( $modulo->getStructureConfig("manual_date") ){
+    if( 1 == 0 AND $modulo->getStructureConfig("manual_date") ){
     ?>
     <tr>
         <td valign="top"><label>Data manual:</label></td>

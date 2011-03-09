@@ -59,6 +59,10 @@ class ModController extends ModsController
 
         $this->set('tagh2', $this->aust->leNomeDaEstrutura($_GET['aust_node']) );
 
+		$this->showControls = false;
+		if( $this->modulo->getStructureConfig('activate_actions') == '1' )
+			$this->showControls = true;
+
         $w = (!empty($_POST['w'])) ? $_POST['w'] : '';
         $w = (empty($w) && !empty($_GET['w'])) ? $_GET['w'] : $w;
         $this->set('w', $w);
@@ -123,7 +127,6 @@ class ModController extends ModsController
 					id IN ($items)
 					AND $targetField>=$subtractValue
 				";
-				
 				$this->connection->exec($sql);
 				notice('Itens atualizados com sucesso.');
 			}
@@ -145,7 +148,6 @@ class ModController extends ModsController
 				WHERE
 					id IN ($items)
 				";
-
 				$this->query['results'] = $this->connection->query($sql);
 				$this->showControls = false;
 				$this->view( array('view' => 'see_data_separated_by_semicolon') );
