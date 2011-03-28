@@ -42,7 +42,7 @@ class Connection extends SQLObject {
 
     private $debugLevel = 0;
 
-
+	public $encoding = 'utf8';
     /**
      * Cria conexão com o DB. Faz integração de conexões se PDO existe ou não.
      *
@@ -51,7 +51,8 @@ class Connection extends SQLObject {
     function __construct(){
             
         $this->dbConfig = DATABASE_CONFIG::$dbConn;
-
+		$this->encoding = (empty($this->dbConfig['encoding'])) ? 'utf8' : $this->dbConfig['encoding'];
+		
         /**
          * Se a extensão PDO, usada para conexão com vários tipos de bases de dados
          */

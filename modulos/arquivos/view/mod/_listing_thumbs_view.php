@@ -37,8 +37,10 @@ if(count($query) == 0){
 				<?php
 			}
 			$randomNumber = rand(0,10000);
+			if( empty($value['original_filename']) )
+				$value['original_filename'] = $value['arquivo_nome'];
 			?>
-			<img src="<?php echo getFileIcon($value['arquivo_nome']);?>" />
+			<img src="<?php echo getFileIcon($value['original_filename']);?>" title="<?php echo $value['original_filename']?>" />
 			<?php
 			if( $permissoes->canEdit($_GET['aust_node']) ){ 
 				?>

@@ -13,7 +13,7 @@ class Migration_20101018162000_AddFieldOriginalFilename extends Migrations
             'table' => 'arquivos',
             'field' => 'original_filename',
             'type' => 'VARCHAR(250)',
-            'position' => 'AFTER systemurl'
+            'position' => 'AFTER url'
         );
         $this->addField($schema);
 

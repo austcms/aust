@@ -195,6 +195,23 @@ class Module
      *
      */
 
+	public function fixEncoding($post = array()){
+		if( $this->connection->encoding != 'utf8' )
+			return $post;
+		
+		foreach( $post as $key=>$value ){
+
+			if( is_string($value) &&
+				!mb_check_encoding($value, 'UTF-8') )
+			{
+				$value = mb_convert_encoding($value, "UTF-8", "auto");
+			}
+			
+			$post[$key] = $value;
+		}
+		
+		return $post;
+	}
     /**
      * save()
      *
@@ -208,6 +225,8 @@ class Module
      * @return <bool>
      */
     public function save($post = array()){
+
+		$post = $this->fixEncoding($post);
 
         if( empty($post['method']) AND
             empty($post['metodo']) )
@@ -259,12 +278,17 @@ class Module
     public function load($param = ''){
         $this->loadedIds = array();
         $paramForLoadSql = $param;
-
+		
         /*
          * austNode é um conjunto de arrays
          */
-        if( is_array($param['austNode']) ){
-            $austNode = reset( array_keys( $param['austNode'] ) );
+		if( !empty($param['austNode']) ){
+	        if( is_array($param['austNode']) ){
+	            $austNode = $param['austNode'];
+			} else if( is_numeric($param['austNode']) ){
+	            $austNode = $param['austNode'];
+	            $paramForLoadSql['austNode'] = $austNode;
+			}
         }
         /*
          * $params contém mais condições para a busca
@@ -285,8 +309,10 @@ class Module
 		// counts rows
 		$this->totalRows = $this->_getTotalRows($paramForLoadSql);
 		
-
+//		pr($paramForLoadSql);
 		$sql = $this->loadSql($paramForLoadSql);
+		
+//		echo $sql;
         $qry = $this->connection->query($sql);
         if( empty($qry) )
             return array();
@@ -424,7 +450,6 @@ class Module
             $limit = empty($options['limit']) ? $defaultLimit : $options['limit'];
             $customWhere = empty($options['where']) ? '' : ' '.$options['where'];
 
-
             if( empty($options['order']) ){
                 if( empty($this->order) )
                     $order = 'id DESC';
@@ -455,10 +480,12 @@ class Module
          */
         $where = '';
         if( !empty($austNode) ) {
-            if( !is_array($austNode) )
-                $austNode = array($austNode);
+            if( !is_array($austNode) ){
+	            $austNodeForSql = $austNode;
+			} else if(is_array($austNode)) {
+	            $austNodeForSql = implode("','", array_keys($austNode) );
+			}
 
-            $austNodeForSql = implode("','", array_keys($austNode) );
 
             $where = $where . " AND ".$this->austField." IN ('".$austNodeForSql."')";
         }
@@ -633,6 +660,7 @@ class Module
             $method = 'edit';
 
         $c = 0;
+		
         $where = "";
         foreach($post as $key=>$valor){
             /*

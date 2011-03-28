@@ -17,8 +17,36 @@ class ModController extends ModsController
     }
 
     function listing(){
-        //$this->render('listar');
-        //$this->autoRender= false;
+	
+		$categorias = $this->aust->LeCategoriasFilhas('',$_GET['aust_node']);
+		$categorias[$_GET['aust_node']] = 'Estrutura';
+
+        /*
+         * PAGINAÇÃO
+         */
+        /*
+         * Página atual
+         */
+        $pagina = (empty($_GET['pagina'])) ? 1 : $_GET['pagina'];
+        /*
+         * Resultados por página
+         */
+        $num_por_pagina = '20';
+        $this->set('numPorPagina', $num_por_pagina);//($config->LeOpcao($nome_modulo.'_paginacao')) ? $config->LeOpcao($nome_modulo.'_paginacao') : '10';
+        $this->set('page', $pagina);//($config->LeOpcao($nome_modulo.'_paginacao')) ? $config->LeOpcao($nome_modulo.'_paginacao') : '10';
+
+        /*
+         * SQL para listagem
+         */
+        $params = array(
+            'austNode' => $categorias,
+            'page' => $pagina,
+            'limit' => $num_por_pagina
+        );
+
+		$query = $this->modulo->load($params);
+		$query = $this->modulo->replaceFieldsValueIfEmpty($query);
+		$this->set('query', $query);
     }
 
     /**

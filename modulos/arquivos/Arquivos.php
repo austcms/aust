@@ -20,10 +20,13 @@ class Arquivos extends Module
 
     public $date = array(
         'standardFormat' => '%d/%m/%Y',
-        'created_on' => 'adddate',
-        'updated_on' => 'addate'
+        'created_on' => 'created_on',
+        'updated_on' => 'updated_on'
     );
 
+	public $fieldsToLoad = array(
+	    'titulo', 'visitantes', 'original_filename', 'arquivo_nome'
+	);
     /**
      *
      * @var <string> Extensões proibidas
@@ -35,6 +38,8 @@ class Arquivos extends Module
      * @var <string> Diretório que o upload acontecerá
      */
     public $uploadSubDir;
+
+	public $austField = 'categoria_id';
 
     /**
      *
@@ -357,7 +362,6 @@ class Arquivos extends Module
             $post['frmurl'] = $this->parseUrl($post['frmurl']);
         }
 
-		pr($post);
         return parent::save($post);
 
         return false;
@@ -368,12 +372,13 @@ class Arquivos extends Module
      * @param <array> $param
      * @return <bool>
      */
-    public function loadSql($param) {
+    public function loadSqltest($param) {
 
         /*
          * Configura e ajusta as variáveis
          */
         $categorias = $param;
+        $limit = (empty($param['limit']) ) ? ' LIMIT 30' : ' LIMIT '.$param['limit'];
         /*
          * Se $categorias estiver vazio (nunca deverá acontecer)
          */
@@ -401,7 +406,7 @@ class Arquivos extends Module
                     ) AS node
                 FROM
                     arquivos AS conf
-                ".$where.$order;
+                ".$where.$order.$limit;
 
         return $sql;
     }
