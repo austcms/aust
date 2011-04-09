@@ -115,6 +115,7 @@
     }
     ?>
 
+	<?php if( $modulo->getStructureConfig('has_title') ){ ?>
     <tr>
         <td valign="top" class="first"><label>Título da galeria:</label></td>
         <td class="second">
@@ -124,7 +125,13 @@
             </p>
         </td>
     </tr>
-
+	<?php
+	} else {
+		?>
+        <INPUT TYPE='hidden' NAME='frmtitulo' value='<?php if( !empty($dados['titulo']) ) echo $dados['titulo'];?>' />
+		<?php
+	}
+	?>
     <?php
     /*
      * RESUMO
@@ -194,7 +201,7 @@
 
     <tr>
         <td colspan="2">
-            <h3>Fotos da Galeria</h3>
+            <h3>Fotos</h3>
         </td>
     </tr>
     <tr>

@@ -1340,7 +1340,9 @@ class Module
 							 			aust_relations
 							 		(slave_id, slave_name, master_id, created_on, updated_on)
 									VALUES
-									('".$params["aust_node"]."', '".$relationalName."', '".$valor."', '".$todayDateTime."', '".$todayDateTime."')";
+									('".$params["aust_node"]."', 
+									(SELECT nome FROM categorias WHERE id='".$params["aust_node"]."'), 
+									'".$valor."', '".$todayDateTime."', '".$todayDateTime."')";
 							$this->connection->exec($sql);
 						}
 					}

@@ -97,6 +97,11 @@ $modInfo = array(
 		    "label" => "Ordenado",
 		    "inputType" => "checkbox",
 		),
+	    'has_title' => array(
+	        "value" => "1",
+	        "label" => "Tem título?",
+	        "inputType" => "checkbox",
+	    ),
 	    /*
 	     * Resumo
 	     */
