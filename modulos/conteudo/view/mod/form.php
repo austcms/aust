@@ -93,7 +93,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
 
 	<?php
 	$slave = Aust::getInstance()->getRelatedSlaves($_GET['aust_node']);
-	if( !empty($slave) ){
+	if( !empty($slave) && $modulo->isEdit() ){
 		?>	
 	    <tr>
 	        <td><label>Opções:</label></td>
