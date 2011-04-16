@@ -13,6 +13,12 @@
     $moduloConfig = $modulo->loadModConf($params);
 
     //$modulo->loadHtmlEditor();
+	$editorPlugins = '';
+	if( $modulo->getStructureConfig('description_upload_inline_images') )
+		$editorPlugins = 'imagemanager';
+	
+	if( $modulo->getStructureConfig('description_has_rich_editor') )
+    	$modulo->loadHtmlEditor($editorPlugins);
 
 
 /*
@@ -74,46 +80,53 @@
      *
      * Ator é a pessoa agente deste evento.
      */
-    ?>
-    <tr>
-        <td class="label">
-            <label>Quem:</label>
-        </td>
-        <td>
-            <input type="hidden" name="frmactor_is_user" value="1" />
-            <?php
-            $user = User::getInstance();
 
-            if( $_GET['action'] == 'edit' AND
-                empty($dados['actor_admin_id'] ) )
-            {
-                $selectAnyOneActor = 'selected="selected"';
-            }
-            ?>
-            <select name="frmactor_admin_id">
-                <option value="<?php echo $user->getId(); ?>"><?php echo $user->LeRegistro('nome'); ?> (você)</option>
-                <option value="" <?php echo $selectAnyOneActor ?>>Não definir</option>
-                <option value="">-----</option>
-                <?php
-                $allUsers = $user->getAllUsers();
-                foreach( $allUsers as $valor ){
+	if( $modulo->getStructureConfig('has_responsible_person') ){
+	    ?>
 
-                    if( $valor['id'] == $user->getId() )
-                        continue;
 
-                    $selected = '';
-                    if( !empty($dados['actor_admin_id']) AND
-                        $valor['id'] == $dados['actor_admin_id'] )
-                        $selected = 'selected="selected"';
-                    ?>
-                    <option value="<?php echo $valor['id'] ?>" <?php echo $selected; ?>><?php echo $valor['nome'] ?></option>
-                    <?php
-                }
-                ?>
-            </select>
+	    <tr>
+	        <td class="label">
+	            <label>Quem:</label>
+	        </td>
+	        <td>
+	            <input type="hidden" name="frmactor_is_user" value="1" />
+	            <?php
+	            $user = User::getInstance();
+
+	            if( $_GET['action'] == 'edit' AND
+	                empty($dados['actor_admin_id'] ) )
+	            {
+	                $selectAnyOneActor = 'selected="selected"';
+	            }
+	            ?>
+	            <select name="frmactor_admin_id">
+	                <option value="<?php echo $user->getId(); ?>"><?php echo $user->LeRegistro('nome'); ?> (você)</option>
+	                <option value="" <?php echo $selectAnyOneActor ?>>Não definir</option>
+	                <option value="">-----</option>
+	                <?php
+	                $allUsers = $user->getAllUsers();
+	                foreach( $allUsers as $valor ){
+
+	                    if( $valor['id'] == $user->getId() )
+	                        continue;
+
+	                    $selected = '';
+	                    if( !empty($dados['actor_admin_id']) AND
+	                        $valor['id'] == $dados['actor_admin_id'] )
+	                        $selected = 'selected="selected"';
+	                    ?>
+	                    <option value="<?php echo $valor['id'] ?>" <?php echo $selected; ?>><?php echo $valor['nome'] ?></option>
+	                    <?php
+	                }
+	                ?>
+	            </select>
               
-        </td>
-    </tr>
+	        </td>
+	    </tr>
+		<?php
+	}
+	?>
 
     <tr>
         <td class="label"><label for="frmtitle">Nome do Evento:</label></td>
@@ -121,6 +134,19 @@
             <INPUT TYPE='text' NAME='frmtitle' id="frmtitle" class='text' value='<?php if( !empty($dados['title']) ) echo $dados['title'];?>' />
         </td>
     </tr>
+
+	<?php
+	if( $modulo->getStructureConfig('has_place') ){
+		?>
+	    <tr>
+	        <td class="label"><label for="frmplace">Local do evento:</label></td>
+	        <td>
+	            <INPUT TYPE='text' NAME='frmplace' id="frmplace" class='text' value='<?php if( !empty($dados['place']) ) echo $dados['place'];?>' />
+	        </td>
+	    </tr>
+		<?php
+	}
+	?>
     <input type="hidden" id="hidden_start_datetime" />
     <?php
     /*
@@ -136,18 +162,16 @@
             </td>
             <td>
                 <input type="text" id="start_date" name="start_date" size="10" value="<?php echo $start_date; ?>" class="text date_text" />
-                até
-                <input type="text" id="end_date" name="end_date" size="10"  value="<?php echo $end_date ?>" class="text date_text" />
+				<?php
+				if( !$modulo->getStructureConfig('one_day_only') ){
+					?>
+	                até
+	                <input type="text" id="end_date" name="end_date" size="10"  value="<?php echo $end_date ?>" class="text date_text" />
+	                <?php
+	                tt("Selecione o mesmo dia em <strong>ambos</strong> os campos se o evento ocorrerá em apenas um dia.");
+	                ?>
                 <?php
-                tt("Selecione o mesmo dia em <strong>ambos</strong> os campos se o evento ocorrerá em apenas um dia.");
-                ?>
-                <?php
-                /*
-                até
-                <input type="text" id="end_datetime" name="end_datetime" size="10"  value="<?php echo date("d/m/Y") ?>" />
-                <input type="checkbox" id="oneDay" checked="checked" value="1" /> Dura apenas um dia
-                 *
-                 */
+				}
                 ?>
                 <script type="text/javascript">
                     agendaSetFromEndDate();

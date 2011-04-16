@@ -112,17 +112,17 @@ exit();
 	$mcImageManagerConfig['thumbnail.allow_override'] = "*";
 
 	// Upload options
-	$mcImageManagerConfig['upload.maxsize'] = "10MB";
+	$mcImageManagerConfig['upload.maxsize'] = "5MB";
 	$mcImageManagerConfig['upload.overwrite'] = false;
 	$mcImageManagerConfig['upload.include_file_pattern'] = '';
 	$mcImageManagerConfig['upload.exclude_file_pattern'] = '';
 	$mcImageManagerConfig['upload.invalid_file_name_msg'] = "";
 	$mcImageManagerConfig['upload.extensions'] = "gif,jpg,jpeg,png";
 	$mcImageManagerConfig['upload.create_thumbnail'] = true; // true/false, create thumbnail on upload
-	$mcImageManagerConfig['upload.autoresize'] = false; // Force max width/height, IM will rescale uploaded images.
-	$mcImageManagerConfig['upload.autoresize_jpeg_quality'] = 75; // Force max width/height, IM will rescale uploaded images.
-	$mcImageManagerConfig['upload.max_width'] = "800"; // Only if force_width_height is true
-	$mcImageManagerConfig['upload.max_height'] = "600"; // Only if force_width_height is true
+	$mcImageManagerConfig['upload.autoresize'] = true; // Force max width/height, IM will rescale uploaded images.
+	$mcImageManagerConfig['upload.autoresize_jpeg_quality'] = 90; // Force max width/height, IM will rescale uploaded images.
+	$mcImageManagerConfig['upload.max_width'] = "1290"; // Only if force_width_height is true
+	$mcImageManagerConfig['upload.max_height'] = "2600"; // Only if force_width_height is true
 	$mcImageManagerConfig['upload.multiple_upload'] = true;
 	$mcImageManagerConfig['upload.chunk_size'] = '1mb';
 	$mcImageManagerConfig['upload.format'] = "";

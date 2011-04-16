@@ -121,7 +121,7 @@ span.viewmode {
 	.filename {
 		font-size: 0.9em;
 	}
-	
+
 	.files_view table tr td {
 		text-align: center;
 		padding-bottom: 10px;
@@ -129,3 +129,102 @@ span.viewmode {
 	.files_view a img {
 		border: 0;
 	}
+
+	/* field: relational_one_to_many */
+	.search_1n {
+		padding: 7px;
+		border: 1px solid #ddd;
+		-moz-border-radius: 8px;
+		border-radius: 8px;
+		background: #FFF4D6;
+		margin: 0 7px 7px 0;
+		display: table;
+	}
+
+		.search1n_result {
+			width: 490px;
+			margin: 0px 0 5px 12px;
+		}
+
+	
+/* MOD_CART */
+.listagem div.transaction {
+	background: #ddd;
+	width: 170px;
+	display: table;
+	margin: 5px;
+	float: left;
+	font-size: 0.9em;
+	-moz-border-radius: 7px;
+	-webkit-border-radius: 7px;
+	border-radius: 7px;
+}
+
+	.listagem div.transaction .containner { margin: 5px; }
+
+	/* STATUS */
+		.listagem div.transaction .status {
+			text-align: center;
+			padding: 3px;
+			margin: 5px 0 5px 0;
+			min-height: 30px;
+		}
+		.listagem div.transaction .status h2 {
+			margin: 0;
+			color: black;
+			font-size: 1.2em;
+			text-transform: uppercase;
+			text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.6);
+		}
+
+		.listagem div.transaction.pending { background: #FBEC05; }
+			.listagem div.transaction.pending .status { background: #FBF182; color: #444; }
+			.listagem div.transaction.pending .status h2 { color: #FD6100; }
+
+		.listagem div.transaction.ready { background: #A6ED99; }
+			.listagem div.transaction.ready .status { background: #CEEDCC; color: #444; }
+			.listagem div.transaction.ready .status h2 { color: green; }
+
+		.listagem div.transaction.not_paid { background: #e6e6e6; }
+			.listagem div.transaction.not_paid .status { background: #efefef; color: #444; }
+			.listagem div.transaction.not_paid .status h2 { color: #555; }
+
+		.listagem div.transaction.cancelled { background: #f7f7f7; color: #bbb; }
+			.listagem div.transaction.cancelled .status { background: #f9f9f9; color: #999; }
+			.listagem div.transaction.cancelled .status h2 { color: #FD944E; }
+
+
+	.listagem div.transaction .gateway {
+		text-align: center;
+		margin: 0 0 3px 0;
+	}
+		.listagem div.transaction .gateway .paid { color: green; }
+		.listagem div.transaction .gateway .waiting {  }
+		.listagem div.transaction .gateway .analysing {  }
+		.listagem div.transaction .gateway .no_response { color: #666; }
+		.listagem div.transaction .gateway .cancelled {  }
+
+	
+	.listagem div.transaction .number {
+		font-size: 0.9em;
+		text-align: center;
+		font-weight: bold;
+		margin: 0 0 5px 0;
+	}
+
+	.listagem div.transaction .label {
+	}
+	.listagem div.transaction .value {
+		font-style: italic;
+	}
+
+	.listagem div.transaction .scheduled_to {
+		margin: 0 0 5px 0;
+	}
+
+	.listagem div.transaction .actions {
+		margin: 3px 0 0 0;
+		padding: 3px 0 0 0;
+		border-top: 1px dashed #fdfdfd;
+	}
+

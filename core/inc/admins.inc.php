@@ -58,11 +58,16 @@ if( !empty($_GET['block'])
 	EscreveBoxMensagem($status);
 }
 
-if(!empty($_GET['action'])){
+if(	!empty($_GET['action']) ){
     if( $_GET['action'] == 'edit' ){
         $_GET['action'] = 'form';
     }
-    include('admins.inc/'.$_GET['action'].'.inc.php');
+}
+
+if(	!empty($_GET['action']) &&
+ 	file_exists(INC_DIR.'admins.inc/'.$_GET['action'].'.inc.php') )
+{
+    include(INC_DIR.'admins.inc/'.$_GET['action'].'.inc.php');
 } else {
 
     ?>
@@ -201,7 +206,16 @@ if(!empty($_GET['action'])){
             </div>
             <?php
         }
-        ?>
+        if( in_array( $administrador->LeRegistro("tipo"), array("Webmaster", "Root", "Administrador") ) ){
+	        ?>
+	        <div class="botao">
+	            <div class="bt_grupos">
+	                <a href="adm_main.php?section=admins&action=groups"></a>
+	            </div>
+	        </div>
+			<?php
+		}
+		?>
         <div class="botao">
             <div class="bt_permissoes">
                 <a href="adm_main.php?section=permissoes"></a>

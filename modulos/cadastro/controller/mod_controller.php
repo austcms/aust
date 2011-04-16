@@ -352,7 +352,12 @@ class ModController extends ModsController
 			$relational = $this->modulo->relationalData;
 			
 
-            if( !empty($relational) AND !empty($lastInsertId) ){
+            if( (
+				!empty($relational) ||
+				!empty($this->modulo->toDeleteTables)
+				)
+				AND
+ 				!empty($lastInsertId) ){
 
                 unset($sql);
                 foreach( $relational as $field=>$dados ){
@@ -385,13 +390,13 @@ class ModController extends ModsController
 							$ref_field = $infoCadastro['campo'][$field]['ref_parent_field'];
 						else
 							$ref_field = $infoCadastro["estrutura"]["tabela"]["valor"]."_id";
-							
+
 	                    $sql = "DELETE FROM
 	                                $key
 	                            WHERE
 	                                ".$ref_field."='$w'
 	                                ";
-	                    $this->modulo->connection->exec($sql);
+						$this->connection->exec($sql);
 	                    unset($sql);
 					}
                 }
@@ -451,22 +456,29 @@ class ModController extends ModsController
 		/*
 		 * EXCLUI IMAGENS EXTRAS
 		 */
-		foreach( $images as $imageFields ){
-			foreach( $imageFields as $field=>$values ){
-				$postedImageFields[] = $field;
+		if( !empty($images) ){
+			foreach( $images as $imageFields ){
+				foreach( $imageFields as $field=>$values ){
+					$postedImageFields[] = $field;
+				}
 			}
-		}
-		$this->modulo->deleteExtraImages($lastInsertId, $postedImageFields);
+			if( !empty($postedImageFields) )
+				$this->modulo->deleteExtraImages($lastInsertId, $postedImageFields);
+		}		
 		
 		/*
 		 * EXCLUI ARQUIVOS EXTRAS
 		 */
-		foreach( $files as $fileFields ){
-			foreach( $fileFields as $field=>$values ){
-				$postedFileFields[] = $field;
+		if( !empty($files) ){
+			foreach( $files as $fileFields ){
+				foreach( $fileFields as $field=>$values ){
+					$postedFileFields[] = $field;
+				}
 			}
+			
+			if( !empty($postedFileFields) )
+				$this->modulo->deleteExtraFiles($lastInsertId, $postedFileFields);
 		}
-		$this->modulo->deleteExtraFiles($lastInsertId, $postedFileFields);
 		
         $this->set('resultado', $resultado);
 

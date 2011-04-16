@@ -184,6 +184,10 @@ class Module
 
 		$this->limit = $this->defaultLimit;
     }
+	
+	function setAustNode($id){
+		$this->austNode = $id;
+	}
 
     /*
      *
@@ -191,6 +195,23 @@ class Module
      *
      */
 
+	public function fixEncoding($post = array()){
+		if( $this->connection->encoding != 'utf8' )
+			return $post;
+		
+		foreach( $post as $key=>$value ){
+
+			if( is_string($value) &&
+				!mb_check_encoding($value, 'UTF-8') )
+			{
+				$value = mb_convert_encoding($value, "UTF-8", "auto");
+			}
+			
+			$post[$key] = $value;
+		}
+		
+		return $post;
+	}
     /**
      * save()
      *
@@ -204,6 +225,8 @@ class Module
      * @return <bool>
      */
     public function save($post = array()){
+
+		$post = $this->fixEncoding($post);
 
         if( empty($post['method']) AND
             empty($post['metodo']) )
@@ -254,14 +277,18 @@ class Module
      */
     public function load($param = ''){
         $this->loadedIds = array();
-        
         $paramForLoadSql = $param;
-
+		
         /*
          * austNode é um conjunto de arrays
          */
-        if( is_array($param['austNode']) ){
-            $austNode = reset( array_keys( $param['austNode'] ) );
+		if( !empty($param['austNode']) ){
+	        if( is_array($param['austNode']) ){
+	            $austNode = $param['austNode'];
+			} else if( is_numeric($param['austNode']) ){
+	            $austNode = $param['austNode'];
+	            $paramForLoadSql['austNode'] = $austNode;
+			}
         }
         /*
          * $params contém mais condições para a busca
@@ -282,8 +309,10 @@ class Module
 		// counts rows
 		$this->totalRows = $this->_getTotalRows($paramForLoadSql);
 		
+//		pr($paramForLoadSql);
 		$sql = $this->loadSql($paramForLoadSql);
 		
+//		echo $sql;
         $qry = $this->connection->query($sql);
         if( empty($qry) )
             return array();
@@ -342,7 +371,7 @@ class Module
 		
 		if( is_string($param) ){
 			$result = reset( $this->connection->query($param) );
-			$total = ( is_numeric($result['rows']) ) ? $result['rows'] : 0;
+			$total = ( !empty($result['rows']) && is_numeric($result['rows']) ) ? $result['rows'] : 0;
 		} else {
 			return 0;
 		}
@@ -421,7 +450,6 @@ class Module
             $limit = empty($options['limit']) ? $defaultLimit : $options['limit'];
             $customWhere = empty($options['where']) ? '' : ' '.$options['where'];
 
-
             if( empty($options['order']) ){
                 if( empty($this->order) )
                     $order = 'id DESC';
@@ -452,10 +480,12 @@ class Module
          */
         $where = '';
         if( !empty($austNode) ) {
-            if( !is_array($austNode) )
-                $austNode = array($austNode);
+            if( !is_array($austNode) ){
+	            $austNodeForSql = $austNode;
+			} else if(is_array($austNode)) {
+	            $austNodeForSql = implode("','", array_keys($austNode) );
+			}
 
-            $austNodeForSql = implode("','", array_keys($austNode) );
 
             $where = $where . " AND ".$this->austField." IN ('".$austNodeForSql."')";
         }
@@ -630,6 +660,7 @@ class Module
             $method = 'edit';
 
         $c = 0;
+		
         $where = "";
         foreach($post as $key=>$valor){
             /*
@@ -993,6 +1024,7 @@ class Module
             return $this->config;
 
         $modDir = $this->getIncludeFolder().'/';
+
         include $modDir.MOD_CONFIG;
 
         if( empty($modInfo) )
@@ -1010,7 +1042,17 @@ class Module
      * @return <string>
      */
     public function getIncludeFolder(){
-        return THIS_TO_BASEURL.MODULOS_DIR.strtolower( get_class($this) );
+
+		$str = get_class($this);
+		
+		preg_match_all('/[A-Z][^A-Z]*/', $str, $results);
+		$tmpStr = implode('_', $results[0]);
+		$tmpStr = strtolower($tmpStr);
+		
+		if( is_dir(THIS_TO_BASEURL.MODULOS_DIR.$tmpStr) )
+       		return THIS_TO_BASEURL.MODULOS_DIR.$tmpStr;
+		else
+       		return THIS_TO_BASEURL.MODULOS_DIR.strtolower( $str );
     }
 
 	/**
@@ -1224,6 +1266,20 @@ class Module
 			if( !empty($params['author']) AND is_numeric($params['author']) )
 				$whereAuthor = "AND autor='".$params['author']."'";
 
+			/*
+			 * Algumas configurações são especiais, como é o caso de estruturas
+			 * relacionadas.
+			 */
+			$moduleConfig = $this->loadConfig();
+			$todayDateTime = date('Y-m-d H:i:s');
+			
+			$sql = "DELETE FROM aust_relations WHERE slave_id='".$params["aust_node"]."'";
+			$this->connection->exec($sql);
+
+			$relationalName = $moduleConfig['nome'];
+			if( !empty($moduleConfig['relationalName']) )
+				$relationalName = $moduleConfig['relationalName'];
+
             foreach( $data as $propriedade=>$valor ) {
 	
 				/*
@@ -1272,6 +1328,25 @@ class Module
 	                    )
 	                );
 	                $this->connection->exec($this->connection->saveSql($paramsToSave));
+	
+					/*
+					 * No caso de relações entre estruturas, salva na devida tabela os dados
+					 * deste relacionamento.
+					 */
+					if( $moduleConfig['configurations'][$propriedade]['inputType'] == 'aust_selection' ){
+						
+						if( !empty($valor) ){
+							$sql = "INSERT INTO
+							 			aust_relations
+							 		(slave_id, slave_name, master_id, created_on, updated_on)
+									VALUES
+									('".$params["aust_node"]."', 
+									(SELECT nome FROM categorias WHERE id='".$params["aust_node"]."'), 
+									'".$valor."', '".$todayDateTime."', '".$todayDateTime."')";
+							$this->connection->exec($sql);
+						}
+					}
+	
 				}
             }
 	        return true;
@@ -1355,7 +1430,7 @@ class Module
 			 * menos itens que as definidas estaticamente.
 			 */
             $sql = "SELECT * FROM config WHERE tipo='mod_conf' AND $classSearchStatement AND local='".$params."' $whereAuthor LIMIT 300";
-            $queryTmp = $this->connection->query($sql, "ASSOC");
+			$queryTmp = $this->connection->query($sql, "ASSOC");
 			
             $query = array();
 			/*
@@ -1477,7 +1552,12 @@ class Module
 			if( !empty($author) ){
 	            $sql = "SELECT * FROM config WHERE tipo='mod_conf' AND local='".$this->austNode."' AND autor='$author' AND propriedade='$params' LIMIT 1";
 	            $queryTmp = $this->connection->query($sql, "ASSOC");
-				return $queryTmp[0]['valor'];
+
+				if( !empty($queryTmp) )
+					return $queryTmp[0]['valor'];
+				else
+					return array();
+					
 			} else if( empty($this->structureConfig) ){
                 $result = $this->loadModConf($this->austNode, $confClass, $author);
                 return $result[$params];

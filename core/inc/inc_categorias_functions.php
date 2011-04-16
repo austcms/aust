@@ -51,7 +51,7 @@ function BuildDDList($table,$id="ddListOptions",$escala,$parent=0, $current_node
 * @param DBConnection Ligação à BD
 * @return String
 */
-function _BuildDDListItems($table, $escala, $parent=0, $level=0, $current_node=-1){
+function _BuildDDListItems($table, $escala = '', $parent=0, $level=0, $current_node=-1){
 
     global $conexao;
     $indent = "";

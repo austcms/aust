@@ -33,10 +33,12 @@ $setup->mainTable = $modulo->getTable();
  * Insere um novo campo na tabela do cadastro
  */
 	if(!empty($_POST['add_field'])){
+
 		$params = array(
-			'name' => $_POST['data'],
-			'type' => $_POST['name'],
-			'order' => $_POST['order'],
+			'name' => $_POST['data']['name'],
+			'type' => $_POST['data']['type'],
+			'order' => $_POST['data']['order'],
+			'description' => $_POST['data']['description'],
 		);
 		
 		if( !empty($_POST['relacionado_tabela_0']) )
@@ -673,7 +675,10 @@ if(!empty($_GET['function'])){
                         categorias_id='".$_GET["aust_node"]."'
                     ";
             $dados = $modulo->connection->query($sql);
-            $dados = $dados[0]["valor"];
+			if( !empty($dados[0]["valor"]) )
+            	$dados = $dados[0]["valor"];
+			else 
+				$dados = '';
 
             ?>
             <form method="post" action="<?php echo $config->self;?>" class="simples pequeno">
@@ -788,6 +793,8 @@ if(!empty($_GET['function'])){
                 <?php
 
                 foreach( $fields as $fieldName=>$fieldOptions ){
+					if( empty($fieldOptions["valor"]) )
+						continue;
                     ?>
 
                     <div class="campo">
@@ -807,7 +814,9 @@ if(!empty($_GET['function'])){
 								?>
 								<div>
 								<?php
-		                        if( $options["inputType"] == "checkbox" ){
+		                        if( !empty($options["inputType"]) &&
+									$options["inputType"] == "checkbox" )
+								{
 
 		                            /*
 		                             * Verifica valores no banco de dados.
@@ -832,7 +841,8 @@ if(!empty($_GET['function'])){
 
 		                        else {
 									$size = '';
-									if( $options['size'] == 'small' )
+									if( !empty($options['size']) &&
+									 	$options['size'] == 'small' )
 										$size = '5';
 		                            ?>
 		                            <input type="text" size="<?php echo $size?>" name="data[<?php echo $fieldName ?>][<?php echo $key; ?>]" value="<?php echo $options['value'] ?>" class="input" />

@@ -22,14 +22,12 @@ if(!empty($_FILES['arquivo'])){
 
 /**
  * Se uma imagem foi enviada, faz todo o processamento
- * @todo - fazer funcionar com PHP-PDO
  */
 if( !empty($_FILES['arquivo']) ){
 
-	
 
 	$file = $_FILES['arquivo'];
-	
+
 	$imageHandler = Image::getInstance();
 	$aust = Aust::getInstance();
 	$user = User::getInstance();

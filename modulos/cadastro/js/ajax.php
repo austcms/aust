@@ -130,6 +130,7 @@ elseif($_POST['action'] == 'search'){
         $searchField = $_POST["field"];
     }
 
+//	$_POST['query'] = str_replace(" ", "%", $_POST['query']);
     $param = array(
         'categorias' => $categorias,
         'metodo' => 'listing',
@@ -138,7 +139,7 @@ elseif($_POST['action'] == 'search'){
     );
 
     $sql = $modulo->loadSql($param);
-    //echo '<br><br>'.$sql .'<br>';
+//    echo '<br><br>'.$sql .'<br>';
 
     $resultado = $modulo->connection->query($sql, "ASSOC");
 
@@ -150,6 +151,74 @@ elseif($_POST['action'] == 'search'){
     //foreach ( $query as $chave=>$valor ){
         //echo '<option value="'.$valor['Field'].'">'.$valor['Field'].'</option>';
     //}
+}
+/*
+ * PESQUISA: relational one-to-many
+ */
+elseif($_POST['action'] == 'search1n'){
+
+    /**
+     *
+     */
+    $austNode = $_POST['austNode'];
+
+	// checked_boxes
+	$get = $_GET;
+	$ids = array();
+	$queryCheckedBoxes = '';
+	if( !empty($get['data']) ){
+		$get = reset($_GET['data'] );
+		if( !empty($get) ){
+			$get = reset($get);
+			$ids = $get;
+			$queryCheckedBoxes = " AND r.id NOT IN ('".implode("','", $ids)."')";
+			
+		}
+	}
+
+    $sql = "SELECT
+                r.id AS ref_id,
+				r.".$ref_field." as ref_value
+            FROM
+                ".$relational_table." AS t
+			RIGHT JOIN
+				".$ref_table." AS r
+			ON
+				r.id=t.".$childField."
+			WHERE
+				r.".$ref_field." LIKE '%".$query."%' AND
+				(
+					t.".$childField." NOT IN
+					(
+						SELECT s.".$childField."
+						FROM ".$relational_table." AS s
+						WHERE s.".$parentField."='$w'
+					)
+					OR
+					t.".$childField." IS NULL
+				)
+				". /*AND r.id!='".$w."' */ "
+				$queryCheckedBoxes
+			GROUP BY
+				r.id
+            ORDER BY
+                t.order_nr ASC, t.id ASC
+			LIMIT 10
+            ";
+
+	$results = $modulo->connection->query($sql);
+	
+	foreach( $results as $result ){
+		?>
+		<div>
+		<div class="input_checkbox_each">
+			<input type="checkbox" value="<?php echo $result['ref_id'] ?>" name="<?php echo $_POST['inputName']?>">
+			<?php echo $result['ref_value'] ?>
+		</div>
+		</div>
+		<?php
+	}
 
 }
+
 ?>

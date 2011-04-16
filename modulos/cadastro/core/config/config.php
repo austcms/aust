@@ -211,6 +211,20 @@ $modInfo = array(
 		    ),
 
 		/*
+		 * RELATIONAL ONE-TO-MANY
+		 */
+		    /*
+		     * Múltiplas imagens ou apenas uma?
+		     */
+			'1n_has_dragdrop' => array(
+				'field_type' => 'relacional_umparamuitos',
+		        "value" => "",
+		        "label" => "Permite drag&drop",
+		        "inputType" => "checkbox",
+				'help' => 'Com drag&drop ativado, é possível alterar a ordem '.
+						  'dos itens selecionados.'
+		    ),
+		/*
 		 * CAMPOS TEXTOS
 		 */
 		    /*
@@ -222,6 +236,16 @@ $modInfo = array(
 				"label" => "Ativar editor de texto rico",
 				"inputType" => "checkbox",
 				'help' => 'Inserir um editor de texto (negrito/itálico/etc) neste campo. ',
+		    ),
+		    /*
+		     * Pode inserir imagens via editor rico?
+		     */
+			'text_has_images' => array(
+				'field_type' => 'text',
+				"value" => "",
+				"label" => "Ativar imagens em editor rico",
+				"inputType" => "checkbox",
+				'help' => 'Selecionar este item permitirá inserir imagens entre o texto.',
 		    ),
 
     ),

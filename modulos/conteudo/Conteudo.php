@@ -73,13 +73,35 @@ class Conteudo extends Module
      * @param <array> $post
      * @return <bool>
      */
-    public function save($post = array() ){
+    public function save($post = array(), $files = array() ){
 
         if( empty($post) )
             return false;
         $post['frmtitulo_encoded'] = encodeText($post['frmtitulo']);
 
+		/*
+		 * Checks if there are files to be uploaded
+		 */
+		if( !empty($files) && !empty($files['file']['size']) ){
 
+			$fileHandler = File::getInstance();
+			$value = $files['file'];
+			
+			$finalName = $fileHandler->upload($value);
+			
+			$finalName['systemPath'] = addslashes($finalName['systemPath']);
+			$finalName['webPath'] = addslashes($finalName['webPath']);
+
+			$post['frmfile_path'] 			= $finalName['webPath'];
+			$post['frmfile_systempath'] 	= $finalName['systemPath'];
+			$post['frmfile_name'] 			= $finalName['new_filename'];
+			$post['frmoriginal_file_name'] = $value['name'];
+			$post['frmfile_size'] 			= $value['size'];
+			$post['frmfile_ext'] 			= $fileHandler->getExtension($value['name']);
+			$post['frmfile_type'] 			= $value['type'];
+
+		}
+		
         return parent::save($post);
         
     }

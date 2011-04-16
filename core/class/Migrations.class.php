@@ -129,13 +129,20 @@ class Migrations
             $position = '';
             if( !empty($options['position']) )
                 $position = $options['position'];
+
+			$default = '';
+            if( ( !empty($options['default']) || $options['default'] == '0' ) && 
+				$options['default'] !== false )
+                $default = "DEFAULT '".$options['default']."'";
             
+
             $sql = "ALTER TABLE ".
                         $options['table'].
                     " ADD COLUMN ".
                     $options['field'].
-                    " ". $options['type'].' '.$position;
-
+                    " ".$options['type'].
+                " ".$default.' '.$position;
+			
             $this->conexao->exec($sql);
         }
     }

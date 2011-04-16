@@ -76,7 +76,15 @@ function encodeDatabaseFieldName($str){
  * Add slashes and others.
  */
 function sanitizeString($str){
-	$str = addslashes($str);
+	if( is_string($str) ){
+		$str = addslashes($str);
+	} else if( is_array($str) ){
+		
+		foreach( $str as $key=>$value){
+			$str[$key] = addslashes($value);
+		}
+		
+	}
 	return $str;
 }
 ?>

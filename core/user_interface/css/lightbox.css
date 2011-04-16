@@ -82,11 +82,16 @@
 }
 
 /** Link nova categoria **/
+	div.nova_categoria {
+        width: 109px;
+        height: 21px;
+        display: table;
+	}
      div.nova_categoria a {
         width: 109px;
         height: 21px;
         background: url(../img/nova_categoria.png) no-repeat;
-        display: block;
+        display: table;
         padding: 0;
         margin: 0;
         float: left;

@@ -93,6 +93,7 @@ class ModsController extends Controller
      */
     protected $globalVars;
 
+	public $testMode = false;
     /**
      * MÉTODOS
      *

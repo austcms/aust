@@ -81,7 +81,7 @@
 
 
 
-<form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?section=<?php echo $_GET["section"] ?>&action=save" enctype="multipart/form-data" >
+<form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?section=<?php echo $_GET["section"] ?>&action=save" enctype="multipart/form-data">
 <input type="hidden" name="metodo" value="<?php echo $_GET['action'];?>">
 <?php if($_GET['action'] == 'create'){ ?>
     <input type="hidden" name="frmadddate" value="<?php echo date("Y-m-d"); ?>">
@@ -171,7 +171,7 @@
     /*
      * Mostra imagem preview
      */
-    if( $dados["bytes"] > 0 ){
+    if( !empty($dados["bytes"]) && $dados["bytes"] > 0 ){
         ?>
         <tr>
             <td valign="top">Imagem atual:</td>

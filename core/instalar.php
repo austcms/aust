@@ -13,6 +13,10 @@
 /**
  * Carrega instalação
  */
+
+// PHP 5.3 needs this
+date_default_timezone_set('America/Sao_Paulo');
+
 /**
  * !!!EDITAR!!!
  *

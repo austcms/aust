@@ -38,6 +38,15 @@
     else if($_GET['action'] == 'edit'){
 
     }
+
+/*
+ * Tamanho máximo do Upload.
+ */
+$maxSize = (int) str_replace('M','', ini_get('upload_max_filesize') );
+if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
+    $maxSize = (int) str_replace('M','', ini_get('post_max_size') );
+
+
 ?>
 <h2><?php echo $tagh2;?></h2>
 <p><?php echo $tagp;?></p>
@@ -48,26 +57,72 @@
 <input type="hidden" name="metodo" value="<?php echo $_GET['action'];?>">
 
 <?php if($_GET['action'] == 'create'){ ?>
-    <input type="hidden" name="frmadddate" value="<?php echo date("Y-m-d H:i:s"); ?>">
     <input type="hidden" name="frmautor" value="<?php echo $_SESSION['loginid'];?>">
 <?php } else { ?>
-
-    <input type="hidden" name="frmadddate" value="<?php ifisset( $dados['adddate'] );?>">
     <input type="hidden" name="frmautor" value="<?php ifisset( $dados['autor'] );?>">
-
 <?php }?>
 
 <input type="hidden" name="w" value="<?php ifisset( $dados['id'] );?>">
 <input type="hidden" name="aust_node" value="<?php echo $austNode; ?>">
 
 <table cellpadding=0 cellspacing=0 class="form">
+	
+    <?php if( $modulo->isEdit() && $modulo->getStructureConfig("show_visits_counter") ){ ?>
+	<tr>
+	    <td><label>Estatísticas:</label></td>
+	    <td>
+			<?php
+			if( $dados['visitantes'] == 0 ){
+				?>
+				Nenhum visitante viu este conteúdo até agora.
+				<?php
+			} else if( $dados['visitantes'] == 1 ){
+				?>
+	         	Apenas <strong>um</strong> visitante viu este conteúdo.
+				<?php
+			} else if( $dados['visitantes'] > 1 ){
+				?>
+	         	Este conteúdo foi visto por <strong><?php echo $dados['visitantes']?></strong> 
+				visitantes.
+				<?php
+			}
+			?>
+	    </td>
+	</tr>
+	<?php } ?>
+
+	<?php
+	$slave = Aust::getInstance()->getRelatedSlaves($_GET['aust_node']);
+	if( !empty($slave) && $modulo->isEdit() ){
+		$slave = reset($slave);
+		?>	
+	    <tr>
+	        <td valign="top"><label>Opções:</label></td>
+	        <td valign="top">
+				<?php
+				foreach ($slave as $key => $value) {
+					?>
+					<div>
+		            <a href="adm_main.php?section=conteudo&action=edit&aust_node=<?php echo $value['slave_id']?>&related_master=<?php echo $_GET['aust_node']?>&related_w=<?php echo $_GET['w']?>">
+					<?php echo $value['slave_name']; ?>
+					</a>
+					</div>
+					<?php
+				}
+				$slave = reset($slave);
+				?>
+	        </td>
+	    </tr>
+		<?php
+	}
+	?>
     <tr>
         <td class="first"><label>Categoria:</label></td>
         <td class="second">
             <div id="categoriacontainer">
             <?php
             $current_node = '';
-            if($_GET['action'] == "editar"){
+            if( $_GET['action'] == "editar" || $_GET['action'] == "edit" ){
                 $current_node = $dados['categoria'];
                 ?>
                 <input type="hidden" name="frmcategoria" value="<?php echo $current_node; ?>">
@@ -94,15 +149,65 @@
             ?>
         </td>
     </tr>
-    <tr>
-        <td><label>Título:</label></td>
-        <td>
-            <INPUT TYPE='text' NAME='frmtitulo' class='text' value='<?php if( !empty($dados['titulo']) ) echo $dados['titulo'];?>' />
-            <p class="explanation">
+	<tr>
+	    <td><label>Título:</label></td>
+	    <td>
+	        <INPUT TYPE='text' NAME='frmtitulo' class='text' value='<?php if( !empty($dados['titulo']) ) echo $dados['titulo'];?>' />
+	        <p class="explanation">
 
-            </p>
+	        </p>
+	    </td>
+	</tr>
+	
+    <?php
+    /*
+     * PREVIEW URL
+     */
+    if( $modulo->getStructureConfig("has_file") ){ ?>
+    <tr>
+        <td valign="top"><label>Arquivo:</label></td>
+        <td>
+			<?php
+			if( $_GET['action'] == "edit" && !empty($dados['file_systempath']) ){
+				?>
+				<img src="<?php echo getFileIcon($dados['file_name']);?>" align="left" />
+                <span style="position: relative; left: 7px; top: 12px; display: block">
+                    <strong>
+					<?php
+					if( empty($dados['original_file_name']) )
+						echo lineWrap($dados['file_name'], 64);
+					else
+						echo lineWrap($dados['original_file_name'], 64);
+					?>
+					</strong>
+					<br />
+					<span class="filesize">
+						<?php echo convertFilesize( $dados['file_size'] ); ?>Mb
+					</span>
+                </span>
+
+				<br clear="all"/>
+
+	            <input type="file" name="file" />
+                <p class="explanation">
+                    Selecione um arquivo para substituir o atual.
+					Tamanho máximo: <?php echo $maxSize; ?>Mb.
+                    
+                </p>
+            	<?php
+			} else {
+				?>
+                <input type="file" name="file" />
+                <p class="explanation">
+                    Localize um arquivo se você deseja realizar upload.
+                    Tamanho máximo: <?php echo $maxSize; ?>Mb.
+                </p>
+            <?php } ?>
+	
         </td>
     </tr>
+    <?php } ?>
+
     <?php
     /*
      * PREVIEW URL
@@ -175,6 +280,23 @@
     <?php
     }
     ?>
+
+	<?php
+    if( 1 == 0 AND $modulo->getStructureConfig("manual_date") ){
+    ?>
+    <tr>
+        <td valign="top"><label>Data manual:</label></td>
+        <td>
+		    <input type="text" name="frmadddate" value="<?php echo date("Y-m-d H:i:s"); ?>">
+            <p class="explanation">
+				Configure uma data para o conteúdo manualmente.
+            </p>
+        </td>
+    </tr>
+    <?php
+    }
+    ?>
+
     <tr>
         <td colspan="2"><label>Texto: </label>
         </td>

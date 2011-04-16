@@ -9,7 +9,7 @@
     }
 ?>
 
-<form method="post" action="adm_main.php?section=<?php echo $_GET['section'];?>&action=gravar">
+<form method="post" action="adm_main.php?section=<?php echo $_GET['section'];?>&action=gravar" enctype="multipart/form-data">
 <input type="hidden" name="action" value="gravar">
 <input type="hidden" name="frmclasse" value="categoria">
 
@@ -72,6 +72,12 @@
             Digite uma breve descrição desta categoria.
         </p>
         <br /><br />
+    </td>
+</tr>
+<tr>
+    <td valign="top">Arquivo de Imagem: </td>
+    <td>
+        <input type="file" name="arquivo" value="" />
     </td>
 </tr>
 <tr>

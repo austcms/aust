@@ -81,16 +81,19 @@ if(count($query) == 0){
                 for($i=0; $i< count($modulo->config['contentHeader']['campos']); $i++) { ?>
                     <td>
                         <?php
+						$title = $dados[$modulo->config['contentHeader']['campos'][$i]];
+						if( empty($title) )
+							$title = "[Sem título]";
                         if($i == 1){
                             //vd($permissoes->canEdit($austNode));
                             if( $permissoes->canEdit($austNode) )
                                 echo '<a href="adm_main.php?section='.$_GET['section'].'&action=edit&aust_node='.$_GET['aust_node'].'&w='.$dados["id"].'">';
 
-                            echo $dados[$modulo->config['contentHeader']['campos'][$i]];
+                            echo $title;
                             if( $permissoes->canEdit($austNode) )
                                 echo '</a>';
                         } else {
-                            echo $dados[$modulo->config['contentHeader']['campos'][$i]];
+                            echo $title;
                         }
                         ?>
                     </td>

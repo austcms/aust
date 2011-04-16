@@ -88,6 +88,14 @@ $modInfo = array(
      */
     'configurations' => array(
         /*
+         * Has file
+         */
+        'has_file' => array(
+            "value" => "",
+            "label" => "Tem arquivo?",
+            "inputType" => "checkbox",
+        ),
+        /*
          * Ordenate
          */
         'ordenate' => array(
@@ -135,6 +143,18 @@ $modInfo = array(
             "label" => "Permitir upload de imagens no TinyMCE?",
             "inputType" => "checkbox",
         ),
+
+	    'manual_date' => array(
+	        "value" => "",
+	        "label" => "Ajustar data manualmente?",
+	        "inputType" => "checkbox",
+	    ),
+
+	    'show_visits_counter' => array(
+	        "value" => "",
+	        "label" => "Mostrar contador de visitas",
+	        "inputType" => "checkbox",
+	    ),
     ),
     
     /*

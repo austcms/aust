@@ -88,7 +88,7 @@ class Config {
                 $type = Registry::read('configStandardType');
                 $field = 'valor';
                 $params = array(
-                    'where' => "tipo='".$type."' AND propriedade='".$property."'",
+                    'where' => "propriedade='".$property."'",
                     'mode' => 'single',
 
                 );
@@ -96,9 +96,10 @@ class Config {
                 return false;
             }
 
+			$config = $this->getConfigs($params);
+			
+            $result = reset( $config );
 
-
-            $result = reset( $this->getConfigs($params) );
             $result = reset($result);
             return $result[$field];
 
@@ -312,8 +313,10 @@ class Config {
     }
 
     function updateOptions($params){
-
-        $this->conexao->exec("UPDATE config SET valor='".$params["valor"]."' WHERE id='".$params["id"]."'");
+		
+		$params = sanitizeString($params);
+		$sql = "UPDATE config SET valor='".$params["valor"]."' WHERE id='".$params["id"]."'";
+        $this->conexao->exec($sql);
 
         return '<span style="color: green;">Configuração salva com sucesso!</span>';
     }

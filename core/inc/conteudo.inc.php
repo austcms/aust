@@ -66,11 +66,6 @@ if(!empty($_GET['action'])){
      */
     $modDir = $aust->LeModuloDaEstrutura($aust_node).'/';
 
-    /**
-     * Carrega arquivos principal do módulo requerido
-     */
-	//include(MODULOS_DIR.$modDir.'index.php');
-
     /*
      *
      * INSTANCIA MÓDULO
@@ -80,7 +75,6 @@ if(!empty($_GET['action'])){
      * Carrega arquivos principal do módulo requerido
      */
         include(MODULOS_DIR.$modDir.MOD_CONFIG);
-        //include(MODULOS_DIR.$modDir.MOD_DBSCHEMA);
         /**
          * Carrega classe do módulo e cria objeto
          */
@@ -90,10 +84,10 @@ if(!empty($_GET['action'])){
         $param = array(
             'config' => $modInfo,
             'user' => $administrador,
-            //'modDbSchema' => $modDbSchema,
         );
         $modulo = new $moduloNome($param);
         unset( $modDbSchema );
+
     /**
      * MVC?
      *
@@ -124,36 +118,34 @@ if(!empty($_GET['action'])){
 		/*
 		 * Navegação entre actions de um austNode
 		 */
-		?>
-		<div class="structure_nav_options">
-			<?php
-			$moreOptions = array();
-			foreach( $modInfo['opcoes'] as $actionName=>$humanName ){
-				if( $actionName == $action )
-					continue;
-				$moreOptions[] = '<a href="adm_main.php?section='.$_GET['section'].'&action='.$actionName.'&aust_node='.$austNode.'">'.$humanName.'</a>';
+
+		$moreOptions = array();
+		foreach( $modInfo['opcoes'] as $actionName=>$humanName ){
+			if( $actionName == $action )
+				continue;
+			$moreOptions[] = '<a href="adm_main.php?section='.$_GET['section'].'&action='.$actionName.'&aust_node='.$austNode.'">'.$humanName.'</a>';
+		}
+		
+		$visibleNav = true;
+		$relatedMasters = Aust::getInstance()->getRelatedMasters(array($austNode));
+
+		if( !empty($relatedMasters) ){
+
+			$module = Aust::getInstance()->getStructureInstance($austNode);
+			if( !$module->getStructureConfig('related_and_visible') ){
+				$visibleNav = false;
 			}
 			
-			if( !empty($moreOptions) ){
-				?>
-				Navegação: <?php echo implode(", ", $moreOptions); ?>
-				<?php
-			}
+		}
+		
+		if( !empty($moreOptions) && $visibleNav ){
 			?>
-		</div>
-		<?php
-	    /*
-	     * Se for save, redireciona automaticamente
-	     */
-	     if( in_array($action, array(SAVE_ACTION, ACTIONS_ACTION)) )
-			{
-	        ?>
-	        <div class="loading_timer">
-	            <img src="<?php echo IMG_DIR ?>loading_timer.gif" /> Redirecionando Automaticamente
-	        </div>
-	        <?php
-	    }
-
+			<div class="structure_nav_options">
+				Navegação: <?php echo implode(", ", $moreOptions); ?>
+			</div>
+			<?php
+		}
+		
         /**
          * Prepara os argumentos para instanciar a classe e depois
          * chama o Controller que cuidará de toda a arquitetura MVC do módulo
@@ -170,20 +162,42 @@ if(!empty($_GET['action'])){
             'model' => $model,
         );
         $modController = new ModController($param);
-	    if( in_array($action, array(SAVE_ACTION, ACTIONS_ACTION)) ){
-            $goToUrl = "adm_main.php?section=".$_GET['section'].'&action=listing&aust_node='.$aust_node;
+
+	    /*
+	     * Se for save, redireciona automaticamente
+	     */
+	    if( in_array($action, array(SAVE_ACTION, ACTIONS_ACTION)) &&
+			(
+				empty($_SESSION['no_redirect']) ||
+				!$_SESSION['no_redirect']
+			)
+	 	)
+		{
+		
+			unset($_SESSION['selected_items']);
+	        ?>
+	        <div class="loading_timer">
+	            <img src="<?php echo IMG_DIR ?>loading_timer.gif" /> Redirecionando Automaticamente
+	        </div>
+	        <?php
+
+			if( !empty($_POST['redirect_to']) )
+				$goToUrl = $_POST['redirect_to'];
+			else if( !empty($_GET['redirect_to']) )
+				$goToUrl = $_GET['redirect_to'];
+			else
+            	$goToUrl = "adm_main.php?section=".$_GET['section'].'&action=listing&aust_node='.$aust_node;
             ?>
             <script type="text/javascript">
                 var timeToRefresh = 2;
                 setTimeout(function(){
                     window.location.href = "<?php echo $goToUrl ?>";
-                }, 2300);
+                }, 2000);
             </script>
-
-
             <?php
         }
 
+		$_SESSION['no_redirect'] = false;
     }
     /**
      * Não possui estrutura MVC
@@ -354,6 +368,15 @@ else {
                             $type = $structure['tipo'];
                         }
 
+						$module = null;
+						if( !empty($structure['masters']) ){
+
+							$module = Aust::getInstance()->getStructureInstance($structure['id']);
+							if( !$module->getStructureConfig('related_and_visible') )
+								continue;
+							
+						}
+
                         if( !$permissoes->verify($structure['id']) )
                             continue;
                         ?>
@@ -389,7 +412,9 @@ else {
                         </table>
 
                     </div>
-                <?php endforeach; ?>
+                <?php
+				unset($module);
+				endforeach; ?>
         </div>
 
     </div><?php // FIM DO DIV PAINEL GERENCIAR ?>

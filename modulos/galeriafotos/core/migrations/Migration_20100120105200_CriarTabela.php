@@ -31,6 +31,8 @@ class Migration_20100120105200_CriarTabela extends Migrations
             'dbSchemaTableProperties' => array(
                 'PRIMARY KEY' => '(id)',
                 'UNIQUE' => 'id (id)',
+                'INDEX' => '(ref_id)',
+				
             )
         );
 
@@ -64,6 +66,8 @@ class Migration_20100120105200_CriarTabela extends Migrations
             'dbSchemaTableProperties' => array(
                 'PRIMARY KEY' => '(id)',
                 'UNIQUE' => 'id (id)',
+                'INDEX' => '(galeria_foto_id)',
+                'INDEX' => '(ref_id)',
             )
         );
         $this->createTable( $schema );

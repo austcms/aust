@@ -61,6 +61,7 @@ $conexao = Connection::getInstance();
  *
  */
 $myid       = (empty($_GET['myid']))        ? ''        : $_GET['myid'];        // id da imagem a ser aberta
+$path       = (empty($_GET['path']))        ? ''        : $_GET['path'];        // id da imagem a ser aberta
 $table      = (empty($_GET['table']))       ? 'imagens' : $_GET['table'];       // tabela onde a imagem se encontra
 $thumbs     = (empty($_GET['thumbs']))      ? ''        : $_GET['thumbs'];      // yes|no: diz se deve ser tratada a imagem
 $fromfile   = (empty($_GET['fromfile']))    ? false     : $_GET['fromfile'];      // yes|no: diz se deve ser tratada a imagem
@@ -84,6 +85,10 @@ if (!empty($myid)){
         
     $sql = "SELECT * FROM $table WHERE $idfrom='$myid' $ordem";
         
+} elseif(!empty($path)) {
+	
+	/** @todo */
+	
 } else {
     $sql = "SELECT id FROM Imagens";
     $result = mysql_query($sql);
@@ -99,7 +104,11 @@ $dados = $query[0];
 if ($conexao->count($sql) > 0){
 
 	$type = '';
-	if( !empty($dados["tipo"]) )
+	if( !empty($dados["file_type"]) )
+		$type = $dados["file_type"];
+	else if( !empty($dados["filetype"]) )
+		$type = $dados["filetype"];
+	else if( !empty($dados["tipo"]) )
 		$type = $dados["tipo"];
 	else if( !empty($dados["type"]) )
 		$type = $dados["type"];
@@ -177,6 +186,15 @@ if ($conexao->count($sql) > 0){
 
         $nova = imagecreatetruecolor($largurad,$alturad);//criar uma imagem em branco
 
+		// PNG ou GIF, ajusta transparência
+		if( in_array($fileType, array('image/png', 'image/gif') ) ){
+			imagealphablending($nova, false);
+			imagesavealpha($nova,true);
+			$transparent = imagecolorallocatealpha($nova, 255, 255, 255, 127);
+			imagefilledrectangle($nova, 0, 0, $largurad, $alturad, $transparent);
+		}
+
+
 //        $nova = imagecreatetruecolor($largurad,$alturad);//criar uma imagem em branco
         if(empty($quality)) $quality = 3;
         if($quality > 5) $quality = 3;
@@ -218,7 +236,7 @@ if ($conexao->count($sql) > 0){
             if( !empty($resample) AND $resample == "no")
                 imagejpeg($nova, '', 90);
             else
-                imagejpeg($nova, null, 100);//, '', $quality);
+                imagepng($nova);//, '', $quality);
         }
         
         

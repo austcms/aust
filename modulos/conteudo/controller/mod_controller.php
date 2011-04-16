@@ -24,8 +24,6 @@ class ModController extends ModsController
          */
         $this->set('h1', $this->aust->leNomeDaEstrutura($_GET['aust_node']) );
 
-        $this->set('cat', $query[0]['nome'] );
-
         if((!empty($filter)) AND ($filter <> 'off')){
             $addurl = "&filter=$filter&filterw=" . urlencode($filterw);
         }
@@ -98,7 +96,11 @@ class ModController extends ModsController
     }
 
     public function save(){
-        $this->set('resultado', $this->modulo->save($_POST));
+		if( $_POST['metodo'] == CREATE_ACTION ){
+			$_POST['frmadddate'] = date("Y-m-d H:i:s");
+		}
+		
+        $this->set('resultado', $this->modulo->save($_POST, $_FILES));
     }
     
 }

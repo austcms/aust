@@ -165,16 +165,22 @@ class Cadastro extends Module {
 	            if( !empty($campos[$campo]) AND $campos[$campo]["especie"] == "relacional_umparamuitos" ){
 	                unset($this->data[$tabela][$campo]);
 
+					// prevents duplicated ids
+					$usedIds = array();
 	                $i = 0;
 	                foreach( $valor as $subArray ){
+						if( in_array($subArray, $usedIds) )
+							continue;
+						
 	                    if( $subArray != 0 ){
+							$usedIds[] = $subArray;
 	                        $relational[$campo][$campos[$campo]["referencia"]][$i][$campos[$campo]["ref_tabela"]."_id"] = $subArray;
 	                        $relational[$campo][$campos[$campo]["referencia"]][$i]["created_on"] = date("Y-m-d H:i:s");
+	                        $relational[$campo][$campos[$campo]["referencia"]][$i]["order_nr"] = $i+1;
 	                        $i++;
 	                    }
-	                    $this->toDeleteTables[$campo][$campos[$campo]["referencia"]] = 1;
 	                }
-
+                    $this->toDeleteTables[$campo][$campos[$campo]["referencia"]] = 1;
 	            }
 	            /*
 	             * Date
@@ -248,6 +254,9 @@ class Cadastro extends Module {
 		if( empty($files) ){
 			$files = $this->files;
 		}
+		
+		if( empty($this->configurations['estrutura']['table_files']['valor']) )
+			return false;
 		
 		$filesTable = $this->configurations['estrutura']['table_files']['valor'];
 		foreach( $files as $table=>$filesField ){
@@ -413,6 +422,9 @@ class Cadastro extends Module {
 		if( empty($images) ){
 			$images = $this->images;
 		}
+		
+		if( empty($this->configurations['estrutura']['table_images']['valor']) )
+			return false;
 		
 		$imageTable = $this->configurations['estrutura']['table_images']['valor'];
 		foreach( $images as $table=>$imagesField ){
@@ -918,7 +930,7 @@ class Cadastro extends Module {
     public function loadSql($param){
         // configura e ajusta as variáveis
         $categorias = (empty($param['categorias'])) ? '' : $param['categorias'];
-        $metodo = (empty($param['metodo'])) ? '' : $param['metodo'];
+        $metodo = (empty($param['metodo'])) ? 'listing' : $param['metodo'];
         $search = (empty($param['search'])) ? '' : $param['search'];
         $searchField = (empty($param['search_field'])) ? '' : $param['search_field'];
         $w = (empty($param['id'])) ? '' : $param['id'];
@@ -1057,7 +1069,7 @@ class Cadastro extends Module {
                 $searchQuery = "AND (".implode(" OR ", $searchQueryArray).")";
             //pr($campos);
         }
-
+		
         /**
          * Novo SQL
          */
@@ -1143,6 +1155,9 @@ class Cadastro extends Module {
         return $dados['valor'];
     }
 
+	function dataTable($param){
+		return $this->LeTabelaDeDados($param);
+	}
     /*
      * Função para retornar o nome da tabela de dados de uma estrutura da cadastro
      */

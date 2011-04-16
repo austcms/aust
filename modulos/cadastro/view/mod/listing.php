@@ -15,12 +15,6 @@ $precisa_aprovacao = $modulo->pegaConfig(Array('estrutura'=>$_GET['aust_node'], 
 
 
 <?php
-
-//print_r($precisa_aprovacao);
-
-//pr($resultado);
-
-
 /*
  * FILTROS ESPECIAIS
  */
@@ -81,11 +75,15 @@ if( $fields > 0 ){
                 <strong>Buscar:</strong>
                 <input type="text" id="search_query_input" onkeyup="cadastroSearch( $('#search_query_input'), <?php echo $this->austNode;?>);" />
                 <select id="search_field" onchange="cadastroSearch( $('#search_query_input'), <?php echo $this->austNode;?>);">
-                    <option value="&all&">Buscar em Todos</option>
+                    <option value="&all&">Todos os campos</option>
                     <?php
                     foreach( $search_fields as $physicalName=>$humanName ){
+						if( empty($humanName['valor']) ||
+						 	in_array($humanName['especie'], array('relacional_umparamuitos','relacional_umparaum'))
+						)
+							continue;
                         ?>
-                        <option value="<?php echo $physicalName; ?>"><?php echo $humanName; ?></option>
+                        <option value="<?php echo $physicalName; ?>"><?php echo $humanName['valor']; ?></option>
                         <?php
                     }
                     ?>

@@ -17,7 +17,6 @@ if($administrador->LeRegistro('tipo') == 'Webmaster'):
         AND is_dir($_GET['instalar_modulo']) )
     {
         $path = $_GET['instalar_modulo'];
-
         /**
          * Carrega arquivos dos módulos
          */

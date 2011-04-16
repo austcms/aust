@@ -16,7 +16,7 @@ if( !empty($_GET['status']) ){
 /*
  * Salva configuração
  */
-if($_POST['gravar']){
+if( !empty($_POST['gravar']) && $_POST['gravar'] ){
     unset($_POST['gravar']);
     foreach($_POST['data'] as $key=>$valor){
         $params = array(
@@ -25,8 +25,10 @@ if($_POST['gravar']){
         );
 
         $msg = $config->updateOptions($params);
+
         unset($params);
     }
+
     header("Location: ".$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&status=1');
     $status = $msg;
 }
@@ -34,7 +36,7 @@ if($_POST['gravar']){
 /*
  * NOVA CONFIGURAÇÃO
  */
-if($_POST['novaconfig']){
+if( !empty($_POST['novaconfig']) && $_POST['novaconfig'] ){
     unset($_POST['novaconfig']);
     $params = array(
         'propriedade' => $_POST['propriedade'],

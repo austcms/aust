@@ -20,6 +20,12 @@ $(document).ready(function(){
 //	$("a[name=modal]").first().click();
 
 //	window.status = $("[name='data[teste][node_id]']").length;
+	$('.check_checkboxes').attr('checked', false).click(function(){
+		
+		window.status = $(this).parents('table').length;
+		$(this).parents('table').find('input[type=checkbox]').attr('checked', $(this).attr('checked'));
+	});
+	
 	// changeViewMode
 	$('a[class=change_viewmode]').click(function(e) {
 		changeViewMode(this);
@@ -65,6 +71,18 @@ $(document).ready(function(){
 
     });
 
+	// .dragdrop
+	
+    $(".dragdrop").sortable({
+//        handle: 'h3',
+        opacity: 0.4,
+//        containment: 'document',
+        dropOnEmpty: true,
+        stop: function () {
+        }
+
+    });
+	
     // Hints
     $("span.hint a").each(function(){
         $(this).tooltip({

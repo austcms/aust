@@ -14,12 +14,12 @@
  * @global array $GLOBALS['aust_charset']
  * @name $aust_charset
  */
-//$aust_charset['view'] = 'iso-8859-1';
-//$aust_charset['db'] = 'latin1';
-//$aust_charset['db_collate'] = 'latin1_general_ci';
+
 $aust_charset['view'] = 'utf-8';
 $aust_charset['db'] = 'utf8';
 $aust_charset['db_collate'] = 'utf8_general_ci';
+
+date_default_timezone_set('America/Sao_Paulo');
 
 /**
  * CONFIGURAÇÕES GERAIS
@@ -57,6 +57,14 @@ $aust_charset['db_collate'] = 'utf8_general_ci';
                 'valor' => 'Modifique o nome do site',
                 'explanation' => 'Este nome aparecerá no título do gerenciador',
             ),
+		    array(
+		        'tipo' => 'Privado',
+		        'local' => '',
+		        'nome' => 'Usuário tem imagem secundária?',
+		        'propriedade' => 'user_has_secondary_image',
+		        'valor' => '0',
+		        'explanation' => 'Em alguns casos, pode ser necessário que administradores tenham uma imagem secundária.',
+		    ),
         );
         Registry::write('neededConfig', $neededConfig);
 
