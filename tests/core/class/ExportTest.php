@@ -20,6 +20,8 @@ class ExportTest extends PHPUnit_Framework_TestCase
 	public $images = array(
 		
 	);
+	
+	public $lastSite;
 
     public function setUp(){
     
@@ -215,7 +217,7 @@ class ExportTest extends PHPUnit_Framework_TestCase
 	}
 	
 	function testImportation(){
-		$this->resetTables();
+		$this->populate();
 		include(dirname(__FILE__).'/ExportPopulate.php');
 		
 		$importData = $this->obj->jsonToArray($json);
@@ -264,7 +266,7 @@ class ExportTest extends PHPUnit_Framework_TestCase
 	}
 	
 	function testImportTwice(){
-		$this->resetTables();
+		$this->populate();
 		include(dirname(__FILE__).'/ExportPopulate.php');
 		
 		$importData = $this->obj->jsonToArray($json);
