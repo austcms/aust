@@ -235,9 +235,9 @@ foreach( $camposForm as $chave=>$valor ){
      * RELACIONAL UM PARA UM
      */
     if( $valor["tipo"]["especie"] == "relacional_umparaum" ){
-        $sql = "SELECT id,".$valor["tipo"]["tabelaReferenciaCampo"]." FROM ".$valor["tipo"]["tabelaReferencia"];
+        $sql = "SELECT id, ".$valor["tipo"]["tabelaReferenciaCampo"]." FROM ".$valor["tipo"]["tabelaReferencia"] ." ORDER BY ".$valor["tipo"]["tabelaReferenciaCampo"];
         $selectValues = $conexao->query($sql);
-        //pr($sql);
+
         //$select["selected"] = "3";
         $inputType = "select";
         foreach($selectValues as $tabelaReferenciaResult){
