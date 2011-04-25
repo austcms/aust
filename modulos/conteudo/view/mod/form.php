@@ -93,19 +93,24 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
 
 	<?php
 	$slave = Aust::getInstance()->getRelatedSlaves($_GET['aust_node']);
-	if( !empty($slave) ){
+	if( !empty($slave) && $modulo->isEdit() ){
+		$slave = reset($slave);
 		?>	
 	    <tr>
-	        <td><label>Opções:</label></td>
-	        <td>
+	        <td valign="top"><label>Opções:</label></td>
+	        <td valign="top">
 				<?php
-				$slave = Aust::getInstance()->getRelatedSlaves($_GET['aust_node']);
-				$slave = reset($slave);
+				foreach ($slave as $key => $value) {
+					?>
+					<div>
+		            <a href="adm_main.php?section=conteudo&action=edit&aust_node=<?php echo $value['slave_id']?>&related_master=<?php echo $_GET['aust_node']?>&related_w=<?php echo $_GET['w']?>">
+					<?php echo $value['slave_name']; ?>
+					</a>
+					</div>
+					<?php
+				}
 				$slave = reset($slave);
 				?>
-	            <a href="adm_main.php?section=conteudo&action=edit&aust_node=<?php echo $slave['slave_id']?>&related_master=<?php echo $_GET['aust_node']?>&related_w=<?php echo $_GET['w']?>">
-				<?php echo $slave['slave_name']; ?>
-				</a>
 	        </td>
 	    </tr>
 		<?php

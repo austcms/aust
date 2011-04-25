@@ -101,7 +101,7 @@ class Conteudo extends Module
 			$post['frmfile_type'] 			= $value['type'];
 
 		}
-
+		
         return parent::save($post);
         
     }

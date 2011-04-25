@@ -468,7 +468,6 @@ class Aust {
 				WHERE
 					$whereStatement
 				";
-		
 		$result = $this->connection->query($sql);
 		if( empty($result) )
 			return array();
