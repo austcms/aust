@@ -168,7 +168,7 @@ class FormHelper
          */
         if( $inputType == "text" ){
             $conteudo.= '<div class="input_field input_text">';
-            $conteudo.= '<input type="text" name="'.$inputName.'" value="'.$inputValue.'" id="input-'.$fieldName.'" />';
+            $conteudo.= '<input type="text" name="'.$inputName.'" value="'.$inputValue.'" id="input-'.$fieldName.'" class="text" />';
         }
         /*
          * DATE FIELD
@@ -305,7 +305,7 @@ class FormHelper
             $conteudo.= '<input type="text" name="'.$inputName.'" value="ERRO NO TIPO DE CAMPO" id="input-'.$fieldName.'">';
         }
 		
-		if( $after ){
+		if( $after != "" ){
 			$conteudo.= '<div class="after">';
 			$conteudo.= $after;
 			$conteudo.= '</div>';

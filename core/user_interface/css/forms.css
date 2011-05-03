@@ -18,7 +18,7 @@
         margin-bottom: 15px;
     }
     form div.input { display: inline; width: 100%; float: left; }
-    form input.text { width: 380px; font-size: 1.3em; height: 22px; padding: 0px 2px; } /* standard */
+    form input.text { width: 470px; font-size: 1.3em; height: 22px; padding: 0px 2px; } /* standard */
     form select { font-size: 1.0em; height: 22px; display: inline-block; }
     form textarea { margin-bottom: 10px; width: 100%; }
     form input.submit { display: block; font-size: 1.4em; padding: 10px; margin-bottom: 5px; clear: both; }
@@ -55,9 +55,12 @@
 
         form div.input_painel div.containner div.options { display: table; }
 
+select.aust_node { display: inline; float: left; }
+
 /* Lightbox */
     .window .lb_content table.form td label { line-height: 24px; width: 80px; display: inline-block; margin: 0 5px 0 0; }
     .window .lb_content table.form td input.text { font-size: 1.3em; font-weight: bold; width: 240px; }
+
 
 /* MÓDULOS */
 /* Table de forms de módulos */
@@ -69,7 +72,7 @@ table.form {
     table.form tr td.label { padding-top: 5px; vertical-align: top; }
     table.form td.first { width: 180px; }
     table.form label { font-weight: bold; color: #444444; }
-    table.form input.text { font-size: 1.3em; font-weight: bold; width: 380px; }
+    table.form input.text { font-size: 1.3em; font-weight: bold; width: 420px; }
     table.form input.date_text { font-size: 1.3em; font-weight: bold; width: 120px; }
 
 /* Table Listagem */
@@ -115,14 +118,15 @@ table.listagem td.adddate { width: 110px; }
 form.formHelper { }
 
     form.formHelper div.input { margin-bottom: 5px; }
-    form.formHelper label { width: 160px; margin-right: 5px; float: left; }
-    form.formHelper div.input_field {  width: 540px; }
+    form.formHelper label { width: 160px; margin: 7px 5px 0 0; float: left; }
+		form.formHelper label.select_category { margin-top: 0; }
+    form.formHelper div.input_field { width: 540px; float: left; }
     form.formHelper div.input_textarea textarea { width: 500px; height: 90px; margin: 0; }
     form.formHelper div.input_date input { width: 18px; }
         form.formHelper div.input_date .input_date_year { width: 35px; }
     form.formHelper div.input_checkbox { display: table; }
     form.formHelper div.input_images { display: table; }
-    form.formHelper div.after { margin: 3px 0 10px 165px; }
+    form.formHelper div.after { margin: 0 0 10px 0; }
 
 /*
  * Listagem de Pessoas - table com a class listagem e pessoas
