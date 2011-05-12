@@ -21,7 +21,10 @@ class YouTube extends Module
         'created_on' => 'adddate',
         'updated_on' => 'addate'
     );
-    /**
+	
+	public $authorField = "autor";
+    
+	/**
      *
      * @var class Configurações do módulo
      */

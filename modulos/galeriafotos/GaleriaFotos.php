@@ -22,6 +22,7 @@ class GaleriaFotos extends Module
         'created_on' => 'adddate',
         'updated_on' => 'addate'
     );
+	public $authorField = "autor";
 
     function __construct($param = ''){
 

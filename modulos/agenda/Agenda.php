@@ -20,6 +20,7 @@ class Agenda extends Module
         'updated_on' => 'updated_on'
     );
 
+	public $authorField = "autor";
     public $austField = 'categoria_id';
     public $order = 'actor_admin_id DESC';
 
