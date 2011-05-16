@@ -37,6 +37,8 @@ class Module
             'titulo', 'visitantes'
         );
 
+		public $authorField = "admin_id";
+
         public $austField = 'categoria';
         public $order = 'id DESC';
 
@@ -485,10 +487,21 @@ class Module
 			} else if(is_array($austNode)) {
 	            $austNodeForSql = implode("','", array_keys($austNode) );
 			}
-
-
             $where = $where . " AND ".$this->austField." IN ('".$austNodeForSql."')";
         }
+
+		
+		$user = User::getInstance();
+		
+		if( !in_array(
+				$user->type(),
+				array('Webmaster', 'Root', 'root', 'Moderador', 'Administrador')
+			) &&
+			$this->connection->tableHasField($this->useThisTable(), $this->authorField)
+		)
+		{
+			$where .= " AND (".$this->authorField." = ".$user->getId().")";
+		}
 
 		/*
 		 * Limit

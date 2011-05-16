@@ -161,24 +161,25 @@ if( $modulo->getStructureConfig("category_selectable") ){
         <?php
     }
 	?>
-	<div class="input"><label for="input-teste">Categoria</label><div class="input_field input_select">
+	<div class="input"><label for="input-teste" class="select_category">Categoria</label><div class="input_field input_select">
 	<?php
     echo BuildDDList( Registry::read('austTable') , $nodeIdFieldName, $administrador->tipo ,$austNode, $nodeId);
 	?>
-	<div class="after">
-	<?php
-	/*
-	 * Nova_Categoria?
-	 */
-	if( $modulo->getStructureConfig("category_creatable") ){
+	<div class="after category">
+		<?php
+		/*
+		 * Nova_Categoria?
+		 */
+		if( $modulo->getStructureConfig("category_creatable") ){
 
-		if( empty($nodeId) )
-			$nodeId = $austNode;
-	    lbCategoria(array('austNode'=>$nodeId, 'categoryInput' => $nodeIdFieldName) );
-	}
+			if( empty($nodeId) )
+				$nodeId = $austNode;
+		    lbCategoria(array('austNode'=>$nodeId, 'categoryInput' => $nodeIdFieldName) );
+		}
 	
-	?>
-	<p class="explanation"></p></div></div></div>
+		?>
+	</div>
+	</div></div>
 	<?php
 	
 }
@@ -310,6 +311,10 @@ foreach( $camposForm as $chave=>$valor ){
 	 * $form->input é uma forma automática de criar inputs. Campos do
 	 * tipo images não precisa desta técnica, pois são diferentes.
 	 */
+	$after = false;
+	if( !empty($valor['comentario']) )
+		$after = '<p class="explanation">'.$valor['comentario'].'</p>';
+
 	if( $useInput ){
 	    /**
 	     * Cria INPUT
@@ -320,7 +325,7 @@ foreach( $camposForm as $chave=>$valor ){
 	                                    "checkbox" => $checkbox,
 	                                    "value" => (string) $valor["valor"],
 	                                    "type" => $inputType,
-										'after' => '<p class="explanation">'.$valor['comentario'].'</p>'
+										'after' => $after
 	                                )
 	                        );
 	    ?>

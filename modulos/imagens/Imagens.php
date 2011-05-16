@@ -26,6 +26,8 @@ class Imagens extends Module
 	    'titulo', 'visitantes', 'systempath'
 	);
 
+	public $authorField = "autor";
+
 	public $defaultLimit = 25;
 	
     function __construct($param = ''){

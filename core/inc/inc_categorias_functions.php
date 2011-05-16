@@ -32,13 +32,13 @@ function BuildDDList($table,$id="ddListOptions",$escala,$parent=0, $current_node
         return "$ddListItems";
     } else if($primeirovazio == true){
         return "
-        <select name='$id' id='$id'>
+        <select name='$id' id='$id' class=\"aust_node\">
         <option value=''>Nenhum</option>
         $ddListItems</select>
         ";
     } else {
         return "
-        <select name='$id' id='$id'>$ddListItems</select>
+        <select name='$id' id='$id' class=\"aust_node\">$ddListItems</select>
         ";
     }
 }

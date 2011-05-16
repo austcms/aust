@@ -20,6 +20,8 @@ class Conteudo extends Module
         'updated_on' => 'addate'
     );
 
+	public $authorField = "autor";
+
     function __construct(){
         parent::__construct(array());
     }

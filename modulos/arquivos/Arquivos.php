@@ -27,6 +27,9 @@ class Arquivos extends Module
 	public $fieldsToLoad = array(
 	    'titulo', 'visitantes', 'original_filename', 'arquivo_nome'
 	);
+
+	public $authorField = "admin_id";
+
     /**
      *
      * @var <string> Extensões proibidas

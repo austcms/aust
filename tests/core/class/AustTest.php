@@ -1,10 +1,9 @@
 <?php
-require_once 'PHPUnit/Framework.php';
 
 #####################################
-
 require_once 'tests/config/auto_include.php';
 require_once 'core/class/SQLObject.class.php';
+
 
 #####################################
 
@@ -20,7 +19,6 @@ class AustTest extends PHPUnit_Framework_TestCase
         /*
          * Informações de conexão com banco de dados
          */
-        
         
         $this->conexao = Connection::getInstance();
         require_once('core/class/Aust.php');
