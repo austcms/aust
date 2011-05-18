@@ -135,6 +135,9 @@ if(!$isResponser){
 
         $_GET['action'] = (empty($_GET['action'])) ? '' : $_GET['action'];
         $_GET['section'] = (empty($_GET['section'])) ? 'conteudo' : $_GET['section'];
+        
+		if( $_GET['section'] == 'index' )
+			$_GET['section'] = 'conteudo';
 
         /**
          * Verifica se o usuário tem permissão para acessar a página requsitada
