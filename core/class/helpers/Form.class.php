@@ -224,8 +224,8 @@ class FormHelper
                 /**
                  * Se um valor padrão foi passado
                  */
-                if( !empty($inputValue) )
-                $selectSelected = $inputValue;
+                if( !empty($inputValue) || $inputValue == 0 )
+                	$selectSelected = $inputValue;
 
             /**
              * Opções a serem mostradas
@@ -245,7 +245,7 @@ class FormHelper
                  * Verifica se o <option> atual deve ser selecionado por
                  * padrão
                  */
-                if( !empty($selectSelected) AND $selectSelected == $chave ){
+                if( (!empty($selectSelected) || $selectSelected == 0) AND $selectSelected == $chave ){
                     $selectThis = 'selected="true"';
                 } else {
                     $selectThis = false;

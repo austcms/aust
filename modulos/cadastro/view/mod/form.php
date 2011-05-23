@@ -272,7 +272,7 @@ foreach( $camposForm as $chave=>$valor ){
      *
      * Fields for files
      */
-    else if($valor["tipo"]["especie"] == "images") {
+    elseif( $valor["tipo"]["especie"] == "images" ){
 
         include($modulo->getIncludeFolder().'/view/mod/_form_field_images.php');
 
@@ -291,6 +291,16 @@ foreach( $camposForm as $chave=>$valor ){
 			$plugins[] = 'imagemanager';
 		}
 		
+		$useInput = true;
+    } elseif( $valor["tipo"]["especie"] == "string" ){
+		if( $modulo->getFieldConfig($chave, 'boolean_field') == "1" ){
+			$inputType = "select";
+	        $select["options"] = array(
+				"1" => "Sim",
+				"0" => "Não",
+			);
+		}
+	
 		$useInput = true;
     } else {
 		$useInput = true;
