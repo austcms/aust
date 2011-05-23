@@ -74,6 +74,22 @@ class AdministradorTest extends PHPUnit_Framework_TestCase
 
     }
 
+ 	function testReset(){
+        // conecta
+        $_SESSION['login']['id'] = 1;
+        $_SESSION['login']['username'] = 'kurko';
+        $this->assertTrue($this->obj->isLogged() );
+
+        $this->assertEquals("1", 			$this->obj->getId() 				);
+        $this->assertEquals("Webmaster", 	$this->obj->tipo() 					);
+        $this->assertEquals("kurko", 		$this->obj->LeRegistro("login") 	);
+
+		$this->obj->reset();
+		
+        $this->assertFalse( $this->obj->getId() 				);
+        $this->assertFalse( $this->obj->type() 					);
+        $this->assertFalse( $this->obj->LeRegistro("username") 	);
+	}
     
 }
 ?>

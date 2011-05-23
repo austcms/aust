@@ -51,7 +51,8 @@ function RetiraAcentos($str){
  */
 function encodeDatabaseTableName($str){
 	$unwantedChars = array(
-		'!','@','#','$','%','^','&',
+		'!','@','#','$','%','^','&', '?', '+', '=', '(', ')',
+		'<', '>', '*'
 	);
 	
 	$str = str_replace($unwantedChars, "", $str);
@@ -63,7 +64,8 @@ function encodeDatabaseTableName($str){
  */
 function encodeDatabaseFieldName($str){
 	$unwantedChars = array(
-		'!','@','#','$','%','^','&',
+		'!','@','#','$','%','^','&', '?', '+', '=', '(', ')',
+		'<', '>', '*'
 	);
 	$str = str_replace($unwantedChars, "", $str);
 	$str = encodeString($str);

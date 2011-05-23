@@ -280,13 +280,16 @@ class Module
     public function load($param = ''){
         $this->loadedIds = array();
         $paramForLoadSql = $param;
-		
+
         /*
          * austNode é um conjunto de arrays
          */
 		if( !empty($param['austNode']) ){
 	        if( is_array($param['austNode']) ){
-	            $austNode = $param['austNode'];
+				if( !is_numeric($param['austNode']) )
+	            	$austNode = reset(array_keys($param['austNode']));
+				else
+		            $austNode = $param['austNode'];
 			} else if( is_numeric($param['austNode']) ){
 	            $austNode = $param['austNode'];
 	            $paramForLoadSql['austNode'] = $austNode;
@@ -296,7 +299,8 @@ class Module
          * $params contém mais condições para a busca
          */
         elseif( is_array($param) ){
-            $austNode = array($param['austNode']=>'');
+			
+           	$austNode = array($param['austNode']=>'');
             $paramForLoadSql['austNode'] = array($param['austNode']=>'');
         }
         /*
@@ -311,10 +315,8 @@ class Module
 		// counts rows
 		$this->totalRows = $this->_getTotalRows($paramForLoadSql);
 		
-//		pr($paramForLoadSql);
 		$sql = $this->loadSql($paramForLoadSql);
-		
-//		echo $sql;
+
         $qry = $this->connection->query($sql);
         if( empty($qry) )
             return array();
@@ -345,7 +347,6 @@ class Module
         }
 
         foreach( $embedResults as $module=>$embedResult ){
-
             foreach( $embedResult as $mainId=>$eachEmbed ){
                 $qry[$mainId][$module] = $eachEmbed;
             }
@@ -490,14 +491,14 @@ class Module
             $where = $where . " AND ".$this->austField." IN ('".$austNodeForSql."')";
         }
 
-		
 		$user = User::getInstance();
-		
+		$userId = $user->getId();
 		if( !in_array(
 				$user->type(),
 				array('Webmaster', 'Root', 'root', 'Moderador', 'Administrador')
 			) &&
-			$this->connection->tableHasField($this->useThisTable(), $this->authorField)
+			!empty($userId) &&
+			( $this->connection->tableHasField($this->useThisTable(), $this->authorField) )
 		)
 		{
 			$where .= " AND (".$this->authorField." = ".$user->getId().")";

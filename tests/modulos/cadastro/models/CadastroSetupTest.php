@@ -71,10 +71,11 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					array('ex_alunos', 'Ex-alunos'),
 					array('ex_alunos', 'Ex/alunos'),
 					array('barra_', 'Barra\\'),
-					array('testeteste', 'Teste&Teste#@'),
+					array('testeteste', 'Teste&Teste#@=*()<>'),
 					array('minha_tabela', 'Minha Tabela'),
 					array('tabela_com_c_cedilha', 'tábéla cOm ç ÇedilhA'),
 					array('aaaaa_eeee_iiii_oooo_uuuu', 'áâäãà éêëè íîïì óôöò úûüù'),
+					array('has', 'has?'),
 				);
 			}
 

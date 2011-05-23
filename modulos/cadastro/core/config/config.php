@@ -225,7 +225,7 @@ $modInfo = array(
 						  'dos itens selecionados.'
 		    ),
 		/*
-		 * CAMPOS TEXTOS
+		 * CAMPOS TEXTOS GRANDE (textarea)
 		 */
 		    /*
 		     * Tem editor?
@@ -236,6 +236,29 @@ $modInfo = array(
 				"label" => "Ativar editor de texto rico",
 				"inputType" => "checkbox",
 				'help' => 'Inserir um editor de texto (negrito/itálico/etc) neste campo. ',
+		    ),
+		    /*
+		     * Pode inserir imagens via editor rico?
+		     */
+			'text_has_images' => array(
+				'field_type' => 'text',
+				"value" => "",
+				"label" => "Ativar imagens em editor rico",
+				"inputType" => "checkbox",
+				'help' => 'Selecionar este item permitirá inserir imagens entre o texto.',
+		    ),
+		/*
+		 * CAMPOS STRING CURTO (254 char)
+		 */
+		    /*
+		     * Tem editor?
+		     */
+			'text_has_editor' => array(
+				'field_type' => 'string',
+				"value" => "",
+				"label" => "Campo booleano",
+				"inputType" => "checkbox",
+				'help' => 'Campo aceita somente 0 ou 1, portanto mostra select com opções "Sim" e "Não".',
 		    ),
 		    /*
 		     * Pode inserir imagens via editor rico?
