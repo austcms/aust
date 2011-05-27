@@ -34,7 +34,8 @@ session_start();
  *      require("config/installation/sql_para_construir_db.php");
  */
     
-
+include_once(THIS_TO_BASEURL.CONFIG_DIR."database.php");
+$dbConn = DATABASE_CONFIG::$dbConn;
 $conexao = new Connection($dbConn);
 
 include(THIS_TO_BASEURL.CORE_DIR."load_core.php");
