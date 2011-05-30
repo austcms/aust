@@ -200,9 +200,8 @@ class Module
 	public function fixEncoding($post = array()){
 		if( $this->connection->encoding != 'utf8' )
 			return $post;
-		
-		foreach( $post as $key=>$value ){
 
+		foreach( $post as $key=>$value ){
 			if( is_string($value) &&
 				!mb_check_encoding($value, 'UTF-8') )
 			{
