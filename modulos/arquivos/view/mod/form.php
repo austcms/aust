@@ -158,7 +158,8 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
     if($fm == "edit"){
         $showshow_path_to_link = false; // por padrão, não mostra
         if( !empty($moduloConfig["show_path_to_link"]) ){
-            if( $moduloConfig["show_path_to_link"]["valor"] == "1" )
+            if( !empty($moduloConfig["show_path_to_link"]["valor"])
+				&& $moduloConfig["show_path_to_link"]["valor"] == "1" )
                 $showshow_path_to_link = true;
         }
         if( $showshow_path_to_link ){
@@ -206,7 +207,8 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
      */
     $showDescricao = false; // por padrão, não mostra
     if( !empty($moduloConfig["descricao"]) ){
-        if( $moduloConfig["descricao"]["valor"] == "1" )
+        if( !empty($moduloConfig["descricao"]["valor"])
+			&& $moduloConfig["descricao"]["valor"] == "1" )
             $showDescricao = true;
     }
     if( $showDescricao ){

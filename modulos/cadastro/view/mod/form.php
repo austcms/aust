@@ -155,7 +155,6 @@ $nodeIdFieldName = 'data['.$infoCadastro["estrutura"]["tabela"]["valor"].'][node
 if( $modulo->getStructureConfig("category_selectable") ){
 	
     if( $_GET['action'] == EDIT_ACTION ){
-        $current_node = $dados['categoria'];
         ?>
         <input type="hidden" name="<?php echo $nodeIdFieldName; ?>" value="<?php echo $nodeId; ?>">
         <?php
@@ -163,6 +162,10 @@ if( $modulo->getStructureConfig("category_selectable") ){
 	?>
 	<div class="input"><label for="input-teste" class="select_category">Categoria</label><div class="input_field input_select">
 	<?php
+	if( empty($nodeId) ){
+		$nodeId = false;
+	}
+	
     echo BuildDDList( Registry::read('austTable') , $nodeIdFieldName, $administrador->tipo ,$austNode, $nodeId);
 	?>
 	<div class="after category">
@@ -306,12 +309,9 @@ foreach( $camposForm as $chave=>$valor ){
 		$useInput = true;
 	}
 
-    if( $valor["valor"] == '' ){
+    if( empty($valor["valor"]) || $valor["valor"] == '' ){
         $valor["valor"] = "";
     }
-
-
-
 
     if( empty($inputType) ){
         $inputType = "";
