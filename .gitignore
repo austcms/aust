@@ -2,6 +2,7 @@ nbproject/
 config/database.php
 config/tinymce
 uploads/
+uploads
 core/cache/*
 core/user_interface/cache/*
 .gitignore~
