@@ -37,6 +37,8 @@ class Module
             'titulo', 'visitantes'
         );
 
+		public $authorField = "admin_id";
+
         public $austField = 'categoria';
         public $order = 'id DESC';
 
@@ -198,9 +200,8 @@ class Module
 	public function fixEncoding($post = array()){
 		if( $this->connection->encoding != 'utf8' )
 			return $post;
-		
-		foreach( $post as $key=>$value ){
 
+		foreach( $post as $key=>$value ){
 			if( is_string($value) &&
 				!mb_check_encoding($value, 'UTF-8') )
 			{
@@ -278,13 +279,16 @@ class Module
     public function load($param = ''){
         $this->loadedIds = array();
         $paramForLoadSql = $param;
-		
+
         /*
          * austNode é um conjunto de arrays
          */
 		if( !empty($param['austNode']) ){
 	        if( is_array($param['austNode']) ){
-	            $austNode = $param['austNode'];
+				if( !is_numeric($param['austNode']) )
+	            	$austNode = reset(array_keys($param['austNode']));
+				else
+		            $austNode = $param['austNode'];
 			} else if( is_numeric($param['austNode']) ){
 	            $austNode = $param['austNode'];
 	            $paramForLoadSql['austNode'] = $austNode;
@@ -294,7 +298,8 @@ class Module
          * $params contém mais condições para a busca
          */
         elseif( is_array($param) ){
-            $austNode = array($param['austNode']=>'');
+			
+           	$austNode = array($param['austNode']=>'');
             $paramForLoadSql['austNode'] = array($param['austNode']=>'');
         }
         /*
@@ -309,10 +314,8 @@ class Module
 		// counts rows
 		$this->totalRows = $this->_getTotalRows($paramForLoadSql);
 		
-//		pr($paramForLoadSql);
 		$sql = $this->loadSql($paramForLoadSql);
-		
-//		echo $sql;
+
         $qry = $this->connection->query($sql);
         if( empty($qry) )
             return array();
@@ -343,7 +346,6 @@ class Module
         }
 
         foreach( $embedResults as $module=>$embedResult ){
-
             foreach( $embedResult as $mainId=>$eachEmbed ){
                 $qry[$mainId][$module] = $eachEmbed;
             }
@@ -485,10 +487,21 @@ class Module
 			} else if(is_array($austNode)) {
 	            $austNodeForSql = implode("','", array_keys($austNode) );
 			}
-
-
             $where = $where . " AND ".$this->austField." IN ('".$austNodeForSql."')";
         }
+
+		$user = User::getInstance();
+		$userId = $user->getId();
+		if( !in_array(
+				$user->type(),
+				array('Webmaster', 'Root', 'root', 'Moderador', 'Administrador')
+			) &&
+			!empty($userId) &&
+			( $this->connection->tableHasField($this->useThisTable(), $this->authorField) )
+		)
+		{
+			$where .= " AND (".$this->authorField." = ".$user->getId().")";
+		}
 
 		/*
 		 * Limit

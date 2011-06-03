@@ -225,7 +225,7 @@ $modInfo = array(
 						  'dos itens selecionados.'
 		    ),
 		/*
-		 * CAMPOS TEXTOS
+		 * CAMPOS TEXTOS GRANDE (textarea)
 		 */
 		    /*
 		     * Tem editor?
@@ -247,7 +247,19 @@ $modInfo = array(
 				"inputType" => "checkbox",
 				'help' => 'Selecionar este item permitirá inserir imagens entre o texto.',
 		    ),
-
+		/*
+		 * CAMPOS STRING CURTO (254 char)
+		 */
+		    /*
+		     * Tem editor?
+		     */
+			'boolean_field' => array(
+				'field_type' => 'string',
+				"value" => "",
+				"label" => "Campo booleano",
+				"inputType" => "checkbox",
+				'help' => 'Campo aceita somente 0 ou 1, portanto mostra select com opções "Sim" e "Não".',
+		    ),
     ),
     /**
      * RESPONSER

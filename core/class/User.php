@@ -49,6 +49,9 @@ class User {
      * @return <string>
      */
     public function type(){
+		if( empty($this->tipo) ){
+			$this->tipo = $this->LeRegistro('tipo');
+		}
         return $this->tipo;
     } // end type()
 
@@ -245,7 +248,13 @@ class User {
         return $query;
     }
 
-
+	function reset(){
+		$this->id 			= false;
+		$this->type 		= false;
+		$this->tipo 		= false;
+		$this->userInfo 	= false;
+		$_SESSION['login'] 	= false;
+	}
 }
 
 ?>

@@ -16,6 +16,8 @@ require_once(CORE_DIR."libs/functions/data_types.php");
 require_once(CORE_DIR."libs/functions/string_treatment.php");
 
 function autoload($className) {
+	if( in_array($className, array("array","int", "integer","string","bool","float")) )
+		return false;
     if( is_file('core/class/'.$className.'.php') )
         require 'core/class/'.$className.'.php';
     else

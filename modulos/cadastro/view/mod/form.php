@@ -155,30 +155,34 @@ $nodeIdFieldName = 'data['.$infoCadastro["estrutura"]["tabela"]["valor"].'][node
 if( $modulo->getStructureConfig("category_selectable") ){
 	
     if( $_GET['action'] == EDIT_ACTION ){
-        $current_node = $dados['categoria'];
         ?>
         <input type="hidden" name="<?php echo $nodeIdFieldName; ?>" value="<?php echo $nodeId; ?>">
         <?php
     }
 	?>
-	<div class="input"><label for="input-teste">Categoria</label><div class="input_field input_select">
+	<div class="input"><label for="input-teste" class="select_category">Categoria</label><div class="input_field input_select">
 	<?php
-    echo BuildDDList( Registry::read('austTable') , $nodeIdFieldName, $administrador->tipo ,$austNode, $nodeId);
-	?>
-	<div class="after">
-	<?php
-	/*
-	 * Nova_Categoria?
-	 */
-	if( $modulo->getStructureConfig("category_creatable") ){
-
-		if( empty($nodeId) )
-			$nodeId = $austNode;
-	    lbCategoria(array('austNode'=>$nodeId, 'categoryInput' => $nodeIdFieldName) );
+	if( empty($nodeId) ){
+		$nodeId = false;
 	}
 	
+    echo BuildDDList( Registry::read('austTable') , $nodeIdFieldName, $administrador->tipo ,$austNode, $nodeId);
 	?>
-	<p class="explanation"></p></div></div></div>
+	<div class="after category">
+		<?php
+		/*
+		 * Nova_Categoria?
+		 */
+		if( $modulo->getStructureConfig("category_creatable") ){
+
+			if( empty($nodeId) )
+				$nodeId = $austNode;
+		    lbCategoria(array('austNode'=>$nodeId, 'categoryInput' => $nodeIdFieldName) );
+		}
+	
+		?>
+	</div>
+	</div></div>
 	<?php
 	
 }
@@ -271,7 +275,7 @@ foreach( $camposForm as $chave=>$valor ){
      *
      * Fields for files
      */
-    else if($valor["tipo"]["especie"] == "images") {
+    elseif( $valor["tipo"]["especie"] == "images" ){
 
         include($modulo->getIncludeFolder().'/view/mod/_form_field_images.php');
 
@@ -291,16 +295,23 @@ foreach( $camposForm as $chave=>$valor ){
 		}
 		
 		$useInput = true;
+    } elseif( $valor["tipo"]["especie"] == "string" ){
+		if( $modulo->getFieldConfig($chave, 'boolean_field') == "1" ){
+			$inputType = "select";
+	        $select["options"] = array(
+				"1" => "Sim",
+				"0" => "Não",
+			);
+		}
+	
+		$useInput = true;
     } else {
 		$useInput = true;
 	}
 
-    if( $valor["valor"] == '' ){
+    if( empty($valor["valor"]) || $valor["valor"] == '' ){
         $valor["valor"] = "";
     }
-
-
-
 
     if( empty($inputType) ){
         $inputType = "";
@@ -310,6 +321,10 @@ foreach( $camposForm as $chave=>$valor ){
 	 * $form->input é uma forma automática de criar inputs. Campos do
 	 * tipo images não precisa desta técnica, pois são diferentes.
 	 */
+	$after = false;
+	if( !empty($valor['comentario']) )
+		$after = '<p class="explanation">'.$valor['comentario'].'</p>';
+
 	if( $useInput ){
 	    /**
 	     * Cria INPUT
@@ -320,7 +335,7 @@ foreach( $camposForm as $chave=>$valor ){
 	                                    "checkbox" => $checkbox,
 	                                    "value" => (string) $valor["valor"],
 	                                    "type" => $inputType,
-										'after' => '<p class="explanation">'.$valor['comentario'].'</p>'
+										'after' => $after
 	                                )
 	                        );
 	    ?>

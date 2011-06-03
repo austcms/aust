@@ -1,18 +1,18 @@
 <?php
 require_once 'PHPUnit/Framework.php';
-
-#####################################
 require_once 'tests/config/auto_include.php';
 require_once 'core/class/SQLObject.class.php';
 require_once 'core/config/variables.php';
 require_once 'core/libs/functions/func.php';
-#####################################
 
 class ConteudoTest extends PHPUnit_Framework_TestCase
 {
     public $lastSaveId;
     
     public function setUp(){
+	
+		$this->user = User::getInstance();
+		
         /*
          * MÓDULOS ATUAL
          *
@@ -27,8 +27,17 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
         include 'modulos/'.$this->mod.'/'.MOD_CONFIG;
         include_once 'modulos/'.$this->mod.'/'.$modInfo['className'].'.php';
 
-        $this->obj = new $modInfo['className'];//new $modInfo['className']();
+        $this->obj = new $modInfo['className'];
     }
+
+	function test_userLogged(){
+        $_SESSION['login']['id'] = 1;
+        $_SESSION['login']['username'] = 'kurko';
+        $this->user->tipo = 'Webmaster';
+        $this->assertTrue($this->user->isLogged() );
+        $this->assertEquals("1", $this->user->getId() );
+
+	}
 
 	function test_LimitSql(){
 		
@@ -68,6 +77,8 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
                 );
         $this->assertEquals('textos', $this->obj->useThisTable() );
 
+        $_SESSION['login']['id'] = 1;
+		$this->user->tipo = 'Webmaster';
         /*
          * Verifica SQL gerado, se é gerado corretamente
          */
@@ -81,13 +92,25 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
                         "LIMIT 0,25"),
                         trim($sql) );
 
+
+		$this->user->tipo = 'Reporter';
+        $sql = $this->obj->loadSql( array('') );
+        $sql = preg_replace('/\n|\t/Us', "", preg_replace('/\s{2,}/s', " ", $sql));
+        $this->assertEquals( trim("SELECT id, titulo, visitantes, categoria AS cat, ".
+                        "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as adddate, ".
+                        "(SELECT nome FROM categorias AS c WHERE id=cat ) AS node ".
+                        "FROM textos WHERE 1=1 AND (autor = 1) ".
+                        "ORDER BY id DESC ".
+                        "LIMIT 0,25"),
+                        trim($sql) );
+
         unset($sql);
         $sql = $this->obj->loadSql( array('page'=>3, 'id'=>'1') );
         $sql = preg_replace('/\n|\t/Us', "", preg_replace('/\s{2,}/s', " ", $sql));
         $this->assertEquals( trim("SELECT id, titulo, visitantes, categoria AS cat, ".
                         "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as adddate, ".
                         "(SELECT nome FROM categorias AS c WHERE id=cat ) AS node ".
-                        "FROM textos WHERE 1=1 AND id='1' ".
+                        "FROM textos WHERE 1=1 AND id='1' AND (autor = 1) ".
                         "ORDER BY id DESC ".
                         "LIMIT 50,25"),
                         trim($sql) );
@@ -98,7 +121,7 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
         $this->assertEquals( trim("SELECT id, titulo, visitantes, categoria AS cat, ".
                         "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as adddate, ".
                         "(SELECT nome FROM categorias AS c WHERE id=cat ) AS node ".
-                        "FROM textos WHERE 1=1 AND id='1' AND categoria IN ('3','4') ".
+                        "FROM textos WHERE 1=1 AND id='1' AND categoria IN ('3','4') AND (autor = 1) ".
                         "ORDER BY id DESC ".
                         "LIMIT 50,25"),
                         trim($sql) );
@@ -164,7 +187,10 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
     }
 
     function testSimplesLoads(){
-
+		$_SESSION['login'] = null;
+		$user = User::getInstance();
+		$user->reset();
+		
         $sql = "INSERT INTO textos (titulo, categoria) VALUES ('teste7777_777','777')";
         $this->obj->connection->exec($sql);
         $catLastInsertId = $this->obj->connection->lastInsertId();
@@ -333,7 +359,6 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
         $params = array(
             'austNode' => array($catLastInsertId=>''),
         );
-
         $result = $this->obj->load($params);
 
         /**
@@ -349,10 +374,6 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
         //var_dump($result);
         $this->assertArrayHasKey(0, $result, "Module::load() não funcionando" );
         $this->assertArrayHasKey('Privilegios', reset($result), "Dados embed de Module::load() não retornam" );
-
-
-
-        //$this->assertArrayHasKey(0, $this->obj->load() );
     }
 
     // alguns campos configurados não podem ser vazios.

@@ -21,7 +21,10 @@ class YouTube extends Module
         'created_on' => 'adddate',
         'updated_on' => 'addate'
     );
-    /**
+	
+	public $authorField = "autor";
+    
+	/**
      *
      * @var class Configurações do módulo
      */
@@ -67,6 +70,9 @@ class YouTube extends Module
      */
     
 	public function SQLParaListagem($categorias = '', $pagina = '', $itens_por_pagina = ''){
+		$where = "";
+		$order = "";
+		$limit = "";
 		if(!empty($categorias)){
 			$order = ' ORDER BY id DESC';
 			$where = ' WHERE ';
@@ -94,7 +100,7 @@ class YouTube extends Module
 							id=cat
 					) AS node
 				FROM
-					".$this->tabela_criar.$where.$order.
+					".$this->useThisTable().$where.$order.
                 $limit
                 ;
 					

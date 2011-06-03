@@ -168,7 +168,7 @@ class FormHelper
          */
         if( $inputType == "text" ){
             $conteudo.= '<div class="input_field input_text">';
-            $conteudo.= '<input type="text" name="'.$inputName.'" value="'.$inputValue.'" id="input-'.$fieldName.'" />';
+            $conteudo.= '<input type="text" name="'.$inputName.'" value="'.$inputValue.'" id="input-'.$fieldName.'" class="text" />';
         }
         /*
          * DATE FIELD
@@ -224,8 +224,8 @@ class FormHelper
                 /**
                  * Se um valor padrão foi passado
                  */
-                if( !empty($inputValue) )
-                $selectSelected = $inputValue;
+                if( !empty($inputValue) || $inputValue == 0 )
+                	$selectSelected = $inputValue;
 
             /**
              * Opções a serem mostradas
@@ -245,7 +245,7 @@ class FormHelper
                  * Verifica se o <option> atual deve ser selecionado por
                  * padrão
                  */
-                if( !empty($selectSelected) AND $selectSelected == $chave ){
+                if( (!empty($selectSelected) || $selectSelected == 0) AND $selectSelected == $chave ){
                     $selectThis = 'selected="true"';
                 } else {
                     $selectThis = false;
@@ -305,7 +305,7 @@ class FormHelper
             $conteudo.= '<input type="text" name="'.$inputName.'" value="ERRO NO TIPO DE CAMPO" id="input-'.$fieldName.'">';
         }
 		
-		if( $after ){
+		if( $after != "" ){
 			$conteudo.= '<div class="after">';
 			$conteudo.= $after;
 			$conteudo.= '</div>';

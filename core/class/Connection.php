@@ -33,6 +33,8 @@ class Connection extends SQLObject {
     private $db;
 
 	public $tables = array();
+	
+	public $tablesDescribed = array();
 
     /**
      *
@@ -445,7 +447,11 @@ class Connection extends SQLObject {
 		
 	}
 
-	function describeTable($table, $fieldAsKey = false){
+	function describeTable($table, $fieldAsKey = true){
+
+		if( !empty($this->tablesDescribed[$table]) )
+			return $this->tablesDescribed[$table];
+
 		$fields = $this->query('DESCRIBE '.$table);
 		
 		if( $fieldAsKey ){
@@ -456,6 +462,8 @@ class Connection extends SQLObject {
 		} else {
 			$result = $fields;
 		}
+
+		$this->tablesDescribed[$table] = $result;
 		
 		return $result;
 	}

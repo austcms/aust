@@ -99,7 +99,7 @@
         if( $moduloConfig["categoria"]["valor"] == "1" )
             $showCategoria = true;
     }
-    if( $showCategoria ){
+    if( $modulo->getStructureConfig("categorias") ){
     ?>
 
         <tr>

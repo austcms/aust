@@ -115,7 +115,12 @@ if(count($query) == 0){
  * PAGINAÇÃO
  * mostra painel de navegação para paginação
  */
+	if( empty($categorias) )
+		$categorias = array();
 
+	if( empty($pagina) )
+		$pagina = 1;
+	
     $sql = $modulo->SQLParaListagem($categorias);
     $total_registros = $modulo->connection->count($sql);
 

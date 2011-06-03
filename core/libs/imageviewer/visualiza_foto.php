@@ -118,7 +118,7 @@ if ($conexao->count($sql) > 0){
 	/*
 	 * Algumas imagens estão em arquivos, outros em DB
 	 */
-	if( $dados["tipo"] == 'application/x-shockwave-flash' ){
+	if( !empty($dados["tipo"]) && $dados["tipo"] == 'application/x-shockwave-flash' ){
 		
 		$noVisualizationFile = str_replace(
 			IMAGE_VIEWER_DIR.basename(__FILE__),
@@ -135,7 +135,6 @@ if ($conexao->count($sql) > 0){
     	$fileContent = $dados["dados"];
 
     if($thumbs == "yes"){
-
         header("Content-Type: ".$fileType);
 
         $im = imagecreatefromstring($fileContent); //criar uma amostra da imagem original

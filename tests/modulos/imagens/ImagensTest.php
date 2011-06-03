@@ -76,6 +76,7 @@ class ImagensTest extends PHPUnit_Framework_TestCase
                         trim($sql) );
     }
 
+	# no without image
     function testSaveDeleteLoad(){
 
 
@@ -104,7 +105,6 @@ class ImagensTest extends PHPUnit_Framework_TestCase
         
         $imagem = $this->obj->trataImagem($_FILES);
         $_POST["frmbytes"] = $imagem["filesize"];
-        $_POST["frmdados"] = $imagem["filedata"];
         $_POST["frmnome"] = $imagem["filename"];
         $_POST["frmtipo"] = $imagem["filetype"];
 
