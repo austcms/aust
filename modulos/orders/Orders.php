@@ -10,9 +10,9 @@
  * @version 0.2
  * @since v0.1.5, 30/05/2009
  */
-class Cart extends Module
+class Orders extends Module
 {
-    public $mainTable = "cart";
+    public $mainTable = "st_orders";
 
     public $date = array(
         'standardFormat' => '%m/%d/%Y %H:%i:%s',
@@ -22,12 +22,12 @@ class Cart extends Module
     );
 
 	public $fieldsToLoad = array(
-	    "Cart.transaction_nr", "Cart.pending", "Cart.paid",
-		"Cart.client_id",
-		"Cart.gateway_analysing",
-		"Cart.gateway_waiting",
-		"Cart.gateway_complete",
-		"Cart.gateway_cancelled",
+	    "Orders.transaction_nr", "Orders.pending", "Orders.paid",
+		"Orders.client_id",
+		"Orders.gateway_analysing",
+		"Orders.gateway_waiting",
+		"Orders.gateway_complete",
+		"Orders.gateway_cancelled",
 	);
 
 	public $austField = 'node_id';
@@ -48,7 +48,7 @@ class Cart extends Module
         static $instance;
 
         if( !$instance ){
-            $instance[0] = new Cart;
+            $instance[0] = new Orders;
         }
 
         return $instance[0];
@@ -80,23 +80,23 @@ class Cart extends Module
 		{
 			$clientFields = ", Clients.".$clientsName." as 'client_name'";
 			$clientLeftJoin = "LEFT JOIN ".$client->dataTable($clientsSt)." as Clients 
-							   ON Cart.client_id=Clients.id";
+							   ON Orders.client_id=Clients.id";
 		}
 		
         $sql = "SELECT
 					'$clientsSt' as client_node,
-					Cart.id as id,
+					Orders.id as id,
                     ".implode(', ', $this->fieldsToLoad).",
-                    Cart.".$this->austField." AS cat,
-                    DATE_FORMAT(Cart.".$this->date['created_on'].", '".$this->date['standardFormat']."') as created_on,
-                    DATE_FORMAT(Cart.scheduled_on, '".$this->date['scheduled_on']."') as scheduled_on
+                    Orders.".$this->austField." AS cat,
+                    DATE_FORMAT(Orders.".$this->date['created_on'].", '".$this->date['standardFormat']."') as created_on,
+                    DATE_FORMAT(Orders.scheduled_on, '".$this->date['scheduled_on']."') as scheduled_on
 					$clientFields
                 FROM
-                    Cart
+                    ".$this->useThisTable()." as Orders
 				$clientLeftJoin
                 WHERE 
 					1=1 $id
-                ORDER BY Cart.pending DESC, Cart.paid DESC, Cart.scheduled_on DESC
+                ORDER BY Orders.pending DESC, Orders.paid DESC, Orders.scheduled_on DESC
 				LIMIT 0,50
                 ";
 		

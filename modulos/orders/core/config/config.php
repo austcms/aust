@@ -29,11 +29,11 @@ $modInfo = array(
     /**
      * 'nome': Nome humano do módulo
      */
-    'nome' => 'Carrinho de Compras',
+    'nome' => 'Orders',
     /**
      * 'className': Classe oficial do módulo
      */
-    'className' => 'Cart',
+    'className' => 'Orders',
     /**
      * 'descricao': Descrição que facilita compreender a função do módulo
      */
