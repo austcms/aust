@@ -368,14 +368,16 @@ else {
                             $type = $structure['tipo'];
                         }
 
-						$module = null;
-						if( !empty($structure['masters']) ){
+												$module = null;
+												if( !empty($structure['masters']) ){
 
-							$module = Aust::getInstance()->getStructureInstance($structure['id']);
-							if( !$module->getStructureConfig('related_and_visible') )
-								continue;
+													$module = Aust::getInstance()->getStructureInstance($structure['id']);
+													$relatedAndVisible = $module->getStructureConfig('related_and_visible');
+													if( !empty($relatedAndVisible)
+															&& !$relatedAndVisible )
+														continue;
 							
-						}
+												}
 
                         if( !$permissoes->verify($structure['id']) )
                             continue;
