@@ -12,7 +12,7 @@ class Migration_20110609011400_AddFreightInfo extends Migrations
         $schema = array(
             'table' => "st_orders",
             'field' => 'freight_service',
-            'type' => 'int',
+            'type' => 'varchar(100)',
             'position' => 'AFTER gateway_analysing',
 						'default' => '0'
         );
@@ -21,7 +21,7 @@ class Migration_20110609011400_AddFreightInfo extends Migrations
         $schema = array(
             'table' => "st_orders",
             'field' => 'freight_value',
-            'type' => 'int',
+            'type' => 'decimal(13,2)',
             'position' => 'AFTER freight_service',
 						'default' => '0'
         );
@@ -31,14 +31,9 @@ class Migration_20110609011400_AddFreightInfo extends Migrations
     }
 
     function down(){
-
-        $this->dropField('st_orders', 'gateway_analysing');
-        $this->dropField('st_orders', 'gateway_waiting');
-        $this->dropField('st_orders', 'gateway_cancelled');
-        $this->dropField('st_orders', 'gateway_complete');
-		
+        $this->dropField('st_orders', 'freight_service');
+        $this->dropField('st_orders', 'freight_value');
         return true;
-
     }
 }
 ?>
