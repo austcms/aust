@@ -251,7 +251,7 @@ $modInfo = array(
 		 * CAMPOS STRING CURTO (254 char)
 		 */
 		    /*
-		     * Tem editor?
+		     * Boolean?
 		     */
 			'boolean_field' => array(
 				'field_type' => 'string',
@@ -259,6 +259,17 @@ $modInfo = array(
 				"label" => "Campo booleano",
 				"inputType" => "checkbox",
 				'help' => 'Campo aceita somente 0 ou 1, portanto mostra select com opções "Sim" e "Não".',
+		    ),
+		    /*
+		     * Valor monetário
+		     */
+			'currency_mask' => array(
+				'field_type' => 'string',
+				"value" => "",
+				"label" => "Máscara para valor monetário",
+				"inputType" => "text",
+				"size" => "small",
+				'help' => 'Campo aceita R$. Vazio é nenhum valor.',
 		    ),
     ),
     /**
