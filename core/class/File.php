@@ -1,8 +1,8 @@
 <?php
 /**
- * IMAGE
+ * FILE
  *
- * Responsável por tratamento de imagens, uploads e carregamento
+ * Responsável por tratamento de arquivos e uploads.
  *
  * @package Classes
  * @name Image

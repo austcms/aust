@@ -49,6 +49,9 @@ class Cadastro extends Module {
         parent::__construct($param);
     }
 
+	function language(){
+		return "R$";
+	}
 
 	/*
 	 * LOADING PROCESS
@@ -136,6 +139,22 @@ class Cadastro extends Module {
 	 * SAVING PROCESS
 	 * 	
 	 */
+	public function sanitizeData($data){
+		
+		foreach( $data as $table=>$fields ){
+			foreach( $fields as $field=>$value ){
+				
+				// Verifies currency field
+				$currencyMask = $this->getFieldConfig($field, 'currency_mask');
+				if( !empty($currencyMask) && !is_numeric($currencyMask) ){
+					$data[$table][$field] = Resources::currencyToFloat($value);
+				}
+			}
+		}
+		
+		return $data;
+	}
+	
 	/**
 	 * setRelationalData()
 	 * 

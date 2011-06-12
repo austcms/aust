@@ -222,7 +222,7 @@ foreach( $camposForm as $chave=>$valor ){
     $select = array();
     $checkbox = array();
 	$useInput = false;
-	$class = "";
+	$fieldClass = array();
 	$elementId = '';
 
     if( array_key_exists($valor['nomeFisico'], $divisorTitles) ){
@@ -296,12 +296,18 @@ foreach( $camposForm as $chave=>$valor ){
 		
 		$useInput = true;
     } elseif( $valor["tipo"]["especie"] == "string" ){
+
+		$currencyMask = $modulo->getFieldConfig($chave, 'currency_mask');
+		// Boolean, creates <select>
 		if( $modulo->getFieldConfig($chave, 'boolean_field') == "1" ){
 			$inputType = "select";
 	        $select["options"] = array(
 				"1" => "Sim",
 				"0" => "Não",
 			);
+		} elseif ( !empty($currencyMask) && !is_numeric($currencyMask) ){
+			$fieldClass[] = "currency_field";
+			$valor["valor"] = Resources::numberToCurrency($valor["valor"], $modulo->language());
 		}
 	
 		$useInput = true;
@@ -335,7 +341,8 @@ foreach( $camposForm as $chave=>$valor ){
 	                                    "checkbox" => $checkbox,
 	                                    "value" => (string) $valor["valor"],
 	                                    "type" => $inputType,
-										'after' => $after
+										'after' => $after,
+										"class" => implode(" ", $fieldClass)
 	                                )
 	                        );
 	    ?>

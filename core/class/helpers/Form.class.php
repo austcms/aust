@@ -79,11 +79,7 @@ class FormHelper
      * @return array Código HTML para o form input pedido.
      */
     public function input($fieldName, $options = ''){
-
-
         $conteudo ='';
-
-        $conteudo.= '<div class="input">';
 
         /**
          * VALUE
@@ -105,6 +101,18 @@ class FormHelper
             $after = $options["after"];
         }
 
+        /**
+         * Class
+         *
+         */
+     	$class = "";
+        if( !empty($options["class"]) ){
+            $class = $options["class"];
+        }
+
+		// DIV FIELD
+		$conteudo.= '<div class="input '.$class.'">';
+        
         /**
          * Gera nomes para os inputs
          */
@@ -196,7 +204,7 @@ class FormHelper
             if( !array_key_exists("cols", $extraOptions) )
                 $cols = 'cols="20"';
 
-            $conteudo.= '<textarea name="'.$inputName.'" '.$rows.' '.$cols.' id="input-'.$fieldName.'">';
+            $conteudo.= '<textarea name="'.$inputName.'" '.$rows.' '.$cols.' id="input-'.$fieldName.'" class="">';
             $conteudo.= $inputValue;//$fieldTextValue;
             $conteudo.= '</textarea>';
         }
