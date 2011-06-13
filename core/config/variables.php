@@ -17,7 +17,7 @@ define('DS', '/');
 /**
  * Define o diretório do CORE
  */
-define("CORE_DIR", "core/");
+define("CORE_DIR", THIS_TO_BASEURL."core/");
 
     /**
      * Define diretórios relativos ao CORE
@@ -77,7 +77,7 @@ define("CORE_DIR", "core/");
     /**
      * Diretório dos módu1os
      */
-	 define('MODULES_DIR', 'modulos/');
+	 define('MODULES_DIR', THIS_TO_BASEURL.'modulos/');
 	 define('MODULOS_DIR', MODULES_DIR);
     /**
      * Diretório de inclusão de arquivos ('inc')
@@ -120,7 +120,7 @@ define("CORE_DIR", "core/");
 /**
  * Configurações gerais 
  */
-define('CONFIG_DIR', 'config/');
+define('CONFIG_DIR', THIS_TO_BASEURL.'config/');
 	/**
 	 * Endereço do arquivo de configurações da base de dados
 	 */

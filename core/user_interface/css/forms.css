@@ -23,6 +23,9 @@
     form textarea { margin-bottom: 10px; width: 100%; }
     form input.submit { display: block; font-size: 1.4em; padding: 10px; margin-bottom: 5px; clear: both; }
 
+		form div.currency_field input { width: 120px; text-align: right; }
+
+
     form p.explanation { margin: 0; font-size: 12px; color: #999999; }
     form p.explanation_example { margin: 0; margin-bottom: 15px; font-size: 12px; color: #FF9900; }
 

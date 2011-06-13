@@ -319,7 +319,7 @@ class ModController extends ModsController
 		 	 * 		1) Prepara dados relacionados para salvá-los;
 			 */
 			$this->modulo->setRelationalData(); // ajusta inclusive imagens
-			$this->data = $this->modulo->data;
+			$this->data = $this->modulo->sanitizeData($this->modulo->data);
 			$images = $this->modulo->images;
 			$files = $this->modulo->files;
 			

@@ -10,7 +10,7 @@ class Migration_20101215044600_CreateTables extends Migrations
     function up(){
 
 
-        $schema['cart'] = array(
+        $schema['st_orders'] = array(
             "id" => "int auto_increment",
             "node_id" => "int",
             "transaction_nr" => "varchar(200) COMMENT 'unique number.'",
@@ -31,9 +31,9 @@ class Migration_20101215044600_CreateTables extends Migrations
                 "INDEX" => "(client_id)",
             )
         );
-	    $schema['cart_line_items'] = array(
+	    $schema['st_order_items'] = array(
 	        "id" => "int auto_increment",
-	        "cart_id" => "int",
+	        "order_id" => "int",
 	        "transaction_nr" => "varchar(200) COMMENT 'unique number.'",
 	        "product_id" => "int",
 	        "product_title" => "varchar(240)",
@@ -55,8 +55,8 @@ class Migration_20101215044600_CreateTables extends Migrations
     }
 
     function down(){
-        $this->dropTable('cart');
-        $this->dropTable('cart_line_items');
+        $this->dropTable('st_orders');
+        $this->dropTable('st_order_items');
         return true;
 
     }
