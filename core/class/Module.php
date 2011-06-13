@@ -1062,10 +1062,10 @@ class Module
 		$tmpStr = implode('_', $results[0]);
 		$tmpStr = strtolower($tmpStr);
 		
-		if( is_dir(THIS_TO_BASEURL.MODULOS_DIR.$tmpStr) )
-       		return THIS_TO_BASEURL.MODULOS_DIR.$tmpStr;
+		if( is_dir(MODULOS_DIR.$tmpStr) )
+       		return MODULOS_DIR.$tmpStr;
 		else
-       		return THIS_TO_BASEURL.MODULOS_DIR.strtolower( $str );
+       		return MODULOS_DIR.strtolower( $str );
     }
 
 	/**
