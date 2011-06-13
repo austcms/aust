@@ -11,6 +11,10 @@
  */
 define('DS', '/');
 
+if(!defined('THIS_TO_BASEURL')){
+    define('THIS_TO_BASEURL', '');
+}
+
 /**
  * DIRETIVAS DO CORE
  */

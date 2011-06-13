@@ -31,7 +31,7 @@ if( !file_exists("config/database.php") ){
 }
 include("config/database.php");
 
-require("core/config/installation/dbschema.php");
+require(INSTALLATION_DIR."dbschema.php");
 
 
 $conexao = Connection::getInstance();
