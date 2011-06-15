@@ -46,13 +46,14 @@ if( $permissoes->canDelete($austNode) ){
 
 
 <?php
+$counting = 1;
 foreach( $query as $dados ){
 	
 	$statusClass = 'ready';
 	if( $dados['pending'] == '1' ){
 		$statusClass = 'pending';
 	}
-	if( $dados['paid'] == '0' ){
+	if( $dados['gateway_complete'] == '0' ){
 		$statusClass = 'not_paid';
 	}
 	if( $dados['gateway_cancelled'] == '1' ){
@@ -74,18 +75,18 @@ foreach( $query as $dados ){
 				<h2>Cancelado</h2>
 				Pedido não pago 
 				<?php
-			} else if( $dados['paid'] == '0' ){
+			} else if( $dados['gateway_complete'] == '0' ){
 				?>
 				<h2>Aguardando</h2>
 				Pedido não pago 
 				<?php
 			} else if( $dados['pending'] == '1' ){
-				if( $dados['paid'] == '1' ){
+				if( $dados['gateway_complete'] == '1' ){
 					?>
 					<h2>Pago e Pendente</h2>
 					Entrega pendente
 					<?php
-				} else if( $dados['paid'] == '0' ){
+				} else if( $dados['gateway_complete'] == '0' ){
 					?>
 					<h2>Pendente, não pago</h2>
 					<?php
@@ -126,19 +127,25 @@ foreach( $query as $dados ){
 				}
 				?>
 				
-			</div>			
-			<?php if( !empty($dados['created_on']) ){ ?>
-				<div class="date scheduled_to">
-				<div class="label">Realizada em: </div>
-				<div class="value"><?php echo dateName($dados['created_on'], "Hoje", "Ontem") ?></div>
-				</div>
-			<?php } ?>
-			<?php if( !empty($dados['scheduled_on']) ){ ?>
-				<div class="date scheduled_to">
-				<div class="label">Agendado para: </div>
-				<div class="value"><?php echo ucfirst( dateName($dados['scheduled_on']) );?></div>
-				</div>
-			<?php } ?>
+			</div>	
+			<div class="date_listing">		
+				<?php if( !empty($dados['created_on']) ){ ?>
+					<div class="date scheduled_to">
+						<strong>Realizada:</strong> <?php echo dateName($dados['created_on'], "Hoje", "Ontem") ?>
+					</div>
+				<?php } ?>
+				<?php if( !empty($dados['scheduled_on']) ){ ?>
+					<div class="date scheduled_to">
+						<strong>Agendado:</strong> <?php echo ucfirst( dateName($dados['scheduled_on']) );?>
+					</div>
+				<?php } ?>
+				<?php if( !empty($dados['paid_on']) ){ ?>
+					<div class="date scheduled_to">
+					<strong>Pago:</strong> <?php echo ucfirst( dateName($dados['paid_on']) );?>
+					</div>
+				<?php } ?>
+			</div>
+
 			
 			<?php
 			
@@ -181,7 +188,12 @@ foreach( $query as $dados ){
 		
 		</div>
 	</div>
+	<?php if( $counting == 4 ){ ?>
+		<br clear="all" />
+		
 	<?php
+	}
+	$counting++;
 }
 ?>
 

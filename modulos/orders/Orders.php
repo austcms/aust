@@ -28,6 +28,7 @@ class Orders extends Module
 		"Orders.gateway_waiting",
 		"Orders.gateway_complete",
 		"Orders.gateway_cancelled",
+		"Orders.paid_on",
 	);
 
 	public $austField = 'node_id';

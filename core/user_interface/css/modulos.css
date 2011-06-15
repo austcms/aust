@@ -218,9 +218,12 @@ span.viewmode {
 		font-style: italic;
 	}
 
-	.listagem div.transaction .scheduled_to {
-		margin: 0 0 5px 0;
+	.listagem div.transaction .date_listing {
+			margin: 10px 0 10px 0;
+			font-size: 0.9em;
 	}
+		.listagem div.transaction .date_listing .date {
+		}
 
 	.listagem div.transaction .actions {
 		margin: 3px 0 0 0;
