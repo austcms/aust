@@ -13,53 +13,16 @@ switch($_GET['action']){
 						$texto = str_replace("\"","\"", $texto);
 						$texto = str_replace("'","\'", $texto);
 
+					    $params = array(
+					        'father' => $_POST["frmsubordinadoid"],
+					        'name' => $_POST['frmnome'],
+							'description' => $_POST["frmdescricao"],
+					        'author' => $administrador->getId(),
+					    );
 
-						if($_POST['frmclasse'] == "categoria"){
-
-                            /**
-                             * Faz um loop para descobrir qual é o patriarca
-                             * desta nova categoria a ser cadastrada.
-                             */
-							$i = 0;
-							$subordinadoidtmp = $_POST['frmsubordinadoid'];
-
-							while( $i < 1 ){
-								$sql = "SELECT
-											id, nome, subordinadoid, classe
-										FROM
-											".$_GET['section']."
-										WHERE
-											id='$subordinadoidtmp'
-										";
-
-								$query = $conexao->query($sql);
-                                $dados = $query[0];
-
-								if($dados['classe'] == "estrutura"){
-									$patriarca = $dados['nome'];
-                                    $tipo = $aust->LeModuloDaEstrutura($dados['id']);;
-									$i++;
-								} else {
-									$subordinadoidtmp = $dados['subordinadoid'];
-								}
-                                $tipo_legivel = $aust->LeModuloDaEstruturaLegivel($dados['id']);
-
-							}
-						}
-
-						$sql = "INSERT INTO ".$_GET['section']." (nome,patriarca,patriarca_encoded, subordinadoid,descricao,classe,tipo,tipo_legivel,autor)
-                                VALUES('{$_POST['frmnome']}','$patriarca','".encodeText( $patriarca )."','{$_POST['frmsubordinadoid']}','$texto','{$_POST['frmclasse']}','{$tipo}','{$tipo_legivel}','".$administrador->LeRegistro('id')."')";
-
-                        /**
-                         * Se insere com sucesso
-                         */
-                        if($conexao->exec($sql)){
-                            $resultado = TRUE;
-                        } else {
-                            $resultado = FALSE;
-                        }
+					    $resultado = $aust->create($params);
 						
-						$lastInsertId = $conexao->lastInsertId();
+						$lastInsertId = $resultado;
 						/**
 						 * Se uma imagem foi enviada, faz todo o processamento
 						 */
