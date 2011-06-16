@@ -22,6 +22,7 @@ if(!defined('THIS_TO_BASEURL')){
  * Define o diretório do CORE
  */
 define("CORE_DIR", THIS_TO_BASEURL."core/");
+define("VENDOR_DIR", THIS_TO_BASEURL."vendor/");
 
     /**
      * Define diretórios relativos ao CORE

@@ -41,7 +41,7 @@ require_once($basepath . "ImageManager/ImageManagerPlugin.php");
 	// MUTRETA PRA CARREGAR PATH DE IMG DINAMICAMENTE
 	ob_start();
 	$oneMoreDir = '';
-	$thisToBaseUrl = '../../../../../../';
+	$thisToBaseUrl = '../../../../';
 	$isJs = array_reverse( explode('/', getcwd() ) );
 	
 	$concat = file_get_contents($basepath.$thisToBaseUrl.'../config/tiny_mce');
