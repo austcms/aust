@@ -400,6 +400,8 @@ class Aust {
         $query = $this->conexao->query($sql);
         $result = array();
 		$stIds = array();
+		
+		$invisibleStructures = $this->getInvisibleStructures();
         /*
          * Each site
         */
@@ -412,9 +414,19 @@ class Aust {
             $structures = $this->getStructuresByFather($sites['id']);
             if( is_array($structures) ) {
 
-				foreach( $structures as $sts ){
-					$stIds[] = $sts['id'];
+				foreach( $structures as $stKey => $sts ){
+					/*
+					 * RELATED AND VISIBLE?
+					 *
+					 * Clear invisible Structures
+					 */
+					if( in_array($sts['id'], $invisibleStructures) )
+						unset($structures[$stKey]);
+					else
+						$stIds[] = $sts['id'];
 				}
+				
+				
                 $result[$key]['Structures'] = $structures;
             }
         }
@@ -454,6 +466,24 @@ class Aust {
         return $result;
 
     } // end getStructures
+
+	function getInvisibleStructures(){
+        $sql = "SELECT
+                    local
+                FROM
+                    config
+                WHERE
+                    tipo='mod_conf' AND
+					propriedade='related_and_visible' AND
+					valor='0'
+                ";
+        $query = $this->conexao->query($sql);
+		$result = array();
+		foreach( $query as $value ){
+			$result[] = $value["local"];
+		}
+		return $result;
+	}
 
 	function getRelatedSlaves($ids = array()){
 		if( empty($ids) )

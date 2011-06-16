@@ -150,6 +150,7 @@ if( !empty($_POST) AND $save  ) {
 
 					$sqlBuffer[] = "(
 				                        '".$_POST['w']."',
+										'',
 				                        IFNULL( ( SELECT MAX(g.ordem)+1 as gordem FROM galeria_fotos_imagens as g
 				                          WHERE g.galeria_foto_id='".$_POST["w"]."'
 				                          GROUP BY g.ordem ORDER BY gordem DESC LIMIT 1
@@ -199,7 +200,7 @@ if( !empty($_POST) AND $save  ) {
 		if( !empty($sqlBuffer) ){
 
 			$sql = "INSERT INTO galeria_fotos_imagens
-					(galeria_foto_id, ordem, bytes, systempath, path, nome, tipo, adddate, texto)
+					(galeria_foto_id, content_id, ordem, bytes, systempath, path, nome, tipo, adddate, texto)
                     VALUES ".implode(",", $sqlBuffer);
 
             if( ! $this->modulo->connection->exec($sql) )

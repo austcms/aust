@@ -309,7 +309,6 @@ else {
     </p>
     <?php
     $sites = $aust->getStructures();
-    //pr($sites);
     ?>
     <?php /* INICIO DO DIV PAINEL GERENCIAR  - É GLOBAL */ ?>
     <div class="painel">
