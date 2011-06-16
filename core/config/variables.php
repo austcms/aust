@@ -23,6 +23,7 @@ if(!defined('THIS_TO_BASEURL')){
  */
 define("CORE_DIR", THIS_TO_BASEURL."core/");
 define("VENDOR_DIR", THIS_TO_BASEURL."vendor/");
+define("TMP_DIR", THIS_TO_BASEURL."tpm/");
 
     /**
      * Define diretórios relativos ao CORE
@@ -212,8 +213,8 @@ define('MOD_VIEW_DIR', 'view/');
 /*
  * CACHE
  */
-    define('CACHE_DIR', CORE_DIR.'cache/');
-    define('CACHE_PUBLIC_DIR', UI_PATH.'cache/');
+    define('CACHE_DIR', TMP_DIR.'cache/');
+    define('CACHE_PUBLIC_DIR', TMP_PATH.'cache/');
 
     define('UPLOADS_DIR', 'uploads/');
 
