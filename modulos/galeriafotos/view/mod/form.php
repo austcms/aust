@@ -90,6 +90,7 @@
 				Conteúdo principal
 				</a>
 				<input type="hidden" name="redirect_to" value="<?php echo $_SERVER['REQUEST_URI'] ?>" />
+				<input type="hidden" name="content_id" value="<?php echo $relW; ?>" />
 	        </td>
 	    </tr>
 

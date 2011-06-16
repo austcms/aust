@@ -117,7 +117,6 @@ if( !empty($_POST) AND $save  ) {
     }
 
     $query = $this->modulo->connection->exec($sql);
-    //$query = false;
 
     /*
      * Salva dados
@@ -136,6 +135,9 @@ if( !empty($_POST) AND $save  ) {
         if( !empty($imagem) AND is_array($imagem) ){
             
             unset($erroImg);
+			$austNode = $_POST["aust_node"];
+			$contentId = (empty($_POST["content_id"])) ? "" : $_POST["content_id"];
+
             foreach( $imagem as $chave=>$valor ){
 				
 				/*
@@ -149,8 +151,9 @@ if( !empty($_POST) AND $save  ) {
 					$finalName['webPath'] = addslashes($finalName['webPath']);
 
 					$sqlBuffer[] = "(
+										'".$austNode."',
 				                        '".$_POST['w']."',
-										'',
+										'".$contentId."',
 				                        IFNULL( ( SELECT MAX(g.ordem)+1 as gordem FROM galeria_fotos_imagens as g
 				                          WHERE g.galeria_foto_id='".$_POST["w"]."'
 				                          GROUP BY g.ordem ORDER BY gordem DESC LIMIT 1
@@ -166,7 +169,9 @@ if( !empty($_POST) AND $save  ) {
 				} else {
 	
 	                $sqlImagem = "INSERT INTO galeria_fotos_imagens
-	                                (galeria_foto_id,
+	                                (
+									category_id
+									galeria_foto_id,
 	                                ordem,
 	                                bytes,
 	                                dados,
@@ -175,7 +180,8 @@ if( !empty($_POST) AND $save  ) {
 	                                adddate)
 	                                VALUES
 	                                (
-	                                    '".$_POST['w']."',
+	                                    '".$_POST["aust_node"]."'
+										'".$_POST['w']."',
 	                                    IFNULL( ( SELECT MAX(g.ordem)+1 as gordem FROM galeria_fotos_imagens as g
 	                                      WHERE g.galeria_foto_id='".$_POST["w"]."'
 	                                      GROUP BY g.ordem ORDER BY gordem DESC LIMIT 1
@@ -192,7 +198,7 @@ if( !empty($_POST) AND $save  ) {
 	                    $erroImg[] = $valor["tmp_name"];
                     
 	                unset($sqlImagem);
-				} // end save_into_db
+				}
             }
 
         }
@@ -200,7 +206,7 @@ if( !empty($_POST) AND $save  ) {
 		if( !empty($sqlBuffer) ){
 
 			$sql = "INSERT INTO galeria_fotos_imagens
-					(galeria_foto_id, content_id, ordem, bytes, systempath, path, nome, tipo, adddate, texto)
+					(category_id, galeria_foto_id, content_id, ordem, bytes, systempath, path, nome, tipo, adddate, texto)
                     VALUES ".implode(",", $sqlBuffer);
 
             if( ! $this->modulo->connection->exec($sql) )
