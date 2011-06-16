@@ -225,7 +225,7 @@ class Module
      * @param <array> $post
      * @return <bool>
      */
-    public function save($post = array()){
+    public function save($post = array(), $params = false){
 
 		$post = $this->fixEncoding($post);
 
@@ -285,9 +285,10 @@ class Module
          */
 		if( !empty($param['austNode']) ){
 	        if( is_array($param['austNode']) ){
-				if( !is_numeric($param['austNode']) )
-	            	$austNode = reset(array_keys($param['austNode']));
-				else
+				if( !is_numeric($param['austNode']) ){
+					$arrayKeys = array_keys($param['austNode']);
+	            	$austNode = reset($arrayKeys);
+				} else
 		            $austNode = $param['austNode'];
 			} else if( is_numeric($param['austNode']) ){
 	            $austNode = $param['austNode'];
@@ -372,7 +373,8 @@ class Module
 		}
 		
 		if( is_string($param) ){
-			$result = reset( $this->connection->query($param) );
+			$query = $this->connection->query($param);
+			$result = reset( $query );
 			$total = ( !empty($result['rows']) && is_numeric($result['rows']) ) ? $result['rows'] : 0;
 		} else {
 			return 0;

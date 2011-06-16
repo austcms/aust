@@ -329,7 +329,7 @@ class Arquivos extends Module
      * @param <array> $files $_FILES
      * @return <bool>
      */
-    public function save($post, $files){
+    public function save($post = array(), $files = array()){
         
         if( count($files) == 1 ){
             return $this->_saveEachFile($post, $files);
@@ -414,41 +414,5 @@ class Arquivos extends Module
         return $sql;
     }
 
-    /*
-     * Função para retonar a tabela de dados de uma estrutura
-    */
-    public function LeTabelaDaEstrutura() {
-		if( !empty($this->tabela_criar) )
-        	return $this->tabela_criar;
-		return '';
-    }
-
-    /*
-     * Função para retonar a tabela de dados de uma estrutra da cadastro
-    */
-    public function LeTabelaDeDados($param) {
-        if(is_int($param) or $param > 0) {
-            $estrutura = "categorias.id='".$param."'";
-        } elseif(is_string($param)) {
-            $estrutura = "categorias.nome='".$param."'";
-        }
-
-        $sql = "SELECT
-                    cadastros_conf.valor AS valor
-                FROM
-                    cadastros_conf, categorias
-                WHERE
-                    categorias.id=cadastros_conf.categorias_id AND
-                {$estrutura} AND
-                    cadastros_conf.tipo='estrutura' AND
-                    cadastros_conf.chave='tabela'
-                LIMIT 0,1";
-        //echo $sql;
-        $mysql = mysql_query($sql);
-        $dados = mysql_fetch_array($mysql);
-        return $dados['valor'];
-    }
-
 }
-
 ?>

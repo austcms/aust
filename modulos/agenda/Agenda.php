@@ -82,14 +82,10 @@ class Agenda extends Module
      * @param <array> $post
      * @return <bool>
      */
-    public function save($post = array() ){
+    public function save($post = array(), $options = array() ){
 
         if( empty($post) )
             return false;
-
-
-
-
         return parent::save($post);
         
     }

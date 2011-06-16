@@ -43,7 +43,7 @@ if( $fields > 0 ){
                 ";
         $email = $modulo->connection->query($sql);
         foreach( $email as $valor ){
-            $emails[] = $valor['email'];
+            $emails[] = $valor[$filtroEspecial];
         }
 
         ?>

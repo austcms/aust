@@ -234,7 +234,8 @@ class Connection extends SQLObject {
             }
 
             if( $query === false){
-                $debugResult = end( $this->conn->errorInfo() );
+				$errorInfo = $this->conn->errorInfo();
+                $debugResult = end( $errorInfo );
             }
 
             if( !empty($query) ){
@@ -319,7 +320,8 @@ class Connection extends SQLObject {
             $result = $this->conn->exec($sql);
 
             if( $result === false){
-                $debugResult = end( $this->conn->errorInfo() );
+				$errorInfo = $this->conn->errorInfo();
+                $debugResult = end( $errorInfo );
             }
 
             /**

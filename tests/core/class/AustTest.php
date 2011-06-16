@@ -51,7 +51,8 @@ class AustTest extends PHPUnit_Framework_TestCase
 	    );
 		
 		$result = $this->obj->create($params);
-		$saved = reset($this->obj->connection->query("SELECT * FROM categorias WHERE nome='Teste777' AND subordinadoid='".$lastInsert."'") );
+		$query = $this->obj->connection->query("SELECT * FROM categorias WHERE nome='Teste777' AND subordinadoid='".$lastInsert."'");
+		$saved = reset( $query );
 		
 		$this->obj->connection->query("DELETE FROM categorias WHERE nome='Teste777'");
 		$this->obj->connection->query("DELETE FROM categorias WHERE nome='TestePai777'");

@@ -11,6 +11,7 @@ require_once 'core/libs/functions/func.php';
 class ImagensTest extends PHPUnit_Framework_TestCase
 {
     public $lastSaveId;
+	public $obj;
     
     public function setUp(){
         /*
@@ -27,8 +28,8 @@ class ImagensTest extends PHPUnit_Framework_TestCase
         include 'modulos/'.$this->mod.'/'.MOD_CONFIG;
         include_once 'modulos/'.$this->mod.'/'.$modInfo['className'].'.php';
 
-        $this->obj->testMode = true;
         $this->obj = new $modInfo['className'];//new $modInfo['className']();
+        $this->obj->testMode = true;
     }
 
     function testLoadSql(){

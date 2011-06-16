@@ -204,7 +204,8 @@ class Aust {
                     categorias
                 WHERE
                     id='$id'";
-        $query = reset( $this->conexao->query($sql) );
+		$query = $this->conexao->query($sql);
+        $query = reset( $query );
 
         /**
          * Categoria sem patriarca, busca o patriarca do seu pai

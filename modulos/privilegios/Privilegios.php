@@ -17,7 +17,10 @@ class Privilegios extends Module
      *
      */
 
-    public function saveEmbed($params){
+    public function saveEmbed($params = array()){
+		if( empty($params) )
+			return false;
+		
         $data = $params['data'];
 
         /*

@@ -591,7 +591,8 @@ class Cadastro extends Module {
 					id='".$w."'
 				";
 		
-		$query = reset( $this->connection->query($sql) );
+		$query = $this->connection->query($sql);
+		$query = reset( $query );
 		
 		if( file_exists($query['systempath']) )
 			unlink( $query['systempath'] );
@@ -898,7 +899,7 @@ class Cadastro extends Module {
 	}
 	
 		// alias
-		function table(){ return $this->dataTable(); }
+		function table(){ return $this->getTable(); }
 	
 	function imagesTable(){
 		$this->configurations();
@@ -946,7 +947,7 @@ class Cadastro extends Module {
      * 
      */
     
-    public function loadSql($param){
+    public function loadSql($options = array()){
         // configura e ajusta as variáveis
         $categorias = (empty($param['categorias'])) ? '' : $param['categorias'];
         $metodo = (empty($param['metodo'])) ? 'listing' : $param['metodo'];
@@ -1136,79 +1137,6 @@ class Cadastro extends Module {
         return $sql;
     } // fim SQLParaListagem()
 
-    /**
-     * Função para retonar a tabela de dados de uma estrutra de cadastro
-     *
-     * @param mixed $param contém o id ou nome da estrutura desejada
-     * @return array 
-     */
-    public function LeTabelaDaEstrutura($param){
-
-        /**
-         * $param é uma integer
-         */
-        if( is_int($param) or $param > 0 ){
-            $estrutura = "categorias.id='".$param."'";
-        }
-        /**
-         * $param é uma string
-         */
-        elseif( is_string($param) ){
-            $estrutura = "categorias.nome='".$param."'";
-        }
-
-        $sql = "SELECT
-                    cadastros_conf.valor AS valor
-                FROM
-                    cadastros_conf, categorias
-                WHERE
-                    categorias.id=cadastros_conf.categorias_id AND
-                    {$estrutura} AND
-                    cadastros_conf.tipo='estrutura' AND
-                    cadastros_conf.chave='tabela'
-                LIMIT 0,1";
-                //echo $sql;
-                
-        $resultado = $this->connection->query($sql);
-        $dados = $resultado[0];
-        return $dados['valor'];
-    }
-
-	function dataTable($param){
-		return $this->LeTabelaDeDados($param);
-	}
-    /*
-     * Função para retornar o nome da tabela de dados de uma estrutura da cadastro
-     */
-    public function LeTabelaDeDados($param){
-
-        if( !empty($this->dataTable) )
-            return $this->dataTable;
-
-        if(is_int($param) or $param > 0){
-            $estrutura = "categorias.id='".$param."'";
-        } elseif(is_string($param)){
-            $estrutura = "categorias.nome='".$param."'";
-        }
-
-        $sql = "SELECT
-                    cadastros_conf.valor AS valor
-                FROM
-                    cadastros_conf, categorias
-                WHERE
-                    categorias.id=cadastros_conf.categorias_id AND
-                    {$estrutura} AND
-                    cadastros_conf.tipo='estrutura' AND
-                    cadastros_conf.chave='tabela'
-                LIMIT 0,1";
-                //echo $sql;
-        $mysql = $this->connection->query($sql);
-        $dados = $mysql[0];
-        
-        $this->dataTable = $dados['valor'];
-        return $dados['valor'];
-    }
-
     /*
      * Cria tabela responsável por guardar arquivos
      */
@@ -1320,6 +1248,38 @@ class Cadastro extends Module {
             return FALSE;
          }
 
+    }
+
+	 public function LeTabelaDaEstrutura() {
+		if( !empty($this->tabela_criar) )
+        	return $this->tabela_criar;
+		return '';
+    }
+
+    /*
+     * Função para retonar a tabela de dados de uma estrutra da cadastro
+    */
+    public function LeTabelaDeDados($param) {
+        if(is_int($param) or $param > 0) {
+            $estrutura = "categorias.id='".$param."'";
+        } elseif(is_string($param)) {
+            $estrutura = "categorias.nome='".$param."'";
+        }
+
+        $sql = "SELECT
+                    cadastros_conf.valor AS valor
+                FROM
+                    cadastros_conf, categorias
+                WHERE
+                    categorias.id=cadastros_conf.categorias_id AND
+                {$estrutura} AND
+                    cadastros_conf.tipo='estrutura' AND
+                    cadastros_conf.chave='tabela'
+                LIMIT 0,1";
+        
+		$resultado = $this->connection->query($sql);
+		$dados = $resultado[0];
+		return $dados['valor'];
     }
 
     /*
