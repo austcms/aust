@@ -25,7 +25,8 @@ if( is_file(MOD_DBSCHEMA) )
  * EDITE:
  */
 
-
+if( !isset($modDbSchema) )
+	$modDbSchema = array();
 
 /**
  * !!! NÃO EDITE ABAIXO !!!

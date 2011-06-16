@@ -18,7 +18,7 @@ $precisa_aprovacao = $modulo->pegaConfig(Array('estrutura'=>$_GET['aust_node'], 
 /*
  * FILTROS ESPECIAIS
  */
-if( $fields > 0 ){
+if( $fieldsCount > 0 ){
     $sql = "SELECT valor
             FROM
                 cadastros_conf

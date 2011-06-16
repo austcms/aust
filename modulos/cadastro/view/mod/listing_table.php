@@ -110,8 +110,19 @@ if(count($resultado) > 0){
                                     <?php
                                 }
                             }
-
-                            echo $dados[$campo];
+							
+							$fieldEncodedName = $fieldsConfiguration[$campo]["chave"];
+							if( $modulo->getFieldConfig($fieldEncodedName, 'currency_mask') ){
+								echo Resources::numberToCurrency($dados[$campo], $modulo->language());
+							} elseif( $modulo->getFieldConfig($fieldEncodedName, 'boolean_field') == "1" ){
+								if( $dados[$campo] )
+									echo $modulo->yesWord();
+								else
+									echo $modulo->noWord();
+							} else {
+	                            echo $dados[$campo];
+							}
+							
                             if( $total_td <= 2 ){
                                 if( $permissoes->canEdit($austNode) ){
                                     ?>

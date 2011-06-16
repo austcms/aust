@@ -24,37 +24,34 @@ class ModController extends ModsController
         $param = array(
             'categorias' => $categorias,
             'metodo' => 'listing',
-            '' => ''
         );
-
+	
         $sql = $this->modulo->loadSql($param);
-        //echo '<br><br>'.$sql .'<br>';
 
         $resultado = $this->modulo->connection->query($sql, "ASSOC");
         $this->set('resultado', $resultado);
 
-        $fields = count($resultado);
-        $this->set('fields', $fields);
+        $fieldsCount = count($resultado);
+        $this->set('fieldsCount', $fieldsCount);
+
+		$fieldsConfiguration = $this->modulo->getFields(null, true);
+        $this->set('fieldsConfiguration', $fieldsConfiguration);
+
         if( $this->modulo->getStructureConfig("has_search") ){
             $this->set("search_fields", $this->modulo->getFields(false));
         }
-        //$this->autoRender= false;
     }
 
     public function actions(){
 
     }
 
-    /**
-     * formulário
-     */
-
     public function form(){
 
     }
 
     /**
-     * FORMULÁRIO DE INSERÇÃO
+     * Create Form
      */
     public function create($params = array() ){
         /**

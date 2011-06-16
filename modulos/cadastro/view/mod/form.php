@@ -108,7 +108,8 @@ if( $_GET['action'] == "edit" ){
 							Imagem secundária atual:
 							<br />
 							<img src="" name="secondary_image" />
-							<a id="del_secondary_image" href="javascript: void(0);" data-secondaryid="" onclick="if( confirm('Você tem certeza que deseja excluir esta imagem?') ) window.open('adm_main.php?section=<?php echo $_GET["section"]; ?>&action=<?php echo $_GET["action"]; ?>&aust_node=<?php echo $_GET["aust_node"]; ?>&w=<?php echo $_GET["w"];?>&deleteimage='+$(this).attr('data-secondaryid'),'_top');">
+							<a id="del_secondary_image" href="javascript: void(0);" data-secondaryid=""
+								onclick="if( confirm('Você tem certeza que deseja excluir esta imagem?') ) window.open('adm_main.php?section=<?php echo $_GET["section"]; ?>&action=<?php echo $_GET["action"]; ?>&aust_node=<?php echo $_GET["aust_node"]; ?>&w=<?php echo $_GET["w"];?>&deleteimage='+$(this).attr('data-secondaryid'),'_top');">
 	                            <img src="core/user_interface/img/icons/delete_15x15.png" alt="Excluir" border="0" />
 	                        </a>
 	                        
@@ -239,7 +240,7 @@ foreach( $camposForm as $chave=>$valor ){
      * RELACIONAL UM PARA UM
      */
     if( $valor["tipo"]["especie"] == "relacional_umparaum" ){
-        $sql = "SELECT id, ".$valor["tipo"]["tabelaReferenciaCampo"]." FROM ".$valor["tipo"]["tabelaReferencia"] ." ORDER BY ".$valor["tipo"]["tabelaReferenciaCampo"];
+        $sql = "SELECT id, ".$valor["tipo"]["tabelaReferenciaCampo"]." FROM ".$valor["tipo"]["tabelaReferencia"] ." ORDER BY ".$valor["tipo"]["tabelaReferenciaCampo"] ." LIMIT 50";
         $selectValues = $conexao->query($sql);
 
         //$select["selected"] = "3";

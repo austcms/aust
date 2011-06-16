@@ -19,7 +19,10 @@ class Resources
 		return $result;
 	}
 	
-	static function CurrencyToFloat($string){
+	static function currencyToFloat($string){
+		if( $string == "" )
+			return 0;
+
 		$result = $string;
 		$result = preg_replace('/[^0-9|,|\.]/', "", $result);
 		$result = preg_replace('/\,/', ".", $result);
@@ -30,6 +33,8 @@ class Resources
 
 		$result = preg_replace('/x/', ".", $result);
 		
+		if( $result == "" )
+			return 0;
 		return $result;
 	}
 

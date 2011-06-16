@@ -10,6 +10,9 @@ class ResourcesTest extends PHPUnit_Framework_TestCase
 {
 
     public function testNumberToCurrency(){
+		// buggy
+        $this->assertEquals('R$ 0,00', Resources::numberToCurrency("0", "R$") );
+
         $this->assertEquals('R$ 10,20', Resources::numberToCurrency("10.20", "R$") );
         $this->assertEquals('R$ 10,20', Resources::numberToCurrency("10.2", "R$") );
         $this->assertEquals('R$ 10,00', Resources::numberToCurrency("10.0", "R$") );
@@ -17,6 +20,11 @@ class ResourcesTest extends PHPUnit_Framework_TestCase
     }
 
     public function testCurrencyToFloat(){
+
+		// buggy
+        $this->assertEquals('0', 		Resources::currencyToFloat("") );
+        $this->assertEquals('0', 		Resources::currencyToFloat("R$ ") );
+
 		// general tests using R$
         $this->assertEquals('10.20', 		Resources::currencyToFloat("R$ 10,20") );
         $this->assertEquals('10.20', 		Resources::currencyToFloat("R$10,20") );

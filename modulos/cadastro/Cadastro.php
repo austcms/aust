@@ -52,6 +52,14 @@ class Cadastro extends Module {
 	function language(){
 		return "R$";
 	}
+	
+	function yesWord(){
+		return "Sim";
+	}
+
+	function noWord(){
+		return "Não";
+	}
 
 	/*
 	 * LOADING PROCESS
@@ -763,10 +771,12 @@ class Cadastro extends Module {
      *
      *      key = physical field name
      *      value = human field name
-     *
+     * @param $fieldNamesOnly = false: returns all information about a field
+	 * @param $humanNameAsKey = false: when returning, the field human name will
+	 *			be as Key of the Array
      * @return <array>
      */
-    public function getFields($fieldNamesOnly = false){
+    public function getFields($fieldNamesOnly = false, $humanNameAsKey = false){
 		$sql = "SELECT
 					*
 				FROM
@@ -788,10 +798,14 @@ class Cadastro extends Module {
 				 * O usuário pode querer somente o nome do campo,
 				 * mas também pode querer a informação completa.
 				 */
-				if( $fieldNamesOnly )
-                	$result[ $valor["chave"] ] = $valor["valor"];
+				$shouldBeKey = $valor["chave"];
+				if( $humanNameAsKey === true )
+					$shouldBeKey = $valor["valor"];
+				
+				if( $fieldNamesOnly === true )
+                	$result[ $shouldBeKey ] = $valor["valor"];
 				else
-                	$result[ $valor["chave"] ] = $valor;
+                	$result[ $shouldBeKey ] = $valor;
 
 			}
         }
@@ -1250,7 +1264,7 @@ class Cadastro extends Module {
 
     }
 
-	 public function LeTabelaDaEstrutura() {
+	 public function LeTabelaDaEstrutura($params = array()) {
 		if( !empty($this->tabela_criar) )
         	return $this->tabela_criar;
 		return '';
