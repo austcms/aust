@@ -160,7 +160,7 @@ foreach( $query as $dados ){
 						Ao cliente:
 					</span>
 					<span class="value name">
-						<a href="adm_main.php?section=conteudo&action=edit&aust_node=<?php echo $dados['client_node'] ?>&w=<?php echo $dados['client_id']?>">
+						<a href="adm_main.php?section=content&action=edit&aust_node=<?php echo $dados['client_node'] ?>&w=<?php echo $dados['client_id']?>">
 							<?php echo $dados['client_name']; ?>
 						</a>
 					</span>
@@ -169,7 +169,7 @@ foreach( $query as $dados ){
 			}
 			?>
 			<div class="actions">
-				<a href="adm_main.php?section=conteudo&action=edit&aust_node=<?php echo $austNode?>&w=<?php echo $dados['id']?>">
+				<a href="adm_main.php?section=content&action=edit&aust_node=<?php echo $austNode?>&w=<?php echo $dados['id']?>">
 					Ver detalhes
 				</a>
 			</div>

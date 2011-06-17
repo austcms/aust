@@ -99,7 +99,7 @@ define("TMP_DIR", THIS_TO_BASEURL."tpm/");
      * São os arquivos que podem desempenhar funções de módulos quando estes
      * estão ausentes.
      */
-    define('CONTENT_TRIGGERS_DIR', INC_DIR.'conteudo.inc/');
+    define('CONTENT_TRIGGERS_DIR', INC_DIR.'content.inc/');
         define('CREATE_ACTION', 'create');
         define('EDIT_ACTION', 'edit');
         define('LISTING_ACTION', 'listing');
@@ -146,6 +146,8 @@ define('CONFIG_DIR', THIS_TO_BASEURL.'config/');
 	 */
 	define('EXPORTED_DIR', CONFIG_DIR.'export/');
 	define('EXPORTED_FILE', EXPORTED_DIR.'exported_data.php');
+
+ 	define("NAVIGATION_PERMISSIONS_FILE", CONFIG_DIR."nav_permissions.php");
 
 
 /**

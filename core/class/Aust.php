@@ -893,7 +893,7 @@ class Aust {
         if(is_file(MODULES_DIR.$pasta_do_modulo.'/listar.php')) {
             return MODULES_DIR.$pasta_do_modulo.'/listar.php';
         } else {
-            return 'conteudo.inc/listar.inc.php';
+            return 'content.inc/listar.inc.php';
         }
     }
 

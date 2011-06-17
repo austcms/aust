@@ -86,7 +86,7 @@
 	    <tr>
 	        <td valign="top" class="first"><label>Opções:</label></td>
 	        <td class="second">
-	            <a href="adm_main.php?section=conteudo&action=edit&aust_node=<?php echo $relMaster?>&w=<?php echo $relW ?>">
+	            <a href="adm_main.php?section=content&action=edit&aust_node=<?php echo $relMaster?>&w=<?php echo $relW ?>">
 				Conteúdo principal
 				</a>
 				<input type="hidden" name="redirect_to" value="<?php echo $_SERVER['REQUEST_URI'] ?>" />

@@ -15,7 +15,6 @@ if( !defined('THIS_TO_BASEURL') )
 
 define('TESTING', true);
 
-
 require_once(CORE_DIR."libs/functions/func.php");
 require_once(CORE_DIR."libs/functions/data_types.php");
 require_once(CORE_DIR."libs/functions/string_treatment.php");

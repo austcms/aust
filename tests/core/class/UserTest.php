@@ -81,7 +81,6 @@ class UserTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->obj->isLogged() );
 
         $this->assertEquals("1", 			$this->obj->getId() 				);
-        $this->assertEquals("Webmaster", 	$this->obj->tipo() 					);
         $this->assertEquals("kurko", 		$this->obj->LeRegistro("login") 	);
 
 		$this->obj->reset();
@@ -98,7 +97,7 @@ class UserTest extends PHPUnit_Framework_TestCase
 	}
 	
 	function testRootType(){
-		$this->assertEquals("Webmaster", $this->obj->rootType());
+		$this->assertEquals("Webmaster", User::getInstance()->rootType());
 	}
     
 }

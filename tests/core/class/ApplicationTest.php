@@ -22,12 +22,5 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(1, $return);
     }
 
-    function testLoadDatabaseConnection(){
-#		$return = $this->installationDiagnostics();
-#        $this->assertType('integer', $return);
-#        $this->assertEqual(1, $return);
-    }
-
-
 }
 ?>

@@ -12,7 +12,7 @@ if(empty($_GET['section']))
     <?php /*
 	<li><a <?php MenuSelecionado($_GET['section'], "index"); ?> href="adm_main.php?section=index">Painel</a></li>
 	*/ ?>
-    <li><a <?php MenuSelecionado($_GET['section'], "conteudo"); ?> href="adm_main.php?section=conteudo">Gerenciar Conteúdo</a></li>
+    <li><a <?php MenuSelecionado($_GET['section'], "conteudo"); ?> href="adm_main.php?section=content">Gerenciar Conteúdo</a></li>
     
     <li class="opcao_direita"><a <?php MenuSelecionado($_GET['section'], "themes"); ?> href="adm_main.php?section=themes">Aparência</a></li>
     <?php
