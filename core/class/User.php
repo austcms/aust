@@ -184,7 +184,7 @@ class User {
         if( !empty($this->userInfo[$campo]) )
             return $this->userInfo[$campo];
 
-        if( !isset($_SESSION) )
+        if( !isset($_SESSION) || empty($_SESSION['login']) )
             return false;
 
         if( $campo == 'tipo' ){

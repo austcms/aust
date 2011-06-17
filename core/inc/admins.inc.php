@@ -156,7 +156,7 @@ if(	!empty($_GET['action']) &&
                 if( $dados["login"] <> "kurko"
                     AND strtolower($dados["tipo"]) <> "webmaster"
                     AND (
-                        in_array( User::getInstance()->LeRegistro("tipo"), $navPermissoes['admins']['form'] )
+                        UiPermissions::getInstance()->isPermittedSection(array('action' => 'form'))
                         OR strtolower($dados["tipo"]) == "colaborador" 
                     )
                 ){
@@ -197,7 +197,7 @@ if(	!empty($_GET['action']) &&
         /*
          * Nova pessoa
          */
-        if( in_array( User::getInstance()->LeRegistro("tipo"), $navPermissoes['admins']['form'] ) ){
+        if( UiPermissions::getInstance()->isPermittedSection(array('action' => 'form')) ){
             ?>
             <div class="botao">
                 <div class="bt_novapessoa">
