@@ -71,9 +71,9 @@ foreach($siteQuery as $chave=>$valor){
             <tr>
                 <td colspan="2" valign="top"><strong>
                 <?php
-                if(is_file('modulos/'.$estruturas['tipo'].'/'.MOD_CONFIG)){
+                if(is_file(MODULES_DIR.$estruturas['tipo'].'/'.MOD_CONFIG)){
                     unset($modInfo);
-                    include('modulos/'.$estruturas['tipo'].'/'.MOD_CONFIG);
+                    include(MODULES_DIR.$estruturas['tipo'].'/'.MOD_CONFIG);
 
                     echo ''.$modInfo['nome'].'';
                 } else {

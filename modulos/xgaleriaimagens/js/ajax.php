@@ -17,7 +17,7 @@ define('THIS_TO_BASEURL', '../../../');
 /**
  * Carrega classes
  */
-require_once(THIS_TO_BASEURL.CLASS_LOADER);
+require_once(CLASS_LOADER);
 
 /**
  * Propriedades editáveis do sistema. Carrega todas as configurações da aplicação
@@ -25,11 +25,11 @@ require_once(THIS_TO_BASEURL.CLASS_LOADER);
 /**
  * Carrega as configurações de conexão do banco de dados
  */
-    include(THIS_TO_BASEURL.CONFIG_DATABASE_FILE);
+    include(CONFIG_DATABASE_FILE);
 /**
  * Configurações do core do sistema
  */
-    include(THIS_TO_BASEURL.CONFIG_CORE_FILE);
+    include(CONFIG_CORE_FILE);
 
 
 $conexao = Connection::getInstance();

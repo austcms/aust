@@ -461,7 +461,7 @@ function loadHtmlEditor($params = ""){
 	echo 'var elementsToLoad = "'.$elements.'";';
 	echo '</script>';
 	
-    include_once(THIS_TO_BASEURL.BASECODE_JS.'html_editor.php');
+    include_once(BASECODE_JS.'html_editor.php');
 }
 
 /*

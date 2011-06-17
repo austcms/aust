@@ -110,7 +110,7 @@ if(!$isResponser){
         /**
          * Ações quanto a conteúdos e categorias
          */
-        include("core/config/permissions.php");
+        include(PERMISSIONS_FILE);
 
         include_once(INC_DIR.'inc_categorias_functions.php');
         

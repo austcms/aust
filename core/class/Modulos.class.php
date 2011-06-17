@@ -52,7 +52,7 @@ class Modulos
      *
      * @var string Diretório onde estão os módulos
      */
-    const MOD_DIR = 'modulos/';
+    const MOD_DIR = MODULES_DIR;
     /**
      *
      * @param array $param:
@@ -143,7 +143,7 @@ class Modulos
         if( is_array($params) ){
             
             foreach( $params as $modName ){
-                $pastas = MODULOS_DIR.$modName;
+                $pastas = MODULES_DIR.$modName;
 
                 /**
                  * Carrega arquivos do módulo atual
@@ -518,7 +518,7 @@ class Modulos
         //pr($modulos);
         return $modulos;
 
-        $diretorio = 'modulos/'; // pega o endereço do diretório
+        $diretorio = MODULES_DIR; // pega o endereço do diretório
         foreach (glob($diretorio."*", GLOB_ONLYDIR) as $pastas) {
             if (is_dir ($pastas)) {
                 if( is_file($pastas.'/'.MOD_CONFIG )) {

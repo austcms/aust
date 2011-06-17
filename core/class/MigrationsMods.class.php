@@ -156,7 +156,7 @@ class MigrationsMods
      * @return <array>
      */
     function _checkAllModsMigration(){
-        $modsDir = MODULOS_DIR;
+        $modsDir = MODULES_DIR;
         $result = array();
 
         /*

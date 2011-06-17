@@ -33,16 +33,16 @@ include(THIS_TO_BASEURL."core/config/variables.php");
 /**
  * Carrega todas as classes do sistema
  */
-include(THIS_TO_BASEURL.CLASS_LOADER);
+include(CLASS_LOADER);
 
 /**
  * Carrega configurações do sistema
  */
-include(THIS_TO_BASEURL.CONFIG_DIR."core.php");
-include(THIS_TO_BASEURL.CONFIG_DIR."database.php");
+include(CONFIG_CORE_FILE);
+include(CONFIG_DATABASE_FILE);
 
 /**
  * Carrega o setup
  */
-require(THIS_TO_BASEURL.INSTALLATION_DIR.'instalar.php');
+require(INSTALLATION_DIR.'instalar.php');
 ?>

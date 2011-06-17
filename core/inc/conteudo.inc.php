@@ -74,12 +74,13 @@ if(!empty($_GET['action'])){
     /**
      * Carrega arquivos principal do módulo requerido
      */
-        include(MODULOS_DIR.$modDir.MOD_CONFIG);
+		
+        include(MODULES_DIR.$modDir.MOD_CONFIG);
         /**
          * Carrega classe do módulo e cria objeto
          */
         $moduloNome = (empty($modInfo['className'])) ? 'Classe' : $modInfo['className'];
-        include(MODULOS_DIR.$modDir.$moduloNome.'.php');
+        include(MODULES_DIR.$modDir.$moduloNome.'.php');
 
         $param = array(
             'config' => $modInfo,
@@ -98,7 +99,7 @@ if(!empty($_GET['action'])){
         /**
          * ModController é o controller principal do módulo
          */
-        include(MODULOS_DIR.$modDir.MOD_CONTROLLER);
+        include(MODULES_DIR.$modDir.MOD_CONTROLLER);
 
         /*
          * JS DO MÓDULO
@@ -107,9 +108,9 @@ if(!empty($_GET['action'])){
          */
         if(!empty($aust_node)){
             //$modulo = $aust->LeModuloDaEstrutura($aust_node);
-            if(is_file('modulos/'.$modDir.'js/jsloader.php')){
-                $include_baseurl = WEBROOT.'modulos/'. substr($modDir, 0, strlen($modDir)-1); // necessário para o arquivo jsloader.php saber onde está fisicamente
-                include_once('modulos/'.$modDir.'js/jsloader.php');
+            if(is_file(MODULES_DIR.$modDir.'js/jsloader.php')){
+                $include_baseurl = WEBROOT.MODULES_DIR. substr($modDir, 0, strlen($modDir)-1); // necessário para o arquivo jsloader.php saber onde está fisicamente
+                include_once(MODULES_DIR.$modDir.'js/jsloader.php');
             }
         }
 
@@ -280,7 +281,7 @@ if(!empty($_GET['action'])){
              * existe e o carrega, senão dá erro.
              */
             default :
-                $diretorio = 'modulos/'.$aust->LeModuloDaEstrutura($aust_node); // pega o endereço do diretório
+                $diretorio = MODULES_DIR.$aust->LeModuloDaEstrutura($aust_node); // pega o endereço do diretório
                 if(count(glob($diretorio.'/'.$_GET['action'].'.php')) == 1){
                     include($diretorio.'/'.$_GET['action'].'.php');
                 } else {
@@ -356,11 +357,11 @@ else {
                          * Use o comando 'continue' para pular o resto do loop atual
                          */
                         unset($modInfo);
-                        if(is_file('modulos/'.$structure['tipo'].'/'.MOD_CONFIG)){
+                        if(is_file(MODULES_DIR.$structure['tipo'].'/'.MOD_CONFIG)){
                             /*
                              * Pega dados do módulo. $modInfo existe.
                              */
-                            include('modulos/'.$structure['tipo'].'/'.MOD_CONFIG);
+                            include(MODULES_DIR.$structure['tipo'].'/'.MOD_CONFIG);
 
                             $type = $modInfo['nome'];
                         } else {

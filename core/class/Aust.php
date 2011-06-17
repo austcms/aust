@@ -74,12 +74,12 @@ class Aust {
 	    /**
 	     * Carrega arquivos principal do módulo requerido
 	     */
-	        include(MODULOS_DIR.$modDir.MOD_CONFIG);
+	        include(MODULES_DIR.$modDir.MOD_CONFIG);
 	        /**
 	         * Carrega classe do módulo e cria objeto
 	         */
 	        $module = (empty($modInfo['className'])) ? 'Classe' : $modInfo['className'];
-	        include_once(MODULOS_DIR.$modDir.$module.'.php');
+	        include_once(MODULES_DIR.$modDir.$module.'.php');
 
 	        $param = array(
 	            'config' => $modInfo,
@@ -284,8 +284,8 @@ class Aust {
         $autor = $params['autor'];
 
 
-        if(is_file('modulos/'.$modulo.'/config.php')) {
-            include('modulos/'.$modulo.'/config.php');
+        if(is_file(MODULES_DIR.$modulo.'/config.php')) {
+            include(MODULES_DIR.$modulo.'/config.php');
             $tipo_legivel = $modInfo['nome'];
         } else {
             $tipo_legivel = NULL;
@@ -610,7 +610,7 @@ class Aust {
                 $str = str_replace("&%" . $columns[$i], $menu[$columns[$i]], $str);
             }
             if(!empty($options)) {
-                $diretorio = 'modulos/'.$menu['tipo']; // pega o endereço do diretório
+                $diretorio = MODULES_DIR.$menu['tipo']; // pega o endereço do diretório
                 foreach (glob($diretorio."*", GLOB_ONLYDIR) as $pastas) {
                     if(is_file($pastas.'/configurar_estrutura.php')) {
                         $str = str_replace('&%options', '<a href="adm_main.php?section='.$_GET['section'].'&aust_node='.$menu['id'].'&action=configurar">Configurar</a>', $str);
@@ -711,8 +711,8 @@ class Aust {
 
         $query = $this->conexao->query($sql);
         $tipo = $query[0]['tipo'];
-        if(is_file('modulos/'.$tipo.'/config.php')) {
-            include('modulos/'.$tipo.'/config.php');
+        if(is_file(MODULES_DIR.$tipo.'/config.php')) {
+            include(MODULES_DIR.$tipo.'/config.php');
             return $modInfo['nome'];
         } else {
             return NULL;
@@ -890,8 +890,8 @@ class Aust {
     // LISTAR: funÃ§Ã£o que retorna diretÃ³rio e arquivo para include da listagem do mÃ³dulo da estrutura com id $aust_node
     function AustListar($aust_node = '0') {
         $pasta_do_modulo = $this->LeModuloDaEstrutura($aust_node);
-        if(is_file('modulos/'.$pasta_do_modulo.'/listar.php')) {
-            return 'modulos/'.$pasta_do_modulo.'/listar.php';
+        if(is_file(MODULES_DIR.$pasta_do_modulo.'/listar.php')) {
+            return MODULES_DIR.$pasta_do_modulo.'/listar.php';
         } else {
             return 'conteudo.inc/listar.inc.php';
         }
@@ -900,7 +900,7 @@ class Aust {
     // Lê somente estruturas que não devem ter categorias e grava em uma $_SESSION
     function EstruturasSemCategorias() {
         unset( $_SESSION['somenteestrutura']);
-        $diretorio = 'modulos/'; // pega o endereço do diretório
+        $diretorio = MODULES_DIR; // pega o endereço do diretório
         foreach (glob($diretorio."*", GLOB_ONLYDIR) as $pastas) {
             if(is_file($pastas.'/config.php')) {
                 include($pastas.'/config.php');
@@ -945,7 +945,7 @@ class Aust {
      * @return <string>
      */
     public function getCategoryHtmlSelect($austNode, $currentNode = ''){
-        include_once (THIS_TO_BASEURL."core/inc/inc_categorias_functions.php");
+        include_once(INC_DIR."inc_categorias_functions.php");
         $tmp = BuildDDList( Registry::read('austTable') ,'frmcategoria', $administrador->tipo ,$austNode, $currentNode, false, true);
         return $tmp;
     }

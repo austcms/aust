@@ -30,18 +30,18 @@ class ExportTest extends PHPUnit_Framework_TestCase
          */
 
         // Conteúdos
-        include 'modulos/conteudo/'.MOD_CONFIG;
-        include_once 'modulos/conteudo/'.$modInfo['className'].'.php';
+        include MODULES_DIR.'conteudo/'.MOD_CONFIG;
+        include_once MODULES_DIR.'conteudo/'.$modInfo['className'].'.php';
         $this->Conteudo = new Conteudo;
 
 		// Cadastro Setup
         $modelName = 'CadastroSetup';
-        include_once 'modulos/Cadastro/'.MOD_MODELS_DIR.$modelName.'.php';
+        include_once MODULES_DIR.'Cadastro/'.MOD_MODELS_DIR.$modelName.'.php';
         $this->CadastroSetup = new $modelName;
 
         // Cadastro
-        include 'modulos/cadastro/'.MOD_CONFIG;
-        include_once 'modulos/cadastro/'.$modInfo['className'].'.php';
+        include MODULES_DIR.'cadastro/'.MOD_CONFIG;
+        include_once MODULES_DIR.'cadastro/'.$modInfo['className'].'.php';
         $this->Cadastro = new Cadastro;
 
         $this->obj = Export::getInstance();

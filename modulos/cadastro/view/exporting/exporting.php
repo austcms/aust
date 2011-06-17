@@ -55,8 +55,8 @@ include(CORE_CONFIG_DIR."core.php");
 
     $aust = new Aust(Connection::getInstance());
     $modDir = $aust->LeModuloDaEstrutura($aust_node).'/';
-    include(MODULOS_DIR.$modDir.MOD_CONFIG);
-    include(MODULOS_DIR.$modDir.'Cadastro.php');
+    include(MODULES_DIR.$modDir.MOD_CONFIG);
+    include(MODULES_DIR.$modDir.'Cadastro.php');
     $param = array(
         'config' => $modInfo,
         'user' => array(),
