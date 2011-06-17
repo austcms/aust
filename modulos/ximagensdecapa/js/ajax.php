@@ -19,7 +19,7 @@ define('THIS_TO_BASEURL', '../../../');
 /**
  * Carrega classes
  */
-require_once(THIS_TO_BASEURL.CLASS_DIR.'_carrega_classes.inc.php');
+require_once(CLASS_DIR.'_carrega_classes.inc.php');
 
 /**
  * Propriedades editáveis do sistema. Carrega todas as configurações da aplicação
@@ -27,11 +27,11 @@ require_once(THIS_TO_BASEURL.CLASS_DIR.'_carrega_classes.inc.php');
 /**
  * Carrega as configurações de conexão do banco de dados
  */
-    include(THIS_TO_BASEURL.CONFIG_DIR.'database.php');
+    include(CONFIG_DIR.'database.php');
 /**
  * Configurações do core do sistema
  */
-    include(THIS_TO_BASEURL.CONFIG_DIR.'core.php');
+    include(CONFIG_DIR.'core.php');
 
 
 

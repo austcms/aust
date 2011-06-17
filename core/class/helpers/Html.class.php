@@ -60,7 +60,7 @@ class HtmlHelper
             !is_readable($cacheFilePath) )
         {
             ob_start();
-            foreach( glob( THIS_TO_BASEURL.CSS_PATH.'*.css' ) as $file ){
+            foreach( glob( CSS_PATH.'*.css' ) as $file ){
                 $files[$file] = filesize($file);
                 /*
                  * Para criar cache
@@ -140,7 +140,7 @@ class HtmlHelper
         /*
          * Arquivos atuais
          */
-        foreach( glob( THIS_TO_BASEURL.CSS_PATH.'*.css' ) as $file ){
+        foreach( glob( CSS_PATH.'*.css' ) as $file ){
             $size = filesize($file);
             $files[$file] = $size;
             $this->cssCacheFilesize+= (int) $size;
@@ -198,7 +198,7 @@ class HtmlHelper
         
         if( !$isCached ){
             ob_start();
-            foreach( glob( THIS_TO_BASEURL.BASECODE_JS.'*.js' ) as $file ){
+            foreach( glob( BASECODE_JS.'*.js' ) as $file ){
                 $files[$file] = filesize($file);
                 /*
                  * Para criar cache
@@ -279,7 +279,7 @@ class HtmlHelper
         /*
          * Arquivos atuais
          */
-        foreach( glob( THIS_TO_BASEURL.BASECODE_JS.'*.js' ) as $file ){
+        foreach( glob( BASECODE_JS.'*.js' ) as $file ){
             $size = filesize($file);
             $files[$file] = $size;
             $this->jsCacheFilesize+= (int) $size;

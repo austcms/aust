@@ -86,9 +86,9 @@ if($administrador->LeRegistro('tipo') == 'Webmaster'):
      */
     if(!empty($_GET['aust_node'])){
         $modulo = $aust->LeModuloDaEstrutura($_GET['aust_node']);
-        if(is_file('modulos/'.$modulo.'/js/jsloader.php')){
-            $include_baseurl = 'modulos/'.$modulo; // necessário para o arquivo jsloader.php saber onde está fisicamente
-            include_once('modulos/'.$modulo.'/js/jsloader.php');
+        if(is_file(MODULES_DIR.$modulo.'/js/jsloader.php')){
+            $include_baseurl = MODULES_DIR.$modulo; // necessário para o arquivo jsloader.php saber onde está fisicamente
+            include_once(MODULES_DIR.$modulo.'/js/jsloader.php');
         }
     } elseif($_GET['action'] == 'configurar_modulo' AND !empty($_GET['modulo'])){
         if(is_file($_GET['modulo'].'/js/jsloader.php')){
@@ -103,7 +103,7 @@ if($administrador->LeRegistro('tipo') == 'Webmaster'):
      * Se o usuário desejar configurar a estrutura. Carrega configurar_estrutura.php
      */
     if($_GET['action'] == 'configurar'){
-        $diretorio = 'modulos/'.$aust->LeModuloDaEstrutura($_GET['aust_node']); // pega o endereço do diretório
+        $diretorio = MODULES_DIR.$aust->LeModuloDaEstrutura($_GET['aust_node']); // pega o endereço do diretório
         foreach (glob($diretorio."*", GLOB_ONLYDIR) as $pastas) {
             if(is_file($pastas.'/configurar_estrutura.php')){
                 //include($pastas.'/modulo.class.php');
@@ -119,7 +119,7 @@ if($administrador->LeRegistro('tipo') == 'Webmaster'):
      */
         // @todo
     else if($_GET['action'] == 'configurar_modulo'){
-        //$diretorio = 'modulos/'.$aust->LeModuloDaEstrutura($_GET['aust_node']); // pega o endereço do diretório
+        //$diretorio = MODULES_DIR.$aust->LeModuloDaEstrutura($_GET['aust_node']); // pega o endereço do diretório
         $pastas = $_GET['modulo'];
         //foreach (glob($diretorio."*", GLOB_ONLYDIR) as $pastas) {
             if(is_file($pastas.'/configurar_modulo.php')){
@@ -136,8 +136,8 @@ if($administrador->LeRegistro('tipo') == 'Webmaster'):
      */
     elseif( !empty($_POST['inserirestrutura'])
             AND (
-                ( is_file( 'modulos/'.$_POST['modulo'].'/'.MOD_SETUP_CONTROLLER ) )
-                OR ( is_file( 'modulos/'.$_POST['modulo'].'/setup.php' ) )
+                ( is_file( MODULES_DIR.$_POST['modulo'].'/'.MOD_SETUP_CONTROLLER ) )
+                OR ( is_file( MODULES_DIR.$_POST['modulo'].'/setup.php' ) )
             )
     ){
 
@@ -146,18 +146,18 @@ if($administrador->LeRegistro('tipo') == 'Webmaster'):
          *
          * Se o padrão MVC está ativado carrega SetupController
          */
-        if( is_file( 'modulos/'.$_POST['modulo'].'/'.MOD_SETUP_CONTROLLER ) ){
+        if( is_file( MODULES_DIR.$_POST['modulo'].'/'.MOD_SETUP_CONTROLLER ) ){
 
             /*
              * Instancia Módulo para começar o Setup
              */
                 $modDir = $_POST['modulo'].'/';
-                include(MODULOS_DIR.$modDir.MOD_CONFIG);
+                include(MODULES_DIR.$modDir.MOD_CONFIG);
                 /**
                  * Carrega classe do módulo e cria objeto
                  */
                 $moduloNome = (empty($modInfo['className'])) ? 'Classe' : $modInfo['className'];
-                include_once(MODULOS_DIR.$modDir.$moduloNome.'.php');
+                include_once(MODULES_DIR.$modDir.$moduloNome.'.php');
 
                 $param = array(
                     'config' => $modInfo,
@@ -172,14 +172,14 @@ if($administrador->LeRegistro('tipo') == 'Webmaster'):
              *
              * Carrega scripts javascript
              */
-            if(is_file('modulos/'.$_POST['modulo'].'/js/jsloader.php')){
-                $include_baseurl = 'modulos/'.$_POST['modulo']; // necessário para o arquivo jsloader.php saber onde está fisicamente
-                include_once('modulos/'.$_POST['modulo'].'/js/jsloader.php');
+            if(is_file(MODULES_DIR.$_POST['modulo'].'/js/jsloader.php')){
+                $include_baseurl = MODULES_DIR.$_POST['modulo']; // necessário para o arquivo jsloader.php saber onde está fisicamente
+                include_once(MODULES_DIR.$_POST['modulo'].'/js/jsloader.php');
             }
             /**
              * Carrega o SetupController
              */
-            include('modulos/'.$_POST['modulo'].'/'.MOD_SETUP_CONTROLLER);
+            include(MODULES_DIR.$_POST['modulo'].'/'.MOD_SETUP_CONTROLLER);
 
             /**
              * SetupController
@@ -218,7 +218,7 @@ if($administrador->LeRegistro('tipo') == 'Webmaster'):
          *
          * Se instalar uma estrutura a partir de um módulo com setup.php próprio, faz include neste arquivo para configuração
          */
-        if(!empty($_POST['inserirestrutura'])  AND !is_file('modulos/'.$_POST['modulo'].'/setup.php')) {
+        if(!empty($_POST['inserirestrutura'])  AND !is_file(MODULES_DIR.$_POST['modulo'].'/setup.php')) {
             $result = $aust->gravaEstrutura(
                             array(
                                 'nome'              => $_POST['nome'],

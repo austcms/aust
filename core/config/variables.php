@@ -40,7 +40,11 @@ define("TMP_DIR", THIS_TO_BASEURL."tpm/");
      * Define o diretório onde estão os arquivos de configuração do core
      */
 	 define("CORE_CONFIG_DIR", CORE_DIR."config/");
-	 define("VERSION_FILE", CORE_CONFIG_DIR."version.php");
+	 	define("VERSION_FILE", CORE_CONFIG_DIR."version.php");
+	 	define("PERMISSIONS_FILE", CORE_CONFIG_DIR."permissions.php");
+
+	 	define("LOAD_CORE", CORE_DIR."load_core.php");
+
     /**
      * Define o caminho para a pasta de instalação
      */
@@ -83,7 +87,7 @@ define("TMP_DIR", THIS_TO_BASEURL."tpm/");
     /**
      * Diretório dos módu1os
      */
-	 define('MODULES_DIR', THIS_TO_BASEURL.'modulos/');
+	 define('MODULES_DIR', THIS_TO_BASEURL."modulos/");
 	 define('MODULOS_DIR', MODULES_DIR);
     /**
      * Diretório de inclusão de arquivos ('inc')
@@ -167,17 +171,17 @@ define("CLASS_FILE_SUFIX", ".class");
 /**
  * Arquivos de actions
  */
-define('MOD_ACTIONS_FILE', 'core/actions.php');
+define('MOD_ACTIONS_FILE', CORE_DIR.'actions.php');
 /**
  * Arquivo que contém o DbSchema do módulo
  */
-define('MOD_DBSCHEMA', 'core/config/db_schema.php');
+define('MOD_DBSCHEMA', CORE_CONFIG_DIR.'db_schema.php');
 /**
  * Configurações do Módulo
  *
  *      A partir do diretório do módulo...
  */
-define('MOD_CONFIG', 'core/config/config.php');
+define('MOD_CONFIG', CORE_CONFIG_DIR.'config.php');
 /**
  * Controller de setup de novas estruturas
  */
@@ -203,7 +207,7 @@ define('MOD_VIEW_DIR', 'view/');
 /*
  * MIGRATIONS
  */
-    define('MIGRATION_MOD_DIR', 'core/migrations/');
+    define('MIGRATION_MOD_DIR', CORE_DIR.'migrations/');
 
 /*
  * WIDGETS

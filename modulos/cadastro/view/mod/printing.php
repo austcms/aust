@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="expires" content="Mon, 19 Feb 2024 11:12:01 GMT" />
     <title><?php echo $this->aust->leNomeDaEstrutura($_GET['aust_node'])?> - Versão para impressão</title>
-    <link rel="stylesheet" type="text/css" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/special/print.css" media="screen, print" />
+    <link rel="stylesheet" type="text/css" href="<?php echo UI_PATH; ?>css/special/print.css" media="screen, print" />
 </head>
 <body>
 <?php

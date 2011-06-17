@@ -148,11 +148,6 @@ class Module
     public $testMode = false;
 
     /**
-     *
-     * @var string Diretório onde estão os módulos
-     */
-    const MOD_DIR = 'modulos/';
-    /**
      * __CONSTRUCT()
      *
      * @param array $param:
@@ -926,15 +921,15 @@ class Module
 
         foreach( $query as $valor ){
 
-            if( !file_exists( MODULOS_DIR.$valor["tipo"].'/'.MOD_CONFIG ) )
+            if( !file_exists( MODULES_DIR.$valor["tipo"].'/'.MOD_CONFIG ) )
                 continue;
 
-            include(MODULOS_DIR.$valor["tipo"].'/'.MOD_CONFIG);
+            include(MODULES_DIR.$valor["tipo"].'/'.MOD_CONFIG);
 
-            if( !file_exists( MODULOS_DIR.$valor["tipo"].'/'.$modInfo['className'].'.php' ) )
+            if( !file_exists( MODULES_DIR.$valor["tipo"].'/'.$modInfo['className'].'.php' ) )
                 continue;
             
-            include_once(MODULOS_DIR.$valor["tipo"].'/'.$modInfo['className'].'.php');
+            include_once(MODULES_DIR.$valor["tipo"].'/'.$modInfo['className'].'.php');
 
             $result[] = new $modInfo['className'];
         }
@@ -1064,10 +1059,10 @@ class Module
 		$tmpStr = implode('_', $results[0]);
 		$tmpStr = strtolower($tmpStr);
 		
-		if( is_dir(MODULOS_DIR.$tmpStr) )
-       		return MODULOS_DIR.$tmpStr;
+		if( is_dir(MODULES_DIR.$tmpStr) )
+       		return MODULES_DIR.$tmpStr;
 		else
-       		return MODULOS_DIR.strtolower( $str );
+       		return MODULES_DIR.strtolower( $str );
     }
 
 	/**
@@ -1185,7 +1180,7 @@ class Module
         if( is_array($params) ){
             
             foreach( $params as $modName ){
-                $pastas = MODULOS_DIR.$modName;
+                $pastas = MODULES_DIR.$modName;
 
                 /**
                  * Carrega arquivos do módulo atual
@@ -2000,7 +1995,7 @@ class Module
         //pr($modulos);
         return $modulos;
 
-        $diretorio = 'modulos/'; // pega o endereço do diretório
+        $diretorio = MODULES_DIR; // pega o endereço do diretório
         foreach (glob($diretorio."*", GLOB_ONLYDIR) as $pastas) {
             if (is_dir ($pastas)) {
                 if( is_file($pastas.'/'.MOD_CONFIG )) {

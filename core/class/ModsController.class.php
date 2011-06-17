@@ -353,7 +353,7 @@ class ModsController extends Controller
         if ( $includeType == 'content_trigger' ){
             include(CONTENT_TRIGGERS_DIR.$path.VIEW_FILE_STANDARD_EXTENSION);
         } else {
-            include(MODULOS_DIR.$this->modDir.MOD_VIEW_DIR.$this->controllerName.'/'.$path.VIEW_FILE_STANDARD_EXTENSION);
+            include(MODULES_DIR.$this->modDir.MOD_VIEW_DIR.$this->controllerName.'/'.$path.VIEW_FILE_STANDARD_EXTENSION);
         }
         /**
          * Confirma que renderização foi feita para que não haja duplicação
@@ -400,10 +400,10 @@ class ModsController extends Controller
 
         if( empty($str) )
             return false;
-        if( !is_file(MODULOS_DIR.$this->modDir.MOD_MODELS_DIR.$str.".php") )
+        if( !is_file(MODULES_DIR.$this->modDir.MOD_MODELS_DIR.$str.".php") )
             return false;
 
-        include_once MODULOS_DIR.$this->modDir.MOD_MODELS_DIR.$str.".php";
+        include_once MODULES_DIR.$this->modDir.MOD_MODELS_DIR.$str.".php";
         $this->{$str} = new $str;
 
         return true;
@@ -420,7 +420,7 @@ class ModsController extends Controller
         /**
          * Se o arquivo existe no módulo.
          */
-        if( is_file(MODULOS_DIR.$this->modDir.MOD_VIEW_DIR.$function.VIEW_FILE_STANDARD_EXTENSION) ){
+        if( is_file(MODULES_DIR.$this->modDir.MOD_VIEW_DIR.$function.VIEW_FILE_STANDARD_EXTENSION) ){
             $this->render( $function );
         }
         /**

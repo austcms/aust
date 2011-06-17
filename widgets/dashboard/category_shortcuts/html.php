@@ -25,7 +25,7 @@ if(count($est) > 0){
          *
          *
          */
-        include(THIS_TO_BASEURL.'modulos/'.$valor['tipo'].'/'.MOD_CONFIG);
+        include(MODULES_DIR.$valor['tipo'].'/'.MOD_CONFIG);
         
         echo '<tr>';
         echo '<td valign="top">';

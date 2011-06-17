@@ -24,8 +24,8 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
          * Informações de conexão com banco de dados
          */
 
-        include 'modulos/'.$this->mod.'/'.MOD_CONFIG;
-        include_once 'modulos/'.$this->mod.'/'.$modInfo['className'].'.php';
+        include MODULES_DIR.$this->mod.'/'.MOD_CONFIG;
+        include_once MODULES_DIR.$this->mod.'/'.$modInfo['className'].'.php';
 
         $this->obj = new $modInfo['className'];
     }
@@ -217,7 +217,7 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
             'embedModules' => array (
                 0 => array(
                     'className' => 'Privilegios',
-                    'dir' => 'modulos/privilegios',
+                    'dir' => MODULES_DIR.'privilegios',
                     'privilegio' => '1',
                     'data' => array(
                         'privid' => array(
@@ -319,7 +319,7 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
             'embed' => array(
                 '0' => array(
                     'className' => 'Privilegios',
-                    'dir' => 'modulos/privilegios',
+                    'dir' => MODULES_DIR.'privilegios',
                     'privilegio' => '1',
                     'data' => array(
                         'privid' => array(
@@ -392,7 +392,7 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
             'embed' => array(
                 '0' => array(
                     'className' => 'Privilegios',
-                    'dir' => 'modulos/privilegios',
+                    'dir' => MODULES_DIR.'privilegios',
                     'privilegio' => '1',
                     'data' => array(
                         'privid' => array(
@@ -528,7 +528,7 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
 	 */
 	function testConfigurationsExists(){
 		
-        include 'modulos/'.$this->mod.'/'.MOD_CONFIG;
+        include MODULES_DIR.$this->mod.'/'.MOD_CONFIG;
 		$configurations = $this->obj->loadModConf();
 		foreach( $modInfo['configurations'] as $key=>$value ){
 			$this->assertArrayHasKey($key, $configurations);

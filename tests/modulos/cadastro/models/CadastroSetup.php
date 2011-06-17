@@ -6,7 +6,7 @@ require_once 'tests/config/auto_include.php';
 require_once 'core/class/SQLObject.class.php';
 require_once 'core/config/variables.php';
 #####################################
-include_once 'modulos/cadastro/Cadastro.php';
+include_once MODULES_DIR.'cadastro/Cadastro.php';
 
 class CadastroSetupTest extends PHPUnit_Framework_TestCase
 {
@@ -14,7 +14,7 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
     function setUp(){
         $modelName = 'CadastroSetup';
         $mod = 'Cadastro';
-        include_once 'modulos/'.$mod.'/'.MOD_MODELS_DIR.$modelName.'.php';
+        include_once MODULES_DIR.$mod.'/'.MOD_MODELS_DIR.$modelName.'.php';
         
         $this->obj = new $modelName;
         $this->Cadastro = new $mod;
