@@ -24,7 +24,7 @@ include(THIS_TO_BASEURL.'core/config/variables.php');
 /**
  * Carrega as configurações de conexão do banco de dados
  */
-include(CONFIG_DIR.'database.php');
+include(CONFIG_DATABASE_FILE);
 
 
 /**

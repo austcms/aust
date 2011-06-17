@@ -1,6 +1,6 @@
 <?php
-$h1 = 'Listando conteúdo: '.$this->aust->leNomeDaEstrutura($_GET['aust_node']);
-$nome_modulo = $this->aust->LeModuloDaEstrutura($_GET['aust_node']);
+$h1 = 'Listando conteúdo: '.$this->Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
+$nome_modulo = $this->Aust::getInstance()->LeModuloDaEstrutura($_GET['aust_node']);
 $sql = "SELECT
             id,nome
         FROM
@@ -32,7 +32,7 @@ if((!empty($filter)) AND ($filter <> 'off')){
 /*
  * Pode excluir conteúdo?
  */
-if( $permissoes->canDelete($austNode) ){
+if( StructurePermissions::getInstance()->canDelete($austNode) ){
     ?>
     <div class="painel_de_controle"><input type="submit" class="js_confirm" name="deletar" value="Deletar selecionados" />
     </div>

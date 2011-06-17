@@ -41,6 +41,10 @@ class User {
 
     }
 
+	public function rootType(){
+		return "Webmaster";
+	}
+	
     /**
      * type()
      *
@@ -48,12 +52,18 @@ class User {
      *
      * @return <string>
      */
-    public function type(){
+    public function type($newType = ""){
+	
+		if( !empty($newType) ){
+			$this->tipo = $newType;
+			return $newType;
+		}
+		
 		if( empty($this->tipo) ){
 			$this->tipo = $this->LeRegistro('tipo');
 		}
         return $this->tipo;
-    } // end type()
+    }
 
     /**
      * tipo() alias-> type()
@@ -74,8 +84,11 @@ class User {
      */
     public function redirectForbiddenSession(){
         if( !empty($this->forbiddenCode) ){
-            header("Location: logout.php?status=".$this->forbiddenCode);
-            exit();
+
+			if( !defined("TESTING") || TESTING !== true ){
+            	header("Location: logout.php?status=".$this->forbiddenCode);
+            	exit();
+			}
             return true;
         }
 

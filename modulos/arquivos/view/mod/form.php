@@ -60,7 +60,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
     <input type="hidden" name="frmarquivo_nome" value="<?php if( !empty($dados['arquivo_nome']) ) echo $dados['arquivo_nome'];?>">
     <input type="hidden" name="frmarquivo_tipo" value="<?php if( !empty($dados['arquivo_tipo']) ) echo $dados['arquivo_tipo'];?>">
     <input type="hidden" name="frmarquivo_tamanho" value="<?php if( !empty($dados['arquivo_tamanho']) ) echo $dados['arquivo_tamanho']; ?>">
-    <input type="hidden" name="frmadmin_id" value="<?php if( !empty($dados['autor']) ) echo $dados['autor']; else echo $administrador->LeRegistro('id');?>">
+    <input type="hidden" name="frmadmin_id" value="<?php if( !empty($dados['autor']) ) echo $dados['autor']; else echo User::getInstance()->LeRegistro('id');?>">
     
     <table border=0 cellpadding=0 cellspacing=0 class="form">
     <?php

@@ -142,7 +142,7 @@ class StructurePermissions extends SQLObject {
      * formato simplicado (array(0 => 'categoria 1', 1 => 'categoria 2', ...))
      */
     function read($param = ''){
-
+		include(PERMISSIONS_FILE);
         /**
          * Ajusta configuração de leitura, verifica a quem se refere
          * a permissão que será lida

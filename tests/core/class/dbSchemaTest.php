@@ -11,22 +11,8 @@ require_once 'core/class/dbSchema.class.php';
 
 class dbSchemaTest extends PHPUnit_Framework_TestCase
 {
-    public $dbConfig = array();
-
-    public $conexao;
-
     public function setUp(){
-
-        /*
-         * Informações de conexão com banco de dados
-         */
-
-        
-        
-        $this->conexao = Connection::getInstance();
-
-        require("core/config/installation/dbschema.php");
-        $this->dbSchema = new dbSchema($dbSchema, $this->conexao);
+        $this->dbSchema = dbSchema::getInstance();
     }
 
     function tearDown(){

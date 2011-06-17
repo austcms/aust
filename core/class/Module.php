@@ -1765,7 +1765,7 @@ class Module
             "where" => "tipo='textos' and classe='estrutura'"
         );
 
-        $estruturas = $aust->LeEstruturasParaArray($param);
+        $estruturas = Aust::getInstance()->LeEstruturasParaArray($param);
         /**
          * Se há estruturas instaladas, rodará uma por uma tomando os conteúdos
          */
@@ -1790,7 +1790,7 @@ class Module
                 foreach($estruturas as $chave=>$valor) {
 
                     $response['intro'] = 'A seguir, os últimos conteúdos.';
-                    $categorias = $aust->categoriasFilhas( array( 'pai' => $valor['id'] ) );
+                    $categorias = Aust::getInstance()->categoriasFilhas( array( 'pai' => $valor['id'] ) );
 
                     if(!empty($categorias)) {
                     /**

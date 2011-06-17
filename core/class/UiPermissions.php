@@ -110,7 +110,7 @@ class UiPermissions {
                     /**
                      * Verifica se o tipo de usuário conectado tem permissão quanto ao action atual
                      */
-                    if(in_array(strtolower($administrador->LeRegistro('tipo')), arraytolower($navPermissoes[$_GET['section']][$_GET['action']]))){
+                    if(in_array(strtolower(User::getInstance()->LeRegistro('tipo')), arraytolower($navPermissoes[$_GET['section']][$_GET['action']]))){
                         /**
                          * Se está tudo ok, se há permissões para este usuário
                          */
@@ -138,7 +138,7 @@ class UiPermissions {
                      * Verifica o ranking do usuário atual e ve se este tem
                      * alguma permissão.
                      */
-                    if(in_array(strtolower($administrador->LeRegistro('tipo')), arraytolower($navPermissoes[$_GET['section']]['au-permissao']))){
+                    if(in_array(strtolower(User::getInstance()->LeRegistro('tipo')), arraytolower($navPermissoes[$_GET['section']]['au-permissao']))){
                         return true;
                     } else {
                         return false;

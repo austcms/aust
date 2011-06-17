@@ -49,7 +49,7 @@ include_once(THIS_TO_BASEURL."core/config/variables.php");
 /**
  * Carrega dados do DB
  */
-require_once(CONFIG_DIR.'database.php');
+require_once(CONFIG_DATABASE_FILE);
 require_once(CLASS_LOADER);
 $conexao = Connection::getInstance();
 

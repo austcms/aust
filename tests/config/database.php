@@ -1,10 +1,4 @@
 <?php
-/**
- * Variável de conexão com banco de dados
- *
- * Contém $dbConn
- */
-//require_once "config/database.php";
 class DATABASE_CONFIG
 {
     static $dbConn = array(

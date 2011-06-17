@@ -69,7 +69,7 @@ class Export
 	 */
 	function getStructures($params = array()){
 		$aust = Aust::getInstance();
-		$data = $aust->getStructures($params);
+		$data = Aust::getInstance()->getStructures($params);
 		$tmpData = $data;
 
 		/*

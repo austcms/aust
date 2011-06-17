@@ -27,7 +27,7 @@
     Nome: <em><?php echo $dados["nome"];?></em><br />
     Hierarquia: <em><?php echo $dados["tipo"];?></em><br />
     Nome de usuário: <em><?php echo $dados["login"];?></em><br />
-    Senha: <em><?php if($administrador->LeRegistro('tipo') == "Webmaster") echo $dados["senha"]; else echo "*****";?></em><br />
+    Senha: <em><?php if(User::getInstance()->LeRegistro('tipo') == "Webmaster") echo $dados["senha"]; else echo "*****";?></em><br />
     Email: <em><?php echo $dados["email"];?></em><br />
     Telefone: <em><?php echo $dados["telefone"];?></em><br />
     Celular: <em><?php echo $dados["celular"];?></em><br />

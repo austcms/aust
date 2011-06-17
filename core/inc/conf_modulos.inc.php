@@ -2,7 +2,7 @@
 /*
  * Somente webmasters tem acesso a esta página
  */
-if($administrador->LeRegistro('tipo') == 'Webmaster'):
+if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'):
 
 /*
  * MIGRATIONS
@@ -58,7 +58,7 @@ if($administrador->LeRegistro('tipo') == 'Webmaster'):
                 'valor' => $modName,
                 'pasta' => $path,
                 'modInfo' => $modInfo,
-                'autor' => $administrador->LeRegistro('id'),
+                'autor' => User::getInstance()->LeRegistro('id'),
             );
             $modulo->configuraModulo($param);
 
@@ -85,7 +85,7 @@ if($administrador->LeRegistro('tipo') == 'Webmaster'):
      * Carrega Javascript de algum módulo se existir
      */
     if(!empty($_GET['aust_node'])){
-        $modulo = $aust->LeModuloDaEstrutura($_GET['aust_node']);
+        $modulo = Aust::getInstance()->LeModuloDaEstrutura($_GET['aust_node']);
         if(is_file(MODULES_DIR.$modulo.'/js/jsloader.php')){
             $include_baseurl = MODULES_DIR.$modulo; // necessário para o arquivo jsloader.php saber onde está fisicamente
             include_once(MODULES_DIR.$modulo.'/js/jsloader.php');
@@ -103,7 +103,7 @@ if($administrador->LeRegistro('tipo') == 'Webmaster'):
      * Se o usuário desejar configurar a estrutura. Carrega configurar_estrutura.php
      */
     if($_GET['action'] == 'configurar'){
-        $diretorio = MODULES_DIR.$aust->LeModuloDaEstrutura($_GET['aust_node']); // pega o endereço do diretório
+        $diretorio = MODULES_DIR.Aust::getInstance()->LeModuloDaEstrutura($_GET['aust_node']); // pega o endereço do diretório
         foreach (glob($diretorio."*", GLOB_ONLYDIR) as $pastas) {
             if(is_file($pastas.'/configurar_estrutura.php')){
                 //include($pastas.'/modulo.class.php');
@@ -119,7 +119,7 @@ if($administrador->LeRegistro('tipo') == 'Webmaster'):
      */
         // @todo
     else if($_GET['action'] == 'configurar_modulo'){
-        //$diretorio = MODULES_DIR.$aust->LeModuloDaEstrutura($_GET['aust_node']); // pega o endereço do diretório
+        //$diretorio = MODULES_DIR.Aust::getInstance()->LeModuloDaEstrutura($_GET['aust_node']); // pega o endereço do diretório
         $pastas = $_GET['modulo'];
         //foreach (glob($diretorio."*", GLOB_ONLYDIR) as $pastas) {
             if(is_file($pastas.'/configurar_modulo.php')){
@@ -219,14 +219,14 @@ if($administrador->LeRegistro('tipo') == 'Webmaster'):
          * Se instalar uma estrutura a partir de um módulo com setup.php próprio, faz include neste arquivo para configuração
          */
         if(!empty($_POST['inserirestrutura'])  AND !is_file(MODULES_DIR.$_POST['modulo'].'/setup.php')) {
-            $result = $aust->gravaEstrutura(
+            $result = Aust::getInstance()->gravaEstrutura(
                             array(
                                 'nome'              => $_POST['nome'],
                                 'categoriaChefe'    => $_POST['categoria_chefe'],
                                 'estrutura'         => 'estrutura',
                                 'publico'           => $_POST['publico'],
                                 'moduloPasta'       => $_POST['modulo'],
-                                'autor'             => $administrador->LeRegistro('id')
+                                'autor'             => User::getInstance()->LeRegistro('id')
                             )
                         );
             if($result){
@@ -264,7 +264,7 @@ if($administrador->LeRegistro('tipo') == 'Webmaster'):
                     /**
                      * @todo - refatorar LeEstruturas()
                      */
-                    $aust->LeEstruturas(Array('id', 'nome', 'tipo'), '<li><strong>&%nome</strong> (módulo &%tipo) &%options</li>', '', '', 'ORDER BY tipo DESC', 'options');
+                    Aust::getInstance()->LeEstruturas(Array('id', 'nome', 'tipo'), '<li><strong>&%nome</strong> (módulo &%tipo) &%options</li>', '', '', 'ORDER BY tipo DESC', 'options');
                     ?>
                     </ul>
                 </div>
@@ -291,7 +291,7 @@ if($administrador->LeRegistro('tipo') == 'Webmaster'):
                             <label>Categoria-chefe: </label>
                                 <select name="categoria_chefe">
                                     <?php
-                                    $aust->LeCategoriaChefe(Array('id', 'nome'), '<option value="&%id">&%nome</option>', '', '');
+                                    Aust::getInstance()->LeCategoriaChefe(Array('id', 'nome'), '<option value="&%id">&%nome</option>', '', '');
                                     ?>
                                 </select>
                         </div>
@@ -432,7 +432,7 @@ if($administrador->LeRegistro('tipo') == 'Webmaster'):
                                 'valor' => $pasta_dir[0],
                                 'pasta' => $pastas,
                                 'modInfo' => $modInfo,
-                                'autor' => $administrador->LeRegistro('id'),
+                                'autor' => User::getInstance()->LeRegistro('id'),
                             );
                             $modulo->configuraModulo($param);
 

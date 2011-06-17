@@ -70,7 +70,7 @@ if(!empty($_GET['block']) AND $_GET['block'] == "delete"){
 <div class="highlights_painel">
     <div class="containner">
     <?php
-        $usertipo = $administrador->LeRegistro('tipo');
+        $usertipo = User::getInstance()->LeRegistro('tipo');
         /*
          * ORGANOGRAMA
          * Monta organograma das categorias

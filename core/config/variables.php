@@ -134,7 +134,9 @@ define('CONFIG_DIR', THIS_TO_BASEURL.'config/');
 	/**
 	 * Endereço do arquivo de configurações da base de dados
 	 */
-	define('CONFIG_DATABASE_FILE', CONFIG_DIR.'database.php');
+	if(!defined('CONFIG_DATABASE_FILE')){
+		define('CONFIG_DATABASE_FILE', CONFIG_DIR.'database.php');
+	}
 	/**
 	 * Configurações do Core
 	 */
@@ -219,7 +221,7 @@ define('MOD_VIEW_DIR', 'view/');
  * CACHE
  */
     define('CACHE_DIR', TMP_DIR.'cache/');
-    define('CACHE_PUBLIC_DIR', TMP_PATH.'cache/');
+    define('CACHE_PUBLIC_DIR', TMP_DIR.'cache/');
 
     define('UPLOADS_DIR', 'uploads/');
 

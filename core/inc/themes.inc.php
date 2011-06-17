@@ -4,7 +4,7 @@ if( !empty($_GET['current_theme']) ){
 
         $params = array(
             'themeName' => $_GET['current_theme'],
-            'userId' => $administrador->getId(),
+            'userId' => User::getInstance()->getId(),
         );
 
         if( $themes->setTheme($params) ){

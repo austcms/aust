@@ -33,7 +33,7 @@ if( !empty($_GET["w"]) ){
 //pr($infoCadastro);
 ?>
 
-<h2>Cadastro: <?php echo $this->aust->leNomeDaEstrutura($_GET['aust_node'])?></h2>
+<h2>Cadastro: <?php echo $this->Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node'])?></h2>
 <?php
 if( $_GET['action'] == "edit" ){
     if( $modulo->getStructureConfig("has_printing_version") ){
@@ -148,7 +148,7 @@ $nodeIdFieldName = 'data['.$infoCadastro["estrutura"]["tabela"]["valor"].'][node
 ?>
 <input type="hidden" name="metodo" value="<?php echo $_GET["action"];?>" />
 <input type="hidden" name="frmcreated_on" value="<?php echo date("Y-m-d H:i:s"); ?>">
-<input type="hidden" name="frmautor" value="<?php echo $administrador->LeRegistro('id');?>">
+<input type="hidden" name="frmautor" value="<?php echo User::getInstance()->LeRegistro('id');?>">
 <input type="hidden" name="w" value="<?php ifisset($_GET['w']);?>">
 <input type="hidden" name="aust_node" value="<?php echo $austNode;?>">
 
@@ -167,7 +167,7 @@ if( $modulo->getStructureConfig("category_selectable") ){
 		$nodeId = false;
 	}
 	
-    echo BuildDDList( Registry::read('austTable') , $nodeIdFieldName, $administrador->tipo ,$austNode, $nodeId);
+    echo BuildDDList( Registry::read('austTable') , $nodeIdFieldName, User::getInstance()->tipo ,$austNode, $nodeId);
 	?>
 	<div class="after category">
 		<?php

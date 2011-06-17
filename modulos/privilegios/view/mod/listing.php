@@ -13,8 +13,8 @@
 ?>
 <div class="listagem">
 <?php
-$h1 = 'Listando conteúdo: '.$this->aust->leNomeDaEstrutura($_GET['aust_node']);
-$nome_modulo = $this->aust->LeModuloDaEstrutura($_GET['aust_node']);
+$h1 = 'Listando conteúdo: '.$this->Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
+$nome_modulo = $this->Aust::getInstance()->LeModuloDaEstrutura($_GET['aust_node']);
 $sql = "SELECT
 			id,nome
 		FROM
@@ -37,7 +37,7 @@ if((!empty($filter)) AND ($filter <> 'off')){
 	$addurl = "&filter=$filter&filterw=" . urlencode($filterw);
 }
 
-$categorias = $this->aust->LeCategoriasFilhas('',$_GET['aust_node']);
+$categorias = $this->Aust::getInstance()->LeCategoriasFilhas('',$_GET['aust_node']);
 $categorias[$_GET['aust_node']] = 'Estrutura';
 
 // itens de paginação
@@ -64,7 +64,7 @@ $query = $modulo->connection->query($sql);
 /*
  * Pode excluir conteúdo?
  */
-if( $permissoes->canDelete($austNode) ){
+if( StructurePermissions::getInstance()->canDelete($austNode) ){
     ?>
     <div class="painel_de_controle"><input type="submit" class="js_confirm" name="deletar" value="Deletar selecionados" />
     </div>
@@ -110,10 +110,10 @@ if(count($query) == 0){
                     <td>
                         <?php
                         if($i == 1){
-                            if( $permissoes->canEdit($_GET['aust_node']) )
+                            if( StructurePermissions::getInstance()->canEdit($_GET['aust_node']) )
                                 echo '<a href="adm_main.php?section='.$_GET['section'].'&action=edit&aust_node='.$_GET['aust_node'].'&w='.$dados["id"].'">';
                             echo $dados[$modulo->config['contentHeader']['campos'][$i]];
-                            if( $permissoes->canEdit($_GET['aust_node']) )
+                            if( StructurePermissions::getInstance()->canEdit($_GET['aust_node']) )
                                 echo '</a>';
                         } else {
                             echo $dados[$modulo->config['contentHeader']['campos'][$i]];
@@ -123,7 +123,7 @@ if(count($query) == 0){
             <?php } ?>
             <td align="center">
                 <?php
-                if( $permissoes->canDelete($austNode) ){
+                if( StructurePermissions::getInstance()->canDelete($austNode) ){
                     ?>
                     <input type='checkbox' name='itens[]' value='<?php echo $dados['id'];?>'>
                     <?php

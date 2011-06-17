@@ -11,7 +11,7 @@ class ModController extends ModsController
 
 	public function getQuery(){
 		
-		$categorias = $this->aust->LeCategoriasFilhas('',$_GET['aust_node']);
+		$categorias = $this->Aust::getInstance()->LeCategoriasFilhas('',$_GET['aust_node']);
         $categorias[$_GET['aust_node']] = 'Estrutura';
 
         /*
@@ -44,7 +44,7 @@ class ModController extends ModsController
 
     public function listing(){
 
-        $h1 = ''.$this->aust->leNomeDaEstrutura($_GET['aust_node']);
+        $h1 = ''.$this->Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
         $this->set('h1', $h1);
 
         $sql = "SELECT

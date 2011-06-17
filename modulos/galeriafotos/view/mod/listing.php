@@ -36,7 +36,7 @@ if((!empty($filter)) AND ($filter <> 'off')){
 /*
  * Pode excluir conteúdo?
  */
-if( $permissoes->canDelete($austNode) ){
+if( StructurePermissions::getInstance()->canDelete($austNode) ){
     ?>
     <div class="painel_de_controle"><input type="submit" class="js_confirm" name="deletar" value="Deletar selecionados" />
     </div>
@@ -85,12 +85,12 @@ if(count($query) == 0){
 						if( empty($title) )
 							$title = "[Sem título]";
                         if($i == 1){
-                            //vd($permissoes->canEdit($austNode));
-                            if( $permissoes->canEdit($austNode) )
+                            //vd(StructurePermissions::getInstance()->canEdit($austNode));
+                            if( StructurePermissions::getInstance()->canEdit($austNode) )
                                 echo '<a href="adm_main.php?section='.$_GET['section'].'&action=edit&aust_node='.$_GET['aust_node'].'&w='.$dados["id"].'">';
 
                             echo $title;
-                            if( $permissoes->canEdit($austNode) )
+                            if( StructurePermissions::getInstance()->canEdit($austNode) )
                                 echo '</a>';
                         } else {
                             echo $title;
@@ -100,7 +100,7 @@ if(count($query) == 0){
             <?php } ?>
             <td align="center">
                 <?php
-                if( $permissoes->canDelete($austNode) ){
+                if( StructurePermissions::getInstance()->canDelete($austNode) ){
                     ?>
                     <input type='checkbox' name='itens[]' value='<?php echo $dados['id'];?>'>
                     <?php

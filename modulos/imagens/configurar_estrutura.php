@@ -175,7 +175,7 @@ if(!empty($_GET['function'])){
 }
 ?>
 
-<h2>Configuração: <?php echo $aust->leNomeDaEstrutura($_GET['aust_node'])?></h2>
+<h2>Configuração: <?php echo Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node'])?></h2>
 <?php if(!empty($status)){ ?>
     <div class="box-full">
         <div class="box alerta">

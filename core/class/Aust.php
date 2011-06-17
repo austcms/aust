@@ -29,7 +29,7 @@ class Aust {
     public $_recursiveLimit = 50;
     public $_recursiveCurrent = 1;
 
-    function __construct($conexao = array()){
+    function __construct(){
         $this->conexao = Connection::getInstance();
         $this->connection = Connection::getInstance();
         unset($this->AustCategorias);
@@ -899,7 +899,10 @@ class Aust {
 
     // Lê somente estruturas que não devem ter categorias e grava em uma $_SESSION
     function EstruturasSemCategorias() {
-        unset( $_SESSION['somenteestrutura']);
+	
+		if( !empty($_SESSION['somenteestrutura']) )
+        	unset( $_SESSION['somenteestrutura']);
+		
         $diretorio = MODULES_DIR; // pega o endereço do diretório
         foreach (glob($diretorio."*", GLOB_ONLYDIR) as $pastas) {
             if(is_file($pastas.'/config.php')) {
@@ -946,7 +949,7 @@ class Aust {
      */
     public function getCategoryHtmlSelect($austNode, $currentNode = ''){
         include_once(INC_DIR."inc_categorias_functions.php");
-        $tmp = BuildDDList( Registry::read('austTable') ,'frmcategoria', $administrador->tipo ,$austNode, $currentNode, false, true);
+        $tmp = BuildDDList( Registry::read('austTable') ,'frmcategoria', User::getInstance()->tipo ,$austNode, $currentNode, false, true);
         return $tmp;
     }
 

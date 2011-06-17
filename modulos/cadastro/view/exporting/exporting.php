@@ -29,7 +29,7 @@ include(CLASS_DIR."_carrega_classes.inc.php");
 /**
  * Configurações de conexão do banco de dados
  */
-include(CONFIG_DIR."database.php");
+include(CONFIG_DATABASE_FILE);
 
 include(LIB_DIR."aust/aust_func.php");
 /**
@@ -54,7 +54,7 @@ include(CORE_CONFIG_DIR."core.php");
     include(CORE_DIR.'load_core.php');
 
     $aust = new Aust(Connection::getInstance());
-    $modDir = $aust->LeModuloDaEstrutura($aust_node).'/';
+    $modDir = Aust::getInstance()->LeModuloDaEstrutura($aust_node).'/';
     include(MODULES_DIR.$modDir.MOD_CONFIG);
     include(MODULES_DIR.$modDir.'Cadastro.php');
     $param = array(

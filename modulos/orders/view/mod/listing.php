@@ -35,7 +35,7 @@
  * Pode excluir conteúdo?
  */
 /*
-if( $permissoes->canDelete($austNode) ){
+if( StructurePermissions::getInstance()->canDelete($austNode) ){
     ?>
     <div class="painel_de_controle"><input type="submit" class="js_confirm" name="deletar" value="Deletar selecionados" />
     </div>
@@ -176,7 +176,7 @@ foreach( $query as $dados ){
 			<div>
 			<?php
 			/*
-            if( $permissoes->canDelete($austNode) ){
+            if( StructurePermissions::getInstance()->canDelete($austNode) ){
                 ?>
                 <input type='checkbox' name='itens[]' value='<?php echo $dados['id'];?>'>
                 <?php

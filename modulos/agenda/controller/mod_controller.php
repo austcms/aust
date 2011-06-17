@@ -22,13 +22,13 @@ class ModController extends ModsController
         /**
          * <h2> HEADER
          */
-        $this->set('h1', $this->aust->leNomeDaEstrutura($_GET['aust_node']) );
+        $this->set('h1', $this->Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']) );
 
         if((!empty($filter)) AND ($filter <> 'off')){
             $addurl = "&filter=$filter&filterw=" . urlencode($filterw);
         }
 
-        $categorias = $this->aust->LeCategoriasFilhas('',$_GET['aust_node']);
+        $categorias = $this->Aust::getInstance()->LeCategoriasFilhas('',$_GET['aust_node']);
         //pr($categorias);
         $categorias[$_GET['aust_node']] = 'Estrutura';
 
@@ -125,7 +125,7 @@ class ModController extends ModsController
 
     public function edit(){
 
-        $this->set('tagh2', "Editar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']) );
+        $this->set('tagh2', "Editar: ". $this->Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']) );
         $this->set('tagp', 'Edite o conteúdo abaixo.');
 
         $w = (!empty($_GET['w'])) ? $_GET['w'] : '';

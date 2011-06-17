@@ -182,7 +182,7 @@ foreach($query as $dados){
     /*
      * Nova pessoa
      */
-    if( in_array( $administrador->LeRegistro("tipo"), $navPermissoes['admins']['form'] ) ){
+    if( in_array( User::getInstance()->LeRegistro("tipo"), $navPermissoes['admins']['form'] ) ){
         ?>
         <div class="botao">
             <div class="bt_novapessoa">

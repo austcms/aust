@@ -28,7 +28,7 @@
  * [Se novo conteúdo]
  */
     if($_GET['action'] == 'create'){
-        $tagh2 = "Criar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
+        $tagh2 = "Criar: ". $this->Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
         $tagp = 'Crie um novo conteúdo abaixo.';
         $dados = array('id' => '');
     }
@@ -129,7 +129,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
                 <?php
             }
 
-            echo BuildDDList( Registry::read('austTable') ,'frmcategoria', $administrador->tipo ,$austNode, $current_node);
+            echo BuildDDList( Registry::read('austTable') ,'frmcategoria', User::getInstance()->tipo ,$austNode, $current_node);
             ?>
 
 

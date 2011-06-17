@@ -30,7 +30,7 @@ if(count($query) == 0){
 		<td valign="top">
 		<span class="item">
 			<?php
-			if( $permissoes->canEdit($_GET['aust_node']) ){ 
+			if( StructurePermissions::getInstance()->canEdit($_GET['aust_node']) ){ 
 				?>
 				<a href="adm_main.php?section=<?php echo $_GET['section']?>&action=edit&aust_node=<?php echo $_GET['aust_node']?>&w=<?php echo $value["id"]?>">
 
@@ -41,7 +41,7 @@ if(count($query) == 0){
 			<div class="image" style="background-image: url(<?php echo IMAGE_VIEWER_DIR?>visualiza_foto.php?table=imagens&thumbs=yes&myid=<?php echo $value["id"]; ?>&minxsize=<?php echo $thumbsW?>&minysize=<?php echo $thumbsH?>&r=<?php echo $randomNumber?><?php echo $fromFile; ?>)">
 			</div>
 			<?php
-			if( $permissoes->canEdit($_GET['aust_node']) ){ 
+			if( StructurePermissions::getInstance()->canEdit($_GET['aust_node']) ){ 
 				?>
 				</a>
 				<?php
