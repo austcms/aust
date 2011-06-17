@@ -40,7 +40,7 @@ $configPermissoes = array(
 
 class NAVIGATION_PERMISSIONS_CONFIGURATIONS {
     
-    static $navegation = array(
+    static $navigation = array(
         'categorias' =>
             array('new' =>
                 array(

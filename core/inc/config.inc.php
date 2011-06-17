@@ -24,7 +24,7 @@ if( !empty($_POST['gravar']) && $_POST['gravar'] ){
             'valor' => $valor,
         );
 
-        $msg = $config->updateOptions($params);
+        $msg = Config::getInstance()->updateOptions($params);
 
         unset($params);
     }
@@ -45,9 +45,9 @@ if( !empty($_POST['novaconfig']) && $_POST['novaconfig'] ){
         'nome' => $_POST['nome'],
     );
 
-    $config->ajustaOpcoes($params);
+    Config::getInstance()->ajustaOpcoes($params);
     // Grava configuração no DB
-    $status = $config->GravaConfig();
+    $status = Config::getInstance()->GravaConfig();
 }
 
 ?>
@@ -70,7 +70,7 @@ if(!empty($_POST['inserirmodulo'])){
  *
  * Carrega todas as configurações existentes
  */
-$options = $config->getConfigs(
+$options = Config::getInstance()->getConfigs(
         array(
             //'type' => 'global'
         )
@@ -105,7 +105,7 @@ $options = $config->getConfigs(
              * TIPOS DE CONFIGURAÇÕES
              */
             foreach($options as $type=>$conf){
-                if( $config->hasPermission($type) ){
+                if( Config::getInstance()->hasPermission($type) ){
                     ?>
                     <li><a href="#"><?php echo $type ?></a></li>
                     <?php
@@ -143,7 +143,7 @@ $options = $config->getConfigs(
             /*
              * Usuário tem permissão para modificar estas permissões
              */
-            if( $config->hasPermission($type) ){
+            if( Config::getInstance()->hasPermission($type) ){
                 ?>
                 <div class="background">
                     <form method="post" action="adm_main.php?section=<?php echo $_GET['section'];?>">

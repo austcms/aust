@@ -15,6 +15,8 @@ if( !defined('THIS_TO_BASEURL') )
 
 define('TESTING', true);
 
+$_SESSION = array();
+
 require_once(CORE_DIR."libs/functions/func.php");
 require_once(CORE_DIR."libs/functions/data_types.php");
 require_once(CORE_DIR."libs/functions/string_treatment.php");
@@ -22,8 +24,13 @@ require_once(CORE_DIR."libs/functions/string_treatment.php");
 function autoload($className) {
 	if( in_array($className, array("array","int", "integer","string","bool","float")) )
 		return false;
+	
     if( is_file('core/class/'.$className.'.php') )
         require 'core/class/'.$className.'.php';
+    elseif( is_file('core/class/helpers/'.$className.'.php') )
+        require 'core/class/helpers/'.$className.'.php';
+    elseif( is_file('core/class/helpers/'.$className.'.class.php') )
+        require 'core/class/helpers/'.$className.'.class.php';
     else
         require 'core/class/'.$className.'.class.php';
 

@@ -202,7 +202,7 @@ if($fm == 'criar'){ ?>
     </td>
 </tr>
 <?php
-if( $config->getConfig('user_has_secondary_image') ){ ?>
+if( Config::getInstance()->getConfig('user_has_secondary_image') ){ ?>
 
 	<tr>
 	    <td valign="top">Foto secundária: </td>

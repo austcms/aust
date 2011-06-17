@@ -89,18 +89,33 @@ class ActionController
         
         $content_for_layout = "";
 		
-        if( $shouldRender ){
+		$viewFile = VIEWS_DIR."".Dispatcher::getInstance()->controller()."/".$this->_action().".php";
+
+		$defaultErrorReporting = ini_get("error_reporting");
+
+        if( $shouldRender && file_exists($viewFile) ){
+
             ob_start();
             include(VIEWS_DIR."".Dispatcher::getInstance()->controller()."/".$this->_action().".php");
             $content_for_layout = ob_get_contents();
             ob_end_clean();
-			
-			include(UI_STANDARD_FILE);
 
-	        $this->isRendered = true;
+            ob_start();
+			include(UI_STANDARD_FILE);
+            $content = ob_get_contents();
+            ob_end_clean();
+			
+			if( $shouldRender && !empty($content) ){
+				
+				if( !defined('TESTING') || !TESTING )
+					echo $content;
+				
+	        	$this->isRendered = true;
+			}
+			return $content;
         }
 
-        return true;
+        return false;
     }
 
     public function beforeFilter(){ $this->beforeFiltered = true; return true; }

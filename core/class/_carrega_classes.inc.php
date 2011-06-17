@@ -33,8 +33,8 @@ function __autoload($classe){
 /**
  * HELPERS
  */
-include(CLASS_DIR."Helpers"         .CLASS_FILE_SUFIX.".php");
-include(CLASS_DIR."helpers/EmbedForms".CLASS_FILE_SUFIX.".php");
-include(CLASS_DIR."helpers/Html".CLASS_FILE_SUFIX.".php");
+include(CLASS_DIR."Helpers.php");
+include(CLASS_DIR."helpers/EmbedFormsHelper.php");
+include(CLASS_DIR."helpers/HtmlHelper.php");
 
 ?>
