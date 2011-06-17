@@ -180,8 +180,9 @@ define('MOD_DBSCHEMA', CORE_CONFIG_DIR.'db_schema.php');
  * Configurações do Módulo
  *
  *      A partir do diretório do módulo...
+ *		***** NÃO PODE SER SEGUNDO THIS_TO_BASEURL *****
  */
-define('MOD_CONFIG', CORE_CONFIG_DIR.'config.php');
+	define('MOD_CONFIG', 'core/config/config.php'); // relative to MODULES_DIR
 /**
  * Controller de setup de novas estruturas
  */
