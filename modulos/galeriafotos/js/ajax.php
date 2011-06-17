@@ -41,7 +41,7 @@ include(CLASS_DIR."_carrega_classes.inc.php");
 /**
  * Configurações de conexão do banco de dados
  */
-include(CONFIG_DIR."database.php");
+include(CONFIG_DATABASE_FILE);
 
 include(LIB_DIR."aust/aust_func.php");
 /**

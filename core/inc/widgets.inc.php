@@ -3,14 +3,14 @@
  * Arquivo contendo a interface de usuário para configuração de permissões
  */
 
-$widgets = new Widgets($envParams, $administrador->getId());
+$widgets = new Widgets($envParams, User::getInstance()->getId());
 
 if( !empty($_GET['i']) ){
     if( is_dir(WIDGETS_DIR.'dashboard/'.$_GET['i']) ){
 
         $params = array(
             'name' => $_GET['i'],
-            'admin_id' => $administrador->getId(),
+            'admin_id' => User::getInstance()->getId(),
             'column_nr' => $_GET['column_nr'],
             'path' => 'dashboard/'.$_GET['i'],
         );

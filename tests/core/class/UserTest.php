@@ -8,7 +8,7 @@ require_once 'core/class/SQLObject.class.php';
 
 #####################################
 
-class AdministradorTest extends PHPUnit_Framework_TestCase
+class UserTest extends PHPUnit_Framework_TestCase
 {
 
     public $dbConfig = array();
@@ -89,6 +89,16 @@ class AdministradorTest extends PHPUnit_Framework_TestCase
         $this->assertFalse( $this->obj->getId() 				);
         $this->assertFalse( $this->obj->type() 					);
         $this->assertFalse( $this->obj->LeRegistro("username") 	);
+	}
+	
+	function testType(){
+		$this->assertEquals("root", $this->obj->type("root"));
+		$this->assertEquals("root", $this->obj->type());
+		$this->assertEquals("root", $this->obj->tipo());
+	}
+	
+	function testRootType(){
+		$this->assertEquals("Webmaster", $this->obj->rootType());
 	}
     
 }

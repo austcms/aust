@@ -12,10 +12,10 @@ class ModController extends ModsController
 {
 
     public function listing(){
-        $this->set('h2', 'Listando conteúdo: '.$this->aust->leNomeDaEstrutura($_GET['aust_node']) );
-        $this->set('nome_modulo', $this->aust->LeModuloDaEstrutura($_GET['aust_node']) );
+        $this->set('h2', 'Listando conteúdo: '.$this->Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']) );
+        $this->set('nome_modulo', $this->Aust::getInstance()->LeModuloDaEstrutura($_GET['aust_node']) );
 
-		$categorias = $this->aust->LeCategoriasFilhas('',$_GET['aust_node']);
+		$categorias = $this->Aust::getInstance()->LeCategoriasFilhas('',$_GET['aust_node']);
 		$categorias[$_GET['aust_node']] = 'Estrutura';
 
 		$params = array(

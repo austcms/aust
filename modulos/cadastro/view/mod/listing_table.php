@@ -82,11 +82,11 @@ if(count($resultado) > 0){
                         //echo $total_td;
                         if($total_td == 1){
 
-                            if( $permissoes->canEdit($austNode) )
+                            if( StructurePermissions::getInstance()->canEdit($austNode) )
                                 echo '<a href="adm_main.php?section='.$_GET['section'].'&action=edit&aust_node='.$austNode.'&w='.$dados["id"].'">';
 
                             echo $dados[$campo];
-                            if( $permissoes->canEdit($austNode) )
+                            if( StructurePermissions::getInstance()->canEdit($austNode) )
                                 echo '</a>';
                             if( $precisa_aprovacao['valor'] == '1'
                                  AND (
@@ -104,7 +104,7 @@ if(count($resultado) > 0){
                              * para edição
                              */
                             if( $total_td <= 2 ){
-                                if( $permissoes->canEdit($austNode) ){
+                                if( StructurePermissions::getInstance()->canEdit($austNode) ){
                                     ?>
                                     <a href="adm_main.php?section=<?php echo $_GET['section'];?>&action=edit&aust_node=<?php echo $austNode;?>&w=<?php echo $dados["id"];?>">
                                     <?php
@@ -124,7 +124,7 @@ if(count($resultado) > 0){
 							}
 							
                             if( $total_td <= 2 ){
-                                if( $permissoes->canEdit($austNode) ){
+                                if( StructurePermissions::getInstance()->canEdit($austNode) ){
                                     ?>
                                     </a>
                                     <?php
@@ -139,7 +139,7 @@ if(count($resultado) > 0){
             ?>
             <td align="center">
                 <?php
-                if( $permissoes->canDelete($austNode) ){
+                if( StructurePermissions::getInstance()->canDelete($austNode) ){
                     ?>
                     <input type='checkbox' name='itens[]' value='<?php echo $dados['id'];?>'>
                     <?php

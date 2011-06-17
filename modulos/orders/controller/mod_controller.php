@@ -22,7 +22,7 @@ class ModController extends ModsController
         /**
          * <h2> HEADER
          */
-        $this->set('h1', $this->aust->leNomeDaEstrutura($_GET['aust_node']) );
+        $this->set('h1', $this->Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']) );
 
         $this->set('cat', $query[0]['nome'] );
 
@@ -30,7 +30,7 @@ class ModController extends ModsController
             $addurl = "&filter=$filter&filterw=" . urlencode($filterw);
         }
 
-        $categorias = $this->aust->LeCategoriasFilhas('',$_GET['aust_node']);
+        $categorias = $this->Aust::getInstance()->LeCategoriasFilhas('',$_GET['aust_node']);
         $categorias[$_GET['aust_node']] = 'Estrutura';
 
 

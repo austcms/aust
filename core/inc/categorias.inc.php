@@ -17,10 +17,10 @@ switch($_GET['action']){
 					        'father' => $_POST["frmsubordinadoid"],
 					        'name' => $_POST['frmnome'],
 							'description' => $_POST["frmdescricao"],
-					        'author' => $administrador->getId(),
+					        'author' => User::getInstance()->getId(),
 					    );
 
-					    $resultado = $aust->create($params);
+					    $resultado = Aust::getInstance()->create($params);
 						
 						$lastInsertId = $resultado;
 						/**
@@ -37,7 +37,7 @@ switch($_GET['action']){
 							$user = User::getInstance();
 
 							if( !empty($lastInsertId) )
-								$aust->deleteNodeImages( $lastInsertId );
+								Aust::getInstance()->deleteNodeImages( $lastInsertId );
 
 							$newFile = $imageHandler->resample($file);
 							$finalName = $imageHandler->upload($newFile);
@@ -106,7 +106,7 @@ switch($_GET['action']){
 						?>
 						<?php
 						if(!empty($_POST['categoria_chefe']) AND $_POST['categoria_chefe'] <> ''){
-							if($aust->Instalar($_POST['nome'], '', 'categoria-chefe')){
+							if(Aust::getInstance()->Instalar($_POST['nome'], '', 'categoria-chefe')){
 								?>
                                 <h2 class="ok">Categoria-chefe incluida com sucesso!</h2>
                                 <p>Simples assim. Inserimos a primeira categoria com sucesso.</p>
@@ -120,7 +120,7 @@ switch($_GET['action']){
 						}
 						
 						
-						if($aust->Instalado()){
+						if(Aust::getInstance()->Instalado()){
 						?>
                             <h2>Gerenciar Categorias</h2>
                             <p>
@@ -153,7 +153,7 @@ switch($_GET['action']){
                                 </ul>
                             
                             </div>
-                            <?php if($administrador->LeRegistro('tipo') == 'Webmaster'){ ?>
+                            <?php if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'){ ?>
                                 <h2 class="restrito">Webmaster</h2>
                                 <p>
                                 A seguir, opções que somente webmasters podem modificar.

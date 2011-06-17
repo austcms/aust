@@ -64,7 +64,7 @@ function lbCategoria($params){
      * é bom, mas por exemplo, falta algo para esta função, por
      * exemplo.
      */
-    if( !in_array(strtolower($administrador->tipo), array('webmaster', 'root', 'administrador', 'moderador')) ){
+    if( !in_array(strtolower(User::getInstance()->tipo), array('webmaster', 'root', 'administrador', 'moderador')) ){
         return false;
     }
     ?>

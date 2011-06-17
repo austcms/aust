@@ -2,7 +2,7 @@
 /*
  * MENU PRINCIPAL
  */
-$usuario_tipo = $administrador->LeRegistro("tipo");
+$usuario_tipo = User::getInstance()->LeRegistro("tipo");
 
 if(empty($_GET['section']))
     $_GET['section'] = "";

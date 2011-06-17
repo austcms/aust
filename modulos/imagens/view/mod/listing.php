@@ -54,7 +54,7 @@ if((!empty($filter)) AND ($filter <> 'off')){
 	/*
 	 * Pode excluir conteúdo?
 	 */
-	if( $permissoes->canDelete($austNode) ){
+	if( StructurePermissions::getInstance()->canDelete($austNode) ){
 	    ?>
 	
 		<input type="submit" class="js_confirm" name="deletar" value="Deletar selecionados" />

@@ -6,7 +6,7 @@
  */
 
 $fm = (empty($_GET['fm'])) ? $fm = 'criar' : $fm = $_GET['fm'];
-$w = (empty($_GET['w'])) ? $w = $administrador->LeRegistro('id') : $w = $_GET['w'];
+$w = (empty($_GET['w'])) ? $w = User::getInstance()->LeRegistro('id') : $w = $_GET['w'];
 
 $dados = array(
     'id' => '',
@@ -55,7 +55,7 @@ if($fm == 'editar'){
 <input type="hidden" name="metodo" value="<?php echo $fm?>">
 <input type="hidden" name="w" value="<?php ifisset($dados['id'])?>">
 <input type="hidden" name="frmsupervisionado" value="0" />
-<input type="hidden" name="frmautor" value="<?php echo $administrador->LeRegistro('id');?>" />
+<input type="hidden" name="frmautor" value="<?php echo User::getInstance()->LeRegistro('id');?>" />
 
 <table cellpadding=0 cellspacing="3" class="form">
 <tr>
@@ -69,9 +69,9 @@ if($fm == 'editar'){
                  *
                  * Se for edição do próprio perfil, não permite modificação
                  */
-                //vd( in_array(strtolower($administrador->tipo), array('root','webmaster','administrador' ) ) );
-                if( $administrador->LeRegistro('id') != $dados['id'] AND
-                    in_array(strtolower($administrador->tipo), array('root','webmaster','administrador' ) ) )
+                //vd( in_array(strtolower(User::getInstance()->tipo), array('root','webmaster','administrador' ) ) );
+                if( User::getInstance()->LeRegistro('id') != $dados['id'] AND
+                    in_array(strtolower(User::getInstance()->tipo), array('root','webmaster','administrador' ) ) )
                 {
                     ?><div style=" width: 120px; display: table; float: left;"><?php
 

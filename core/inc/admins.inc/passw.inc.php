@@ -99,7 +99,7 @@ if ($_POST['metodo'] == 'gravar'){
 
     <form method="post" action="adm_main.php?section=<?php echo $_GET['section']?>&action=<?php echo $_GET['action']?>">
     <input type="hidden" name="metodo" value="gravar">
-    <input type="hidden" name="myid" value="<?php echo $administrador->LeRegistro('id');?>">
+    <input type="hidden" name="myid" value="<?php echo User::getInstance()->LeRegistro('id');?>">
     <table width="670" border=0 cellpadding=0 cellspacing=3>
     <col width="200">
     <col>

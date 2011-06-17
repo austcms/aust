@@ -84,19 +84,29 @@ class dbSchema
      * @param array $dbSchema O Schema das tabelas necessário ao funcionamento do sistema
      * @param class $conexaoClass Classe de conexão com o banco de dados
      */
-    function  __construct($dbSchema, $conexaoClass = '') {
-        if ( is_array($dbSchema) ){
-            $this->dbSchema = $dbSchema;
-        }
-        
+    function  __construct() {
+	    require(INSTALLATION_DIR.'dbschema.php');
+		$this->dbSchema = $dbSchema;
         $this->conexao = Connection::getInstance();
+    }
 
-        /**
-         * Se não houve verificação do Schema atual ainda
-         */
-        if(empty($this->status)){
-            //$this->verificaSchema();
+    /**
+     * getInstance()
+     *
+     * Para Singleton
+     *
+     * @staticvar <object> $instance
+     * @return <Conexao object>
+     */
+    static function getInstance(){
+        static $instance;
+
+        if( !$instance ){
+            $instance[0] = new dbSchema;
         }
+
+        return $instance[0];
+
     }
 
     /**
@@ -383,7 +393,6 @@ class dbSchema
      * @return <bool>
      */
     public function isDbSchemaFormatOk($dbSchema = ''){
-
         if( empty($dbSchema) )
             $dbSchema = $this->dbSchema;
 
@@ -392,16 +401,11 @@ class dbSchema
         }
 
         return false;
-
-
     }
 
     public function sql(){
 
         $this->tabelasAtuais();
-        //pr($this->dbSchema);
-        //pr($this->tabelasAtuais);
-
         foreach($this->dbSchema as $tabela=>$campos){
 
             /*
@@ -441,13 +445,11 @@ class dbSchema
 
                     }
                 }
-                /**
-                 * Gera SQL
-                 */
+
                 $sql[$tabela] = 'CREATE TABLE '.$tabela.' ('. implode(', ', $camposSchema) .')';
                 unset($camposSchema);
             }
-        } // Fim do foreach
+        }
 
         if( !empty($sqlsubquery) )
             $sql['dbSchemaSQLQuery'] = $sqlsubquery;
@@ -477,10 +479,8 @@ class dbSchema
             }
         }
 
-        //$properties = str_replace('"', "'", reset( $params[$table] ) );
-
         return 'ALTER TABLE '.$table.' '.implode(", ", $addStatement);
-    } // fim sqlForMissingFields()
+    }
 }
 
 ?>

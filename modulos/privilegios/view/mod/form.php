@@ -24,14 +24,14 @@
 
 // se é formulário com $_GET[action] = criar...
 if($_GET['action'] == 'create') {
-    $tagh1 = "Criar: ". $aust->leNomeDaEstrutura($_GET['aust_node']);
+    $tagh1 = "Criar: ". Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
     $tagp = 'Alguns usuários precisam de privilégios para acessar determinados '
            .'conteúdos. Comece criando um privilégio a seguir'
            .'.';
 
 } else if($_GET['action'] == 'edit') {
 
-    $tagh1 = "Editar: ". $aust->leNomeDaEstrutura($_GET['aust_node']);
+    $tagh1 = "Editar: ". Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
     $tagp = 'Edite o conteúdo abaixo. Somente os usuários cadastrados que tiverem este privilégio poderão
              acessar os conteúdos associados a este privilégio.';
     //echo $_GET['aust_node'];

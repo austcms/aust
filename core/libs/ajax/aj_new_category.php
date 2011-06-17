@@ -19,10 +19,10 @@ if( $_GET['lib'] == 'new_category'
     $params = array(
         'father' => $givenAN,
         'name' => $catName,
-        'author' => $administrador->getId(),
+        'author' => User::getInstance()->getId(),
     );
 
-    echo $aust->create($params);
+    echo Aust::getInstance()->create($params);
 
 
 }

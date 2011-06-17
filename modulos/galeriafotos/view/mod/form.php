@@ -23,7 +23,7 @@
  * [Se novo conteúdo]
  */
     if($_GET['action'] == 'create'){
-        $tagh2 = "Criar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
+        $tagh2 = "Criar: ". $this->Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
         $tagp = 'Crie uma nova galeria de fotos a seguir. Comece configurando as '.
                 'informações básicas da galeria e depois suas fotos.';
         $dados = array('id' => '');
@@ -33,7 +33,7 @@
  */
     else if($_GET['action'] == 'edit'){
 
-        $tagh2 = "Editar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
+        $tagh2 = "Editar: ". $this->Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
         $tagp = 'Edite o conteúdo abaixo.';
 
     }

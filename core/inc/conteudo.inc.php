@@ -46,7 +46,7 @@ if(!empty($_GET['action'])){
     /*
      * Tem permissão?
      */
-    if( !$permissoes->verify($aust_node, $_GET['action']) ){
+    if( !StructurePermissions::getInstance()->verify($aust_node, $_GET['action']) ){
 	
 		echo '<p>Sem permissão para esta operação.</p><!-- conteudo.inc -->';
 		
@@ -64,7 +64,7 @@ if(!empty($_GET['action'])){
      * Identifica qual é a pasta do módulo responsável por esta
      * estrutura/categoria
      */
-    $modDir = $aust->LeModuloDaEstrutura($aust_node).'/';
+    $modDir = Aust::getInstance()->LeModuloDaEstrutura($aust_node).'/';
 
     /*
      *
@@ -107,7 +107,7 @@ if(!empty($_GET['action'])){
          * Carrega Javascript de algum módulo se existir
          */
         if(!empty($aust_node)){
-            //$modulo = $aust->LeModuloDaEstrutura($aust_node);
+            //$modulo = Aust::getInstance()->LeModuloDaEstrutura($aust_node);
             if(is_file(MODULES_DIR.$modDir.'js/jsloader.php')){
                 $include_baseurl = WEBROOT.MODULES_DIR. substr($modDir, 0, strlen($modDir)-1); // necessário para o arquivo jsloader.php saber onde está fisicamente
                 include_once(MODULES_DIR.$modDir.'js/jsloader.php');
@@ -230,7 +230,7 @@ if(!empty($_GET['action'])){
              * LISTAR conteúdo
              */
             case 'listar' :
-                //include($aust->AustListar($aust_node).'/view/list_data.php'); // verifica se o módulo tem uma listagem padrão.
+                //include(Aust::getInstance()->AustListar($aust_node).'/view/list_data.php'); // verifica se o módulo tem uma listagem padrão.
                 include( $modulos->loadInterface( $aust_node, 'list' ) ); // verifica se o módulo tem uma listagem padrão.
                 break;
 
@@ -281,7 +281,7 @@ if(!empty($_GET['action'])){
              * existe e o carrega, senão dá erro.
              */
             default :
-                $diretorio = MODULES_DIR.$aust->LeModuloDaEstrutura($aust_node); // pega o endereço do diretório
+                $diretorio = MODULES_DIR.Aust::getInstance()->LeModuloDaEstrutura($aust_node); // pega o endereço do diretório
                 if(count(glob($diretorio.'/'.$_GET['action'].'.php')) == 1){
                     include($diretorio.'/'.$_GET['action'].'.php');
                 } else {
@@ -309,7 +309,7 @@ else {
             como <em>Notícias</em>, <em>Artigos</em> e outros, por exemplo.') ?>
     </p>
     <?php
-    $sites = $aust->getStructures();
+    $sites = Aust::getInstance()->getStructures();
     ?>
     <?php /* INICIO DO DIV PAINEL GERENCIAR  - É GLOBAL */ ?>
     <div class="painel">
@@ -379,7 +379,7 @@ else {
 							
 												}
 
-                        if( !$permissoes->verify($structure['id']) )
+                        if( !StructurePermissions::getInstance()->verify($structure['id']) )
                             continue;
                         ?>
                         
@@ -392,7 +392,7 @@ else {
                                 <?php
                                 $options = (is_array($modInfo['opcoes'])) ? $modInfo['opcoes'] : Array();
                                 foreach ($options as $chave=>$valor) {
-                                    if( $permissoes->verify($structure['id'], $chave) )
+                                    if( StructurePermissions::getInstance()->verify($structure['id'], $chave) )
                                         echo '<li><a href="adm_main.php?section='.$_GET['section'].'&action='.$chave.'&aust_node='.$structure['id'].'">'.$valor.'</a></li>';
                                 }
                                 ?>

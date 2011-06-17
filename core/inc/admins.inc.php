@@ -156,7 +156,7 @@ if(	!empty($_GET['action']) &&
                 if( $dados["login"] <> "kurko"
                     AND strtolower($dados["tipo"]) <> "webmaster"
                     AND (
-                        in_array( $administrador->LeRegistro("tipo"), $navPermissoes['admins']['form'] )
+                        in_array( User::getInstance()->LeRegistro("tipo"), $navPermissoes['admins']['form'] )
                         OR strtolower($dados["tipo"]) == "colaborador" 
                     )
                 ){
@@ -197,7 +197,7 @@ if(	!empty($_GET['action']) &&
         /*
          * Nova pessoa
          */
-        if( in_array( $administrador->LeRegistro("tipo"), $navPermissoes['admins']['form'] ) ){
+        if( in_array( User::getInstance()->LeRegistro("tipo"), $navPermissoes['admins']['form'] ) ){
             ?>
             <div class="botao">
                 <div class="bt_novapessoa">
@@ -206,7 +206,7 @@ if(	!empty($_GET['action']) &&
             </div>
             <?php
         }
-        if( in_array( $administrador->LeRegistro("tipo"), array("Webmaster", "Root", "Administrador") ) ){
+        if( in_array( User::getInstance()->LeRegistro("tipo"), array("Webmaster", "Root", "Administrador") ) ){
 	        ?>
 	        <div class="botao">
 	            <div class="bt_grupos">

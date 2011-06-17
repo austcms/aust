@@ -19,7 +19,7 @@ class ModController extends ModsController
         $austNode = $_GET['aust_node'];
         $this->set('austNode', $austNode);
 
-        $categorias = $this->aust->LeCategoriasFilhas('',$_GET['aust_node']);
+        $categorias = $this->Aust::getInstance()->LeCategoriasFilhas('',$_GET['aust_node']);
         $categorias[$_GET['aust_node']] = 'Estrutura';
         $param = array(
             'categorias' => $categorias,
@@ -69,7 +69,7 @@ class ModController extends ModsController
          * Pega todas as informações sobre a estrutura (austNode) atual
          * em formato array
          */
-        $estrutura = $this->aust->pegaInformacoesDeEstrutura( $this->austNode );
+        $estrutura = $this->Aust::getInstance()->pegaInformacoesDeEstrutura( $this->austNode );
         /**
          * Pega informações sobre o cadastro na tabela cadastro_conf
          */

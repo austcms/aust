@@ -15,8 +15,19 @@ class Themes {
      */
 	public $conexao;
 
-    function __construct($param) {
-        $this->conexao = $param['conexao'];
+    function __construct() {
+		$this->conexao = Connection::getInstance();
+    }
+
+    static function getInstance(){
+        static $instance;
+
+        if( !$instance ){
+            $instance[0] = new Themes;
+        }
+
+        return $instance[0];
+
     }
 
     /**

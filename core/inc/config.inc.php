@@ -54,13 +54,13 @@ if( !empty($_POST['novaconfig']) && $_POST['novaconfig'] ){
 
 <?php
 if(!empty($_POST['inserirmodulo'])){
-	$status = $aust->gravaEstrutura(
+	$status = Aust::getInstance()->gravaEstrutura(
                                     array(
                                         'nome' => $_POST['nome'],
                                         'categoriaChefe' => $_POST['categoria_chefe'],
                                         'estrutura' => 'estrutura',
                                         'moduloPasta' => $_POST['modulo'],
-                                        'autor' => $administrador->LeRegistro('id')
+                                        'autor' => User::getInstance()->LeRegistro('id')
                                     )
                                 );
 }
@@ -184,7 +184,7 @@ $options = $config->getConfigs(
  * NOVA CONFIGURAÇÃO
  *
  */
-if( $administrador->tipo == "Webmaster" AND 1==1 ){
+if( User::getInstance()->tipo == "Webmaster" AND 1==1 ){
     ?>
 
     <?php
@@ -193,7 +193,7 @@ if( $administrador->tipo == "Webmaster" AND 1==1 ){
      * MOSTRA CONFIGURAÇÕES
      */
 
-    if( $administrador->tipo != "Webmaster" ){
+    if( User::getInstance()->tipo != "Webmaster" ){
         $params = array(
             'where' => "tipo='global'",
         );

@@ -28,7 +28,7 @@
  * [Se novo conteúdo]
  */
     if($_GET['action'] == 'create'){
-        $tagh2 = "Criar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
+        $tagh2 = "Criar: ". $this->Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
         $tagp = 'Crie um novo conteúdo abaixo.';
         $dados = array('id' => '');
     }
@@ -71,7 +71,7 @@
         /*
          * Pode excluir?
          */
-//        if( $permissoes->canDelete($austNode) ){
+//        if( StructurePermissions::getInstance()->canDelete($austNode) ){
             ?>
             <input type="submit" class="js_confirm" name="action[subtract][1]" value="Subtrair 1" />
             <input type="submit" name="action[see_data_separated_by_semicolon][email]" value="Ver emails" />

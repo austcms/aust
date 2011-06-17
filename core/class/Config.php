@@ -2,7 +2,7 @@
 class Config {
 
     private $Opcoes; // variável possuindo as configurações
-    public $self;
+    public $self = "";
 
     public $options;
     public $conexao;
@@ -54,28 +54,40 @@ class Config {
     public $_missingConfig = array();
 
     
-    function __construct( $params ) {
-        $this->conexao = $params['conexao'];
-        $this->self = $_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'];
+    function __construct( $params = "" ) {
+        $this->conexao = Connection::getInstance();
+
+		if( !empty($_SERVER['QUERY_STRING']) && !empty($_SERVER['PHP_SELF']) )
+        	$this->self = $_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'];
 
         /*
          * Permissões de usuários acessar configurações
          */
-        $this->permissions = (empty($params['permissions'])) ? array('*'=>'*') : $params['permissions'];
+		$permissions = StructurePermissions::getInstance();
+        $this->permissions = StructurePermissions::getInstance()->read($params);
 
         /*
          * Grupo do usuário (webmaster, administrador, moderador, etc)
          */
-        $this->_userType = (empty($params['userType'])) ? '' : strtolower($params['userType']);
+        $this->_userType = User::getInstance()->type();
 
         /*
          * Grupo root
          */
-        $this->_rootType = (empty($params['rootType'])) ? '' : strtolower($params['rootType']);
+        $this->_rootType = User::getInstance()->rootType();
 
         if( !$this->checkIntegrity() )
             $this->_initConfig();
+    }
 
+    static function getInstance(){
+        static $instance;
+
+        if( !$instance ){
+            $instance[0] = new Config;
+        }
+
+        return $instance[0];
     }
 
     public function getConfig($property){

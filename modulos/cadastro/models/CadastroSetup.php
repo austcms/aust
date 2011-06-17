@@ -1007,7 +1007,7 @@ class CadastroSetup extends ModsSetup {
 			return false;
 		
 		$aust = Aust::getInstance();
-		$return = $aust->create($params);
+		$return = Aust::getInstance()->create($params);
 		if( is_numeric($return) )
 			$this->austNode = (int) $return;
 			

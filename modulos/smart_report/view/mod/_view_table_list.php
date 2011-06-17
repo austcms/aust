@@ -28,7 +28,7 @@
 		<?php if( $this->showControls ){ ?>
         <td align="center">
             <?php
-//            if( $permissoes->canDelete($austNode) ){
+//            if( StructurePermissions::getInstance()->canDelete($austNode) ){
 				
 				$checked = "";
 				if( !empty($_SESSION['selected_items'][$austNode]) &&

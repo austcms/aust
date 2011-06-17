@@ -30,7 +30,7 @@
  * [Se novo conteúdo]
  */
     if($_GET['action'] == 'create'){
-        $tagh2 = "Criar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
+        $tagh2 = "Criar: ". $this->Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
         $tagp = 'Crie um novo evento.';
         $dados = array('id' => '');
         $start_date = date("d/m/Y");

@@ -14,7 +14,7 @@
  */
 
 
-$h1 = 'Listando conteúdo: '.$aust->leNomeDaEstrutura($_GET[aust_node]);
+$h1 = 'Listando conteúdo: '.Aust::getInstance()->leNomeDaEstrutura($_GET[aust_node]);
 $specsection['list_content_description'] = 
                                         '<p>
                                             A seguir, o conteúdo do site. Ao lado, há opções que podem ser tomadas quanto
@@ -165,7 +165,7 @@ if($block == "block"){
     }
 }
 
-    $categorias = $aust->LeCategoriasFilhas('',$_GET[aust_node]);
+    $categorias = Aust::getInstance()->LeCategoriasFilhas('',$_GET[aust_node]);
     $categorias[$_GET[aust_node]] = 'Estrutura';
     $sql = $modulo->SQLParaListagem($categorias);
 //		echo '<br><br>'.$sql .'<br>';

@@ -10,8 +10,8 @@ $tabela = $modulo->LeTabelaDeDados($_GET['aust_node']);
 $precisa_aprovacao = $modulo->pegaConfig(Array('estrutura'=>$_GET['aust_node'], 'chave'=>'aprovacao'));
 ?>
 
-<h2><?php echo $aust->leNomeDaEstrutura($_GET['aust_node']);?></h2>
-<p>A seguir você vê a lista de registros sob o cadastro "<?php echo $aust->leNomeDaEstrutura($_GET['aust_node'])?>".</p>
+<h2><?php echo Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);?></h2>
+<p>A seguir você vê a lista de registros sob o cadastro "<?php echo Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node'])?>".</p>
 
 
 <?php
@@ -114,7 +114,7 @@ if( $fieldsCount > 0 ){
          */
         ?>
         <?php
-        if( $permissoes->canEdit($austNode) ){
+        if( StructurePermissions::getInstance()->canEdit($austNode) ){
             ?>
             <div class="painel_de_controle">Selecionados:
             <?php
@@ -129,7 +129,7 @@ if( $fieldsCount > 0 ){
             /*
              * Pode excluir?
              */
-            if( $permissoes->canDelete($austNode) ){
+            if( StructurePermissions::getInstance()->canDelete($austNode) ){
                 ?>
                 <input type="submit" class="js_confirm" name="deletar" value="Deletar" />
                 <?php

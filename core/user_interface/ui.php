@@ -11,7 +11,7 @@
 		<?php
 	}
 	?>
-    <title><?php echo $config->getConfig('site_name'); ?> - Gerenciador<?php /* ifisset($config->LeOpcao('sitename'), 'Aust'); */ ?></title>
+    <title><?php echo Config::getInstance()->getConfig('site_name'); ?> - Gerenciador<?php /* ifisset($config->LeOpcao('sitename'), 'Aust'); */ ?></title>
     <!-- TinyMCE -->
     <?php
     $html = HtmlHelper::getInstance();
@@ -29,7 +29,7 @@
     <link rel="stylesheet" href="<?php echo UI_PATH; ?>css/theme.css" type="text/css" />
 
     <?php /* Tema Azul */ ?>
-    <link rel="stylesheet" href="<?php echo THEMES_DIR; ?><?php echo $themes->currentTheme($administrador->getId()); ?>/default.css" type="text/css" />
+    <link rel="stylesheet" href="<?php echo THEMES_DIR; ?><?php echo Themes::getInstance()->currentTheme(User::getInstance()->getId()); ?>/default.css" type="text/css" />
     <?php
     /**
      * @todo - o comando abaixo é perigoso, pois permite que um usuário altere
@@ -45,7 +45,7 @@
     ?>
 
     <script type="text/javascript">
-	    var userId = '<?php echo $administrador->getId() ?>';
+	    var userId = '<?php echo User::getInstance()->getId() ?>';
 	    var austNode = '<?php if( !empty($_GET["aust_node"]) ) echo $_GET["aust_node"]; ?>';
         var IMG_DIR = '<?php echo IMG_DIR ?>';
 		var page = '<?php echo $page ?>';
@@ -70,7 +70,7 @@
         ?>
         <div class="logotipo">
             <h1>
-                <a href="adm_main.php?section=index"><?php echo $config->getConfig('site_name'); ?></a>
+                <a href="adm_main.php?section=index"><?php echo Config::getInstance()->getConfig('site_name'); ?></a>
             </h1>
         </div>
 
@@ -99,8 +99,8 @@
             <div id="conectado_como">
             <?php /*
                 <p>
-                    Conectado como <strong><?php echo $administrador->LeRegistro('nome');?></strong>.<br />
-                    N&iacute;vel de acesso  <strong><?php echo $administrador->LeRegistro('tipo');?></strong>.
+                    Conectado como <strong><?php echo User::getInstance()->LeRegistro('nome');?></strong>.<br />
+                    N&iacute;vel de acesso  <strong><?php echo User::getInstance()->LeRegistro('tipo');?></strong>.
                 </p>
              *
              */ ?>
@@ -148,7 +148,7 @@
     <div id="link_bottom">
         <div class="links_admin">
             <?php
-            if($administrador->LeRegistro('tipo') == 'Webmaster'){
+            if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'){
                 ?>
                 <div class="borda"></div>
                 <br />

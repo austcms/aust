@@ -33,7 +33,7 @@ if( !empty($_FILES['arquivo']) ){
 	$user = User::getInstance();
 
 	if( !empty($_POST['w']) )
-		$aust->deleteNodeImages( $_POST['w'] );
+		Aust::getInstance()->deleteNodeImages( $_POST['w'] );
 	
 	$newFile = $imageHandler->resample($file);
 	$finalName = $imageHandler->upload($newFile);
