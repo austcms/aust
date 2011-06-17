@@ -27,7 +27,12 @@ class DispatcherTest extends PHPUnit_Framework_TestCase
 
 	function testControllerFile(){
 		$_GET["action"] = "content";
-		$this->assertEquals( "core/inc/content.inc.php", $this->obj->controllerFile());
+		$this->assertEquals( "core/app/controllers/content_controller.php", $this->obj->controllerFile());
+	}
+
+	function testSectionFile(){
+		$_GET["action"] = "content";
+		$this->assertEquals( "core/inc/content.inc.php", $this->obj->sectionFile());
 	}
 
 }

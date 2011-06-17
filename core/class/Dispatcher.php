@@ -11,6 +11,24 @@ class Dispatcher {
 		
 	}
 	
+    /**
+     * getInstance()
+     *
+     * Para Singleton
+     *
+     * @staticvar <object> $instance
+     * @return <Conexao object>
+     */
+    static function getInstance(){
+        static $instance;
+
+        if( !$instance ){
+            $instance[0] = new Dispatcher;
+        }
+
+        return $instance[0];
+    }
+	
 	public function controller(){
 		if( empty($_GET["section"]) )
 			return "content";
@@ -30,11 +48,17 @@ class Dispatcher {
         $_GET['action'] = $this->action();
         $_GET['section'] = $this->controller();
 
+		$hasCalledController = $this->callController();
+
+		if( $hasCalledController )
+			return true;
+
         ob_start();
-        include($this->controllerFile());
+        include($this->sectionFile());
         $content_for_layout = ob_get_contents();
         ob_end_clean();
-
+		
+		
 		// show only view?
 		$viewOnly = false;
 		if( (
@@ -66,14 +90,27 @@ class Dispatcher {
 	}
 	
 	function callController(){
-		
+		if( file_exists($this->controllerFile()) ){
+			include_once($this->controllerFile());
+			$controllerName = $this->controller();
+			$controller = new $controllerName();
+			return true;
+		}
+		return false;
 	}
-	
+
 	function controllerFile(){
         if( UiPermissions::getInstance()->isPermittedSection() )
+            return CONTROLLERS_DIR.$this->controller()."_controller.php";
+
+        return MSG_DENIED_ACCESS;
+	}
+	
+	function sectionFile(){
+        if( UiPermissions::getInstance()->isPermittedSection() )
             return INC_DIR . $this->controller() . '.inc.php';
-        else
-            return MSG_DENIED_ACCESS;
+
+		return MSG_DENIED_ACCESS;
 	}
 	
 }
