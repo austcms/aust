@@ -21,9 +21,11 @@ if(!defined('THIS_TO_BASEURL')){
 /**
  * Define o diretório do CORE
  */
-define("CORE_DIR", THIS_TO_BASEURL."core/");
-define("VENDOR_DIR", THIS_TO_BASEURL."vendor/");
-define("TMP_DIR", THIS_TO_BASEURL."tpm/");
+define("CORE_DIR", 		THIS_TO_BASEURL."core/");
+	define("APP_DIR", 	CORE_DIR."app/");
+
+define("VENDOR_DIR", 	THIS_TO_BASEURL."vendor/");
+define("TMP_DIR", 		THIS_TO_BASEURL."tpm/");
 
     /**
      * Define diretórios relativos ao CORE
@@ -31,9 +33,9 @@ define("TMP_DIR", THIS_TO_BASEURL."tpm/");
     /**
      * Diretório do MVC do Core
      */
-    define("CONTROLLER_DIR", CORE_DIR."controller/");
-    define("MODEL_DIR", CORE_DIR."model/");
-    define("VIEW_DIR", CORE_DIR."view/");
+    define("CONTROLLERS_DIR", APP_DIR."controllers/");
+    define("MODELS_DIR", APP_DIR."models/");
+    define("VIEWS_DIR", APP_DIR."views/");
     define("VIEW_FILE_STANDARD_EXTENSION", ".php");
 
     /**
@@ -116,12 +118,12 @@ define("TMP_DIR", THIS_TO_BASEURL."tpm/");
     /**
      * Diretório com as views que contém as mensagens
      */
-    define('MSG_VIEW_DIR', VIEW_DIR.'mensagens/');
+    define('MSG_VIEW_DIR', CORE_CONFIG_DIR.'messages/');
     define('MSG_ERROR_VIEW_DIR', MSG_VIEW_DIR.'error/');
     /**
      * msg: acesso negado
      */
-    define('MSG_DENIED_ACCESS', MSG_ERROR_VIEW_DIR.'acesso_negado.inc.php');
+    define('MSG_DENIED_ACCESS', MSG_ERROR_VIEW_DIR.'access_denied.php');
 
 
 /**

@@ -1,0 +1,115 @@
+<?php
+/**
+ * ACTIVE CONTROLLER
+ *
+ * @author Alexandre de Oliveira <chavedomundo@gmail.com>
+ * @since v0.2, 17/06/2011
+ */
+class ActionController
+{
+
+	public $autoRender = true;
+	public $isRendered = false;
+
+	public $completedRequest = false;
+	
+	public $params = array();
+
+    public $globalVars = array();
+
+	public $shouldCallAction = true;
+	public $beforeFiltered = false;
+	public $afterFiltered = false;
+
+	public $testVar;
+
+    function __construct($shouldCallAction = true){
+        $this->shouldCallAction = $shouldCallAction;
+        /**
+         * _trigger() is responsible for triggering methods as actions
+         */
+        $this->_trigger();
+		$this->completedRequest = true;
+    }
+
+    /*
+     * PRIVATE METHODS
+     */
+
+	function _action(){
+		return Dispatcher::getInstance()->action();
+	}
+	
+	function _actionExists(){
+        return method_exists($this, $this->_action());
+	}
+	
+    public function set($varName, $varValue){
+        $this->globalVars[$varName] = $varValue;
+    }
+	
+    /**
+     * _TRIGGER()
+     *
+     * Responsible for calling actions, preppending beforeFilter() and appending
+	 * afterFilter() and calling render().
+	 *
+     * @param array $param
+     *      'ation': which method should be called
+     */
+    public function _trigger(){
+        $this->beforeFilter();
+		
+        /*
+         * Action time!
+         */
+        if( $this->_actionExists() )
+            call_user_func_array( array($this, $this->_action() ), array() );
+
+	    $this->afterFilter();
+
+        if( !$this->isRendered AND $this->autoRender && $this->_action() && $this->shouldCallAction )
+            $this->render( $this->_action() );
+        else if( !$this->isRendered )
+            $this->render( false );
+
+    }
+
+    /*
+     * Renders the view
+     */
+    public function render( $shouldRender = true ){
+
+        /*
+         * Variables for views
+         */
+        foreach( $this->globalVars as $key=>$value ){
+            $$chave = $valor;
+        }
+        
+        $content_for_layout = "";
+		
+        if( $shouldRender ){
+            ob_start();
+            include(VIEWS_DIR."".Dispatcher::getInstance()->controller()."/".$this->_action().".php");
+            $content_for_layout = ob_get_contents();
+            ob_end_clean();
+			
+			include(UI_STANDARD_FILE);
+
+	        $this->isRendered = true;
+        }
+
+        return true;
+    }
+
+    public function beforeFilter(){ $this->beforeFiltered = true; return true; }
+    public function afterFilter(){ $this->afterFiltered = true; return true; }
+    public function test_action(){
+		$this->testVar = "Action working.";
+		$this->autoRender = false;
+	}
+
+}
+
+?>

@@ -91,7 +91,6 @@ class Connection extends SQLObject {
         }
 
         return $instance[0];
-
     }
 
     /**
