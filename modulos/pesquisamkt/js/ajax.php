@@ -75,7 +75,7 @@ if($_POST['action'] == 'leResultadosAbertos'){
                 pesqmkt_respostas_textos
             WHERE
                 pesqmkt_pergunta_id='".$_POST["id"]."'";
-    $arraytmp = $conexao->query($sql);
+    $arraytmp = Connection::getInstance()->query($sql);
     $i = 1;
     foreach($arraytmp AS $valor){
         echo "<p><strong>".$i.".</strong> <em>".$valor["resposta"].'</em></p>';
@@ -95,7 +95,7 @@ elseif($_POST['action'] == 'LeCampos'){
      * Lê os campos da tabela e depois mostra um html <select> para o usuário
      * escolher o relacionamento de tabelas
      */
-    $query = $conexao->listaCampos($_POST['tabela']);
+    $query = Connection::getInstance()->listaCampos($_POST['tabela']);
     foreach ( $query as $chave=>$valor ){
         echo '<option value="'.$valor['campo'].'">'.$valor['campo'].'</option>';
     }

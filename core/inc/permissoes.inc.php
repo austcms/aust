@@ -73,7 +73,7 @@
                 /**
                  * Lista os tipos de usuários
                  */
-                $adminsTipos = $conexao->find(array(
+                $adminsTipos = Connection::getInstance()->find(array(
                                             'table' => 'admins_tipos',
                                             'conditions' => array(
                                                 'NOT' => array(
@@ -114,7 +114,7 @@
                 /**
                  * Lista os tipos de usuários
                  */
-                $adminsTipos = $conexao->find(
+                $adminsTipos = Connection::getInstance()->find(
                                         array(
                                             'table' => 'admins',
                                             'join' => array(

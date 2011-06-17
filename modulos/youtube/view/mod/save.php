@@ -50,7 +50,7 @@ if(!empty($_POST)) {
                 ";
 
 
-        $h1 = 'Criando: '.$this->Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
+        $h1 = 'Criando: '.Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
     } else if($_POST['metodo'] == 'edit') {
         $sql = "UPDATE
                     ".$modulo->useThisTable()."
@@ -59,7 +59,7 @@ if(!empty($_POST)) {
                 WHERE
                 id='".$_POST['w']."'
                 ";
-        $h1 = 'Editando: '.$this->Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
+        $h1 = 'Editando: '.Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
     }
 
     $query = $this->modulo->connection->exec($sql);

@@ -301,7 +301,7 @@ if(!empty($_GET['function'])){
 
             <?php
 
-            $categorias = $conexao->find(array(
+            $categorias = Connection::getInstance()->find(array(
                                             'table' => 'categorias',
                                             'conditions' => array(
                                                 //'id' => $_POST['id'],
@@ -326,7 +326,7 @@ if(!empty($_GET['function'])){
                     ";
 
 
-            $relacionamentos = $conexao->query($sql);
+            $relacionamentos = Connection::getInstance()->query($sql);
             //pr($sql);
             $categoriasChecked = array();
             foreach($relacionamentos as $valor){
@@ -364,7 +364,7 @@ if(!empty($_GET['function'])){
         </div>
         <div class="content">
             <p></p>
-            <form method="post" action="<?php echo $config->self;?>" class="simples pequeno">
+            <form method="post" action="<?php echo Config::getInstance()->self;?>" class="simples pequeno">
 
             </form>
 

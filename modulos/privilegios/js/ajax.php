@@ -112,7 +112,7 @@ if($_POST['action'] == 'altera_relacionamentos'){
                 ";
     }
 
-    if($conexao->exec($sql)){
+    if(Connection::getInstance()->exec($sql)){
         echo '1';
     } else {
         echo '0';

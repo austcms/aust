@@ -6,5 +6,6 @@
  *
  */
 ?>
+
 <script type="text/javascript" src="<?php echo VENDOR_DIR; ?>tiny_mce/tiny_mce.js"></script>
 <script type="text/javascript" src="<?php echo BASECODE_JS; ?>others/tiny_mce_loader.js"></script>

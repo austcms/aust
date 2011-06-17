@@ -79,7 +79,7 @@ if($_POST['action'] == 'LeCadastros'){
             WHERE
                 tipo='cadastro'";
     //echo $sql;
-    $arraytmp = $conexao->listaTabelasDoDBParaArray();
+    $arraytmp = Connection::getInstance()->listaTabelasDoDBParaArray();
     //pr($arraytmp);
     foreach($arraytmp AS $valor){
         echo '<option value="'.$valor.'">'.$valor.'</option>';
@@ -95,7 +95,7 @@ elseif($_POST['action'] == 'LeCampos'){
      * Lê os campos da tabela e depois mostra um html <select> para o usuário
      * escolher o relacionamento de tabelas
      */
-    $query = $conexao->listaCampos($_POST['tabela']);
+    $query = Connection::getInstance()->listaCampos($_POST['tabela']);
     foreach ( $query as $chave=>$valor ){
         echo '<option value="'.$valor['campo'].'">'.$valor['campo'].'</option>';
     }

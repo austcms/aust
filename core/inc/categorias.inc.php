@@ -59,7 +59,7 @@ switch($_GET['action']){
 									'".date("Y-m-d H:i:s")."', '".date("Y-m-d H:i:s")."', ".$user->getId().")";
 
 							// insere no DB
-							if ($conexao->exec($sql)){
+							if (Connection::getInstance()->exec($sql)){
 							    $status_imagem = true;
 							} else {
 							    $status_imagem = false;

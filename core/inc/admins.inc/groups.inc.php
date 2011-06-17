@@ -15,7 +15,7 @@ if( !empty($_POST['new_group']) && !empty($_POST['name']) ){
 	        WHERE
 	            nome LIKE '".$_POST['name']."'";
 	
-	$query = $conexao->query($sql);
+	$query = Connection::getInstance()->query($sql);
 	if( count($query) < 1 ){
 	
 		$sql = "INSERT INTO
@@ -23,7 +23,7 @@ if( !empty($_POST['new_group']) && !empty($_POST['name']) ){
 		        (nome, descricao, publico, data)
 				VALUES
 				('".$_POST['name']."', '".$_POST['description']."', '1', '".date('Y-m-d H:i:s')."')";
-		$query = $conexao->query($sql);
+		$query = Connection::getInstance()->query($sql);
 		?>
 		<p style="color: green">Dados salvos com sucesso.</p>
 		<?php
@@ -48,7 +48,7 @@ if( !empty($_POST['edit_group']) &&
 			WHERE
 				id='".$_POST['id']."'
 			";
-	$query = $conexao->query($sql);
+	$query = Connection::getInstance()->query($sql);
 	?>
 	<p style="color: green">Dados salvos com sucesso.</p>
 	<?php
@@ -64,7 +64,7 @@ $sql = "SELECT *
         FROM admins
         WHERE
             id='$w'";
-$query = $conexao->query($sql);
+$query = Connection::getInstance()->query($sql);
 if( !empty($query) ){
     $dados = $query[0];
 }
@@ -77,7 +77,7 @@ $sql = "SELECT
             admins_tipos
         ORDER BY id ASC
         ";
-$query = $conexao->query($sql);
+$query = Connection::getInstance()->query($sql);
 //echo $sql;
 
 

@@ -311,7 +311,7 @@ if(!empty($_GET['function'])){
         </div>
         <div class="content">
             <p></p>
-            <form method="post" action="<?php echo $config->self;?>" class="simples pequeno">
+            <form method="post" action="<?php echo Config::getInstance()->self;?>" class="simples pequeno">
 
             </form>
 
