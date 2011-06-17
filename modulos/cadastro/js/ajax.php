@@ -80,8 +80,8 @@ if($_POST['action'] == 'LeCadastros'){
             WHERE
                 tipo='cadastro'";
     //echo $sql;
-    $arraytmp = $conexao->query('SHOW TABLES');
-    //$arraytmp = $conexao->listaTabelasDoDBParaArray();
+    $arraytmp = Connection::getInstance()->query('SHOW TABLES');
+    //$arraytmp = Connection::getInstance()->listaTabelasDoDBParaArray();
     
     foreach($arraytmp AS $valor){
         $valor = reset($valor);
@@ -98,7 +98,7 @@ elseif($_POST['action'] == 'LeCampos'){
      * Lê os campos da tabela e depois mostra um html <select> para o usuário
      * escolher o relacionamento de tabelas
      */
-    $query = $conexao->query('DESCRIBE '.$_POST['tabela']);
+    $query = Connection::getInstance()->query('DESCRIBE '.$_POST['tabela']);
     foreach ( $query as $chave=>$valor ){
         echo '<option value="'.$valor['Field'].'">'.$valor['Field'].'</option>';
     }
@@ -147,7 +147,7 @@ elseif($_POST['action'] == 'search'){
 
     include($modulo->getIncludeFolder().'/view/mod/listing_table.php');
 
-    //$query = $conexao->query('DESCRIBE '.$_POST['tabela']);
+    //$query = Connection::getInstance()->query('DESCRIBE '.$_POST['tabela']);
     //foreach ( $query as $chave=>$valor ){
         //echo '<option value="'.$valor['Field'].'">'.$valor['Field'].'</option>';
     //}

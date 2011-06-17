@@ -12,9 +12,9 @@ class ModController extends ModsController
 {
 
     public function listing(){
-        $this->set('h1', 'Listando conteúdo: '.$this->Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']) );
+        $this->set('h1', 'Listando conteúdo: '.Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']) );
         
-        $nome_modulo = $this->Aust::getInstance()->LeModuloDaEstrutura($_GET['aust_node']);
+        $nome_modulo = Aust::getInstance()->LeModuloDaEstrutura($_GET['aust_node']);
         $sql = "SELECT
                     id,nome
                 FROM
@@ -26,7 +26,7 @@ class ModController extends ModsController
         $query = $this->modulo->connection->query($sql);
         $this->set('cat', $query[0]['nome'] );
 
-        $categorias = $this->Aust::getInstance()->LeCategoriasFilhas('',$_GET['aust_node']);
+        $categorias = Aust::getInstance()->LeCategoriasFilhas('',$_GET['aust_node']);
         $categorias[$_GET['aust_node']] = 'Estrutura';
 
         /*
@@ -40,7 +40,7 @@ class ModController extends ModsController
          * Resultados por página
          */
         $num_por_pagina = '20';
-        $this->set('numPorPagina', $num_por_pagina);//($config->LeOpcao($nome_modulo.'_paginacao')) ? $config->LeOpcao($nome_modulo.'_paginacao') : '10';
+        $this->set('numPorPagina', $num_por_pagina);//(Config::getInstance()->LeOpcao($nome_modulo.'_paginacao')) ? Config::getInstance()->LeOpcao($nome_modulo.'_paginacao') : '10';
 
         /*
          * SQL para listagem

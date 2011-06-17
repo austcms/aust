@@ -13,8 +13,8 @@
 ?>
 <div class="listagem">
 <?php
-$h1 = 'Listando conteúdo: '.$this->Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
-$nome_modulo = $this->Aust::getInstance()->LeModuloDaEstrutura($_GET['aust_node']);
+$h1 = 'Listando conteúdo: '.Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
+$nome_modulo = Aust::getInstance()->LeModuloDaEstrutura($_GET['aust_node']);
 $sql = "SELECT
 			id,nome
 		FROM
@@ -37,12 +37,12 @@ if((!empty($filter)) AND ($filter <> 'off')){
 	$addurl = "&filter=$filter&filterw=" . urlencode($filterw);
 }
 
-$categorias = $this->Aust::getInstance()->LeCategoriasFilhas('',$_GET['aust_node']);
+$categorias = Aust::getInstance()->LeCategoriasFilhas('',$_GET['aust_node']);
 $categorias[$_GET['aust_node']] = 'Estrutura';
 
 // itens de paginação
 $pagina = (empty($_GET['pagina'])) ? $pagina = 1 : $pagina = $_GET['pagina'];
-$num_por_pagina = '10';//($config->LeOpcao($nome_modulo.'_paginacao')) ? $config->LeOpcao($nome_modulo.'_paginacao') : '10';
+$num_por_pagina = '10';//(Config::getInstance()->LeOpcao($nome_modulo.'_paginacao')) ? Config::getInstance()->LeOpcao($nome_modulo.'_paginacao') : '10';
 //echo $num_por_pagina;
 // carrega o sql para listagem
 $sql = $modulo->SQLParaListagem($categorias, $pagina, $num_por_pagina);

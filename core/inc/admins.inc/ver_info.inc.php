@@ -13,7 +13,7 @@
                 admins.tipo=admins_tipos.id AND
                 admins.id='".$_GET['w']."'
             ";
-    $query = $conexao->query($sql);
+    $query = Connection::getInstance()->query($sql);
     $dados = $query[0];
 ?>
 <p>

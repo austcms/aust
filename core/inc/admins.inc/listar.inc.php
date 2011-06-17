@@ -10,7 +10,7 @@ $sql = "SELECT *
         FROM admins
         WHERE
             id='$w'";
-$query = $conexao->query($sql);
+$query = Connection::getInstance()->query($sql);
 if( !empty($query) ){
     $dados = $query[0];
 }
@@ -29,7 +29,7 @@ if( !empty($_GET['block'])
             ";
 
     // se executar query, EscreveBoxMensagem mostra mensagem padrão
-    if($conexao->exec($sql)){
+    if(Connection::getInstance()->exec($sql)){
 		$resultado = TRUE;
 	} else {
 		$resultado = FALSE;
@@ -61,7 +61,7 @@ if( !empty($_GET['block'])
                 id='$w'
             ";
     // se executar query, EscreveBoxMensagem mostra mensagem padrão
-    if($conexao->exec($sql)){
+    if(Connection::getInstance()->exec($sql)){
 		$resultado = TRUE;
 	} else {
 		$resultado = FALSE;
@@ -104,7 +104,7 @@ $sql = "SELECT
         ON
             admins.tipo=admins_tipos.id
         ";
-$query = $conexao->query($sql);
+$query = Connection::getInstance()->query($sql);
 //echo $sql;
 ?>
 <table width="680" class="listagem">

@@ -55,7 +55,7 @@ if( !empty($_FILES['arquivo']) ){
 			'".date("Y-m-d H:i:s")."', '".date("Y-m-d H:i:s")."', ".$user->getId().")";
 
 	// insere no DB
-	if ($conexao->exec($sql)){
+	if (Connection::getInstance()->exec($sql)){
 	    $status_imagem = true;
 	} else {
 	    $status_imagem = false;
@@ -88,7 +88,7 @@ if(!empty($status_imagem) AND $status_imagem == true){
     echo '<p>Houve um erro desconhecido ao salvar a imagem. Contate o administrador.</p>';
 }
 
-$result = $conexao->exec($sql);
+$result = Connection::getInstance()->exec($sql);
 
 if ( $result > 0 ){
     echo '<p style="color: green;">As informações foram salvas com sucesso!</p>';

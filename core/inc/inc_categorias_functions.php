@@ -75,41 +75,38 @@ function _BuildDDListItems($table, $escala = '', $parent=0, $level=0, $current_n
         lp.subordinadoid = '$parent'
     ";
     //	  echo $iSQL;
-    $query = $conexao->query($iSQL);
+    $query = Connection::getInstance()->query($iSQL);
     $items = '';
-   // pr($_SESSION);
 
     foreach ($query as $myrow){
-        //if(!in_array($myrow['tipo'], $_SESSION['somenteestrutura'])){
-            //se fôr um nó, serão efectuadas algumas modificações
-            if (_IsNode($myrow["num_sub_nodes"],$myrow["subordinadoid"])){
-                $prefix="";
-                $class='class="node"';
-            }else{
-                $prefix="&bull;"._DummySpaces(1);
-                $class = '';
-            }
+  		//se fôr um nó, serão efectuadas algumas modificações
+		  if (_IsNode($myrow["num_sub_nodes"],$myrow["subordinadoid"])){
+		      $prefix="";
+		      $class='class="node"';
+		  }else{
+		      $prefix="&bull;"._DummySpaces(1);
+		      $class = '';
+		  }
 
-            $tmp_nome = $myrow['nome'];
-            $selected = '';
-            if($current_node == $myrow['id']){
-                $tmp_nome.= ' <- Atualmente';
-                $selected = 'selected="selected" style="font-weight: bold;"';
-            }
-            //construir item
-            if($myrow["subordinadoid"] == 0){
-                if($escala == "webmaster"){
-                    $items.="<option value='".$myrow['id']."' $selected $class>$indent$prefix$tmp_nome</option>";
-                } else {
-                    $items.='<optgroup label="'.$tmp_nome.'"></optgroup>';
-                }
-            } else {
-                $items.="<option value='".$myrow['id']."' $selected $class>$indent$prefix$tmp_nome</option>";
-            }
+		  $tmp_nome = $myrow['nome'];
+		  $selected = '';
+		  if($current_node == $myrow['id']){
+		      $tmp_nome.= ' <- Atualmente';
+		      $selected = 'selected="selected" style="font-weight: bold;"';
+		  }
+		  //construir item
+		  if($myrow["subordinadoid"] == 0){
+		      if($escala == "webmaster"){
+		          $items.="<option value='".$myrow['id']."' $selected $class>$indent$prefix$tmp_nome</option>";
+		      } else {
+		          $items.='<optgroup label="'.$tmp_nome.'"></optgroup>';
+		      }
+		  } else {
+		      $items.="<option value='".$myrow['id']."' $selected $class>$indent$prefix$tmp_nome</option>";
+		  }
 
-            //chamar recursivamente a função
-            $items.=_BuildDDListItems($table, $escala, $myrow['id'], $level+1, $current_node);
-       // }
+		  //chamar recursivamente a função
+		  $items.=_BuildDDListItems($table, $escala, $myrow['id'], $level+1, $current_node);
     }
     return $items;
 }

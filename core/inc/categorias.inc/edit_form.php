@@ -11,7 +11,7 @@
             WHERE
                 id='".$_GET['w']."'
     ";
-    $query = $conexao->query($sql);
+    $query = Connection::getInstance()->query($sql);
     $dados = $query[0];
 ?>
 
@@ -76,7 +76,7 @@
          * Mostra foto da categoria se houver
          */
         $sql = "SELECT id FROM austnode_images WHERE node_id='".$_GET['w']."' ORDER BY id DESC LIMIT 0,1";
-        $query = $conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
         if(count($query)){
             $result = $query[0];
             ?>

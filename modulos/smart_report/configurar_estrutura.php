@@ -211,7 +211,7 @@ if( !empty($_POST['conf_type']) AND $_POST['conf_type'] == "mod_conf" ){
         </div>
         <div class="content">
             <p></p>
-            <form method="post" action="<?php echo $config->self;?>" class="simples pequeno">
+            <form method="post" action="<?php echo Config::getInstance()->self;?>" class="simples pequeno">
 
             </form>
 

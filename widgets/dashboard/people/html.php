@@ -1,5 +1,5 @@
 <?php
-$users = $conexao->query("SELECT nome FROM admins WHERE is_blocked!='1' AND is_deleted!='1'");
+$users = Connection::getInstance()->query("SELECT nome FROM admins WHERE is_blocked!='1' AND is_deleted!='1'");
 ?>
 
 <ul>

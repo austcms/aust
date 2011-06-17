@@ -1,6 +1,7 @@
 <IfModule mod_rewrite.c>
 	RewriteEngine On
 
+	RewriteRule ^vendor/(.*) vendor/$1 [L]
 	RewriteRule ^core/(.*) core/$1 [L]
 	RewriteRule ^uploads/(.*) uploads/$1 [L]
 	RewriteRule ^responser/(.*) responser/$1 [L]

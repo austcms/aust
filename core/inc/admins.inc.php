@@ -17,7 +17,7 @@ if( !empty($_GET['block'])
             ";
 
     // se executar query, EscreveBoxMensagem mostra mensagem padrão
-    if($conexao->exec($sql)){
+    if(Connection::getInstance()->exec($sql)){
 		$resultado = TRUE;
 	} else {
 		$resultado = FALSE;
@@ -42,7 +42,7 @@ if( !empty($_GET['block'])
                 id='$w'
             ";
     // se executar query, EscreveBoxMensagem mostra mensagem padrão
-    if($conexao->exec($sql)){
+    if(Connection::getInstance()->exec($sql)){
 		$resultado = TRUE;
 	} else {
 		$resultado = FALSE;
@@ -90,7 +90,7 @@ if(	!empty($_GET['action']) &&
             FROM admins
             WHERE
                 id='$w'";
-    $query = $conexao->query($sql);
+    $query = Connection::getInstance()->query($sql);
     if( !empty($query) ){
         $dados = $query[0];
     }
@@ -109,7 +109,7 @@ if(	!empty($_GET['action']) &&
                 admins.tipo=admins_tipos.id
             ORDER BY aid ASC
             ";
-    $query = $conexao->query($sql);
+    $query = Connection::getInstance()->query($sql);
     //echo $sql;
 
     ?>

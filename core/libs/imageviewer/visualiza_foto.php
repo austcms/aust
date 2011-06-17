@@ -99,9 +99,9 @@ if (!empty($myid)){
     $sql = "SELECT * FROM $tabelaimg WHERE id=".$ids[rand(0,count($ids)-1)];
 }
 
-$query = $conexao->query($sql);
+$query = Connection::getInstance()->query($sql);
 $dados = $query[0];
-if ($conexao->count($sql) > 0){
+if (Connection::getInstance()->count($sql) > 0){
 
 	$type = '';
 	if( !empty($dados["file_type"]) )

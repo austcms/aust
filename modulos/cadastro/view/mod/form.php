@@ -33,7 +33,7 @@ if( !empty($_GET["w"]) ){
 //pr($infoCadastro);
 ?>
 
-<h2>Cadastro: <?php echo $this->Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node'])?></h2>
+<h2>Cadastro: <?php echo Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node'])?></h2>
 <?php
 if( $_GET['action'] == "edit" ){
     if( $modulo->getStructureConfig("has_printing_version") ){
@@ -241,7 +241,7 @@ foreach( $camposForm as $chave=>$valor ){
      */
     if( $valor["tipo"]["especie"] == "relacional_umparaum" ){
         $sql = "SELECT id, ".$valor["tipo"]["tabelaReferenciaCampo"]." FROM ".$valor["tipo"]["tabelaReferencia"] ." ORDER BY ".$valor["tipo"]["tabelaReferenciaCampo"] ." LIMIT 50";
-        $selectValues = $conexao->query($sql);
+        $selectValues = Connection::getInstance()->query($sql);
 
         //$select["selected"] = "3";
         $inputType = "select";

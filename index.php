@@ -45,7 +45,7 @@ if( !is_dir('uploads/editor') ){
 require_once("core/load_core.php");
 
 // verifica se banco de dados existe
-if($conexao->DBExiste){
+if(Connection::getInstance()->DBExiste){
 
     /**
      * Faz verificação do Schema
@@ -62,7 +62,7 @@ if($conexao->DBExiste){
          */
 
             // Se deve-se criar um admin no sistema (pois não há um)
-            if( !empty($_POST['configurar']) AND ($_POST['configurar'] == 'criar_admin') OR (!$conexao->VerificaAdmin()) ){
+            if( !empty($_POST['configurar']) AND ($_POST['configurar'] == 'criar_admin') OR (!Connection::getInstance()->VerificaAdmin()) ){
                 require(INSTALLATION_DIR.'criar_admin.inc.php');
 
             // Deve-se configurar o sistema
@@ -85,7 +85,7 @@ if($conexao->DBExiste){
     }
 } else {
 
-    // $conexao->ConstruirDB($sqlparaconstruirdb);
+    // Connection::getInstance()->ConstruirDB($sqlparaconstruirdb);
 
     // Ops.. Não há uma conexão funcionando
     echo 'Erro no Sistema: 001.';

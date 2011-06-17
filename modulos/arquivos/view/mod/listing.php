@@ -1,6 +1,6 @@
 <?php
-$h1 = 'Listando conteúdo: '.$this->Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
-$nome_modulo = $this->Aust::getInstance()->LeModuloDaEstrutura($_GET['aust_node']);
+$h1 = 'Listando conteúdo: '.Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
+$nome_modulo = Aust::getInstance()->LeModuloDaEstrutura($_GET['aust_node']);
 $sql = "SELECT
             id,nome
         FROM

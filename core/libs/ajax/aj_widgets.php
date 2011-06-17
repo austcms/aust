@@ -23,7 +23,7 @@ if( !empty($_GET['userId']) ){
                     WHERE
                         admin_id='".$_GET['userId']."' AND
                         id='".$widget_id."'";
-            $conexao->exec($sql);
+            Connection::getInstance()->exec($sql);
 
         }
 

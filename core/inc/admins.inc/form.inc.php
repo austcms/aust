@@ -37,7 +37,7 @@ if($fm == 'editar'){
 				AND admins_photos.image_type='primary'
             WHERE
                 admins.id='".$w."'";
-    $query = $conexao->query($sql);
+    $query = Connection::getInstance()->query($sql);
     $dados = $query[0];
     //echo $sql;
 }
@@ -81,7 +81,7 @@ if($fm == 'editar'){
                                 admins_tipos
                             WHERE
                                 publico=1";
-                    $query = $conexao->query($sql);
+                    $query = Connection::getInstance()->query($sql);
                     foreach($query as $result){
                         ?>
                         <input type="radio" <?php if($fm == 'editar') makechecked($result['id'], $dados['tipo']); else echo 'checked'; ?> name="frmtipo" value="<?php echo $result['id']?>" onclick="javascript: form_hierarquia(this.value);" /> <?php echo $result['nome']?><br />
@@ -109,7 +109,7 @@ if($fm == 'editar'){
                             WHERE
                                 id='".$dados['tipo']."'";
                         //echo $sql;
-                    $query = $conexao->query($sql);
+                    $query = Connection::getInstance()->query($sql);
                     $result = $query[0];
                     ?>
                     <p>

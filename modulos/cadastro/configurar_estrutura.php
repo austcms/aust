@@ -415,7 +415,7 @@ if(!empty($_GET['function'])){
         </div>
         <div class="content">
             <p>Insira um novo campo.</p>
-            <form method="post" action="<?php echo $config->self;?>" class="simples pequeno">
+            <form method="post" action="<?php echo Config::getInstance()->self;?>" class="simples pequeno">
                 <input type="hidden" name="add_field" value="1" />
 
                 <?php
@@ -547,7 +547,7 @@ if(!empty($_GET['function'])){
             <p>
                 Insira um novo título divisor no formulário de cadastro.
             </p>
-            <form method="post" action="<?php echo $config->self;?>" class="simples pequeno">
+            <form method="post" action="<?php echo Config::getInstance()->self;?>" class="simples pequeno">
                 <input type="hidden" name="tabela" value="<?php echo $tabela_da_estrutura?>" />
 
                 <?php
@@ -682,7 +682,7 @@ if(!empty($_GET['function'])){
 				$dados = '';
 
             ?>
-            <form method="post" action="<?php echo $config->self;?>" class="simples pequeno">
+            <form method="post" action="<?php echo Config::getInstance()->self;?>" class="simples pequeno">
                 <input type="hidden" name="tabela" value="<?php echo $tabela_da_estrutura ?>" />
                 Campo de email? <input type="text" name="email" value="<?php echo $dados ?>" />
                 <br />
@@ -888,7 +888,7 @@ if(!empty($_GET['function'])){
         </div>
         <div class="content">
             <p>A seguir, você configurar as principais opções deste cadastro.</p>
-            <form method="post" action="<?php echo $config->self;?>" class="simples pequeno">
+            <form method="post" action="<?php echo Config::getInstance()->self;?>" class="simples pequeno">
                 <?php
                 // busca todos os campos da tabela do cadastro
                 $sql = "SELECT

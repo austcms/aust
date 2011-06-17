@@ -50,8 +50,8 @@ class ExportTest extends PHPUnit_Framework_TestCase
 	}
 
 	function populate(){
-		$this->Aust::getInstance()->connection->exec("INSERT INTO categorias (nome,classe,subordinadoid) VALUES ('TestePai777','categoria-chefe','0')");
-		$lastInsert = $this->Aust::getInstance()->connection->lastInsertId();
+		Aust::getInstance()->connection->exec("INSERT INTO categorias (nome,classe,subordinadoid) VALUES ('TestePai777','categoria-chefe','0')");
+		$lastInsert = Aust::getInstance()->connection->lastInsertId();
 		$this->lastSite = $lastInsert;
 		
 	    $params = array(
@@ -63,7 +63,7 @@ class ExportTest extends PHPUnit_Framework_TestCase
 	        'author' => '1',
 	    );
 		
-		$result = $this->Aust::getInstance()->create($params);
+		$result = Aust::getInstance()->create($params);
 		
 		$params = array(
             'name' => 'Teste777Cadastro',
@@ -101,10 +101,10 @@ class ExportTest extends PHPUnit_Framework_TestCase
 		);
 		
 		// Pega ID da estrutura salva
-		$st = reset($this->Aust::getInstance()->connection->query("SELECT id FROM categorias WHERE nome='Teste777Conteudo'"));
+		$st = reset(Aust::getInstance()->connection->query("SELECT id FROM categorias WHERE nome='Teste777Conteudo'"));
 		
 		$stId = $st['id'];
-		$this->Aust::getInstance()->connection->exec("INSERT INTO config (tipo,local,propriedade,valor) VALUES('mod_conf','$stId','teste777777','teste777777')");
+		Aust::getInstance()->connection->exec("INSERT INTO config (tipo,local,propriedade,valor) VALUES('mod_conf','$stId','teste777777','teste777777')");
 		
 		$result = $this->CadastroSetup->createStructure($params);		
     }

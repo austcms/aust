@@ -18,7 +18,7 @@ $sql = "SELECT
             subordinadoid='0'
         ";
 
-$siteQuery = $conexao->query($sql);
+$siteQuery = Connection::getInstance()->query($sql);
 
 /**
  * Loop por cada site cadastrado, mostrando suas estruturas
@@ -57,7 +57,7 @@ foreach($siteQuery as $chave=>$valor){
                 lp.nome ASC
     ";
 
-    $query = $conexao->query($sql);
+    $query = Connection::getInstance()->query($sql);
     foreach($query as $estruturas){
 
         $cur_tipo = (empty($cur_tipo)) ? '' : $cur_tipo;

@@ -11,7 +11,7 @@ if ($_POST['metodo'] == 'gravar'){
 	
 	$sql2 = "SELECT * FROM admins WHERE id='".$_POST['myid']."'";
 
-    $query = $conexao->query($sql2);
+    $query = Connection::getInstance()->query($sql2);
 	if ( !empty($query) ){
 
         $dados2 = $query[0];
@@ -47,7 +47,7 @@ if ($_POST['metodo'] == 'gravar'){
             } else {
             
 	            $sql2 = "UPDATE admins SET senha='".$_POST['frmnovasenha']."' WHERE id='{$_POST['myid']}'";
-	            if ($conexao->exec($sql2)){
+	            if (Connection::getInstance()->exec($sql2)){
 		            echo '
 							<h2 style="color: green">
 								Senha modificada com sucesso

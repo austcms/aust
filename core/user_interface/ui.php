@@ -11,7 +11,7 @@
 		<?php
 	}
 	?>
-    <title><?php echo Config::getInstance()->getConfig('site_name'); ?> - Gerenciador<?php /* ifisset($config->LeOpcao('sitename'), 'Aust'); */ ?></title>
+    <title><?php echo Config::getInstance()->getConfig('site_name'); ?> - Gerenciador<?php /* ifisset(Config::getInstance()->LeOpcao('sitename'), 'Aust'); */ ?></title>
     <!-- TinyMCE -->
     <?php
     $html = HtmlHelper::getInstance();

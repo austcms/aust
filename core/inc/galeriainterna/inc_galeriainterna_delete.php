@@ -5,7 +5,7 @@ if (!empty($action)){
 			$sql4 = "SELECT * FROM Noticias WHERE id='$idtodelete' AND autor='$login1'";
             //echo $sql4;
 	
-		    $mysql4 = $conexao->query($sql4);
+		    $mysql4 = Connection::getInstance()->query($sql4);
 		    $total = count($mysql4);
 		    $dados4 = $mysql4[0];
 			if ($total == 0){
@@ -13,7 +13,7 @@ if (!empty($action)){
 				//break;
 			} else { 					  
 				$sql1 = "DELETE FROM Noticias WHERE id='$idtodelete' AND autor='$login1'";
-			    if ($conexao->exec($sql1))
+			    if (Connection::getInstance()->exec($sql1))
 			        echo "Ítem deletado com sucesso.<br><br>";
 			    else
 			        echo "Erro ao deletar ítem.<br><br>";

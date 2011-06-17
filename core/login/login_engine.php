@@ -40,7 +40,7 @@ $sql = "SELECT
         LIMIT 0,1
         ";
 
-$query = $conexao->query($sql);
+$query = Connection::getInstance()->query($sql);
 
 $blocked = reset($query);
 

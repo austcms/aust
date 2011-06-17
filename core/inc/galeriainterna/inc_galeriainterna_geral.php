@@ -74,7 +74,7 @@ include("../../../func.php");
 													'".PegaData('dia')."','".PegaData('mes')."','".PegaData('ano')."','".PegaData('hora')."','".PegaData('minuto')."',
 													'".$_SESSION["loginid"]."','".$_SESSION["loginnome"]."')";
 					//echo $sqlpeq;
-					if ($conexao->exec($sqlpeq)){
+					if (Connection::getInstance()->exec($sqlpeq)){
 					  $mystatus = "<p style=\"color:green\">Ítem inserido com sucesso.</p>";
 					} else
 					  $mystatus = "<p style=\"color:red\">Erro ao inserir ítem. Contate um administrador do site.</p>";
@@ -86,7 +86,7 @@ include("../../../func.php");
 	if(isset($mydelete)){
 		if ($mydelete == "yes"){
 			$sqldel = "DELETE FROM imagens WHERE id=$fotoid";
-            if ($conexao->query($sqldel)){
+            if (Connection::getInstance()->query($sqldel)){
 		      $mystatus = "<p style=\"color:green; \">Ítem apagado com sucesso.</p>";
 	        } else
 		      $mystatus = "<p style=\"color:red\">Erro ao apagar ítem.</p>";
@@ -136,7 +136,7 @@ p   { margin: 0px }
 	$sqlgal = "SELECT * FROM imagens WHERE especie='galeriainterna' ORDER BY id DESC LIMIT 0,12";
 
 
-	$mysqlgal = $conexao->query($sqlgal);
+	$mysqlgal = Connection::getInstance()->query($sqlgal);
 
 	if (!empty($mysqlgal) AND count($mysqlgal) > 0){
 		foreach( $mysqlgal as $thumbs) {

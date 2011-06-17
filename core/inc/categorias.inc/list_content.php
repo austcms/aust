@@ -47,7 +47,7 @@ if(!empty($_GET['block']) AND $_GET['block'] == "delete"){
                 WHERE
                     id='$w'
                 ";
-        if ($conexao->exec($sql)){
+        if (Connection::getInstance()->exec($sql)){
         ?>
             <div style="width: 680px; display: table;">
                 <div style="background: black; padding: 15px; text-align: center;">
@@ -93,7 +93,7 @@ if(!empty($_GET['block']) AND $_GET['block'] == "delete"){
                         cat.subordinadoid = '$parent'
                 ";
             //echo $sql;
-            $query = $conexao->query($sql);
+            $query = Connection::getInstance()->query($sql);
             /**
              * CATEGORIAS
              * Mostra as categoria indentadas
