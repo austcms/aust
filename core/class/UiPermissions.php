@@ -35,10 +35,11 @@ class UiPermissions {
         /**
          * Inicializa com dados do usuário atual
          */
-        
-        $this->permissionConfigurations['navegation'] = NAVEGATION_PERMISSIONS_CONFIGURATIONS::$navegation;
-        $this->permissionConfigurations['configurations'] = NAVEGATION_PERMISSIONS_CONFIGURATIONS::$configurations;
-        $this->permissionConfigurations['widgets'] = NAVEGATION_PERMISSIONS_CONFIGURATIONS::$widgets;
+
+	    include_once(NAVIGATION_PERMISSIONS_FILE);
+        $this->permissionConfigurations['navegation'] = NAVIGATION_PERMISSIONS_CONFIGURATIONS::$navegation;
+        $this->permissionConfigurations['configurations'] = NAVIGATION_PERMISSIONS_CONFIGURATIONS::$configurations;
+        $this->permissionConfigurations['widgets'] = NAVIGATION_PERMISSIONS_CONFIGURATIONS::$widgets;
         $this->connection = Connection::getInstance();
     }
 

@@ -7,8 +7,6 @@
  * Ele verifica cada ação requisitada e cada arquivo encontrado nos formulários
  * e mostra a página adequada.
  *
- * @package
- * @name Conteúdo
  * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @version 0.2
  * @since v0.1, 01/01/2009
@@ -16,7 +14,7 @@
 /*
  *  Se $_GET['action'] está setado, alguma ação foi requisitada
  */
-if(!empty($_GET['action'])){
+if( !empty($_GET['action']) && $_GET['action'] != "index" ){
 
     /**
      * A seguir, o código de automação dos módulos (CRUD). São carregados os
@@ -48,7 +46,7 @@ if(!empty($_GET['action'])){
      */
     if( !StructurePermissions::getInstance()->verify($aust_node, $_GET['action']) ){
 	
-		echo '<p>Sem permissão para esta operação.</p><!-- conteudo.inc -->';
+		echo '<p>Sem permissão para esta operação.</p><!-- content.inc -->';
 		
 		// tests post and alerts about post_max_size
 		$data = file_get_contents('php://input');
@@ -220,7 +218,7 @@ if(!empty($_GET['action'])){
              */
             case 'editar' :
                 /**
-                 * O arquivo carregado 'inc/conteudo.inc/editar.inc.php' (arquivo do core)
+                 * O arquivo carregado 'inc/content.inc/editar.inc.php' (arquivo do core)
                  * verfica se o módulo tem arquivo formulário específico para edição e o
                  * carrega.
                  */
@@ -247,7 +245,7 @@ if(!empty($_GET['action'])){
                 /**
                  * Inclui os actions
                  */
-                include('conteudo.inc/actions.php');
+                include('content.inc/actions.php');
                 /**
                  * Após ter incluido os actions, lista o conteúdo normalmente.
                  */

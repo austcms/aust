@@ -227,7 +227,6 @@ class StructurePermissions extends SQLObject {
      * à estrutura requerida
      */
     function verify($austNode, $action = ''){
-
         if( $action == 'save' )
             return $this->canSave($austNode);
 

@@ -103,7 +103,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
 				foreach ($slave as $key => $value) {
 					?>
 					<div>
-		            <a href="adm_main.php?section=conteudo&action=edit&aust_node=<?php echo $value['slave_id']?>&related_master=<?php echo $_GET['aust_node']?>&related_w=<?php echo $_GET['w']?>">
+		            <a href="adm_main.php?section=content&action=edit&aust_node=<?php echo $value['slave_id']?>&related_master=<?php echo $_GET['aust_node']?>&related_w=<?php echo $_GET['w']?>">
 					<?php echo $value['slave_name']; ?>
 					</a>
 					</div>
@@ -346,7 +346,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
      * O arquivo inserido é /embed/form.php do módulo que $embed==true
      */
 
-        include(INC_DIR.'conteudo.inc/form_embed.php');
+        include(INC_DIR.'content.inc/form_embed.php');
 
     ?>
     <tr>
@@ -368,7 +368,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
      * É padrão e pode ser copiado para todos os forms
      */
 
-        include(INC_DIR.'conteudo.inc/form_embedownform.php');
+        include(INC_DIR.'content.inc/form_embedownform.php');
 
 
 ?>

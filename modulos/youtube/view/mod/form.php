@@ -242,7 +242,7 @@
      * O arquivo inserido é /embed/form.php do módulo que $embed==true
      */
 
-        include(INC_DIR.'conteudo.inc/form_embed.php');
+        include(INC_DIR.'content.inc/form_embed.php');
 
     ?>
     <tr>
@@ -264,7 +264,7 @@
      * É padrão e pode ser copiado para todos os forms
      */
 
-        //include(INC_DIR.'conteudo.inc/form_embedownform.php');
+        //include(INC_DIR.'content.inc/form_embedownform.php');
 ?>
 
 
