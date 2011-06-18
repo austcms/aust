@@ -1,141 +1,46 @@
 <?php
 /**
- * Controller genérico de todos os módulos.
- *
- * Cada módulo vai ser extended desta classe
- *
- * @package Controller
- * @name ModsController
  * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @version 0.1
  * @since v0.1.5, 22/06/2009
  */
-class ModsController extends Controller
+class ModActionController extends ActionController
 {
 
     var $helpers = array();
 
-    /**
-     * VARIÁVEIS DE CONFIGURAÇÃO
-     *
-     * A seguir, todas as variáveis que são setadas antes do controller começar
-     * a operar.
-     */
-
-    /**
-     * Variáveis do sistema
-     */
     public $conexao;
     public $connection;
     public $administrador;
     public $aust;
     public $model;
-    /**
-     *
-     * @var Object Classe do módulo carregado atualmente
-     */
+
     public $modulo;
 
-    /**
-     * Esta variável contém o id da estrutura atual. Ela é configurada em
-     * $this->__construct();
-     *
-     * @var <type> ID da estrutura atual.
-     */
     public $austNode;
 
-    /**
-     *
-     * @var object Possui o objeto instanciado da classe do módulo.
-     */
-    //protected $modulo;
-    /**
-     *
-     * @var string Diretório do módulo
-     */
     protected $modDir;
 
-    /**
-     *
-     * @var string Nome do controller acessado
-     */
     protected $controllerName;
-    /**
-     *
-     * @var string Qual é a action atual?
-     */
-    protected $action;
-
-    /**
-     * VARIÁVEIS DE APOIO
-     *
-     * A seguir, as variáveis que auxiliam o sistema a funcionar. Elas são
-     * tratadas após a inicialização do objeto.
-     */
-    /**
-     * Esta variável auxilia o sistema a não renderizar automaticamente views
-     * mais de uma vez.
-     *
-     * @var bool TRUE se uma view já foi renderizada.
-     */
-    protected $isRendered;
-    /**
-     *
-     * @var bool Renderiza views automaticamente por padrão
-     */
-    protected $autoRender = true;
-    /**
-     *
-     * @var array Repositórios de variáveis que foram instanciadas e precisam
-     * ser acessadas pelas views. ModsController::set() é o responsável
-     * por tornar estas variáveis em variáveis locais para o método
-     * ModsController::render().
-     */
-    protected $globalVars;
 
 	public $testMode = false;
-    /**
-     * MÉTODOS
-     *
-     * 
-     */
-    /**
-     * Inicializa a classe
-     *
-     * @param array $param
-     *      'conexao': possui o objeto instanciado da conexão universal.
-     *      'modulo' : objeto do módulo em questão.
-     */
+
     function __construct($param){
 
-        /**
-         * OBJETOS INSTANCIADOS
-         *
-         * Agrega ao objeto atual todos os outros objetos criados
-         */
-        
         /**
          * austNode é o ID da estrutura sendo tratada
          */
         if( !empty($param["austNode"]) AND is_numeric($param["austNode"]) )
             $this->austNode = $param["austNode"];
-        /**
-         * $connection: configura a conexão universal a ser usada no controller
-         */
-        $this->connection = Connection::getInstance();;
-        /**
-         * $conexao: configura a conexão universal a ser usada no controller
-         */
-        $this->aust = (empty($param['aust'])) ? '' : $param['aust'];
-        /**
-         * $conexao: configura a conexão universal a ser usada no controller
-         */
-        $this->administrador = (empty($param['administrador'])) ? '' : $param['administrador'];
 
-        $this->permissoes = (empty($param['permissoes'])) ? '' : $param['permissoes'];
-        /**
-         * $modulo: ajusta controller para receber objeto instanciado do modulo
-         */
+        $this->connection = Connection::getInstance();;
+
+        $this->aust = Aust::getInstance();
+
+        $this->administrador = User::getInstance();
+
+        $this->permissoes = StructurePermissions::getInstance();
+
         $modulo = (empty($param['modulo'])) ? '' : $param['modulo'];
         $this->modulo = $modulo;
         /**
@@ -236,7 +141,27 @@ class ModsController extends Controller
         /**
          * Ajuste de conexão é feito no pai da classe
          */
-        parent::__construct($this->conexao);
+
+		/*
+	     * HELPERS
+	     * 
+	     * Cria helpers solicitados
+	     */
+	     if( count($this->helpers) ){
+	         /**
+	          * Loop por cada Helper a ser carregado
+	          */
+	         foreach($this->helpers as $valor){
+	             unset( $$valor );
+	             /**
+	              * Inclui o arquivo do helper
+	              */
+	             include_once( HELPERS_DIR.$valor.CLASS_FILE_SUFIX.".php" );
+	             $helperName = $valor.HELPER_CLASSNAME_SUFIX;
+	             $$valor = new $helperName();
+	             $this->set( strtolower($valor), $$valor);
+	         }
+	     }
         /**
          * trigger() é responsável por engatilhar todos os métodos
          * automáticos a serem rodados, como beforeFilter, render, etc.
@@ -298,12 +223,7 @@ class ModsController extends Controller
         /**
          * Chama a action requerida.
          */
-        //pr($param['action']);
         $this->{$param['action']}();
-        //$this->{"save"}();
-        //echo $this->action;
-        //call_user_func(array($this, "saveß"));
-        //echo "oijoij";
 
         /**
          * Se não foi renderizado ainda, renderiza automaticamente
@@ -321,7 +241,7 @@ class ModsController extends Controller
      *
      * @param string $path Indica qual o view deve ser carregado.
      */
-    protected function render($path, $includeType = ''){
+    public function render($path, $includeType = ''){
 	
         $this->set('modulo', $this->modulo);
 
@@ -363,18 +283,17 @@ class ModsController extends Controller
         return true;
     }
 
-    protected function set($varName, $varValue){
+    public function set($varName, $varValue){
         $this->globalVars[$varName] = $varValue;
     }
 
     
-    protected function beforeFilter(){
+    public function beforeFilter(){
 
         return true;
     }
 
-    
-    protected function afterFilter(){
+    public function afterFilter(){
 
         return true;
     }

@@ -17,6 +17,7 @@ define('TESTING', true);
 
 $_SESSION = array();
 
+require_once CORE_DIR."load_core.php";
 require_once(CORE_DIR."libs/functions/func.php");
 require_once(CORE_DIR."libs/functions/data_types.php");
 require_once(CORE_DIR."libs/functions/string_treatment.php");

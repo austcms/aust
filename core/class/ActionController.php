@@ -13,6 +13,7 @@ class ActionController
 
 	public $completedRequest = false;
 	
+	public $customAction = false;
 	public $params = array();
 
     public $globalVars = array();
@@ -32,21 +33,28 @@ class ActionController
 		$this->completedRequest = true;
     }
 
+	
+    public function set($varName, $varValue){
+        $this->globalVars[$varName] = $varValue;
+    }
+
     /*
      * PRIVATE METHODS
      */
-
 	function _action(){
+		if( $this->customAction )
+			return $this->customAction;
 		return Dispatcher::getInstance()->action();
 	}
 	
 	function _actionExists(){
         return method_exists($this, $this->_action());
 	}
-	
-    public function set($varName, $varValue){
-        $this->globalVars[$varName] = $varValue;
-    }
+
+	public function _setupParams(){
+		$this->params["controller"] = Dispatcher::getInstance()->controller();
+		$this->params["action"] = $this->_action();
+	}
 	
     /**
      * _TRIGGER()
@@ -60,6 +68,7 @@ class ActionController
     public function _trigger(){
         $this->beforeFilter();
 		
+		$this->_setupParams();
         /*
          * Action time!
          */
@@ -88,6 +97,11 @@ class ActionController
         }
         
         $content_for_layout = "";
+		
+		if( empty($this->params) )
+			$this->_setupParams();
+		
+		$params = $this->params;
 		
 		$viewFile = VIEWS_DIR."".Dispatcher::getInstance()->controller()."/".$this->_action().".php";
 
@@ -121,7 +135,8 @@ class ActionController
     public function beforeFilter(){ $this->beforeFiltered = true; return true; }
     public function afterFilter(){ $this->afterFiltered = true; return true; }
     public function test_action(){
-		$this->testVar = "Action working.";
+		$this->testVar = 	"Action ". $this->params["action"] .
+							" from controller ".$this->params["controller"]." working.";
 		$this->autoRender = false;
 	}
 

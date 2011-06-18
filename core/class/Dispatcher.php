@@ -92,7 +92,7 @@ class Dispatcher {
 	function callController(){
 		if( file_exists($this->controllerFile()) ){
 			include_once($this->controllerFile());
-			$controllerName = $this->controller();
+			$controllerName = ucfirst($this->controller())."Controller";
 			$controller = new $controllerName();
 			return true;
 		}

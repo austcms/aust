@@ -8,7 +8,7 @@
  * @since v0.1.6 06/07/2009
  */
 
-class SetupController extends ModsController
+class SetupController extends ModActionController
 {
 
     function beforeFilter(){

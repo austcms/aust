@@ -153,7 +153,7 @@ class Module
      * @param array $param:
      *      'conexao': Contém a conexão universal
      */
-    function __construct() {
+    function __construct(){
 
         if( !isset ($_GET["aust_node"]) )
             $_GET["aust_node"] = false;
@@ -172,7 +172,8 @@ class Module
          */
             $this->user = User::getInstance();
 
-        $this->config = $this->loadConfig();
+		if( !defined("TESTING") || !TESTING )
+        	$this->config = $this->loadConfig();
 		
 		if( !empty($this->config['viewmodes']) )
 			$this->viewModes = $this->config['viewmodes'];

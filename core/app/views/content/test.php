@@ -1,0 +1,1 @@
+View <?php echo $params["action"] ?> from <?php echo $params["controller"] ?> controller.

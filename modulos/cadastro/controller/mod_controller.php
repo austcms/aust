@@ -8,7 +8,7 @@
  * @since v0.1.6 06/07/2009
  */
 
-class ModController extends ModsController
+class ModController extends ModActionController
 {
 
     var $helpers = array('Form');

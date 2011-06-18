@@ -89,7 +89,7 @@ $sites = Aust::getInstance()->getStructures();
                             $options = (is_array($modInfo['opcoes'])) ? $modInfo['opcoes'] : Array();
                             foreach ($options as $chave=>$valor) {
                                 if( StructurePermissions::getInstance()->verify($structure['id'], $chave) )
-                                    echo '<li><a href="adm_main.php?section='.$_GET['section'].'&action='.$chave.'&aust_node='.$structure['id'].'">'.$valor.'</a></li>';
+                                    echo '<li><a href="adm_main.php?section='.$params['controller'].'&action='.$chave.'&aust_node='.$structure['id'].'">'.$valor.'</a></li>';
                             }
                             ?>
                             </ul>

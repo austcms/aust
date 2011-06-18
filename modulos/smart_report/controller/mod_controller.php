@@ -10,7 +10,7 @@
  * @since v0.1.5 24/06/2009
  */
 
-class ModController extends ModsController
+class ModController extends ModActionController
 {
 	public $query = array();
 	

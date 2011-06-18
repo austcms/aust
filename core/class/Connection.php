@@ -291,7 +291,6 @@ class Connection extends SQLObject {
                 Registry::add('debug',$debugVars);
             }
         }
-
         return $result;
     }
 

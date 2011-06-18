@@ -8,7 +8,7 @@
  * @since v0.1.6 06/07/2009
  */
 
-class ModsSetup extends ModsController
+class ModsSetup extends ModActionController
 {
 
     function __construct($param){
