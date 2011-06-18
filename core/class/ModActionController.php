@@ -8,9 +8,22 @@ class ModActionController extends ActionController
 {
 
 	public $module;
-	
-    function __construct($param){
+	public $austNode;
+	/**
+	 * 
+	 * 
+	 * @param $param:array
+	 * 			'austNode':int
+	 */
+    function __construct($austNode){
+		$this->austNode = $austNode;
+		$dispatcher = new ModDispatcher($this->austNode);
+		$this->module = $dispatcher->modelInstance();
 
+		if( defined('DO_ACT') && !DO_ACT ){
+			$this->shouldCallAction = false;
+		}
+		
         /**
          * $_POST e $_FILES:
          *
@@ -53,19 +66,6 @@ class ModActionController extends ActionController
 	
         }
 
-		
-        /*
-         * $modDir: diretório do módulo
-         *
-         * Verifica se foi passada um diretório válido
-         */
-        if ( !empty($param['modDir']) ){
-            if( $param['modDir'][ strlen( $param['modDir'] ) -1 ] != '/' ){
-                $param['modDir'].= '/';
-            }
-        }
-        $this->modDir = (empty($param['modDir'])) ? '' : $param['modDir'];
-
 		/*
 	     * HELPERS
 	     * 
@@ -87,7 +87,6 @@ class ModActionController extends ActionController
 	        }
 	    }
 
-	    #$this->trigger( array( 'action' => $this->action ) );
 		$this->_trigger();
     }
 
@@ -115,7 +114,7 @@ class ModActionController extends ActionController
     }
 
 	public function _viewFile(){
-		return MODULES_DIR."".MOD_VIEW_DIR."mod/".$this->_action().".php";
+		return MODULES_DIR.$this->module->directory().MOD_VIEW_DIR."mod/".$this->_action().".php";
 	}
 	
     public function test_action(){

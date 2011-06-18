@@ -9,7 +9,7 @@
  * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @since v0.1.5, 30/05/2009
  */
-class Module
+class Module extends ActiveModule
 {
 
     /*
@@ -153,12 +153,9 @@ class Module
      * @param array $param:
      *      'conexao': Contém a conexão universal
      */
-    function __construct(){
+    function __construct($austNode = ""){
 
-        if( !isset ($_GET["aust_node"]) )
-            $_GET["aust_node"] = false;
-        
-        $this->austNode = $_GET['aust_node'];
+        $this->austNode = $austNode;
 
         if( !empty($_GET['w']) AND is_numeric($_GET['w']) )
             $this->w = $_GET['w'];

@@ -22,10 +22,6 @@ class Conteudo extends Module
 
 	public $authorField = "autor";
 
-    function __construct(){
-        parent::__construct(array());
-    }
-
     /**
      * getInstance()
      *

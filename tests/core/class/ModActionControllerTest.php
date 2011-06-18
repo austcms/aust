@@ -15,16 +15,17 @@ class ModActionControllerTest extends PHPUnit_Framework_TestCase
 			$this->structureId = $query[0]["id"];
 		}
 		
-        $this->params = array(
-            'austNode' => $this->structureId
-		);
+		if( !defined('DO_ACT') )
+			define('DO_ACT', false);
+		
+        $this->params = $this->structureId;
 	}
 	
 	function testViewFile(){
-		$_GET["action"] = "test_action";
+		$_GET["action"] = "listing";
         $controller = new ModActionController($this->params);
 
-		$this->assertEquals(MODULES_DIR."conteudo/view/mod/test_action.php", $controller->_viewFile());
+		$this->assertEquals(MODULES_DIR."conteudo/view/mod/listing.php", $controller->_viewFile());
 	}
 	
 	function testGetAction(){
@@ -32,18 +33,6 @@ class ModActionControllerTest extends PHPUnit_Framework_TestCase
 		$this->obj = new ModActionController($this->params);
 		$this->assertEquals("listing", $this->obj->_action());
 	}
-
-    function testInitialization(){
-		$_GET['action'] = 'listing';
-        $this->obj = new ModActionController($this->params);
-    }
-
-	function testRenderization(){
-		$_GET['action'] = 'listing';
-		$this->obj = new ModActionController($this->params);
-		$this->assertEquals("listing", $this->obj->_action());
-	}
-
 
 }
 ?>
