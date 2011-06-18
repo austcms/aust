@@ -106,6 +106,11 @@ class ContentController extends ActionController {
 				$moreOptions[] = '<a href="adm_main.php?section='.$_GET['section'].'&action='.$actionName.'&aust_node='.$austNode.'">'.$humanName.'</a>';
 			}
 
+
+			$modDispatcher = new ModDispatcher($aust_node);
+			$modDispatcher->dispatch();
+			return true;
+			
 			$visibleNav = true;
 			$relatedMasters = Aust::getInstance()->getRelatedMasters(array($austNode));
 
@@ -126,21 +131,6 @@ class ContentController extends ActionController {
 				<?php
 			}
 
-	        /**
-	         * Prepara os argumentos para instanciar a classe e depois
-	         * chama o Controller que cuidará de toda a arquitetura MVC do módulo
-	         */
-	        $param = array(
-	            'conexao' => $conexao,
-	            'modulo' => $modulo,
-	            'permissoes' => $permissoes,
-	            'administrador' => $administrador,
-	            'aust' => $aust,
-	            'action' => $action,
-	            'modDir' => $modDir,
-	            'austNode' => $aust_node,
-	            'model' => $model,
-	        );
 	        $modController = new ModController($param);
 
 		    /*

@@ -22,14 +22,14 @@ class ModController extends ModActionController
         /**
          * <h2> HEADER
          */
-        $this->set('h1', Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']) );
+        $this->set('h1', Aust::getInstance()->leNomeDaEstrutura($this->austNode) );
 
         if((!empty($filter)) AND ($filter <> 'off')){
             $addurl = "&filter=$filter&filterw=" . urlencode($filterw);
         }
 
-        $categorias = Aust::getInstance()->LeCategoriasFilhas('',$_GET['aust_node']);
-        $categorias[$_GET['aust_node']] = 'Estrutura';
+        $categorias = Aust::getInstance()->LeCategoriasFilhas('',$this->austNode);
+        $categorias[$this->austNode] = 'Estrutura';
 
 
         /*
@@ -59,10 +59,10 @@ class ModController extends ModActionController
          * Query com resultado
          */
 
-        $query = $this->modulo->load($params);
+        $query = $this->module->load($params);
         $this->set('sql', $this->modulo->lastSql );
         //$config = $this->modulo->loadConfig();
-        $query = $this->modulo->replaceFieldsValueIfEmpty($query);
+        $query = $this->module->replaceFieldsValueIfEmpty($query);
 
         $this->set('query', $query );
 
@@ -74,7 +74,7 @@ class ModController extends ModActionController
 
     public function edit(){
 
-        $this->set('tagh2', "Editar: ". Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']) );
+        $this->set('tagh2', "Editar: ". Aust::getInstance()->leNomeDaEstrutura($this->austNode) );
         $this->set('tagp', 'Edite o conteúdo abaixo.');
 
         $w = (!empty($_GET['w'])) ? $_GET['w'] : '';

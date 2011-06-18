@@ -11,7 +11,7 @@ class ActiveModule
 	public $austNode;
 	
 	function __construct($austNode){
-		$this->austNode($austNode); 
+		$this->austNode($austNode);
 	}
 	
 	public function directory(){
