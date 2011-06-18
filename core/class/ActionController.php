@@ -8,6 +8,7 @@
 class ActionController
 {
 
+	public $helpers = array();
 	public $autoRender = true;
 	public $isRendered = false;
 
@@ -84,6 +85,10 @@ class ActionController
 
     }
 
+	public function _viewFile(){
+		return VIEWS_DIR."".Dispatcher::getInstance()->controller()."/".$this->_action().".php";
+	}
+	
     /*
      * Renders the view
      */
@@ -103,14 +108,12 @@ class ActionController
 		
 		$params = $this->params;
 		
-		$viewFile = VIEWS_DIR."".Dispatcher::getInstance()->controller()."/".$this->_action().".php";
-
 		$defaultErrorReporting = ini_get("error_reporting");
 
-        if( $shouldRender && file_exists($viewFile) ){
+        if( $shouldRender && file_exists($this->_viewFile()) ){
 
             ob_start();
-            include(VIEWS_DIR."".Dispatcher::getInstance()->controller()."/".$this->_action().".php");
+            include($this->_viewFile());
             $content_for_layout = ob_get_contents();
             ob_end_clean();
 
