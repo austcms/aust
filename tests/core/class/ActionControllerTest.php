@@ -14,6 +14,14 @@ class ActionControllerTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue($controller->completedRequest);
 		$this->assertFalse($controller->isRendered);
 	}
+	
+	function testViewFile(){
+		$_GET["section"] = "content";
+		$_GET["action"] = "test_action";
+        $controller = new ActionController();
+
+		$this->assertEquals("core/app/views/content/test_action.php", $controller->_viewFile());
+	}
 
 	function testCallingActionWithoutRendering(){
 		$_GET["section"] = "content";

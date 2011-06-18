@@ -691,11 +691,11 @@ class Aust {
     // retorna o módulo responsável por determinada estrutura
     function LeModuloDaEstrutura($node) {
         $sql = "SELECT
-                                tipo
-                        FROM
-                                categorias
-                        WHERE
-                                id=$node";
+                	tipo
+                FROM
+                	categorias
+                WHERE
+                	id=$node";
         $query = $this->conexao->query($sql);
         return $query[0]['tipo'];
     }
