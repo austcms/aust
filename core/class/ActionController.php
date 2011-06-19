@@ -98,7 +98,7 @@ class ActionController
          * Variables for views
          */
         foreach( $this->globalVars as $key=>$value ){
-            $$chave = $valor;
+            $$key = $value;
         }
         
         $content_for_layout = "";

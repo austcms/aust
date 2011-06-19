@@ -17,10 +17,10 @@ $c = 0;
 $params = array(
     "aust_node" => $_POST["aust_node"],
 );
-$moduloConfig = $modulo->loadModConf($params);
+$moduloConfig = $module->loadModConf($params);
 
 if(!empty($_POST)){
-    $resultado = $modulo->save($_POST, $_FILES);
+    $resultado = $module->save($_POST, $_FILES);
 
     if($resultado){
         $status['classe'] = 'sucesso';

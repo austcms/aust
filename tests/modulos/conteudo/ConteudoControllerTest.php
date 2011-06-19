@@ -22,7 +22,6 @@ class ConteudoControllerTest extends PHPUnit_Framework_TestCase
     function testInstallationDiagnostics(){
 		$_GET["action"] = "listing";
         $this->obj = new ModController($this->params);
-		var_dump($this->obj->render());
     }
 
 }

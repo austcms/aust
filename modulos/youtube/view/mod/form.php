@@ -12,7 +12,7 @@
         "aust_node" => $_GET["aust_node"],
     );
 
-    $moduloConfig = $modulo->loadModConf($params);
+    $moduloConfig = $module->loadModConf($params);
 
 
 /*
@@ -40,11 +40,11 @@
                 SELECT
                     *
                 FROM
-                    ".$modulo->useThisTable()."
+                    ".$module->useThisTable()."
                 WHERE
                     id='$w'
                 ";
-        $query = $modulo->connection->query($sql);
+        $query = $module->connection->query($sql);
         $dados = $query[0];
     }
 ?>
@@ -99,7 +99,7 @@
         if( $moduloConfig["categoria"]["valor"] == "1" )
             $showCategoria = true;
     }
-    if( $modulo->getStructureConfig("categorias") ){
+    if( $module->getStructureConfig("categorias") ){
     ?>
 
         <tr>

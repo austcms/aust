@@ -36,7 +36,7 @@ if(is_array($_POST['privid'])){
                     ";
 
     //pr($sql_delete);
-    $modulo->connection->exec($sql_delete);
+    $module->connection->exec($sql_delete);
 
     
     /*
@@ -57,7 +57,7 @@ if(is_array($_POST['privid'])){
     //pr($embed_sql);
 
     foreach($embed_sql as $valor){
-        $modulo->connection->exec($valor);
+        $module->connection->exec($valor);
     }
 
 
@@ -71,6 +71,6 @@ if(is_array($_POST['privid'])){
                         target_id='".$insert_id."'
                     ";
 
-    $modulo->connection->exec($sql_delete);
+    $module->connection->exec($sql_delete);
 }
 ?>

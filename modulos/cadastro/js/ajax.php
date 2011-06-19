@@ -138,14 +138,14 @@ elseif($_POST['action'] == 'search'){
         'search_field' => $searchField
     );
 
-    $sql = $modulo->loadSql($param);
+    $sql = $module->loadSql($param);
 //    echo '<br><br>'.$sql .'<br>';
 
-    $resultado = $modulo->connection->query($sql, "ASSOC");
+    $resultado = $module->connection->query($sql, "ASSOC");
 
     $fields = count($resultado);
 
-    include($modulo->getIncludeFolder().'/view/mod/listing_table.php');
+    include($module->getIncludeFolder().'/view/mod/listing_table.php');
 
     //$query = Connection::getInstance()->query('DESCRIBE '.$_POST['tabela']);
     //foreach ( $query as $chave=>$valor ){
@@ -206,7 +206,7 @@ elseif($_POST['action'] == 'search1n'){
 			LIMIT 10
             ";
 
-	$results = $modulo->connection->query($sql);
+	$results = $module->connection->query($sql);
 	
 	foreach( $results as $result ){
 		?>

@@ -11,7 +11,7 @@
         "aust_node" => $_GET["aust_node"],
     );
 
-    $moduloConfig = $modulo->loadModConf($params);
+    $moduloConfig = $module->loadModConf($params);
 
 
 /*
@@ -116,7 +116,7 @@
     }
     ?>
 
-	<?php if( $modulo->getStructureConfig('has_title') ){ ?>
+	<?php if( $module->getStructureConfig('has_title') ){ ?>
     <tr>
         <td valign="top" class="first"><label>Título da galeria:</label></td>
         <td class="second">
@@ -137,7 +137,7 @@
     /*
      * RESUMO
      */
-    if( $modulo->getStructureConfig('resumo') ){
+    if( $module->getStructureConfig('resumo') ){
     ?>
     <tr>
         <td valign="top"><label>Resumo:</label></td>
@@ -156,7 +156,7 @@
     /*
      * ORDEM
      */
-    if( $modulo->getStructureConfig('ordenate') ){
+    if( $module->getStructureConfig('ordenate') ){
     ?>
     <tr>
         <td valign="top"><label>Ordem:</label></td>
@@ -186,7 +186,7 @@
     /*
      * DESCRIÇÃO
      */
- 	if( $modulo->getStructureConfig('descricao') ){
+ 	if( $module->getStructureConfig('descricao') ){
         ?>
         <tr>
             <td valign="top"><label>Descrição da galeria: </label>
@@ -211,7 +211,7 @@
                 if( !empty($_GET["delete"]) AND $_GET["delete"] > 0 ){
                     $sql = "DELETE FROM galeria_fotos_imagens
                             WHERE id='".$_GET["delete"]."'";
-                    if( $modulo->connection->exec($sql) ){
+                    if( $module->connection->exec($sql) ){
                         echo "<div style='color: green;'>";
                         echo "<p>Imagem excluída com sucesso</p>";
                         echo "</div>";
@@ -230,7 +230,7 @@
                     $sql = "SELECT id, nome, texto FROM galeria_fotos_imagens
                             WHERE galeria_foto_id='".$w."' ORDER BY ordem ASC";
 
-                    $query = $modulo->connection->query($sql, "ASSOC");
+                    $query = $module->connection->query($sql, "ASSOC");
                     $c = 1;
                     foreach($query as $dados){
                         if($c == 1){
@@ -321,7 +321,7 @@
             <input type="file" id="file" name="frmarquivo[]" multiple="multiple" />
         </td>
     </tr>
-	<?php if( $modulo->getStructureConfig('commented_images') ){ ?>
+	<?php if( $module->getStructureConfig('commented_images') ){ ?>
 	    <tr>
 	        <td valign="top" class="first"><label for="comment">Comentário:</label></td>
 	        <td class="second">

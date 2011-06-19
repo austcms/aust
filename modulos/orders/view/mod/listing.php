@@ -205,8 +205,8 @@ foreach( $query as $dados ){
  * mostra painel de navegação para paginação
  */
 
-    //$sql = $modulo->getSQLForListing($categorias);
-    $total_registros = $modulo->totalRows;
+    //$sql = $module->getSQLForListing($categorias);
+    $total_registros = $module->totalRows;
 
     $total_paginas = $total_registros/$numPorPagina;
     $prev = $page - 1;

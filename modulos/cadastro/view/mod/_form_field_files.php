@@ -19,7 +19,7 @@ $inputName = "data[".$infoCadastro["estrutura"]["tabela"]["valor"]."][".$fieldNa
 			'austNode' => $austNode,
 		);
 
-		$files = $modulo->getFiles($params);
+		$files = $module->getFiles($params);
 		
 		if( !empty($files) ){
 			$thumbsW = 80;
@@ -43,8 +43,8 @@ $inputName = "data[".$infoCadastro["estrutura"]["tabela"]["valor"]."][".$fieldNa
 				
 				// somente uma imagem
 				if(
-					$i > $modulo->getFieldConfig($fieldName, 'image_field_limit_quantity') AND
-					$modulo->getFieldConfig($fieldName, 'image_field_limit_quantity') > 0
+					$i > $module->getFieldConfig($fieldName, 'image_field_limit_quantity') AND
+					$module->getFieldConfig($fieldName, 'image_field_limit_quantity') > 0
 				)
 					break;
 				
@@ -106,13 +106,13 @@ $inputName = "data[".$infoCadastro["estrutura"]["tabela"]["valor"]."][".$fieldNa
 	for($i = 1; $i <= 3; $i++){
 
 		$multiple = '';
-		if( $modulo->getFieldConfig($fieldName, 'files_field_limit_quantity') != 1 )
+		if( $module->getFieldConfig($fieldName, 'files_field_limit_quantity') != 1 )
 			$multiple = 'multiple="multiple"';
 		
 		// somente uma imagem
 		if(
-			$i > $modulo->getFieldConfig($fieldName, 'files_field_limit_quantity') AND
-			$modulo->getFieldConfig($fieldName, 'files_field_limit_quantity') > 0
+			$i > $module->getFieldConfig($fieldName, 'files_field_limit_quantity') AND
+			$module->getFieldConfig($fieldName, 'files_field_limit_quantity') > 0
 		)
 			break;
 		

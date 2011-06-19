@@ -8,7 +8,6 @@
 class Dispatcher {
 	
 	public function __construct(){
-		
 	}
 	
     /**
@@ -53,11 +52,10 @@ class Dispatcher {
 		if( $hasCalledController )
 			return true;
 
-        ob_start();
+#        ob_start();
         include($this->sectionFile());
-        $content_for_layout = ob_get_contents();
-        ob_end_clean();
-		
+#        $content_for_layout = ob_get_contents();
+#        ob_end_clean();
 		
 		// show only view?
 		$viewOnly = false;

@@ -17,7 +17,7 @@
 /**
  * INICIALIZAÇÃO
  */
-$tabela_da_estrutura = $modulo->LeTabelaDaEstrutura($_GET['aust_node']);
+$tabela_da_estrutura = $module->LeTabelaDaEstrutura($_GET['aust_node']);
 
 
 
@@ -28,7 +28,7 @@ if( !empty($_POST['conf_type']) AND $_POST['conf_type'] == "mod_conf" ){
     /**
      *
      */
-    $modulo->saveModConf($_POST);
+    $module->saveModConf($_POST);
 }
 
 
@@ -70,7 +70,7 @@ if( !empty($_POST['conf_type']) AND $_POST['conf_type'] == "mod_conf" ){
         </div>
         <div class="content">
             <?php
-            $configurations = $modulo->loadModConf();
+            $configurations = $module->loadModConf();
 			//pr($configurations);
             if( !empty($configurations) && is_array($configurations) ){
                 ?>

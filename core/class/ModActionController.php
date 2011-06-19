@@ -9,6 +9,7 @@ class ModActionController extends ActionController
 
 	public $module;
 	public $austNode;
+	public $modDispatcher;
 	/**
 	 * 
 	 * 
@@ -16,9 +17,18 @@ class ModActionController extends ActionController
 	 * 			'austNode':int
 	 */
     function __construct($austNode){
+
+		if( $austNode === false )
+			return false;
+		
 		$this->austNode = $austNode;
-		$dispatcher = new ModDispatcher($this->austNode);
-		$this->module = $dispatcher->modelInstance();
+
+		$action = $this->_action();
+		if( empty($action) )
+			return false;
+		
+		$this->modDispatcher = new ModDispatcher($this->austNode);
+		$this->module = $this->modDispatcher->modelInstance();
 
 		if( defined('DO_ACT') && !DO_ACT ){
 			$this->shouldCallAction = false;
@@ -90,13 +100,31 @@ class ModActionController extends ActionController
 		$this->_trigger();
     }
 
+	function austNode($int = ""){
+		if( empty($int) )
+			return $this->austNode;
+		elseif( is_numeric($int) )
+			$this->austNode = $int;
+		
+		return true;
+	}
+	
     /*
      * PRIVATE METHODS
      */
 	function _action(){
 		if( $this->customAction )
 			return $this->customAction;
+			
+		if( empty($_GET['action']) )
+			return false;
 		return $_GET['action'];
+	}
+
+	function _coreController(){
+		if( empty($_GET['section']) )
+			return false;
+		return $_GET['section'];
 	}
 	
 	function _actionExists(){
@@ -121,6 +149,17 @@ class ModActionController extends ActionController
 		$this->testVar = 	"Action ". $this->params["action"] .
 							" from module.";
 		$this->autoRender = false;
+	}
+	
+    /*
+     * Renders the view
+     */
+    public function render( $shouldRender = true ){
+
+		$this->set("austNode", $this->austNode());
+		$this->set("module", $this->modDispatcher->modelInstance());
+		
+		parent::render();
 	}
 
     /*

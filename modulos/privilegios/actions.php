@@ -46,7 +46,7 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
 
 
         $sql = "DELETE FROM
-                    ".$modulo->LeTabelaDaEstrutura($_GET['aust_node'])."
+                    ".$module->LeTabelaDaEstrutura($_GET['aust_node'])."
                 WHERE
                     $where
                     ";
@@ -112,7 +112,7 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
 
         
         $sql = "UPDATE
-                    ".$modulo->LeTabelaDaEstrutura($_GET['aust_node'])."
+                    ".$module->LeTabelaDaEstrutura($_GET['aust_node'])."
                 SET
                     aprovado='1'
                 WHERE

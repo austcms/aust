@@ -10,13 +10,13 @@
     $params = array(
         "aust_node" => $_GET["aust_node"],
     );
-    $moduloConfig = $modulo->loadModConf($params);
+    $moduloConfig = $module->loadModConf($params);
 
 	$editorPlugins = '';
-	if( $modulo->getStructureConfig('upload_inline_images') == '1' )
+	if( $module->getStructureConfig('upload_inline_images') == '1' )
 		$editorPlugins = 'imagemanager';
 	
-    $modulo->loadHtmlEditor($editorPlugins);
+    $module->loadHtmlEditor($editorPlugins);
 
 
 /*
@@ -67,7 +67,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
 
 <table cellpadding=0 cellspacing=0 class="form">
 	
-    <?php if( $modulo->isEdit() && $modulo->getStructureConfig("show_visits_counter") ){ ?>
+    <?php if( $module->isEdit() && $module->getStructureConfig("show_visits_counter") ){ ?>
 	<tr>
 	    <td><label>Estatísticas:</label></td>
 	    <td>
@@ -93,7 +93,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
 
 	<?php
 	$slave = Aust::getInstance()->getRelatedSlaves($_GET['aust_node']);
-	if( !empty($slave) && $modulo->isEdit() ){
+	if( !empty($slave) && $module->isEdit() ){
 		$slave = reset($slave);
 		?>	
 	    <tr>
@@ -163,7 +163,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
     /*
      * PREVIEW URL
      */
-    if( $modulo->getStructureConfig("has_file") ){ ?>
+    if( $module->getStructureConfig("has_file") ){ ?>
     <tr>
         <td valign="top"><label>Arquivo:</label></td>
         <td>
@@ -212,11 +212,11 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
     /*
      * PREVIEW URL
      */
-    if( $modulo->isEdit() AND $modulo->getStructureConfig("generate_preview_url") ){ ?>
+    if( $module->isEdit() AND $module->getStructureConfig("generate_preview_url") ){ ?>
     <tr>
         <td valign="top"><label>URL gerada:</label></td>
         <td>
-            <?php echo $modulo->getGeneratedUrl(); ?>
+            <?php echo $module->getGeneratedUrl(); ?>
             <?php
             tt('Esta URL é gerada automaticamente e aponta para página deste conteúdo.<br /><br />'.
                'Em caso de alterações '.
@@ -230,7 +230,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
      * RESUMO
      */ 
 
-    if( $modulo->getStructureConfig("resumo") ){
+    if( $module->getStructureConfig("resumo") ){
     ?>
     <tr>
         <td valign="top"><label>Resumo:</label></td>
@@ -282,7 +282,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
     ?>
 
 	<?php
-    if( 1 == 0 AND $modulo->getStructureConfig("manual_date") ){
+    if( 1 == 0 AND $module->getStructureConfig("manual_date") ){
     ?>
     <tr>
         <td valign="top"><label>Data manual:</label></td>

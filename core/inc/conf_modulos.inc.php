@@ -10,6 +10,7 @@ if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'):
  * Verificações de Migrations de módulos
  */
     $migrationsMods = new MigrationsMods( $conexao );
+
     /*
      * INSTALA MÓDULO
      */
@@ -60,7 +61,7 @@ if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'):
                 'modInfo' => $modInfo,
                 'autor' => User::getInstance()->LeRegistro('id'),
             );
-            $modulo->configuraModulo($param);
+            $module->configuraModulo($param);
 
             $status['classe'] = 'sucesso';
             $status['mensagem'] = '<strong>Sucesso: </strong> Migration executado com sucesso!';
@@ -412,7 +413,7 @@ if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'):
                             $isInstalled = $migrationsMods->isActualVersion($pastas);
                         } else {
                             $installStatus = $thisDbSchema->instalarSchema();
-                            $isInstalled = $modulo->verificaInstalacaoTabelas();
+                            $isInstalled = $module->verificaInstalacaoTabelas();
                         }
 
                         /*
@@ -434,7 +435,7 @@ if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'):
                                 'modInfo' => $modInfo,
                                 'autor' => User::getInstance()->LeRegistro('id'),
                             );
-                            $modulo->configuraModulo($param);
+                            $module->configuraModulo($param);
 
 
                             $conteudo.= '<div style="color: green;">Instalado com sucesso!</div>';
@@ -452,15 +453,15 @@ if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'):
                      *
                     else {
 
-                        if( $modulo->verificaInstalacaoTabelas()
-                            AND $modulo->verificaInstalacaoRegistro(array("pasta"=>$pastas)) )
+                        if( $module->verificaInstalacaoTabelas()
+                            AND $module->verificaInstalacaoRegistro(array("pasta"=>$pastas)) )
                         {
                             $conteudo.= '<div style="color: green;">Instalado</div>';
 
-                        } else if( $modulo->verificaInstalacaoTabelas() ){
+                        } else if( $module->verificaInstalacaoTabelas() ){
                             $conteudo.= '<div style="color: orange;">Tabela instalada, registro no DB não.<br />';
                             $conteudo.= '<a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&instalar_modulo='.$pastas.'">Tentar instalar</a></div>';
-                        } else if( $modulo->verificaInstalacaoRegistro(array("pasta"=>$pastas)) ){
+                        } else if( $module->verificaInstalacaoRegistro(array("pasta"=>$pastas)) ){
                             $conteudo.= '<div style="color: orange;">Tabela não instalada, registro no DB sim.</div>';
                         } else {
                             $conteudo.= '<div style="color: red;">Não Instalado, ';
@@ -550,15 +551,15 @@ if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'):
                             echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&instalar_modulo='.$path.'">instalar agora</a><br />';
                         }
                         /*
-                        if( $modulo->verificaInstalacaoTabelas()
-                            AND $modulo->verificaInstalacaoRegistro(array("pasta"=>$pastas)) )
+                        if( $module->verificaInstalacaoTabelas()
+                            AND $module->verificaInstalacaoRegistro(array("pasta"=>$pastas)) )
                         {
                             $conteudo.= '<div style="color: green;">Instalado</div>';
 
-                        } else if( $modulo->verificaInstalacaoTabelas() ){
+                        } else if( $module->verificaInstalacaoTabelas() ){
                             $conteudo.= '<div style="color: orange;">Tabela instalada, registro no DB não.<br />';
                             $conteudo.= '<a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&instalar_modulo='.$pastas.'">Tentar instalar</a></div>';
-                        } else if( $modulo->verificaInstalacaoRegistro(array("pasta"=>$pastas)) ){
+                        } else if( $module->verificaInstalacaoRegistro(array("pasta"=>$pastas)) ){
                             $conteudo.= '<div style="color: orange;">Tabela não instalada, registro no DB sim.</div>';
                         } else {
                             $conteudo.= '<div style="color: red;">Não Instalado, ';

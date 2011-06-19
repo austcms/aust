@@ -14,11 +14,11 @@
     /**
      * Lê somente módulos que contém habilidade Embed
      */
-    $embed = $modulo->LeModulosEmbedOwnForm();
+    $embed = $module->LeModulosEmbedOwnForm();
     /**
      * Módulos com habilidade embed liberados pelo admin para esta estrutura
      */
-    $liberados = $modulo->LeModulosEmbedOwnFormLiberados($_GET['aust_node']);
+    $liberados = $module->LeModulosEmbedOwnFormLiberados($_GET['aust_node']);
 
     /**
      * Se há algum embed

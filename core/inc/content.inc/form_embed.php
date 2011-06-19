@@ -10,7 +10,7 @@
      */
 
     $tempmodulo = $modulo;
-    $embed = $modulo->LeModulosEmbed();
+    $embed = $module->LeModulosEmbed();
     
     if( !empty($embed) ){
         foreach( $embed as $valor ){
@@ -22,14 +22,14 @@
      * Contém quais as outras estruturas (nodes) que são relacionadas à
      * estrutura atual.
      */
-    $embedRelatedNodes = $modulo->getRelatedEmbedAsArray($_GET["aust_node"]);
+    $embedRelatedNodes = $module->getRelatedEmbedAsArray($_GET["aust_node"]);
 
 
 
     if( !empty($embed) AND count($embed)){
         ?>
         <input type="hidden" name="contentTable" value="<?php
-        echo $modulo->getContentTable();
+        echo $module->getContentTable();
         ?>" />
         <?php
         /*

@@ -9,7 +9,7 @@ $sql = "SELECT
             id='".$_GET['aust_node']."'";
 
 
-$catQuery = $modulo->connection->query($sql);
+$catQuery = $module->connection->query($sql);
 
 $cat = $catQuery[0]['nome'];?>
 <h2><?php echo $h1; ?></h2>
@@ -43,7 +43,7 @@ if( StructurePermissions::getInstance()->canDelete($austNode) ){
 
 <div id="listing_table">
 	<?php
-	include($modulo->getIncludeFolder().'/view/mod/_listing_thumbs_view.php');
+	include($module->getIncludeFolder().'/view/mod/_listing_thumbs_view.php');
 	?>
 </div>
 
@@ -57,8 +57,8 @@ if( StructurePermissions::getInstance()->canDelete($austNode) ){
  * mostra painel de navegação para paginação
  */
 
-    //$sql = $modulo->getSQLForListing($categorias);
-    $total_registros = $modulo->totalRows;
+    //$sql = $module->getSQLForListing($categorias);
+    $total_registros = $module->totalRows;
 
     $total_paginas = $total_registros/$numPorPagina;
     $prev = $page - 1;
