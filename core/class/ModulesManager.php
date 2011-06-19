@@ -1,20 +1,13 @@
 <?php
 /**
- * Classe dos módulos, contém informações de todos os módulos. Não é
- * superclasse, mas contém métodos para leitura de diretórios e
- * aplicações gerais.
+ * Manages modules and its information.
  *
- * @package Classes
- * @name Módulos
  * @author Alexandre de Oliveira <chavedomundo@gmail.com>
- * @version 0.1.1
  * @since v0.1.5, 30/05/2009
  */
-class Modulos
+class ModulesManager
 {
-    /**
-     * TABELAS
-     */
+
     protected $db_tabelas;
     protected $sql_das_tabelas;
     protected $sql_registros;
@@ -58,34 +51,13 @@ class Modulos
      * @param array $param:
      *      'conexao': Contém a conexão universal
      */
-    function __construct($param) {
-        global $aust;
-        $this->aust = $aust;
+    function __construct($param = array()) {
 
-        $this->params = &$param;
+        $this->aust = Aust::getInstance();
+        $this->conexao = Connection::getInstance();
+        $this->user = User::getInstance();
+        $this->config = Config::getInstance();
 
-        /**
-         * Ajusta a conexao para o módulo
-         */
-            $this->conexao = Connection::getInstance();
-
-        /**
-         * Usuário atual
-         */
-        if( !empty($param['user']) ) {
-            $this->user = &$param['user'];
-        }
-
-        /**
-         * Grava configurações do módulo no objeto
-         */
-        if( !empty($param['config']) ) {
-            $this->config = $param['config'];
-        }
-
-        /**
-         * modDbSchema: Grava o schema se for passado como argumento
-         */
         if( !empty($param['modDbSchema']) ) {
             $this->modDbSchema = $param['modDbSchema'];
 
