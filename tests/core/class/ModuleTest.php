@@ -3,7 +3,7 @@ require_once 'PHPUnit/Framework.php';
 require_once 'tests/config/auto_include.php';
 
 
-class ModulesTest extends PHPUnit_Framework_TestCase
+class ModuleTest extends PHPUnit_Framework_TestCase
 {
 
     public function testInitialization(){
