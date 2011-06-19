@@ -20,7 +20,7 @@ $sql = "SELECT
         ORDER BY t.$campo ASC
         ";
 
-$checkboxes = $modulo->connection->query($sql);
+$checkboxes = $module->connection->query($sql);
 
 $inputName = "data[".$infoCadastro["estrutura"]["tabela"]["valor"]."][".$chave."][]";
 
@@ -47,7 +47,7 @@ if( !empty($w) ){
             ORDER BY
                 t.order_nr ASC, t.id ASC
             ";
-    $values = $modulo->connection->query($sql);
+    $values = $module->connection->query($sql);
 
     if( empty($values)){
         $values = array();
@@ -59,7 +59,7 @@ if( !empty($w) ){
 }
 
 $dragdrop = '';
-if( $modulo->getFieldConfig($chave, '1n_has_dragdrop') == '1' )
+if( $module->getFieldConfig($chave, '1n_has_dragdrop') == '1' )
 	$dragdrop = 'dragdrop';
 
 /*

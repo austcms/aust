@@ -101,6 +101,9 @@ define("TMP_DIR", 		THIS_TO_BASEURL."tpm/");
      * São os arquivos que podem desempenhar funções de módulos quando estes
      * estão ausentes.
      */
+ 	define('CONTENT_DISPATCHER', 'content');
+	define('MODULES', 'content'); # alias for content_dispatcher
+	
     define('CONTENT_TRIGGERS_DIR', INC_DIR.'content.inc/');
         define('CREATE_ACTION', 'create');
         define('EDIT_ACTION', 'edit');

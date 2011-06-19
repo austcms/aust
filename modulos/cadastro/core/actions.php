@@ -54,11 +54,11 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
         //$dados = mysql_fetch_array($mysql);
 
         $sql = "DELETE FROM
-                    ".$modulo->LeTabelaDaEstrutura($_GET['aust_node'])."
+                    ".$module->LeTabelaDaEstrutura($_GET['aust_node'])."
                 WHERE
                     $where
                     ";
-        if($modulo->connection->exec){
+        if($module->connection->exec){
             $resultado = TRUE;
         } else {
             $resultado = FALSE;
@@ -119,13 +119,13 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
 
         
         $sql = "UPDATE
-                    ".$modulo->LeTabelaDaEstrutura($_GET['aust_node'])."
+                    ".$module->LeTabelaDaEstrutura($_GET['aust_node'])."
                 SET
                     approved='1'
                 WHERE
                     $where
                     ";
-        if($modulo->connection->exec($sql)){
+        if($module->connection->exec($sql)){
             $resultado = TRUE;
         } else {
             $resultado = FALSE;

@@ -10,7 +10,7 @@
     $params = array(
         "aust_node" => $_GET["aust_node"],
     );
-    $moduloConfig = $modulo->loadModConf($params);
+    $moduloConfig = $module->loadModConf($params);
 
 
 /*
@@ -19,7 +19,7 @@
     $austNode = (!empty($_GET['aust_node'])) ? $_GET['aust_node'] : '';
 
 
-// $modulo->getStructureConfig("generate_preview_url")
+// $module->getStructureConfig("generate_preview_url")
 ?>
 <h2>Pedido: <?php echo $cart['transaction_nr'] ?></h2>
 <p>Detalhes do pedido.</p>

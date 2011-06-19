@@ -21,17 +21,28 @@ class ModActionControllerTest extends PHPUnit_Framework_TestCase
         $this->params = $this->structureId;
 	}
 	
+	function testAustNode(){
+		$controller = new ModActionController($this->params);
+		$this->assertEquals($this->params, $controller->austNode());
+	}
+	
 	function testViewFile(){
 		$_GET["action"] = "listing";
-        $controller = new ModActionController($this->params);
+#        $controller = new ModActionController($this->params);
 
-		$this->assertEquals(MODULES_DIR."conteudo/view/mod/listing.php", $controller->_viewFile());
+#		$this->assertEquals(MODULES_DIR."conteudo/view/mod/listing.php", $controller->_viewFile());
 	}
 	
 	function testGetAction(){
 		$_GET['action'] = 'listing';
-		$this->obj = new ModActionController($this->params);
+		$this->obj = new ModActionController(false);
 		$this->assertEquals("listing", $this->obj->_action());
+	}
+
+	function testGetController(){
+		$_GET['section'] = 'content';
+		$this->obj = new ModActionController(false);
+		$this->assertEquals("content", $this->obj->_coreController());
 	}
 
 }

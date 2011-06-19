@@ -8,6 +8,7 @@
  	RewriteRule ^tmp/(.*) tmp/$1 [L]
  	RewriteRule ^modulos/(.*) modulos/$1 [L]
 	RewriteRule ^adm_main.php(.*) adm_main.php$1 [L]
+	RewriteRule ^$ index.php [L]
 	RewriteRule ^index.php index.php [L]
 	RewriteRule ^logout.php logout.php [L]
 	

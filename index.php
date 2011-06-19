@@ -13,7 +13,6 @@
  */
 session_name("aust");
 session_start();
-
 /**
  * Carrega variáveis do sistema
  */
@@ -33,7 +32,6 @@ include(CONFIG_DATABASE_FILE);
 
 require(INSTALLATION_DIR."dbschema.php");
 
-
 $conexao = Connection::getInstance();
 
 if( !is_dir('uploads') ){
@@ -52,6 +50,7 @@ if(Connection::getInstance()->DBExiste){
      *
      * O resultado é guardado em dbSchema::schemaStatus
      */
+	$dbSchema = dbSchema::getInstance();
     $dbSchema->verificaSchema();
 
     // verificação tabela por tabela quais existem ($db_tabelas é Array)

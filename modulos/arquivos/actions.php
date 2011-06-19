@@ -54,7 +54,7 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
             if(unlink('../'.$dados['url'].$dados['arquivo_nome']) or die('Erro ao deletar arquivo, pois ele provavelmente não existe mais. Entre em contato com o administrador.</p>')){
 
                 $sql = "DELETE FROM
-                            ".$modulo->LeTabelaDaEstrutura($_GET['aust_node'])."
+                            ".$module->LeTabelaDaEstrutura($_GET['aust_node'])."
                         WHERE
                             $where
                             ";

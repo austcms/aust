@@ -13,7 +13,7 @@
     $params = array(
         "aust_node" => $_GET["aust_node"],
     );
-    $moduloConfig = $modulo->loadModConf($params);
+    $moduloConfig = $module->loadModConf($params);
 
 /*
  * Ajusta variáveis iniciais
@@ -44,11 +44,11 @@ if($_GET['action'] == 'create') {
             SELECT
                 *
             FROM
-                ".$modulo->useThisTable()."
+                ".$module->useThisTable()."
             WHERE
                 id='$w'
             ";
-    $query = $modulo->connection->query($sql);
+    $query = $module->connection->query($sql);
     $dados = $query[0];
 }
 ?>
@@ -78,7 +78,7 @@ if($_GET['action'] == 'create') {
         /*
          * Verifica quais categorias este módulo está associado
          */
-        $categorias = $modulo->getRelatedCategories($austNode);
+        $categorias = $module->getRelatedCategories($austNode);
 
         if( !empty($categorias) ){
 
@@ -93,7 +93,7 @@ if($_GET['action'] == 'create') {
                     WHERE
                         privilegio_id='$w'
                     ";
-            $query = $modulo->connection->query($sql);
+            $query = $module->connection->query($sql);
             $node = $query[0];
             if( is_array($node) )
                 $current_node = reset($node);
@@ -109,7 +109,7 @@ if($_GET['action'] == 'create') {
                     WHERE
                         id IN ('".implode("','", $categorias)."')
                     ";
-            $query = $modulo->connection->query($sql);
+            $query = $module->connection->query($sql);
 
             /*
              * Cria <select>

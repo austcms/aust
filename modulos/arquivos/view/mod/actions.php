@@ -24,10 +24,10 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
         $sql = "SELECT
                     *
                 FROM
-                    ".$modulo->getMainTable()."
+                    ".$module->getMainTable()."
                 WHERE
                     {$where}";
-        $mysql = $modulo->connection->query($sql);
+        $mysql = $module->connection->query($sql);
         $dados = $mysql[0];
 
         // se conseguir excluir o arquivo fisicamente, então exclui dados do DB
@@ -39,11 +39,11 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
             {
 
                 $sql = "DELETE FROM
-                            ".$modulo->getMainTable()."
+                            ".$module->getMainTable()."
                         WHERE
                             $where
                             ";
-                if($modulo->connection->exec($sql)){
+                if($module->connection->exec($sql)){
                     $resultado = TRUE;
                 } else {
                     $resultado = FALSE;

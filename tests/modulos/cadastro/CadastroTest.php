@@ -333,6 +333,7 @@ class CadastroTest extends PHPUnit_Framework_TestCase
 	             VALUES
 	                 ('campo','campo_1','Campo 1','777','teste7777', 'images')
 	             ";
+		echo $sql;
 	    $this->obj->connection->query($sql);
 
 		

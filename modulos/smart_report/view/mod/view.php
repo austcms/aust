@@ -10,13 +10,13 @@
     $params = array(
         "aust_node" => $_GET["aust_node"],
     );
-    $moduloConfig = $modulo->loadModConf($params);
+    $moduloConfig = $module->loadModConf($params);
 
 	$editorPlugins = '';
-	if( $modulo->getStructureConfig('upload_inline_images') == '1' )
+	if( $module->getStructureConfig('upload_inline_images') == '1' )
 		$editorPlugins = 'imagemanager';
 	
-    $modulo->loadHtmlEditor($editorPlugins);
+    $module->loadHtmlEditor($editorPlugins);
 
 
 /*
@@ -96,9 +96,9 @@
 	    <?php
 	} else {
 		if( empty($viewType) || $viewType == 'normal' )
-        	include($modulo->getIncludeFolder().'/view/mod/_view_table_list.php');
+        	include($module->getIncludeFolder().'/view/mod/_view_table_list.php');
 		else
-        	include($modulo->getIncludeFolder().'/view/mod/_view_'.$viewType.'.php');
+        	include($module->getIncludeFolder().'/view/mod/_view_'.$viewType.'.php');
 
 	}
 	?>

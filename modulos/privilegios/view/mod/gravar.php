@@ -84,7 +84,7 @@ if(!empty($_POST)) {
 
     if($_POST['metodo'] == 'create') {
         $sql = "INSERT INTO
-                        ".$modulo->useThisTable()."
+                        ".$module->useThisTable()."
                         ($sqlcampostr)
                 VALUES
                         ($sqlvalorstr)
@@ -95,7 +95,7 @@ if(!empty($_POST)) {
         $h1 = 'Criando: '.Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
     } else if($_POST['metodo'] == 'edit') {
         $sql = "UPDATE
-                    ".$modulo->useThisTable()."
+                    ".$module->useThisTable()."
                 SET
                     $sqlcampostr
                 WHERE

@@ -419,7 +419,7 @@ class Module extends ActiveModule
         {
             print $options['categorias'];
 
-            print("Argumento <strong>categorias</strong> ultrapassada em \$modulo->loadSql. Use \$options['austNode'].");
+            print("Argumento <strong>categorias</strong> ultrapassada em \$module->loadSql. Use \$options['austNode'].");
             exit(0);
         }
 		/* gera sql para descobrir o número total de rows */

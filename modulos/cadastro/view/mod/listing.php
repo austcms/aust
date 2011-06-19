@@ -6,8 +6,8 @@
  */
 
 // configuração: ajusta variáveis
-$tabela = $modulo->LeTabelaDeDados($_GET['aust_node']);
-$precisa_aprovacao = $modulo->pegaConfig(Array('estrutura'=>$_GET['aust_node'], 'chave'=>'aprovacao'));
+$tabela = $module->LeTabelaDeDados($_GET['aust_node']);
+$precisa_aprovacao = $module->pegaConfig(Array('estrutura'=>$_GET['aust_node'], 'chave'=>'aprovacao'));
 ?>
 
 <h2><?php echo Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);?></h2>
@@ -27,7 +27,7 @@ if( $fieldsCount > 0 ){
                 chave='email' AND
                 categorias_id='".$_GET["aust_node"]."'
             ";
-    $filtroEspecial = $modulo->connection->query($sql);
+    $filtroEspecial = $module->connection->query($sql);
 
     if( !empty($filtroEspecial[0]) )
         $filtroEspecial = $filtroEspecial[0]["valor"];
@@ -41,7 +41,7 @@ if( $fieldsCount > 0 ){
                     t.".$filtroEspecial."
                 ORDER BY t.id DESC
                 ";
-        $email = $modulo->connection->query($sql);
+        $email = $module->connection->query($sql);
         foreach( $email as $valor ){
             $emails[] = $valor[$filtroEspecial];
         }
@@ -69,7 +69,7 @@ if( $fieldsCount > 0 ){
          *
          * Mostra resultados somente se existirem no banco de dados
          */
-        if( $modulo->getStructureConfig("has_search") ){
+        if( $module->getStructureConfig("has_search") ){
             ?>
             <div class="content_search">
                 <strong>Buscar:</strong>
@@ -143,7 +143,7 @@ if( $fieldsCount > 0 ){
 
         <div id="listing_table">
         <?php
-        include($modulo->getIncludeFolder().'/view/mod/listing_table.php');
+        include($module->getIncludeFolder().'/view/mod/listing_table.php');
         ?>
         </div>
                 
@@ -168,11 +168,11 @@ if( $fieldsCount > 0 ){
  * mostra painel de navegação para paginação
  */
 
-    //$sql = $modulo->getSQLForListing($categorias);
-    $total_registros = $modulo->totalRows;
-	$page = $modulo->page();
+    //$sql = $module->getSQLForListing($categorias);
+    $total_registros = $module->totalRows;
+	$page = $module->page();
 
-    $total_paginas = $total_registros/$modulo->defaultLimit;
+    $total_paginas = $total_registros/$module->defaultLimit;
     $prev = $page - 1;
     $next = $page + 1;
     // se página maior que 1 (um), então temos link para a página anterior

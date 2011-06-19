@@ -6,7 +6,7 @@
 // se foi clicado algum item no form de inclusão
 if(is_array($_POST['privid'])){
 
-    $usuario_tabela = $modulo->LeTabelaDaEstrutura($_GET['aust_node']);
+    $usuario_tabela = $module->LeTabelaDaEstrutura($_GET['aust_node']);
     // Se $_post[w] está vazio, é um novo conteúdo
     if(empty($_POST['w']) AND $_POST['metodo'] == 'criar'){
         $insert_id = mysql_insert_id();

@@ -19,7 +19,7 @@
 /**
  * Informações deste cadastro
  */
-$infoCadastro = $modulo->pegaInformacoesCadastro($austNode);
+$infoCadastro = $module->pegaInformacoesCadastro($austNode);
 
 if( !empty($_GET["w"]) ){
     $w = $_GET['w'];
@@ -111,7 +111,7 @@ if( !empty($_GET["w"]) ){
                         ".$referencia." AS t
                     ORDER BY t.$campo ASC
                     ";
-            $checkboxes = $modulo->connection->query($sql);
+            $checkboxes = $module->connection->query($sql);
 
             $inputType = "checkbox";
             foreach($checkboxes as $tabelaReferenciaResult){
@@ -131,7 +131,7 @@ if( !empty($_GET["w"]) ){
                             t.id ASC
                         ";
 
-                $values = $modulo->connection->query($sql);
+                $values = $module->connection->query($sql);
                 if( empty($values)){
                     $values = array();
                 } else {

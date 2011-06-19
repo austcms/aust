@@ -10,7 +10,7 @@
 /**
  * Informações deste cadastro
  */
-$infoCadastro = $modulo->pegaInformacoesCadastro($austNode);
+$infoCadastro = $module->pegaInformacoesCadastro($austNode);
 $tabelaCadastro = $infoCadastro["estrutura"]['tabela']["valor"];
 
 $tabelaImagens = null;
@@ -36,7 +36,7 @@ if( !empty($_GET["w"]) ){
 <h2>Cadastro: <?php echo Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node'])?></h2>
 <?php
 if( $_GET['action'] == "edit" ){
-    if( $modulo->getStructureConfig("has_printing_version") ){
+    if( $module->getStructureConfig("has_printing_version") ){
         ?>
         <a target="_blank" href="adm_main.php?section=<?php echo $_GET["section"] ?>&action=printing&theme=blank&aust_node=<?php echo $_GET['aust_node'] ?>&w=<?php echo $_GET['w'] ?>">
         Versão para impressão
@@ -153,7 +153,7 @@ $nodeIdFieldName = 'data['.$infoCadastro["estrutura"]["tabela"]["valor"].'][node
 <input type="hidden" name="aust_node" value="<?php echo $austNode;?>">
 
 <?php
-if( $modulo->getStructureConfig("category_selectable") ){
+if( $module->getStructureConfig("category_selectable") ){
 	
     if( $_GET['action'] == EDIT_ACTION ){
         ?>
@@ -174,7 +174,7 @@ if( $modulo->getStructureConfig("category_selectable") ){
 		/*
 		 * Nova_Categoria?
 		 */
-		if( $modulo->getStructureConfig("category_creatable") ){
+		if( $module->getStructureConfig("category_creatable") ){
 
 			if( empty($nodeId) )
 				$nodeId = $austNode;
@@ -258,7 +258,7 @@ foreach( $camposForm as $chave=>$valor ){
      */
     else if($valor["tipo"]["especie"] == "relacional_umparamuitos") {
 
-        include($modulo->getIncludeFolder().'/view/mod/_form_field_relational_one_to_many.php');
+        include($module->getIncludeFolder().'/view/mod/_form_field_relational_one_to_many.php');
 
 	}
     /*
@@ -268,7 +268,7 @@ foreach( $camposForm as $chave=>$valor ){
      */
     else if($valor["tipo"]["especie"] == "files") {
 	
-        include($modulo->getIncludeFolder().'/view/mod/_form_field_files.php');
+        include($module->getIncludeFolder().'/view/mod/_form_field_files.php');
 
 	}
     /*
@@ -278,7 +278,7 @@ foreach( $camposForm as $chave=>$valor ){
      */
     elseif( $valor["tipo"]["especie"] == "images" ){
 
-        include($modulo->getIncludeFolder().'/view/mod/_form_field_images.php');
+        include($module->getIncludeFolder().'/view/mod/_form_field_images.php');
 
     } elseif( $valor['tipo']['tipoFisico'] == 'date' ){
         $inputType = "date";
@@ -286,21 +286,21 @@ foreach( $camposForm as $chave=>$valor ){
     } elseif( $valor['tipo']['tipoFisico'] == 'text' ){
         $inputType = "textarea";
 		
-		if( $modulo->getFieldConfig($chave, 'text_has_editor') == "1" ){
+		if( $module->getFieldConfig($chave, 'text_has_editor') == "1" ){
 			$elementId = 'input-'.$chave;
 			$elementsEditor[] = $elementId;
 		}
 
-		if( $modulo->getFieldConfig($chave, 'text_has_images') == "1" ){
+		if( $module->getFieldConfig($chave, 'text_has_images') == "1" ){
 			$plugins[] = 'imagemanager';
 		}
 		
 		$useInput = true;
     } elseif( $valor["tipo"]["especie"] == "string" ){
 
-		$currencyMask = $modulo->getFieldConfig($chave, 'currency_mask');
+		$currencyMask = $module->getFieldConfig($chave, 'currency_mask');
 		// Boolean, creates <select>
-		if( $modulo->getFieldConfig($chave, 'boolean_field') == "1" ){
+		if( $module->getFieldConfig($chave, 'boolean_field') == "1" ){
 			$inputType = "select";
 	        $select["options"] = array(
 				"1" => "Sim",

@@ -39,7 +39,7 @@ if(is_file( Modulos::MOD_DIR .Aust::getInstance()->LeModuloDaEstrutura($_GET['au
                 WHERE
                     id='$w'
                 ";
-        if ($modulo->connection->exec($sql)){
+        if ($module->connection->exec($sql)){
         ?>
             <div style="width: 680px; display: table;">
                 <div style="background: red; padding: 15px; text-align: center;">
@@ -77,7 +77,7 @@ if(is_file( Modulos::MOD_DIR .Aust::getInstance()->LeModuloDaEstrutura($_GET['au
                 WHERE
                     id='$w'
                 ";
-        if ($modulo->connection->exec($sql)){
+        if ($module->connection->exec($sql)){
         ?>
             <div style="width: 680px; display: table;">
                 <div style="background: green; padding: 15px; text-align: center;">
@@ -111,12 +111,12 @@ if(is_file( Modulos::MOD_DIR .Aust::getInstance()->LeModuloDaEstrutura($_GET['au
                 $c++;
             }
             $sql = "DELETE FROM
-                        ".$modulo->LeTabelaDaEstrutura($_GET['aust_node'])."
+                        ".$module->LeTabelaDaEstrutura($_GET['aust_node'])."
                     WHERE
                         $where
                         ";
 
-            if($modulo->connection->exec($sql)){
+            if($module->connection->exec($sql)){
                 $resultado = TRUE;
             } else {
                 $resultado = FALSE;

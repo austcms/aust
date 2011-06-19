@@ -17,7 +17,7 @@
 /**
  * INICIALIZAÇÃO
  */
-$tabela_da_estrutura = $modulo->LeTabelaDaEstrutura($_GET['aust_node']);
+$tabela_da_estrutura = $module->LeTabelaDaEstrutura($_GET['aust_node']);
 
 
 
@@ -28,7 +28,7 @@ if( !empty($_POST['conf_type']) AND $_POST['conf_type'] == "mod_conf" ){
     /**
      *
      */
-    $modulo->saveModConf($_POST);
+    $module->saveModConf($_POST);
 }
 
 /**
@@ -52,7 +52,7 @@ if(!empty($_GET['function'])){
                     chave='".$_GET['w']."' AND
                     categorias_id='".$_GET['aust_node']."'
         ";
-        if($modulo->connection->exec($sql))
+        if($module->connection->exec($sql))
             $status[] = "Campo desativado com sucesso";
         else
             $status[] = "Erro ao desativar campo.";
@@ -70,7 +70,7 @@ if(!empty($_GET['function'])){
                     chave='".$_GET['w']."' AND
                     categorias_id='".$_GET['aust_node']."'
         ";
-        if($modulo->connection->exec($sql))
+        if($module->connection->exec($sql))
             $status[] = "Campo ativado com sucesso";
         else
             $status[] = "Erro ao ativar campo.";
@@ -89,7 +89,7 @@ if(!empty($_GET['function'])){
                     chave='".$_GET['w']."' AND
                     categorias_id='".$_GET['aust_node']."'
         ";
-        if($modulo->connection->exec($sql))
+        if($module->connection->exec($sql))
             $status[] = "Preenchimento do campo ajustado para necessário com sucesso.";
         else
             $status[] = "Erro ao executar ação.";
@@ -108,7 +108,7 @@ if(!empty($_GET['function'])){
                     chave='".$_GET['w']."' AND
                     categorias_id='".$_GET['aust_node']."'
         ";
-        if($modulo->connection->exec($sql))
+        if($module->connection->exec($sql))
             $status[] = "Não é necessário preenchimento obrigatório do campo ajustado com sucesso.";
         else
             $status[] = "Erro ao executar ação.";
@@ -129,7 +129,7 @@ if(!empty($_GET['function'])){
                     chave='".$_GET['w']."' AND
                     categorias_id='".$_GET['aust_node']."'
         ";
-        if($modulo->connection->exec($sql))
+        if($module->connection->exec($sql))
             $status[] = "Campo aparecerá na listagem de cadastro.";
         else
             $status[] = "Erro ao executar ação.";
@@ -150,7 +150,7 @@ if(!empty($_GET['function'])){
                     chave='".$_GET['w']."' AND
                     categorias_id='".$_GET['aust_node']."'
         ";
-        if($modulo->connection->exec($sql))
+        if($module->connection->exec($sql))
             $status[] = "O campo selecionado não aparecerá mais em listagens.";
         else
             $status[] = "Erro ao executar ação.";
@@ -212,7 +212,7 @@ if(!empty($_GET['function'])){
         </div>
         <div class="content">
             <?php
-            $configurations = $modulo->loadModConf();
+            $configurations = $module->loadModConf();
 			//pr($configurations);
             if( !empty($configurations) && is_array($configurations) ){
                 ?>

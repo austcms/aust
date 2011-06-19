@@ -14,7 +14,7 @@ $austNode = (!empty($_GET['aust_node'])) ? $_GET['aust_node'] : '';
     $params = array(
         "aust_node" => $_GET["aust_node"],
     );
-    $moduloConfig = $modulo->loadModConf($params);
+    $moduloConfig = $module->loadModConf($params);
 
 
 if($_GET['action'] == 'edit'){
@@ -27,7 +27,7 @@ if($_GET['action'] == 'edit'){
             WHERE
                 id='".$_GET['w']."'
             ";
-    $mysql = $modulo->connection->query($sql);
+    $mysql = $module->connection->query($sql);
     $dados = $mysql[0];
     $fm = "edit";
 } else {
@@ -67,7 +67,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
     /*
      * CATEGORIA
      */
-    if( $modulo->getStructureConfig('select_category') == 1 ){
+    if( $module->getStructureConfig('select_category') == 1 ){
         ?>
         <tr>
             <td valign="top">Selecione a categoria: </td>
@@ -85,7 +85,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
                 /*
                  * Nova_Categoria?
                  */
-                if( $modulo->getStructureConfig('nova_categoria') == 1 ){
+                if( $module->getStructureConfig('nova_categoria') == 1 ){
                     $param = array(
                         'austNode' => $austNode,
                         'categoryInput' => 'frmcategoria_id',
@@ -171,7 +171,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
                 if( strtolower( substr($_SERVER["SERVER_PROTOCOL"], 0, 4) ) == 'http' ){
                     $url = 'http://';
                 }
-                $url = $modulo->parseUrl( $url.$_SERVER["SERVER_NAME"].$dados['url'] );
+                $url = $module->parseUrl( $url.$_SERVER["SERVER_NAME"].$dados['url'] );
 
             }
             ?>

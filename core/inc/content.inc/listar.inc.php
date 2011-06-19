@@ -167,7 +167,7 @@ if($block == "block"){
 
     $categorias = Aust::getInstance()->LeCategoriasFilhas('',$_GET[aust_node]);
     $categorias[$_GET[aust_node]] = 'Estrutura';
-    $sql = $modulo->SQLParaListagem($categorias);
+    $sql = $module->SQLParaListagem($categorias);
 //		echo '<br><br>'.$sql .'<br>';
 
 
