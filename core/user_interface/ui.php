@@ -146,8 +146,95 @@
 			</div>
 		<?php } ?>
 		
+		<?php
+		/* MODULE NAVIGATION BAR */
+	    if( !empty($_GET["aust_node"]) || $_POST["aust_node"] ){
+			if( !empty($_GET["aust_node"]) )
+				$austNode = $_GET["aust_node"];
+			elseif( !empty($_POST["aust_node"]) )
+				$austNode = $_POST["aust_node"];
+		
+
+	     	include(MODULES_DIR.$modDir.MOD_CONFIG);
+	        $action = $_GET['action'];
+
+			/*
+			 * Navegação entre actions de um austNode
+			 */
+
+			$moreOptions = array();
+			foreach( $modInfo['opcoes'] as $actionName=>$humanName ){
+				if( $actionName == $action )
+					continue;
+				$moreOptions[] = '<a href="adm_main.php?section='.$this->params['controller'].'&action='.$actionName.'&aust_node='.$austNode.'">'.$humanName.'</a>';
+			}
+
+			$visibleNav = true;
+			$relatedMasters = Aust::getInstance()->getRelatedMasters(array($austNode));
+
+			if( !empty($relatedMasters) ){
+
+				$module = Aust::getInstance()->getStructureInstance($austNode);
+				if( !$module->getStructureConfig('related_and_visible') ){
+					$visibleNav = false;
+				}
+
+			}
+
+			if( !empty($moreOptions) && $visibleNav ){
+				?>
+				<div class="structure_nav_options">
+					Navegação: <?php echo implode(", ", $moreOptions); ?>
+				</div>
+				<?php
+			}
+		}		
+		?>
         <?php echo $content_for_layout; ?>
         
+		<?php
+	    /*
+	     * Se for save, redireciona automaticamente
+	     */
+     	$action = "";
+		if( !empty($_GET['action']) ){
+			$action = $_GET['action'];
+		}
+	    if( in_array($action, array(SAVE_ACTION, ACTIONS_ACTION)) &&
+			(
+				empty($_SESSION['no_redirect']) ||
+				!$_SESSION['no_redirect']
+			)
+	 	)
+		{
+
+			unset($_SESSION['selected_items']);
+	        ?>
+	        <div class="loading_timer">
+	            <img src="<?php echo IMG_DIR ?>loading_timer.gif" /> Redirecionando Automaticamente
+	        </div>
+	        <?php
+
+			if( !empty($_POST['redirect_to']) )
+				$goToUrl = $_POST['redirect_to'];
+			else if( !empty($_GET['redirect_to']) )
+				$goToUrl = $_GET['redirect_to'];
+			else
+            	$goToUrl = "adm_main.php?section=".$_GET['section'].'&action=listing&aust_node='.$austNode;
+            ?>
+            <script type="text/javascript">
+                var timeToRefresh = 2;
+                setTimeout(function(){
+                    window.location.href = "<?php echo $goToUrl ?>";
+                }, 2000);
+            </script>
+            <?php
+        }
+
+		$_SESSION['no_redirect'] = false;
+		
+		?>
+
         </div>
     </div>
     <?php
