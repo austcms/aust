@@ -2,7 +2,7 @@
 class ContentController extends ActionController {
 	
 	function beforeFilter(){
-		if( !empty($_GET["aust_node"]) ){
+		if( !empty($_GET["aust_node"]) || !empty($_POST["aust_node"]) ){
 			$this->customAction = "load_structure";
 		}
 	}
@@ -12,7 +12,6 @@ class ContentController extends ActionController {
 	}
 	
 	function load_structure(){
-		
 		/**
 	     * AUST_NODE
 	     *

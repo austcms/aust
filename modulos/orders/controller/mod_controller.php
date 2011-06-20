@@ -58,11 +58,11 @@ class ModController extends ModActionController
         /*
          * Query com resultado
          */
-        $query = $this->modulo->load($params);
+        $query = $this->module->load($params);
 
-        $this->set('sql', $this->modulo->lastSql );
-        //$config = $this->modulo->loadConfig();
-        $query = $this->modulo->replaceFieldsValueIfEmpty($query);
+        $this->set('sql', $this->module->lastSql );
+        //$config = $this->module->loadConfig();
+        $query = $this->module->replaceFieldsValueIfEmpty($query);
 
         $this->set('query', $query );
 
@@ -75,7 +75,7 @@ class ModController extends ModActionController
     public function edit(){
 
 
-				$products = $this->modulo->getStructureConfig("aust_products");
+				$products = $this->module->getStructureConfig("aust_products");
 		        $sql = "
 		                SELECT
 		                    *
@@ -85,9 +85,9 @@ class ModController extends ModActionController
 		                    order_id='".$_GET['w']."'
 		                ";
 
-		        $query = $this->modulo->connection->query($sql);
+		        $query = $this->module->connection->query($sql);
 
-				$cartSql = $this->modulo->loadSql( array('id' => $_GET['w']) );
+				$cartSql = $this->module->loadSql( array('id' => $_GET['w']) );
 				$cart = $this->connection->query($cartSql);
 				$cart = reset($cart);
 		
@@ -106,7 +106,7 @@ class ModController extends ModActionController
     }
 
     public function save(){
-        $this->set('resultado', $this->modulo->save($_POST));
+        $this->set('resultado', $this->module->save($_POST));
     }
     
 }

@@ -26,19 +26,19 @@ class ModController extends ModActionController
             'metodo' => 'listing',
         );
 	
-        $sql = $this->modulo->loadSql($param);
+        $sql = $this->module->loadSql($param);
 
-        $resultado = $this->modulo->connection->query($sql, "ASSOC");
+        $resultado = $this->module->connection->query($sql, "ASSOC");
         $this->set('resultado', $resultado);
 
         $fieldsCount = count($resultado);
         $this->set('fieldsCount', $fieldsCount);
 
-		$fieldsConfiguration = $this->modulo->getFields(null, true);
+		$fieldsConfiguration = $this->module->getFields(null, true);
         $this->set('fieldsConfiguration', $fieldsConfiguration);
 
-        if( $this->modulo->getStructureConfig("has_search") ){
-            $this->set("search_fields", $this->modulo->getFields(false));
+        if( $this->module->getStructureConfig("has_search") ){
+            $this->set("search_fields", $this->module->getFields(false));
         }
     }
 
@@ -57,7 +57,7 @@ class ModController extends ModActionController
         /**
          * Verifica se há parâmetros
          */
-		$this->modulo->{"teste"} = "hey";
+		$this->module->{"teste"} = "hey";
         if( !empty($params) ){
             $w = ( empty($params["w"]) ? "" : $params["w"] );
         }
@@ -73,18 +73,18 @@ class ModController extends ModActionController
         /**
          * Pega informações sobre o cadastro na tabela cadastro_conf
          */
-        $infoCadastro = $this->modulo->pegaInformacoesCadastro( $this->austNode );
+        $infoCadastro = $this->module->pegaInformacoesCadastro( $this->austNode );
         /**
          * Toma informações sobre a tabela física do cadastro
          */
-        $infoTabelaFisica = $this->modulo->getPhysicalFields(
+        $infoTabelaFisica = $this->module->getPhysicalFields(
             array(
                 "tabela" => $infoCadastro["estrutura"]["tabela"]["valor"],
                 "by" => "Field",
             )
         );
 
-        $divisorTitles = $this->modulo->loadDivisors();
+        $divisorTitles = $this->module->loadDivisors();
         $this->set('divisorTitles', $divisorTitles);
         
         $campos = $infoCadastro["campo"];
@@ -209,13 +209,13 @@ class ModController extends ModActionController
 			// descrição
 			if( !empty($data['description']) ){
 				$data = reset( $this->data );
-				$this->modulo->saveImageDescription( $data['description'], $imageId );
+				$this->module->saveImageDescription( $data['description'], $imageId );
 			}
 
 			// link 
 			if( !empty($data['link']) ){
 				$data = reset( $this->data );
-				$this->modulo->saveImageLink( $data['link'], $imageId );
+				$this->module->saveImageLink( $data['link'], $imageId );
 			}
 			
 			if( !empty($data['secondary_image']) ){
@@ -223,20 +223,20 @@ class ModController extends ModActionController
 					'reference' => $imageId,
 					'type' => 'secondary',
 				);
-				$this->modulo->deleteSecondaryImagesById($imageId);
+				$this->module->deleteSecondaryImagesById($imageId);
 				$images['table'][$_POST['image_field']] = $data['secondary_image'];
-				$this->modulo->uploadAndSaveImages( $images, $w, $options );
+				$this->module->uploadAndSaveImages( $images, $w, $options );
 			}
 				
 		}
 		
 		
 		if( !empty($_GET['deleteimage']) ){
-			$deletedImage = $this->modulo->deleteImage( $_GET['deleteimage'] );
+			$deletedImage = $this->module->deleteImage( $_GET['deleteimage'] );
 		}
 
 		if( !empty($_GET['deletefile']) ){
-			$deletedFile = $this->modulo->deleteFile( $_GET['deletefile'] );
+			$deletedFile = $this->module->deleteFile( $_GET['deletefile'] );
 		}
 		
 		$this->doRender = false;
@@ -272,7 +272,7 @@ class ModController extends ModActionController
 	 */
     public function save(){
 
-        $infoCadastro = $this->modulo->pegaInformacoesCadastro( $this->austNode );
+        $infoCadastro = $this->module->pegaInformacoesCadastro( $this->austNode );
 
         /*
          * UPDATE?
@@ -284,7 +284,7 @@ class ModController extends ModActionController
         /**
          * Toma informações sobre a tabela física do cadastro
          */
-        $infoTabelaFisica = $this->modulo->getPhysicalFields(
+        $infoTabelaFisica = $this->module->getPhysicalFields(
             array(
                 "tabela" => $infoCadastro["estrutura"]["tabela"]["valor"],
                 "by" => "Field",
@@ -292,14 +292,14 @@ class ModController extends ModActionController
         );
 
         $campos = $infoCadastro["campo"];
-		$this->modulo->austNode = $this->austNode;
-		$this->modulo->fields = $campos;
+		$this->module->austNode = $this->austNode;
+		$this->module->fields = $campos;
         $relational = array();
 		$images = array();
 
 
         if( $this->data ){
-			$this->modulo->data = $this->data;
+			$this->module->data = $this->data;
 			/*
 			 * PREPARA DADOS PARA POSTERIOR SALVAMENTO DE DADOS
 			 * RELACIONADOS
@@ -315,10 +315,10 @@ class ModController extends ModActionController
 		 	/*
 		 	 * 		1) Prepara dados relacionados para salvá-los;
 			 */
-			$this->modulo->setRelationalData(); // ajusta inclusive imagens
-			$this->data = $this->modulo->sanitizeData($this->modulo->data);
-			$images = $this->modulo->images;
-			$files = $this->modulo->files;
+			$this->module->setRelationalData(); // ajusta inclusive imagens
+			$this->data = $this->module->sanitizeData($this->module->data);
+			$images = $this->module->images;
+			$files = $this->module->files;
 			
 			// insert date
 			$table = reset(array_keys($this->data));
@@ -335,23 +335,23 @@ class ModController extends ModActionController
             if( !empty($w) AND $w > 0 )
                 $lastInsertId = $w;
             else
-                $lastInsertId = $this->modulo->connection->lastInsertId();
+                $lastInsertId = $this->module->connection->lastInsertId();
 
 			/*
 		 	 *		3) Salva dados físicos (como arquivos).
 			 */
-			$this->modulo->uploadAndSaveImages($images, $lastInsertId);
-			$this->modulo->uploadAndSaveFiles($files, $lastInsertId);
+			$this->module->uploadAndSaveImages($images, $lastInsertId);
+			$this->module->uploadAndSaveFiles($files, $lastInsertId);
 			
 			/*
 			 *		4) Salva dados relacionados no DB.
 			 */
-			$relational = $this->modulo->relationalData;
+			$relational = $this->module->relationalData;
 			
 
             if( (
 				!empty($relational) ||
-				!empty($this->modulo->toDeleteTables)
+				!empty($this->module->toDeleteTables)
 				)
 				AND
  				!empty($lastInsertId) ){
@@ -380,7 +380,7 @@ class ModController extends ModActionController
                  * começar a salvar o que foi enviado.
 				 *
                  */
-             	foreach( $this->modulo->toDeleteTables as $field=>$value ){
+             	foreach( $this->module->toDeleteTables as $field=>$value ){
                 	foreach( $value as $key=>$value ){
 					
 						if( !empty($infoCadastro['campo'][$field]['ref_parent_field']) )
@@ -443,7 +443,7 @@ class ModController extends ModActionController
             if( !empty($sql) ){
                 if( is_array($sql) ){
                     foreach( $sql as $uniqueSql ){
-                        $this->modulo->connection->exec($uniqueSql);
+                        $this->module->connection->exec($uniqueSql);
                     }
                 }
             }
@@ -460,7 +460,7 @@ class ModController extends ModActionController
 				}
 			}
 			if( !empty($postedImageFields) )
-				$this->modulo->deleteExtraImages($lastInsertId, $postedImageFields);
+				$this->module->deleteExtraImages($lastInsertId, $postedImageFields);
 		}		
 		
 		/*
@@ -474,7 +474,7 @@ class ModController extends ModActionController
 			}
 			
 			if( !empty($postedFileFields) )
-				$this->modulo->deleteExtraFiles($lastInsertId, $postedFileFields);
+				$this->module->deleteExtraFiles($lastInsertId, $postedFileFields);
 		}
 		
         $this->set('resultado', $resultado);
