@@ -27,7 +27,7 @@ class ModActionController extends ActionController
 			return false;
 		
 		$this->module = ModulesManager::getInstance()->modelInstance($austNode);
-
+		
 		if( defined('DO_ACT') && !DO_ACT ){
 			$this->shouldCallAction = false;
 		}
@@ -88,7 +88,7 @@ class ModActionController extends ActionController
 	            /**
 	             * Inclui o arquivo do helper
 	             */
-	            include_once( HELPERS_DIR.$valor.CLASS_FILE_SUFIX.".php" );
+	            include_once( HELPERS_DIR.$valor.HELPER_CLASSNAME_SUFIX.".php" );
 	            $helperName = $valor.HELPER_CLASSNAME_SUFIX;
 	            $$valor = new $helperName();
 	            $this->set( strtolower($valor), $$valor);

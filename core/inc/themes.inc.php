@@ -7,7 +7,7 @@ if( !empty($_GET['current_theme']) ){
             'userId' => User::getInstance()->getId(),
         );
 
-        if( $themes->setTheme($params) ){
+        if( Themes::getInstance()->setTheme($params) ){
             header( 'Location: adm_main.php?section=themes&status=installed' );
             exit();
         }
@@ -40,7 +40,7 @@ if( !empty($_GET['current_theme']) ){
         EscreveBoxMensagem($mensagem);
     }
     
-    foreach( $themes->getThemes() as $theme ){
+    foreach( Themes::getInstance()->getThemes() as $theme ){
     ?>
 
     <div id="themes">
