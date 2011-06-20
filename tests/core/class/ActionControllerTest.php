@@ -20,7 +20,7 @@ class ActionControllerTest extends PHPUnit_Framework_TestCase
 		$_GET["action"] = "test_action";
         $controller = new ActionController();
 
-		$this->assertEquals("core/app/views/content/test_action.php", $controller->_viewFile());
+		$this->assertEquals("core/app/views/content/", $controller->_viewFile());
 	}
 
 	function testCallingActionWithoutRendering(){
