@@ -13,7 +13,6 @@
 /**
  * Carrega configurações
  */
-include(MOD_CONFIG);
 include(MOD_DBSCHEMA);
 /**
  * Classes

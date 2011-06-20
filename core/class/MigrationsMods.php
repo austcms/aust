@@ -47,19 +47,15 @@ class MigrationsMods
      */
 
     function updateMigration($path){
-        //if($this->isActualVersion($path))
-            //return false;
 
         $missingMigrations = $this->getMissingMigrations($path);
-
         /*
          * Roda cada um dos migrations que estão faltando
          */
-        $modName = $this->getModNameFromPath($path);
+        $modName = $path;
         foreach( $missingMigrations as $name ){
 
-            require $path.'/'.MIGRATION_MOD_DIR.$name.'.php';
-
+            require_once MODULES_DIR.$path.'/'.MIGRATION_MOD_DIR.$name.'.php';
             $migration = new $name($modName, $this->conexao);
             
             if( !$migration->goUp() ){
@@ -70,7 +66,7 @@ class MigrationsMods
             unset($migration);
         }
 
-        return false;
+        return true;
     }
 
     public function getMissingMigrations($path){
@@ -79,7 +75,7 @@ class MigrationsMods
         $missingMigrations = array();
         $i = 0;
 
-        $modMigrationsDir = $path.'/'.MIGRATION_MOD_DIR;
+        $modMigrationsDir = MODULES_DIR.$path.'/'.MIGRATION_MOD_DIR;
         foreach (glob($modMigrationsDir."Migration_*.php") as $filename) {
             $regexp = "/([0-9]{14})/";
 
@@ -123,14 +119,14 @@ class MigrationsMods
      */
     public function isActualVersion($path){
         $migrationVersion = $this->_checkModVersionInArray($path);
-        
+
         if( !empty($migrationVersion[ key($migrationVersion) ]['migrationVersion'] ) )
             $mV = $migrationVersion[ key($migrationVersion) ]['migrationVersion'];
         else
             return false;
 
-        $actualVersion = $this->getActualVersion( $this->getModNameFromPath($path) );
-
+        $actualVersion = $this->getActualVersion( $path );
+		
         if( $actualVersion < $mV )
             return false;
 
@@ -162,11 +158,12 @@ class MigrationsMods
         /*
          * Percorre pastas dos módulos, verificando um a um sobre seus migrations.
          */
-        foreach( glob($modsDir."*", GLOB_ONLYDIR) as $modDir):
+        foreach( glob($modsDir."*", GLOB_ONLYDIR) as $modDir){
+
             $return = array_merge_recursive( $this->_checkModVersionInArray($modDir) );
             $situation['mods'][ key($return) ] = $return;
-        endforeach;
-
+        }
+		
         /*
          * Verifica se está instalado as últimas versões
          */
@@ -187,12 +184,12 @@ class MigrationsMods
      * @return <array>
      */
     public function _checkModVersionInArray($modDir){
-
+		$modDir = $modDir;
         $modName = $this->getModNameFromPath($modDir);
-        if( is_dir($modDir)
-            AND is_dir($modDir.'/'.MIGRATION_MOD_DIR))
-        {
-            $modMigrationsDir = $modDir.'/'.MIGRATION_MOD_DIR;
+        $modMigrationsDir = MODULES_DIR.$modName.'/'.MIGRATION_MOD_DIR;
+
+        if( is_dir($modMigrationsDir) ){
+            $modMigrationsDir = MODULES_DIR.$modName.'/'.MIGRATION_MOD_DIR;
             /*
              * Loop por cada migration, tomando o nome e versão
              * do mesmo.
@@ -252,15 +249,13 @@ class MigrationsMods
      * @return <string>
      */
     function getActualVersion($name){
-          if ( preg_match( "/\//", $name) ){
-            $name = $this->getModNameFromPath($name);
-        }
-
+		$name = $name;
         $sql = 'SELECT version
                 FROM migrations_mods
                 WHERE module_name="'.$name.'"
                 ORDER BY version DESC
                 LIMIT 1';
+
 		$sqlReturn = $this->conexao->query($sql);
         $result = reset( $sqlReturn );
 
@@ -282,8 +277,8 @@ class MigrationsMods
      *
      * ex. a partir de modulos/conteudo, será retornado 'conteudo'.
      */
-    function getModNameFromPath($path){
-        $modName = array_reverse( explode('/', $path) );
+    function getModNameFromPath($modName){
+		$modName = array_reverse(explode("/", $modName));
         return $modName[0];
     }
 
@@ -296,7 +291,7 @@ class MigrationsMods
      * @return <bool>
      */
     public function hasMigration($path){
-        $modMigrationsDir = $path.'/'.MIGRATION_MOD_DIR;
+        $modMigrationsDir = MODULES_DIR.$path.'/'.MIGRATION_MOD_DIR;
         /*
          * Loop por cada migration, tomando o nome e versão
          * do mesmo.

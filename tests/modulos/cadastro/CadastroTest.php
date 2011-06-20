@@ -25,7 +25,7 @@ class CadastroTest extends PHPUnit_Framework_TestCase
         include_once MODULES_DIR.$this->mod.'/'.$modInfo['className'].'.php';
         
         $_GET['aust_node'] = '777';
-        $this->obj = new $modInfo['className'];//new $modInfo['className']();
+        $this->obj = new $modInfo['className'](777);//new $modInfo['className']();
 
 		
 
@@ -318,6 +318,13 @@ class CadastroTest extends PHPUnit_Framework_TestCase
 		$this->deleteTemporaryTable();
 	}
 	
+	function testAustNode(){
+		$_GET["aust_node"] = 777;
+		$obj = new Cadastro();
+		$obj->setAustNode(777);
+		$this->assertEquals(777, $obj->austNode);
+	}
+	
 	function testLoadModConfWithoutSavedData(){
 		/* FIELDS */
         $this->obj->connection->query("DELETE FROM config WHERE local='777' AND nome='teste7777'");
@@ -333,7 +340,6 @@ class CadastroTest extends PHPUnit_Framework_TestCase
 	             VALUES
 	                 ('campo','campo_1','Campo 1','777','teste7777', 'images')
 	             ";
-		echo $sql;
 	    $this->obj->connection->query($sql);
 
 		
