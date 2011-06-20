@@ -83,6 +83,31 @@ class ModulesManager
 
     }
 
+	public function modelInstance($austNode = ""){
+		if( empty($austNode) || !is_numeric($austNode) )
+			return false;
+		
+		include_once($this->modelClassFile($austNode));
+		$modelClassName = $this->modelClassName($austNode);
+		return new $modelClassName($austNode);
+	}
+
+	public function modelClassFile($austNode){
+		return MODULES_DIR.$this->directory($austNode).$this->modelClassName($austNode).".php";
+	}
+
+	public function modelClassName($austNode){
+		if( !is_file(MODULES_DIR.$this->directory($austNode).MOD_CONFIG) )
+			return false;
+		
+		include(MODULES_DIR.$this->directory($austNode).MOD_CONFIG);
+		return $modInfo["className"];
+	}
+
+	public function directory($austNode){
+		return Aust::getInstance()->LeModuloDaEstrutura($austNode)."/";
+	}
+
     /*
      *
      * MÈTODOS DE SUPORTE

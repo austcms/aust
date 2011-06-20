@@ -13,7 +13,7 @@ class ModDispatcher
 	
 	public function __construct($austNode){
 		$this->austNode = $austNode;
-		$this->module = $this->modelInstance();
+		$this->module = ModulesManager::getInstance()->modelInstance($austNode);
 	}
 	
     /**
@@ -38,24 +38,6 @@ class ModDispatcher
 		return Aust::getInstance()->LeModuloDaEstrutura($this->austNode)."/";
 	}
 
-	public function modelClassName(){
-		if( !is_file(MODULES_DIR.$this->directory().MOD_CONFIG) )
-			return false;
-		
-		include(MODULES_DIR.$this->directory().MOD_CONFIG);
-		return $modInfo["className"];
-	}
-
-	public function modelClassFile(){
-		return MODULES_DIR.$this->directory().$this->modelClassName().".php";
-	}
-	
-	public function modelInstance(){
-		include_once($this->modelClassFile());
-		$modelClassName = $this->modelClassName();
-		return new $modelClassName($this->austNode);
-	}
-	
 	public function action(){
 		if( empty($_GET["action"]) )
 			return "index";

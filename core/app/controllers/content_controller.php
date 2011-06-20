@@ -12,7 +12,7 @@ class ContentController extends ActionController {
 	}
 	
 	function load_structure(){
-
+		
 		/**
 	     * AUST_NODE
 	     *
@@ -88,11 +88,10 @@ class ContentController extends ActionController {
 	         */
 	        if(!empty($aust_node)){
 	            if(is_file(MODULES_DIR.$modDir.'js/jsloader.php')){
-	                $include_baseurl = MODULES_DIR. substr($modDir, 0, strlen($modDir)-1); // necessário para o arquivo jsloader.php saber onde está fisicamente
-	                include_once(MODULES_DIR.$modDir.'js/jsloader.php');
+#	                $include_baseurl = MODULES_DIR. substr($modDir, 0, strlen($modDir)-1); // necessário para o arquivo jsloader.php saber onde está fisicamente
+#	                include_once(MODULES_DIR.$modDir.'js/jsloader.php');
 	            }
 	        }
-
 	        $action = $_GET['action'];
 
 			/*
@@ -103,7 +102,7 @@ class ContentController extends ActionController {
 			foreach( $modInfo['opcoes'] as $actionName=>$humanName ){
 				if( $actionName == $action )
 					continue;
-				$moreOptions[] = '<a href="adm_main.php?section='.$_GET['section'].'&action='.$actionName.'&aust_node='.$austNode.'">'.$humanName.'</a>';
+				$moreOptions[] = '<a href="adm_main.php?section='.$this->params['controller'].'&action='.$actionName.'&aust_node='.$austNode.'">'.$humanName.'</a>';
 			}
 
 

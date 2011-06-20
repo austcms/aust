@@ -26,5 +26,22 @@ class ModulesManagerTest extends PHPUnit_Framework_TestCase
 		
     }
 
+	function testModelInstance(){
+		$obj = new ModulesManager();
+		
+		$this->assertFalse($obj->modelInstance());
+
+		if( empty($this->structureId) ){
+			$query = Connection::getInstance()->query("SELECT id FROM categorias WHERE tipo='conteudo' AND classe='estrutura' LIMIT 1");
+			$this->assertArrayHasKey(0, $query);
+			$structureId = $query[0]["id"];
+		}
+
+		$obj = new ModulesManager();
+		$this->assertNotNull($obj->modelInstance($structureId));
+		$this->assertObjectHasAttribute("mainTable", $obj->modelInstance($structureId));
+#		$this->assert
+	}
+
 }
 ?>
