@@ -19,7 +19,7 @@ class CategoryShortcuts extends Widget
                     classe='estrutura'
                 ";
         
-        $query = $this->conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
 
         $est = array();
         foreach( $query as $chave=>$valor ){

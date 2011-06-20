@@ -50,7 +50,7 @@
      *
      * Carrega Javascript de algum módulo se existir
      */
-    if( !empty($_GET["aust_node"]) || $_POST["aust_node"] ){
+    if( !empty($_GET["aust_node"]) || !empty($_POST["aust_node"]) ){
 		if( !empty($_GET["aust_node"]) )
 			$austNode = $_GET["aust_node"];
 		elseif( !empty($_POST["aust_node"]) )
@@ -148,7 +148,7 @@
 		
 		<?php
 		/* MODULE NAVIGATION BAR */
-	    if( !empty($_GET["aust_node"]) || $_POST["aust_node"] ){
+	    if( !empty($_GET["aust_node"]) || !empty($_POST["aust_node"]) ){
 			if( !empty($_GET["aust_node"]) )
 				$austNode = $_GET["aust_node"];
 			elseif( !empty($_POST["aust_node"]) )
@@ -166,7 +166,7 @@
 			foreach( $modInfo['opcoes'] as $actionName=>$humanName ){
 				if( $actionName == $action )
 					continue;
-				$moreOptions[] = '<a href="adm_main.php?section='.$this->params['controller'].'&action='.$actionName.'&aust_node='.$austNode.'">'.$humanName.'</a>';
+				$moreOptions[] = '<a href="adm_main.php?section='.MODULES.'&action='.$actionName.'&aust_node='.$austNode.'">'.$humanName.'</a>';
 			}
 
 			$visibleNav = true;
@@ -225,7 +225,7 @@
             <script type="text/javascript">
                 var timeToRefresh = 2;
                 setTimeout(function(){
-                    window.location.href = "<?php echo $goToUrl ?>";
+                    //window.location.href = "<?php echo $goToUrl ?>";
                 }, 2000);
             </script>
             <?php

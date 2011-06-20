@@ -191,7 +191,7 @@ class Module extends ActiveModule
      */
 
 	public function fixEncoding($post = array()){
-		if( $this->connection->encoding != 'utf8' )
+		if( Connection::getInstance()->encoding != 'utf8' )
 			return $post;
 
 		foreach( $post as $key=>$value ){
@@ -241,12 +241,12 @@ class Module extends ActiveModule
         /**
          * Salva no DB
          */
-        if( $this->connection->exec($sql) !== false ){
+        if( Connection::getInstance()->exec($sql) !== false ){
 
             if( !empty($post['w']) OR $post['w'] > 0 ){
                 $this->w = $post['w'];
             } else {
-                $this->w = $this->connection->conn->lastInsertId();
+                $this->w = Connection::getInstance()->conn->lastInsertId();
             }
 
             /*
@@ -310,7 +310,7 @@ class Module extends ActiveModule
 		
 		$sql = $this->loadSql($paramForLoadSql);
 
-        $qry = $this->connection->query($sql);
+        $qry = Connection::getInstance()->query($sql);
         if( empty($qry) )
             return array();
 
@@ -366,7 +366,7 @@ class Module extends ActiveModule
 		}
 		
 		if( is_string($param) ){
-			$query = $this->connection->query($param);
+			$query = Connection::getInstance()->query($param);
 			$result = reset( $query );
 			$total = ( !empty($result['rows']) && is_numeric($result['rows']) ) ? $result['rows'] : 0;
 		} else {
@@ -492,7 +492,7 @@ class Module extends ActiveModule
 				array('Webmaster', 'Root', 'root', 'Moderador', 'Administrador')
 			) &&
 			!empty($userId) &&
-			( $this->connection->tableHasField($this->useThisTable(), $this->authorField) )
+			( Connection::getInstance()->tableHasField($this->useThisTable(), $this->authorField) )
 		)
 		{
 			$where .= " AND (".$this->authorField." = ".$user->getId().")";
@@ -520,7 +520,7 @@ class Module extends ActiveModule
 		}
 
         if( empty($this->describedTable[$this->useThisTable()]) ){
-            $tempDescribe = $this->connection->query('DESCRIBE '.$this->useThisTable());
+            $tempDescribe = Connection::getInstance()->query('DESCRIBE '.$this->useThisTable());
             foreach( $tempDescribe as $fields ){
                 $this->describedTable[$this->useThisTable()][$fields['Field']] = $fields;
             }
@@ -649,7 +649,7 @@ class Module extends ActiveModule
                         id='$id'
                 ";
 
-            $result = $this->connection->exec($sql);
+            $result = Connection::getInstance()->exec($sql);
 
             if( $result )
                 return true;
@@ -846,7 +846,7 @@ class Module extends ActiveModule
                     target_table='$targetTable'
                 ";
 
-        $query = $this->connection->query($sql);
+        $query = Connection::getInstance()->query($sql);
 
         if( empty($query) )
             return array();
@@ -913,7 +913,7 @@ class Module extends ActiveModule
                     c.id='".$austNode."'
                 ";
 
-        $query = $this->connection->query($sql);
+        $query = Connection::getInstance()->query($sql);
         if( empty($query) )
             return array();
 
@@ -958,7 +958,7 @@ class Module extends ActiveModule
                     m.tipo='relacionamentos' AND
                     m.valor='".$austNode."'
                 ";
-        $query = $this->connection->query($sql);
+        $query = Connection::getInstance()->query($sql);
         $tmp = array();
         foreach( $query as $valor ){
             $tmp[] = $valor["categoria_id"];
@@ -1211,7 +1211,7 @@ class Module extends ActiveModule
         }
 
         $sql = "SELECT id FROM modulos WHERE ".$where;
-        $query = $this->connection->query($sql);
+        $query = Connection::getInstance()->query($sql);
         if( !$query ){
             return false;
         } else {
@@ -1282,7 +1282,7 @@ class Module extends ActiveModule
 			$todayDateTime = date('Y-m-d H:i:s');
 			
 			$sql = "DELETE FROM aust_relations WHERE slave_id='".$params["aust_node"]."'";
-			$this->connection->exec($sql);
+			Connection::getInstance()->exec($sql);
 
 			$relationalName = $moduleConfig['nome'];
 			if( !empty($moduleConfig['relationalName']) )
@@ -1299,7 +1299,7 @@ class Module extends ActiveModule
 					foreach( $valor as $propriedade=>$valor ){
 						
 						$deleteSQL = "DELETE FROM config WHERE tipo='mod_conf'  AND $classSearchStatement AND local='".$params["aust_node"]."' AND propriedade='$propriedade' AND ref_field='$refField' $whereAuthor";
-			            $this->connection->exec($deleteSQL);
+			            Connection::getInstance()->exec($deleteSQL);
 
 		                $paramsToSave = array(
 		                    "table" => "config",
@@ -1313,7 +1313,7 @@ class Module extends ActiveModule
 			                    "valor" => $valor
 		                    )
 		                );
-		                $this->connection->exec($this->connection->saveSql($paramsToSave));
+		                Connection::getInstance()->exec(Connection::getInstance()->saveSql($paramsToSave));
 					}
 				}
 				/*
@@ -1322,7 +1322,7 @@ class Module extends ActiveModule
 				else {
 				
 					$deleteSQL = "DELETE FROM config WHERE tipo='mod_conf' AND $classSearchStatement AND local='".$params["aust_node"]."' AND propriedade='$propriedade' $whereAuthor";
-		            $this->connection->exec($deleteSQL);
+		            Connection::getInstance()->exec($deleteSQL);
 
 	                $paramsToSave = array(
 	                    "table" => "config",
@@ -1335,7 +1335,7 @@ class Module extends ActiveModule
 		                    "valor" => $valor
 	                    )
 	                );
-	                $this->connection->exec($this->connection->saveSql($paramsToSave));
+	                Connection::getInstance()->exec(Connection::getInstance()->saveSql($paramsToSave));
 	
 					/*
 					 * No caso de relações entre estruturas, salva na devida tabela os dados
@@ -1351,7 +1351,7 @@ class Module extends ActiveModule
 									('".$params["aust_node"]."', 
 									(SELECT nome FROM categorias WHERE id='".$params["aust_node"]."'), 
 									'".$valor."', '".$todayDateTime."', '".$todayDateTime."')";
-							$this->connection->exec($sql);
+							Connection::getInstance()->exec($sql);
 						}
 					}
 	
@@ -1437,7 +1437,7 @@ class Module extends ActiveModule
 			 * menos itens que as definidas estaticamente.
 			 */
             $sql = "SELECT * FROM config WHERE tipo='mod_conf' AND $classSearchStatement AND local='".$params."' $whereAuthor LIMIT 300";
-			$queryTmp = $this->connection->query($sql, "ASSOC");
+			$queryTmp = Connection::getInstance()->query($sql, "ASSOC");
 			
             $query = array();
 			/*
@@ -1560,7 +1560,7 @@ class Module extends ActiveModule
              */
 			if( !empty($author) ){
 	            $sql = "SELECT * FROM config WHERE tipo='mod_conf' AND local='".$this->austNode."' AND autor='$author' AND propriedade='$params' LIMIT 1";
-	            $queryTmp = $this->connection->query($sql, "ASSOC");
+	            $queryTmp = Connection::getInstance()->query($sql, "ASSOC");
 
 				if( !empty($queryTmp) )
 					return $queryTmp[0]['valor'];
@@ -1814,7 +1814,7 @@ class Module extends ActiveModule
                                 LIMIT 0,4
                                 ";
 
-                        $result = $this->connection->query($sql);
+                        $result = Connection::getInstance()->query($sql);
 
                         foreach($result as $dados) {
                         /**
@@ -1923,7 +1923,7 @@ class Module extends ActiveModule
      */
     function leModulos() {
 
-        $modulos = $this->connection->query("SELECT * FROM modulos");
+        $modulos = Connection::getInstance()->query("SELECT * FROM modulos");
         //pr($modulos);
         return $modulos;
 
@@ -1978,7 +1978,7 @@ class Module extends ActiveModule
                 WHERE
                     m.embed='1'
                 ";
-        $query = $this->connection->query($sql);
+        $query = Connection::getInstance()->query($sql);
         $i = 0;
         $return = '';
 
@@ -2006,7 +2006,7 @@ class Module extends ActiveModule
                 WHERE
                     embedownform='1'
                 ";
-        $query = $this->connection->query($sql);
+        $query = Connection::getInstance()->query($sql);
 
         $return = '';
         $i = 0;
@@ -2034,7 +2034,7 @@ class Module extends ActiveModule
                 WHERE
                     valor='".$estrutura."'
                 ";
-        $query = $this->connection->query($sql);
+        $query = Connection::getInstance()->query($sql);
 
         $return = '';
         foreach($query as $dados) {
@@ -2052,7 +2052,7 @@ class Module extends ActiveModule
                 FROM
                     modulos
                 ";
-        $query = $this->connection->query($sql);
+        $query = Connection::getInstance()->query($sql);
         $i = 0;
         foreach($query as $dados) {
             $return[$i]['pasta'] = $dados['pasta'];

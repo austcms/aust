@@ -131,7 +131,7 @@ class Aust {
                         id='$father'
                     ";
 
-            $query = $this->conexao->query($sql);
+            $query = Connection::getInstance()->query($sql);
 			
 			if( empty($query[0]) )
 				return false;
@@ -186,8 +186,8 @@ class Aust {
                         '$classe','$tipo','$tipo_legivel',
                         '".$autor."'
                     )";
-        if( $this->conexao->exec($sql) ) {
-            return (int) $this->conexao->lastInsertId();
+        if( Connection::getInstance()->exec($sql) ) {
+            return (int) Connection::getInstance()->lastInsertId();
         }
 
         return false;
@@ -204,7 +204,7 @@ class Aust {
                     categorias
                 WHERE
                     id='$id'";
-		$query = $this->conexao->query($sql);
+		$query = Connection::getInstance()->query($sql);
         $query = reset( $query );
 
         /**
@@ -249,12 +249,12 @@ class Aust {
 					node_id='".$node_id."'
 				";
 		
-		$query = $this->connection->query($sql);
+		$query = Connection::getInstance()->query($sql);
 		foreach( $query as $key=>$value ){
 			if( file_exists($value['systempath']) )
 				unlink( $value['systempath'] );
 			$sqlDelete = "DELETE FROM austnode_images WHERE id='".$value['id']."'";
-			$this->connection->exec($sqlDelete);
+			Connection::getInstance()->exec($sqlDelete);
 		}
 		
 		return true;
@@ -306,8 +306,8 @@ class Aust {
         /**
          * Retorna o id do registro feito
          */
-        if ($this->conexao->exec($sql)) {
-            return $this->conexao->conn->lastInsertId();
+        if (Connection::getInstance()->exec($sql)) {
+            return Connection::getInstance()->conn->lastInsertId();
         } else {
             return FALSE;
         }
@@ -319,7 +319,7 @@ class Aust {
                         (nome,descricao,classe,tipo,subordinadoid)
                 VALUES
                     ('$nome','$descricao','$classe','$tipo','$subordinadoid')";
-        return $this->conexao->exec($sql);
+        return Connection::getInstance()->exec($sql);
     }
 
     /**
@@ -355,7 +355,7 @@ class Aust {
                 WHERE
                     classe='categoria-chefe'
                 ";
-        $query = $this->conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
         $t = count($query);
         $c = 0;
         foreach($query as $menu) {
@@ -397,7 +397,7 @@ class Aust {
 					$where
                 ";
 
-        $query = $this->conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
         $result = array();
 		$stIds = array();
 		
@@ -477,7 +477,7 @@ class Aust {
 					propriedade='related_and_visible' AND
 					valor='0'
                 ";
-        $query = $this->conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
 		$result = array();
 		foreach( $query as $value ){
 			$result[] = $value["local"];
@@ -499,7 +499,7 @@ class Aust {
 				WHERE
 					$whereStatement
 				";
-		$result = $this->connection->query($sql);
+		$result = Connection::getInstance()->query($sql);
 		if( empty($result) )
 			return array();
 		
@@ -526,7 +526,7 @@ class Aust {
 					$whereStatement
 				";
 		
-		$result = $this->connection->query($sql);
+		$result = Connection::getInstance()->query($sql);
 		if( empty($result) )
 			return array();
 		
@@ -569,7 +569,7 @@ class Aust {
                     lp.tipo DESC,
                     lp.nome ASC
         ";
-        $query = $this->conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
 
         return $query;
     } // end getStructuresByFather()
@@ -601,7 +601,7 @@ class Aust {
                 WHERE
                     classe='estrutura'
                 ";
-        $query = $this->conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
         $t = count($query);
         $c = 0;
         foreach($query as $menu) {
@@ -640,7 +640,7 @@ class Aust {
         /**
          * Busca na tabela do Aust onde o id é igual à estrutura requisitada.
          */
-        $result = $this->conexao->query("SELECT * FROM ".Registry::read("austTable")." WHERE id='".$austNode."'" );
+        $result = Connection::getInstance()->query("SELECT * FROM ".Registry::read("austTable")." WHERE id='".$austNode."'" );
         return $result;
     }
 
@@ -675,7 +675,7 @@ class Aust {
                 WHERE
                     ".$where."
                 ".$orderby." ".$limit;
-        $query = $this->conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
 
         //pr($mysql);
 
@@ -696,7 +696,7 @@ class Aust {
                 	categorias
                 WHERE
                 	id=$node";
-        $query = $this->conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
         return $query[0]['tipo'];
     }
 
@@ -709,7 +709,7 @@ class Aust {
                         WHERE
                                 id=$node";
 
-        $query = $this->conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
         $tipo = $query[0]['tipo'];
         if(is_file(MODULES_DIR.$tipo.'/config.php')) {
             include(MODULES_DIR.$tipo.'/config.php');
@@ -729,7 +729,7 @@ class Aust {
                     categorias
                 WHERE
                     id=$node";
-        $query = $this->conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
 		if( $field == "*" )
 	        return $query[0];
 		else
@@ -749,7 +749,7 @@ class Aust {
                     categorias
                 WHERE
                     id=$node";
-        $query = $this->conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
         return $query[0]['nome'];
     }
 
@@ -830,7 +830,7 @@ class Aust {
                 $where
                 ";
 
-        $query = $this->conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
 
         $i = 0;
         $items = '';
@@ -930,7 +930,7 @@ class Aust {
                     id
                 FROM
                     categorias";
-        return $this->conexao->count($sql);
+        return Connection::getInstance()->count($sql);
     }
 
     /*

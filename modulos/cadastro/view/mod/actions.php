@@ -31,7 +31,7 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
         //$dados = mysql_fetch_array($mysql);
 
         $sql = "DELETE FROM
-                    ".$module->LeTabelaDaEstrutura($_GET['aust_node'])."
+                    ".$this->module->getTable()."
                 WHERE
                     $where
                     ";
@@ -52,7 +52,7 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
 					categorias_id = '".$module->austNode."'
 				";
 
-		$tables = $this->connection->query($sql);
+		$tables = Connection::getInstance()->query($sql);
 		
 		foreach( $tables as $table ){
 			$sqlDelete = "
@@ -60,7 +60,7 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
 						WHERE ".$table['ref_parent_field']." IN ('".implode("','", $itens)."')
 						";
 
-        	$this->connection->exec($sqlDelete);
+        	Connection::getInstance()->exec($sqlDelete);
 		}
 
         if($resultado){
@@ -92,7 +92,7 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
 
         
         $sql = "UPDATE
-                    ".$module->LeTabelaDaEstrutura($_GET['aust_node'])."
+                    ".$this->module->getTable()."
                 SET
                     approved='1'
                 WHERE

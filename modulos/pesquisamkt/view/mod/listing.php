@@ -23,7 +23,7 @@ $sql = "SELECT
             id='".$_GET['aust_node']."'";
 
             
-$query = $this->connection->query($sql);
+$query = Connection::getInstance()->query($sql);
 
 $cat = $query[0]['nome'];
 ?>

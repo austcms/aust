@@ -144,7 +144,7 @@ class PesquisaMkt extends Module
 				ORDER BY
 					id ASC
                 ";
-		$questions = $this->connection->query($sql);
+		$questions = Connection::getInstance()->query($sql);
 
 		foreach( $questions as $value ){
 			$query[ $questionKeys[$value['pesqmkt_id']] ]['question'] = $value;

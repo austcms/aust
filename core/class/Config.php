@@ -153,7 +153,7 @@ class Config {
                     $type
                 ORDER BY tipo ASC
                 ";
-        $query = $this->conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
 
         $result = array();
         foreach( $query as $valor ){
@@ -252,7 +252,7 @@ class Config {
                 WHERE
                     ".implode(" OR ", $whereConfig)."
                 ";
-        $query = $this->conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
 
         /*
          * Não é igual o número de valores encontrados e o de necessários
@@ -299,7 +299,7 @@ class Config {
                     (".implode(', ', $valor).")
                  VALUES
                     ('".implode("', '", $values[$i])."')";
-            $this->conexao->query($sql);
+            Connection::getInstance()->query($sql);
         }
         
         return true;
@@ -328,7 +328,7 @@ class Config {
 		
 		$params = sanitizeString($params);
 		$sql = "UPDATE config SET valor='".$params["valor"]."' WHERE id='".$params["id"]."'";
-        $this->conexao->exec($sql);
+        Connection::getInstance()->exec($sql);
 
         return '<span style="color: green;">Configuração salva com sucesso!</span>';
     }
@@ -353,7 +353,7 @@ class Config {
         foreach($this->options as $tipo=>$valor) {
 
             $sql = "SELECT id FROM config WHERE tipo='".$tipo."' AND propriedade='".key($valor)."'";
-            $query = $this->conexao->count($sql);
+            $query = Connection::getInstance()->count($sql);
 
             if( $query ) {
                 $valores = reset($valor);
@@ -381,7 +381,7 @@ class Config {
                             ('".implode("','", $infos)."')";
             }
 
-            if( !$this->conexao->exec($sql) ) {
+            if( !Connection::getInstance()->exec($sql) ) {
                 $erro[] = key($valor);
             }
         }

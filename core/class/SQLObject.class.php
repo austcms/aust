@@ -90,7 +90,7 @@ class SQLObject {
          */
             //echo $sql . '<--<br />';
 
-            //echo $this->conexao->testConexao();
+            //echo Connection::getInstance()->testConexao();
 
         $query = $this->query($sql);
         $return = array();

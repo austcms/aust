@@ -58,7 +58,7 @@ class Widgets
                     {$column}
                 ORDER BY column_nr ASC, position_nr ASC
                 ";
-        $query = $this->conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
         $result = array();
 
         if( $mode == 'list' ){
@@ -152,7 +152,7 @@ class Widgets
                     ('".$name."','".$path."','".$column_nr."','".$position_nr."','".$admin_id."')
                 ";
         
-        return $this->conexao->exec($sql);
+        return Connection::getInstance()->exec($sql);
 
     }
 
@@ -203,7 +203,7 @@ class Widgets
                 LIMIT 10
                 ";
 
-        $query = reset( $this->conexao->query($sql) );
+        $query = reset( Connection::getInstance()->query($sql) );
         if( !empty($query['position_nr'])
             AND $query['position_nr'] > 0 )
         {

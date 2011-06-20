@@ -51,7 +51,7 @@ class ModController extends ModActionController
 							ref_id='".$_GET['related_w']."' AND
 							categoria='".$_GET['aust_node']."'
 						";
-				$result = $this->connection->query($sql);
+				$result = Connection::getInstance()->query($sql);
 				if( !empty($result) ){
 					$result = reset($result);
 					$w = $result['w'];

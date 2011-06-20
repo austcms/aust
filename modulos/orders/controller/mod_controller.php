@@ -88,13 +88,13 @@ class ModController extends ModActionController
 		        $query = $this->module->connection->query($sql);
 
 				$cartSql = $this->module->loadSql( array('id' => $_GET['w']) );
-				$cart = $this->connection->query($cartSql);
+				$cart = Connection::getInstance()->query($cartSql);
 				$cart = reset($cart);
 		
 				if( !empty($_GET['pending']) || is_string($_GET['pending']) ){
 					if( $_GET['pending'] == '1' || $_GET['pending'] == '0' ){
 						$sql = "UPDATE st_orders SET pending='".$_GET['pending']."' WHERE id='".$_GET['w']."'";
-						$this->connection->exec($sql);
+						Connection::getInstance()->exec($sql);
 						$cart['pending'] = $_GET['pending'];
 					}
 				}

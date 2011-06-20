@@ -173,7 +173,7 @@ class ModulesManager
         $schema = $this->modDbSchema;
         foreach( $schema as $tabela=>$valor ) {
             $sql = "DESCRIBE ". $tabela;
-            $query = $this->conexao->query($sql);
+            $query = Connection::getInstance()->query($sql);
             if(!$query) {
                 return false;
             } else {
@@ -194,7 +194,7 @@ class ModulesManager
         }
 
         $sql = "SELECT id FROM modulos WHERE ".$where;
-        $query = $this->conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
 		
         if( empty($query[0]['id']) ){
             return false;
@@ -226,7 +226,7 @@ class ModulesManager
             AND !empty($params['aust_node']) ) {
 
             $data = $params["data"];
-            $this->conexao->exec("DELETE FROM config WHERE tipo='mod_conf' AND local='".$params["aust_node"]."'");
+            Connection::getInstance()->exec("DELETE FROM config WHERE tipo='mod_conf' AND local='".$params["aust_node"]."'");
             foreach( $data as $propriedade=>$valor ) {
 
                 $paramsToSave = array(
@@ -239,7 +239,7 @@ class ModulesManager
                     "valor" => $valor
                     )
                 );
-                $this->conexao->exec($this->conexao->saveSql($paramsToSave));
+                Connection::getInstance()->exec(Connection::getInstance()->saveSql($paramsToSave));
             }
         }
         return true;
@@ -248,7 +248,7 @@ class ModulesManager
     function loadModConf($params) {
         $sql = "SELECT * FROM config WHERE tipo='mod_conf' AND local='".$params["aust_node"]."' LIMIT 200";
 
-        $queryTmp = $this->conexao->query($sql, "ASSOC");
+        $queryTmp = Connection::getInstance()->query($sql, "ASSOC");
 
         foreach($queryTmp as $valor) {
             $query[$valor["propriedade"]] = $valor;
@@ -334,7 +334,7 @@ class ModulesManager
                                 LIMIT 0,4
                                 ";
 
-                        $result = $this->conexao->query($sql);
+                        $result = Connection::getInstance()->query($sql);
 
                         foreach($result as $dados) {
                         /**
@@ -488,7 +488,7 @@ class ModulesManager
         $autor = (empty($param['autor'])) ? '' : $param['autor'];
 
 
-        $this->conexao->exec("DELETE FROM modulos WHERE pasta='".$pasta."'");
+        Connection::getInstance()->exec("DELETE FROM modulos WHERE pasta='".$pasta."'");
 
         $sql = "INSERT INTO
                     modulos
@@ -496,7 +496,7 @@ class ModulesManager
                 VALUES
                     ('$tipo','$chave','$valor','$pasta','".$modInfo['nome']."','".$modInfo['descricao']."','".$modInfo['embed']."','".$modInfo['embedownform']."','".$modInfo['somenteestrutura']."','$autor')
             ";
-        if($this->conexao->exec($sql, 'CREATE_TABLE')) {
+        if(Connection::getInstance()->exec($sql, 'CREATE_TABLE')) {
             return TRUE;
         } else {
             return FALSE;
@@ -510,7 +510,7 @@ class ModulesManager
      */
     function leModulos() {
 
-        $modulos = $this->conexao->query("SELECT * FROM modulos");
+        $modulos = Connection::getInstance()->query("SELECT * FROM modulos");
         //pr($modulos);
         return $modulos;
 
@@ -562,7 +562,7 @@ class ModulesManager
                 WHERE
                     m.embed='1'
                 ";
-        $query = $this->conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
         $i = 0;
         $return = '';
 
@@ -590,7 +590,7 @@ class ModulesManager
                 WHERE
                     embedownform='1'
                 ";
-        $query = $this->conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
 
         $return = '';
         $i = 0;
@@ -618,7 +618,7 @@ class ModulesManager
                 WHERE
                     valor='".$estrutura."'
                 ";
-        $query = $this->conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
 
         $return = '';
         foreach($query as $dados) {
@@ -636,7 +636,7 @@ class ModulesManager
                 FROM
                     modulos
                 ";
-        $query = $this->conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
         $i = 0;
         foreach($query as $dados) {
             $return[$i]['pasta'] = $dados['pasta'];

@@ -207,7 +207,7 @@ class User {
                     admins.id='".$_SESSION['login']['id']."'
                 ";
 
-        $query = $this->conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
 
         if( empty($query) )
             return false;
@@ -229,7 +229,7 @@ class User {
                     id='$id'
                 ";
 
-        $query = reset( $this->conexao->query($sql) );
+        $query = reset( Connection::getInstance()->query($sql) );
         $name = $query['nome'];
 
         return $name;
@@ -256,7 +256,7 @@ class User {
                 LIMIT 100
                 ";
 
-        $query = $this->conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
 
         return $query;
     }

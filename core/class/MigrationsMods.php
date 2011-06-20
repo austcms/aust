@@ -256,7 +256,7 @@ class MigrationsMods
                 ORDER BY version DESC
                 LIMIT 1';
 
-		$sqlReturn = $this->conexao->query($sql);
+		$sqlReturn = Connection::getInstance()->query($sql);
         $result = reset( $sqlReturn );
 
         if( $result['version'] > 0 )

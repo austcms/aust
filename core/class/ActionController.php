@@ -82,7 +82,7 @@ class ActionController
 
         if( !$this->isRendered AND $this->autoRender && $this->_action() && $this->shouldCallAction )
             $this->render( $this->_action() );
-        else if( !$this->isRendered )
+        else if( !$this->isRendered && $this->autoRender )
             $this->render( false );
 
     }
@@ -116,8 +116,11 @@ class ActionController
 		} else {
 			$viewFile = $this->_viewFile().$this->_action().".php";
 		}
-				
-        if( $shouldRender && file_exists($viewFile) ){
+
+		if( !file_exists($viewFile) ){
+			trigger_error("Module's view (".$viewFile.") doesn't exist");
+		}
+        elseif( $shouldRender ){
             ob_start();
             include($viewFile);
             $content_for_layout = ob_get_contents();
