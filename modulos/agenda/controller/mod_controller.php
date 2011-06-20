@@ -19,6 +19,8 @@ class ModController extends ModActionController
      */
     public function listing(){
 
+		echo "========";
+		return true;
         /**
          * <h2> HEADER
          */
@@ -124,7 +126,6 @@ class ModController extends ModActionController
     }
 
     public function edit(){
-
         $this->set('tagh2', "Editar: ". Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']) );
         $this->set('tagp', 'Edite o conteúdo abaixo.');
 

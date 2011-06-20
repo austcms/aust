@@ -17,7 +17,6 @@ class ModActionController extends ActionController
 	 * 			'austNode':int
 	 */
     function __construct($austNode){
-
 		if( $austNode === false )
 			return false;
 		
@@ -27,8 +26,7 @@ class ModActionController extends ActionController
 		if( empty($action) )
 			return false;
 		
-		$this->modDispatcher = new ModDispatcher($this->austNode);
-		$this->module = $this->modDispatcher->modelInstance();
+		$this->module = ModulesManager::getInstance()->modelInstance($austNode);
 
 		if( defined('DO_ACT') && !DO_ACT ){
 			$this->shouldCallAction = false;
@@ -157,9 +155,9 @@ class ModActionController extends ActionController
     public function render( $shouldRender = true ){
 
 		$this->set("austNode", $this->austNode());
-		$this->set("module", $this->modDispatcher->modelInstance());
-		
-		parent::render();
+		$this->set("module", ModulesManager::getInstance()->modelInstance($this->austNode()));
+
+		return parent::render();
 	}
 
     /*

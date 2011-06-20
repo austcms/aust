@@ -19,9 +19,18 @@ class ConteudoControllerTest extends PHPUnit_Framework_TestCase
 		include_once(MODULES_DIR."conteudo/".MOD_CONTROLLER_DIR."mod_controller.php");
     }
 
-    function testInstallationDiagnostics(){
+    function _testInstallationDiagnostics(){
 		$_GET["action"] = "listing";
+#        $this->obj = new ModController($this->params);
+    }
+
+    function testListingAction(){
+		$_GET["action"] = "listing";
+
         $this->obj = new ModController($this->params);
+		$rendered = $this->obj->render();
+		
+		$this->assertRegExp('/Listando conteúdo:/', $rendered);
     }
 
 }

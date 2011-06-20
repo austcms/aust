@@ -13,7 +13,7 @@
 ?>
 <div class="listagem">
 <h2>
-    Listando contéudo: <?php echo $h1;?>
+    Listando conteúdo: <?php echo $h1;?>
 </h2>
 <p>
     Abaixo você encontra a listagem dos últimos textos desta categoria.

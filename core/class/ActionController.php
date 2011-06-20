@@ -22,7 +22,8 @@ class ActionController
 	public $shouldCallAction = true;
 	public $beforeFiltered = false;
 	public $afterFiltered = false;
-
+	public $renderized = "";
+	
 	public $testVar;
 
     function __construct($shouldCallAction = true){
@@ -30,7 +31,7 @@ class ActionController
         /**
          * _trigger() is responsible for triggering methods as actions
          */
-        $this->_trigger();
+        $this->_trigger($shouldCallAction);
 		$this->completedRequest = true;
     }
 
@@ -66,15 +67,16 @@ class ActionController
      * @param array $param
      *      'ation': which method should be called
      */
-    public function _trigger(){
+    public function _trigger($shouldCallAction = true){
         $this->beforeFilter();
 		
 		$this->_setupParams();
         /*
          * Action time!
          */
-        if( $this->_actionExists() )
+        if( $this->_actionExists() && $shouldCallAction ){
             call_user_func_array( array($this, $this->_action() ), array() );
+		}
 
 	    $this->afterFilter();
 
@@ -107,9 +109,8 @@ class ActionController
 			$this->_setupParams();
 		
 		$params = $this->params;
-		
 		$defaultErrorReporting = ini_get("error_reporting");
-
+		
         if( $shouldRender && file_exists($this->_viewFile()) ){
 
             ob_start();
@@ -122,6 +123,8 @@ class ActionController
             $content = ob_get_contents();
             ob_end_clean();
 			
+			$this->renderized = $content;
+			
 			if( $shouldRender && !empty($content) ){
 				
 				if( !defined('TESTING') || !TESTING )
@@ -129,6 +132,7 @@ class ActionController
 				
 	        	$this->isRendered = true;
 			}
+			
 			return $content;
         }
 

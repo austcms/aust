@@ -7,10 +7,10 @@ class ContentControllerTest extends PHPUnit_Framework_TestCase
 
     public function setUp(){
 		require_once(CONTROLLERS_DIR."content_controller.php");
-        $this->obj = new ContentController;
     }
 
 	public function testIndex(){
+        $this->obj = new ContentController;
 		$this->assertRegExp('/<h2>Gerenciar conteúdo<\/h2>/', $this->obj->render());
 	}
 
@@ -22,10 +22,8 @@ class ContentControllerTest extends PHPUnit_Framework_TestCase
 		
 		$_GET['aust_node'] = $structureId;
 		$_GET['action'] = "listing";
-#        $this->obj = new ContentController;
-#		$this->assertEquals('load_structure', $this->obj->_action());
-		
-#		$this->assertRegExp('/List/', $this->obj->render());
+        $this->obj = new ContentController(true);
+		$this->assertEquals('load_structure', $this->obj->_action());
 		
 	}
 
