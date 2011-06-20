@@ -1173,7 +1173,7 @@ class Module extends ActiveModule
          * Load Migrations
          */
         $migrationsMods = new MigrationsMods( $this->conexao );
-        //$migrationsStatus = $migrationsMods->status();
+        //$migrationsStatus = MigrationsMods::getInstance()->status();
 
         if( is_array($params) ){
             
@@ -1189,7 +1189,7 @@ class Module extends ActiveModule
                 
                 include($pastas.'/'.MOD_CONFIG);
 
-                $result[$modName]['version'] = $migrationsMods->isActualVersion($pastas);
+                $result[$modName]['version'] = MigrationsMods::getInstance()->isActualVersion($pastas);
                 $result[$modName]['path'] = $pastas;//.'/'.MOD_CONFIG;
                 $result[$modName]['config'] = $modInfo;
 
@@ -1381,7 +1381,7 @@ class Module extends ActiveModule
      * @return <array>
      */
     function loadModConf($params = "", $confClass = '', $author = "") {
-	
+
 		if( is_null($confClass) OR empty($confClass) )
 			$confClass = 'module';
 		
@@ -1420,7 +1420,6 @@ class Module extends ActiveModule
 			 */
             $staticConfig = $this->loadConfig();
 
-
 			if( $confClass == 'module' )
             	$staticConfig = $staticConfig['configurations'];
 			else
@@ -1445,7 +1444,9 @@ class Module extends ActiveModule
 			 * Configurações de campos individuais têm um formato completamente
 			 * diferente de configurações de módulos.
 			 */
+			
 			if( $confClass == 'field' ){
+
 				$fields = $this->getFields();
 				if( empty($fields) )
 					return array();
@@ -1913,73 +1914,6 @@ class Module extends ActiveModule
 
         return $result;
 
-    }
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     * @todo - ajustar código para baixo
-     */
-    /**
-     * Salva dados sobre o módulo na base de dados.
-     *
-     * Usado após a criação das tabelas do módulo.
-     *
-     * @param array $param
-     * @return bool
-     */
-    function configuraModulo($param) {
-
-    /**
-     * Ajusta cada variável enviada como parâmetro
-     */
-    /**
-     * $tipo:
-     */
-        $tipo = (empty($param['tipo'])) ? '' : $param['tipo'];
-        /**
-         * $chave:
-         */
-        $chave = (empty($param['chave'])) ? '' : $param['chave'];
-        /**
-         * $valor:
-         */
-        $valor = (empty($param['valor'])) ? '' : $param['valor'];
-        /**
-         * $pasta:
-         */
-        $pasta = (empty($param['pasta'])) ? '' : $param['pasta'];
-        /**
-         * $modInfo:
-         */
-        $modInfo = (empty($param['modInfo'])) ? '' : $param['modInfo'];
-        /**
-         * $autor:
-         */
-        $autor = (empty($param['autor'])) ? '' : $param['autor'];
-
-
-        $this->connection->exec("DELETE FROM modulos WHERE pasta='".$pasta."'");
-
-        $sql = "INSERT INTO
-                    modulos
-                        (tipo,chave,valor,pasta,nome,descricao,embed,embedownform,somenteestrutura,autor)
-                VALUES
-                    ('$tipo','$chave','$valor','$pasta','".$modInfo['nome']."','".$modInfo['descricao']."','".$modInfo['embed']."','".$modInfo['embedownform']."','".$modInfo['somenteestrutura']."','$autor')
-            ";
-        if($this->connection->exec($sql, 'CREATE_TABLE')) {
-            return TRUE;
-        } else {
-            return FALSE;
-        }
     }
 
     /*

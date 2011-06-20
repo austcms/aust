@@ -83,10 +83,11 @@ class Migrations
      * @return <bool>
      */
     function createTable($schema){
+
         $c = $this->conexao;
         if( is_array($schema) ){
-            $schema = new dbSchema( $schema, $c );
-            if( $schema->isDbSchemaFormatOk() ){
+            $schema = new dbSchema( $schema );
+            if( $schema->isDbSchemaFormatOk($schema) ){
 
                 if( is_array($schema->sql())){
                 
@@ -131,7 +132,7 @@ class Migrations
                 $position = $options['position'];
 
 			$default = '';
-            if( ( !empty($options['default']) || $options['default'] == '0' ) && 
+            if( ( !empty($options['default']) ) && 
 				$options['default'] !== false )
                 $default = "DEFAULT '".$options['default']."'";
             

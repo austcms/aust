@@ -90,6 +90,15 @@ class dbSchema
         $this->conexao = Connection::getInstance();
     }
 
+	function setSchema($schema = array()){
+		if( $this->isDbSchemaFormatOk($schema) ){
+			$this->schema = $schema;
+			return true;
+		}
+		
+		return false;
+	}
+	
     /**
      * getInstance()
      *
@@ -393,62 +402,57 @@ class dbSchema
      * @return <bool>
      */
     public function isDbSchemaFormatOk($dbSchema = ''){
-        if( empty($dbSchema) )
-            $dbSchema = $this->dbSchema;
-
-        if ( is_array($dbSchema)) {
+        if( is_array($dbSchema) )
             return true;
-        }
 
         return false;
     }
 
-    public function sql(){
-
+    public function sql($schema = array()){
+		if( empty($schema) )
+			$schema = $this->dbSchema;
+		
+		$sql = false;
         $this->tabelasAtuais();
-        foreach($this->dbSchema as $tabela=>$campos){
+        foreach($schema as $tabela=>$campos){
 
             /*
              * Só roda SQL se tabela não existe ainda.
              */
-            if(!array_key_exists($tabela, $this->tabelasAtuais) AND is_array($campos)){
-                foreach($campos as $nome=>$propriedades){
-                    /**
-                     * Se não for campo especial, gera SQL deste campo
-                     */
-                    if(!in_array( $nome, $this->camposEspeciais)){
-                        $camposSchema[] = $nome.' '.$propriedades;
-                    }
-                    /**
-                     * Campo especial (Keys)
-                     */
-                    else {
-                        if(is_array($propriedades)){
-                            /**
-                             * Percorre os campos especiais (Keys)
-                             */
-                            foreach($propriedades as $key=>$propriedades2){
-                                /**
-                                 * Se for propriedades como Keys primárias, únicas, etc
-                                 */
-                                if($nome == 'dbSchemaTableProperties'){
-                                    $camposSchema[] = $key.' '.$propriedades2;
-                                }
-                                /**
-                                 * Se for SQLs que devem ser rodados na criação da tabela
-                                 */
-                                elseif($nome == 'dbSchemaSQLQuery'){
-                                    $sqlsubquery[$tabela][] = $propriedades2;
-                                }
-                            }
-                        }
+            foreach($campos as $nome=>$propriedades){
 
-                    }
-                }
+	            if( !in_array( $nome, $this->camposEspeciais) ){
+					$camposSchema[] = $nome.' '.$propriedades;
+				}
+				/*
+				 * Campo especial (Keys)
+	             */
+	            else {
+	                if(is_array($propriedades)){
+	                    /**
+	                     * Percorre os campos especiais (Keys)
+	                     */
+	                    foreach($propriedades as $key=>$propriedades2){
+	                        /**
+	                         * Se for propriedades como Keys primárias, únicas, etc
+	                         */
+	                        if($nome == 'dbSchemaTableProperties'){
+	                            $camposSchema[] = $key.' '.$propriedades2;
+	                        }
+	                        /**
+	                         * Se for SQLs que devem ser rodados na criação da tabela
+	                         */
+	                        elseif($nome == 'dbSchemaSQLQuery'){
+	                            $sqlsubquery[$tabela][] = $propriedades2;
+	                        }
+	                    }
+	                }
 
-                $sql[$tabela] = 'CREATE TABLE '.$tabela.' ('. implode(', ', $camposSchema) .')';
-                unset($camposSchema);
-            }
+	            }
+
+           	}
+            $sql[$tabela] = 'CREATE TABLE '.$tabela.' ('. implode(', ', $camposSchema) .')';
+            unset($camposSchema);
         }
 
         if( !empty($sqlsubquery) )

@@ -785,6 +785,7 @@ class Cadastro extends Module {
 				   categorias_id='".$this->austNode."' AND
 				   tipo='campo'
 					ORDER BY ordem ASC";
+
         $temp = $this->connection->query(
             $sql,
             PDO::FETCH_ASSOC

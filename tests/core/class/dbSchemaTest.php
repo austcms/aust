@@ -11,31 +11,77 @@ require_once 'core/class/dbSchema.php';
 
 class dbSchemaTest extends PHPUnit_Framework_TestCase
 {
-    public function setUp(){
-        $this->dbSchema = dbSchema::getInstance();
+    function setUp(){
     }
 
+	function fixture(){
+        $schema['st_agenda'] = array(
+            "id" => "int auto_increment",
+            "categoria_id" => "int",
+            "title" => "text COMMENT 'O título do evento.'",
+            "description" => "text COMMENT 'Descrição do evento.'",
+            "occurs_all_day" => "smallint COMMENT '1 se dura todo o dia.'",
+            "actor_is_user" => "smallint",
+            "actor_admin_id" => "int",
+            "actor_admin_name" => "varchar(200)",
+            "start_datetime" => "datetime",
+            "end_datetime" => "datetime",
+            "created_on" => "datetime",
+            "updated_on" => "datetime",
+            "admin_id" => "int",
+            "dbSchemaTableProperties" => array(
+                "PRIMARY KEY" => "(id)",
+                "UNIQUE" => "id (id)",
+            )
+        );
+		return $schema;
+	}
+	
     function tearDown(){
-        $this->dbSchema = false;
+        $dbSchema = false;
     }
 
-    public function testSchemaIsSet(){
-        $this->assertType('array', $this->dbSchema->dbSchema );
+	function testSetSchema(){
+        $dbSchema = new dbSchema();
+		$this->assertTrue( $dbSchema->setSchema($this->fixture()) );
+		$this->assertFalse( $dbSchema->setSchema(false) );
+	}
+	
+    function testSchemaIsSet(){
+        $dbSchema = new dbSchema();
+		$dbSchema->setSchema($this->fixture());
+		
+        $this->assertType('array', $dbSchema->dbSchema );
     }
 
-    public function testVerificaSchemaExistente(){
-        $this->assertType('integer', $this->dbSchema->verificaSchema() );
+    function testVerificaSchemaExistente(){
+        $dbSchema = new dbSchema();
+		$dbSchema->setSchema($this->fixture());
+        
+		$this->assertType('integer', $dbSchema->verificaSchema() );
     }
 
     function testTabelasAtuais(){
-        $this->assertType('array', $this->dbSchema->tabelasAtuais());
+        $dbSchema = new dbSchema();
+		$dbSchema->setSchema($this->fixture());
+		
+        $this->assertType('array', $dbSchema->tabelasAtuais());
     }
 
     function testIsDbSchemaFormatOk(){
-        $this->assertTrue($this->dbSchema->isDbSchemaFormatOk());
-        $this->assertFalse($this->dbSchema->isDbSchemaFormatOk('blabla'));
+        $dbSchema = new dbSchema();
+		
+        $this->assertTrue($dbSchema->isDbSchemaFormatOk($this->fixture()));
+        $this->assertFalse($dbSchema->isDbSchemaFormatOk('blabla'));
     }
 
+    function testSql(){
+        $dbSchema = new dbSchema();
+		$fixture = $this->fixture();
+		$sql = $dbSchema->sql($fixture);
+		$sql = reset($sql);
+        $this->assertRegExp('/CREATE TABLE st_agenda .* evento\.\', description text COMMENT/', $sql );
+    }
 
 }
 ?>

@@ -76,7 +76,7 @@ class ModulesManager
         static $instance;
 
         if( !$instance ){
-            $instance[0] = new Modulos;
+            $instance[0] = new ModulesManager;
         }
 
         return $instance[0];
@@ -105,13 +105,12 @@ class ModulesManager
      * @return <array>
      */
     public function getModuleInformation($params){
-
         /*
          * Load Migrations
          */
         $migrationsMods = MigrationsMods::getInstance();
-        //$migrationsStatus = $migrationsMods->status();
-
+        //$migrationsStatus = MigrationsMods::getInstance()->status();
+		$result = array();
         if( is_array($params) ){
             
             foreach( $params as $modName ){
@@ -120,14 +119,13 @@ class ModulesManager
                 /**
                  * Carrega arquivos do módulo atual
                  */
-                //include($pastas.'/index.php');
                 if( !is_file($pastas.'/'.MOD_CONFIG) )
                     continue; // cai fora se não tem config
                 
                 include($pastas.'/'.MOD_CONFIG);
 
-                $result[$modName]['version'] = $migrationsMods->isActualVersion($pastas);
-                $result[$modName]['path'] = $pastas;//.'/'.MOD_CONFIG;
+                $result[$modName]['version'] = MigrationsMods::getInstance()->isActualVersion($modName);
+                $result[$modName]['path'] = $modName;
                 $result[$modName]['config'] = $modInfo;
 
             }
@@ -167,12 +165,13 @@ class ModulesManager
     public function verificaInstalacaoRegistro($options = array()) {
 
         if( !empty($options["pasta"]) ){
-            $where = "pasta='".$options["pasta"]."'";
+            $where = "pasta='".MODULES_DIR.$options["pasta"]."'";
         }
 
         $sql = "SELECT id FROM modulos WHERE ".$where;
         $query = $this->conexao->query($sql);
-        if( !$query ){
+		
+        if( empty($query[0]['id']) ){
             return false;
         } else {
             return true;
@@ -453,7 +452,7 @@ class ModulesManager
         /**
          * $pasta:
          */
-        $pasta = (empty($param['pasta'])) ? '' : $param['pasta'];
+        $pasta = (empty($param['pasta'])) ? '' : MODULES_DIR.$param['pasta'];
         /**
          * $modInfo:
          */
