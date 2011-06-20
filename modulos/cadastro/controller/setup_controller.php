@@ -464,7 +464,7 @@ class SetupController extends ModActionController
             pr( $sql );
             //var_dump($this->module);
 
-            if( $this->connection->exec( $sql, 'CREATE_TABLE') ){
+            if( Connection::getInstance()->exec( $sql, 'CREATE_TABLE') ){
                 $status_setup[] = "Tabela '".$tabela."' criada com sucesso!";
 
                 /**

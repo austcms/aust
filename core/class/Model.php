@@ -116,7 +116,7 @@ class Model extends Aust
             if( count($sql) > 0 ){
                 foreach( $sql as $instrucao ){
 
-                    $this->conexao->exec($instrucao);
+                    Connection::getInstance()->exec($instrucao);
                 }
                 
                 return true;

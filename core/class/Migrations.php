@@ -56,7 +56,7 @@ class Migrations
                     VALUES
                         ('".$this->version."', '".$this->modName."')
                     ";
-            $this->conexao->exec($sql);
+            Connection::getInstance()->exec($sql);
 
             return true;
         }
@@ -115,7 +115,7 @@ class Migrations
                 " DROP COLUMN ".
                 $options['field'];
 
-        $this->conexao->exec($sql);
+        Connection::getInstance()->exec($sql);
     }
 
     public function addField($options = array()){
@@ -144,7 +144,7 @@ class Migrations
                     " ".$options['type'].
                 " ".$default.' '.$position;
 			
-            $this->conexao->exec($sql);
+            Connection::getInstance()->exec($sql);
         }
     }
 

@@ -198,7 +198,7 @@ class StructurePermissions extends SQLObject {
                                         'fields' => array('categorias_id','action'),
                                     ), 'sql'
         );
-        $query = $this->conexao->query($permissoesSql) ;
+        $query = Connection::getInstance()->query($permissoesSql) ;
 
 
         $permissoes = array();

@@ -127,7 +127,7 @@ class ModController extends ModActionController
 					id IN ($items)
 					AND $targetField>=$subtractValue
 				";
-				$this->connection->exec($sql);
+				Connection::getInstance()->exec($sql);
 				notice('Itens atualizados com sucesso.');
 			}
 			/*
@@ -148,7 +148,7 @@ class ModController extends ModActionController
 				WHERE
 					id IN ($items)
 				";
-				$this->query['results'] = $this->connection->query($sql);
+				$this->query['results'] = Connection::getInstance()->query($sql);
 				$this->showControls = false;
 				$this->view( array('view' => 'see_data_separated_by_semicolon') );
 				

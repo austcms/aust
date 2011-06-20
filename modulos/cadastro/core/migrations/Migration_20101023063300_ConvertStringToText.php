@@ -18,7 +18,7 @@ class Migration_20101023063300_ConvertStringToText extends Migrations
 					)
 				";
 		
-		$fields = $this->connection->query($sql);
+		$fields = Connection::getInstance()->query($sql);
 		
 		$sqls = array();
 		foreach( $fields as $field ){
@@ -30,10 +30,10 @@ class Migration_20101023063300_ConvertStringToText extends Migrations
 							chave='tabela'
 						)
 					";
-			$tableName = reset( $this->connection->query($sql) );
+			$tableName = reset( Connection::getInstance()->query($sql) );
 			$tableName = $tableName['valor'];
 			
-			$describe = $this->connection->describeTable($tableName, true);
+			$describe = Connection::getInstance()->describeTable($tableName, true);
 			
 			if( $describe[$field['chave']]['Type'] == 'text' ){
 				$sqls[] = "UPDATE cadastros_conf SET especie='text' WHERE id='".$field['id']."'";
@@ -42,7 +42,7 @@ class Migration_20101023063300_ConvertStringToText extends Migrations
 		}
 
 		foreach( $sqls as $sql ){
-			$this->connection->exec($sql);
+			Connection::getInstance()->exec($sql);
 		}
 		
         return true;
@@ -59,7 +59,7 @@ class Migration_20101023063300_ConvertStringToText extends Migrations
 					)
 				";
 		
-		$fields = $this->connection->query($sql);
+		$fields = Connection::getInstance()->query($sql);
 		
 		$sqls = array();
 		foreach( $fields as $field ){
@@ -71,10 +71,10 @@ class Migration_20101023063300_ConvertStringToText extends Migrations
 							chave='tabela'
 						)
 					";
-			$tableName = reset( $this->connection->query($sql) );
+			$tableName = reset( Connection::getInstance()->query($sql) );
 			$tableName = $tableName['valor'];
 			
-			$describe = $this->connection->describeTable($tableName, true);
+			$describe = Connection::getInstance()->describeTable($tableName, true);
 			
 			if( $describe[$field['chave']]['Type'] == 'varchar(250)' ){
 				$sqls[] = "UPDATE cadastros_conf SET especie='string' WHERE id='".$field['id']."'";
@@ -83,7 +83,7 @@ class Migration_20101023063300_ConvertStringToText extends Migrations
 		}
 		
 		foreach( $sqls as $sql ){
-			$this->connection->exec($sql);
+			Connection::getInstance()->exec($sql);
 		}
         return true;
     }

@@ -104,7 +104,7 @@ class ModController extends ModActionController
                         WHERE
                             id=".$w."
                         ";
-                $dados = $this->connection->query($sql, "ASSOC");
+                $dados = Connection::getInstance()->query($sql, "ASSOC");
                 $dados = $dados[0];
 		        $this->set('w', $w);
 				$this->set('nodeId', $dados['node_id']);
@@ -393,7 +393,7 @@ class ModController extends ModActionController
 	                            WHERE
 	                                ".$ref_field."='$w'
 	                                ";
-						$this->connection->exec($sql);
+						Connection::getInstance()->exec($sql);
 	                    unset($sql);
 					}
                 }

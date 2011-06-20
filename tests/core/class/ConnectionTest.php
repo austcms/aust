@@ -25,11 +25,11 @@ class ConnectionTest extends PHPUnit_Framework_TestCase
         
         
         $this->conexao = Connection::getInstance();
-		$this->conexao->exec('create table '.$this->standardTableName.'(id int)');
+		Connection::getInstance()->exec('create table '.$this->standardTableName.'(id int)');
     }
 
 	function tearDown(){
-		$this->conexao->exec('drop table '.$this->standardTableName.'');
+		Connection::getInstance()->exec('drop table '.$this->standardTableName.'');
 	}
 
     public function testConexaoWithPdoInit(){
@@ -42,34 +42,34 @@ class ConnectionTest extends PHPUnit_Framework_TestCase
      * @depends testConexaoWithPdoInit
      */
     function testQuery(){
-        $this->assertArrayHasKey('0', $this->conexao->query('SHOW TABLES'));
+        $this->assertArrayHasKey('0', Connection::getInstance()->query('SHOW TABLES'));
     }
 
 
     function testWrongQuery(){
-        $this->assertType('array', $this->conexao->query('blabla'));
+        $this->assertType('array', Connection::getInstance()->query('blabla'));
     }
 
 	function test_acquireTablesList(){
-		$this->assertType('array', $this->conexao->_acquireTablesList() );
+		$this->assertType('array', Connection::getInstance()->_acquireTablesList() );
 		
-		if( !in_array($this->standardTableName, $this->conexao->_acquireTablesList() ) )
+		if( !in_array($this->standardTableName, Connection::getInstance()->_acquireTablesList() ) )
 			$this->fail('Not acquiring table on SHOW TABLE');
 	}
 
 	function testHasTable(){
-		$this->assertTrue( $this->conexao->hasTable($this->standardTableName) );
+		$this->assertTrue( Connection::getInstance()->hasTable($this->standardTableName) );
 	}
 	
 	function testTableHasField(){
-		$query = $this->conexao->query('SHOW TABLES');
+		$query = Connection::getInstance()->query('SHOW TABLES');
 		$query = reset( $query );
 		$table = reset( $query );
-		$query = $this->conexao->query('DESCRIBE '.$table);
+		$query = Connection::getInstance()->query('DESCRIBE '.$table);
 		$fields = reset( $query );
 		
-		$this->assertTrue( $this->conexao->tableHasField($table, $fields['Field']) );
-		$this->assertFalse( $this->conexao->tableHasField($table, 'tabela_com_campo_inexistente_test') );
+		$this->assertTrue( Connection::getInstance()->tableHasField($table, $fields['Field']) );
+		$this->assertFalse( Connection::getInstance()->tableHasField($table, 'tabela_com_campo_inexistente_test') );
 	}
 
 }

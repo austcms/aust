@@ -230,7 +230,7 @@ class dbSchema
         /**
          * Carrega todas as tabelas do DB
          */
-        $mysql = $this->conexao->query('SHOW TABLES');
+        $mysql = Connection::getInstance()->query('SHOW TABLES');
 
         $this->tabelasAtuais = array();
         /**
@@ -244,7 +244,7 @@ class dbSchema
             $describeSql = 'DESCRIBE '.reset($dados);
 
 
-            foreach($this->conexao->query($describeSql) as $tabela=>$info){
+            foreach(Connection::getInstance()->query($describeSql) as $tabela=>$info){
                 $this->tabelasAtuais[ reset($dados) ][$info['Field']] = $info;
             }
         }
@@ -342,7 +342,7 @@ class dbSchema
                         foreach( $valor as $subTabelas ){
 
                             foreach($subTabelas as $subSql){
-                                if($this->conexao->exec($subSql)){
+                                if(Connection::getInstance()->exec($subSql)){
 
                                 } else {
 
@@ -354,7 +354,7 @@ class dbSchema
                      * SQLs simples, como TABLES
                      */
                     else {
-                        $mysql = $this->conexao->exec($valor, 'CREATE_TABLE');
+                        $mysql = Connection::getInstance()->exec($valor, 'CREATE_TABLE');
                         if($mysql){
                             $resultado[$tabela] = 1;
                             /**

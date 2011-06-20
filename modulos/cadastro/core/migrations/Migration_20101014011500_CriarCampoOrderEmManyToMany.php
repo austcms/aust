@@ -20,7 +20,7 @@ class Migration_20101014011500_CriarCampoOrderEmManyToMany extends Migrations
 					)
 				";
 		
-		$tables = $this->connection->query($sql);
+		$tables = Connection::getInstance()->query($sql);
 		
 		foreach( $tables as $table ){
 	        $schema = array(
@@ -47,7 +47,7 @@ class Migration_20101014011500_CriarCampoOrderEmManyToMany extends Migrations
 					)
 				";
 		
-		$tables = $this->connection->query($sql);
+		$tables = Connection::getInstance()->query($sql);
 		
 		foreach( $tables as $table ){
 	        $this->dropField($table['referencia'], 'order_nr');

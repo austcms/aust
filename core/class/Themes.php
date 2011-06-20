@@ -75,7 +75,7 @@ class Themes {
                     local='".$userId."' AND
                     propriedade='current_theme'
                 ";
-        $this->conexao->exec($sql);
+        Connection::getInstance()->exec($sql);
 
         $sql = "INSERT INTO
                     config
@@ -83,7 +83,7 @@ class Themes {
                 VALUES
                     ('Themes', '".$userId."', 'Tema Atual', 'current_theme', '".$themeName."', '".$userId."')
                 ";
-        $this->conexao->exec($sql);
+        Connection::getInstance()->exec($sql);
 
         return true;
 
@@ -99,7 +99,7 @@ class Themes {
                 LIMIT 1
                 ";
 
-        $tmp = $this->conexao->query($sql);
+        $tmp = Connection::getInstance()->query($sql);
 
         if(empty($tmp[0]['valor']))
             return Registry::read('defaultTheme');

@@ -80,7 +80,7 @@ class ContentController extends ActionController {
 	         */
 	        include(MODULES_DIR.$modDir.MOD_CONTROLLER);
 
-
+			$this->autoRender = false;
 			$modDispatcher = new ModDispatcher($aust_node);
 			$modDispatcher->dispatch();
 			return true;
