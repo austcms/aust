@@ -140,7 +140,7 @@ class ModActionController extends ActionController
     }
 
 	public function _viewFile(){
-		return MODULES_DIR.$this->module->directory().MOD_VIEW_DIR."mod/".$this->_action().".php";
+		return MODULES_DIR.$this->module->directory().MOD_VIEW_DIR."mod/";
 	}
 	
     public function test_action(){
@@ -157,7 +157,7 @@ class ModActionController extends ActionController
 		$this->set("austNode", $this->austNode());
 		$this->set("module", ModulesManager::getInstance()->modelInstance($this->austNode()));
 
-		return parent::render();
+		return parent::render($shouldRender);
 	}
 
     /*

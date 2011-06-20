@@ -23,7 +23,7 @@ class ModController extends ModActionController
                     id='".$_GET['aust_node']."'";
 
 
-        $query = $this->modulo->connection->query($sql);
+        $query = $this->module->connection->query($sql);
         $this->set('cat', $query[0]['nome'] );
 
         $categorias = Aust::getInstance()->LeCategoriasFilhas('',$_GET['aust_node']);
@@ -50,13 +50,13 @@ class ModController extends ModActionController
             'pagina' => $pagina,
             'resultadosPorPagina' => $num_por_pagina
         );
-        $sql = $this->modulo->loadSql($params);
+        $sql = $this->module->loadSql($params);
         $this->set('sql', $sql );
 
         /*
          * Query com resultado
          */
-        $this->set('query', $this->modulo->connection->query($sql) );
+        $this->set('query', $this->module->connection->query($sql) );
         
     }
 

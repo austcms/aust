@@ -16,7 +16,7 @@ if(empty($_POST['w']) AND $_POST['metodo'] == 'criar'){
      * seguro pegar este valor aqui, mas sim que o conteúdo
      * principal já tenha salvo o valor em $_POST['w']
      */
-    $insert_id = $this->modulo->connection->lastInsertId();
+    $insert_id = $this->module->connection->lastInsertId();
 } elseif(!empty($_POST['w'])) {
     $insert_id = $_POST['w'];
 }

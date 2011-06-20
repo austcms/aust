@@ -10,6 +10,7 @@
 	RewriteRule ^adm_main.php(.*) adm_main.php$1 [L]
 	RewriteRule ^$ index.php [L]
 	RewriteRule ^index.php index.php [L]
+	RewriteRule ^phpinfo.php phpinfo.php [L]
 	RewriteRule ^logout.php logout.php [L]
 	
 	RewriteRule (.*) /not_found [R=404]

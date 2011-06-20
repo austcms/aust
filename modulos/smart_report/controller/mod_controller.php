@@ -40,11 +40,11 @@ class ModController extends ModActionController
         /*
          * Query com resultado
          */
-        $query = $this->modulo->load($params);
+        $query = $this->module->load($params);
 
-        $this->set('sql', $this->modulo->lastSql );
-        //$config = $this->modulo->loadConfig();
-//        $query = $this->modulo->replaceFieldsValueIfEmpty($query);
+        $this->set('sql', $this->module->lastSql );
+        //$config = $this->module->loadConfig();
+//        $query = $this->module->replaceFieldsValueIfEmpty($query);
 //		pr($query);
 		
         $this->set('query', $query );
@@ -60,7 +60,7 @@ class ModController extends ModActionController
         $this->set('tagh2', Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']) );
 
 		$this->showControls = false;
-		if( $this->modulo->getStructureConfig('activate_actions') == '1' )
+		if( $this->module->getStructureConfig('activate_actions') == '1' )
 			$this->showControls = true;
 
         $w = (!empty($_POST['w'])) ? $_POST['w'] : '';
@@ -68,7 +68,7 @@ class ModController extends ModActionController
         $this->set('w', $w);
 
 		if( empty($this->query) ){
-			$query = $this->modulo->runFilter($w);
+			$query = $this->module->runFilter($w);
 		} else {
 			$query = $this->query;
 		}
@@ -86,7 +86,7 @@ class ModController extends ModActionController
     }
 
     public function save(){
-        $this->set('resultado', $this->modulo->save($_POST));
+        $this->set('resultado', $this->module->save($_POST));
     }
 
 	function actions(){

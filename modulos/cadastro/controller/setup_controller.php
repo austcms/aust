@@ -364,7 +364,7 @@ class SetupController extends ModActionController
 
                                 ) ';
 
-                        $createdRelational = $this->modulo->connection->exec($sql, 'CREATE_TABLE');
+                        $createdRelational = $this->module->connection->exec($sql, 'CREATE_TABLE');
                         //var_dump($createdRelational);
                         if($createdRelational){
                             $status_setup[] = 'Criação da tabela relacional um-para-muitos \''.$tabelasRelacionadasNome.'\' efetuada com sucesso.';
@@ -462,7 +462,7 @@ class SetupController extends ModActionController
              * Se retornar sucesso, salva configurações gerais sobre o cadastro na tabela cadastros_conf
              */
             pr( $sql );
-            //var_dump($this->modulo);
+            //var_dump($this->module);
 
             if( $this->connection->exec( $sql, 'CREATE_TABLE') ){
                 $status_setup[] = "Tabela '".$tabela."' criada com sucesso!";
@@ -471,7 +471,7 @@ class SetupController extends ModActionController
                  * Se há SQL para criação de tabela para arquivos
                  */
                 if( !empty($sql_arquivos) AND $cria_tabela_arquivos == TRUE ){
-                    if($this->modulo->connection->exec($sql_arquivos, 'CREATE_TABLE')){
+                    if($this->module->connection->exec($sql_arquivos, 'CREATE_TABLE')){
                         $status_setup[] = 'Criação da tabela \''.$tabela.'_arquivos\' efetuada com sucesso!';
                     } else {
                         $status_setup[] = 'Erro ao criar tabela \''.$tabela.'_arquivos\'.';
@@ -484,7 +484,7 @@ class SetupController extends ModActionController
                                 VALUES
                                     ('estrutura','tabela_arquivos','".$tabela."_arquivos',".$status_insert.", '".date('Y-m-d H:i:s')."', ".$this->administrador->LeRegistro('id').",0,0,1,0,1)
                                 ";
-                    if($this->modulo->connection->exec($sql_conf_arquivos)){
+                    if($this->module->connection->exec($sql_conf_arquivos)){
                         $status_setup[] = 'Configuração da estrutura \''.$tabela.'_arquivos\' salva com sucesso!';
                     } else {
                         $status_setup[] = 'Erro ao criar tabela \''.$tabela.'_arquivos\'.';
@@ -506,7 +506,7 @@ class SetupController extends ModActionController
                                 VALUES
                                     ('config','aprovacao','".$_SESSION['exPOST']['aprovacao']."','Aprovação','bool',".$status_insert.", '".date('Y-m-d H:i:s')."', ".$this->administrador->LeRegistro('id').",0,0,1,0,1)
                                 ";
-                    if($this->modulo->connection->exec($sql_conf_2)){
+                    if($this->module->connection->exec($sql_conf_2)){
                         $status_setup[] = 'Configuração de aprovação salva com sucesso!';
                     } else {
                         $status_setup[] = 'Configuração de aprovação não foi salva com sucesso.';
@@ -520,7 +520,7 @@ class SetupController extends ModActionController
                                 VALUES
                                     ('config','descricao','".$_SESSION['exPOST']['descricao']."','Descrição','blob',".$status_insert.", '".date('Y-m-d H:i:s')."', ".$this->administrador->LeRegistro('id').",0,0,1,0,1)
                                 ";
-                    if($this->modulo->connection->exec($sql_conf_2)){
+                    if($this->module->connection->exec($sql_conf_2)){
                         $status_setup[] = 'Configuração de aprovação salva com sucesso!';
                     } else {
                         $status_setup[] = 'Configuração de aprovação não foi salva com sucesso.';
@@ -534,7 +534,7 @@ class SetupController extends ModActionController
                                 VALUES
                                     ('config','pre_senha','".$_SESSION['exPOST']['pre_senha']."','Pré-senha','string',".$status_insert.", '".date('Y-m-d H:i:s')."', ".$this->administrador->LeRegistro('id').",0,0,1,0,1)
                                 ";
-                    if($this->modulo->connection->exec($sql_conf_2)){
+                    if($this->module->connection->exec($sql_conf_2)){
                         $status_setup[] = 'Configuração de pré-senha salva com sucesso!';
                     } else {
                         $status_setup[] = 'Configuração de pré-senha não foi salva com sucesso.';
@@ -551,13 +551,13 @@ class SetupController extends ModActionController
                             VALUES
                                 ('estrutura','tabela','".RetiraAcentos(mb_strtolower(str_replace(' ', '_', $_SESSION['exPOST']['nome']), 'UTF-8'))."',".$status_insert.", '".date('Y-m-d H:i:s')."', ".$this->administrador->LeRegistro('id').",0,0,1,0,1)
                             ";
-                if($this->modulo->connection->exec($sql_conf)){
+                if($this->module->connection->exec($sql_conf)){
                     $status_setup[] = 'Configuração da estrutura \''.RetiraAcentos(mb_strtolower(str_replace(' ', '_', $_SESSION['exPOST']['nome']), 'UTF-8')).'\' salva com sucesso!';
 
                     // número de erros encontrados
                     $status_campos = 0;
                     foreach ($sql_campos as $valor) {
-                        if(!$this->modulo->connection->exec($valor)){
+                        if(!$this->module->connection->exec($valor)){
                             $status_campos++;
                         }
                     }

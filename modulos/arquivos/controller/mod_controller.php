@@ -44,8 +44,8 @@ class ModController extends ModActionController
             'limit' => $num_por_pagina
         );
 
-		$query = $this->modulo->load($params);
-		$query = $this->modulo->replaceFieldsValueIfEmpty($query);
+		$query = $this->module->load($params);
+		$query = $this->module->replaceFieldsValueIfEmpty($query);
 		$this->set('query', $query);
     }
 

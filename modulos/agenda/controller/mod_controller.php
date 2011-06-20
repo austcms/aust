@@ -78,7 +78,7 @@ class ModController extends ModActionController
             'resultadosPorPagina' => $num_por_pagina,
             'where' => "AND ( MONTH(start_datetime)=".$month_int." AND YEAR(start_datetime)=".$year_int." )",
         );
-        $sql = $this->modulo->loadSql($params);
+        $sql = $this->module->loadSql($params);
         $this->set('sql', $sql );
 
         /*
@@ -86,7 +86,7 @@ class ModController extends ModActionController
          *
          * Query com resultado
          */
-        $query = $this->modulo->connection->query($sql);
+        $query = $this->module->connection->query($sql);
         $results = array();
         foreach( $query as $valor ){
 
@@ -137,11 +137,11 @@ class ModController extends ModActionController
                 SELECT
                     *
                 FROM
-                    ".$this->modulo->getContentTable()."
+                    ".$this->module->getContentTable()."
                 WHERE
                     id='$w'
                 ";
-        $query = $this->modulo->connection->query($sql);
+        $query = $this->module->connection->query($sql);
         $this->set('dados', $query[0] );
         
         $this->render('form');
@@ -192,7 +192,7 @@ class ModController extends ModActionController
 		
         //pr($_POST);
 
-        $this->set('resultado', $this->modulo->save($_POST));
+        $this->set('resultado', $this->module->save($_POST));
     }
     
 }

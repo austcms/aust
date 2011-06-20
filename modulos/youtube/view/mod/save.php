@@ -62,20 +62,20 @@ if(!empty($_POST)) {
         $h1 = 'Editando: '.Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
     }
 
-    $query = $this->modulo->connection->exec($sql);
+    $query = $this->module->connection->exec($sql);
     if($query !== false) {
         $resultado = TRUE;
 
         // se estiver criando um registro, guarda seu id para ser usado por módulos embed a seguir
         if($_POST['metodo'] == 'criar') {
-            $_POST['w'] = $this->modulo->connection->conn->lastInsertId();
+            $_POST['w'] = $this->module->connection->conn->lastInsertId();
         }
 
 
         /*
          * carrega módulos que contenham propriedade embed
         */
-        $embed = $this->modulo->LeModulosEmbed();
+        $embed = $this->module->LeModulosEmbed();
 
         // salva o objeto do módulo atual para fazer embed
         if( !empty($embed) ) {

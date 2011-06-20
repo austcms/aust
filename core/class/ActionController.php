@@ -88,7 +88,7 @@ class ActionController
     }
 
 	public function _viewFile(){
-		return VIEWS_DIR."".Dispatcher::getInstance()->controller()."/".$this->_action().".php";
+		return VIEWS_DIR."".Dispatcher::getInstance()->controller()."/";
 	}
 	
     /*
@@ -111,10 +111,16 @@ class ActionController
 		$params = $this->params;
 		$defaultErrorReporting = ini_get("error_reporting");
 		
-        if( $shouldRender && file_exists($this->_viewFile()) ){
+		if( is_string($shouldRender) ){
+			$viewFile = $this->_viewFile().$shouldRender.".php";
+		} else {
+			$viewFile = $this->_viewFile().$this->_action().".php";
+		}
+				
+        if( $shouldRender && file_exists($viewFile) ){
 
             ob_start();
-            include($this->_viewFile());
+            include($viewFile);
             $content_for_layout = ob_get_contents();
             ob_end_clean();
 

@@ -22,7 +22,7 @@ class ModController extends ModActionController
 			'austNode' => $categorias
 		);
 		
-		$query = $this->modulo->load($params);
+		$query = $this->module->load($params);
 		
         $this->set('query', $query);
     }
@@ -92,13 +92,13 @@ class ModController extends ModActionController
                 SELECT
                     *
                 FROM
-                    ".$this->modulo->useThisTable()."
+                    ".$this->module->useThisTable()."
                 WHERE
                     id='$w' AND
 					categoria='".$_GET['aust_node']."'
                 ";
 
-        $query = $this->modulo->connection->query($sql, "ASSOC");
+        $query = $this->module->connection->query($sql, "ASSOC");
         $dados = reset($query);
 
 		$this->set('dados', $dados);

@@ -40,7 +40,7 @@ if(!empty($_POST) AND !empty($_POST["perguntas"]) ){
                 WHERE
                     categoria='".$_POST["aust_node"]."'
                 ";
-        $this->modulo->connection->exec($sql);
+        $this->module->connection->exec($sql);
         unset($sql);
     }
 
@@ -75,7 +75,7 @@ if(!empty($_POST) AND !empty($_POST["perguntas"]) ){
 
     if($_POST['metodo'] == 'create') {
         $sql = "INSERT INTO
-                                    ".$this->modulo->useThisTable()."
+                                    ".$this->module->useThisTable()."
                                     ($sqlcampostr)
                             VALUES
                                     ($sqlvalorstr)
@@ -85,7 +85,7 @@ if(!empty($_POST) AND !empty($_POST["perguntas"]) ){
         $h1 = 'Criando: '.Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
     } else if($_POST['metodo'] == 'edit') {
             $sql = "UPDATE
-                                    ".$this->modulo->useThisTable()."
+                                    ".$this->module->useThisTable()."
                             SET
                 $sqlcampostr
                             WHERE
@@ -97,7 +97,7 @@ if(!empty($_POST) AND !empty($_POST["perguntas"]) ){
     /*
      * Cria a pesquisa no DB
      */
-    $query = $this->modulo->connection->exec($sql);
+    $query = $this->module->connection->exec($sql);
 
     if($query OR $_POST["metodo"] == "edit" ){
         $resultado = TRUE;
@@ -106,7 +106,7 @@ if(!empty($_POST) AND !empty($_POST["perguntas"]) ){
          * Se estiver criando um registro, guarda seu id para ser usado por módulos embed a seguir
          */
         if($_POST['metodo'] == 'create'){
-            $_POST['w'] = $this->modulo->connection->conn->lastInsertId();
+            $_POST['w'] = $this->module->connection->conn->lastInsertId();
             
         }
 
@@ -128,8 +128,8 @@ if(!empty($_POST) AND !empty($_POST["perguntas"]) ){
                                 ('".$_POST["w"]."','".$pergunta."','".$_POST["resposta_tipo"][$pchave]."')
                             ";
 
-                    $queryp = $this->modulo->connection->exec($sqlp);
-                    $pid = $this->modulo->connection->conn->lastInsertId();
+                    $queryp = $this->module->connection->exec($sqlp);
+                    $pid = $this->module->connection->conn->lastInsertId();
 
                     /*
                      * Se é uma pergunta com alternativas
@@ -178,7 +178,7 @@ if(!empty($_POST) AND !empty($_POST["perguntas"]) ){
                     WHERE
                         pp.pesqmkt_id='".$_POST['w']."'
                     ";
-            $perguntasQuery = $this->modulo->connection->query($sql, "ASSOC");
+            $perguntasQuery = $this->module->connection->query($sql, "ASSOC");
 
             $perguntasExistentes = array();
             if( !empty($perguntasQuery) ){
@@ -210,9 +210,9 @@ if(!empty($_POST) AND !empty($_POST["perguntas"]) ){
                                             id='".$idPergunta."'
                                         ";
                         //echo $sqlPergunta;
-                        $this->modulo->connection->exec($sqlPergunta);
+                        $this->module->connection->exec($sqlPergunta);
                         if( $_POST["resposta_tipo"][$idPergunta] == "aberta" ){
-                            $this->modulo->connection->exec("DELETE FROM pesqmkt_respostas WHERE pesqmkt_pergunta_id='".$idPergunta."'");
+                            $this->module->connection->exec("DELETE FROM pesqmkt_respostas WHERE pesqmkt_pergunta_id='".$idPergunta."'");
                         }
                     }
                 }
@@ -232,8 +232,8 @@ if(!empty($_POST) AND !empty($_POST["perguntas"]) ){
                                     ('".$_POST["w"]."','".$valor."','".$_POST["resposta_tipo"][$idPergunta]."')
                                 ";
 
-                        $queryp = $this->modulo->connection->exec($sqlp);
-                        $pid = $this->modulo->connection->conn->lastInsertId();
+                        $queryp = $this->module->connection->exec($sqlp);
+                        $pid = $this->module->connection->conn->lastInsertId();
 
                         /*
                          * Se é uma pergunta com alternativas
@@ -290,7 +290,7 @@ if(!empty($_POST) AND !empty($_POST["perguntas"]) ){
                             WHERE
                                 pr.pesqmkt_pergunta_id='".$idPergunta."'
                             ";
-                    $respostaQuery = $this->modulo->connection->query($sql, "ASSOC");
+                    $respostaQuery = $this->module->connection->query($sql, "ASSOC");
 
                     $respostaExistentes = array();
                     if( !empty($respostaQuery) ){
@@ -347,14 +347,14 @@ if(!empty($_POST) AND !empty($_POST["perguntas"]) ){
 
         if( !empty($sqlrStart) ){
             foreach( $sqlrStart as $sqlRespostas ){
-                $respostasSQL[] = $this->modulo->connection->exec($sqlRespostas);
+                $respostasSQL[] = $this->module->connection->exec($sqlRespostas);
             }
         }
 
         /*
          * carrega módulos que contenham propriedade embed
          */
-        $embed = $this->modulo->LeModulosEmbed();
+        $embed = $this->module->LeModulosEmbed();
         
         // salva o objeto do módulo atual para fazer embed
         if( !empty($embed) ){
