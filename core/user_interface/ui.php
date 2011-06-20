@@ -44,6 +44,25 @@
 
     <?php
     $html->js();
+
+    /*
+     * JS DO MÓDULO
+     *
+     * Carrega Javascript de algum módulo se existir
+     */
+    if( !empty($_GET["aust_node"]) || $_POST["aust_node"] ){
+		if( !empty($_GET["aust_node"]) )
+			$austNode = $_GET["aust_node"];
+		elseif( !empty($_POST["aust_node"]) )
+			$austNode = $_POST["aust_node"];
+		
+		$modDir = Aust::getInstance()->LeModuloDaEstrutura($austNode).'/';
+        if(is_file(MODULES_DIR.$modDir.'js/jsloader.php')){
+            $include_baseurl = MODULES_DIR. substr($modDir, 0, strlen($modDir)-1); // necessário para o arquivo jsloader.php saber onde está fisicamente
+            include_once(MODULES_DIR.$modDir.'js/jsloader.php');
+        }
+    }
+
     ?>
 
 

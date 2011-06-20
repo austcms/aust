@@ -80,17 +80,6 @@ class ContentController extends ActionController {
 	         */
 	        include(MODULES_DIR.$modDir.MOD_CONTROLLER);
 
-	        /*
-	         * JS DO MÓDULO
-	         *
-	         * Carrega Javascript de algum módulo se existir
-	         */
-	        if(!empty($aust_node)){
-	            if(is_file(MODULES_DIR.$modDir.'js/jsloader.php')){
-#	                $include_baseurl = MODULES_DIR. substr($modDir, 0, strlen($modDir)-1); // necessário para o arquivo jsloader.php saber onde está fisicamente
-#	                include_once(MODULES_DIR.$modDir.'js/jsloader.php');
-	            }
-	        }
 	        $action = $_GET['action'];
 
 			/*

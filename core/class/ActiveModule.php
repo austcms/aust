@@ -15,6 +15,9 @@ class ActiveModule
 	}
 	
 	public function directory(){
+		if( empty($this->austNode) ){
+			trigger_error("austNode not defined in module instanciation");
+		}
 		$this->directory = Aust::getInstance()->LeModuloDaEstrutura($this->austNode()).'/';
 		return $this->directory;
 	}

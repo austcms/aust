@@ -19,8 +19,6 @@ class ModController extends ModActionController
      */
     public function listing(){
 
-		echo "========";
-		return true;
         /**
          * <h2> HEADER
          */
