@@ -133,9 +133,10 @@ class User {
      * @return <bool>
      */
     public function isLogged(){
-        if( !empty($_SESSION['login']['id']) AND
-            $_SESSION['login']['id'] > 0 AND
-            !empty( $_SESSION['login']['username'] ) )
+        if( !empty($_SESSION['login']['id']) 	&&
+            $_SESSION['login']['id'] > 0 		&&
+            ( !empty($_SESSION['login']['username']) || !empty( $_SESSION['login']['login']))
+		)
         {
             return true;
         }
@@ -194,7 +195,6 @@ class User {
         } else {
             $statement = "admins.$campo as $campo";
         }
-
         $sql = "SELECT
                     $statement,
                     admins.is_blocked

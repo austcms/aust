@@ -16,15 +16,10 @@ class UserTest extends PHPUnit_Framework_TestCase
     public $conexao;
 
     public function setUp(){
-    
-        /*
-         * Informações de conexão com banco de dados
-         */
-        
-        //$this->dbConfig = $dbConn;
-        
+    	Fixture::getInstance()->create();
+
         $this->conexao = Connection::getInstance();
-        $this->obj = User::getInstance();
+        $this->obj = new User;
     }
 
     public function testRedirectForbiddenSession(){
@@ -64,10 +59,13 @@ class UserTest extends PHPUnit_Framework_TestCase
     }
 
     public function testLeRegistro(){
+		$query = Connection::getInstance()->query("SELECT id FROM admins LIMIT 1");
+		$query = reset($query);
+		$id = $query["id"];
 
-        // conecta
-        $_SESSION['login']['id'] = 1;
-        $_SESSION['login']['username'] = 'kurko';
+        // connect
+        $_SESSION['login']['id'] = $id;
+        $_SESSION['login']['login'] = 'test_user';
         $this->assertTrue($this->obj->isLogged() );
 
         $this->assertGreaterThan( 0, $this->obj->LeRegistro('id') );
@@ -75,13 +73,17 @@ class UserTest extends PHPUnit_Framework_TestCase
     }
 
  	function testReset(){
-        // conecta
-        $_SESSION['login']['id'] = 1;
-        $_SESSION['login']['username'] = 'kurko';
+		$query = Connection::getInstance()->query("SELECT id FROM admins LIMIT 1");
+		$query = reset($query);
+		$id = $query["id"];
+
+        // connect
+        $_SESSION['login']['id'] = $id;
+        $_SESSION['login']['username'] = 'test_user';
         $this->assertTrue($this->obj->isLogged() );
 
-        $this->assertEquals("1", 			$this->obj->getId() 				);
-        $this->assertEquals("kurko", 		$this->obj->LeRegistro("login") 	);
+        $this->assertEquals($id, 			$this->obj->getId() 				);
+        $this->assertEquals("test_user",	$this->obj->LeRegistro("login") 	);
 
 		$this->obj->reset();
 		

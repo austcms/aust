@@ -6,6 +6,10 @@ require_once 'tests/config/auto_include.php';
 class ModulesManagerTest extends PHPUnit_Framework_TestCase
 {
 
+	function setUp(){
+		Fixture::getInstance()->create();
+	}
+	
     public function testInitialization(){
         $this->obj = new ModulesManager();
     }
@@ -16,11 +20,10 @@ class ModulesManagerTest extends PHPUnit_Framework_TestCase
 		
 		$modulesInstalled = array(
 			"conteudo",
-			"cadastro"
+			"agenda"
 		);
 		$result = $this->obj->getModuleInformation($modulesInstalled);
-		
-		$this->assertTrue($result["conteudo"]["version"]);
+
 		$this->assertEquals("Conteudo", $result["conteudo"]["config"]["className"]);
 		$this->assertEquals("conteudo", $result["conteudo"]["path"]);
 		
