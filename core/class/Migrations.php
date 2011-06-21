@@ -27,9 +27,9 @@ class Migrations
      */
     var $modName = '';
 
-    function __construct($modName, $conexao){
-        $this->conexao = $conexao;
-        $this->connection = $conexao;
+    function __construct($modName, $conexao = ''){
+        $this->conexao = Connection::getInstance();
+        $this->connection = $this->conexao;
         $this->modName = $modName;
 
         $regexp = "/([0-9]{14})/";
@@ -82,16 +82,17 @@ class Migrations
      * @param <mixed> $schema
      * @return <bool>
      */
-    function createTable($schema){
+    function createTable($dbschema){
 
-        $c = $this->conexao;
-        if( is_array($schema) ){
-            $schema = new dbSchema( $schema );
-            if( $schema->isDbSchemaFormatOk($schema) ){
+        $c = Connection::getInstance();
+        if( is_array($dbschema) ){
+            $schema = new dbSchema( $dbschema );
 
-                if( is_array($schema->sql())){
+            if( $schema->isDbSchemaFormatOk($dbschema) ){
+
+                if( is_array($schema->sql($dbschema))){
                 
-                    foreach( $schema->sql() as $tabela=>$sql ){
+                    foreach( $schema->sql($dbschema) as $tabela=>$sql ){
                         /**
                          * @todo - deve-se fazer com que se a
                          * função a seguir não funcione ou retorne
@@ -101,8 +102,8 @@ class Migrations
                     }
                 }
             }
-        } else if( is_string($schema) ){
-            if( !$c->exec($schema) )
+        } else if( is_string($dbschema) ){
+            if( !$c->exec($dbschema) )
                 return false;
         }
 

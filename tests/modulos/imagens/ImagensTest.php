@@ -14,6 +14,7 @@ class ImagensTest extends PHPUnit_Framework_TestCase
 	public $obj;
     
     public function setUp(){
+		installModule('imagens');
         /*
          * MÓDULOS ATUAL
          *

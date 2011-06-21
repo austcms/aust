@@ -496,6 +496,7 @@ class ModulesManager
                 VALUES
                     ('$tipo','$chave','$valor','$pasta','".$modInfo['nome']."','".$modInfo['descricao']."','".$modInfo['embed']."','".$modInfo['embedownform']."','".$modInfo['somenteestrutura']."','$autor')
             ";
+
         if(Connection::getInstance()->exec($sql, 'CREATE_TABLE')) {
             return TRUE;
         } else {
