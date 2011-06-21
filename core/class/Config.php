@@ -7,6 +7,8 @@ class Config {
     public $options;
     public $conexao;
 
+	public $table = "config";
+
     /**
      * Contém configurações de permissões de acesso às configurações do sistema
      *
@@ -111,7 +113,8 @@ class Config {
 			$config = $this->getConfigs($params);
 			
             $result = reset( $config );
-
+			if( empty($result) )
+				return false;
             $result = reset($result);
             return $result[$field];
 
@@ -146,7 +149,7 @@ class Config {
         $type = (empty($type)) ? '' : ' AND tipo IN (\''. implode("','", $type) .'\')';
 
         $sql = "SELECT * FROM
-                    config
+                    ".$this->table."
                 WHERE
                     1=1
                     $where
@@ -248,7 +251,7 @@ class Config {
         $qtdNeeded = count($neededConfig);
 
         $sql = "SELECT tipo, propriedade FROM
-                    config
+                    ".$this->table."
                 WHERE
                     ".implode(" OR ", $whereConfig)."
                 ";
@@ -327,7 +330,7 @@ class Config {
     function updateOptions($params){
 		
 		$params = sanitizeString($params);
-		$sql = "UPDATE config SET valor='".$params["valor"]."' WHERE id='".$params["id"]."'";
+		$sql = "UPDATE ".$this->table." SET valor='".$params["valor"]."' WHERE id='".$params["id"]."'";
         Connection::getInstance()->exec($sql);
 
         return '<span style="color: green;">Configuração salva com sucesso!</span>';
@@ -352,13 +355,13 @@ class Config {
 
         foreach($this->options as $tipo=>$valor) {
 
-            $sql = "SELECT id FROM config WHERE tipo='".$tipo."' AND propriedade='".key($valor)."'";
+            $sql = "SELECT id FROM ".$this->table." WHERE tipo='".$tipo."' AND propriedade='".key($valor)."'";
             $query = Connection::getInstance()->count($sql);
 
             if( $query ) {
                 $valores = reset($valor);
                 $sql = "UPDATE
-                            config
+                            ".$this->table."
                         SET
                             valor='".$valores["valor"]."'
                         WHERE
@@ -375,7 +378,7 @@ class Config {
                 }
 
                 $sql = "INSERT INTO
-                            config
+                            ".$this->table."
                                 (".implode(",", $colunas).")
                         VALUES
                             ('".implode("','", $infos)."')";

@@ -19,6 +19,11 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 	function testRootType(){
 		$this->assertEquals( "Webmaster", $this->obj->_rootType );
 	}
+	
+	function testInexistentConfiguration(){
+		Connection::getInstance()->exec("DELETE FROM ".$this->obj->table."");
+		$this->assertFalse($this->obj->getConfig('site_name'));
+	}
 
 
 }
