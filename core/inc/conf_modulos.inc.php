@@ -77,27 +77,23 @@ if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'):
     $modulesStatus = ModulesManager::getInstance()->getModuleInformation( array_keys($migrationsStatus) );
 
     /*
-     * JS DO MÓDULO
-     *
-     * Carrega Javascript de algum módulo se existir
+     * Module's JS
      */
     if(!empty($_GET['aust_node'])){
         $modulo = Aust::getInstance()->LeModuloDaEstrutura($_GET['aust_node']);
         if(is_file(MODULES_DIR.$modulo.'/js/jsloader.php')){
-            $include_baseurl = MODULES_DIR.$modulo; // necessário para o arquivo jsloader.php saber onde está fisicamente
+            $include_baseurl = MODULES_DIR.$modulo;
             include_once(MODULES_DIR.$modulo.'/js/jsloader.php');
         }
     } elseif($_GET['action'] == 'configurar_modulo' AND !empty($_GET['modulo'])){
         if(is_file($_GET['modulo'].'/js/jsloader.php')){
-            $include_baseurl = $_GET['modulo']; // necessário para o arquivo jsloader.php saber onde está fisicamente
+            $include_baseurl = $_GET['modulo'];
             include_once($_GET['modulo'].'/js/jsloader.php');
         }
     }
 
-    /**
-     * CONFIGURAR ESTRUTURA
-     *
-     * Se o usuário desejar configurar a estrutura. Carrega configurar_estrutura.php
+    /*
+     * Configure a structure
      */
     if($_GET['action'] == 'configurar'){
         $diretorio = MODULES_DIR.Aust::getInstance()->LeModuloDaEstrutura($_GET['aust_node']); // pega o endereço do diretório
@@ -108,14 +104,10 @@ if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'):
             }
         }
     }
-    /**
-     * CONFIGURAR MÓDULO
-     *
-     * Configuração do módulo e não estrutura. Carrega configurar_modulo.php
+    /*
+     * Configure a module
      */
-        // @todo
     else if($_GET['action'] == 'configurar_modulo'){
-        //$diretorio = MODULES_DIR.Aust::getInstance()->LeModuloDaEstrutura($_GET['aust_node']); // pega o endereço do diretório
         $pastas = $_GET['modulo'];
         if(is_file($pastas.'/configurar_modulo.php')){
             include($pastas.'/configurar_modulo.php');
