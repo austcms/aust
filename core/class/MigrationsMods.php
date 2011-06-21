@@ -56,7 +56,7 @@ class MigrationsMods
         foreach( $missingMigrations as $name ){
 
             require_once MODULES_DIR.$path.'/'.MIGRATION_MOD_DIR.$name.'.php';
-            $migration = new $name($modName, $this->conexao);
+            $migration = new $name($modName);
             
             if( !$migration->goUp() ){
                 echo 'ERRO! Migration '.$name.' com erro!';

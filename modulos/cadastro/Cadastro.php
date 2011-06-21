@@ -947,7 +947,6 @@ class Cadastro extends Module {
             $sql,
             PDO::FETCH_ASSOC
         );
-		echo $sql;
 
         foreach( $temp as $chave=>$valor ){
             if( !empty($valor["chave"]) )

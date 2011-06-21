@@ -12,22 +12,7 @@ class CadastroTest extends PHPUnit_Framework_TestCase
 
     public function setUp(){
 
-     	include(MODULES_DIR.'cadastro/'.MOD_CONFIG);
-
-        $modName = MigrationsMods::getInstance()->getModNameFromPath(MODULES_DIR.'cadastro');
-        $modInfo['embedownform'] = (empty($modInfo['embedownform'])) ? false : $modInfo['embedownform'];
-        $modInfo['embed'] = (empty($modInfo['embed'])) ? false : $modInfo['embed'];
-        $modInfo['somenteestrutura'] = (empty($modInfo['somenteestrutura'])) ? false : $modInfo['somenteestrutura'];
-	
-	    $param = array(
-            'tipo' => 'módulo',
-            'chave' => 'dir',
-            'valor' => $modName,
-            'pasta' => 'cadastro',
-            'modInfo' => $modInfo,
-            'autor' => "1",
-        );
-        ModulesManager::getInstance()->configuraModulo($param);
+		installModule('cadastro');
     
         /*
          * MÓDULOS ATUAL

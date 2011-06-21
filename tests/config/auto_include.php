@@ -41,4 +41,5 @@ spl_autoload_register('autoload');
 
 require_once(THIS_TO_BASEURL."tests/config/integrity_check.php");
 require_once(THIS_TO_BASEURL."tests/fixtures/Fixture.php");
+require_once(THIS_TO_BASEURL."tests/config/test_helpers.php");
 ?>
