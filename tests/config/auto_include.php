@@ -39,4 +39,6 @@ function autoload($className) {
 
 spl_autoload_register('autoload');
 
+require_once(THIS_TO_BASEURL."tests/config/integrity_check.php");
+
 ?>

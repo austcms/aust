@@ -137,7 +137,6 @@ class dbSchema
         $this->camposInexistentes = array();
         $this->tabelasInstaladas = array();
         $this->tabelasAtuais();
-
         /**
          * Nomes de campos especiais
          */
@@ -318,7 +317,8 @@ class dbSchema
          */
 
         $checkedSchema = $this->verificaSchema();
-        if($checkedSchema != 1 AND $this->isDbSchemaFormatOk() ){
+        if($checkedSchema != 1 AND $this->isDbSchemaFormatOk($this->dbSchema) ){
+
             /**
              * Tabela por tabela do Schema
              */
