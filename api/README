@@ -1,5 +1,25 @@
-RESPONSER
 
-Responsável por retornar resultado de dados lidos do DB.
+Use case 1:
 
-Retorna formato XML e JSON.
+	Structure: News
+	Module: content
+	What we want: The last 10 records, all fields, ordered by name and id
+
+	/api.json?query=News&order=name;id&limit=10&fields=*
+
+
+Use case 2:
+
+	Structure: News
+	Module: content
+	We want: The record where id=10, fields title and text
+
+	/api.json?query=News&id=10&fields=title,text
+
+Use case 3:
+
+	Structure: News (suppose there are two structures called News)
+	Module: texts
+	We want: The title where id=10
+
+	/api.json?query=News&module=texts&id=10&fields=title
