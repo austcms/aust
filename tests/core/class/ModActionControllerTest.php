@@ -9,6 +9,8 @@ class ModActionControllerTest extends PHPUnit_Framework_TestCase
 	public $structureId;
 	
 	function setUp(){
+		Fixture::getInstance()->create();
+
 		if( empty($this->structureId) ){
 			$query = Connection::getInstance()->query("SELECT id FROM categorias WHERE tipo='conteudo' AND classe='estrutura' LIMIT 1");
 			$this->assertArrayHasKey(0, $query);
@@ -19,6 +21,9 @@ class ModActionControllerTest extends PHPUnit_Framework_TestCase
 			define('DO_ACT', false);
 		
         $this->params = $this->structureId;
+	}
+	function tearDown(){
+		Fixture::getInstance()->destroy();
 	}
 	
 	function testAustNode(){
