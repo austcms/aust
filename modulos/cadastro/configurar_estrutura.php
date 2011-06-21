@@ -17,6 +17,7 @@
 /**
  * INICIALIZAÇÃO
  */
+
 $tabela_da_estrutura = $module->getTable();
 
 include_once $module->getIncludeFolder().'/'.MOD_MODELS_DIR.'CadastroSetup.php';

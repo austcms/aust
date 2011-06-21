@@ -103,9 +103,8 @@ if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'):
         $diretorio = MODULES_DIR.Aust::getInstance()->LeModuloDaEstrutura($_GET['aust_node']); // pega o endereço do diretório
         foreach (glob($diretorio."*", GLOB_ONLYDIR) as $pastas) {
             if(is_file($pastas.'/configurar_estrutura.php')){
-                //include($pastas.'/modulo.class.php');
-                include($pastas.'/index.php');
-                include($pastas.'/configurar_estrutura.php');
+				$module = ModulesManager::getInstance()->modelInstance($_GET["aust_node"]);
+				include($pastas.'/configurar_estrutura.php');
             }
         }
     }
@@ -118,11 +117,9 @@ if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'):
     else if($_GET['action'] == 'configurar_modulo'){
         //$diretorio = MODULES_DIR.Aust::getInstance()->LeModuloDaEstrutura($_GET['aust_node']); // pega o endereço do diretório
         $pastas = $_GET['modulo'];
-        //foreach (glob($diretorio."*", GLOB_ONLYDIR) as $pastas) {
-            if(is_file($pastas.'/configurar_modulo.php')){
-                include($pastas.'/index.php');
-                include($pastas.'/configurar_modulo.php');
-            }
+        if(is_file($pastas.'/configurar_modulo.php')){
+            include($pastas.'/configurar_modulo.php');
+        }
     }
 
     /*
