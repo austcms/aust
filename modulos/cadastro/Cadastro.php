@@ -961,7 +961,7 @@ class Cadastro extends Module {
      * 
      */
     
-    public function loadSql($options = array()){
+    public function loadSql($param = array()){
         // configura e ajusta as variáveis
         $categorias = (empty($param['categorias'])) ? '' : $param['categorias'];
         $metodo = (empty($param['metodo'])) ? 'listing' : $param['metodo'];
@@ -984,7 +984,6 @@ class Cadastro extends Module {
                 $c++;
             }
         }
-        
         /**
          *  SQL para verificar na tabela CADASTRO_CONF quais campos existem
          */
@@ -1148,8 +1147,53 @@ class Cadastro extends Module {
                         id=".$w."
                     ";
         }
+
         return $sql;
     } // fim SQLParaListagem()
+
+
+	/**
+     * Função para retonar a tabela de dados de uma estrutra de cadastro
+     *
+     * @param mixed $param contém o id ou nome da estrutura desejada
+     * @return array 
+     */
+    public function LeTabelaDaEstrutura($param){
+
+        /**
+         * $param é uma integer
+         */
+        if( is_int($param) or $param > 0 ){
+            $estrutura = "categorias.id='".$param."'";
+        }
+        /**
+         * $param é uma string
+         */
+        elseif( is_string($param) ){
+            $estrutura = "categorias.nome='".$param."'";
+        }
+
+        $sql = "SELECT
+                    cadastros_conf.valor AS valor
+                FROM
+                    cadastros_conf, categorias
+                WHERE
+                    categorias.id=cadastros_conf.categorias_id AND
+                    {$estrutura} AND
+                    cadastros_conf.tipo='estrutura' AND
+                    cadastros_conf.chave='tabela'
+                LIMIT 0,1";
+                //echo $sql;
+                
+        $resultado = $this->connection->query($sql);
+        $dados = $resultado[0];
+        return $dados['valor'];
+    }
+
+	function dataTable($param){
+		return $this->LeTabelaDeDados($param);
+	}
+
 
     /*
      * Cria tabela responsável por guardar arquivos
@@ -1262,12 +1306,6 @@ class Cadastro extends Module {
             return FALSE;
          }
 
-    }
-
-	 public function LeTabelaDaEstrutura($params = array()) {
-		if( !empty($this->tabela_criar) )
-        	return $this->tabela_criar;
-		return '';
     }
 
     /*

@@ -22,7 +22,7 @@ class ModController extends ModsController
         $categorias = $this->aust->LeCategoriasFilhas('',$_GET['aust_node']);
         $categorias[$_GET['aust_node']] = 'Estrutura';
         $param = array(
-            'categorias' => $categorias,
+            'categorias' => array($_GET['aust_node'] => ""),
             'metodo' => 'listing',
         );
 	
