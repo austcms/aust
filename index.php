@@ -21,7 +21,7 @@ require_once("core/config/variables.php");
 /**
  * Carrega todas as classes do sistema
  */
-include(CLASS_DIR."_carrega_classes.inc.php");
+include(CLASS_LOADER);
 
 include("config/core.php");
 if( !file_exists(CONFIG_DATABASE_FILE) ){

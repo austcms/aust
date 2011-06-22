@@ -106,7 +106,7 @@ switch($_GET['action']){
 						?>
 						<?php
 						if(!empty($_POST['categoria_chefe']) AND $_POST['categoria_chefe'] <> ''){
-							if(Aust::getInstance()->Instalar($_POST['nome'], '', 'categoria-chefe')){
+							if(Aust::getInstance()->createSite($_POST['nome'], '')){
 								?>
                                 <h2 class="ok">Categoria-chefe incluida com sucesso!</h2>
                                 <p>Simples assim. Inserimos a primeira categoria com sucesso.</p>

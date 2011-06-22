@@ -1159,7 +1159,7 @@ class Cadastro extends Module {
      * @param mixed $param contém o id ou nome da estrutura desejada
      * @return array 
      */
-    public function LeTabelaDaEstrutura($param){
+    public function LeTabelaDaEstrutura($param = ""){
 
         /**
          * $param é uma integer

@@ -32,7 +32,7 @@ include(CONFIG_DATABASE_FILE);
  * Carrega classes automaticamente
  *
  */
-    include_once(CLASS_DIR.'_carrega_classes.inc.php');
+    include_once(CLASS_LOADER);
 
 
 /**

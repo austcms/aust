@@ -22,7 +22,7 @@ include_once(THIS_TO_BASEURL."core/config/variables.php");
 /**
  * Classes do sistema
  */
-include(CLASS_DIR."_carrega_classes.inc.php");
+include(CLASS_LOADER);
 /**
  * Propriedades editáveis do sistema. Carrega todas as configurações da aplicação
  */
