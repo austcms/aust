@@ -45,9 +45,9 @@ if( !empty($_POST['novaconfig']) && $_POST['novaconfig'] ){
         'nome' => $_POST['nome'],
     );
 
-    Config::getInstance()->ajustaOpcoes($params);
+    Config::getInstance()->adjustOptions($params);
     // Grava configuração no DB
-    $status = Config::getInstance()->GravaConfig();
+    $status = Config::getInstance()->save();
 }
 
 ?>
@@ -105,7 +105,7 @@ $options = Config::getInstance()->getConfigs(
              * TIPOS DE CONFIGURAÇÕES
              */
             foreach($options as $type=>$conf){
-                if( Config::getInstance()->hasPermission($type) ){
+                if( Config::getInstance()->hasPermission($type, User::getInstance()->type()) ){
                     ?>
                     <li><a href="#"><?php echo $type ?></a></li>
                     <?php
@@ -143,7 +143,7 @@ $options = Config::getInstance()->getConfigs(
             /*
              * Usuário tem permissão para modificar estas permissões
              */
-            if( Config::getInstance()->hasPermission($type) ){
+            if( Config::getInstance()->hasPermission($type, User::getInstance()->type()) ){
                 ?>
                 <div class="background">
                     <form method="post" action="adm_main.php?section=<?php echo $_GET['section'];?>">

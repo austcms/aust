@@ -1,81 +1,47 @@
 <?php
 class Config {
 
-    private $Opcoes; // variável possuindo as configurações
     public $self = "";
 
     public $options;
-    public $conexao;
 
 	public $table = "config";
 
     /**
-     * Contém configurações de permissões de acesso às configurações do sistema
+     * Permissions to access the configurations.
      *
-     * O formato é o seguinte:
+     * The correct format is:
      *
      *      array(
-     *          tipo_1 => grupo_de_admins_1,
-     *          tipo_2 => array(
-     *              grupo_de_admins_1,
-     *              grupo_de_admins_2,
+     *          type_1 => group_1,
+     *          type_2 => array(
+     *              group_1,
+     *              group_2,
      *          ),
-     *          tipo_3 => '*'
+     *          type_3 => '*'
      *      )
      *
-     * Interpretação:
+     * Interpretation:
      *
-     *      - tipo_1 : somente grupo_de_admins_1 pode ver,
-     *      - tipo_2 : somente grupo_de_admins 1 e 2 podem ver,
-     *      - tipo_3 : todos podem ver
-     *      - tipo_4 : não especificado, ninguém pode ver, exceto webmaster.
-     *
-     * O tipo_4 neste formato, ninguém podendo ver, evita que novas configurações
-     * venham à tona e possam ser vistos por qualquer usuário.
+     *      - type_1 : only group_1 can access,
+     *      - type_2 : only groups 1 e 2 can access,
+     *      - type_3 : everyone have access
+     *      - type_4 : not specified, no one can access, except root user.
      *
      * @var <array>
      */
-    public $permissions = array('*'=>'*');
-
-    /**
-     * Grupo do usuário
-     */
+    public $permissions = array('general'=>'*', 'Geral' => '*');
     public $_userType = '';
-
-    /**
-     * Grupo root
-     */
     public $_rootType = 'root';
-
-    /**
-     * Contém os itens de configuração que estão faltando para
-     * que o sistema esteja íntegro.
-     *
-     * @var <array>
-     */
     public $_missingConfig = array();
+	public $neededConfig;
 
     
     function __construct( $params = "" ) {
-        $this->conexao = Connection::getInstance();
-
 		if( !empty($_SERVER['QUERY_STRING']) && !empty($_SERVER['PHP_SELF']) )
         	$this->self = $_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'];
 
-        /*
-         * Permissões de usuários acessar configurações
-         */
-		$permissions = StructurePermissions::getInstance();
-        $this->permissions = StructurePermissions::getInstance()->read($params);
-
-        /*
-         * Grupo do usuário (webmaster, administrador, moderador, etc)
-         */
         $this->_userType = User::getInstance()->type();
-
-        /*
-         * Grupo root
-         */
         $this->_rootType = User::getInstance()->rootType();
 
         if( !$this->checkIntegrity() )
@@ -95,9 +61,6 @@ class Config {
     public function getConfig($property){
         if( !empty($property) ){
 
-            /*
-             * String, ou seja, apenas um valor dado.
-             */
             if( is_string($property) ){
                 $type = Registry::read('configStandardType');
                 $field = 'valor';
@@ -132,7 +95,7 @@ class Config {
     public function getConfigs($params = array()){
 
         /*
-         * Modo de retorno
+         * mode of return
          */
         $mode = (empty($params["mode"])) ? '' : $params["mode"];
         unset($params['mode']);
@@ -141,7 +104,7 @@ class Config {
         unset($params['where']);
 
         /**
-         * Tipo de configuração, geralmente global
+         * Type of configuration, generally global
          */
         $type = (empty($params["type"])) ? array() : $params["type"];
         if( is_string($type) )
@@ -173,45 +136,33 @@ class Config {
     /**
      * hasPermission()
      *
-     * Verifica se usuário tem permissão de ver uma determinada configuração
-     * seguindo as regras em $this->permission.
+     * Verifies if an user has permission to see a given configuration
+     * following the rules in $this->permission.
      *
      * @param <mixed> $param
      * @return <bool>
      */
-    function hasPermission($param){
-        /*
-         * $ut = $this->_userType
-         */
-        $uT = $this->_userType;
+    function hasPermission($type, $userType = ""){
 
-        /*
-         * Usuários Root podem tudo
-         */
+		if( !empty($userType) )
+			$uT = $userType;
+		else
+        	$uT = $this->_userType;
+
         if( $uT == $this->_rootType )
             return true;
-        
-        /*
-         * Por padrão, param é = type (global, etc)
-         */
-        if( is_string($param) ){
-            $givenType = $param;
-            /*
-             * Se existe alguma permissão definida
-             */
+		
+        if( is_string($type) ){
+            $givenType = $type;
+
             if( array_key_exists($givenType, $this->permissions) ){
-                /*
-                 * String
-                 */
+
                 if( is_string( $this->permissions[$givenType]) ){
                     if( $uT == strtolower($this->permissions[$givenType]) )
                         return true;
                     if( $this->permissions[$givenType] == '*' )
                         return true;
                 }
-                /*
-                 * Array
-                 */
                 elseif( is_array( $this->permissions[$givenType]) ){
                     foreach( $this->permissions[$givenType] as $typePermitted ){
                         if( $uT == strtolower($typePermitted) )
@@ -221,24 +172,21 @@ class Config {
             }
         }
         return false;
-    } // end hasPermission()
+    }
 
-    /*
-     *
-     * INTEGRIDADE DAS CONFIGURAÇÕES
-     *
-     */
     /**
      * checkIntegrity()
      *
-     * Verifica a integridade das configurações, se todas
-     * necessárias estão presentes.
+     * Verifies configurations integrity.
      *
      * @return <bool>
      */
     public function checkIntegrity(){
-
-        $neededConfig = Registry::read('neededConfig');
+		
+		if( empty($this->neededConfig) )
+        	$neededConfig = Registry::read('neededConfig');
+		else
+			$neededConfig = $this->neededConfig;
 
         if( !empty($neededConfig) AND is_array($neededConfig) ){
             foreach( $neededConfig as $valor ){
@@ -257,9 +205,6 @@ class Config {
                 ";
         $query = Connection::getInstance()->query($sql);
 
-        /*
-         * Não é igual o número de valores encontrados e o de necessários
-         */
         if( $qtdNeeded != count($query) ){
 
             $actualConfig = array();
@@ -279,10 +224,14 @@ class Config {
         } else
             return true;
 
-    } // end checkIntegrity()
+    }
 
     public function _initConfig(){
 
+		if( empty($this->_missingConfig) )
+	        if( $this->checkIntegrity() )
+				return true;
+		
         $i = 0;
         foreach( $this->_missingConfig as $neededConfig ){
             foreach( $neededConfig as $key=>$value ){
@@ -292,8 +241,6 @@ class Config {
             $i++;
         }
 
-        //pr($fields);
-        //pr($values);
         foreach( $fields as $i=>$valor ){
             
             $sql =
@@ -308,27 +255,7 @@ class Config {
         return true;
     }
 
-
-    // Atualiza Configurações
-    function AtualizaConfig(){
-        $this->__construct();
-    }
-
-    // Acessa a variável que guarda as configurações e retorna seu valor
-    public function LeOpcao($propriedade, $metodo = ''){
-            if(empty($this->Opcoes[$propriedade])){
-                    if($metodo == 'form'){
-                            return '';
-                    } else if(empty($metodo)) {
-                            return ''; //return 'con'.$propriedade.'fig01';
-                    }
-            } else {
-                    return $this->Opcoes[$propriedade];
-            }
-    }
-
     function updateOptions($params){
-		
 		$params = sanitizeString($params);
 		$sql = "UPDATE ".$this->table." SET valor='".$params["valor"]."' WHERE id='".$params["id"]."'";
         Connection::getInstance()->exec($sql);
@@ -336,24 +263,16 @@ class Config {
         return '<span style="color: green;">Configuração salva com sucesso!</span>';
     }
     
-    // Ajusta a configuração
-    function ajustaOpcoes($params){ //$propriedade, $valor, $nome = '', $tipo = '', $local = ''){
-
+    // Adjusts the configuration
+    function adjustOptions($params){
         $this->options[$params["tipo"]][$params["propriedade"]] = $params;
         return true;
-        /*
-        $this->Opcoes[$propriedade] = $valor;
-        $this->OpcoesNomes[$propriedade] = $nome;
-        $this->OpcoesTipo[$propriedade] = $tipo;
-        $this->OpcoesLocal[$propriedade] = $local;
-         * 
-         */
     }
 
-    // Grava as configurações definitivamente no banco de dados
-    public function gravaConfig() {
+    // save into the configuration the DB
+    public function save() {
 
-        foreach($this->options as $tipo=>$valor) {
+        foreach( $this->options as $tipo=>$valor ){
 
             $sql = "SELECT id FROM ".$this->table." WHERE tipo='".$tipo."' AND propriedade='".key($valor)."'";
             $query = Connection::getInstance()->count($sql);
@@ -399,38 +318,8 @@ class Config {
 				'classe' => 'insucesso',
 				'mensagem' => 'Ocorreu um erro desconhecido. Algumas opções não foram salvas.'
 			);
-
-        }
-
-    }
-
-
-
-    public function ContaConfig(){
-        return count($this->options);
-    }
-
-    // retorna a data de agora no formato certo para o campo MySQL DATETIME
-    function DataParaMySQL($param = ''){
-        if(empty($param) or $param == 'datetime'){
-            return date("Y-m-d H:i:s");
-        } elseif($param == 'date'){
-            return date("Y-m-d");
         }
     }
-    
-    // retorna a data
-    function PegaData($formato){
-        $formato = StrToLower($formato);
-        if ($formato == "dia") return date("d");
-        else if ($formato == "mes") return date("m");
-        else if ($formato == "ano") return date("Y");
-        else if ($formato == "hora") return date("H");
-        else if ($formato == "minuto") return date("i");
-        else if ($formato == "segundo") return date("s");
-    }
-
 
 }
-
 ?>
