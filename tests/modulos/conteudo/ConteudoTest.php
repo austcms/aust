@@ -32,7 +32,7 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
     }
 
 	function test_userLogged(){
-		
+		Fixture::getInstance()->create();
 		$user = getUser();
         $_SESSION['login']['id'] = $user["id"];
         $_SESSION['login']['username'] = $user["login"];

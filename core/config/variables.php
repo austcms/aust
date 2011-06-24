@@ -2,239 +2,162 @@
 /*
  * VARIABLES
  *
- * Aqui estão as variáveis globais, como endereços, configurações, etc.
- * Caminhos são relativos ao diretório raiz ("/").
+ * Paths to directories and files. THIS_TO_BASEURL is the relative path
+ * to root.
  */
-
-/**
- * Variáveis de sistema, sem endereços
- */
-define('DS', '/');
 
 if(!defined('THIS_TO_BASEURL')){
     define('THIS_TO_BASEURL', '');
 }
 
-/**
- * DIRETIVAS DO CORE
+/*
+ * Root folders
  */
-/**
- * Define o diretório do CORE
+
+define("CORE_DIR", 						THIS_TO_BASEURL."core/");
+
+define("VENDOR_DIR", 					THIS_TO_BASEURL."vendor/");
+define("TMP_DIR", 						THIS_TO_BASEURL."tpm/");
+
+/*
+ * Core directories
  */
-define("CORE_DIR", 		THIS_TO_BASEURL."core/");
-	define("APP_DIR", 	CORE_DIR."app/");
-
-define("VENDOR_DIR", 	THIS_TO_BASEURL."vendor/");
-define("TMP_DIR", 		THIS_TO_BASEURL."tpm/");
-
-    /**
-     * Define diretórios relativos ao CORE
-     */
-    /**
-     * Diretório do MVC do Core
-     */
-    define("CONTROLLERS_DIR", APP_DIR."controllers/");
-    define("MODELS_DIR", APP_DIR."models/");
-    define("VIEWS_DIR", APP_DIR."views/");
+	define("APP_DIR", 					CORE_DIR."app/");
+	
+    define("CONTROLLERS_DIR", 			APP_DIR."controllers/");
+    define("MODELS_DIR", 				APP_DIR."models/");
+    define("VIEWS_DIR", 				APP_DIR."views/");
     define("VIEW_FILE_STANDARD_EXTENSION", ".php");
 
-    /**
-     * Define o diretório onde estão os arquivos de configuração do core
+    /*
+     * Core's config
      */
-	 define("CORE_CONFIG_DIR", CORE_DIR."config/");
-	 	define("VERSION_FILE", CORE_CONFIG_DIR."version.php");
-	 	define("PERMISSIONS_FILE", CORE_CONFIG_DIR."permissions.php");
+	 define("CORE_CONFIG_DIR", 			CORE_DIR."config/");
+	 	define("VERSION_FILE", 			CORE_CONFIG_DIR."version.php");
+	 	define("PERMISSIONS_FILE", 		CORE_CONFIG_DIR."permissions.php");
 
-	 	define("LOAD_CORE", CORE_DIR."load_core.php");
-
-    /**
-     * Define o caminho para a pasta de instalação
-     */
-    define("INSTALLATION_DIR", CORE_CONFIG_DIR."installation/");
-    /**
-     * DBSCHEMA: arquivo
-     */
-    define("DBSCHEMA_FILE_PATH", CORE_DIR.INSTALLATION_DIR."dbschema.php");
-    /**
-     * USER INTERFACE
-     *
-     * Define o diretório onde estão as interfaces de usuário do painel do sistema
-     */
-    define("UI_PATH", CORE_DIR."user_interface/");
-        define("CSS_PATH", UI_PATH."css/");
-        define("IMG_DIR", UI_PATH."img/");
-    define("UI_STANDARD_FILE", UI_PATH."ui.php");
-    define("THEMES_DIR", UI_PATH."themes/");
-    define("THEMES_SCREENSHOT_FILE", "screenshot");
-    /**
-     * Define o diretório onde estão os arquivos de login e autenticação
-     */
-    define("LOGIN_PATH", CORE_DIR."login/");
-    /**
-     * Libs
-     */
-    define("LIB_DIR", CORE_DIR."libs/"); define("LIBS_DIR", LIB_DIR);
-    define("LIB_DATA_TYPES", CORE_DIR."libs/functions/data_types.php");
-
-    /**
-     * GDImageViewer
-     */
-    define('IMAGE_VIEWER_DIR', LIB_DIR.'imageviewer/');
-    /**
-     * Javascript:
-     *
-     * Define o diretório onde estão os arquivos Javascript
-     */
-    define("BASECODE_JS", LIB_DIR."js/");
-    /**
-     * Diretório dos módu1os
-     */
-	 define('MODULES_DIR', THIS_TO_BASEURL."modulos/");
-	 define('MODULOS_DIR', MODULES_DIR);
-    /**
-     * Diretório de inclusão de arquivos ('inc')
-     */
-    define('INC_DIR', CORE_DIR.'inc/');
-    /**
-     * TRIGGER
-     *
-     * São os arquivos que podem desempenhar funções de módulos quando estes
-     * estão ausentes.
-     */
- 	define('CONTENT_DISPATCHER', 'content');
-	define('MODULES', 'content'); # alias for content_dispatcher
-	
-    define('CONTENT_TRIGGERS_DIR', INC_DIR.'content.inc/');
-        define('CREATE_ACTION', 'create');
-        define('EDIT_ACTION', 'edit');
-        define('LISTING_ACTION', 'listing');
-        define('DELETE_ACTION', 'delete');
-        define('ACTIONS_ACTION', 'actions');
-        define('SAVE_ACTION', 'save');
-
-
-    /**
-     * MENSAGENS
-     * 
-     * View com Mensagens do sistema
-     */
-    /**
-     * Diretório com as views que contém as mensagens
-     */
-    define('MSG_VIEW_DIR', CORE_CONFIG_DIR.'messages/');
-    define('MSG_ERROR_VIEW_DIR', MSG_VIEW_DIR.'error/');
-    /**
-     * msg: acesso negado
-     */
-    define('MSG_DENIED_ACCESS', MSG_ERROR_VIEW_DIR.'access_denied.php');
-
-
-/**
- * CONFIGURAÇÕES GERAIS
- */
-/**
- * Configurações gerais 
- */
-define('CONFIG_DIR', THIS_TO_BASEURL.'config/');
-	/**
-	 * Endereço do arquivo de configurações da base de dados
-	 */
-	if(!defined('CONFIG_DATABASE_FILE')){
-		define('CONFIG_DATABASE_FILE', CONFIG_DIR.'database.php');
-	}
-	/**
-	 * Configurações do Core
-	 */
-	define('CONFIG_CORE_FILE', CONFIG_DIR.'core.php');
-	/**
-	 * Exported Data
-	 */
-	define('EXPORTED_DIR', CONFIG_DIR.'export/');
-	define('EXPORTED_FILE', EXPORTED_DIR.'exported_data.php');
-
- 	define("NAVIGATION_PERMISSIONS_FILE", CONFIG_DIR."nav_permissions.php");
-
-
-/**
- * CLASSES
- */
-/**
- * Diretório das classes e configurações extras
- */
-define("CLASS_DIR", CORE_DIR.'class/');
-define("CLASS_LOADER", CLASS_DIR.'_carrega_classes.inc.php');
-define("CLASS_FILE_SUFIX", ".class");
-
-        /*
-         * HELPERS
-         */
-        define("HELPERS_DIR", CLASS_DIR."helpers/");
-        define("HELPER_CLASSNAME_SUFIX", "Helper");
-
-
-/**
- * MÓDULOS
- *
- * Configurações de Módulos. Os paths são relativos ao diretório do módulo
- */
-/**
- * Arquivos de actions
- */
-define('MOD_ACTIONS_FILE', CORE_DIR.'actions.php');
-/**
- * Arquivo que contém o DbSchema do módulo
- */
-define('MOD_DBSCHEMA', CORE_CONFIG_DIR.'db_schema.php');
-/**
- * Configurações do Módulo
- *
- *      A partir do diretório do módulo...
- *		***** NÃO PODE SER SEGUNDO THIS_TO_BASEURL *****
- */
-	define('MOD_CONFIG', 'core/config/config.php'); // relative to MODULES_DIR
-/**
- * Controller de setup de novas estruturas
- */
-define('MOD_SETUP_CONTROLLER', 'controller/setup_controller.php');
-/**
- * Definição dos diretórios da arquitetura MVC (se disponível)
- *
- * 1: Diretório do controller
- * 2: Arquivo controller principal
- * 3: Nome do controller principal
- * 4: Diretório do view
- */
-define('MOD_CONTROLLER_DIR', 'controller/'); // Diretório do Controller
-define('MOD_CONTROLLER', MOD_CONTROLLER_DIR.'mod_controller.php');
-define('MOD_CONTROLLER_NAME', 'ModController');
-define('MOD_VIEW_DIR', 'view/');
+ 	define("LOAD_CORE", 				CORE_DIR."load_core.php");
 
     /*
-     * MODELS
+     * Installation
      */
-    define('MOD_MODELS_DIR', 'models/'); // Diretório do Controller
+    define("INSTALLATION_DIR", 			CORE_CONFIG_DIR."installation/");
+    	define("DBSCHEMA_FILE_PATH", 	CORE_DIR.INSTALLATION_DIR."dbschema.php");
+
+    /*
+     * GUI
+     */
+    define("UI_PATH", 					CORE_DIR."user_interface/");
+        define("CSS_PATH", 				UI_PATH."css/");
+        define("IMG_DIR", 				UI_PATH."img/");
+    define("UI_STANDARD_FILE", 			UI_PATH."ui.php");
+    define("THEMES_DIR", 				UI_PATH."themes/");
+    define("THEMES_SCREENSHOT_FILE", 	"screenshot");
+    define("LOGIN_PATH", 				CORE_DIR."login/");
+
+    /*
+     * Libraries
+     */
+    define("LIB_DIR", 					CORE_DIR."libs/"); define("LIBS_DIR", LIB_DIR);
+    define("LIB_DATA_TYPES", 			CORE_DIR."libs/functions/data_types.php");
+    define('IMAGE_VIEWER_DIR', 			LIB_DIR.'imageviewer/');
+    define("BASECODE_JS", 				LIB_DIR."js/");
+
+    /*
+     * Diretório dos módu1os
+     */
+
+	define('MODULES_DIR', 				THIS_TO_BASEURL."modulos/");
+	define('MODULOS_DIR', 				MODULES_DIR);
+    define('INC_DIR', 					CORE_DIR.'inc/');
+    
+	/*
+     * TRIGGER
+     */
+
+ 	define('CONTENT_DISPATCHER', 		'content');
+	define('MODULES', 					'content'); # alias for content_dispatcher
+	
+    define('CONTENT_TRIGGERS_DIR', 		INC_DIR.'content.inc/');
+        define('CREATE_ACTION', 		'create');
+        define('EDIT_ACTION', 			'edit');
+        define('LISTING_ACTION', 		'listing');
+        define('DELETE_ACTION', 		'delete');
+        define('ACTIONS_ACTION', 		'actions');
+        define('SAVE_ACTION', 			'save');
+
+
+    /*
+     * Standard Messages
+     */
+    define('MSG_VIEW_DIR', 				CORE_CONFIG_DIR.'messages/');
+    define('MSG_ERROR_VIEW_DIR', 		MSG_VIEW_DIR.'error/');
+    define('MSG_DENIED_ACCESS', 		MSG_ERROR_VIEW_DIR.'access_denied.php');
+
+/*
+ * General Config
+ */
+
+	define('CONFIG_DIR', 				THIS_TO_BASEURL.'config/');
+	if(!defined('CONFIG_DATABASE_FILE')){
+		define('CONFIG_DATABASE_FILE', 	CONFIG_DIR.'database.php');
+	}
+	define('CONFIG_CORE_FILE', 			CONFIG_DIR.'core.php');
+
+	define('EXPORTED_DIR', 				CONFIG_DIR.'export/');
+	define('EXPORTED_FILE', 			EXPORTED_DIR.'exported_data.php');
+ 	define("NAVIGATION_PERMISSIONS_FILE", CONFIG_DIR."nav_permissions.php");
+
+/*
+ * Classes
+ */
+	define("CLASS_DIR", 				CORE_DIR.'class/');
+	define("CLASS_LOADER", 				CLASS_DIR.'_autoload.php');
+	define("CLASS_FILE_SUFIX", 			".class");
+
+	define("HELPERS_DIR", 				CLASS_DIR."helpers/");
+	define("HELPER_CLASSNAME_SUFIX", 	"Helper");
+
+
+/*
+ * Modules
+ */
+	define('MOD_ACTIONS_FILE', 			CORE_DIR.'actions.php');
+	define('MOD_DBSCHEMA', 				CORE_CONFIG_DIR.'db_schema.php');
+	/*
+	 * Caution: must be relative to MODULES_DIR
+	 */
+	define('MOD_CONFIG', 				'core/config/config.php');
+
+	define('MOD_SETUP_CONTROLLER', 		'controller/setup_controller.php');
+
+	define('MOD_CONTROLLER_DIR', 		'controller/');
+	define('MOD_CONTROLLER', 			MOD_CONTROLLER_DIR.'mod_controller.php');
+	define('MOD_CONTROLLER_NAME', 		'ModController');
+	define('MOD_VIEW_DIR', 				'view/');
+
+    define('MOD_MODELS_DIR', 			'models/');
 
 /*
  * MIGRATIONS
  */
-    define('MIGRATION_MOD_DIR', CORE_DIR.'migrations/');
+    define('MIGRATION_MOD_DIR', 		CORE_DIR.'migrations/');
 
 /*
  * WIDGETS
  */
-    define('WIDGETS_DIR', 'widgets/');
+    define('WIDGETS_DIR', 				'widgets/');
 
 /*
  * CACHE
  */
-    define('CACHE_DIR', TMP_DIR.'cache/');
-    define('CACHE_PUBLIC_DIR', TMP_DIR.'cache/');
+    define('CACHE_DIR', 				TMP_DIR.'cache/');
+    define('CACHE_PUBLIC_DIR', 			TMP_DIR.'cache/');
 
-    define('UPLOADS_DIR', 'uploads/');
+    define('UPLOADS_DIR', 				'uploads/');
 
-    define('CACHE_CSS_CONTENT', CACHE_PUBLIC_DIR.'style.css');
-    define('CACHE_JS_CONTENT', CACHE_PUBLIC_DIR.'javascript.js');
-    define('CACHE_CSS_FILES', CACHE_DIR.'CLIENTSIDE_CSS_FILES');
-    define('CACHE_JS_FILES', CACHE_DIR.'CLIENTSIDE_JS_FILES');
-
+    define('CACHE_CSS_CONTENT', 		CACHE_PUBLIC_DIR.'style.css');
+    define('CACHE_JS_CONTENT', 			CACHE_PUBLIC_DIR.'javascript.js');
+    define('CACHE_CSS_FILES', 			CACHE_DIR.'CLIENTSIDE_CSS_FILES');
+    define('CACHE_JS_FILES', 			CACHE_DIR.'CLIENTSIDE_JS_FILES');
 ?>

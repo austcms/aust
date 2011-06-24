@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title><?php echo Config::getInstance()->getConfig('site_name'); ?> - Gerenciador<?php /* ifisset(Config::getInstance()->LeOpcao('sitename'), 'Aust'); */ ?></title>
+    <title><?php echo Config::getInstance()->getConfig('site_name'); ?> - Gerenciador</title>
     <!-- TinyMCE -->
     <?php
     $html = HtmlHelper::getInstance();

@@ -276,7 +276,7 @@ if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'):
                             <label>Categoria-chefe: </label>
                                 <select name="categoria_chefe">
                                     <?php
-                                    Aust::getInstance()->LeCategoriaChefe(Array('id', 'nome'), '<option value="&%id">&%nome</option>', '', '');
+                                    Aust::getInstance()->getSite(Array('id', 'nome'), '<option value="&%id">&%nome</option>', '', '');
                                     ?>
                                 </select>
                         </div>

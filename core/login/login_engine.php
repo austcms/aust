@@ -15,7 +15,7 @@ include_once(CONFIG_DATABASE_FILE);
 /**
  * Carrega classes necessárias
  */
-include_once(CLASS_DIR."/_carrega_classes.inc.php");
+include_once(CLASS_LOADER);
 
 $conexao = Connection::getInstance();
 

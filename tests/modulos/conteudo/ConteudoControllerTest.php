@@ -9,6 +9,8 @@ class ConteudoControllerTest extends PHPUnit_Framework_TestCase
 	
 	function setUp(){
 		if( empty($this->structureId) ){
+			installModule('conteudo');
+			Fixture::getInstance()->create();
 			$query = Connection::getInstance()->query("SELECT id FROM categorias WHERE tipo='conteudo' AND classe='estrutura' LIMIT 1");
 			$this->assertArrayHasKey(0, $query);
 			$this->structureId = $query[0]["id"];
@@ -17,11 +19,6 @@ class ConteudoControllerTest extends PHPUnit_Framework_TestCase
         $this->params = $this->structureId;
 
 		include_once(MODULES_DIR."conteudo/".MOD_CONTROLLER_DIR."mod_controller.php");
-    }
-
-    function _testInstallationDiagnostics(){
-		$_GET["action"] = "listing";
-#        $this->obj = new ModController($this->params);
     }
 
     function testListingAction(){

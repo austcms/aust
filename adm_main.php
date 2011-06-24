@@ -31,7 +31,7 @@ include_once(THIS_TO_BASEURL."core/config/variables.php");
 /**
  * Classes do sistema
  */
-include(CLASS_DIR."_carrega_classes.inc.php");
+include(CLASS_LOADER);
 
 $application = new Application();
 ?>

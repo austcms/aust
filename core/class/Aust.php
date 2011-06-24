@@ -2,10 +2,8 @@
 /**
  * AUST
  *
- * Classe que contém funções acerca de estrutura de banco de dados em formato árvore
+ * Controls the structures and its taxonomies.
  *
- * @package Classes
- * @name Aust
  * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @version 0.2
  * @since v0.1.5, 30/05/2009
@@ -13,16 +11,8 @@
 
 class Aust {
 
-    /**
-     *
-     * @var string Tabela padrão do sistema Aust
-     */
     static $austTable = 'categorias';
     protected $AustCategorias = Array();
-    /**
-     *
-     * @var class Classe responsável pela conexão com o banco de dados
-     */
     public $connection;
     protected $conexao;
 
@@ -35,14 +25,6 @@ class Aust {
         unset($this->AustCategorias);
     }
 
-    /**
-     * getInstance()
-     *
-     * Para Singleton
-     *
-     * @staticvar <object> $instance
-     * @return <Aust object>
-     */
     static function getInstance(){
         static $instance;
 
@@ -51,52 +33,89 @@ class Aust {
         }
 
         return $instance[0];
-
     }
 
-    /*
-     *
-     * CATEGORIAS
-     *
-     */
+	/**
+	 * getStructureInstance()
+	 *
+	 * Return the instance of a structure's model.
+	 *
+	 * @param $austNode (int)
+	 */
 	function getStructureInstance($austNode){
-	    /**
-	     * Identifica qual é a pasta do módulo responsável por esta
-	     * estrutura/categoria
-	     */
 	    $modDir = $this->LeModuloDaEstrutura($austNode).'/';
 
-	    /*
-	     *
-	     * INSTANCIA MÓDULO
-	     *
-	     */
-	    /**
-	     * Carrega arquivos principal do módulo requerido
-	     */
-	        include(MODULES_DIR.$modDir.MOD_CONFIG);
-	        /**
-	         * Carrega classe do módulo e cria objeto
-	         */
-	        $module = (empty($modInfo['className'])) ? 'Classe' : $modInfo['className'];
-	        include_once(MODULES_DIR.$modDir.$module.'.php');
+        include(MODULES_DIR.$modDir.MOD_CONFIG);
+        $module = (empty($modInfo['className'])) ? 'Classe' : $modInfo['className'];
+        include_once(MODULES_DIR.$modDir.$module.'.php');
 
-	        $param = array(
-	            'config' => $modInfo,
-	            'user' => User::getInstance(),
-	        );
-
-			
-	        $object = new $module($param);
-			$object->setAustNode($austNode);
-			
-			return $object;
+        $param = array(
+            'config' => $modInfo,
+            'user' => User::getInstance(),
+        );
+		
+        $object = new $module($param);
+		$object->setAustNode($austNode);
+		
+		return $object;
 	}
+
+    /**
+     * gravaEstrutura()
+     *
+     * Creates a new structure.
+     *
+     * @param array $param Contém os seguintes índices:
+     *      string  [nome]              structure's name;
+     *      int     [categoriaChefe]    structure's father id
+     *      bool    [publico]           1, everyone has access; 0, only root has access
+     *      string  [modulo]            modules' name
+     *      string  [autor]             struture's author id
+     */
+    function gravaEstrutura($params) {
+
+        $nome = $params['nome'];
+        $nome_encoded = (empty($params['nome_encoded'])) ? encodeText($nome) : $params['nome_encoded'] ;
+        $categoria_chefe = $params['categoriaChefe'];
+        $estrutura = (empty($params['estrutura'])) ? 'estrutura' : $params['estrutura'] ;
+        $publico = (empty($params['publico'])) ? '1' : $params['publico'] ;
+        $modulo = $params['moduloPasta'];
+        $autor = $params['autor'];
+
+
+        if(is_file(MODULES_DIR.$modulo.'/config.php')) {
+            include(MODULES_DIR.$modulo.'/config.php');
+            $tipo_legivel = $modInfo['nome'];
+        } else {
+            $tipo_legivel = NULL;
+        }
+
+        $sql = "INSERT INTO
+            categorias
+            (
+            nome,subordinadoid,classe,tipo,tipo_legivel,publico,autor,
+            nome_encoded
+            )
+                        VALUES
+            (
+            '$nome','$categoria_chefe','estrutura','$modulo','$tipo_legivel',$publico,'$autor',
+            '$nome_encoded'
+            )
+                ";
+        /**
+         * Retorna o id do registro feito
+         */
+        if (Connection::getInstance()->exec($sql)) {
+            return Connection::getInstance()->conn->lastInsertId();
+        } else {
+            return FALSE;
+        }
+    }
 	
 	/**
 	 * create()
 	 * 
-	 * cria uma nova categoria ou estrutura
+	 * Creates a new structure's category.
 	 *
 	 * @return int id criado
 	 */
@@ -116,8 +135,7 @@ class Aust {
         if( !$father ) return false;
 
         /**
-         * Faz um loop para descobrir qual é o patriarca
-         * desta nova categoria a ser cadastrada.
+         * Loops to find out who's the Patriarch of this new category
          */
         $i = 0;
         $subordinadoidtmp = $father;
@@ -144,8 +162,8 @@ class Aust {
             }
 
             /*
-             * Patriarca
-            */
+             * Patriarch
+             */
             if( !empty($dados['patriarca']) )
                 $patriarca = $dados['patriarca'];
             else
@@ -191,7 +209,7 @@ class Aust {
         }
 
         return false;
-    } // end create()
+    }
 
     public function getPatriarch($id) {
 
@@ -208,7 +226,7 @@ class Aust {
         $query = reset( $query );
 
         /**
-         * Categoria sem patriarca, busca o patriarca do seu pai
+         * Category without patriarch, go for its father's patriarch
          */
         if( empty($query['patriarca'])
                 AND $query['classe'] == 'categoria' ) {
@@ -216,15 +234,15 @@ class Aust {
             return $this->getPatriarch($query['subordinadoid']);
         }
         /*
-         * Sem patriarca, mas é uma estrutura, então é o próprio patriarca
-        */
+         * No patriarch, but it's an structure, so it is itself
+         */
         elseif( empty($query['patriarca'])
                 AND $query['classe'] == 'estrutura' ) {
             return $query['nome'];
         }
         /*
-         * Tem um patriarca já definido.
-        */
+         * A patriarch is already defined
+         */
         else {
             $this->_recursiveCurrent = 1;
             return $query['patriarca'];
@@ -234,7 +252,7 @@ class Aust {
 	/**
 	 * deleteNodeImages( $node_id )
 	 * 
-	 * Exclui todas as imagens de um dado node.
+	 * Deletes images from a aust node (structure or category).
 	 * 
 	 * @param int $node_id node_id da categoria
 	 * @return bool
@@ -260,87 +278,22 @@ class Aust {
 		return true;
 	}
 
-    /**
-     * gravaEstrutura()
-     *
-     * Grava uma nova estrutura na tabela categorias
-     *
-     * @param array $param Contém os seguintes índices:
-     *      string  [nome]              nome da estrutura;
-     *      int     [categoriaChefe]    id do pai da estrutura
-     *      string  [estrutura]         indica 'estrutura' se for estrutura, e senão um string sendo o tipo de categoria
-     *      bool    [publico]           1, todos tem acesso (exceto quando especificadas permissões); 0, somente Webmaster tem acesso
-     *      string  [modulo]            nome da pasta do módulo responsável por esta estrutura
-     *      string  [autor]             autor da estrutura
-     */
-    function gravaEstrutura($params) {
-
-        $nome = $params['nome'];
-        $nome_encoded = (empty($params['nome_encoded'])) ? encodeText($nome) : $params['nome_encoded'] ;
-        $categoria_chefe = $params['categoriaChefe'];
-        $estrutura = (empty($params['estrutura'])) ? 'estrutura' : $params['estrutura'] ;
-        $publico = (empty($params['publico'])) ? '1' : $params['publico'] ;
-        $modulo = $params['moduloPasta'];
-        $autor = $params['autor'];
-
-
-        if(is_file(MODULES_DIR.$modulo.'/config.php')) {
-            include(MODULES_DIR.$modulo.'/config.php');
-            $tipo_legivel = $modInfo['nome'];
-        } else {
-            $tipo_legivel = NULL;
-        }
-
-        $sql = "INSERT INTO
-            categorias
-            (
-            nome,subordinadoid,classe,tipo,tipo_legivel,publico,autor,
-            nome_encoded
-            )
-                        VALUES
-            (
-            '$nome','$categoria_chefe','estrutura','$modulo','$tipo_legivel',$publico,'$autor',
-            '$nome_encoded'
-            )
-                ";
-        /**
-         * Retorna o id do registro feito
-         */
-        if (Connection::getInstance()->exec($sql)) {
-            return Connection::getInstance()->conn->lastInsertId();
-        } else {
-            return FALSE;
-        }
-    }
-
-    public function Instalar($nome, $descricao = '', $classe = '', $tipo = '', $subordinadoid = '0') {
+    public function createSite($name, $description = '') {
         $sql = "INSERT INTO
                     categorias
                         (nome,descricao,classe,tipo,subordinadoid)
                 VALUES
-                    ('$nome','$descricao','$classe','$tipo','$subordinadoid')";
+                    ('$name','$description','categoria-chefe','','0')";
         return Connection::getInstance()->exec($sql);
     }
 
-    /**
-     *
-     * LEITURA DE INFORMAÇÕES
-     *
+    /*
+     * READING
      */
     /**
-     * Retorna categoria-chefe
-     *
-     * @todo - refatorar
-     *
-     * A string retornada pode conter sufixo e prefixo opcionais
-     *
-     * @param <type> $columns
-     * @param <type> $formato
-     * @param <type> $chardivisor
-     * @param <type> $charend
-     * @param <type> $order
+     * returns a site's information
      */
-    public function LeCategoriaChefe($columns, $formato, $chardivisor = '', $charend = '', $order = '') {
+    public function getSite($columns, $formato, $chardivisor = '', $charend = '', $order = '') {
 
         for($i = 0; $i < count($columns); $i++) {
             $fields .= $columns[$i];
@@ -378,7 +331,7 @@ class Aust {
      *
      * Get all sites and its substructures.
      *
-     * @return <array>
+     * @return <array> $params
      */
     public function getStructures($params = array()) {
 	
@@ -425,8 +378,6 @@ class Aust {
 					else
 						$stIds[] = $sts['id'];
 				}
-				
-				
                 $result[$key]['Structures'] = $structures;
             }
         }
@@ -434,38 +385,33 @@ class Aust {
 		$slaves = $this->getRelatedSlaves($stIds);
 		$masters = $this->getRelatedMasters($stIds);
 		if( !empty($slaves) ){
-			// loop pelos sites
+			// loop through
 			foreach( $result as $siteKey=>$site ){
-				// loop pelas estruturas
+				// loop through structures
 				foreach( $site['Structures'] as $stKey=>$st ){
 					
 					if( array_key_exists($st['id'], $slaves) ){
 						
 						$result[$siteKey]['Structures'][$stKey]['slaves'] = $slaves[$st['id']];
 					}
-					
 				}
 			}
-			
 		}
 		if( !empty($masters) ){
-			// loop pelos sites
+			// loop through sites
 			foreach( $result as $siteKey=>$site ){
-				// loop pelas estruturas
+				// loop through structures
 				foreach( $site['Structures'] as $stKey=>$st ){
 					
 					if( array_key_exists($st['id'], $masters) ){
-						
 						$result[$siteKey]['Structures'][$stKey]['masters'] = $masters[$st['id']];
 					}
-					
 				}
 			}
-			
 		}
         return $result;
 
-    } // end getStructures
+    }
 
 	function getInvisibleStructures(){
         $sql = "SELECT
@@ -572,19 +518,12 @@ class Aust {
         $query = Connection::getInstance()->query($sql);
 
         return $query;
-    } // end getStructuresByFather()
+    }
 
     /**
-     * @todo - refatorar
-     *
-     * Lê somente as estruturas do site e retorna segundo o formato indicado
-     *
-     * @param <type> $columns
-     * @param <type> $formato
-     * @param <type> $chardivisor
-     * @param <type> $charend
-     * @param <type> $order
-     * @param <type> $options
+     * get Structures from a site
+	 * 
+	 * (duplicated with getStructureByFather)
      */
     public function LeEstruturas($columns, $formato, $chardivisor = '', $charend = '', $order = '', $options = '') {
         $fields = '';
@@ -610,7 +549,7 @@ class Aust {
                 $str = str_replace("&%" . $columns[$i], $menu[$columns[$i]], $str);
             }
             if(!empty($options)) {
-                $diretorio = MODULES_DIR.$menu['tipo']; // pega o endereço do diretório
+                $diretorio = MODULES_DIR.$menu['tipo'];
                 foreach (glob($diretorio."*", GLOB_ONLYDIR) as $pastas) {
                     if(is_file($pastas.'/configurar_estrutura.php')) {
                         $str = str_replace('&%options', '<a href="adm_main.php?section='.$_GET['section'].'&aust_node='.$menu['id'].'&action=configurar">Configurar</a>', $str);
@@ -629,17 +568,12 @@ class Aust {
     }
 
     /**
-     * Retorna informações da estrutura selecionada.
-     *
-     * O código retorna a linha inteira da tabela de categorias.
+     * Returns information from the selected structure
      *
      * @param int $austNode
      * @return array
      */
     public function pegaInformacoesDeEstrutura( $austNode ) {
-        /**
-         * Busca na tabela do Aust onde o id é igual à estrutura requisitada.
-         */
         $result = Connection::getInstance()->query("SELECT * FROM ".Registry::read("austTable")." WHERE id='".$austNode."'" );
         return $result;
     }

@@ -43,8 +43,8 @@ class ModController extends ModActionController
          * Resultados por página
          */
         $num_por_pagina = '20';
-        $this->set('numPorPagina', $num_por_pagina);//(Config::getInstance()->LeOpcao($nome_modulo.'_paginacao')) ? Config::getInstance()->LeOpcao($nome_modulo.'_paginacao') : '10';
-        $this->set('page', $pagina);//(Config::getInstance()->LeOpcao($nome_modulo.'_paginacao')) ? Config::getInstance()->LeOpcao($nome_modulo.'_paginacao') : '10';
+        $this->set('numPorPagina', $num_por_pagina);
+        $this->set('page', $pagina);
 
         /*
          * SQL para listagem
@@ -61,7 +61,6 @@ class ModController extends ModActionController
 
         $query = $this->module->load($params);
         $this->set('sql', $this->module->lastSql );
-        //$config = $this->module->loadConfig();
         $query = $this->module->replaceFieldsValueIfEmpty($query);
 
         $this->set('query', $query );

@@ -21,7 +21,7 @@ require_once("core/config/variables.php");
 /**
  * Carrega todas as classes do sistema
  */
-include(CLASS_DIR."_carrega_classes.inc.php");
+include(CLASS_LOADER);
 
 include("config/core.php");
 if( !file_exists(CONFIG_DATABASE_FILE) ){
@@ -43,7 +43,7 @@ if( !is_dir('uploads/editor') ){
 require_once("core/load_core.php");
 
 // verifica se banco de dados existe
-if(Connection::getInstance()->DBExiste){
+if(Connection::getInstance()->dbExists()){
 
     /**
      * Faz verificação do Schema
@@ -61,7 +61,7 @@ if(Connection::getInstance()->DBExiste){
          */
 
             // Se deve-se criar um admin no sistema (pois não há um)
-            if( !empty($_POST['configurar']) AND ($_POST['configurar'] == 'criar_admin') OR (!Connection::getInstance()->VerificaAdmin()) ){
+            if( !empty($_POST['configurar']) AND ($_POST['configurar'] == 'criar_admin') OR (!User::getInstance()->hasUser()) ){
                 require(INSTALLATION_DIR.'criar_admin.inc.php');
 
             // Deve-se configurar o sistema

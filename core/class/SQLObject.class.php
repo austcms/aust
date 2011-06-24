@@ -88,10 +88,6 @@ class SQLObject {
          *
          * Descomente a linha abaixo para debugar
          */
-            //echo $sql . '<--<br />';
-
-            //echo Connection::getInstance()->testConexao();
-
         $query = $this->query($sql);
         $return = array();
         foreach($query as $chave=>$dados){
