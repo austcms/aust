@@ -31,11 +31,13 @@ class ConnectionTest extends PHPUnit_Framework_TestCase
 	function tearDown(){
 		Connection::getInstance()->exec('drop table '.$this->standardTableName.'');
 	}
+	
+	function testDbExists(){
+        $this->assertTrue( $this->conexao->dbExists() );
+	}
 
-    public function testConexaoWithPdoInit(){
-
+    function testConexaoWithPdoInit(){
         $this->assertObjectHasAttribute('conn', Connection::getInstance() );
-        //$this->assertEquals(0, count($stack));
     }
 
     /**

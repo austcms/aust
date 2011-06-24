@@ -42,7 +42,7 @@ class Application {
 	    /*
 	     * Verifica se a conexão ou tabelas existem
 	     */
-	    if( !Connection::getInstance()->DBExiste ||
+	    if( !Connection::getInstance()->dbExists() ||
 			($this->installationDiagnostics() != 1) )
 		{
 	        echo 'Erro no sistema: 002.';

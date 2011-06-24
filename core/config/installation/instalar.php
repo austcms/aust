@@ -42,7 +42,7 @@ include(LOAD_CORE);
 /**
  * Verifica se banco de dados existe
  */
-if(Connection::getInstance()->DBExiste){
+if(Connection::getInstance()->dbExists()){
 
     /**
      * Faz verificação do Schema
@@ -63,7 +63,7 @@ if(Connection::getInstance()->DBExiste){
         /**
          * Verifica se há um usuário Admin cadastrado
          */
-        } else if(!Connection::getInstance()->VerificaAdmin()){
+        } else if(!User::getInstance()->hasUser()){
             require('criar_admin.inc.php');
 
         } else if(isset($_GET["configurar"])) {

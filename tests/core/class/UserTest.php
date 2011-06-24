@@ -1,12 +1,8 @@
 <?php
 require_once 'PHPUnit/Framework.php';
 
-#####################################
-
 require_once 'tests/config/auto_include.php';
 require_once 'core/class/SQLObject.class.php';
-
-#####################################
 
 class UserTest extends PHPUnit_Framework_TestCase
 {
@@ -100,6 +96,12 @@ class UserTest extends PHPUnit_Framework_TestCase
 	
 	function testRootType(){
 		$this->assertEquals("Webmaster", User::getInstance()->rootType());
+	}
+	
+	function testHasUser(){
+		$this->assertTrue($this->obj->hasUser());
+    	Fixture::getInstance()->destroy();
+		$this->assertFalse($this->obj->hasUser());
 	}
     
 }

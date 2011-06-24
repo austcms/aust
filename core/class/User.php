@@ -261,6 +261,17 @@ class User {
         return $query;
     }
 
+	public function hasUser(){
+        $sql = "SELECT
+					admins.id
+                FROM
+					admins, admins_tipos
+                WHERE
+					admins.tipo=admins_tipos.id
+                LIMIT 0,2";
+		return (Connection::getInstance()->count($sql) > 0) ? true : false;
+	}
+
 	function reset(){
 		$this->id 			= false;
 		$this->type 		= false;

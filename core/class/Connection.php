@@ -1,71 +1,46 @@
 <?php
 /**
- * Arquivo responsável pela Conexão com Bases de Dados
+ * CONNECTION ADAPTER
  *
- * Integra PDO (se presente) ou conexão normal.
+ * Serves as an adapter (PDO or not) between the application and its database.
  *
- * ATENÇÃO:
- *      - Se você encontrar erro de 'mysql unbuffered', erro 2014, isto significa
- *        que você precisa liberar a memória após as querys que você fez.
- *        Faça isto através do método PDOStatement::closeCursor();
+ * Caution:
+ *      - Regarding PDO: if you find and error, 'mysql unbuffered', error 2014,
+ *        you have to free memory after each query.
+ *        us PDOStatement::closeCursor() for this.
  *
- * @package DB
- * @name Conexao
  * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @version 0.1
  * @since v0.1.5, 30/05/2009
  */
 class Connection extends SQLObject {
+
     /**
-     *
-     * @var bool Se a base de dados existe. Serve para verificação simples.
-     */
-	public $DBExiste;
-    /**
-     *
-     * @var Resource Possui a conexão com o DB
+     * @var Resource Where the connection handle is located
      */
 	public $conn;
-    /**
-     *
-     * @var <type> ????????????????????????
-     */
     private $db;
 
 	public $tables = array();
-	
 	public $tablesDescribed = array();
 
-    /**
-     *
-     * @var <type> Contém toda a configuração de acesso à base de dados
-     */
     protected $dbConfig;
-
     private $debugLevel = 0;
-
 	public $encoding = 'utf8';
-    /**
-     * Cria conexão com o DB. Faz integração de conexões se PDO existe ou não.
-     *
-     * @param array $conexao Contém parâmetros de conexão ao DB
-     */
+
     function __construct(){
             
         $this->dbConfig = DATABASE_CONFIG::$dbConn;
 		$this->encoding = (empty($this->dbConfig['encoding'])) ? 'utf8' : $this->dbConfig['encoding'];
 		
-        /**
-         * Se a extensão PDO, usada para conexão com vários tipos de bases de dados
-         */
-        if($this->PdoExtension()){
-            $this->PdoInit($this->dbConfig);
-            if($this->debugLevel == 1){
+        if( $this->PdoExtension() ){
+            $this->pdoInit($this->dbConfig);
+            if( $this->debugLevel == 1 ){
                 $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
             }
         }
-        /**
-         * Conexão comum
+        /*
+         * non pdo mortal connection
          */
         else {
             $this->DbConnect($this->dbConfig);
@@ -74,15 +49,6 @@ class Connection extends SQLObject {
 		$this->_acquireTablesList();
     }
 
-
-    /**
-     * getInstance()
-     *
-     * Para Singleton
-     *
-     * @staticvar <object> $instance
-     * @return <Conexao object>
-     */
     static function getInstance(){
         static $instance;
 
@@ -94,18 +60,18 @@ class Connection extends SQLObject {
     }
 
     /**
-     * Efetua conexão via PDO.
+     * pdoInit
      * 
-     * Esta função é executada somente se a extensão 'PDO' estiver ativada.
+     * This method is called if PDO extension is present.
      *
-     * @param array $dbConfig Possui dados para conexão no DB
-     *      driver: tipo de driver/db (mysql, postgresql, mssql, oracle, etc)
-     *      database: nome da base de dados
-     *      server: endereço da base de dados
-     *      username: nome de usuário para acesso ao db
-     *      password: senha para acesso ao db
+     * @param array $dbConfig
+     *      driver: (mysql, postgresql, mssql, oracle, etc)
+     *      database: database name
+     *      server: host address
+     *      username:
+     *      password:
      */
-    protected function PdoInit($dbConfig){
+    protected function pdoInit($dbConfig){
 
         $dbConfig['driver'] = (empty($dbConfig['driver'])) ? 'mysql' : $dbonfig['driver'];
 
@@ -118,8 +84,7 @@ class Connection extends SQLObject {
                                 .   'dbname='.$dbConfig['database'];
 
         /**
-         * @todo - se não encontra conexão (não me refiro
-         * a banco de dados), simplesmente não mostra erro algum.
+         * @todo - should raise exception if no connection is found.
          */
         try {
             if( $this->conn = new PDO(
@@ -129,7 +94,7 @@ class Connection extends SQLObject {
                                 )
 
             ){
-                $this->DBExiste = true;
+                $this->dbExists = true;
             } else {
                 return false;
             }
@@ -148,68 +113,60 @@ class Connection extends SQLObject {
         $this->pdo = $this->conn;
         return true;
 
-
-        //$this->con = $dbConfig[]':host=localhost;dbname=test';
     }
     /**
-     * Conexão comum ao DB. Padrão MySQL.
-     *
-     * @param array $dbConfig Possui dados para conexão no DB
-     *      driver: tipo de driver/db (mysql, postgresql, mssql, oracle, etc)
-     *      database: nome da base de dados
-     *      server: endereço da base de dados
-     *      username: nome de usuário para acesso ao db
-     *      password: senha para acesso ao db
+	 * @param array $dbConfig
+	 *      driver: (mysql, postgresql, mssql, oracle, etc)
+	 *      database: database name
+	 *      server: host address
+	 *      username:
+	 *      password:
      */
     protected function DbConnect($dbConfig){
         $conexao = $dbConfig;
 		$conn = mysql_connect($conexao['server'], $conexao['username'], $conexao['password']) or die('Erro ao encontrar servidor');
 		if(mysql_select_db($conexao['database'], $conn)){
-			$this->DBExiste = TRUE;
+			$this->dbExists = true;
             $this->db = $db;
             $this->conn = $conn;
 		} else {
-			$this->DBExiste = FALSE;
+			$this->dbExists = false;
 		}
     }
 
-    /**
+	public function dbExists(){
+		return $this->dbExists;
+	}
+
+    /*
      * CRUD
      */
     /**
-     * Função integradora para Query's
+     * Queries' integration
      *
      * @param string $sql
-     * @return array Resultado em formato array
+     * @return array Query result
      */
     public function query($sql, $type = "ASSOC"){
-        /**
-         * Timer init
+        /*
+         * We count how long the queries took. This is the timer init
          */
         $sT = microtime(true);
         
-        /**
-         * Se a extensão PDO está ativada
-         */
         if($this->PdoExtension()){
             /**
              * Roda o SQL e trás os resultados para um array
              */
 
-            /**
-             * Se o resultado deve ser num formato diferente
-             */
             if ( !empty( $type ) ){
-                /**
-                 * Se "ASSOC", usa por padrão PDO::FETCH_ASSOC.
+                /*
+                 * if "ASSOC", uses PDO::FETCH_ASSOC
                  */
                 if( $type == "ASSOC" ){
                     $query = $this->conn->query( $sql, PDO::FETCH_ASSOC );
                 }
-                /**
-                 * Se for um tipo específico de resultado desejado aceito pelo
-                 * PDO, carrega automaticamente o tipo selecionado em
-                 * PDO::query().
+                /*
+                 * If any type accepted by PDO
                  */
                 else if (
                     in_array( 
@@ -245,13 +202,15 @@ class Connection extends SQLObject {
                 $query->closeCursor();
             }
             
-        } else {
+        }
+		/*
+		 * PDOless query
+		 */
+		else {
 
             /**
-             * @todo - fazer errorinfo para sqls inválidos
-             * para querys não PDO
+             * @todo - implement errorinfo
              */
-
             $mysql = mysql_query($sql);
             
             while($dados = mysql_fetch_array($mysql)){
@@ -259,28 +218,24 @@ class Connection extends SQLObject {
             }
         }
         
-        /**
-         * Se não houverem resultados, instancia variável para evitar erros
-         */
         if(empty($result)){
             $result = array();
         }
 
         /*
-         * Salva debug SQL
+         * Debugs SQL
          */
         if( Registry::read('debugLevel') > 1 ){
 
             $sEnd = microtime(true);
 
-               //pr($result);
             if( !empty($debugResult) AND !is_string($debugResult) ){
                 $debugResult = count($result);
             } else if( empty($debugResult) ) {
                 $debugResult = count($result);
             }
             /*
-             * DESCRIBE NÃO SÃO MOSTRADOS
+             * DESCRIBEs are hidden from view
              */
             if( substr( $sql, 0, 8 ) !== 'DESCRIBE' ){
                 $debugVars = array(
@@ -295,11 +250,8 @@ class Connection extends SQLObject {
     }
 
     /**
-     * Comando específico para uso com PDO. Se PDO não está presente,
-     * chama $this->query.
-     *
      * @param string $sql
-     * @return <type> Retorna resultado da operação
+     * @return <mixed>
      */
     public function exec($sql, $mode = ''){
         /**
@@ -308,13 +260,7 @@ class Connection extends SQLObject {
         $sT = microtime(true);
 		$debugResult = false;
         
-        /**
-         * Se a extensão PDO está ativada
-         */
         if($this->PdoExtension()){
-            /**
-             * Executa e retorna resultado
-             */
             $result = $this->conn->exec($sql);
 
             if( $result === false){
@@ -323,9 +269,8 @@ class Connection extends SQLObject {
             }
 
             /**
-             * Quando executado CREATE TABLE, retorno com sucesso é 0 e
-             * insucesso é false, não sendo possível diferenciar entre um e
-             * outro. Este hack dá um jeitinho nisto.
+             * If CREATE TABLE, success returns 0 and insuccess returns false.
+             * This clarifies the result
              */
             if( in_array( $mode, array('CREATE_TABLE', 'CREATE TABLE') ) ){
                 if($result == 0 AND !is_bool($result)){
@@ -339,7 +284,7 @@ class Connection extends SQLObject {
         }
 
         /*
-         * Salva debug SQL
+         * Debugs SQL
          */
         if( Registry::read('debugLevel') > 1 ){
 
@@ -352,13 +297,13 @@ class Connection extends SQLObject {
             }
 
             /*
-             * DESCRIBE NÃO SÃO MOSTRADOS
+             * DESCRIBEs are not shown
              */
             if( substr( $sql, 0, 8 ) !== 'DESCRIBE' ){
 
                 if( Registry::read('debugLevel') < 3) {
                     if( strlen($sql) > 1200 ){
-                        $sql = substr($sql, 0, 1200).' ... <strong>Mensagem truncada</strong>.';
+                        $sql = substr($sql, 0, 1200).' ... <strong>Truncated message</strong>.';
                     }
                 }
                 $debugVars = array(
@@ -382,14 +327,9 @@ class Connection extends SQLObject {
      * @return <type>
      */
     public function count($sql){
-        /**
-         * Se a extensão PDO está ativada
-         */
+
         if($this->PdoExtension()){
-            /**
-             * Executa e retorna resultado
-             */
-            
+
             $mysql = $this->conn->prepare($sql);
             $mysql->execute();
 
@@ -398,17 +338,11 @@ class Connection extends SQLObject {
 
             return $total;
         } else {
-            /**
-             * @todo Usar $this->query
-             */
             $mysql = mysql_query($sql);
             return mysql_num_rows($mysql);
         }
     }
 
-    /**
-     * @todo - comentar
-     */
     public function lastInsertId(){
         return $this->conn->lastInsertId();
     }
@@ -444,7 +378,6 @@ class Connection extends SQLObject {
 		}
 		
 		return false;
-		
 	}
 
 	function describeTable($table, $fieldAsKey = true){
@@ -467,46 +400,9 @@ class Connection extends SQLObject {
 		
 		return $result;
 	}
-	
-    public function VerificaAdmin(){
-            $sql = "SELECT admins.id
-                            FROM
-                                    admins, admins_tipos
-                            WHERE
-                                    admins.tipo=admins_tipos.id
-                            LIMIT 0,2";
-    //echo $this->count($sql);
-            //$mysql = $this->query($sql);
-            return $this->count($sql);
-    }
 
-// retorna quantos registros existém na tabela CONFIG (tabela de configurações)
-    public function VerificaConf(){
-            $sql = "SELECT id
-                            FROM
-                                    config
-                            LIMIT 0,2";
-            $mysql = mysql_query($sql);
-            return mysql_num_rows($mysql);
-    }
-    /**
-     * VERIFICAÇÕES INTERNAS
-     */
-    /**
-     *
-     * @return bool A extensão PDO está ativa ou não
-     */
     protected function PdoExtension(){
-        /**
-         * Se a extensão PDO está ativada ou não
-         */
-        //return false;
         return extension_loaded('PDO');
-    }
-
-
-    public function testConexao(){
-        return 'Funcionando!';
     }
 }
 
