@@ -69,7 +69,7 @@ class Export
 	 */
 	function getStructures($params = array()){
 		$aust = Aust::getInstance();
-		$data = $aust->getStructures($params);
+		$data = Aust::getInstance()->getStructures($params);
 		$tmpData = $data;
 
 		/*
@@ -78,7 +78,7 @@ class Export
 		foreach( $tmpData as $key=>$site ){
 			// clean inexistent fields in site data
 			foreach( $site['Site'] as $fieldName=>$fieldValue){
-				if( !$this->connection->tableHasField('categorias', $fieldName) ){
+				if( !Connection::getInstance()->tableHasField('categorias', $fieldName) ){
 					unset($data[$key]['Site'][$fieldName]);
 				}
 			}
@@ -87,7 +87,7 @@ class Export
 
 				// clean inexistent fields in structure
 				foreach( $st as $fieldName=>$fieldValue){
-					if( !$this->connection->tableHasField('categorias', $fieldName) ){
+					if( !Connection::getInstance()->tableHasField('categorias', $fieldName) ){
 						unset($data[$key]['Structures'][$stKey][$fieldName]);
 					}
 				}
@@ -122,7 +122,7 @@ class Export
 				$sqlConfig = "SELECT * FROM config WHERE tipo='mod_conf' AND local='$stId'";
 //				print($sqlConfig."\n");
 				$configs = array();
-				$configs = $this->connection->query($sqlConfig);
+				$configs = Connection::getInstance()->query($sqlConfig);
 				if( !empty($configs) ){
 //					print 'FOUND'."\n";
 					//pr($configs);
@@ -236,7 +236,7 @@ class Export
 				1
 			";
 
-		$hasSite = $this->connection->query($sqlSite);
+		$hasSite = Connection::getInstance()->query($sqlSite);
 		
 		/*
 		 * Importando ou não, $siteId é igual ao id do site
@@ -252,8 +252,8 @@ class Export
 					('".implode("','", $siteData)."')
 				";
 			
-			$this->connection->exec($sql);
-			$siteId = $this->connection->lastInsertId();
+			Connection::getInstance()->exec($sql);
+			$siteId = Connection::getInstance()->lastInsertId();
 		}
 
 		foreach( $site['Structures'] as $st ){
@@ -300,7 +300,7 @@ class Export
 					1
 				";
 
-			$hasSt = $this->connection->query($sqlSt);
+			$hasSt = Connection::getInstance()->query($sqlSt);
 			
 			if( !empty($hasSt['0']['id']) )
 				$stId = $hasSt['0']['id'];
@@ -316,8 +316,8 @@ class Export
 						('".implode("','", $stData)."')
 					";
 
-				$this->connection->exec($sql);
-				$stId = $this->connection->lastInsertId();
+				Connection::getInstance()->exec($sql);
+				$stId = Connection::getInstance()->lastInsertId();
 			}
 			
 			/*
@@ -346,9 +346,9 @@ class Export
 				}
 
 				$sql = "DELETE FROM config WHERE tipo='mod_conf' AND local='$stId'";
-				$this->connection->exec($sql);
+				Connection::getInstance()->exec($sql);
 				$sql = "INSERT INTO config (".$fieldsStr.") VALUES ".implode(",", $values);
-				$this->connection->exec($sql);
+				Connection::getInstance()->exec($sql);
 			}
 			
 			/*

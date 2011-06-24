@@ -8,7 +8,7 @@
  * @since v0.1.6 06/07/2009
  */
 
-class ModController extends ModsController
+class ModController extends ModActionController
 {
 
     var $helpers = array('Form');
@@ -18,7 +18,7 @@ class ModController extends ModsController
 
     function listing(){
 	
-		$categorias = $this->aust->LeCategoriasFilhas('',$_GET['aust_node']);
+		$categorias = Aust::getInstance()->LeCategoriasFilhas('',$_GET['aust_node']);
 		$categorias[$_GET['aust_node']] = 'Estrutura';
 
         /*
@@ -32,8 +32,8 @@ class ModController extends ModsController
          * Resultados por página
          */
         $num_por_pagina = '20';
-        $this->set('numPorPagina', $num_por_pagina);//($config->LeOpcao($nome_modulo.'_paginacao')) ? $config->LeOpcao($nome_modulo.'_paginacao') : '10';
-        $this->set('page', $pagina);//($config->LeOpcao($nome_modulo.'_paginacao')) ? $config->LeOpcao($nome_modulo.'_paginacao') : '10';
+        $this->set('numPorPagina', $num_por_pagina);//(Config::getInstance()->LeOpcao($nome_modulo.'_paginacao')) ? Config::getInstance()->LeOpcao($nome_modulo.'_paginacao') : '10';
+        $this->set('page', $pagina);//(Config::getInstance()->LeOpcao($nome_modulo.'_paginacao')) ? Config::getInstance()->LeOpcao($nome_modulo.'_paginacao') : '10';
 
         /*
          * SQL para listagem
@@ -44,8 +44,8 @@ class ModController extends ModsController
             'limit' => $num_por_pagina
         );
 
-		$query = $this->modulo->load($params);
-		$query = $this->modulo->replaceFieldsValueIfEmpty($query);
+		$query = $this->module->load($params);
+		$query = $this->module->replaceFieldsValueIfEmpty($query);
 		$this->set('query', $query);
     }
 

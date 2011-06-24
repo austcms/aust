@@ -5,7 +5,6 @@
  * 'au-permissao' significa que ninguém tem acesso, exceto quem estiver
  * especificado.
  */
-
 $navPermissoes = array(
                     'categorias' =>
                         array('new' =>
@@ -39,9 +38,9 @@ $configPermissoes = array(
     'Geral' => '*',
 );
 
-class NAVEGATION_PERMISSIONS_CONFIGURATIONS {
+class NAVIGATION_PERMISSIONS_CONFIGURATIONS {
     
-    static $navegation = array(
+    static $navigation = array(
         'categorias' =>
             array('new' =>
                 array(

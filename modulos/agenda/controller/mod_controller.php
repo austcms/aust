@@ -10,7 +10,7 @@
  * @since v0.1.5 24/06/2009
  */
 
-class ModController extends ModsController
+class ModController extends ModActionController
 {
     /**
      * listar()
@@ -22,13 +22,13 @@ class ModController extends ModsController
         /**
          * <h2> HEADER
          */
-        $this->set('h1', $this->aust->leNomeDaEstrutura($_GET['aust_node']) );
+        $this->set('h1', Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']) );
 
         if((!empty($filter)) AND ($filter <> 'off')){
             $addurl = "&filter=$filter&filterw=" . urlencode($filterw);
         }
 
-        $categorias = $this->aust->LeCategoriasFilhas('',$_GET['aust_node']);
+        $categorias = Aust::getInstance()->LeCategoriasFilhas('',$_GET['aust_node']);
         //pr($categorias);
         $categorias[$_GET['aust_node']] = 'Estrutura';
 
@@ -65,7 +65,7 @@ class ModController extends ModsController
          * Resultados por página
          */
         $num_por_pagina = '20';
-        $this->set('numPorPagina', $num_por_pagina);//($config->LeOpcao($nome_modulo.'_paginacao')) ? $config->LeOpcao($nome_modulo.'_paginacao') : '10';
+        $this->set('numPorPagina', $num_por_pagina);//(Config::getInstance()->LeOpcao($nome_modulo.'_paginacao')) ? Config::getInstance()->LeOpcao($nome_modulo.'_paginacao') : '10';
 
         /*
          * SQL para listagem
@@ -76,7 +76,7 @@ class ModController extends ModsController
             'resultadosPorPagina' => $num_por_pagina,
             'where' => "AND ( MONTH(start_datetime)=".$month_int." AND YEAR(start_datetime)=".$year_int." )",
         );
-        $sql = $this->modulo->loadSql($params);
+        $sql = $this->module->loadSql($params);
         $this->set('sql', $sql );
 
         /*
@@ -84,7 +84,7 @@ class ModController extends ModsController
          *
          * Query com resultado
          */
-        $query = $this->modulo->connection->query($sql);
+        $query = $this->module->connection->query($sql);
         $results = array();
         foreach( $query as $valor ){
 
@@ -124,8 +124,7 @@ class ModController extends ModsController
     }
 
     public function edit(){
-
-        $this->set('tagh2', "Editar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']) );
+        $this->set('tagh2', "Editar: ". Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']) );
         $this->set('tagp', 'Edite o conteúdo abaixo.');
 
         $w = (!empty($_GET['w'])) ? $_GET['w'] : '';
@@ -136,11 +135,11 @@ class ModController extends ModsController
                 SELECT
                     *
                 FROM
-                    ".$this->modulo->getContentTable()."
+                    ".$this->module->getContentTable()."
                 WHERE
                     id='$w'
                 ";
-        $query = $this->modulo->connection->query($sql);
+        $query = $this->module->connection->query($sql);
         $this->set('dados', $query[0] );
         
         $this->render('form');
@@ -191,7 +190,7 @@ class ModController extends ModsController
 		
         //pr($_POST);
 
-        $this->set('resultado', $this->modulo->save($_POST));
+        $this->set('resultado', $this->module->save($_POST));
     }
     
 }

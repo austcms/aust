@@ -24,7 +24,7 @@ if( !empty($_POST['gravar']) && $_POST['gravar'] ){
             'valor' => $valor,
         );
 
-        $msg = $config->updateOptions($params);
+        $msg = Config::getInstance()->updateOptions($params);
 
         unset($params);
     }
@@ -45,22 +45,22 @@ if( !empty($_POST['novaconfig']) && $_POST['novaconfig'] ){
         'nome' => $_POST['nome'],
     );
 
-    $config->ajustaOpcoes($params);
+    Config::getInstance()->ajustaOpcoes($params);
     // Grava configuração no DB
-    $status = $config->GravaConfig();
+    $status = Config::getInstance()->GravaConfig();
 }
 
 ?>
 
 <?php
 if(!empty($_POST['inserirmodulo'])){
-	$status = $aust->gravaEstrutura(
+	$status = Aust::getInstance()->gravaEstrutura(
                                     array(
                                         'nome' => $_POST['nome'],
                                         'categoriaChefe' => $_POST['categoria_chefe'],
                                         'estrutura' => 'estrutura',
                                         'moduloPasta' => $_POST['modulo'],
-                                        'autor' => $administrador->LeRegistro('id')
+                                        'autor' => User::getInstance()->LeRegistro('id')
                                     )
                                 );
 }
@@ -70,7 +70,7 @@ if(!empty($_POST['inserirmodulo'])){
  *
  * Carrega todas as configurações existentes
  */
-$options = $config->getConfigs(
+$options = Config::getInstance()->getConfigs(
         array(
             //'type' => 'global'
         )
@@ -105,7 +105,7 @@ $options = $config->getConfigs(
              * TIPOS DE CONFIGURAÇÕES
              */
             foreach($options as $type=>$conf){
-                if( $config->hasPermission($type) ){
+                if( Config::getInstance()->hasPermission($type) ){
                     ?>
                     <li><a href="#"><?php echo $type ?></a></li>
                     <?php
@@ -143,7 +143,7 @@ $options = $config->getConfigs(
             /*
              * Usuário tem permissão para modificar estas permissões
              */
-            if( $config->hasPermission($type) ){
+            if( Config::getInstance()->hasPermission($type) ){
                 ?>
                 <div class="background">
                     <form method="post" action="adm_main.php?section=<?php echo $_GET['section'];?>">
@@ -184,7 +184,7 @@ $options = $config->getConfigs(
  * NOVA CONFIGURAÇÃO
  *
  */
-if( $administrador->tipo == "Webmaster" AND 1==1 ){
+if( User::getInstance()->tipo == "Webmaster" AND 1==1 ){
     ?>
 
     <?php
@@ -193,7 +193,7 @@ if( $administrador->tipo == "Webmaster" AND 1==1 ){
      * MOSTRA CONFIGURAÇÕES
      */
 
-    if( $administrador->tipo != "Webmaster" ){
+    if( User::getInstance()->tipo != "Webmaster" ){
         $params = array(
             'where' => "tipo='global'",
         );

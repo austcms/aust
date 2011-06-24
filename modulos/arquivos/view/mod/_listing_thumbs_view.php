@@ -30,7 +30,7 @@ if(count($query) == 0){
 		<td valign="top">
 		<span class="item">
 			<?php
-			if( $permissoes->canEdit($_GET['aust_node']) ){ 
+			if( StructurePermissions::getInstance()->canEdit($_GET['aust_node']) ){ 
 				?>
 				<a href="adm_main.php?section=<?php echo $_GET['section']?>&action=edit&aust_node=<?php echo $_GET['aust_node']?>&w=<?php echo $value["id"]?>">
 
@@ -42,7 +42,7 @@ if(count($query) == 0){
 			?>
 			<img src="<?php echo getFileIcon($value['original_filename']);?>" title="<?php echo $value['original_filename']?>" />
 			<?php
-			if( $permissoes->canEdit($_GET['aust_node']) ){ 
+			if( StructurePermissions::getInstance()->canEdit($_GET['aust_node']) ){ 
 				?>
 				</a>
 				<?php
@@ -50,7 +50,7 @@ if(count($query) == 0){
 			?>
 			<div class="info">
 				<?php
-				if( $permissoes->canDelete($austNode) ){
+				if( StructurePermissions::getInstance()->canDelete($austNode) ){
 					?>
 					<input type="checkbox" name="itens[]" value="<?php echo $value['id'];?>" />
 					<?php

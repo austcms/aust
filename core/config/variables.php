@@ -21,7 +21,11 @@ if(!defined('THIS_TO_BASEURL')){
 /**
  * Define o diretório do CORE
  */
-define("CORE_DIR", THIS_TO_BASEURL."core/");
+define("CORE_DIR", 		THIS_TO_BASEURL."core/");
+	define("APP_DIR", 	CORE_DIR."app/");
+
+define("VENDOR_DIR", 	THIS_TO_BASEURL."vendor/");
+define("TMP_DIR", 		THIS_TO_BASEURL."tpm/");
 
     /**
      * Define diretórios relativos ao CORE
@@ -29,16 +33,20 @@ define("CORE_DIR", THIS_TO_BASEURL."core/");
     /**
      * Diretório do MVC do Core
      */
-    define("CONTROLLER_DIR", CORE_DIR."controller/");
-    define("MODEL_DIR", CORE_DIR."model/");
-    define("VIEW_DIR", CORE_DIR."view/");
+    define("CONTROLLERS_DIR", APP_DIR."controllers/");
+    define("MODELS_DIR", APP_DIR."models/");
+    define("VIEWS_DIR", APP_DIR."views/");
     define("VIEW_FILE_STANDARD_EXTENSION", ".php");
 
     /**
      * Define o diretório onde estão os arquivos de configuração do core
      */
 	 define("CORE_CONFIG_DIR", CORE_DIR."config/");
-	 define("VERSION_FILE", CORE_CONFIG_DIR."version.php");
+	 	define("VERSION_FILE", CORE_CONFIG_DIR."version.php");
+	 	define("PERMISSIONS_FILE", CORE_CONFIG_DIR."permissions.php");
+
+	 	define("LOAD_CORE", CORE_DIR."load_core.php");
+
     /**
      * Define o caminho para a pasta de instalação
      */
@@ -81,7 +89,7 @@ define("CORE_DIR", THIS_TO_BASEURL."core/");
     /**
      * Diretório dos módu1os
      */
-	 define('MODULES_DIR', THIS_TO_BASEURL.'modulos/');
+	 define('MODULES_DIR', THIS_TO_BASEURL."modulos/");
 	 define('MODULOS_DIR', MODULES_DIR);
     /**
      * Diretório de inclusão de arquivos ('inc')
@@ -93,7 +101,10 @@ define("CORE_DIR", THIS_TO_BASEURL."core/");
      * São os arquivos que podem desempenhar funções de módulos quando estes
      * estão ausentes.
      */
-    define('CONTENT_TRIGGERS_DIR', INC_DIR.'conteudo.inc/');
+ 	define('CONTENT_DISPATCHER', 'content');
+	define('MODULES', 'content'); # alias for content_dispatcher
+	
+    define('CONTENT_TRIGGERS_DIR', INC_DIR.'content.inc/');
         define('CREATE_ACTION', 'create');
         define('EDIT_ACTION', 'edit');
         define('LISTING_ACTION', 'listing');
@@ -110,12 +121,12 @@ define("CORE_DIR", THIS_TO_BASEURL."core/");
     /**
      * Diretório com as views que contém as mensagens
      */
-    define('MSG_VIEW_DIR', VIEW_DIR.'mensagens/');
+    define('MSG_VIEW_DIR', CORE_CONFIG_DIR.'messages/');
     define('MSG_ERROR_VIEW_DIR', MSG_VIEW_DIR.'error/');
     /**
      * msg: acesso negado
      */
-    define('MSG_DENIED_ACCESS', MSG_ERROR_VIEW_DIR.'acesso_negado.inc.php');
+    define('MSG_DENIED_ACCESS', MSG_ERROR_VIEW_DIR.'access_denied.php');
 
 
 /**
@@ -128,7 +139,9 @@ define('CONFIG_DIR', THIS_TO_BASEURL.'config/');
 	/**
 	 * Endereço do arquivo de configurações da base de dados
 	 */
-	define('CONFIG_DATABASE_FILE', CONFIG_DIR.'database.php');
+	if(!defined('CONFIG_DATABASE_FILE')){
+		define('CONFIG_DATABASE_FILE', CONFIG_DIR.'database.php');
+	}
 	/**
 	 * Configurações do Core
 	 */
@@ -138,6 +151,8 @@ define('CONFIG_DIR', THIS_TO_BASEURL.'config/');
 	 */
 	define('EXPORTED_DIR', CONFIG_DIR.'export/');
 	define('EXPORTED_FILE', EXPORTED_DIR.'exported_data.php');
+
+ 	define("NAVIGATION_PERMISSIONS_FILE", CONFIG_DIR."nav_permissions.php");
 
 
 /**
@@ -165,17 +180,18 @@ define("CLASS_FILE_SUFIX", ".class");
 /**
  * Arquivos de actions
  */
-define('MOD_ACTIONS_FILE', 'core/actions.php');
+define('MOD_ACTIONS_FILE', CORE_DIR.'actions.php');
 /**
  * Arquivo que contém o DbSchema do módulo
  */
-define('MOD_DBSCHEMA', 'core/config/db_schema.php');
+define('MOD_DBSCHEMA', CORE_CONFIG_DIR.'db_schema.php');
 /**
  * Configurações do Módulo
  *
  *      A partir do diretório do módulo...
+ *		***** NÃO PODE SER SEGUNDO THIS_TO_BASEURL *****
  */
-define('MOD_CONFIG', 'core/config/config.php');
+	define('MOD_CONFIG', 'core/config/config.php'); // relative to MODULES_DIR
 /**
  * Controller de setup de novas estruturas
  */
@@ -201,7 +217,7 @@ define('MOD_VIEW_DIR', 'view/');
 /*
  * MIGRATIONS
  */
-    define('MIGRATION_MOD_DIR', 'core/migrations/');
+    define('MIGRATION_MOD_DIR', CORE_DIR.'migrations/');
 
 /*
  * WIDGETS
@@ -211,8 +227,8 @@ define('MOD_VIEW_DIR', 'view/');
 /*
  * CACHE
  */
-    define('CACHE_DIR', CORE_DIR.'cache/');
-    define('CACHE_PUBLIC_DIR', UI_PATH.'cache/');
+    define('CACHE_DIR', TMP_DIR.'cache/');
+    define('CACHE_PUBLIC_DIR', TMP_DIR.'cache/');
 
     define('UPLOADS_DIR', 'uploads/');
 

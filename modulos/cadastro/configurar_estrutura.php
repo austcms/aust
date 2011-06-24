@@ -17,12 +17,13 @@
 /**
  * INICIALIZAÇÃO
  */
-$tabela_da_estrutura = $modulo->getTable();
 
-include_once $modulo->getIncludeFolder().'/'.MOD_MODELS_DIR.'CadastroSetup.php';
+$tabela_da_estrutura = $module->getTable();
+
+include_once $module->getIncludeFolder().'/'.MOD_MODELS_DIR.'CadastroSetup.php';
 $setup = new CadastroSetup();
 $setup->austNode = $_GET['aust_node'];
-$setup->mainTable = $modulo->getTable();
+$setup->mainTable = $module->getTable();
 
 /*
  * VERIFICAÇÕES $_POST
@@ -59,7 +60,7 @@ if( !empty($_POST['conf_type']) AND $_POST['conf_type'] == "mod_conf" ){
      */
 	
 	//pr($_POST);
-    $modulo->saveModConf($_POST);
+    $module->saveModConf($_POST);
 }
 
 /*
@@ -84,7 +85,7 @@ if( !empty($_POST['conf_type']) AND $_POST['conf_type'] == "mod_conf" ){
             'before' => $_POST['before']
         );
 
-        if( $modulo->saveDivisor($params) ){
+        if( $module->saveDivisor($params) ){
             $status[] = 'Divisor criado com sucesso!';
         } else {
             $status[] = "Erro ao gravar informações sobre o novo campo. Nada foi criado.";
@@ -97,7 +98,7 @@ if( !empty($_POST['conf_type']) AND $_POST['conf_type'] == "mod_conf" ){
         $_GET['deleteDivisor'] > 0 )
         {
 
-        if( $modulo->deleteDivisor($_GET['deleteDivisor']) ){
+        if( $module->deleteDivisor($_GET['deleteDivisor']) ){
             $status[] = 'Divisor excluído com sucesso!';
         } else {
             $status[] = "Erro. Nada foi excluído.";
@@ -128,7 +129,7 @@ if(!empty($_POST['configurar_opcoes'])){
                         categorias_id='".$_GET['aust_node']."'
             ";
             
-            if($modulo->connection->exec($sql)){
+            if($module->connection->exec($sql)){
                 $status[] = "Informação \"".$key."\" salva com sucesso.";
             } else {
                 $status[] = "<span style=\"color:red;\">Erro ao salvar \"".$key."\".";
@@ -159,7 +160,7 @@ if(!empty($_GET['function'])){
                     chave='".$_GET['w']."' AND
                     categorias_id='".$_GET['aust_node']."'
         ";
-        if($modulo->connection->exec($sql))
+        if($module->connection->exec($sql))
             $status[] = "Campo desativado com sucesso";
         else
             $status[] = "Erro ao desativar campo.";
@@ -177,7 +178,7 @@ if(!empty($_GET['function'])){
                     chave='".$_GET['w']."' AND
                     categorias_id='".$_GET['aust_node']."'
         ";
-        if($modulo->connection->exec($sql))
+        if($module->connection->exec($sql))
             $status[] = "Campo ativado com sucesso";
         else
             $status[] = "Erro ao ativar campo.";
@@ -196,7 +197,7 @@ if(!empty($_GET['function'])){
                     chave='".$_GET['w']."' AND
                     categorias_id='".$_GET['aust_node']."'
         ";
-        if($modulo->connection->exec($sql))
+        if($module->connection->exec($sql))
             $status[] = "Preenchimento do campo ajustado para necessário com sucesso.";
         else
             $status[] = "Erro ao executar ação.";
@@ -215,7 +216,7 @@ if(!empty($_GET['function'])){
                     chave='".$_GET['w']."' AND
                     categorias_id='".$_GET['aust_node']."'
         ";
-        if($modulo->connection->exec($sql))
+        if($module->connection->exec($sql))
             $status[] = "Não é necessário preenchimento obrigatório do campo ajustado com sucesso.";
         else
             $status[] = "Erro ao executar ação.";
@@ -236,7 +237,7 @@ if(!empty($_GET['function'])){
                     chave='".$_GET['w']."' AND
                     categorias_id='".$_GET['aust_node']."'
         ";
-        if($modulo->connection->exec($sql))
+        if($module->connection->exec($sql))
             $status[] = "Campo aparecerá na listagem de cadastro.";
         else
             $status[] = "Erro ao executar ação.";
@@ -257,7 +258,7 @@ if(!empty($_GET['function'])){
                     chave='".$_GET['w']."' AND
                     categorias_id='".$_GET['aust_node']."'
         ";
-        if($modulo->connection->exec($sql))
+        if($module->connection->exec($sql))
             $status[] = "O campo selecionado não aparecerá mais em listagens.";
         else
             $status[] = "Erro ao executar ação.";
@@ -282,7 +283,7 @@ if(!empty($_GET['function'])){
 }
 ?>
 
-<h2>Configuração: <?php echo $aust->leNomeDaEstrutura($_GET['aust_node'])?></h2>
+<h2>Configuração: <?php echo Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node'])?></h2>
 <p>
     Configure esta estrutura de cadastro.
 </p>
@@ -324,7 +325,7 @@ if(!empty($_GET['function'])){
             <p>A seguir, você tem a lista dos campos existentes neste cadastro.</p>
             <ul>
             <?php
-			$fields = $modulo->getFields(false);
+			$fields = $module->getFields(false);
 
             foreach($fields as $chave=>$valor){
                 /**
@@ -339,7 +340,7 @@ if(!empty($_GET['function'])){
                             categorias_id='".$_GET['aust_node']."'
                         LIMIT 0,2
                         ";
-                $result = $modulo->connection->query($sql);
+                $result = $module->connection->query($sql);
                 if( count($result) > 0 ){
                     $dados = $result[0];
                     ?>
@@ -415,7 +416,7 @@ if(!empty($_GET['function'])){
         </div>
         <div class="content">
             <p>Insira um novo campo.</p>
-            <form method="post" action="<?php echo $config->self;?>" class="simples pequeno">
+            <form method="post" action="<?php echo Config::getInstance()->self;?>" class="simples pequeno">
                 <input type="hidden" name="add_field" value="1" />
 
                 <?php
@@ -490,7 +491,7 @@ if(!empty($_GET['function'])){
 
 
                         // pega o valor físico do campo da tabela
-                        $fields = $modulo->getFields();
+                        $fields = $module->getFields();
                         $i = 0;
                         foreach($fields as $campo=>$valor){
                             // verifica se o campo é editável ou infra-estrutura (ex. de campos: id, adddate, aprovado)
@@ -503,7 +504,7 @@ if(!empty($_GET['function'])){
 										categorias_id='".$_GET['aust_node']."'
                                     LIMIT 0,2
                                     ";
-                            $result = $modulo->connection->query($sql,"ASSOC");
+                            $result = $module->connection->query($sql,"ASSOC");
                             $result = $result[0];
                             if( count($result) > 0 ){
                                 $i++;
@@ -547,7 +548,7 @@ if(!empty($_GET['function'])){
             <p>
                 Insira um novo título divisor no formulário de cadastro.
             </p>
-            <form method="post" action="<?php echo $config->self;?>" class="simples pequeno">
+            <form method="post" action="<?php echo Config::getInstance()->self;?>" class="simples pequeno">
                 <input type="hidden" name="tabela" value="<?php echo $tabela_da_estrutura?>" />
 
                 <?php
@@ -588,7 +589,7 @@ if(!empty($_GET['function'])){
                                 tipo='campo' AND
                                 categorias_id='".$_GET['aust_node']."'
                             ";
-                    $dados = $modulo->connection->query($sql,"ASSOC");
+                    $dados = $module->connection->query($sql,"ASSOC");
                     ?>
 
                     <select name="before">
@@ -611,7 +612,7 @@ if(!empty($_GET['function'])){
 
             <h4>Divisores atuais</h4>
             <?php
-            $divisorTitles = $modulo->loadDivisors();
+            $divisorTitles = $module->loadDivisors();
             if( empty($divisorTitles) ){
                 ?>
 
@@ -654,7 +655,7 @@ if(!empty($_GET['function'])){
                 AND $_POST["filtro_especial_campo_email"] == "Salvar" ){
 
                 $sql = "DELETE FROM cadastros_conf WHERE tipo='filtros_especiais'";
-                $modulo->connection->exec($sql);
+                $module->connection->exec($sql);
 
                 if( !empty($_POST['email']) ){
                     $sql = "INSERT INTO
@@ -663,7 +664,7 @@ if(!empty($_GET['function'])){
                             VALUES
                                 ('filtros_especiais', 'email', '".$_POST['email']."', '".$_GET["aust_node"]."')
                             ";
-                    $modulo->connection->exec($sql);
+                    $module->connection->exec($sql);
                 }
             }
 
@@ -675,14 +676,14 @@ if(!empty($_GET['function'])){
                         chave='email' AND
                         categorias_id='".$_GET["aust_node"]."'
                     ";
-            $dados = $modulo->connection->query($sql);
+            $dados = $module->connection->query($sql);
 			if( !empty($dados[0]["valor"]) )
             	$dados = $dados[0]["valor"];
 			else 
 				$dados = '';
 
             ?>
-            <form method="post" action="<?php echo $config->self;?>" class="simples pequeno">
+            <form method="post" action="<?php echo Config::getInstance()->self;?>" class="simples pequeno">
                 <input type="hidden" name="tabela" value="<?php echo $tabela_da_estrutura ?>" />
                 Campo de email? <input type="text" name="email" value="<?php echo $dados ?>" />
                 <br />
@@ -710,7 +711,7 @@ if(!empty($_GET['function'])){
         </div>
         <div class="content">
             <?php
-            $configurations = $modulo->loadModConf();
+            $configurations = $module->loadModConf();
             if( !empty($configurations) && is_array($configurations) ){
                 ?>
 
@@ -780,8 +781,8 @@ if(!empty($_GET['function'])){
         </div>
         <div class="content">
             <?php
-            $configurations = $modulo->loadModConf(null,'field');
-			$fields = $modulo->getFields(false);
+            $configurations = $module->loadModConf(null,'field');
+			$fields = $module->getFields(false);
 			//pr($fields);
             if( !empty($configurations) && is_array($configurations) ){
                 ?>
@@ -888,7 +889,7 @@ if(!empty($_GET['function'])){
         </div>
         <div class="content">
             <p>A seguir, você configurar as principais opções deste cadastro.</p>
-            <form method="post" action="<?php echo $config->self;?>" class="simples pequeno">
+            <form method="post" action="<?php echo Config::getInstance()->self;?>" class="simples pequeno">
                 <?php
                 // busca todos os campos da tabela do cadastro
                 $sql = "SELECT
@@ -899,7 +900,7 @@ if(!empty($_GET['function'])){
                             tipo='config' AND
                             categorias_id='".$_GET['aust_node']."'
                         ";
-                $result = $modulo->connection->query($sql);
+                $result = $module->connection->query($sql);
                 foreach($result as $dados){
                     ?>
                         <div class="campo">

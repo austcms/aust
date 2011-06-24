@@ -11,11 +11,11 @@
         "aust_node" => $_GET["aust_node"],
     );
 
-    $moduloConfig = $modulo->loadModConf($params);
+    $moduloConfig = $module->loadModConf($params);
 
 	// tem editor?
-	if( $modulo->getStructureConfig('description_has_rich_editor') == '1' )
-		$modulo->loadHtmlEditor();
+	if( $module->getStructureConfig('description_has_rich_editor') == '1' )
+		$module->loadHtmlEditor();
     
 
 /*
@@ -28,7 +28,7 @@
  * [Se novo conteúdo]
  */
     if($_GET['action'] == 'create'){
-        $tagh1 = "Criar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
+        $tagh1 = "Criar: ". Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
         $tagp = 'Crie um novo conteúdo abaixo.';
         $dados = array('id' => '');
     }
@@ -36,7 +36,7 @@
  * [Se modo edição]
  */
     else if($_GET['action'] == 'edit'){
-        $tagh1 = "Editar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
+        $tagh1 = "Editar: ". Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
         $tagp = 'Edite o conteúdo abaixo.';
         $sql = "
                 SELECT
@@ -62,11 +62,11 @@
                     visitantes,
                     autor
                 FROM
-                    ".$modulo->getMainTable()."
+                    ".$module->getMainTable()."
                 WHERE
                     id='$w'
                 ";
-        $query = $modulo->connection->query($sql, "ASSOC");
+        $query = $module->connection->query($sql, "ASSOC");
         $dados = $query[0];
 		$frmcategory = $dados['categoria'];
     }
@@ -105,7 +105,7 @@
 	 * CATEGORY_SELECTION
 	 *
 	 */
-	if( $modulo->getStructureConfig('category_selection') ){
+	if( $module->getStructureConfig('category_selection') ){
 		?>
 	    <tr>
 	        <td class="first"><label>Categoria:</label></td>
@@ -113,13 +113,13 @@
 	            <div id="categoriacontainer">
 
                 <?php
-	            echo BuildDDList( Registry::read('austTable') ,'frmcategoria', $administrador->tipo , $austNode, $frmcategory);
+	            echo BuildDDList( Registry::read('austTable') ,'frmcategoria', User::getInstance()->tipo , $austNode, $frmcategory);
 	            ?>
 
 
 	            </div>
 	            <?php
-				if( $modulo->getStructureConfig('category_creation') ){
+				if( $module->getStructureConfig('category_creation') ){
                 	lbCategoria($austNode);
 				}
 	            ?>
@@ -134,7 +134,7 @@
      *
      * Se expireTime está ativo, mostra que o tempo está expirado
      */
-    if( $modulo->getStructureConfig("expireTime") ){
+    if( $module->getStructureConfig("expireTime") ){
 
         if( !empty($dados["expiredate"]) ){
             $date = date('Y-m-d', strtotime($dados["expiredate"]));
@@ -212,7 +212,7 @@
     /*
      * DESCRIÇÃO
      */
-    if( $modulo->getStructureConfig("link") ){
+    if( $module->getStructureConfig("link") ){
         ?>
         <tr>
             <td valign="top"><label>Link:</label></td>
@@ -242,7 +242,7 @@
     /*
      * RESUMO
      */
-    if( $modulo->getStructureConfig("resumo") ){
+    if( $module->getStructureConfig("resumo") ){
     ?>
     <tr>
         <td valign="top"><label>Resumo:</label></td>
@@ -261,7 +261,7 @@
     /*
      * ORDEM
      */
-    if( $modulo->getStructureConfig("ordem") || $modulo->getStructureConfig("ordenate") ){
+    if( $module->getStructureConfig("ordem") || $module->getStructureConfig("ordenate") ){
     ?>
     <tr>
         <td valign="top"><label>Ordem:</label></td>
@@ -292,7 +292,7 @@
     /*
      * DESCRIÇÃO
      */
-    if( $modulo->getStructureConfig("descricao") ){
+    if( $module->getStructureConfig("descricao") ){
         ?>
         <tr>
             <td valign="top"><label>Descrição: </label>

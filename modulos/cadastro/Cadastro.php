@@ -98,7 +98,7 @@ class Cadastro extends Module {
 				ORDER BY t.id DESC
 				";
 
-		$query = $this->connection->query($sql);
+		$query = Connection::getInstance()->query($sql);
 		
 		return $query;
 		
@@ -137,7 +137,7 @@ class Cadastro extends Module {
 					type='main'
 				ORDER BY t.id DESC
 				";
-		$query = $this->connection->query($sql);
+		$query = Connection::getInstance()->query($sql);
 		
 		return $query;
 		
@@ -333,7 +333,7 @@ class Cadastro extends Module {
 							'".date("Y-m-d H:i:s")."', '".$userId."'
 							)";
 					
-					$this->connection->exec($sql);
+					Connection::getInstance()->exec($sql);
 					
 				}
 			}
@@ -380,7 +380,7 @@ class Cadastro extends Module {
 				LIMIT $limit, 999999999999999
 			";
 			
-			$result = $this->connection->query($sql);
+			$result = Connection::getInstance()->query($sql);
 			foreach( $result as $value ){
 				$this->deleteFile($value['id']);
 			}
@@ -412,12 +412,12 @@ class Cadastro extends Module {
 					id='".$w."'
 				";
 		
-		$query = reset( $this->connection->query($sql) );
+		$query = reset( Connection::getInstance()->query($sql) );
 		
 		if( file_exists($query['systempath']) )
 			unlink( $query['systempath'] );
 		$sqlDelete = "DELETE FROM $filesTable WHERE id='".$w."'";
-		$this->connection->exec($sqlDelete);
+		Connection::getInstance()->exec($sqlDelete);
 		
 		return true;
 	} // deleteFile()
@@ -502,7 +502,7 @@ class Cadastro extends Module {
 							'".date("Y-m-d H:i:s")."', '".$userId."'
 							)
 							";
-					$this->connection->exec($sql);
+					Connection::getInstance()->exec($sql);
 					
 				}
 			}
@@ -524,7 +524,7 @@ class Cadastro extends Module {
 		$imageTable = $this->configurations['estrutura']['table_images']['valor'];
 		
 		$sql = "UPDATE $imageTable SET description='$string' WHERE id='$imageId'";
-		return $this->connection->exec($sql);
+		return Connection::getInstance()->exec($sql);
 	}
     
 	/**
@@ -542,7 +542,7 @@ class Cadastro extends Module {
 		$imageTable = $this->configurations['estrutura']['table_images']['valor'];
 		
 		$sql = "UPDATE $imageTable SET link='$string' WHERE id='$imageId'";
-		return $this->connection->exec($sql);
+		return Connection::getInstance()->exec($sql);
 	}
     
 
@@ -574,12 +574,12 @@ class Cadastro extends Module {
 					type='secondary'
 				";
 		
-		$query = $this->connection->query($sql);
+		$query = Connection::getInstance()->query($sql);
 		foreach( $query as $key=>$value ){
 			if( file_exists($value['systempath']) )
 				unlink( $value['systempath'] );
 			$sqlDelete = "DELETE FROM $imagesTable WHERE id='".$value['id']."'";
-			$this->connection->exec($sqlDelete);
+			Connection::getInstance()->exec($sqlDelete);
 		}
 		
 		return true;
@@ -599,13 +599,13 @@ class Cadastro extends Module {
 					id='".$w."'
 				";
 		
-		$query = $this->connection->query($sql);
+		$query = Connection::getInstance()->query($sql);
 		$query = reset( $query );
 		
 		if( file_exists($query['systempath']) )
 			unlink( $query['systempath'] );
 		$sqlDelete = "DELETE FROM $imagesTable WHERE id='".$w."'";
-		$this->connection->exec($sqlDelete);
+		Connection::getInstance()->exec($sqlDelete);
 		
 		return true;
 	}
@@ -650,7 +650,7 @@ class Cadastro extends Module {
 				LIMIT $limit, 999999999999999
 			";
 			
-			$result = $this->connection->query($sql);
+			$result = Connection::getInstance()->query($sql);
 			foreach( $result as $value ){
 				$this->deleteImage($value['id']);
 				$this->deleteSecondaryImagesById($value['id']);
@@ -679,7 +679,7 @@ class Cadastro extends Module {
                     tipo='divisor' AND
                     categorias_id='".$this->austNode."'
             ";
-        $tempResult = $this->connection->query($sql);
+        $tempResult = Connection::getInstance()->query($sql);
 
         /*
          * Agrupa array de Divisors com as chaves sendo o nome do
@@ -738,7 +738,7 @@ class Cadastro extends Module {
                     )
                 ";
         
-        $result = $this->connection->exec($sql);
+        $result = Connection::getInstance()->exec($sql);
 
         if( $result )
             return true;
@@ -759,7 +759,7 @@ class Cadastro extends Module {
                 WHERE
                     $where
                 ";
-        $result = $this->connection->exec($sql);
+        $result = Connection::getInstance()->exec($sql);
 
         return $result;
     }
@@ -785,7 +785,8 @@ class Cadastro extends Module {
 				   categorias_id='".$this->austNode."' AND
 				   tipo='campo'
 					ORDER BY ordem ASC";
-        $temp = $this->connection->query(
+
+        $temp = Connection::getInstance()->query(
             $sql,
             PDO::FETCH_ASSOC
         );
@@ -859,7 +860,7 @@ class Cadastro extends Module {
         else
 			$tabela = $this->getTable();
 
-        $temp = $this->connection->query("DESCRIBE ".$tabela, "ASSOC");
+        $temp = Connection::getInstance()->query("DESCRIBE ".$tabela, "ASSOC");
 
         if ( empty( $params["by"] ) )
 	        $params["by"] = "Field";
@@ -942,7 +943,7 @@ class Cadastro extends Module {
          * austNode selecionado.
          */
 		$sql = "SELECT * FROM cadastros_conf WHERE categorias_id='".$austNode."' ORDER BY ordem ASC";
-        $temp = $this->connection->query(
+        $temp = Connection::getInstance()->query(
             $sql,
             PDO::FETCH_ASSOC
         );
@@ -1004,7 +1005,7 @@ class Cadastro extends Module {
         /**
          * Campos carregados
          */
-        $result = $this->connection->query($sql, "ASSOC");
+        $result = Connection::getInstance()->query($sql, "ASSOC");
         /**
          * Configurações
          */
@@ -1210,7 +1211,7 @@ class Cadastro extends Module {
                     ".$param['tabela']."_arquivos
                 LIMIT 0,1
                 ";
-        $result = $this->connection->query($sql);
+        $result = Connection::getInstance()->query($sql);
         if( count($result) == 0 ){
             $sql_arquivos =
                             "CREATE TABLE ".$param['tabela']."_arquivos(
@@ -1231,7 +1232,7 @@ class Cadastro extends Module {
                             PRIMARY KEY (id),
                             UNIQUE id (id)
                         ) ".$charset;
-            if( $this->connection->exec($sql_arquivos) ){
+            if( Connection::getInstance()->exec($sql_arquivos) ){
                 return TRUE;
             } else {
                 return FALSE;
@@ -1298,7 +1299,7 @@ class Cadastro extends Module {
                     ";
         }
 
-        $result = $this->connection->query($sql);
+        $result = Connection::getInstance()->query($sql);
         if( count($result) > 0 ){
             $dados = $result[0];
             return $dados;
@@ -1329,7 +1330,7 @@ class Cadastro extends Module {
                     cadastros_conf.chave='tabela'
                 LIMIT 0,1";
         
-		$resultado = $this->connection->query($sql);
+		$resultado = Connection::getInstance()->query($sql);
 		$dados = $resultado[0];
 		return $dados['valor'];
     }

@@ -17,7 +17,7 @@ if( !empty($_GET['block'])
             ";
 
     // se executar query, EscreveBoxMensagem mostra mensagem padrão
-    if($conexao->exec($sql)){
+    if(Connection::getInstance()->exec($sql)){
 		$resultado = TRUE;
 	} else {
 		$resultado = FALSE;
@@ -42,7 +42,7 @@ if( !empty($_GET['block'])
                 id='$w'
             ";
     // se executar query, EscreveBoxMensagem mostra mensagem padrão
-    if($conexao->exec($sql)){
+    if(Connection::getInstance()->exec($sql)){
 		$resultado = TRUE;
 	} else {
 		$resultado = FALSE;
@@ -90,7 +90,7 @@ if(	!empty($_GET['action']) &&
             FROM admins
             WHERE
                 id='$w'";
-    $query = $conexao->query($sql);
+    $query = Connection::getInstance()->query($sql);
     if( !empty($query) ){
         $dados = $query[0];
     }
@@ -109,7 +109,7 @@ if(	!empty($_GET['action']) &&
                 admins.tipo=admins_tipos.id
             ORDER BY aid ASC
             ";
-    $query = $conexao->query($sql);
+    $query = Connection::getInstance()->query($sql);
     //echo $sql;
 
     ?>
@@ -156,7 +156,7 @@ if(	!empty($_GET['action']) &&
                 if( $dados["login"] <> "kurko"
                     AND strtolower($dados["tipo"]) <> "webmaster"
                     AND (
-                        in_array( $administrador->LeRegistro("tipo"), $navPermissoes['admins']['form'] )
+                        UiPermissions::getInstance()->isPermittedSection(array('action' => 'form'))
                         OR strtolower($dados["tipo"]) == "colaborador" 
                     )
                 ){
@@ -197,7 +197,7 @@ if(	!empty($_GET['action']) &&
         /*
          * Nova pessoa
          */
-        if( in_array( $administrador->LeRegistro("tipo"), $navPermissoes['admins']['form'] ) ){
+        if( UiPermissions::getInstance()->isPermittedSection(array('action' => 'form')) ){
             ?>
             <div class="botao">
                 <div class="bt_novapessoa">
@@ -206,7 +206,7 @@ if(	!empty($_GET['action']) &&
             </div>
             <?php
         }
-        if( in_array( $administrador->LeRegistro("tipo"), array("Webmaster", "Root", "Administrador") ) ){
+        if( in_array( User::getInstance()->LeRegistro("tipo"), array("Webmaster", "Root", "Administrador") ) ){
 	        ?>
 	        <div class="botao">
 	            <div class="bt_grupos">

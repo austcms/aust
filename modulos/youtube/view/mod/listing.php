@@ -37,7 +37,7 @@ if((!empty($filter)) AND ($filter <> 'off')){
 /*
  * Pode excluir conteúdo?
  */
-if( $permissoes->canDelete($austNode) ){
+if( StructurePermissions::getInstance()->canDelete($austNode) ){
     ?>
     <div class="painel_de_controle"><input type="submit" class="js_confirm" name="deletar" value="Deletar selecionados" />
     </div>
@@ -47,10 +47,10 @@ if( $permissoes->canDelete($austNode) ){
 <table cellspacing="0" cellpadding="10" class="listagem">
     <tr class="titulo">
         
-        <?php for($i=0; $i< count($modulo->config['contentHeader']['campos']); $i++) { ?>
-                <td class="<? echo $modulo->config['contentHeader']['campos'][$i]; ?>">
+        <?php for($i=0; $i< count($module->config['contentHeader']['campos']); $i++) { ?>
+                <td class="<? echo $module->config['contentHeader']['campos'][$i]; ?>">
                     <?php
-                        echo $modulo->config['contentHeader']['camposNome'][$i];
+                        echo $module->config['contentHeader']['camposNome'][$i];
                     ?>
                 </td>
         <?php } ?>
@@ -79,24 +79,24 @@ if(count($query) == 0){
             *
             *
             *******************************/
-                for($i=0; $i< count($modulo->config['contentHeader']['campos']); $i++) { ?>
+                for($i=0; $i< count($module->config['contentHeader']['campos']); $i++) { ?>
                     <td>
                         <?php
                         if($i == 1){
-                            if( $permissoes->canEdit($_GET['aust_node']) )
+                            if( StructurePermissions::getInstance()->canEdit($_GET['aust_node']) )
                                 echo '<a href="adm_main.php?section='.$_GET['section'].'&action=edit&aust_node='.$_GET['aust_node'].'&w='.$dados["id"].'">';
-                            echo $dados[$modulo->config['contentHeader']['campos'][$i]];
-                            if( $permissoes->canEdit($_GET['aust_node']) )
+                            echo $dados[$module->config['contentHeader']['campos'][$i]];
+                            if( StructurePermissions::getInstance()->canEdit($_GET['aust_node']) )
                                 echo '</a>';
                         } else {
-                            echo $dados[$modulo->config['contentHeader']['campos'][$i]];
+                            echo $dados[$module->config['contentHeader']['campos'][$i]];
                         }
                         ?>
                     </td>
             <?php } ?>
             <td align="center">
                 <?php
-                if( $permissoes->canDelete($austNode) ){
+                if( StructurePermissions::getInstance()->canDelete($austNode) ){
                     ?>
                     <input type='checkbox' name='itens[]' value='<?php echo $dados['id'];?>'>
                     <?php
@@ -121,8 +121,8 @@ if(count($query) == 0){
 	if( empty($pagina) )
 		$pagina = 1;
 	
-    $sql = $modulo->SQLParaListagem($categorias);
-    $total_registros = $modulo->connection->count($sql);
+    $sql = $module->SQLParaListagem($categorias);
+    $total_registros = $module->connection->count($sql);
 
     $total_paginas = $total_registros/$numPorPagina;
 

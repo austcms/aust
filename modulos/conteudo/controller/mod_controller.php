@@ -10,7 +10,7 @@
  * @since v0.1.5 24/06/2009
  */
 
-class ModController extends ModsController
+class ModController extends ModActionController
 {
     /**
      * listar()
@@ -22,14 +22,14 @@ class ModController extends ModsController
         /**
          * <h2> HEADER
          */
-        $this->set('h1', $this->aust->leNomeDaEstrutura($_GET['aust_node']) );
+        $this->set('h1', Aust::getInstance()->leNomeDaEstrutura($this->austNode) );
 
         if((!empty($filter)) AND ($filter <> 'off')){
             $addurl = "&filter=$filter&filterw=" . urlencode($filterw);
         }
 
-        $categorias = $this->aust->LeCategoriasFilhas('',$_GET['aust_node']);
-        $categorias[$_GET['aust_node']] = 'Estrutura';
+        $categorias = Aust::getInstance()->LeCategoriasFilhas('',$this->austNode);
+        $categorias[$this->austNode] = 'Estrutura';
 
 
         /*
@@ -43,8 +43,8 @@ class ModController extends ModsController
          * Resultados por página
          */
         $num_por_pagina = '20';
-        $this->set('numPorPagina', $num_por_pagina);//($config->LeOpcao($nome_modulo.'_paginacao')) ? $config->LeOpcao($nome_modulo.'_paginacao') : '10';
-        $this->set('page', $pagina);//($config->LeOpcao($nome_modulo.'_paginacao')) ? $config->LeOpcao($nome_modulo.'_paginacao') : '10';
+        $this->set('numPorPagina', $num_por_pagina);//(Config::getInstance()->LeOpcao($nome_modulo.'_paginacao')) ? Config::getInstance()->LeOpcao($nome_modulo.'_paginacao') : '10';
+        $this->set('page', $pagina);//(Config::getInstance()->LeOpcao($nome_modulo.'_paginacao')) ? Config::getInstance()->LeOpcao($nome_modulo.'_paginacao') : '10';
 
         /*
          * SQL para listagem
@@ -59,10 +59,10 @@ class ModController extends ModsController
          * Query com resultado
          */
 
-        $query = $this->modulo->load($params);
-        $this->set('sql', $this->modulo->lastSql );
-        //$config = $this->modulo->loadConfig();
-        $query = $this->modulo->replaceFieldsValueIfEmpty($query);
+        $query = $this->module->load($params);
+        $this->set('sql', $this->module->lastSql );
+        //$config = $this->module->loadConfig();
+        $query = $this->module->replaceFieldsValueIfEmpty($query);
 
         $this->set('query', $query );
 
@@ -74,24 +74,23 @@ class ModController extends ModsController
 
     public function edit(){
 
-        $this->set('tagh2', "Editar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']) );
+        $this->set('tagh2', "Editar: ". Aust::getInstance()->leNomeDaEstrutura($this->austNode) );
         $this->set('tagp', 'Edite o conteúdo abaixo.');
 
         $w = (!empty($_GET['w'])) ? $_GET['w'] : '';
         $this->set('w', $w);
 
-
         $sql = "
                 SELECT
                     *
                 FROM
-                    ".$this->modulo->getContentTable()."
+                    ".$this->module->getContentTable()."
                 WHERE
                     id='$w'
                 ";
-        $query = $this->modulo->connection->query($sql);
+        $query = $this->module->connection->query($sql);
         $this->set('dados', $query[0] );
-        
+
         $this->render('form');
     }
 
@@ -100,7 +99,7 @@ class ModController extends ModsController
 			$_POST['frmadddate'] = date("Y-m-d H:i:s");
 		}
 		
-        $this->set('resultado', $this->modulo->save($_POST, $_FILES));
+        $this->set('resultado', $this->module->save($_POST, $_FILES));
     }
     
 }

@@ -2,16 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<?php
-	if( !empty($_GET['action']) OR $_GET['action'] != 'listing' ){
-//		header("Cache-Control: no-cache");
-//		header("Pragma: no-cache");
-//    	<meta http-equiv="expires" content="Mon, 19 Feb 2024 11:12:01 GMT" />
-		?>
-		<?php
-	}
-	?>
-    <title><?php echo $config->getConfig('site_name'); ?> - Gerenciador<?php /* ifisset($config->LeOpcao('sitename'), 'Aust'); */ ?></title>
+    <title><?php echo Config::getInstance()->getConfig('site_name'); ?> - Gerenciador<?php /* ifisset(Config::getInstance()->LeOpcao('sitename'), 'Aust'); */ ?></title>
     <!-- TinyMCE -->
     <?php
     $html = HtmlHelper::getInstance();
@@ -26,10 +17,10 @@
      */
     ?>
     <?php /* Estilo da seleção de temas */ ?>
-    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="<?php echo UI_PATH; ?>css/theme.css" type="text/css" />
 
     <?php /* Tema Azul */ ?>
-    <link rel="stylesheet" href="<?php echo THIS_TO_BASEURL.THEMES_DIR; ?><?php echo $themes->currentTheme($administrador->getId()); ?>/default.css" type="text/css" />
+    <link rel="stylesheet" href="<?php echo THEMES_DIR; ?><?php echo Themes::getInstance()->currentTheme(User::getInstance()->getId()); ?>/default.css" type="text/css" />
     <?php
     /**
      * @todo - o comando abaixo é perigoso, pois permite que um usuário altere
@@ -45,7 +36,7 @@
     ?>
 
     <script type="text/javascript">
-	    var userId = '<?php echo $administrador->getId() ?>';
+	    var userId = '<?php echo User::getInstance()->getId() ?>';
 	    var austNode = '<?php if( !empty($_GET["aust_node"]) ) echo $_GET["aust_node"]; ?>';
         var IMG_DIR = '<?php echo IMG_DIR ?>';
 		var page = '<?php echo $page ?>';
@@ -53,6 +44,25 @@
 
     <?php
     $html->js();
+
+    /*
+     * JS DO MÓDULO
+     *
+     * Carrega Javascript de algum módulo se existir
+     */
+    if( !empty($_GET["aust_node"]) || !empty($_POST["aust_node"]) ){
+		if( !empty($_GET["aust_node"]) )
+			$austNode = $_GET["aust_node"];
+		elseif( !empty($_POST["aust_node"]) )
+			$austNode = $_POST["aust_node"];
+		
+		$modDir = Aust::getInstance()->LeModuloDaEstrutura($austNode).'/';
+        if(is_file(MODULES_DIR.$modDir.'js/jsloader.php')){
+            $include_baseurl = MODULES_DIR. substr($modDir, 0, strlen($modDir)-1); // necessário para o arquivo jsloader.php saber onde está fisicamente
+            include_once(MODULES_DIR.$modDir.'js/jsloader.php');
+        }
+    }
+
     ?>
 
 
@@ -70,7 +80,7 @@
         ?>
         <div class="logotipo">
             <h1>
-                <a href="adm_main.php?section=index"><?php echo $config->getConfig('site_name'); ?></a>
+                <a href="adm_main.php?section=index"><?php echo Config::getInstance()->getConfig('site_name'); ?></a>
             </h1>
         </div>
 
@@ -99,8 +109,8 @@
             <div id="conectado_como">
             <?php /*
                 <p>
-                    Conectado como <strong><?php echo $administrador->LeRegistro('nome');?></strong>.<br />
-                    N&iacute;vel de acesso  <strong><?php echo $administrador->LeRegistro('tipo');?></strong>.
+                    Conectado como <strong><?php echo User::getInstance()->LeRegistro('nome');?></strong>.<br />
+                    N&iacute;vel de acesso  <strong><?php echo User::getInstance()->LeRegistro('tipo');?></strong>.
                 </p>
              *
              */ ?>
@@ -136,8 +146,95 @@
 			</div>
 		<?php } ?>
 		
+		<?php
+		/* MODULE NAVIGATION BAR */
+	    if( !empty($_GET["aust_node"]) || !empty($_POST["aust_node"]) ){
+			if( !empty($_GET["aust_node"]) )
+				$austNode = $_GET["aust_node"];
+			elseif( !empty($_POST["aust_node"]) )
+				$austNode = $_POST["aust_node"];
+		
+
+	     	include(MODULES_DIR.$modDir.MOD_CONFIG);
+	        $action = $_GET['action'];
+
+			/*
+			 * Navegação entre actions de um austNode
+			 */
+
+			$moreOptions = array();
+			foreach( $modInfo['opcoes'] as $actionName=>$humanName ){
+				if( $actionName == $action )
+					continue;
+				$moreOptions[] = '<a href="adm_main.php?section='.MODULES.'&action='.$actionName.'&aust_node='.$austNode.'">'.$humanName.'</a>';
+			}
+
+			$visibleNav = true;
+			$relatedMasters = Aust::getInstance()->getRelatedMasters(array($austNode));
+
+			if( !empty($relatedMasters) ){
+
+				$module = Aust::getInstance()->getStructureInstance($austNode);
+				if( !$module->getStructureConfig('related_and_visible') ){
+					$visibleNav = false;
+				}
+
+			}
+
+			if( !empty($moreOptions) && $visibleNav ){
+				?>
+				<div class="structure_nav_options">
+					Navegação: <?php echo implode(", ", $moreOptions); ?>
+				</div>
+				<?php
+			}
+		}		
+		?>
         <?php echo $content_for_layout; ?>
         
+		<?php
+	    /*
+	     * Se for save, redireciona automaticamente
+	     */
+     	$action = "";
+		if( !empty($_GET['action']) ){
+			$action = $_GET['action'];
+		}
+	    if( in_array($action, array(SAVE_ACTION, ACTIONS_ACTION)) &&
+			(
+				empty($_SESSION['no_redirect']) ||
+				!$_SESSION['no_redirect']
+			)
+	 	)
+		{
+
+			unset($_SESSION['selected_items']);
+	        ?>
+	        <div class="loading_timer">
+	            <img src="<?php echo IMG_DIR ?>loading_timer.gif" /> Redirecionando Automaticamente
+	        </div>
+	        <?php
+
+			if( !empty($_POST['redirect_to']) )
+				$goToUrl = $_POST['redirect_to'];
+			else if( !empty($_GET['redirect_to']) )
+				$goToUrl = $_GET['redirect_to'];
+			else
+            	$goToUrl = "adm_main.php?section=".$_GET['section'].'&action=listing&aust_node='.$austNode;
+            ?>
+            <script type="text/javascript">
+                var timeToRefresh = 2;
+                setTimeout(function(){
+                    //window.location.href = "<?php echo $goToUrl ?>";
+                }, 2000);
+            </script>
+            <?php
+        }
+
+		$_SESSION['no_redirect'] = false;
+		
+		?>
+
         </div>
     </div>
     <?php
@@ -148,7 +245,7 @@
     <div id="link_bottom">
         <div class="links_admin">
             <?php
-            if($administrador->LeRegistro('tipo') == 'Webmaster'){
+            if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'){
                 ?>
                 <div class="borda"></div>
                 <br />

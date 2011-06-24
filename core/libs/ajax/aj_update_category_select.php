@@ -5,6 +5,6 @@
  *
  */
 
-echo $aust->getCategoryHtmlSelect($_POST['node'], (int) $_POST['selected']);
+echo Aust::getInstance()->getCategoryHtmlSelect($_POST['node'], (int) $_POST['selected']);
 
 ?>

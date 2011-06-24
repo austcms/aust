@@ -54,7 +54,7 @@ if((!empty($filter)) AND ($filter <> 'off')){
 	/*
 	 * Pode excluir conteúdo?
 	 */
-	if( $permissoes->canDelete($austNode) ){
+	if( StructurePermissions::getInstance()->canDelete($austNode) ){
 	    ?>
 	
 		<input type="submit" class="js_confirm" name="deletar" value="Deletar selecionados" />
@@ -69,9 +69,9 @@ if((!empty($filter)) AND ($filter <> 'off')){
 	// sets GETS
 	
 	if( empty($viewMode) OR $viewMode == 'list' )
-		include($modulo->getIncludeFolder().'/view/mod/listing_list_view.php');
+		include($module->getIncludeFolder().'/view/mod/listing_list_view.php');
 	else if( $viewMode == 'thumbs' )
-		include($modulo->getIncludeFolder().'/view/mod/listing_thumbs_view.php');
+		include($module->getIncludeFolder().'/view/mod/listing_thumbs_view.php');
 		
 		
 	?>
@@ -84,10 +84,10 @@ if((!empty($filter)) AND ($filter <> 'off')){
  * mostra painel de navegação para paginação
  */
 
-    $total_registros = $modulo->totalRows;
-	$page = $modulo->page();
+    $total_registros = $module->totalRows;
+	$page = $module->page();
 
-    $total_paginas = $total_registros/$modulo->limit;
+    $total_paginas = $total_registros/$module->limit;
 
     $prev = $page - 1;
     $next = $page + 1;

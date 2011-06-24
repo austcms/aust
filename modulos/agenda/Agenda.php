@@ -33,10 +33,6 @@ class Agenda extends Module
         'actor_admin_name',
     );
 
-    function __construct(){
-        parent::__construct(array());
-    }
-
     /**
      * getInstance()
      *

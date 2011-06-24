@@ -2,7 +2,7 @@
 /*
  * Somente webmasters tem acesso a esta página
  */
-if($administrador->LeRegistro('tipo') == 'Webmaster'):
+if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'):
 
 /*
  * MIGRATIONS
@@ -10,21 +10,21 @@ if($administrador->LeRegistro('tipo') == 'Webmaster'):
  * Verificações de Migrations de módulos
  */
     $migrationsMods = new MigrationsMods( $conexao );
+
     /*
      * INSTALA MÓDULO
      */
     if( !empty($_GET['instalar_modulo'])
-        AND is_dir($_GET['instalar_modulo']) )
+        AND is_dir(MODULES_DIR.$_GET['instalar_modulo']) )
     {
+
         $path = $_GET['instalar_modulo'];
         /**
          * Carrega arquivos dos módulos
          */
-        include_once($path.'/index.php');
-        include_once($path.'/'.MOD_CONFIG);
+     	include_once(MODULES_DIR.$path.'/'.MOD_CONFIG);
 
-        $modName = $migrationsMods->getModNameFromPath($path);
-
+        $modName = MigrationsMods::getInstance()->getModNameFromPath(MODULES_DIR.$path);
         /**
          * Ajusta variáveis para gravação
          */
@@ -48,9 +48,9 @@ if($administrador->LeRegistro('tipo') == 'Webmaster'):
          * Caso o módulo não tenha migrations, faz a verificação normal das tabelas
          * a partir de schemas, o que não é recomendado.
          */
-        if( $migrationsMods->hasMigration($path) ){
-            $installStatus = $migrationsMods->updateMigration($path);
-            $isInstalled = $migrationsMods->isActualVersion($path);
+        if( MigrationsMods::getInstance()->hasMigration($path) ){
+            $installStatus = MigrationsMods::getInstance()->updateMigration($path);
+            $isInstalled = MigrationsMods::getInstance()->isActualVersion($path);
 
             $param = array(
                 'tipo' => 'módulo',
@@ -58,9 +58,9 @@ if($administrador->LeRegistro('tipo') == 'Webmaster'):
                 'valor' => $modName,
                 'pasta' => $path,
                 'modInfo' => $modInfo,
-                'autor' => $administrador->LeRegistro('id'),
+                'autor' => User::getInstance()->LeRegistro('id'),
             );
-            $modulo->configuraModulo($param);
+            ModulesManager::getInstance()->configuraModulo($param);
 
             $status['classe'] = 'sucesso';
             $status['mensagem'] = '<strong>Sucesso: </strong> Migration executado com sucesso!';
@@ -72,60 +72,46 @@ if($administrador->LeRegistro('tipo') == 'Webmaster'):
     /*
      * Migration Status
      */
-    $migrationsStatus = $migrationsMods->status();
+    $migrationsStatus = MigrationsMods::getInstance()->status();
 
-    //pr($migrationsStatus);
-    $modulesStatus = $modulos->getModuleInformation( array_keys($migrationsStatus) );
-
-    //pr($modulesStatus);
+    $modulesStatus = ModulesManager::getInstance()->getModuleInformation( array_keys($migrationsStatus) );
 
     /*
-     * JS DO MÓDULO
-     *
-     * Carrega Javascript de algum módulo se existir
+     * Module's JS
      */
     if(!empty($_GET['aust_node'])){
-        $modulo = $aust->LeModuloDaEstrutura($_GET['aust_node']);
-        if(is_file('modulos/'.$modulo.'/js/jsloader.php')){
-            $include_baseurl = 'modulos/'.$modulo; // necessário para o arquivo jsloader.php saber onde está fisicamente
-            include_once('modulos/'.$modulo.'/js/jsloader.php');
+        $modulo = Aust::getInstance()->LeModuloDaEstrutura($_GET['aust_node']);
+        if(is_file(MODULES_DIR.$modulo.'/js/jsloader.php')){
+            $include_baseurl = MODULES_DIR.$modulo;
+            include_once(MODULES_DIR.$modulo.'/js/jsloader.php');
         }
     } elseif($_GET['action'] == 'configurar_modulo' AND !empty($_GET['modulo'])){
         if(is_file($_GET['modulo'].'/js/jsloader.php')){
-            $include_baseurl = $_GET['modulo']; // necessário para o arquivo jsloader.php saber onde está fisicamente
+            $include_baseurl = $_GET['modulo'];
             include_once($_GET['modulo'].'/js/jsloader.php');
         }
     }
 
-    /**
-     * CONFIGURAR ESTRUTURA
-     *
-     * Se o usuário desejar configurar a estrutura. Carrega configurar_estrutura.php
+    /*
+     * Configure a structure
      */
     if($_GET['action'] == 'configurar'){
-        $diretorio = 'modulos/'.$aust->LeModuloDaEstrutura($_GET['aust_node']); // pega o endereço do diretório
+        $diretorio = MODULES_DIR.Aust::getInstance()->LeModuloDaEstrutura($_GET['aust_node']); // pega o endereço do diretório
         foreach (glob($diretorio."*", GLOB_ONLYDIR) as $pastas) {
             if(is_file($pastas.'/configurar_estrutura.php')){
-                //include($pastas.'/modulo.class.php');
-                include($pastas.'/index.php');
-                include($pastas.'/configurar_estrutura.php');
+				$module = ModulesManager::getInstance()->modelInstance($_GET["aust_node"]);
+				include($pastas.'/configurar_estrutura.php');
             }
         }
     }
-    /**
-     * CONFIGURAR MÓDULO
-     *
-     * Configuração do módulo e não estrutura. Carrega configurar_modulo.php
+    /*
+     * Configure a module
      */
-        // @todo
     else if($_GET['action'] == 'configurar_modulo'){
-        //$diretorio = 'modulos/'.$aust->LeModuloDaEstrutura($_GET['aust_node']); // pega o endereço do diretório
         $pastas = $_GET['modulo'];
-        //foreach (glob($diretorio."*", GLOB_ONLYDIR) as $pastas) {
-            if(is_file($pastas.'/configurar_modulo.php')){
-                include($pastas.'/index.php');
-                include($pastas.'/configurar_modulo.php');
-            }
+        if(is_file($pastas.'/configurar_modulo.php')){
+            include($pastas.'/configurar_modulo.php');
+        }
     }
 
     /*
@@ -136,8 +122,8 @@ if($administrador->LeRegistro('tipo') == 'Webmaster'):
      */
     elseif( !empty($_POST['inserirestrutura'])
             AND (
-                ( is_file( 'modulos/'.$_POST['modulo'].'/'.MOD_SETUP_CONTROLLER ) )
-                OR ( is_file( 'modulos/'.$_POST['modulo'].'/setup.php' ) )
+                ( is_file( MODULES_DIR.$_POST['modulo'].'/'.MOD_SETUP_CONTROLLER ) )
+                OR ( is_file( MODULES_DIR.$_POST['modulo'].'/setup.php' ) )
             )
     ){
 
@@ -146,18 +132,18 @@ if($administrador->LeRegistro('tipo') == 'Webmaster'):
          *
          * Se o padrão MVC está ativado carrega SetupController
          */
-        if( is_file( 'modulos/'.$_POST['modulo'].'/'.MOD_SETUP_CONTROLLER ) ){
+        if( is_file( MODULES_DIR.$_POST['modulo'].'/'.MOD_SETUP_CONTROLLER ) ){
 
             /*
              * Instancia Módulo para começar o Setup
              */
                 $modDir = $_POST['modulo'].'/';
-                include(MODULOS_DIR.$modDir.MOD_CONFIG);
+                include(MODULES_DIR.$modDir.MOD_CONFIG);
                 /**
                  * Carrega classe do módulo e cria objeto
                  */
                 $moduloNome = (empty($modInfo['className'])) ? 'Classe' : $modInfo['className'];
-                include_once(MODULOS_DIR.$modDir.$moduloNome.'.php');
+                include_once(MODULES_DIR.$modDir.$moduloNome.'.php');
 
                 $param = array(
                     'config' => $modInfo,
@@ -172,14 +158,14 @@ if($administrador->LeRegistro('tipo') == 'Webmaster'):
              *
              * Carrega scripts javascript
              */
-            if(is_file('modulos/'.$_POST['modulo'].'/js/jsloader.php')){
-                $include_baseurl = 'modulos/'.$_POST['modulo']; // necessário para o arquivo jsloader.php saber onde está fisicamente
-                include_once('modulos/'.$_POST['modulo'].'/js/jsloader.php');
+            if(is_file(MODULES_DIR.$_POST['modulo'].'/js/jsloader.php')){
+                $include_baseurl = MODULES_DIR.$_POST['modulo']; // necessário para o arquivo jsloader.php saber onde está fisicamente
+                include_once(MODULES_DIR.$_POST['modulo'].'/js/jsloader.php');
             }
             /**
              * Carrega o SetupController
              */
-            include('modulos/'.$_POST['modulo'].'/'.MOD_SETUP_CONTROLLER);
+            include(MODULES_DIR.$_POST['modulo'].'/'.MOD_SETUP_CONTROLLER);
 
             /**
              * SetupController
@@ -212,21 +198,20 @@ if($administrador->LeRegistro('tipo') == 'Webmaster'):
      */
     else {
 
-
         /*
          * INSTALAR ESTRUTURA SEM SETUP.PHP PRÓPRIO VIA CORE DO AUST
          *
          * Se instalar uma estrutura a partir de um módulo com setup.php próprio, faz include neste arquivo para configuração
          */
-        if(!empty($_POST['inserirestrutura'])  AND !is_file('modulos/'.$_POST['modulo'].'/setup.php')) {
-            $result = $aust->gravaEstrutura(
+        if(!empty($_POST['inserirestrutura'])  AND !is_file(MODULES_DIR.$_POST['modulo'].'/setup.php')) {
+            $result = Aust::getInstance()->gravaEstrutura(
                             array(
                                 'nome'              => $_POST['nome'],
                                 'categoriaChefe'    => $_POST['categoria_chefe'],
                                 'estrutura'         => 'estrutura',
                                 'publico'           => $_POST['publico'],
                                 'moduloPasta'       => $_POST['modulo'],
-                                'autor'             => $administrador->LeRegistro('id')
+                                'autor'             => User::getInstance()->LeRegistro('id')
                             )
                         );
             if($result){
@@ -264,7 +249,7 @@ if($administrador->LeRegistro('tipo') == 'Webmaster'):
                     /**
                      * @todo - refatorar LeEstruturas()
                      */
-                    $aust->LeEstruturas(Array('id', 'nome', 'tipo'), '<li><strong>&%nome</strong> (módulo &%tipo) &%options</li>', '', '', 'ORDER BY tipo DESC', 'options');
+                    Aust::getInstance()->LeEstruturas(Array('id', 'nome', 'tipo'), '<li><strong>&%nome</strong> (módulo &%tipo) &%options</li>', '', '', 'ORDER BY tipo DESC', 'options');
                     ?>
                     </ul>
                 </div>
@@ -291,7 +276,7 @@ if($administrador->LeRegistro('tipo') == 'Webmaster'):
                             <label>Categoria-chefe: </label>
                                 <select name="categoria_chefe">
                                     <?php
-                                    $aust->LeCategoriaChefe(Array('id', 'nome'), '<option value="&%id">&%nome</option>', '', '');
+                                    Aust::getInstance()->LeCategoriaChefe(Array('id', 'nome'), '<option value="&%id">&%nome</option>', '', '');
                                     ?>
                                 </select>
                         </div>
@@ -299,7 +284,7 @@ if($administrador->LeRegistro('tipo') == 'Webmaster'):
                         <div class="campo">
                             <label>Módulo: </label>
                                 <?php
-                                $modulosList = $modulos->LeModulos();
+                                $modulosList = ModulesManager::getInstance()->LeModulos();
                                 //pr($modulosList);
                                 ?>
                                 <select name="modulo">
@@ -336,148 +321,7 @@ if($administrador->LeRegistro('tipo') == 'Webmaster'):
         </div>
 
 
-        <?php
 
-        /**
-         * Loop por cada diretório de módulos
-         */
-        /*
-        foreach (glob($diretorio."*", GLOB_ONLYDIR) as $pastas) {
-            break;
-            if(is_dir($pastas) AND is_file($pastas.'/index.php')) {
-
-                /**
-                 * Carrega arquivos dos módulos
-                 *
-                include_once($pastas.'/index.php');
-                include_once($pastas.'/'.MOD_CONFIG);
-
-                /**
-                 * Se o módulo possui uma classe própria com métodos próprios,
-                 * podemos continuar
-                 *
-                if(!empty($modulo)){
-
-                    $conteudo.= '';
-                    // escreve o nome do módulo
-                    if(is_file($pastas.'/configurar_modulo.php')){
-                        $conteudo.= '<a href="adm_main.php?section=conf_modulos&action=configurar_modulo&modulo='.$pastas.'" style="text-decoration: none;">'.$modInfo['nome'].'</a><br>';
-                    } else {
-                        $conteudo.= '<strong>'.$modInfo['nome'].'</strong>';
-                    }
-                    $conteudo.= '<div>'.$modInfo['descricao'].'</div>';
-
-                    /*
-                     * INSTALAR MÓDULO
-                     *
-                     * faz a instalação do módulo, criando as tabelas e gravando informações na tabela módulo
-                     *
-                    if(!empty($_GET['instalar_modulo']) and
-                        $_GET['instalar_modulo'] == $pastas){
-
-                        $pasta_dir = array_reverse( explode('/', $pastas));
-
-                        /**
-                         * Ajusta variáveis para gravação
-                         */
-                        /**
-                         * [embedownform] indica se este módulo possui habilidade para acoplar-se em formulários de outros módulos
-                         * com seu próprio <form></form>
-                         *
-                        $modInfo['embedownform'] = (empty($modInfo['embedownform'])) ? false : $modInfo['embedownform'];
-                        /**
-                         * [embed] indica se este módulo possui habilidade para acoplar-se em formulários de outros módulos
-                         *
-                        $modInfo['embed'] = (empty($modInfo['embed'])) ? false : $modInfo['embed'];
-                        /**
-                         * [somenteestrutura] indica se a estrutura conterá categorias ou não.
-                         *
-                        $modInfo['somenteestrutura'] = (empty($modInfo['somenteestrutura'])) ? false : $modInfo['somenteestrutura'];
-
-                        /**
-                         * DBSCHEMA
-                         *
-                         * A partir será criado o banco de dados
-                         *
-                        include($pastas.'/'.MOD_DBSCHEMA);
-
-                        $migrationsMods = new MigrationsMods($conexao);
-
-                        /*
-                         * Caso o módulo não tenha migrations, faz a verificação normal das tabelas
-                         * a partir de schemas, o que não é recomendado.
-                         *
-                        if( $migrationsMods->hasMigration($pastas) ){
-                            $installStatus = $migrationsMods->updateMigration($pastas);
-                            $isInstalled = $migrationsMods->isActualVersion($pastas);
-                        } else {
-                            $installStatus = $thisDbSchema->instalarSchema();
-                            $isInstalled = $modulo->verificaInstalacaoTabelas();
-                        }
-
-                        /*
-                         * Instalou?
-                         *
-                        if( $installStatus == true
-                            OR $isInstalled )
-                        {
-                            /**
-                             * Guarda configurações do módulo na base de dados
-                             *
-                             * Chama função InstalarTabelas para criação oficial do módulo
-                             *
-                            $param = array(
-                                'tipo' => 'módulo',
-                                'chave' => 'dir',
-                                'valor' => $pasta_dir[0],
-                                'pasta' => $pastas,
-                                'modInfo' => $modInfo,
-                                'autor' => $administrador->LeRegistro('id'),
-                            );
-                            $modulo->configuraModulo($param);
-
-
-                            $conteudo.= '<div style="color: green;">Instalado com sucesso!</div>';
-                        }
-                        /*
-                         * Não foi possível instalar o módulo.
-                         *
-                        else {
-                            $conteudo.= '<div style="color: red;">Não foi possível instalar o módulo</div>';
-                        }
-
-                    }
-                    /*
-                     * Amostragem normal dos módulos.
-                     *
-                    else {
-
-                        if( $modulo->verificaInstalacaoTabelas()
-                            AND $modulo->verificaInstalacaoRegistro(array("pasta"=>$pastas)) )
-                        {
-                            $conteudo.= '<div style="color: green;">Instalado</div>';
-
-                        } else if( $modulo->verificaInstalacaoTabelas() ){
-                            $conteudo.= '<div style="color: orange;">Tabela instalada, registro no DB não.<br />';
-                            $conteudo.= '<a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&instalar_modulo='.$pastas.'">Tentar instalar</a></div>';
-                        } else if( $modulo->verificaInstalacaoRegistro(array("pasta"=>$pastas)) ){
-                            $conteudo.= '<div style="color: orange;">Tabela não instalada, registro no DB sim.</div>';
-                        } else {
-                            $conteudo.= '<div style="color: red;">Não Instalado, ';
-                            $conteudo.= '<a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&instalar_modulo='.$pastas.'">clique para instalar</a></div>';
-                        }
-                    }
-                    $conteudo.= '<br />';
-
-                }
-                unset($modulo);
-                unset($modDbSchema);
-                unset($modInfo);
-            }
-        }
-         *
-         */
-        ?>
         <div class="widget_group">
 
             <?php
@@ -503,7 +347,7 @@ if($administrador->LeRegistro('tipo') == 'Webmaster'):
                         /*
                          * Tem configurador?
                          */
-                        if(is_file($modulo['path'].'/configurar_modulo.php')){
+                        if(is_file(MODULES_DIR.$modulo['path'].'/configurar_modulo.php')){
                             echo '<a href="adm_main.php?section=conf_modulos&action=configurar_modulo&modulo='.$modulo['path'].'" style="text-decoration: none;">'.$modulo['config']['nome'].'</a>';
                         } else {
                             echo $modulo['config']['nome'];
@@ -511,22 +355,16 @@ if($administrador->LeRegistro('tipo') == 'Webmaster'):
                         ?>
                         </strong>
                         <br />
-                        <?php echo $modulo['config']['descricao']?>
-                        <?php
-
-                        /*
-                         * STATUS DE INSTALAÇÃO
-                         */
+                        <?php echo $modulo['config']['descricao'];
                         /*
                          * Totalmente Atualizado.
                          */
-                        //var_dump($migrationsMods->isActualVersion($path));
-                        if( $migrationsMods->isActualVersion($path)
-                            AND $modulos->verificaInstalacaoRegistro(array("pasta"=>$path)) )
+                        if( MigrationsMods::getInstance()->isActualVersion($path)
+                            AND ModulesManager::getInstance()->verificaInstalacaoRegistro(array("pasta"=>$path)) )
                         {
                             echo '<br /><span class="green">Instalado</span><br />';
-                        } elseif( $migrationsMods->isActualVersion($path)
-                            AND !$modulos->verificaInstalacaoRegistro(array("pasta"=>$path)) )
+                        } elseif( MigrationsMods::getInstance()->isActualVersion($path)
+                            AND !ModulesManager::getInstance()->verificaInstalacaoRegistro(array("pasta"=>$path)) )
                         {
                             echo '<div style="color: orange;">Migration atualizado, mas não há registro do módulo no DB.<br />';
                             echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&instalar_modulo='.$path.'">Tentar registrar agora</a></div>';
@@ -535,13 +373,13 @@ if($administrador->LeRegistro('tipo') == 'Webmaster'):
                          * Não atualizado,
                          * contém alguma versão no DB.
                          */
-                        elseif( $migrationsMods->hasSomeVersion($path)
-                                AND $modulos->verificaInstalacaoRegistro(array("pasta"=>$path)) )
+                        elseif( MigrationsMods::getInstance()->hasSomeVersion($path)
+                                AND ModulesManager::getInstance()->verificaInstalacaoRegistro(array("pasta"=>$path)) )
                         {
                             echo '<div style="color: orange;">Tabela instalada, mas requer atualização.<br />';
                             echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&instalar_modulo='.$path.'">Rodar Migration</a></div>';
-                        } elseif( $migrationsMods->hasSomeVersion($path)
-                                AND !$modulos->verificaInstalacaoRegistro(array("pasta"=>$path)) )
+                        } elseif( MigrationsMods::getInstance()->hasSomeVersion($path)
+                                AND !ModulesManager::getInstance()->verificaInstalacaoRegistro(array("pasta"=>$path)) )
                         {
                             echo '<div style="color: orange;">Tabela instalada, mas requer atualização e registro do módulo no DB.<br />';
                             echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&instalar_modulo='.$path.'">Rodar Migration</a></div>';
@@ -550,15 +388,15 @@ if($administrador->LeRegistro('tipo') == 'Webmaster'):
                             echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&instalar_modulo='.$path.'">instalar agora</a><br />';
                         }
                         /*
-                        if( $modulo->verificaInstalacaoTabelas()
-                            AND $modulo->verificaInstalacaoRegistro(array("pasta"=>$pastas)) )
+                        if( $module->verificaInstalacaoTabelas()
+                            AND $module->verificaInstalacaoRegistro(array("pasta"=>$pastas)) )
                         {
                             $conteudo.= '<div style="color: green;">Instalado</div>';
 
-                        } else if( $modulo->verificaInstalacaoTabelas() ){
+                        } else if( $module->verificaInstalacaoTabelas() ){
                             $conteudo.= '<div style="color: orange;">Tabela instalada, registro no DB não.<br />';
                             $conteudo.= '<a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&instalar_modulo='.$pastas.'">Tentar instalar</a></div>';
-                        } else if( $modulo->verificaInstalacaoRegistro(array("pasta"=>$pastas)) ){
+                        } else if( $module->verificaInstalacaoRegistro(array("pasta"=>$pastas)) ){
                             $conteudo.= '<div style="color: orange;">Tabela não instalada, registro no DB sim.</div>';
                         } else {
                             $conteudo.= '<div style="color: red;">Não Instalado, ';

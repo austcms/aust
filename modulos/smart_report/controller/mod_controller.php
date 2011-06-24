@@ -10,7 +10,7 @@
  * @since v0.1.5 24/06/2009
  */
 
-class ModController extends ModsController
+class ModController extends ModActionController
 {
 	public $query = array();
 	
@@ -25,9 +25,9 @@ class ModController extends ModsController
         /**
          * <h2> HEADER
          */
-        $this->set('h1', $this->aust->leNomeDaEstrutura($_GET['aust_node']) );
+        $this->set('h1', Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']) );
 
-        $categorias = $this->aust->LeCategoriasFilhas('',$_GET['aust_node']);
+        $categorias = Aust::getInstance()->LeCategoriasFilhas('',$_GET['aust_node']);
         $categorias[$_GET['aust_node']] = 'Estrutura';
 
         /*
@@ -40,11 +40,11 @@ class ModController extends ModsController
         /*
          * Query com resultado
          */
-        $query = $this->modulo->load($params);
+        $query = $this->module->load($params);
 
-        $this->set('sql', $this->modulo->lastSql );
-        //$config = $this->modulo->loadConfig();
-//        $query = $this->modulo->replaceFieldsValueIfEmpty($query);
+        $this->set('sql', $this->module->lastSql );
+        //$config = $this->module->loadConfig();
+//        $query = $this->module->replaceFieldsValueIfEmpty($query);
 //		pr($query);
 		
         $this->set('query', $query );
@@ -57,10 +57,10 @@ class ModController extends ModsController
 
     public function view($param = array()){
 
-        $this->set('tagh2', $this->aust->leNomeDaEstrutura($_GET['aust_node']) );
+        $this->set('tagh2', Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']) );
 
 		$this->showControls = false;
-		if( $this->modulo->getStructureConfig('activate_actions') == '1' )
+		if( $this->module->getStructureConfig('activate_actions') == '1' )
 			$this->showControls = true;
 
         $w = (!empty($_POST['w'])) ? $_POST['w'] : '';
@@ -68,7 +68,7 @@ class ModController extends ModsController
         $this->set('w', $w);
 
 		if( empty($this->query) ){
-			$query = $this->modulo->runFilter($w);
+			$query = $this->module->runFilter($w);
 		} else {
 			$query = $this->query;
 		}
@@ -86,7 +86,7 @@ class ModController extends ModsController
     }
 
     public function save(){
-        $this->set('resultado', $this->modulo->save($_POST));
+        $this->set('resultado', $this->module->save($_POST));
     }
 
 	function actions(){
@@ -127,7 +127,7 @@ class ModController extends ModsController
 					id IN ($items)
 					AND $targetField>=$subtractValue
 				";
-				$this->connection->exec($sql);
+				Connection::getInstance()->exec($sql);
 				notice('Itens atualizados com sucesso.');
 			}
 			/*
@@ -148,7 +148,7 @@ class ModController extends ModsController
 				WHERE
 					id IN ($items)
 				";
-				$this->query['results'] = $this->connection->query($sql);
+				$this->query['results'] = Connection::getInstance()->query($sql);
 				$this->showControls = false;
 				$this->view( array('view' => 'see_data_separated_by_semicolon') );
 				

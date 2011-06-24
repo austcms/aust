@@ -5,7 +5,7 @@
  */
 
         // se for para editar, deixa checkbox com propriedade 'check'
-        $usuario_tabela = $modulo->LeTabelaDaEstrutura($_GET['aust_node']);
+        $usuario_tabela = $module->LeTabelaDaEstrutura($_GET['aust_node']);
         $privid_result = array();
         if(!empty($_GET['w'])){
             $temp_w = $_GET['w'];

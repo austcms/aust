@@ -12,7 +12,7 @@
         "aust_node" => $_GET["aust_node"],
     );
 
-    $moduloConfig = $modulo->loadModConf($params);
+    $moduloConfig = $module->loadModConf($params);
 
 
 /*
@@ -25,7 +25,7 @@
  * [Se novo conteúdo]
  */
     if($_GET['action'] == 'create'){
-        $tagh1 = "Criar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
+        $tagh1 = "Criar: ". Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
         $tagp = 'Crie um novo conteúdo abaixo.';
         $dados = array('id' => '');
     }
@@ -34,17 +34,17 @@
  */
     else if($_GET['action'] == 'edit'){
 
-        $tagh1 = "Editar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
+        $tagh1 = "Editar: ". Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
         $tagp = 'Edite o conteúdo abaixo.';
         $sql = "
                 SELECT
                     *
                 FROM
-                    ".$modulo->useThisTable()."
+                    ".$module->useThisTable()."
                 WHERE
                     id='$w'
                 ";
-        $query = $modulo->connection->query($sql);
+        $query = $module->connection->query($sql);
         $dados = $query[0];
     }
 ?>
@@ -99,7 +99,7 @@
         if( $moduloConfig["categoria"]["valor"] == "1" )
             $showCategoria = true;
     }
-    if( $modulo->getStructureConfig("categorias") ){
+    if( $module->getStructureConfig("categorias") ){
     ?>
 
         <tr>
@@ -115,7 +115,7 @@
                     <?php
                 }
 
-                echo BuildDDList( Registry::read('austTable') ,'frmcategoria', $administrador->tipo ,$austNode, $current_node);
+                echo BuildDDList( Registry::read('austTable') ,'frmcategoria', User::getInstance()->tipo ,$austNode, $current_node);
                 ?>
                 </div>
 
@@ -242,7 +242,7 @@
      * O arquivo inserido é /embed/form.php do módulo que $embed==true
      */
 
-        include(INC_DIR.'conteudo.inc/form_embed.php');
+        include(INC_DIR.'content.inc/form_embed.php');
 
     ?>
     <tr>
@@ -264,7 +264,7 @@
      * É padrão e pode ser copiado para todos os forms
      */
 
-        //include(INC_DIR.'conteudo.inc/form_embedownform.php');
+        //include(INC_DIR.'content.inc/form_embedownform.php');
 ?>
 
 

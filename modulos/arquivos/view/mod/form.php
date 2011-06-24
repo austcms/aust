@@ -14,7 +14,7 @@ $austNode = (!empty($_GET['aust_node'])) ? $_GET['aust_node'] : '';
     $params = array(
         "aust_node" => $_GET["aust_node"],
     );
-    $moduloConfig = $modulo->loadModConf($params);
+    $moduloConfig = $module->loadModConf($params);
 
 
 if($_GET['action'] == 'edit'){
@@ -27,7 +27,7 @@ if($_GET['action'] == 'edit'){
             WHERE
                 id='".$_GET['w']."'
             ";
-    $mysql = $modulo->connection->query($sql);
+    $mysql = $module->connection->query($sql);
     $dados = $mysql[0];
     $fm = "edit";
 } else {
@@ -60,14 +60,14 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
     <input type="hidden" name="frmarquivo_nome" value="<?php if( !empty($dados['arquivo_nome']) ) echo $dados['arquivo_nome'];?>">
     <input type="hidden" name="frmarquivo_tipo" value="<?php if( !empty($dados['arquivo_tipo']) ) echo $dados['arquivo_tipo'];?>">
     <input type="hidden" name="frmarquivo_tamanho" value="<?php if( !empty($dados['arquivo_tamanho']) ) echo $dados['arquivo_tamanho']; ?>">
-    <input type="hidden" name="frmadmin_id" value="<?php if( !empty($dados['autor']) ) echo $dados['autor']; else echo $administrador->LeRegistro('id');?>">
+    <input type="hidden" name="frmadmin_id" value="<?php if( !empty($dados['autor']) ) echo $dados['autor']; else echo User::getInstance()->LeRegistro('id');?>">
     
     <table border=0 cellpadding=0 cellspacing=0 class="form">
     <?php
     /*
      * CATEGORIA
      */
-    if( $modulo->getStructureConfig('select_category') == 1 ){
+    if( $module->getStructureConfig('select_category') == 1 ){
         ?>
         <tr>
             <td valign="top">Selecione a categoria: </td>
@@ -85,7 +85,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
                 /*
                  * Nova_Categoria?
                  */
-                if( $modulo->getStructureConfig('nova_categoria') == 1 ){
+                if( $module->getStructureConfig('nova_categoria') == 1 ){
                     $param = array(
                         'austNode' => $austNode,
                         'categoryInput' => 'frmcategoria_id',
@@ -171,7 +171,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
                 if( strtolower( substr($_SERVER["SERVER_PROTOCOL"], 0, 4) ) == 'http' ){
                     $url = 'http://';
                 }
-                $url = $modulo->parseUrl( $url.$_SERVER["SERVER_NAME"].$dados['url'] );
+                $url = $module->parseUrl( $url.$_SERVER["SERVER_NAME"].$dados['url'] );
 
             }
             ?>
@@ -237,7 +237,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
      * O arquivo inserido é /embed/form.php do módulo que $embed==true
      */
 
-        include(INC_DIR.'conteudo.inc/form_embed.php');
+        include(INC_DIR.'content.inc/form_embed.php');
 
     ?>
 

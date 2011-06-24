@@ -142,7 +142,7 @@ class StructurePermissions extends SQLObject {
      * formato simplicado (array(0 => 'categoria 1', 1 => 'categoria 2', ...))
      */
     function read($param = ''){
-
+		include(PERMISSIONS_FILE);
         /**
          * Ajusta configuração de leitura, verifica a quem se refere
          * a permissão que será lida
@@ -198,7 +198,7 @@ class StructurePermissions extends SQLObject {
                                         'fields' => array('categorias_id','action'),
                                     ), 'sql'
         );
-        $query = $this->conexao->query($permissoesSql) ;
+        $query = Connection::getInstance()->query($permissoesSql) ;
 
 
         $permissoes = array();
@@ -227,7 +227,6 @@ class StructurePermissions extends SQLObject {
      * à estrutura requerida
      */
     function verify($austNode, $action = ''){
-
         if( $action == 'save' )
             return $this->canSave($austNode);
 

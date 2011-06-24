@@ -97,26 +97,26 @@ if( !empty($_POST) AND $save  ) {
 
     if($_POST['metodo'] == 'create') {
         $sql = "INSERT INTO
-                    ".$this->modulo->useThisTable()."
+                    ".$this->module->useThisTable()."
                     ($sqlcampostr)
                 VALUES
                     ($sqlvalorstr)
             ";
 
 
-        $h1 = 'Criando: '.$this->aust->leNomeDaEstrutura($_GET['aust_node']);
+        $h1 = 'Criando: '.Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
     } else if($_POST['metodo'] == 'edit') {
         $sql = "UPDATE
-                    ".$this->modulo->useThisTable()."
+                    ".$this->module->useThisTable()."
                 SET
                 $sqlcampostr
                 WHERE
                     id='".$_POST['w']."'
                 ";
-        $h1 = 'Editando: '.$this->aust->leNomeDaEstrutura($_GET['aust_node']);
+        $h1 = 'Editando: '.Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
     }
 
-    $query = $this->modulo->connection->exec($sql);
+    $query = $this->module->connection->exec($sql);
 
     /*
      * Salva dados
@@ -126,7 +126,7 @@ if( !empty($_POST) AND $save  ) {
 
         // se estiver criando um registro, guarda seu id para ser usado por módulos embed a seguir
         if($_POST['metodo'] == 'create') {
-            $_POST['w'] = $this->modulo->connection->conn->lastInsertId();
+            $_POST['w'] = $this->module->connection->conn->lastInsertId();
         }
 
         /*
@@ -143,7 +143,7 @@ if( !empty($_POST) AND $save  ) {
 				/*
 				 * PADRÃO : Salva imagem fisicamente.
 				 */
-				if( !$this->modulo->getStructureConfig('save_into_db') ){
+				if( !$this->module->getStructureConfig('save_into_db') ){
 					
 					$finalName = $imageHandler->upload($valor);
 					
@@ -194,7 +194,7 @@ if( !empty($_POST) AND $save  ) {
 	                                )
 	                                ";
                 
-	                if( ! $this->modulo->connection->exec($sqlImagem) )
+	                if( ! $this->module->connection->exec($sqlImagem) )
 	                    $erroImg[] = $valor["tmp_name"];
                     
 	                unset($sqlImagem);
@@ -209,7 +209,7 @@ if( !empty($_POST) AND $save  ) {
 					(category_id, galeria_foto_id, content_id, ordem, bytes, systempath, path, nome, tipo, adddate, texto)
                     VALUES ".implode(",", $sqlBuffer);
 
-            if( ! $this->modulo->connection->exec($sql) )
+            if( ! $this->module->connection->exec($sql) )
                 $erroImg[] = 'várias imagens';
             
             unset($sqlBuffer);

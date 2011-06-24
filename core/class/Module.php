@@ -9,7 +9,7 @@
  * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @since v0.1.5, 30/05/2009
  */
-class Module
+class Module extends ActiveModule
 {
 
     /*
@@ -148,22 +148,14 @@ class Module
     public $testMode = false;
 
     /**
-     *
-     * @var string Diretório onde estão os módulos
-     */
-    const MOD_DIR = 'modulos/';
-    /**
      * __CONSTRUCT()
      *
      * @param array $param:
      *      'conexao': Contém a conexão universal
      */
-    function __construct() {
+    function __construct($austNode = ""){
 
-        if( !isset ($_GET["aust_node"]) )
-            $_GET["aust_node"] = false;
-        
-        $this->austNode = $_GET['aust_node'];
+        $this->austNode = $austNode;
 
         if( !empty($_GET['w']) AND is_numeric($_GET['w']) )
             $this->w = $_GET['w'];
@@ -177,7 +169,8 @@ class Module
          */
             $this->user = User::getInstance();
 
-        $this->config = $this->loadConfig();
+		if( !defined("TESTING") || !TESTING )
+        	$this->config = $this->loadConfig();
 		
 		if( !empty($this->config['viewmodes']) )
 			$this->viewModes = $this->config['viewmodes'];
@@ -198,7 +191,7 @@ class Module
      */
 
 	public function fixEncoding($post = array()){
-		if( $this->connection->encoding != 'utf8' )
+		if( Connection::getInstance()->encoding != 'utf8' )
 			return $post;
 
 		foreach( $post as $key=>$value ){
@@ -248,12 +241,12 @@ class Module
         /**
          * Salva no DB
          */
-        if( $this->connection->exec($sql) !== false ){
+        if( Connection::getInstance()->exec($sql) !== false ){
 
             if( !empty($post['w']) OR $post['w'] > 0 ){
                 $this->w = $post['w'];
             } else {
-                $this->w = $this->connection->conn->lastInsertId();
+                $this->w = Connection::getInstance()->conn->lastInsertId();
             }
 
             /*
@@ -317,7 +310,7 @@ class Module
 		
 		$sql = $this->loadSql($paramForLoadSql);
 
-        $qry = $this->connection->query($sql);
+        $qry = Connection::getInstance()->query($sql);
         if( empty($qry) )
             return array();
 
@@ -373,7 +366,7 @@ class Module
 		}
 		
 		if( is_string($param) ){
-			$query = $this->connection->query($param);
+			$query = Connection::getInstance()->query($param);
 			$result = reset( $query );
 			$total = ( !empty($result['rows']) && is_numeric($result['rows']) ) ? $result['rows'] : 0;
 		} else {
@@ -426,7 +419,7 @@ class Module
         {
             print $options['categorias'];
 
-            print("Argumento <strong>categorias</strong> ultrapassada em \$modulo->loadSql. Use \$options['austNode'].");
+            print("Argumento <strong>categorias</strong> ultrapassada em \$module->loadSql. Use \$options['austNode'].");
             exit(0);
         }
 		/* gera sql para descobrir o número total de rows */
@@ -499,7 +492,7 @@ class Module
 				array('Webmaster', 'Root', 'root', 'Moderador', 'Administrador')
 			) &&
 			!empty($userId) &&
-			( $this->connection->tableHasField($this->useThisTable(), $this->authorField) )
+			( Connection::getInstance()->tableHasField($this->useThisTable(), $this->authorField) )
 		)
 		{
 			$where .= " AND (".$this->authorField." = ".$user->getId().")";
@@ -527,7 +520,7 @@ class Module
 		}
 
         if( empty($this->describedTable[$this->useThisTable()]) ){
-            $tempDescribe = $this->connection->query('DESCRIBE '.$this->useThisTable());
+            $tempDescribe = Connection::getInstance()->query('DESCRIBE '.$this->useThisTable());
             foreach( $tempDescribe as $fields ){
                 $this->describedTable[$this->useThisTable()][$fields['Field']] = $fields;
             }
@@ -656,7 +649,7 @@ class Module
                         id='$id'
                 ";
 
-            $result = $this->connection->exec($sql);
+            $result = Connection::getInstance()->exec($sql);
 
             if( $result )
                 return true;
@@ -853,7 +846,7 @@ class Module
                     target_table='$targetTable'
                 ";
 
-        $query = $this->connection->query($sql);
+        $query = Connection::getInstance()->query($sql);
 
         if( empty($query) )
             return array();
@@ -920,21 +913,21 @@ class Module
                     c.id='".$austNode."'
                 ";
 
-        $query = $this->connection->query($sql);
+        $query = Connection::getInstance()->query($sql);
         if( empty($query) )
             return array();
 
         foreach( $query as $valor ){
 
-            if( !file_exists( MODULOS_DIR.$valor["tipo"].'/'.MOD_CONFIG ) )
+            if( !file_exists( MODULES_DIR.$valor["tipo"].'/'.MOD_CONFIG ) )
                 continue;
 
-            include(MODULOS_DIR.$valor["tipo"].'/'.MOD_CONFIG);
+            include(MODULES_DIR.$valor["tipo"].'/'.MOD_CONFIG);
 
-            if( !file_exists( MODULOS_DIR.$valor["tipo"].'/'.$modInfo['className'].'.php' ) )
+            if( !file_exists( MODULES_DIR.$valor["tipo"].'/'.$modInfo['className'].'.php' ) )
                 continue;
             
-            include_once(MODULOS_DIR.$valor["tipo"].'/'.$modInfo['className'].'.php');
+            include_once(MODULES_DIR.$valor["tipo"].'/'.$modInfo['className'].'.php');
 
             $result[] = new $modInfo['className'];
         }
@@ -965,7 +958,7 @@ class Module
                     m.tipo='relacionamentos' AND
                     m.valor='".$austNode."'
                 ";
-        $query = $this->connection->query($sql);
+        $query = Connection::getInstance()->query($sql);
         $tmp = array();
         foreach( $query as $valor ){
             $tmp[] = $valor["categoria_id"];
@@ -1064,10 +1057,10 @@ class Module
 		$tmpStr = implode('_', $results[0]);
 		$tmpStr = strtolower($tmpStr);
 		
-		if( is_dir(MODULOS_DIR.$tmpStr) )
-       		return MODULOS_DIR.$tmpStr;
+		if( is_dir(MODULES_DIR.$tmpStr) )
+       		return MODULES_DIR.$tmpStr;
 		else
-       		return MODULOS_DIR.strtolower( $str );
+       		return MODULES_DIR.strtolower( $str );
     }
 
 	/**
@@ -1180,12 +1173,12 @@ class Module
          * Load Migrations
          */
         $migrationsMods = new MigrationsMods( $this->conexao );
-        //$migrationsStatus = $migrationsMods->status();
+        //$migrationsStatus = MigrationsMods::getInstance()->status();
 
         if( is_array($params) ){
             
             foreach( $params as $modName ){
-                $pastas = MODULOS_DIR.$modName;
+                $pastas = MODULES_DIR.$modName;
 
                 /**
                  * Carrega arquivos do módulo atual
@@ -1196,7 +1189,7 @@ class Module
                 
                 include($pastas.'/'.MOD_CONFIG);
 
-                $result[$modName]['version'] = $migrationsMods->isActualVersion($pastas);
+                $result[$modName]['version'] = MigrationsMods::getInstance()->isActualVersion($pastas);
                 $result[$modName]['path'] = $pastas;//.'/'.MOD_CONFIG;
                 $result[$modName]['config'] = $modInfo;
 
@@ -1218,7 +1211,7 @@ class Module
         }
 
         $sql = "SELECT id FROM modulos WHERE ".$where;
-        $query = $this->connection->query($sql);
+        $query = Connection::getInstance()->query($sql);
         if( !$query ){
             return false;
         } else {
@@ -1289,7 +1282,7 @@ class Module
 			$todayDateTime = date('Y-m-d H:i:s');
 			
 			$sql = "DELETE FROM aust_relations WHERE slave_id='".$params["aust_node"]."'";
-			$this->connection->exec($sql);
+			Connection::getInstance()->exec($sql);
 
 			$relationalName = $moduleConfig['nome'];
 			if( !empty($moduleConfig['relationalName']) )
@@ -1306,7 +1299,7 @@ class Module
 					foreach( $valor as $propriedade=>$valor ){
 						
 						$deleteSQL = "DELETE FROM config WHERE tipo='mod_conf'  AND $classSearchStatement AND local='".$params["aust_node"]."' AND propriedade='$propriedade' AND ref_field='$refField' $whereAuthor";
-			            $this->connection->exec($deleteSQL);
+			            Connection::getInstance()->exec($deleteSQL);
 
 		                $paramsToSave = array(
 		                    "table" => "config",
@@ -1320,7 +1313,7 @@ class Module
 			                    "valor" => $valor
 		                    )
 		                );
-		                $this->connection->exec($this->connection->saveSql($paramsToSave));
+		                Connection::getInstance()->exec(Connection::getInstance()->saveSql($paramsToSave));
 					}
 				}
 				/*
@@ -1329,7 +1322,7 @@ class Module
 				else {
 				
 					$deleteSQL = "DELETE FROM config WHERE tipo='mod_conf' AND $classSearchStatement AND local='".$params["aust_node"]."' AND propriedade='$propriedade' $whereAuthor";
-		            $this->connection->exec($deleteSQL);
+		            Connection::getInstance()->exec($deleteSQL);
 
 	                $paramsToSave = array(
 	                    "table" => "config",
@@ -1342,7 +1335,7 @@ class Module
 		                    "valor" => $valor
 	                    )
 	                );
-	                $this->connection->exec($this->connection->saveSql($paramsToSave));
+	                Connection::getInstance()->exec(Connection::getInstance()->saveSql($paramsToSave));
 	
 					/*
 					 * No caso de relações entre estruturas, salva na devida tabela os dados
@@ -1358,7 +1351,7 @@ class Module
 									('".$params["aust_node"]."', 
 									(SELECT nome FROM categorias WHERE id='".$params["aust_node"]."'), 
 									'".$valor."', '".$todayDateTime."', '".$todayDateTime."')";
-							$this->connection->exec($sql);
+							Connection::getInstance()->exec($sql);
 						}
 					}
 	
@@ -1388,7 +1381,7 @@ class Module
      * @return <array>
      */
     function loadModConf($params = "", $confClass = '', $author = "") {
-	
+
 		if( is_null($confClass) OR empty($confClass) )
 			$confClass = 'module';
 		
@@ -1427,7 +1420,6 @@ class Module
 			 */
             $staticConfig = $this->loadConfig();
 
-
 			if( $confClass == 'module' )
             	$staticConfig = $staticConfig['configurations'];
 			else
@@ -1445,14 +1437,16 @@ class Module
 			 * menos itens que as definidas estaticamente.
 			 */
             $sql = "SELECT * FROM config WHERE tipo='mod_conf' AND $classSearchStatement AND local='".$params."' $whereAuthor LIMIT 300";
-			$queryTmp = $this->connection->query($sql, "ASSOC");
+			$queryTmp = Connection::getInstance()->query($sql, "ASSOC");
 			
             $query = array();
 			/*
 			 * Configurações de campos individuais têm um formato completamente
 			 * diferente de configurações de módulos.
 			 */
+			
 			if( $confClass == 'field' ){
+
 				$fields = $this->getFields();
 				if( empty($fields) )
 					return array();
@@ -1566,7 +1560,7 @@ class Module
              */
 			if( !empty($author) ){
 	            $sql = "SELECT * FROM config WHERE tipo='mod_conf' AND local='".$this->austNode."' AND autor='$author' AND propriedade='$params' LIMIT 1";
-	            $queryTmp = $this->connection->query($sql, "ASSOC");
+	            $queryTmp = Connection::getInstance()->query($sql, "ASSOC");
 
 				if( !empty($queryTmp) )
 					return $queryTmp[0]['valor'];
@@ -1770,7 +1764,7 @@ class Module
             "where" => "tipo='textos' and classe='estrutura'"
         );
 
-        $estruturas = $aust->LeEstruturasParaArray($param);
+        $estruturas = Aust::getInstance()->LeEstruturasParaArray($param);
         /**
          * Se há estruturas instaladas, rodará uma por uma tomando os conteúdos
          */
@@ -1795,7 +1789,7 @@ class Module
                 foreach($estruturas as $chave=>$valor) {
 
                     $response['intro'] = 'A seguir, os últimos conteúdos.';
-                    $categorias = $aust->categoriasFilhas( array( 'pai' => $valor['id'] ) );
+                    $categorias = Aust::getInstance()->categoriasFilhas( array( 'pai' => $valor['id'] ) );
 
                     if(!empty($categorias)) {
                     /**
@@ -1820,7 +1814,7 @@ class Module
                                 LIMIT 0,4
                                 ";
 
-                        $result = $this->connection->query($sql);
+                        $result = Connection::getInstance()->query($sql);
 
                         foreach($result as $dados) {
                         /**
@@ -1922,73 +1916,6 @@ class Module
 
     }
 
-
-
-
-
-
-
-
-
-
-
-    /**
-     * @todo - ajustar código para baixo
-     */
-    /**
-     * Salva dados sobre o módulo na base de dados.
-     *
-     * Usado após a criação das tabelas do módulo.
-     *
-     * @param array $param
-     * @return bool
-     */
-    function configuraModulo($param) {
-
-    /**
-     * Ajusta cada variável enviada como parâmetro
-     */
-    /**
-     * $tipo:
-     */
-        $tipo = (empty($param['tipo'])) ? '' : $param['tipo'];
-        /**
-         * $chave:
-         */
-        $chave = (empty($param['chave'])) ? '' : $param['chave'];
-        /**
-         * $valor:
-         */
-        $valor = (empty($param['valor'])) ? '' : $param['valor'];
-        /**
-         * $pasta:
-         */
-        $pasta = (empty($param['pasta'])) ? '' : $param['pasta'];
-        /**
-         * $modInfo:
-         */
-        $modInfo = (empty($param['modInfo'])) ? '' : $param['modInfo'];
-        /**
-         * $autor:
-         */
-        $autor = (empty($param['autor'])) ? '' : $param['autor'];
-
-
-        $this->connection->exec("DELETE FROM modulos WHERE pasta='".$pasta."'");
-
-        $sql = "INSERT INTO
-                    modulos
-                        (tipo,chave,valor,pasta,nome,descricao,embed,embedownform,somenteestrutura,autor)
-                VALUES
-                    ('$tipo','$chave','$valor','$pasta','".$modInfo['nome']."','".$modInfo['descricao']."','".$modInfo['embed']."','".$modInfo['embedownform']."','".$modInfo['somenteestrutura']."','$autor')
-            ";
-        if($this->connection->exec($sql, 'CREATE_TABLE')) {
-            return TRUE;
-        } else {
-            return FALSE;
-        }
-    }
-
     /*
      *
      *	funções de verificação ou leitura
@@ -1996,11 +1923,11 @@ class Module
      */
     function leModulos() {
 
-        $modulos = $this->connection->query("SELECT * FROM modulos");
+        $modulos = Connection::getInstance()->query("SELECT * FROM modulos");
         //pr($modulos);
         return $modulos;
 
-        $diretorio = 'modulos/'; // pega o endereço do diretório
+        $diretorio = MODULES_DIR; // pega o endereço do diretório
         foreach (glob($diretorio."*", GLOB_ONLYDIR) as $pastas) {
             if (is_dir ($pastas)) {
                 if( is_file($pastas.'/'.MOD_CONFIG )) {
@@ -2051,7 +1978,7 @@ class Module
                 WHERE
                     m.embed='1'
                 ";
-        $query = $this->connection->query($sql);
+        $query = Connection::getInstance()->query($sql);
         $i = 0;
         $return = '';
 
@@ -2079,7 +2006,7 @@ class Module
                 WHERE
                     embedownform='1'
                 ";
-        $query = $this->connection->query($sql);
+        $query = Connection::getInstance()->query($sql);
 
         $return = '';
         $i = 0;
@@ -2107,7 +2034,7 @@ class Module
                 WHERE
                     valor='".$estrutura."'
                 ";
-        $query = $this->connection->query($sql);
+        $query = Connection::getInstance()->query($sql);
 
         $return = '';
         foreach($query as $dados) {
@@ -2125,7 +2052,7 @@ class Module
                 FROM
                     modulos
                 ";
-        $query = $this->connection->query($sql);
+        $query = Connection::getInstance()->query($sql);
         $i = 0;
         foreach($query as $dados) {
             $return[$i]['pasta'] = $dados['pasta'];

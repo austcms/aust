@@ -43,39 +43,39 @@ if(!empty($_POST)) {
 
     if($_POST['metodo'] == 'create') {
         $sql = "INSERT INTO
-                    ".$modulo->useThisTable()."
+                    ".$module->useThisTable()."
                     ($sqlcampostr)
                 VALUES
                     ($sqlvalorstr)
                 ";
 
 
-        $h1 = 'Criando: '.$this->aust->leNomeDaEstrutura($_GET['aust_node']);
+        $h1 = 'Criando: '.Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
     } else if($_POST['metodo'] == 'edit') {
         $sql = "UPDATE
-                    ".$modulo->useThisTable()."
+                    ".$module->useThisTable()."
                 SET
                 $sqlcampostr
                 WHERE
                 id='".$_POST['w']."'
                 ";
-        $h1 = 'Editando: '.$this->aust->leNomeDaEstrutura($_GET['aust_node']);
+        $h1 = 'Editando: '.Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
     }
 
-    $query = $this->modulo->connection->exec($sql);
+    $query = $this->module->connection->exec($sql);
     if($query !== false) {
         $resultado = TRUE;
 
         // se estiver criando um registro, guarda seu id para ser usado por módulos embed a seguir
         if($_POST['metodo'] == 'criar') {
-            $_POST['w'] = $this->modulo->connection->conn->lastInsertId();
+            $_POST['w'] = $this->module->connection->conn->lastInsertId();
         }
 
 
         /*
          * carrega módulos que contenham propriedade embed
         */
-        $embed = $this->modulo->LeModulosEmbed();
+        $embed = $this->module->LeModulosEmbed();
 
         // salva o objeto do módulo atual para fazer embed
         if( !empty($embed) ) {

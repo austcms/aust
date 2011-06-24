@@ -88,7 +88,7 @@ function lightboxClose(){
 // viewmode - thumbs, list
 function changeViewMode(este){
 
-	var url = 'adm_main.php?section=conteudo&action=view_items&page='+page+'&aust_node='+austNode;
+	var url = 'adm_main.php?section=content&action=view_items&page='+page+'&aust_node='+austNode;
 	var viewMode = $(este).attr('name');
 	
     $('.viewmode').removeClass('pressed');

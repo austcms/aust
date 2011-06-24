@@ -91,7 +91,6 @@ class Connection extends SQLObject {
         }
 
         return $instance[0];
-
     }
 
     /**
@@ -292,7 +291,6 @@ class Connection extends SQLObject {
                 Registry::add('debug',$debugVars);
             }
         }
-
         return $result;
     }
 

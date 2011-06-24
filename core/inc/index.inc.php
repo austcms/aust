@@ -2,7 +2,7 @@
 /*
  * WIDGETS
  */
-$widgets = new Widgets($envParams, $administrador->getId());
+$widgets = new Widgets($envParams, User::getInstance()->getId());
 ?>
 
 <h2>Painel Principal</h2>
@@ -26,13 +26,13 @@ $widgets = new Widgets($envParams, $administrador->getId());
             $widgetsToInstall = array(
                 array(
                     'name' => 'category_shortcuts',
-                    'admin_id' => $administrador->getId(),
+                    'admin_id' => User::getInstance()->getId(),
                     'column_nr' => 1,
                     'path' => 'dashboard/category_shortcuts',
                 ),
                 array(
                     'name' => 'people',
-                    'admin_id' => $administrador->getId(),
+                    'admin_id' => User::getInstance()->getId(),
                     'column_nr' => 2,
                     'path' => 'dashboard/people',
                 ),

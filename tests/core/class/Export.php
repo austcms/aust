@@ -30,18 +30,18 @@ class ExportTest extends PHPUnit_Framework_TestCase
          */
 
         // Conteúdos
-        include 'modulos/conteudo/'.MOD_CONFIG;
-        include_once 'modulos/conteudo/'.$modInfo['className'].'.php';
+        include MODULES_DIR.'conteudo/'.MOD_CONFIG;
+        include_once MODULES_DIR.'conteudo/'.$modInfo['className'].'.php';
         $this->Conteudo = new Conteudo;
 
 		// Cadastro Setup
         $modelName = 'CadastroSetup';
-        include_once 'modulos/Cadastro/'.MOD_MODELS_DIR.$modelName.'.php';
+        include_once MODULES_DIR.'Cadastro/'.MOD_MODELS_DIR.$modelName.'.php';
         $this->CadastroSetup = new $modelName;
 
         // Cadastro
-        include 'modulos/cadastro/'.MOD_CONFIG;
-        include_once 'modulos/cadastro/'.$modInfo['className'].'.php';
+        include MODULES_DIR.'cadastro/'.MOD_CONFIG;
+        include_once MODULES_DIR.'cadastro/'.$modInfo['className'].'.php';
         $this->Cadastro = new Cadastro;
 
         $this->obj = Export::getInstance();
@@ -50,8 +50,8 @@ class ExportTest extends PHPUnit_Framework_TestCase
 	}
 
 	function populate(){
-		$this->aust->connection->exec("INSERT INTO categorias (nome,classe,subordinadoid) VALUES ('TestePai777','categoria-chefe','0')");
-		$lastInsert = $this->aust->connection->lastInsertId();
+		Aust::getInstance()->connection->exec("INSERT INTO categorias (nome,classe,subordinadoid) VALUES ('TestePai777','categoria-chefe','0')");
+		$lastInsert = Aust::getInstance()->connection->lastInsertId();
 		$this->lastSite = $lastInsert;
 		
 	    $params = array(
@@ -63,7 +63,7 @@ class ExportTest extends PHPUnit_Framework_TestCase
 	        'author' => '1',
 	    );
 		
-		$result = $this->aust->create($params);
+		$result = Aust::getInstance()->create($params);
 		
 		$params = array(
             'name' => 'Teste777Cadastro',
@@ -101,10 +101,10 @@ class ExportTest extends PHPUnit_Framework_TestCase
 		);
 		
 		// Pega ID da estrutura salva
-		$st = reset($this->aust->connection->query("SELECT id FROM categorias WHERE nome='Teste777Conteudo'"));
+		$st = reset(Aust::getInstance()->connection->query("SELECT id FROM categorias WHERE nome='Teste777Conteudo'"));
 		
 		$stId = $st['id'];
-		$this->aust->connection->exec("INSERT INTO config (tipo,local,propriedade,valor) VALUES('mod_conf','$stId','teste777777','teste777777')");
+		Aust::getInstance()->connection->exec("INSERT INTO config (tipo,local,propriedade,valor) VALUES('mod_conf','$stId','teste777777','teste777777')");
 		
 		$result = $this->CadastroSetup->createStructure($params);		
     }

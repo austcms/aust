@@ -11,7 +11,7 @@ $conditions = (empty($_POST['id'])) ? array() : array('id' => $_POST['id']);
  */
 if( !empty($_POST['id']) ){
     if( $_POST['tipo'] == 'userTipo'){
-        $agente = $conexao->find(array(
+        $agente = Connection::getInstance()->find(array(
                                     'table' => 'admins_tipos',
                                     'conditions' => array(
                                         'id' => $_POST['id'],
@@ -20,7 +20,7 @@ if( !empty($_POST['id']) ){
                                 ), 'all'
         );
     } else {
-        $agente = $conexao->find(array(
+        $agente = Connection::getInstance()->find(array(
                                     'table' => 'admins',
                                     'conditions' => array(
                                         'id' => $_POST['id'],
@@ -48,7 +48,7 @@ if(empty($_GET['action'])){
     <p>Permissões > <strong><?php echo $agente['0']['nome']; ?></strong></p>
     <?php
 
-    $categorias = $conexao->find(array(
+    $categorias = Connection::getInstance()->find(array(
                                     'table' => 'categorias',
                                     'conditions' => array(
                                         //'id' => $_POST['id'],
@@ -69,7 +69,7 @@ if(empty($_GET['action'])){
     } elseif($_POST['tipo'] == 'user'){
         $permissoesCondition = array('admins_id' => $_POST['id']);
     }
-    $permissoes = $conexao->find(array(
+    $permissoes = Connection::getInstance()->find(array(
                                     'table' => 'admins_permissions',
                                     'conditions' => $permissoesCondition,
 
@@ -207,7 +207,7 @@ if(empty($_GET['action'])){
                 ";
     }
 
-    if($conexao->exec($sql)){
+    if(Connection::getInstance()->exec($sql)){
         echo '1';
     } else {
         echo '0';

@@ -18,7 +18,7 @@ class Migration_20101130114000_InsertNodeId extends Migrations
 					)
 				";
 
-		$fields = $this->connection->query($sql);
+		$fields = Connection::getInstance()->query($sql);
 		foreach( $fields as $field ){
 	        $schema = array(
 	            'table' => $field['valor'],
@@ -43,7 +43,7 @@ class Migration_20101130114000_InsertNodeId extends Migrations
 					)
 				";
 		
-		$fields = $this->connection->query($sql);
+		$fields = Connection::getInstance()->query($sql);
 		
 		$sqls = array();
 		foreach( $fields as $field ){

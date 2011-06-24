@@ -3,8 +3,8 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta http-equiv="expires" content="Mon, 19 Feb 2024 11:12:01 GMT" />
-    <title><?php echo $this->aust->leNomeDaEstrutura($_GET['aust_node'])?> - Versão para impressão</title>
-    <link rel="stylesheet" type="text/css" href="<?php echo THIS_TO_BASEURL.UI_PATH; ?>css/special/print.css" media="screen, print" />
+    <title><?php echo Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node'])?> - Versão para impressão</title>
+    <link rel="stylesheet" type="text/css" href="<?php echo UI_PATH; ?>css/special/print.css" media="screen, print" />
 </head>
 <body>
 <?php
@@ -19,7 +19,7 @@
 /**
  * Informações deste cadastro
  */
-$infoCadastro = $modulo->pegaInformacoesCadastro($austNode);
+$infoCadastro = $module->pegaInformacoesCadastro($austNode);
 
 if( !empty($_GET["w"]) ){
     $w = $_GET['w'];
@@ -27,7 +27,7 @@ if( !empty($_GET["w"]) ){
 
 //pr($infoCadastro);
 ?>
-<h2>Cadastro: <?php echo $this->aust->leNomeDaEstrutura($_GET['aust_node'])?></h2>
+<h2>Cadastro: <?php echo Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node'])?></h2>
 
 <div id="print">
 <table>
@@ -86,7 +86,7 @@ if( !empty($_GET["w"]) ){
          */
         if( $valor["tipo"]["especie"] == "relacional_umparaum" ){
             $sql = "SELECT id,".$valor["tipo"]["tabelaReferenciaCampo"]." FROM ".$valor["tipo"]["tabelaReferencia"];
-            $selectValues = $conexao->query($sql);
+            $selectValues = Connection::getInstance()->query($sql);
             //pr($sql);
             //$select["selected"] = "3";
             $inputType = "select";
@@ -111,7 +111,7 @@ if( !empty($_GET["w"]) ){
                         ".$referencia." AS t
                     ORDER BY t.$campo ASC
                     ";
-            $checkboxes = $modulo->connection->query($sql);
+            $checkboxes = $module->connection->query($sql);
 
             $inputType = "checkbox";
             foreach($checkboxes as $tabelaReferenciaResult){
@@ -131,7 +131,7 @@ if( !empty($_GET["w"]) ){
                             t.id ASC
                         ";
 
-                $values = $modulo->connection->query($sql);
+                $values = $module->connection->query($sql);
                 if( empty($values)){
                     $values = array();
                 } else {

@@ -6,7 +6,7 @@
  */
 
 $fm = (empty($_GET['fm'])) ? $fm = 'criar' : $fm = $_GET['fm'];
-$w = (empty($_GET['w'])) ? $w = $administrador->LeRegistro('id') : $w = $_GET['w'];
+$w = (empty($_GET['w'])) ? $w = User::getInstance()->LeRegistro('id') : $w = $_GET['w'];
 
 $dados = array(
     'id' => '',
@@ -37,7 +37,7 @@ if($fm == 'editar'){
 				AND admins_photos.image_type='primary'
             WHERE
                 admins.id='".$w."'";
-    $query = $conexao->query($sql);
+    $query = Connection::getInstance()->query($sql);
     $dados = $query[0];
     //echo $sql;
 }
@@ -55,7 +55,7 @@ if($fm == 'editar'){
 <input type="hidden" name="metodo" value="<?php echo $fm?>">
 <input type="hidden" name="w" value="<?php ifisset($dados['id'])?>">
 <input type="hidden" name="frmsupervisionado" value="0" />
-<input type="hidden" name="frmautor" value="<?php echo $administrador->LeRegistro('id');?>" />
+<input type="hidden" name="frmautor" value="<?php echo User::getInstance()->LeRegistro('id');?>" />
 
 <table cellpadding=0 cellspacing="3" class="form">
 <tr>
@@ -69,9 +69,9 @@ if($fm == 'editar'){
                  *
                  * Se for edição do próprio perfil, não permite modificação
                  */
-                //vd( in_array(strtolower($administrador->tipo), array('root','webmaster','administrador' ) ) );
-                if( $administrador->LeRegistro('id') != $dados['id'] AND
-                    in_array(strtolower($administrador->tipo), array('root','webmaster','administrador' ) ) )
+                //vd( in_array(strtolower(User::getInstance()->tipo), array('root','webmaster','administrador' ) ) );
+                if( User::getInstance()->LeRegistro('id') != $dados['id'] AND
+                    in_array(strtolower(User::getInstance()->tipo), array('root','webmaster','administrador' ) ) )
                 {
                     ?><div style=" width: 120px; display: table; float: left;"><?php
 
@@ -81,7 +81,7 @@ if($fm == 'editar'){
                                 admins_tipos
                             WHERE
                                 publico=1";
-                    $query = $conexao->query($sql);
+                    $query = Connection::getInstance()->query($sql);
                     foreach($query as $result){
                         ?>
                         <input type="radio" <?php if($fm == 'editar') makechecked($result['id'], $dados['tipo']); else echo 'checked'; ?> name="frmtipo" value="<?php echo $result['id']?>" onclick="javascript: form_hierarquia(this.value);" /> <?php echo $result['nome']?><br />
@@ -109,7 +109,7 @@ if($fm == 'editar'){
                             WHERE
                                 id='".$dados['tipo']."'";
                         //echo $sql;
-                    $query = $conexao->query($sql);
+                    $query = Connection::getInstance()->query($sql);
                     $result = $query[0];
                     ?>
                     <p>
@@ -202,7 +202,7 @@ if($fm == 'criar'){ ?>
     </td>
 </tr>
 <?php
-if( $config->getConfig('user_has_secondary_image') ){ ?>
+if( Config::getInstance()->getConfig('user_has_secondary_image') ){ ?>
 
 	<tr>
 	    <td valign="top">Foto secundária: </td>

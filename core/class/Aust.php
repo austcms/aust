@@ -29,7 +29,7 @@ class Aust {
     public $_recursiveLimit = 50;
     public $_recursiveCurrent = 1;
 
-    function __construct($conexao = array()){
+    function __construct(){
         $this->conexao = Connection::getInstance();
         $this->connection = Connection::getInstance();
         unset($this->AustCategorias);
@@ -74,12 +74,12 @@ class Aust {
 	    /**
 	     * Carrega arquivos principal do módulo requerido
 	     */
-	        include(MODULOS_DIR.$modDir.MOD_CONFIG);
+	        include(MODULES_DIR.$modDir.MOD_CONFIG);
 	        /**
 	         * Carrega classe do módulo e cria objeto
 	         */
 	        $module = (empty($modInfo['className'])) ? 'Classe' : $modInfo['className'];
-	        include_once(MODULOS_DIR.$modDir.$module.'.php');
+	        include_once(MODULES_DIR.$modDir.$module.'.php');
 
 	        $param = array(
 	            'config' => $modInfo,
@@ -131,7 +131,7 @@ class Aust {
                         id='$father'
                     ";
 
-            $query = $this->conexao->query($sql);
+            $query = Connection::getInstance()->query($sql);
 			
 			if( empty($query[0]) )
 				return false;
@@ -186,8 +186,8 @@ class Aust {
                         '$classe','$tipo','$tipo_legivel',
                         '".$autor."'
                     )";
-        if( $this->conexao->exec($sql) ) {
-            return (int) $this->conexao->lastInsertId();
+        if( Connection::getInstance()->exec($sql) ) {
+            return (int) Connection::getInstance()->lastInsertId();
         }
 
         return false;
@@ -204,7 +204,7 @@ class Aust {
                     categorias
                 WHERE
                     id='$id'";
-		$query = $this->conexao->query($sql);
+		$query = Connection::getInstance()->query($sql);
         $query = reset( $query );
 
         /**
@@ -249,12 +249,12 @@ class Aust {
 					node_id='".$node_id."'
 				";
 		
-		$query = $this->connection->query($sql);
+		$query = Connection::getInstance()->query($sql);
 		foreach( $query as $key=>$value ){
 			if( file_exists($value['systempath']) )
 				unlink( $value['systempath'] );
 			$sqlDelete = "DELETE FROM austnode_images WHERE id='".$value['id']."'";
-			$this->connection->exec($sqlDelete);
+			Connection::getInstance()->exec($sqlDelete);
 		}
 		
 		return true;
@@ -284,8 +284,8 @@ class Aust {
         $autor = $params['autor'];
 
 
-        if(is_file('modulos/'.$modulo.'/config.php')) {
-            include('modulos/'.$modulo.'/config.php');
+        if(is_file(MODULES_DIR.$modulo.'/config.php')) {
+            include(MODULES_DIR.$modulo.'/config.php');
             $tipo_legivel = $modInfo['nome'];
         } else {
             $tipo_legivel = NULL;
@@ -306,8 +306,8 @@ class Aust {
         /**
          * Retorna o id do registro feito
          */
-        if ($this->conexao->exec($sql)) {
-            return $this->conexao->conn->lastInsertId();
+        if (Connection::getInstance()->exec($sql)) {
+            return Connection::getInstance()->conn->lastInsertId();
         } else {
             return FALSE;
         }
@@ -319,7 +319,7 @@ class Aust {
                         (nome,descricao,classe,tipo,subordinadoid)
                 VALUES
                     ('$nome','$descricao','$classe','$tipo','$subordinadoid')";
-        return $this->conexao->exec($sql);
+        return Connection::getInstance()->exec($sql);
     }
 
     /**
@@ -355,7 +355,7 @@ class Aust {
                 WHERE
                     classe='categoria-chefe'
                 ";
-        $query = $this->conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
         $t = count($query);
         $c = 0;
         foreach($query as $menu) {
@@ -397,7 +397,7 @@ class Aust {
 					$where
                 ";
 
-        $query = $this->conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
         $result = array();
 		$stIds = array();
 		
@@ -477,7 +477,7 @@ class Aust {
 					propriedade='related_and_visible' AND
 					valor='0'
                 ";
-        $query = $this->conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
 		$result = array();
 		foreach( $query as $value ){
 			$result[] = $value["local"];
@@ -499,7 +499,7 @@ class Aust {
 				WHERE
 					$whereStatement
 				";
-		$result = $this->connection->query($sql);
+		$result = Connection::getInstance()->query($sql);
 		if( empty($result) )
 			return array();
 		
@@ -526,7 +526,7 @@ class Aust {
 					$whereStatement
 				";
 		
-		$result = $this->connection->query($sql);
+		$result = Connection::getInstance()->query($sql);
 		if( empty($result) )
 			return array();
 		
@@ -569,7 +569,7 @@ class Aust {
                     lp.tipo DESC,
                     lp.nome ASC
         ";
-        $query = $this->conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
 
         return $query;
     } // end getStructuresByFather()
@@ -601,7 +601,7 @@ class Aust {
                 WHERE
                     classe='estrutura'
                 ";
-        $query = $this->conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
         $t = count($query);
         $c = 0;
         foreach($query as $menu) {
@@ -610,7 +610,7 @@ class Aust {
                 $str = str_replace("&%" . $columns[$i], $menu[$columns[$i]], $str);
             }
             if(!empty($options)) {
-                $diretorio = 'modulos/'.$menu['tipo']; // pega o endereço do diretório
+                $diretorio = MODULES_DIR.$menu['tipo']; // pega o endereço do diretório
                 foreach (glob($diretorio."*", GLOB_ONLYDIR) as $pastas) {
                     if(is_file($pastas.'/configurar_estrutura.php')) {
                         $str = str_replace('&%options', '<a href="adm_main.php?section='.$_GET['section'].'&aust_node='.$menu['id'].'&action=configurar">Configurar</a>', $str);
@@ -640,7 +640,7 @@ class Aust {
         /**
          * Busca na tabela do Aust onde o id é igual à estrutura requisitada.
          */
-        $result = $this->conexao->query("SELECT * FROM ".Registry::read("austTable")." WHERE id='".$austNode."'" );
+        $result = Connection::getInstance()->query("SELECT * FROM ".Registry::read("austTable")." WHERE id='".$austNode."'" );
         return $result;
     }
 
@@ -675,7 +675,7 @@ class Aust {
                 WHERE
                     ".$where."
                 ".$orderby." ".$limit;
-        $query = $this->conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
 
         //pr($mysql);
 
@@ -691,12 +691,12 @@ class Aust {
     // retorna o módulo responsável por determinada estrutura
     function LeModuloDaEstrutura($node) {
         $sql = "SELECT
-                                tipo
-                        FROM
-                                categorias
-                        WHERE
-                                id=$node";
-        $query = $this->conexao->query($sql);
+                	tipo
+                FROM
+                	categorias
+                WHERE
+                	id=$node";
+        $query = Connection::getInstance()->query($sql);
         return $query[0]['tipo'];
     }
 
@@ -709,10 +709,10 @@ class Aust {
                         WHERE
                                 id=$node";
 
-        $query = $this->conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
         $tipo = $query[0]['tipo'];
-        if(is_file('modulos/'.$tipo.'/config.php')) {
-            include('modulos/'.$tipo.'/config.php');
+        if(is_file(MODULES_DIR.$tipo.'/config.php')) {
+            include(MODULES_DIR.$tipo.'/config.php');
             return $modInfo['nome'];
         } else {
             return NULL;
@@ -729,7 +729,7 @@ class Aust {
                     categorias
                 WHERE
                     id=$node";
-        $query = $this->conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
 		if( $field == "*" )
 	        return $query[0];
 		else
@@ -749,7 +749,7 @@ class Aust {
                     categorias
                 WHERE
                     id=$node";
-        $query = $this->conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
         return $query[0]['nome'];
     }
 
@@ -830,7 +830,7 @@ class Aust {
                 $where
                 ";
 
-        $query = $this->conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
 
         $i = 0;
         $items = '';
@@ -890,17 +890,20 @@ class Aust {
     // LISTAR: funÃ§Ã£o que retorna diretÃ³rio e arquivo para include da listagem do mÃ³dulo da estrutura com id $aust_node
     function AustListar($aust_node = '0') {
         $pasta_do_modulo = $this->LeModuloDaEstrutura($aust_node);
-        if(is_file('modulos/'.$pasta_do_modulo.'/listar.php')) {
-            return 'modulos/'.$pasta_do_modulo.'/listar.php';
+        if(is_file(MODULES_DIR.$pasta_do_modulo.'/listar.php')) {
+            return MODULES_DIR.$pasta_do_modulo.'/listar.php';
         } else {
-            return 'conteudo.inc/listar.inc.php';
+            return 'content.inc/listar.inc.php';
         }
     }
 
     // Lê somente estruturas que não devem ter categorias e grava em uma $_SESSION
     function EstruturasSemCategorias() {
-        unset( $_SESSION['somenteestrutura']);
-        $diretorio = 'modulos/'; // pega o endereço do diretório
+	
+		if( !empty($_SESSION['somenteestrutura']) )
+        	unset( $_SESSION['somenteestrutura']);
+		
+        $diretorio = MODULES_DIR; // pega o endereço do diretório
         foreach (glob($diretorio."*", GLOB_ONLYDIR) as $pastas) {
             if(is_file($pastas.'/config.php')) {
                 include($pastas.'/config.php');
@@ -927,7 +930,7 @@ class Aust {
                     id
                 FROM
                     categorias";
-        return $this->conexao->count($sql);
+        return Connection::getInstance()->count($sql);
     }
 
     /*
@@ -945,8 +948,8 @@ class Aust {
      * @return <string>
      */
     public function getCategoryHtmlSelect($austNode, $currentNode = ''){
-        include_once (THIS_TO_BASEURL."core/inc/inc_categorias_functions.php");
-        $tmp = BuildDDList( Registry::read('austTable') ,'frmcategoria', $administrador->tipo ,$austNode, $currentNode, false, true);
+        include_once(INC_DIR."inc_categorias_functions.php");
+        $tmp = BuildDDList( Registry::read('austTable') ,'frmcategoria', User::getInstance()->tipo ,$austNode, $currentNode, false, true);
         return $tmp;
     }
 

@@ -25,7 +25,7 @@ if(count($est) > 0){
          *
          *
          */
-        include(THIS_TO_BASEURL.'modulos/'.$valor['tipo'].'/'.MOD_CONFIG);
+        include(MODULES_DIR.$valor['tipo'].'/'.MOD_CONFIG);
         
         echo '<tr>';
         echo '<td valign="top">';
@@ -35,7 +35,7 @@ if(count($est) > 0){
             $i = 0;
             foreach($modInfo['opcoes'] as $opcao=>$opcaonome){
                 if($i > 0) echo ', ';
-                echo '<a href="adm_main.php?section=conteudo&action='.$opcao.'&aust_node='.$valor['id'].'">'.$opcaonome.'</a>';
+                echo '<a href="adm_main.php?section=content&action='.$opcao.'&aust_node='.$valor['id'].'">'.$opcaonome.'</a>';
                 $i++;
             }
         }

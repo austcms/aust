@@ -8,13 +8,13 @@
  * @since v0.1.5 24/06/2009
  */
 
-class ModController extends ModsController
+class ModController extends ModActionController
 {
 
     public function listing(){
-        $this->set('h1', 'Listando conteúdo: '.$this->aust->leNomeDaEstrutura($_GET['aust_node']) );
+        $this->set('h1', 'Listando conteúdo: '.Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']) );
         
-        $nome_modulo = $this->aust->LeModuloDaEstrutura($_GET['aust_node']);
+        $nome_modulo = Aust::getInstance()->LeModuloDaEstrutura($_GET['aust_node']);
         $sql = "SELECT
                     id,nome
                 FROM
@@ -23,10 +23,10 @@ class ModController extends ModsController
                     id='".$_GET['aust_node']."'";
 
 
-        $query = $this->modulo->connection->query($sql);
+        $query = $this->module->connection->query($sql);
         $this->set('cat', $query[0]['nome'] );
 
-        $categorias = $this->aust->LeCategoriasFilhas('',$_GET['aust_node']);
+        $categorias = Aust::getInstance()->LeCategoriasFilhas('',$_GET['aust_node']);
         $categorias[$_GET['aust_node']] = 'Estrutura';
 
         /*
@@ -40,7 +40,7 @@ class ModController extends ModsController
          * Resultados por página
          */
         $num_por_pagina = '20';
-        $this->set('numPorPagina', $num_por_pagina);//($config->LeOpcao($nome_modulo.'_paginacao')) ? $config->LeOpcao($nome_modulo.'_paginacao') : '10';
+        $this->set('numPorPagina', $num_por_pagina);//(Config::getInstance()->LeOpcao($nome_modulo.'_paginacao')) ? Config::getInstance()->LeOpcao($nome_modulo.'_paginacao') : '10';
 
         /*
          * SQL para listagem
@@ -50,13 +50,13 @@ class ModController extends ModsController
             'pagina' => $pagina,
             'resultadosPorPagina' => $num_por_pagina
         );
-        $sql = $this->modulo->loadSql($params);
+        $sql = $this->module->loadSql($params);
         $this->set('sql', $sql );
 
         /*
          * Query com resultado
          */
-        $this->set('query', $this->modulo->connection->query($sql) );
+        $this->set('query', $this->module->connection->query($sql) );
         
     }
 

@@ -41,7 +41,7 @@ class Privilegios extends Module
              * seguro pegar este valor aqui, mas sim que o conteúdo
              * principal já tenha salvo o valor em $w
              */
-            $insert_id = $this->connection->lastInsertId();
+            $insert_id = Connection::getInstance()->lastInsertId();
         } elseif(!empty($w)) {
             $insert_id = $w;
         }
@@ -61,7 +61,7 @@ class Privilegios extends Module
                                 target_id='".$insert_id."'
                             ";
 
-            $this->connection->exec($sql_delete);
+            Connection::getInstance()->exec($sql_delete);
 
             /*
              * Prepara o sql
@@ -82,8 +82,8 @@ class Privilegios extends Module
             }
 
             foreach($embed_sql as $valor){
-                $this->connection->exec($valor);
-                $this->w = $this->connection->lastInsertId();
+                Connection::getInstance()->exec($valor);
+                $this->w = Connection::getInstance()->lastInsertId();
             }
 
 
@@ -99,7 +99,7 @@ class Privilegios extends Module
                                 target_id='".$insert_id."'
                             ";
 
-            $this->connection->exec($sql_delete);
+            Connection::getInstance()->exec($sql_delete);
         }
 
         return true;
@@ -124,7 +124,7 @@ class Privilegios extends Module
                     tipo='relacionamentos'
                 ";
         //echo $sql;
-        $result = $this->connection->query($sql);
+        $result = Connection::getInstance()->query($sql);
         $return = array();
         foreach( $result as $key=>$valor ){
             $return[] = reset($valor);

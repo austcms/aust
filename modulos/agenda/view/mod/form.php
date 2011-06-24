@@ -10,15 +10,15 @@
     $params = array(
         "aust_node" => $_GET["aust_node"],
     );
-    $moduloConfig = $modulo->loadModConf($params);
+    $moduloConfig = $module->loadModConf($params);
 
-    //$modulo->loadHtmlEditor();
+    //$module->loadHtmlEditor();
 	$editorPlugins = '';
-	if( $modulo->getStructureConfig('description_upload_inline_images') )
+	if( $module->getStructureConfig('description_upload_inline_images') )
 		$editorPlugins = 'imagemanager';
 	
-	if( $modulo->getStructureConfig('description_has_rich_editor') )
-    	$modulo->loadHtmlEditor($editorPlugins);
+	if( $module->getStructureConfig('description_has_rich_editor') )
+    	$module->loadHtmlEditor($editorPlugins);
 
 
 /*
@@ -30,7 +30,7 @@
  * [Se novo conteúdo]
  */
     if($_GET['action'] == 'create'){
-        $tagh2 = "Criar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
+        $tagh2 = "Criar: ". Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
         $tagp = 'Crie um novo evento.';
         $dados = array('id' => '');
         $start_date = date("d/m/Y");
@@ -81,7 +81,7 @@
      * Ator é a pessoa agente deste evento.
      */
 
-	if( $modulo->getStructureConfig('has_responsible_person') ){
+	if( $module->getStructureConfig('has_responsible_person') ){
 	    ?>
 
 
@@ -136,7 +136,7 @@
     </tr>
 
 	<?php
-	if( $modulo->getStructureConfig('has_place') ){
+	if( $module->getStructureConfig('has_place') ){
 		?>
 	    <tr>
 	        <td class="label"><label for="frmplace">Local do evento:</label></td>
@@ -163,7 +163,7 @@
             <td>
                 <input type="text" id="start_date" name="start_date" size="10" value="<?php echo $start_date; ?>" class="text date_text" />
 				<?php
-				if( !$modulo->getStructureConfig('one_day_only') ){
+				if( !$module->getStructureConfig('one_day_only') ){
 					?>
 	                até
 	                <input type="text" id="end_date" name="end_date" size="10"  value="<?php echo $end_date ?>" class="text date_text" />
@@ -251,7 +251,7 @@
      * O arquivo inserido é /embed/form.php do módulo que $embed==true
      */
 
-        include(INC_DIR.'conteudo.inc/form_embed.php');
+        include(INC_DIR.'content.inc/form_embed.php');
 
     ?>
     <tr>
@@ -273,7 +273,7 @@
      * É padrão e pode ser copiado para todos os forms
      */
 
-        include(INC_DIR.'conteudo.inc/form_embedownform.php');
+        include(INC_DIR.'content.inc/form_embedownform.php');
 ?>
 
 

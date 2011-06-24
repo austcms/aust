@@ -17,7 +17,7 @@
 /**
  * INICIALIZAÇÃO
  */
-$tabela_da_estrutura = $modulo->LeTabelaDaEstrutura($_GET['aust_node']);
+$tabela_da_estrutura = $module->LeTabelaDaEstrutura($_GET['aust_node']);
 
 
 
@@ -28,13 +28,13 @@ if( !empty($_POST['conf_type']) AND $_POST['conf_type'] == "mod_conf" ){
     /**
      *
      */
-    $modulo->saveModConf($_POST);
+    $module->saveModConf($_POST);
 }
 
 
 ?>
 
-<h2>Configuração: <?php echo $aust->leNomeDaEstrutura($_GET['aust_node'])?></h2>
+<h2>Configuração: <?php echo Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node'])?></h2>
 <?php if(!empty($status)){ ?>
     <div class="box-full">
         <div class="box alerta">
@@ -70,7 +70,7 @@ if( !empty($_POST['conf_type']) AND $_POST['conf_type'] == "mod_conf" ){
         </div>
         <div class="content">
             <?php
-            $configurations = $modulo->loadModConf();
+            $configurations = $module->loadModConf();
 			//pr($configurations);
             if( !empty($configurations) && is_array($configurations) ){
                 ?>
@@ -211,7 +211,7 @@ if( !empty($_POST['conf_type']) AND $_POST['conf_type'] == "mod_conf" ){
         </div>
         <div class="content">
             <p></p>
-            <form method="post" action="<?php echo $config->self;?>" class="simples pequeno">
+            <form method="post" action="<?php echo Config::getInstance()->self;?>" class="simples pequeno">
 
             </form>
 

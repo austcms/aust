@@ -53,7 +53,7 @@ class SmartReport extends Module
                 WHERE
                     id='$w'
                 ";
-        $firstQuery = reset( $this->connection->query($sql) );
+        $firstQuery = reset( Connection::getInstance()->query($sql) );
 
 		if( empty($firstQuery) )
 			return array();
@@ -71,7 +71,7 @@ class SmartReport extends Module
 			
 
 			$sqlFilter = preg_replace('/^select /i', "SELECT $defaultIdField as '_id', ", $sqlFilter);
-			$filter = $this->connection->query($sqlFilter);
+			$filter = Connection::getInstance()->query($sqlFilter);
 			$query['results'] = $filter;
 		}
 		

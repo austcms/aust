@@ -12,7 +12,7 @@
         "aust_node" => $_GET["aust_node"],
     );
 
-    $moduloConfig = $modulo->loadModConf($params);
+    $moduloConfig = $module->loadModConf($params);
 
     /*
      * QUANTIDADE DE PERGUNTAS NESTA PESQUISA
@@ -40,7 +40,7 @@
  * [Se novo conteúdo]
  */
     if($_GET['action'] == 'create'){
-        $tagh1 = "Criar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
+        $tagh1 = "Criar: ". Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
         $tagp = 'Crie um novo conteúdo abaixo.';
         $dados = array('id' => '');
     }
@@ -49,7 +49,7 @@
  */
     else if($_GET['action'] == 'edit'){
 
-        $tagh1 = "Editar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
+        $tagh1 = "Editar: ". Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
         $tagp = 'Edite o conteúdo abaixo.';
         
         /*
@@ -59,7 +59,7 @@
                 SELECT
                     p.*
                 FROM
-                    ".$modulo->tabela_criar." as p
+                    ".$module->tabela_criar." as p
                 LEFT JOIN
                     pesqmkt_perguntas as pp
                 ON
@@ -76,7 +76,7 @@
                     p.id='$w'
                 ";
 
-        $query = $modulo->connection->query($sql, "ASSOC");
+        $query = $module->connection->query($sql, "ASSOC");
         $dados = $query[0];
         $pesqAtiva = $dados["ativo"];
 
@@ -89,7 +89,7 @@
                     pp.pesqmkt_id='$w'
                 ";
 
-        $query = $modulo->connection->query($sql, "ASSOC");
+        $query = $module->connection->query($sql, "ASSOC");
         $perguntas = $query;
         //pr($perguntas);
 
@@ -124,7 +124,7 @@
                     pp.pesqmkt_id='$w'
                 ";
 
-        $query = $modulo->connection->query($sql, "ASSOC");
+        $query = $module->connection->query($sql, "ASSOC");
         $respostasTmp = $query;
 
         foreach( $respostasTmp as $chave=>$valor ){
@@ -254,7 +254,7 @@ if( $_GET["action"] == "edit" ){
 	 *
 	 */
 
-	if( $modulo->getStructureConfig('do_not_show_result') != '1' ){
+	if( $module->getStructureConfig('do_not_show_result') != '1' ){
 		?>
 		<div class="resultados" style="width: 99%; display: block;">
 		    <div class="resultados_content" style="margin: 5px; padding: 10px 20px 10px 20px; width: 93%; background: #faf9f9; display: table;">
@@ -334,7 +334,7 @@ if( !empty($perguntasQuantidade) ):
         <col width="470">
 
 		<?php
-		if( $modulo->getStructureConfig('has_no_title') != '1' ){
+		if( $module->getStructureConfig('has_no_title') != '1' ){
 			?>
 	        <tr>
 	            <td valign="top" class="first"><label>Título da pesquisa:</label></td>
@@ -348,7 +348,7 @@ if( !empty($perguntasQuantidade) ):
 	        <?php
 		}
 
-		if( $modulo->getStructureConfig('has_no_visibility_option') != '1' ){
+		if( $module->getStructureConfig('has_no_visibility_option') != '1' ){
 			?>
         <tr>
             <td valign="top"><label>Pesquisa ativa:</label></td>
@@ -366,7 +366,7 @@ if( !empty($perguntasQuantidade) ):
         <?php
 		}
 		
-		if( $modulo->getStructureConfig('has_description') == '1' ){
+		if( $module->getStructureConfig('has_description') == '1' ){
 			?>
             <tr>
                 <td valign="top"><label>Texto sobre a pesquisa: </label>
@@ -412,7 +412,7 @@ if( !empty($perguntasQuantidade) ):
                     <div style="margin: 3px;">
                         <div style="font-size: 1.2em; font-weight: bold; display: table; text-align: right; margin-left: 0px; width: 150px; float: left;">
                             Questão<?php 
-							if( $modulo->getStructureConfig('enquete') != '1' ){
+							if( $module->getStructureConfig('enquete') != '1' ){
 							echo $i+1;
 							}
 							?>:&nbsp;
@@ -467,7 +467,7 @@ if( !empty($perguntasQuantidade) ):
                                     <div style="display: table; text-align: right; margin-left: 0px; width: 150px; float: left;">
 										
 										<?php
-										if( $modulo->getStructureConfig('first_alternative_right') == '1' AND
+										if( $module->getStructureConfig('first_alternative_right') == '1' AND
 											$r == 1 )
 										{
 											?>
@@ -513,14 +513,14 @@ if( !empty($perguntasQuantidade) ):
                             ?>
                             Tipo de resposta: <input name="resposta_tipo[<?php echo $pid ?>]" <?php if($perguntaTipo=="aberta")echo 'checked="checked"'; ?> value="aberta" type="radio" onclick='$("#alternativa_<?php echo $pid ?>").html("<div style=\"font-style: italic; margin-left: 160px; width: 330px; margin-bottom: 10px\">Esta será uma pergunta aberta, portanto não serão apresentadas alternativas ao usuário, mas sim uma caixa de texto para escrever sua resposta.</div>"); $(".add_alternativa_<?php echo $pid ?>").hide()' /> Texto
                             <input type="radio" name="resposta_tipo[<?php echo $pid ?>]" <?php if($perguntaTipo=="fechada")echo 'checked="checked"'; ?> value="fechada" onclick='restauraAlternativas(<?php echo $pid ?>)' /> Múltipla Escolha
-                            <?php if( $modulo->getStructureConfig('can_not_add_alternatives') != '1' ){ ?>
+                            <?php if( $module->getStructureConfig('can_not_add_alternatives') != '1' ){ ?>
                             	<span class="add_alternativa_<?php echo $pid ?>">| <a href="javascript: void(0);" onclick='somaAlternativa(<?php echo $pid ?>)'>+ alternativa</a></span>
 							<?php
 							}
                         } else {
                             ?>
                             <input type="hidden" name="resposta_tipo[<?php echo $pid ?>]" value="fechada" />
-                            <?php if( $modulo->getStructureConfig('can_not_add_alternatives') != '1' ){ ?>
+                            <?php if( $module->getStructureConfig('can_not_add_alternatives') != '1' ){ ?>
                             	<span class="add_alternativa_<?php echo $pid ?>"><a href="javascript: void(0);" onclick='somaAlternativa(<?php echo $pid ?>)'>+ alternativa</a></span>
                             <?php
 							}
@@ -570,7 +570,7 @@ if( !empty($perguntasQuantidade) ):
          * O arquivo inserido é /embed/form.php do módulo que $embed==true
          */
 
-            //include(INC_DIR.'conteudo.inc/form_embed.php');
+            //include(INC_DIR.'content.inc/form_embed.php');
 
         ?>
         <tr>
@@ -629,7 +629,7 @@ endif;
      * É padrão e pode ser copiado para todos os forms
      */
 
-        include(INC_DIR.'conteudo.inc/form_embedownform.php');
+        include(INC_DIR.'content.inc/form_embedownform.php');
 ?>
 
 

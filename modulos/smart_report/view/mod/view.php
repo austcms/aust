@@ -10,13 +10,13 @@
     $params = array(
         "aust_node" => $_GET["aust_node"],
     );
-    $moduloConfig = $modulo->loadModConf($params);
+    $moduloConfig = $module->loadModConf($params);
 
 	$editorPlugins = '';
-	if( $modulo->getStructureConfig('upload_inline_images') == '1' )
+	if( $module->getStructureConfig('upload_inline_images') == '1' )
 		$editorPlugins = 'imagemanager';
 	
-    $modulo->loadHtmlEditor($editorPlugins);
+    $module->loadHtmlEditor($editorPlugins);
 
 
 /*
@@ -28,7 +28,7 @@
  * [Se novo conteúdo]
  */
     if($_GET['action'] == 'create'){
-        $tagh2 = "Criar: ". $this->aust->leNomeDaEstrutura($_GET['aust_node']);
+        $tagh2 = "Criar: ". Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
         $tagp = 'Crie um novo conteúdo abaixo.';
         $dados = array('id' => '');
     }
@@ -71,7 +71,7 @@
         /*
          * Pode excluir?
          */
-//        if( $permissoes->canDelete($austNode) ){
+//        if( StructurePermissions::getInstance()->canDelete($austNode) ){
             ?>
             <input type="submit" class="js_confirm" name="action[subtract][1]" value="Subtrair 1" />
             <input type="submit" name="action[see_data_separated_by_semicolon][email]" value="Ver emails" />
@@ -96,9 +96,9 @@
 	    <?php
 	} else {
 		if( empty($viewType) || $viewType == 'normal' )
-        	include($modulo->getIncludeFolder().'/view/mod/_view_table_list.php');
+        	include($module->getIncludeFolder().'/view/mod/_view_table_list.php');
 		else
-        	include($modulo->getIncludeFolder().'/view/mod/_view_'.$viewType.'.php');
+        	include($module->getIncludeFolder().'/view/mod/_view_'.$viewType.'.php');
 
 	}
 	?>

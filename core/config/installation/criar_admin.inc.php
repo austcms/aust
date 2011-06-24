@@ -3,7 +3,7 @@
 	require 'cabecalho.inc.php';
 
 if(!empty($_POST['configurar']) AND ($_POST['configurar'] == 'criar_admin')){
-    $sql = $conexao->count("SELECT
+    $sql = Connection::getInstance()->count("SELECT
                 id
             FROM
                 admins
@@ -29,7 +29,7 @@ if(!empty($_POST['configurar']) AND ($_POST['configurar'] == 'criar_admin')){
                     '{$_POST['frmnomeaust']}','{$_POST['frmloginaust']}','{$_POST['frmsenhaaust']}','{$_POST['frmemailaust']}','".date("Y-m-d H:i:s")."'
                     )";
 
-        $query = $conexao->exec($sql);
+        $query = Connection::getInstance()->exec($sql);
 
         if($query){ ?>
             <h1 style="color: green;">Conta criada com sucesso!</h1>

@@ -11,6 +11,9 @@ class CadastroTest extends PHPUnit_Framework_TestCase
 {
 
     public function setUp(){
+
+		installModule('cadastro');
+    
         /*
          * MÓDULOS ATUAL
          *
@@ -21,11 +24,11 @@ class CadastroTest extends PHPUnit_Framework_TestCase
         /*
          * Informações de conexão com banco de dados
          */
-        include 'modulos/'.$this->mod.'/'.MOD_CONFIG;
-        include_once 'modulos/'.$this->mod.'/'.$modInfo['className'].'.php';
+        include MODULES_DIR.$this->mod.'/'.MOD_CONFIG;
+        include_once MODULES_DIR.$this->mod.'/'.$modInfo['className'].'.php';
         
         $_GET['aust_node'] = '777';
-        $this->obj = new $modInfo['className'];//new $modInfo['className']();
+        $this->obj = new $modInfo['className'](777);//new $modInfo['className']();
 
 		
 
@@ -199,7 +202,7 @@ class CadastroTest extends PHPUnit_Framework_TestCase
 	 */
 	function testConfigurationsExists(){
 		
-        include 'modulos/'.$this->mod.'/'.MOD_CONFIG;
+        include MODULES_DIR.$this->mod.'/'.MOD_CONFIG;
 		$configurations = $this->obj->loadModConf();
 		foreach( $modInfo['configurations'] as $key=>$value ){
 			$this->assertArrayHasKey($key, $configurations);
@@ -288,7 +291,7 @@ class CadastroTest extends PHPUnit_Framework_TestCase
 		             VALUES
 		                 ('campo','campo_1','Campo 1','777','teste7777', 'images')
 		             ";
-		    $this->obj->connection->exec($sql);
+		    Connection::getInstance()->exec($sql);
 
 			
 	        $sql = "INSERT INTO config
@@ -316,6 +319,13 @@ class CadastroTest extends PHPUnit_Framework_TestCase
         $this->obj->connection->query("DELETE FROM cadastro_conf WHERE categorias_id='777' AND nome='teste7777'");
 
 		$this->deleteTemporaryTable();
+	}
+	
+	function testAustNode(){
+		$_GET["aust_node"] = 777;
+		$obj = new Cadastro();
+		$obj->setAustNode(777);
+		$this->assertEquals(777, $obj->austNode);
 	}
 	
 	function testLoadModConfWithoutSavedData(){

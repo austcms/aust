@@ -14,6 +14,7 @@ class ImagensTest extends PHPUnit_Framework_TestCase
 	public $obj;
     
     public function setUp(){
+		installModule('imagens');
         /*
          * MÓDULOS ATUAL
          *
@@ -25,8 +26,8 @@ class ImagensTest extends PHPUnit_Framework_TestCase
          * Informações de conexão com banco de dados
          */
 
-        include 'modulos/'.$this->mod.'/'.MOD_CONFIG;
-        include_once 'modulos/'.$this->mod.'/'.$modInfo['className'].'.php';
+        include MODULES_DIR.$this->mod.'/'.MOD_CONFIG;
+        include_once MODULES_DIR.$this->mod.'/'.$modInfo['className'].'.php';
 
         $this->obj = new $modInfo['className'];//new $modInfo['className']();
         $this->obj->testMode = true;
@@ -132,7 +133,7 @@ class ImagensTest extends PHPUnit_Framework_TestCase
 	 */
 	function testConfigurationsExists(){
 		
-        include 'modulos/'.$this->mod.'/'.MOD_CONFIG;
+        include MODULES_DIR.$this->mod.'/'.MOD_CONFIG;
 		$configurations = $this->obj->loadModConf();
 		foreach( $modInfo['configurations'] as $key=>$value ){
 			$this->assertArrayHasKey($key, $configurations);

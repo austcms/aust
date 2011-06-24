@@ -41,6 +41,10 @@ class User {
 
     }
 
+	public function rootType(){
+		return "Webmaster";
+	}
+	
     /**
      * type()
      *
@@ -48,12 +52,18 @@ class User {
      *
      * @return <string>
      */
-    public function type(){
+    public function type($newType = ""){
+	
+		if( !empty($newType) ){
+			$this->tipo = $newType;
+			return $newType;
+		}
+		
 		if( empty($this->tipo) ){
 			$this->tipo = $this->LeRegistro('tipo');
 		}
         return $this->tipo;
-    } // end type()
+    }
 
     /**
      * tipo() alias-> type()
@@ -74,8 +84,11 @@ class User {
      */
     public function redirectForbiddenSession(){
         if( !empty($this->forbiddenCode) ){
-            header("Location: logout.php?status=".$this->forbiddenCode);
-            exit();
+
+			if( !defined("TESTING") || TESTING !== true ){
+            	header("Location: logout.php?status=".$this->forbiddenCode);
+            	exit();
+			}
             return true;
         }
 
@@ -120,9 +133,10 @@ class User {
      * @return <bool>
      */
     public function isLogged(){
-        if( !empty($_SESSION['login']['id']) AND
-            $_SESSION['login']['id'] > 0 AND
-            !empty( $_SESSION['login']['username'] ) )
+        if( !empty($_SESSION['login']['id']) 	&&
+            $_SESSION['login']['id'] > 0 		&&
+            ( !empty($_SESSION['login']['username']) || !empty( $_SESSION['login']['login']))
+		)
         {
             return true;
         }
@@ -171,7 +185,7 @@ class User {
         if( !empty($this->userInfo[$campo]) )
             return $this->userInfo[$campo];
 
-        if( !isset($_SESSION) )
+        if( !isset($_SESSION) || empty($_SESSION['login']) )
             return false;
 
         if( $campo == 'tipo' ){
@@ -181,7 +195,6 @@ class User {
         } else {
             $statement = "admins.$campo as $campo";
         }
-
         $sql = "SELECT
                     $statement,
                     admins.is_blocked
@@ -194,7 +207,7 @@ class User {
                     admins.id='".$_SESSION['login']['id']."'
                 ";
 
-        $query = $this->conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
 
         if( empty($query) )
             return false;
@@ -216,7 +229,7 @@ class User {
                     id='$id'
                 ";
 
-        $query = reset( $this->conexao->query($sql) );
+        $query = reset( Connection::getInstance()->query($sql) );
         $name = $query['nome'];
 
         return $name;
@@ -243,7 +256,7 @@ class User {
                 LIMIT 100
                 ";
 
-        $query = $this->conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
 
         return $query;
     }

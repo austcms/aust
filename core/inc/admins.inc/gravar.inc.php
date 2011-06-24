@@ -61,13 +61,13 @@ if(!empty($_POST)) {
                     id='".$_POST['w']."'";
     }
 
-    if($conexao->exec($sql) !== false) {
+    if(Connection::getInstance()->exec($sql) !== false) {
         $resultado = true;
     } else {
         $resultado = false;
     }
 
-	$connLastId = $conexao->lastInsertId();
+	$connLastId = Connection::getInstance()->lastInsertId();
 	$lastInsertId = '';
 	if( !empty($_POST['w']) ){
 		$lastInsertId = $_POST['w'];
@@ -82,12 +82,12 @@ if(!empty($_POST)) {
 		$sql = "SELECT * FROM admins_photos
 				WHERE admin_id='".$lastInsertId."' AND image_type='primary'
 				";
-		$query = $conexao->query($sql);
+		$query = Connection::getInstance()->query($sql);
 		foreach( $query as $row ){
 			if( file_exists($row['systempath']) )
 				unlink($row['systempath']);
 		}
-		$conexao->exec("DELETE FROM admins_photos WHERE admin_id='".$lastInsertId."' AND image_type='primary'");
+		Connection::getInstance()->exec("DELETE FROM admins_photos WHERE admin_id='".$lastInsertId."' AND image_type='primary'");
 		
 		
 		$imageHandler = Image::getInstance();
@@ -128,7 +128,7 @@ if(!empty($_POST)) {
 				)
 				";
 
-		$conexao->exec($sql);
+		Connection::getInstance()->exec($sql);
 	}
 	
 	/* IMAGEM SECUNDÁRIA */
@@ -138,12 +138,12 @@ if(!empty($_POST)) {
 		$sql = "SELECT * FROM admins_photos
 				WHERE admin_id='".$lastInsertId."' AND image_type='secondary'
 				";
-		$query = $conexao->query($sql);
+		$query = Connection::getInstance()->query($sql);
 		foreach( $query as $row ){
 			if( file_exists($row['systempath']) )
 				unlink($row['systempath']);
 		}
-		$conexao->exec("DELETE FROM admins_photos WHERE admin_id='".$lastInsertId."' AND image_type='secondary'");
+		Connection::getInstance()->exec("DELETE FROM admins_photos WHERE admin_id='".$lastInsertId."' AND image_type='secondary'");
 		
 		
 		$imageHandler = Image::getInstance();
@@ -184,7 +184,7 @@ if(!empty($_POST)) {
 				)
 				";
 
-		$conexao->exec($sql);
+		Connection::getInstance()->exec($sql);
 	}	
 
 }

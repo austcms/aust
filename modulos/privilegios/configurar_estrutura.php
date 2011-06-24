@@ -17,7 +17,7 @@
 /**
  * INICIALIZAÇÃO
  */
-$tabela_da_estrutura = $modulo->LeTabelaDaEstrutura($_GET['aust_node']);
+$tabela_da_estrutura = $module->LeTabelaDaEstrutura($_GET['aust_node']);
 
 
 
@@ -28,7 +28,7 @@ if( !empty($_POST['conf_type']) AND $_POST['conf_type'] == "mod_conf" ){
     /**
      *
      */
-    $modulo->saveModConf($_POST);
+    $module->saveModConf($_POST);
 }
 
 /**
@@ -52,7 +52,7 @@ if(!empty($_GET['function'])){
                     chave='".$_GET['w']."' AND
                     categorias_id='".$_GET['aust_node']."'
         ";
-        if($modulo->connection->exec($sql))
+        if($module->connection->exec($sql))
             $status[] = "Campo desativado com sucesso";
         else
             $status[] = "Erro ao desativar campo.";
@@ -70,7 +70,7 @@ if(!empty($_GET['function'])){
                     chave='".$_GET['w']."' AND
                     categorias_id='".$_GET['aust_node']."'
         ";
-        if($modulo->connection->exec($sql))
+        if($module->connection->exec($sql))
             $status[] = "Campo ativado com sucesso";
         else
             $status[] = "Erro ao ativar campo.";
@@ -89,7 +89,7 @@ if(!empty($_GET['function'])){
                     chave='".$_GET['w']."' AND
                     categorias_id='".$_GET['aust_node']."'
         ";
-        if($modulo->connection->exec($sql))
+        if($module->connection->exec($sql))
             $status[] = "Preenchimento do campo ajustado para necessário com sucesso.";
         else
             $status[] = "Erro ao executar ação.";
@@ -108,7 +108,7 @@ if(!empty($_GET['function'])){
                     chave='".$_GET['w']."' AND
                     categorias_id='".$_GET['aust_node']."'
         ";
-        if($modulo->connection->exec($sql))
+        if($module->connection->exec($sql))
             $status[] = "Não é necessário preenchimento obrigatório do campo ajustado com sucesso.";
         else
             $status[] = "Erro ao executar ação.";
@@ -129,7 +129,7 @@ if(!empty($_GET['function'])){
                     chave='".$_GET['w']."' AND
                     categorias_id='".$_GET['aust_node']."'
         ";
-        if($modulo->connection->exec($sql))
+        if($module->connection->exec($sql))
             $status[] = "Campo aparecerá na listagem de cadastro.";
         else
             $status[] = "Erro ao executar ação.";
@@ -150,7 +150,7 @@ if(!empty($_GET['function'])){
                     chave='".$_GET['w']."' AND
                     categorias_id='".$_GET['aust_node']."'
         ";
-        if($modulo->connection->exec($sql))
+        if($module->connection->exec($sql))
             $status[] = "O campo selecionado não aparecerá mais em listagens.";
         else
             $status[] = "Erro ao executar ação.";
@@ -175,7 +175,7 @@ if(!empty($_GET['function'])){
 }
 ?>
 
-<h2>Configuração: <?php echo $aust->leNomeDaEstrutura($_GET['aust_node'])?></h2>
+<h2>Configuração: <?php echo Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node'])?></h2>
 <?php if(!empty($status)){ ?>
     <div class="box-full">
         <div class="box alerta">
@@ -205,7 +205,7 @@ if(!empty($_GET['function'])){
         </div>
         <div class="content">
             <?php
-            $configurations = $modulo->loadModConf();
+            $configurations = $module->loadModConf();
 			//pr($configurations);
             if( !empty($configurations) && is_array($configurations) ){
                 ?>
@@ -301,7 +301,7 @@ if(!empty($_GET['function'])){
 
             <?php
 
-            $categorias = $conexao->find(array(
+            $categorias = Connection::getInstance()->find(array(
                                             'table' => 'categorias',
                                             'conditions' => array(
                                                 //'id' => $_POST['id'],
@@ -326,7 +326,7 @@ if(!empty($_GET['function'])){
                     ";
 
 
-            $relacionamentos = $conexao->query($sql);
+            $relacionamentos = Connection::getInstance()->query($sql);
             //pr($sql);
             $categoriasChecked = array();
             foreach($relacionamentos as $valor){
@@ -364,7 +364,7 @@ if(!empty($_GET['function'])){
         </div>
         <div class="content">
             <p></p>
-            <form method="post" action="<?php echo $config->self;?>" class="simples pequeno">
+            <form method="post" action="<?php echo Config::getInstance()->self;?>" class="simples pequeno">
 
             </form>
 

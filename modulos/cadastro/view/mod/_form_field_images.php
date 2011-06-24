@@ -19,7 +19,7 @@ $inputName = "data[".$infoCadastro["estrutura"]["tabela"]["valor"]."][".$fieldNa
 			'austNode' => $austNode,
 		);
 		
-		$images = $modulo->getImages($params);
+		$images = $module->getImages($params);
 		
 		if( !empty($images) ){
 			$thumbsW = 80;
@@ -51,8 +51,8 @@ $inputName = "data[".$infoCadastro["estrutura"]["tabela"]["valor"]."][".$fieldNa
 				
 				// somente uma imagem
 				if(
-					$i > $modulo->getFieldConfig($fieldName, 'image_field_limit_quantity') AND
-					$modulo->getFieldConfig($fieldName, 'image_field_limit_quantity') > 0
+					$i > $module->getFieldConfig($fieldName, 'image_field_limit_quantity') AND
+					$module->getFieldConfig($fieldName, 'image_field_limit_quantity') > 0
 				)
 					break;
 				
@@ -65,9 +65,9 @@ $inputName = "data[".$infoCadastro["estrutura"]["tabela"]["valor"]."][".$fieldNa
 				<td>
 				<script type="text/javascript">
 				/* DEFINIÇÕES DE CAMPOS IMAGES */
-				imageHasDescription['image_<?php echo $image['id']?>'] = "<?php echo $modulo->getFieldConfig($fieldName, 'image_field_has_description')?>";
-				imageHasLink['image_<?php echo $image['id']?>'] = "<?php echo $modulo->getFieldConfig($fieldName, 'image_field_has_link')?>";
-				imageHasSecondaryImage['image_<?php echo $image['id']?>'] = "<?php echo $modulo->getFieldConfig($fieldName, 'image_field_has_secondary_image')?>";
+				imageHasDescription['image_<?php echo $image['id']?>'] = "<?php echo $module->getFieldConfig($fieldName, 'image_field_has_description')?>";
+				imageHasLink['image_<?php echo $image['id']?>'] = "<?php echo $module->getFieldConfig($fieldName, 'image_field_has_link')?>";
+				imageHasSecondaryImage['image_<?php echo $image['id']?>'] = "<?php echo $module->getFieldConfig($fieldName, 'image_field_has_secondary_image')?>";
 				</script>
 				
 				<img class="thumb" name="image_<?php echo $image['id']?>" src="<?php echo $imagesPath.$image['id']?>" />
@@ -79,9 +79,9 @@ $inputName = "data[".$infoCadastro["estrutura"]["tabela"]["valor"]."][".$fieldNa
                     <img src="core/user_interface/img/icons/delete_15x15.png" alt="Excluir" title="Excluir" border="0" />
                 </a>
 				<?php
-				if( $modulo->getFieldConfig($fieldName, 'image_field_has_description') OR
-					$modulo->getFieldConfig($fieldName, 'image_field_has_link') OR
-				 	$modulo->getFieldConfig($fieldName, 'image_field_has_secondary_image') )
+				if( $module->getFieldConfig($fieldName, 'image_field_has_description') OR
+					$module->getFieldConfig($fieldName, 'image_field_has_link') OR
+				 	$module->getFieldConfig($fieldName, 'image_field_has_secondary_image') )
 				{
 					?>
 					<a href="javascript: void(0)" class="lightbox-panel" id="image_<?php echo $image['id'] ?>" name="modal" onclick="editImageInLightbox(this, <?php echo $image['id'] ?>, '<?php echo $fieldName ?>')">
@@ -123,13 +123,13 @@ $inputName = "data[".$infoCadastro["estrutura"]["tabela"]["valor"]."][".$fieldNa
 	for($i = 1; $i <= 3; $i++){
 
 		$multiple = '';
-		if( $modulo->getFieldConfig($fieldName, 'image_field_limit_quantity') != 1 )
+		if( $module->getFieldConfig($fieldName, 'image_field_limit_quantity') != 1 )
 			$multiple = 'multiple="multiple"';
 		
 		// somente uma imagem
 		if(
-			$i > $modulo->getFieldConfig($fieldName, 'image_field_limit_quantity') AND
-			$modulo->getFieldConfig($fieldName, 'image_field_limit_quantity') > 0
+			$i > $module->getFieldConfig($fieldName, 'image_field_limit_quantity') AND
+			$module->getFieldConfig($fieldName, 'image_field_limit_quantity') > 0
 		)
 			break;
 		

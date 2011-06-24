@@ -8,21 +8,21 @@
  * @since v0.1.5 24/06/2009
  */
 
-class ModController extends ModsController
+class ModController extends ModActionController
 {
 
     public function listing(){
-        $this->set('h2', 'Listando conteúdo: '.$this->aust->leNomeDaEstrutura($_GET['aust_node']) );
-        $this->set('nome_modulo', $this->aust->LeModuloDaEstrutura($_GET['aust_node']) );
+        $this->set('h2', 'Listando conteúdo: '.Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']) );
+        $this->set('nome_modulo', Aust::getInstance()->LeModuloDaEstrutura($_GET['aust_node']) );
 
-		$categorias = $this->aust->LeCategoriasFilhas('',$_GET['aust_node']);
+		$categorias = Aust::getInstance()->LeCategoriasFilhas('',$_GET['aust_node']);
 		$categorias[$_GET['aust_node']] = 'Estrutura';
 
 		$params = array(
 			'austNode' => $categorias
 		);
 		
-		$query = $this->modulo->load($params);
+		$query = $this->module->load($params);
 		
         $this->set('query', $query);
     }
@@ -51,7 +51,7 @@ class ModController extends ModsController
 							ref_id='".$_GET['related_w']."' AND
 							categoria='".$_GET['aust_node']."'
 						";
-				$result = $this->connection->query($sql);
+				$result = Connection::getInstance()->query($sql);
 				if( !empty($result) ){
 					$result = reset($result);
 					$w = $result['w'];
@@ -92,13 +92,13 @@ class ModController extends ModsController
                 SELECT
                     *
                 FROM
-                    ".$this->modulo->useThisTable()."
+                    ".$this->module->useThisTable()."
                 WHERE
                     id='$w' AND
 					categoria='".$_GET['aust_node']."'
                 ";
 
-        $query = $this->modulo->connection->query($sql, "ASSOC");
+        $query = $this->module->connection->query($sql, "ASSOC");
         $dados = reset($query);
 
 		$this->set('dados', $dados);

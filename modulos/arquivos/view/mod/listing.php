@@ -1,6 +1,6 @@
 <?php
-$h1 = 'Listando conteúdo: '.$this->aust->leNomeDaEstrutura($_GET['aust_node']);
-$nome_modulo = $this->aust->LeModuloDaEstrutura($_GET['aust_node']);
+$h1 = 'Listando conteúdo: '.Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
+$nome_modulo = Aust::getInstance()->LeModuloDaEstrutura($_GET['aust_node']);
 $sql = "SELECT
             id,nome
         FROM
@@ -9,7 +9,7 @@ $sql = "SELECT
             id='".$_GET['aust_node']."'";
 
 
-$catQuery = $modulo->connection->query($sql);
+$catQuery = $module->connection->query($sql);
 
 $cat = $catQuery[0]['nome'];?>
 <h2><?php echo $h1; ?></h2>
@@ -32,7 +32,7 @@ if((!empty($filter)) AND ($filter <> 'off')){
 /*
  * Pode excluir conteúdo?
  */
-if( $permissoes->canDelete($austNode) ){
+if( StructurePermissions::getInstance()->canDelete($austNode) ){
     ?>
     <div class="painel_de_controle"><input type="submit" class="js_confirm" name="deletar" value="Deletar selecionados" />
     </div>
@@ -43,7 +43,7 @@ if( $permissoes->canDelete($austNode) ){
 
 <div id="listing_table">
 	<?php
-	include($modulo->getIncludeFolder().'/view/mod/_listing_thumbs_view.php');
+	include($module->getIncludeFolder().'/view/mod/_listing_thumbs_view.php');
 	?>
 </div>
 
@@ -57,8 +57,8 @@ if( $permissoes->canDelete($austNode) ){
  * mostra painel de navegação para paginação
  */
 
-    //$sql = $modulo->getSQLForListing($categorias);
-    $total_registros = $modulo->totalRows;
+    //$sql = $module->getSQLForListing($categorias);
+    $total_registros = $module->totalRows;
 
     $total_paginas = $total_registros/$numPorPagina;
     $prev = $page - 1;

@@ -9,8 +9,8 @@
 
 header("Cache-Control: no-cache, must-revalidate");
 
-include_once("config/core.php");
-include_once("config/database.php");
+include_once(CONFIG_CORE_FILE);
+include_once(CONFIG_DATABASE_FILE);
 
 /**
  * Carrega classes necessárias
@@ -40,7 +40,7 @@ $sql = "SELECT
         LIMIT 0,1
         ";
 
-$query = $conexao->query($sql);
+$query = Connection::getInstance()->query($sql);
 
 $blocked = reset($query);
 

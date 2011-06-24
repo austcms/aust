@@ -64,7 +64,7 @@
                 /**
                  * Se Webmaster, pode editar configurações de Administradores
                  */
-                if($administrador->LeRegistro('tipo') == 'Webmaster'){
+                if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'){
                     $adminsTiposCarregar = array('Webmaster');
                 } else {
                     $adminsTiposCarregar = array('Webmaster', 'Administrador');
@@ -73,7 +73,7 @@
                 /**
                  * Lista os tipos de usuários
                  */
-                $adminsTipos = $conexao->find(array(
+                $adminsTipos = Connection::getInstance()->find(array(
                                             'table' => 'admins_tipos',
                                             'conditions' => array(
                                                 'NOT' => array(
@@ -110,11 +110,11 @@
             </p>
             <ul>
             <?php
-            //echo $administrador->LeRegistro('id');
+            //echo User::getInstance()->LeRegistro('id');
                 /**
                  * Lista os tipos de usuários
                  */
-                $adminsTipos = $conexao->find(
+                $adminsTipos = Connection::getInstance()->find(
                                         array(
                                             'table' => 'admins',
                                             'join' => array(
@@ -123,7 +123,7 @@
                                             
                                             'conditions' => array(
                                                 'NOT' => array(
-                                                    'admins.id' => $administrador->LeRegistro('id'),
+                                                    'admins.id' => User::getInstance()->LeRegistro('id'),
                                                     'admins_tipos.nome' => 'Webmaster'
                                                 ),
                                             ),

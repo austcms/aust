@@ -13,7 +13,7 @@
 ?>
 <div class="listagem">
 <h2>
-    Listando contéudo: <?php echo $h1;?>
+    Listando conteúdo: <?php echo $h1;?>
 </h2>
 <p>
     Abaixo você encontra a listagem dos últimos textos desta categoria.
@@ -27,13 +27,13 @@
 *
 *********************************/
 ?>
-<form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?section=<?php echo $_GET['section'];?>&action=actions&aust_node=<?php echo $_GET['aust_node'];?>">
+<form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?section=<?php echo MODULES;?>&action=actions&aust_node=<?php echo $austNode;?>">
 <a name="list"></a>
 <?php
 /*
  * Pode excluir conteúdo?
  */
-if( $permissoes->canDelete($austNode) ){
+if( StructurePermissions::getInstance()->canDelete($austNode) ){
     ?>
     <div class="painel_de_controle"><input type="submit" class="js_confirm" name="deletar" value="Deletar selecionados" />
     </div>
@@ -44,10 +44,10 @@ if( $permissoes->canDelete($austNode) ){
 <table cellspacing="0" cellpadding="0" border="0" class="listagem">
     <tr class="titulo">
         
-        <?php for($i=0; $i< count($modulo->config['contentHeader']['campos']); $i++) { ?>
-                <td class="<? echo $modulo->config['contentHeader']['campos'][$i]; ?>">
+        <?php for($i=0; $i< count($module->config['contentHeader']['campos']); $i++) { ?>
+                <td class="<? echo $module->config['contentHeader']['campos'][$i]; ?>">
                     <?php
-                        echo $modulo->config['contentHeader']['camposNome'][$i];
+                        echo $module->config['contentHeader']['camposNome'][$i];
                     ?>
                 </td>
         <?php } ?>
@@ -76,25 +76,25 @@ if(count($query) == 0){
             *
             *
             *******************************/
-                for($i=0; $i< count($modulo->config['contentHeader']['campos']); $i++) { ?>
+                for($i=0; $i< count($module->config['contentHeader']['campos']); $i++) { ?>
                     <td>
                         <?php
                         if($i == 1){
 
-                            if( $permissoes->canEdit($_GET['aust_node']) )
+                            if( StructurePermissions::getInstance()->canEdit($_GET['aust_node']) )
                                 echo '<a href="adm_main.php?section='.$_GET['section'].'&action=edit&aust_node='.$_GET['aust_node'].'&w='.$dados["id"].'">';
-                            echo $dados[$modulo->config['contentHeader']['campos'][$i]];
-                            if( $permissoes->canEdit($_GET['aust_node']) )
+                            echo $dados[$module->config['contentHeader']['campos'][$i]];
+                            if( StructurePermissions::getInstance()->canEdit($_GET['aust_node']) )
                                 echo '</a>';
                         } else {
-                            echo $dados[$modulo->config['contentHeader']['campos'][$i]];
+                            echo $dados[$module->config['contentHeader']['campos'][$i]];
                         }
                         ?>
                     </td>
             <?php } ?>
             <td align="center">
                 <?php
-                if( $permissoes->canDelete($austNode) ){
+                if( StructurePermissions::getInstance()->canDelete($austNode) ){
                     ?>
                     <input type='checkbox' name='itens[]' value='<?php echo $dados['id'];?>'>
                     <?php
@@ -114,8 +114,8 @@ if(count($query) == 0){
  * mostra painel de navegação para paginação
  */
 
-    //$sql = $modulo->getSQLForListing($categorias);
-    $total_registros = $modulo->totalRows;
+    //$sql = $module->getSQLForListing($categorias);
+    $total_registros = $module->totalRows;
 
     $total_paginas = $total_registros/$numPorPagina;
     $prev = $page - 1;
@@ -159,6 +159,6 @@ if(count($query) == 0){
 ?>
 
 <p style="margin-top: 15px;">
-	<a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
+	<a href="adm_main.php?section=<?php echo MODULES ?>"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
 </p>
 </div>

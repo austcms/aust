@@ -29,16 +29,16 @@ include_once(THIS_TO_BASEURL."core/config/variables.php");
 /**
  * Classes do sistema
  */
-include(THIS_TO_BASEURL.CLASS_DIR."_carrega_classes.inc.php");
+include(CLASS_DIR."_carrega_classes.inc.php");
 /**
  * Propriedades editáveis do sistema. Carrega todas as configurações da aplicação
  */
 /**
  * Configurações de conexão do banco de dados
  */
-include(THIS_TO_BASEURL.CONFIG_DIR."database.php");
+include(CONFIG_DATABASE_FILE);
 
-include(THIS_TO_BASEURL.LIB_DIR."aust/aust_func.php");
+include(LIB_DIR."aust/aust_func.php");
 /**
  * Conexão principal
  */
@@ -47,15 +47,15 @@ $conexao = Connection::getInstance();
 /**
  * Configurações do core do sistema
  */
-    include(THIS_TO_BASEURL.CONFIG_DIR."core.php");
+    include(CONFIG_DIR."core.php");
 /**
  * Permissões de tipos de usuários relacionados à navegação
  */
-    include(THIS_TO_BASEURL.CONFIG_DIR."nav_permissions.php");
+    include(CONFIG_DIR."nav_permissions.php");
 /**
  * Carrega o CORE
  */
-    include(THIS_TO_BASEURL.CORE_DIR.'load_core.php');
+    include(CORE_DIR.'load_core.php');
 
     
 include('../index.php');
@@ -80,8 +80,8 @@ if($_POST['action'] == 'LeCadastros'){
             WHERE
                 tipo='cadastro'";
     //echo $sql;
-    $arraytmp = $conexao->query('SHOW TABLES');
-    //$arraytmp = $conexao->listaTabelasDoDBParaArray();
+    $arraytmp = Connection::getInstance()->query('SHOW TABLES');
+    //$arraytmp = Connection::getInstance()->listaTabelasDoDBParaArray();
     
     foreach($arraytmp AS $valor){
         $valor = reset($valor);
@@ -98,7 +98,7 @@ elseif($_POST['action'] == 'LeCampos'){
      * Lê os campos da tabela e depois mostra um html <select> para o usuário
      * escolher o relacionamento de tabelas
      */
-    $query = $conexao->query('DESCRIBE '.$_POST['tabela']);
+    $query = Connection::getInstance()->query('DESCRIBE '.$_POST['tabela']);
     foreach ( $query as $chave=>$valor ){
         echo '<option value="'.$valor['Field'].'">'.$valor['Field'].'</option>';
     }
@@ -120,7 +120,7 @@ elseif($_POST['action'] == 'search'){
     $aust = Aust::getInstance();
 
     $resultado = array();
-    $categorias = $aust->LeCategoriasFilhas('',$_GET['aust_node']);
+    $categorias = Aust::getInstance()->LeCategoriasFilhas('',$_GET['aust_node']);
     $categorias[$austNode] = 'Estrutura';
 
     $searchField = '';
@@ -138,16 +138,16 @@ elseif($_POST['action'] == 'search'){
         'search_field' => $searchField
     );
 
-    $sql = $modulo->loadSql($param);
+    $sql = $module->loadSql($param);
 //    echo '<br><br>'.$sql .'<br>';
 
-    $resultado = $modulo->connection->query($sql, "ASSOC");
+    $resultado = $module->connection->query($sql, "ASSOC");
 
     $fields = count($resultado);
 
-    include($modulo->getIncludeFolder().'/view/mod/listing_table.php');
+    include($module->getIncludeFolder().'/view/mod/listing_table.php');
 
-    //$query = $conexao->query('DESCRIBE '.$_POST['tabela']);
+    //$query = Connection::getInstance()->query('DESCRIBE '.$_POST['tabela']);
     //foreach ( $query as $chave=>$valor ){
         //echo '<option value="'.$valor['Field'].'">'.$valor['Field'].'</option>';
     //}
@@ -206,7 +206,7 @@ elseif($_POST['action'] == 'search1n'){
 			LIMIT 10
             ";
 
-	$results = $modulo->connection->query($sql);
+	$results = $module->connection->query($sql);
 	
 	foreach( $results as $result ){
 		?>

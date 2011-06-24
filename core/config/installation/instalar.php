@@ -34,15 +34,15 @@ session_start();
  *      require("config/installation/sql_para_construir_db.php");
  */
     
-include_once(THIS_TO_BASEURL.CONFIG_DIR."database.php");
+include_once(CONFIG_DATABASE_FILE);
 $dbConn = DATABASE_CONFIG::$dbConn;
 $conexao = new Connection($dbConn);
 
-include(THIS_TO_BASEURL.CORE_DIR."load_core.php");
+include(LOAD_CORE);
 /**
  * Verifica se banco de dados existe
  */
-if($conexao->DBExiste){
+if(Connection::getInstance()->DBExiste){
 
     /**
      * Faz verificação do Schema
@@ -63,7 +63,7 @@ if($conexao->DBExiste){
         /**
          * Verifica se há um usuário Admin cadastrado
          */
-        } else if(!$conexao->VerificaAdmin()){
+        } else if(!Connection::getInstance()->VerificaAdmin()){
             require('criar_admin.inc.php');
 
         } else if(isset($_GET["configurar"])) {
@@ -146,7 +146,7 @@ if($conexao->DBExiste){
                             <em>Criação dos campos:
 								<?php
 								$sql = $dbSchema->sqlForMissingFields(array($tabela=>$campo));
-								$conexao->exec( $sql, "CREATE_TABLE");
+								Connection::getInstance()->exec( $sql, "CREATE_TABLE");
 								echo "SQL executado. Pressione F5 para verificar seu sucesso.";
 								echo "<br /><br />";
 								echo '<span style="font-size: 0.9em">'.$sql.'</span>';

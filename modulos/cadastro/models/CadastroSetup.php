@@ -135,7 +135,7 @@ class CadastroSetup extends ModsSetup {
 	function createMainTable($params = array()){
 		$sql = $this->createMainTableSql();
 		$this->setCreateTableMode();
-		$table = $this->connection->exec($sql, 'CREATE_TABLE');
+		$table = Connection::getInstance()->exec($sql, 'CREATE_TABLE');
 		
 		if( !empty($params['austNode']) )
 			$austNode = $params['austNode'];
@@ -245,7 +245,7 @@ class CadastroSetup extends ModsSetup {
 			if( $type == 'string' ){
 				
 				$this->addColumn($params);
-				$this->connection->exec($this->createFieldConfigurationSql_String($params));
+				Connection::getInstance()->exec($this->createFieldConfigurationSql_String($params));
 				
 			}
 			/*
@@ -254,7 +254,7 @@ class CadastroSetup extends ModsSetup {
 			else if( $type == 'text' ) {
 				
 				$this->addColumn($params);
-				$this->connection->exec($this->createFieldConfigurationSql_Text($params));
+				Connection::getInstance()->exec($this->createFieldConfigurationSql_Text($params));
 				
 			}
 			/*
@@ -263,7 +263,7 @@ class CadastroSetup extends ModsSetup {
 			else if( $type == 'date' ) {
 				
 				$this->addColumn($params);
-				$this->connection->exec($this->createFieldConfigurationSql_String($params));
+				Connection::getInstance()->exec($this->createFieldConfigurationSql_String($params));
 				
 			}
 			/*
@@ -272,7 +272,7 @@ class CadastroSetup extends ModsSetup {
 			else if( $type == 'pw' ) {
 
 				$this->addColumn($params);
-				$this->connection->exec($this->createFieldConfigurationSql_Password($params));
+				Connection::getInstance()->exec($this->createFieldConfigurationSql_Password($params));
 				
 			}
 			/*
@@ -281,9 +281,9 @@ class CadastroSetup extends ModsSetup {
 			else if( $type == 'files' ) {
 				
 				$this->addColumn($params);
-				$this->connection->exec($this->createFieldConfigurationSql_File($params));
+				Connection::getInstance()->exec($this->createFieldConfigurationSql_File($params));
 				$this->createTableForFiles();
-				$this->connection->exec( $this->createSqlForFileConfiguration() );
+				Connection::getInstance()->exec( $this->createSqlForFileConfiguration() );
 			}
 			/*
 			 * Relational_onetoone
@@ -293,7 +293,7 @@ class CadastroSetup extends ModsSetup {
 				if( empty($params['refTable']) ) continue;
 				$this->addColumn($params);
 				$sql = $this->createFieldConfigurationSql_RelationalOneToOne($params);
-				$this->connection->exec($sql);
+				Connection::getInstance()->exec($sql);
 				
 			}
 			/*
@@ -320,10 +320,10 @@ class CadastroSetup extends ModsSetup {
 				
 				$this->addColumn($params);
 				$sql = $this->createFieldConfigurationSql_RelationalOneToMany($params);
-				$this->connection->exec($sql);
+				Connection::getInstance()->exec($sql);
 				
 				$sqlReferenceTable = $this->createReferenceTableSql_RelationalOneToMany($params);
-				$this->connection->exec($sqlReferenceTable, 'CREATE TABLE');
+				Connection::getInstance()->exec($sqlReferenceTable, 'CREATE TABLE');
 			}
 			/*
 			 * images
@@ -331,9 +331,9 @@ class CadastroSetup extends ModsSetup {
 			else if( $type == 'images' ) {
 				
 				$this->addColumn($params);
-				$this->connection->exec($this->createFieldConfigurationSql_Images($params));
+				Connection::getInstance()->exec($this->createFieldConfigurationSql_Images($params));
 				$this->createTableForImages();
-				$this->connection->exec( $this->createSqlForImagesConfiguration() );
+				Connection::getInstance()->exec( $this->createSqlForImagesConfiguration() );
 				
 			}
 			
@@ -360,7 +360,7 @@ class CadastroSetup extends ModsSetup {
 			$sql.= $this->setCommentForSql($params['comment']);
 			
 			
-		$this->connection->exec($sql);
+		Connection::getInstance()->exec($sql);
 		
 	}
 
@@ -409,7 +409,7 @@ class CadastroSetup extends ModsSetup {
 						tipo='campo' AND
 						chave='".$field."'
 						";
-			$query = reset($this->connection->query($sql));
+			$query = reset(Connection::getInstance()->query($sql));
 
 			if( empty($query['ordem']) )
 				return false;
@@ -428,7 +428,7 @@ class CadastroSetup extends ModsSetup {
 			$sql = "SELECT MAX(ordem) as ordem
 					FROM cadastros_conf
 					WHERE categorias_id='".$this->austNode."'";
-			$query = reset($this->connection->query($sql));
+			$query = reset(Connection::getInstance()->query($sql));
 
 			if( empty($query['ordem']) )
 				$this->fieldOrder = 1;
@@ -464,7 +464,7 @@ class CadastroSetup extends ModsSetup {
 					ordem >= $int
 				";
 
-		return $this->connection->exec($sql);
+		return Connection::getInstance()->exec($sql);
 	}
 	
 	function decreaseFieldOrder(){
@@ -575,7 +575,7 @@ class CadastroSetup extends ModsSetup {
 				if( $this->imagesTableCreated ) return false;
 	
 				$sql = $this->createSqlForImagesTable($this->mainTable);
-				$result = $this->connection->exec($sql, 'CREATE TABLE');
+				$result = Connection::getInstance()->exec($sql, 'CREATE TABLE');
 	
 				if( $result ){
 					$this->imagesTableCreated = true;
@@ -595,7 +595,7 @@ class CadastroSetup extends ModsSetup {
 				$sql = $this->createSqlForImagesConfiguration();
 
 				if( !$sql ) return false;
-				$result = $this->connection->exec($sql);
+				$result = Connection::getInstance()->exec($sql);
 
 				if( $result ){
 					return true;
@@ -687,7 +687,7 @@ class CadastroSetup extends ModsSetup {
 			if( $this->filesTableCreated === true ) return false;
 			
 			$sql = $this->createSqlForFilesTable($this->mainTable);
-			$result = $this->connection->exec($sql, 'CREATE TABLE');
+			$result = Connection::getInstance()->exec($sql, 'CREATE TABLE');
 
 			if( $result ){
 				$this->filesTableCreated = true;
@@ -707,7 +707,7 @@ class CadastroSetup extends ModsSetup {
 			
 			$sql = $this->createSqlForFileConfiguration();
 			if( !$sql ) return false;
-			$result = $this->connection->exec($sql);
+			$result = Connection::getInstance()->exec($sql);
 			
 			if( $result ){
 				return true;
@@ -937,7 +937,7 @@ class CadastroSetup extends ModsSetup {
 		foreach( $params as $key=>$value ){
 			
 			if( $key == 'approval' ){
-				$this->connection->exec("DELETE FROM cadastros_conf WHERE tipo='config' AND chave='aprovacao' AND categorias_id='$austNode'");
+				Connection::getInstance()->exec("DELETE FROM cadastros_conf WHERE tipo='config' AND chave='aprovacao' AND categorias_id='$austNode'");
                 $sql =
 	                "INSERT INTO
 	                    cadastros_conf
@@ -945,10 +945,10 @@ class CadastroSetup extends ModsSetup {
 	                VALUES
 	                    ('config','aprovacao','".$value."','Aprovação','bool',".$austNode.", '".date('Y-m-d H:i:s')."', '".$this->user."',0,0,1,0,1)
 	                ";
-                $this->connection->exec($sql);
+                Connection::getInstance()->exec($sql);
 
 			} else if( $key == 'pre_password' ){
-				$this->connection->exec("DELETE FROM cadastros_conf WHERE tipo='config' AND chave='pre_senha' AND categorias_id='$austNode'");
+				Connection::getInstance()->exec("DELETE FROM cadastros_conf WHERE tipo='config' AND chave='pre_senha' AND categorias_id='$austNode'");
                 $sql =
 	                "INSERT INTO
 	                    cadastros_conf
@@ -956,9 +956,9 @@ class CadastroSetup extends ModsSetup {
 	                VALUES
 	                    ('config','pre_senha','".$value."','Pré-Senha','string',".$austNode.", '".date('Y-m-d H:i:s')."', '".$this->user."',0,0,1,0,1)
 	                ";
-                $this->connection->exec($sql);
+                Connection::getInstance()->exec($sql);
 			} else if( $key == 'description' ){
-				$this->connection->exec("DELETE FROM cadastros_conf WHERE tipo='config' AND chave='descricao' AND categorias_id='$austNode'");
+				Connection::getInstance()->exec("DELETE FROM cadastros_conf WHERE tipo='config' AND chave='descricao' AND categorias_id='$austNode'");
                 $sql =
 	                "INSERT INTO
 	                    cadastros_conf
@@ -966,9 +966,9 @@ class CadastroSetup extends ModsSetup {
 	                VALUES
 	                    ('config','descricao','".$value."','Descrição','blob',".$austNode.", '".date('Y-m-d H:i:s')."', '".$this->user."',0,0,1,0,1)
 	                ";
-                $this->connection->exec($sql);
+                Connection::getInstance()->exec($sql);
 			} else if( $key == 'table' ){
-				$this->connection->exec("DELETE FROM cadastros_conf WHERE tipo='estrutura' AND chave='tabela' AND categorias_id='$austNode'");
+				Connection::getInstance()->exec("DELETE FROM cadastros_conf WHERE tipo='estrutura' AND chave='tabela' AND categorias_id='$austNode'");
                 $sql =
 	                "INSERT INTO
 	                    cadastros_conf
@@ -976,7 +976,7 @@ class CadastroSetup extends ModsSetup {
 	                VALUES
 	                    ('estrutura','tabela','".$value."','Tabela Principal','blob',".$austNode.", '".date('Y-m-d H:i:s')."', '".$this->user."',0,0,1,0,1)
 	                ";
-                $this->connection->exec($sql);
+                Connection::getInstance()->exec($sql);
 			}
 			
 		}
@@ -1007,7 +1007,7 @@ class CadastroSetup extends ModsSetup {
 			return false;
 		
 		$aust = Aust::getInstance();
-		$return = $aust->create($params);
+		$return = Aust::getInstance()->create($params);
 		if( is_numeric($return) )
 			$this->austNode = (int) $return;
 			

@@ -14,10 +14,10 @@
 /**
  * Carrega permissões do usuário atual
  */
-$params = array(
-    'admins_tipos_id' => $administrador->LeRegistro('tipoid'),
-    'admins_id' => $administrador->LeRegistro('id'),
-    'conexao' => $conexao,
+$param = array(
+    'admins_tipos_id' => User::getInstance()->LeRegistro('tipoid'),
+    'admins_id' => User::getInstance()->LeRegistro('id'),
+    'conexao' => Connection::getInstance(),
     /*
      * Que tipos de usuários podem acessar Widgets?
      */
@@ -29,7 +29,7 @@ $params = array(
 
 
 
-$permissoes = new StructurePermissions($params);
-$categoriasPermitidas = $permissoes->read($params);
+#$permissoes = StructurePermissions::getInstance();
+#$categoriasPermitidas = StructurePermissions::getInstance()->read($params);
 
 ?>

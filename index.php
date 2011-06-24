@@ -13,7 +13,6 @@
  */
 session_name("aust");
 session_start();
-
 /**
  * Carrega variáveis do sistema
  */
@@ -25,14 +24,13 @@ require_once("core/config/variables.php");
 include(CLASS_DIR."_carrega_classes.inc.php");
 
 include("config/core.php");
-if( !file_exists("config/database.php") ){
+if( !file_exists(CONFIG_DATABASE_FILE) ){
     echo "N&aacute;o h&aacute; um arquivo de configura&ccedil;&atilde;o de banco de dados. Crie um.";
     exit();
 }
-include("config/database.php");
+include(CONFIG_DATABASE_FILE);
 
 require(INSTALLATION_DIR."dbschema.php");
-
 
 $conexao = Connection::getInstance();
 
@@ -45,13 +43,14 @@ if( !is_dir('uploads/editor') ){
 require_once("core/load_core.php");
 
 // verifica se banco de dados existe
-if($conexao->DBExiste){
+if(Connection::getInstance()->DBExiste){
 
     /**
      * Faz verificação do Schema
      *
      * O resultado é guardado em dbSchema::schemaStatus
      */
+	$dbSchema = dbSchema::getInstance();
     $dbSchema->verificaSchema();
 
     // verificação tabela por tabela quais existem ($db_tabelas é Array)
@@ -62,7 +61,7 @@ if($conexao->DBExiste){
          */
 
             // Se deve-se criar um admin no sistema (pois não há um)
-            if( !empty($_POST['configurar']) AND ($_POST['configurar'] == 'criar_admin') OR (!$conexao->VerificaAdmin()) ){
+            if( !empty($_POST['configurar']) AND ($_POST['configurar'] == 'criar_admin') OR (!Connection::getInstance()->VerificaAdmin()) ){
                 require(INSTALLATION_DIR.'criar_admin.inc.php');
 
             // Deve-se configurar o sistema
@@ -85,7 +84,7 @@ if($conexao->DBExiste){
     }
 } else {
 
-    // $conexao->ConstruirDB($sqlparaconstruirdb);
+    // Connection::getInstance()->ConstruirDB($sqlparaconstruirdb);
 
     // Ops.. Não há uma conexão funcionando
     echo 'Erro no Sistema: 001.';

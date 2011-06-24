@@ -84,7 +84,7 @@ if(!empty($_POST)) {
 
     if($_POST['metodo'] == 'create') {
         $sql = "INSERT INTO
-                        ".$modulo->useThisTable()."
+                        ".$module->useThisTable()."
                         ($sqlcampostr)
                 VALUES
                         ($sqlvalorstr)
@@ -92,21 +92,21 @@ if(!empty($_POST)) {
 
 
 
-        $h1 = 'Criando: '.$aust->leNomeDaEstrutura($_GET['aust_node']);
+        $h1 = 'Criando: '.Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
     } else if($_POST['metodo'] == 'edit') {
         $sql = "UPDATE
-                    ".$modulo->useThisTable()."
+                    ".$module->useThisTable()."
                 SET
                     $sqlcampostr
                 WHERE
                     id='".$_POST['w']."'
                 ";
-        $h1 = 'Editando: '.$aust->leNomeDaEstrutura($_GET['aust_node']);
+        $h1 = 'Editando: '.Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
     }
 
-    $success = $this->modulo->connection->exec($sql);
+    $success = $this->module->connection->exec($sql);
     if( $success !== false ) {
-        $insert_id = $this->modulo->connection->lastInsertId();
+        $insert_id = $this->module->connection->lastInsertId();
 
         if( !empty($_POST['w']) ){
             $insert_id = $_POST['w'];
@@ -121,7 +121,7 @@ if(!empty($_POST)) {
          * 'Categoria' significa que uma estrutura inteira está bloqueada.
          */
             $sql_delete = "DELETE FROM privilegio_target WHERE privilegio_id='".$insert_id."'";
-            $this->modulo->connection->exec($sql_delete);
+            $this->module->connection->exec($sql_delete);
 
         if( $_POST["privilegio_tipo"] == "categoria" 
             AND !empty($_POST["categoria_id"]) )
@@ -133,7 +133,7 @@ if(!empty($_POST)) {
                             VALUES
                                 ('".$insert_id."','".Registry::read('austTable')."','".$_POST["categoria_id"]."', 'structure','".$_POST['frmadmin_id']."','".date("Y-m-d")."')
                             ";
-            $this->modulo->connection->exec($sql_tipo);
+            $this->module->connection->exec($sql_tipo);
         }
 
         $resultado = TRUE;

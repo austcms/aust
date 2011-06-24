@@ -8,10 +8,10 @@ if( empty($_GET['section']) )
  * 
  * Verifica se há a necessidade de aprovação de cadastro e se há alguém necessitando aprovação
  */
-$precisa_aprovacao = $modulo->pegaConfig(Array('estrutura'=>$austNode, 'chave'=>'aprovacao'));
+$precisa_aprovacao = $module->pegaConfig(Array('estrutura'=>$austNode, 'chave'=>'aprovacao'));
 if($precisa_aprovacao['valor'] == '1'){
-    $sql = "SELECT id FROM ".$modulo->LeTabelaDeDados($austNode)." WHERE approved=0 or approved IS NULL";
-    $result = $modulo->connection->query($sql);
+    $sql = "SELECT id FROM ".$module->LeTabelaDeDados($austNode)." WHERE approved=0 or approved IS NULL";
+    $result = $module->connection->query($sql);
     if( count($result) > 0 ){
         //echo '<p>Há cadastros para serem aprovados.</p>';
     }
@@ -82,11 +82,11 @@ if(count($resultado) > 0){
                         //echo $total_td;
                         if($total_td == 1){
 
-                            if( $permissoes->canEdit($austNode) )
+                            if( StructurePermissions::getInstance()->canEdit($austNode) )
                                 echo '<a href="adm_main.php?section='.$_GET['section'].'&action=edit&aust_node='.$austNode.'&w='.$dados["id"].'">';
 
                             echo $dados[$campo];
-                            if( $permissoes->canEdit($austNode) )
+                            if( StructurePermissions::getInstance()->canEdit($austNode) )
                                 echo '</a>';
                             if( $precisa_aprovacao['valor'] == '1'
                                  AND (
@@ -104,7 +104,7 @@ if(count($resultado) > 0){
                              * para edição
                              */
                             if( $total_td <= 2 ){
-                                if( $permissoes->canEdit($austNode) ){
+                                if( StructurePermissions::getInstance()->canEdit($austNode) ){
                                     ?>
                                     <a href="adm_main.php?section=<?php echo $_GET['section'];?>&action=edit&aust_node=<?php echo $austNode;?>&w=<?php echo $dados["id"];?>">
                                     <?php
@@ -112,19 +112,19 @@ if(count($resultado) > 0){
                             }
 							
 							$fieldEncodedName = $fieldsConfiguration[$campo]["chave"];
-							if( $modulo->getFieldConfig($fieldEncodedName, 'currency_mask') ){
-								echo Resources::numberToCurrency($dados[$campo], $modulo->language());
-							} elseif( $modulo->getFieldConfig($fieldEncodedName, 'boolean_field') == "1" ){
+							if( $module->getFieldConfig($fieldEncodedName, 'currency_mask') ){
+								echo Resources::numberToCurrency($dados[$campo], $module->language());
+							} elseif( $module->getFieldConfig($fieldEncodedName, 'boolean_field') == "1" ){
 								if( $dados[$campo] )
-									echo $modulo->yesWord();
+									echo $module->yesWord();
 								else
-									echo $modulo->noWord();
+									echo $module->noWord();
 							} else {
 	                            echo $dados[$campo];
 							}
 							
                             if( $total_td <= 2 ){
-                                if( $permissoes->canEdit($austNode) ){
+                                if( StructurePermissions::getInstance()->canEdit($austNode) ){
                                     ?>
                                     </a>
                                     <?php
@@ -139,7 +139,7 @@ if(count($resultado) > 0){
             ?>
             <td align="center">
                 <?php
-                if( $permissoes->canDelete($austNode) ){
+                if( StructurePermissions::getInstance()->canDelete($austNode) ){
                     ?>
                     <input type='checkbox' name='itens[]' value='<?php echo $dados['id'];?>'>
                     <?php

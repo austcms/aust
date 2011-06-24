@@ -6,12 +6,12 @@
  * @since v0.1.5 24/06/2009
  */
 
-class ModController extends ModsController
+class ModController extends ModActionController
 {
 
 	public function getQuery(){
 		
-		$categorias = $this->aust->LeCategoriasFilhas('',$_GET['aust_node']);
+		$categorias = Aust::getInstance()->LeCategoriasFilhas('',$_GET['aust_node']);
         $categorias[$_GET['aust_node']] = 'Estrutura';
 
         /*
@@ -21,7 +21,7 @@ class ModController extends ModsController
             'austNode' => $categorias,
         );
 
-        $query = $this->modulo->load($params);
+        $query = $this->module->load($params);
 		return $query;
 		
 	}
@@ -29,9 +29,9 @@ class ModController extends ModsController
 	public function view_items(){
 		
 		if( !empty($_POST['viewMode']) )
-			$this->modulo->setViewMode();
+			$this->module->setViewMode();
 			
-		$viewMode = $this->modulo->viewmode();
+		$viewMode = $this->module->viewmode();
 		
 		$this->set('viewMode', $viewMode);
 		
@@ -44,7 +44,7 @@ class ModController extends ModsController
 
     public function listing(){
 
-        $h1 = ''.$this->aust->leNomeDaEstrutura($_GET['aust_node']);
+        $h1 = ''.Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
         $this->set('h1', $h1);
 
         $sql = "SELECT
@@ -54,18 +54,18 @@ class ModController extends ModsController
                 WHERE
                     id='".$_GET['aust_node']."'";
 
-        $query = $this->modulo->connection->query($sql);
+        $query = $this->module->connection->query($sql);
 
         $cat = $query[0]['nome'];
 
 		/*
 		 * VIEW MODE
 		 */
-		$viewMode = $this->modulo->viewmode();
+		$viewMode = $this->module->viewmode();
 		$this->set('viewMode', $viewMode);
 		
 		$query = $this->getQuery();
-		$query = $this->modulo->replaceFieldsValueIfEmpty($query);
+		$query = $this->module->replaceFieldsValueIfEmpty($query);
         $this->set('query', $query);
     }
 
@@ -123,7 +123,7 @@ class ModController extends ModsController
 				if( $imageHandler->isImage($file['type']) ){
 				
 					// resample?
-					if( $this->modulo->getStructureConfig('resample_images') != '0' ){
+					if( $this->module->getStructureConfig('resample_images') != '0' ){
 						$value = $imageHandler->resample($file);
 					} 
 						
@@ -131,10 +131,10 @@ class ModController extends ModsController
 					 * Por padrão, as imagens são salvas fisicamente. Opcionalmente,
 					 * pode-se salvar as imagens no banco de dados.
 					 */
-					if( $this->modulo->getStructureConfig('save_files_to_db') == '1' ){
+					if( $this->module->getStructureConfig('save_files_to_db') == '1' ){
 						
 						if( $editing ){
-							$oldFile = reset( $this->modulo->load($id) );
+							$oldFile = reset( $this->module->load($id) );
 							if( !empty($oldFile['systempath']) ){
 								$oldFile = $oldFile['systempath'];
 								if( file_exists($oldFile) ){
@@ -153,7 +153,7 @@ class ModController extends ModsController
 					} else {
 						$paths = $imageHandler->upload($_FILES['frmarquivo']);
 						if( $editing ){
-							$oldFile = reset( $this->modulo->load($id) );
+							$oldFile = reset( $this->module->load($id) );
 							if( !empty($oldFile['systempath']) ){
 								$oldFile = $oldFile['systempath'];
 								if( file_exists($oldFile) ){
@@ -171,12 +171,12 @@ class ModController extends ModsController
 					}
 
 				} else if( $fileHandler->isFlash($_FILES['frmarquivo']['type']) AND 
-						   $this->modulo->getStructureConfig('allow_flash_upload') == '1' )
+						   $this->module->getStructureConfig('allow_flash_upload') == '1' )
 				{
 					
 					$path = $fileHandler->upload($_FILES['frmarquivo']);
 					if( $editing ){
-						$oldFile = reset( $this->modulo->load($id) );
+						$oldFile = reset( $this->module->load($id) );
 						if( !empty($oldFile['systempath']) ){
 							$oldFile = $oldFile['systempath'];
 							if( file_exists($oldFile) ){
@@ -222,7 +222,7 @@ class ModController extends ModsController
                 $sql = "SELECT
                             ordem
                         FROM
-                            ".$this->modulo->useThisTable()."
+                            ".$this->module->useThisTable()."
                         WHERE
                             categoria='".$_POST['aust_node']."'
                         ORDER BY
@@ -230,8 +230,8 @@ class ModController extends ModsController
                         LIMIT 1
                         ";
                 //echo $sql;
-                $query = $this->modulo->connection->query($sql);
-                $total = $this->modulo->connection->count($sql);
+                $query = $this->module->connection->query($sql);
+                $total = $this->module->connection->count($sql);
 
                 $ordem = 0;
                 foreach ( $query as $dados ){
@@ -282,7 +282,7 @@ class ModController extends ModsController
                 }
 
             }
-            $result = $this->modulo->save($_POST);
+            $result = $this->module->save($_POST);
             $this->set('resultado', $result);
         }
 

@@ -10,7 +10,7 @@
  * @since v0.1.5 24/06/2009
  */
 
-class ModController extends ModsController
+class ModController extends ModActionController
 {
     /**
      * listar()
@@ -22,13 +22,13 @@ class ModController extends ModsController
         /**
          * <h2> HEADER
          */
-        $this->set('h1', $this->aust->leNomeDaEstrutura($_GET['aust_node']) );
+        $this->set('h1', Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']) );
 
         if((!empty($filter)) AND ($filter <> 'off')){
             $addurl = "&filter=$filter&filterw=" . urlencode($filterw);
         }
 
-        $categorias = $this->aust->LeCategoriasFilhas('',$_GET['aust_node']);
+        $categorias = Aust::getInstance()->LeCategoriasFilhas('',$_GET['aust_node']);
         $categorias[$_GET['aust_node']] = 'Estrutura';
 
 
@@ -43,8 +43,8 @@ class ModController extends ModsController
          * Resultados por página
          */
         $num_por_pagina = '20';
-        $this->set('numPorPagina', $num_por_pagina);//($config->LeOpcao($nome_modulo.'_paginacao')) ? $config->LeOpcao($nome_modulo.'_paginacao') : '10';
-        $this->set('page', $pagina);//($config->LeOpcao($nome_modulo.'_paginacao')) ? $config->LeOpcao($nome_modulo.'_paginacao') : '10';
+        $this->set('numPorPagina', $num_por_pagina);//(Config::getInstance()->LeOpcao($nome_modulo.'_paginacao')) ? Config::getInstance()->LeOpcao($nome_modulo.'_paginacao') : '10';
+        $this->set('page', $pagina);//(Config::getInstance()->LeOpcao($nome_modulo.'_paginacao')) ? Config::getInstance()->LeOpcao($nome_modulo.'_paginacao') : '10';
 
         /*
          * SQL para listagem
@@ -58,11 +58,11 @@ class ModController extends ModsController
         /*
          * Query com resultado
          */
-        $query = $this->modulo->load($params);
+        $query = $this->module->load($params);
 
-        $this->set('sql', $this->modulo->lastSql );
-        //$config = $this->modulo->loadConfig();
-        $query = $this->modulo->replaceFieldsValueIfEmpty($query);
+        $this->set('sql', $this->module->lastSql );
+        //$config = $this->module->loadConfig();
+        $query = $this->module->replaceFieldsValueIfEmpty($query);
 
         $this->set('query', $query );
 
@@ -75,7 +75,7 @@ class ModController extends ModsController
     public function edit(){
 
 
-				$products = $this->modulo->getStructureConfig("aust_products");
+				$products = $this->module->getStructureConfig("aust_products");
 		        $sql = "
 		                SELECT
 		                    *
@@ -85,16 +85,16 @@ class ModController extends ModsController
 		                    order_id='".$_GET['w']."'
 		                ";
 
-		        $query = $this->modulo->connection->query($sql);
+		        $query = $this->module->connection->query($sql);
 
-				$cartSql = $this->modulo->loadSql( array('id' => $_GET['w']) );
-				$cart = $this->connection->query($cartSql);
+				$cartSql = $this->module->loadSql( array('id' => $_GET['w']) );
+				$cart = Connection::getInstance()->query($cartSql);
 				$cart = reset($cart);
 		
 				if( !empty($_GET['pending']) || is_string($_GET['pending']) ){
 					if( $_GET['pending'] == '1' || $_GET['pending'] == '0' ){
 						$sql = "UPDATE st_orders SET pending='".$_GET['pending']."' WHERE id='".$_GET['w']."'";
-						$this->connection->exec($sql);
+						Connection::getInstance()->exec($sql);
 						$cart['pending'] = $_GET['pending'];
 					}
 				}
@@ -106,7 +106,7 @@ class ModController extends ModsController
     }
 
     public function save(){
-        $this->set('resultado', $this->modulo->save($_POST));
+        $this->set('resultado', $this->module->save($_POST));
     }
     
 }
