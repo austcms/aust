@@ -70,30 +70,15 @@ class ContentController extends ActionController {
 	        $modulo = new $moduloNome();
 	        unset( $modDbSchema );
 
-	    /**
-	     * Module MVC?
-	     */
-	    if( !empty($modInfo['mvc']) AND $modInfo['mvc'] == true ){
+        /**
+         * ModController é o controller principal do módulo
+         */
+        include(MODULES_DIR.$modDir.MOD_CONTROLLER);
 
-	        /**
-	         * ModController é o controller principal do módulo
-	         */
-	        include(MODULES_DIR.$modDir.MOD_CONTROLLER);
-
-			$this->autoRender = false;
-			$modDispatcher = new ModDispatcher($aust_node);
-			$modDispatcher->dispatch();
-			return true;
-			
-			
-			
-			
-			
-
-	        $modController = new ModController($param);
-
-			
-		}
+		$this->autoRender = false;
+		$modDispatcher = new ModDispatcher($aust_node);
+		$modDispatcher->dispatch();
+		return true;
 	}
 	
 }

@@ -147,7 +147,7 @@ if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'):
 
                 $param = array(
                     'config' => $modInfo,
-                    'user' => $administrador,
+                    'user' => User::getInstance(),
                     //'modDbSchema' => $modDbSchema,
                 );
                 $modulo = new $moduloNome($param);
@@ -178,10 +178,6 @@ if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'):
              * 'exPOST': possui $_POST enviados anteriormente.
              */
             $params = array(
-                'conexao' => $conexao,
-                'aust' => $aust,
-                'modulo' => $modulo,
-                'administrador' => $administrador,
                 'modDir' => $_POST['modulo'],
                 'action' => $setupAction,
                 'exPOST' => $_POST,

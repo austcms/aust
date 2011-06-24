@@ -17,6 +17,7 @@ class ModActionController extends ActionController
 	 * 			'austNode':int
 	 */
     function __construct($austNode){
+
 		if( $austNode === false )
 			return false;
 		
