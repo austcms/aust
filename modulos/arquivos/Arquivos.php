@@ -50,9 +50,8 @@ class Arquivos extends Module
      */
     public $relativeDir;
 
-    function __construct(){
-
-        parent::__construct();
+    function __construct($austNode = ""){
+        parent::__construct($austNode);
 
         $this->uploadSubDir = 'uploads/'.date('Y').'/'.date('m').'/';
 

@@ -9,7 +9,7 @@
      * O arquivo inserido é /embed/form.php do módulo que $embed==true
      */
 
-    $tempmodulo = $modulo;
+    $tempmodulo = $module;
     $embed = $module->LeModulosEmbed();
     
     if( !empty($embed) ){

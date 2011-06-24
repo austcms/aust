@@ -93,7 +93,8 @@
 	            <input type="hidden" name="frmactor_is_user" value="1" />
 	            <?php
 	            $user = User::getInstance();
-
+				
+				$selectAnyOneActor = '';
 	            if( $_GET['action'] == 'edit' AND
 	                empty($dados['actor_admin_id'] ) )
 	            {

@@ -177,7 +177,7 @@ if($fm == 'criar'){ ?>
 <tr>
     <td valign="top">Twitter: </td>
     <td>
-        <input class="text" type="text" name="frmtwitter" value="<?php ifisset($dados['twitter'])?>" />
+        <input class="text" type="text" name="frmtwitter" value="<?php if( !empty($dados['twitter']) ) echo $dados['twitter'] ?>" />
         <p class="explanation">
             Você tem Twitter? Ex.: 'usuário' ou '@usuário'.
         </p>

@@ -310,7 +310,7 @@ foreach( $camposForm as $chave=>$valor ){
 			$fieldClass[] = "currency_field";
 			if( empty($valor["valor"]) )
 				$valor["valor"] = 0;
-			$valor["valor"] = Resources::numberToCurrency($valor["valor"], $modulo->language());
+			$valor["valor"] = Resources::numberToCurrency($valor["valor"], $this->module->language());
 		}
 	
 		$useInput = true;

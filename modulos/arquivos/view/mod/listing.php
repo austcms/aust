@@ -26,7 +26,7 @@ if((!empty($filter)) AND ($filter <> 'off')){
 *
 *********************************/
 ?>
-<form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?section=<?php echo $_GET['section'];?>&action=actions&aust_node=<?php echo $_GET[aust_node];?>">
+<form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?section=<?php echo $_GET['section'];?>&action=actions&aust_node=<?php echo $_GET["aust_node"];?>">
 <a name="list"></a>
 <?php
 /*
@@ -102,5 +102,5 @@ if( StructurePermissions::getInstance()->canDelete($austNode) ){
 ?>
 
 <p style="margin-top: 15px;">
-	<a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
+	<a href="adm_main.php?section=<?php echo MODULES?>"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
 </p>

@@ -1,19 +1,19 @@
 <IfModule mod_rewrite.c>
 	RewriteEngine On
 
-	RewriteRule ^vendor/(.*) vendor/$1 [L]
-	RewriteRule ^core/(.*) core/$1 [L]
-	RewriteRule ^uploads/(.*) uploads/$1 [L]
-	RewriteRule ^responser/(.*) responser/$1 [L]
- 	RewriteRule ^tmp/(.*) tmp/$1 [L]
- 	RewriteRule ^modulos/(.*) modulos/$1 [L]
-	RewriteRule ^adm_main.php(.*) adm_main.php$1 [L]
-	RewriteRule ^$ index.php [L]
-	RewriteRule ^index.php index.php [L]
-	RewriteRule ^phpinfo.php phpinfo.php [L]
-	RewriteRule ^logout.php logout.php [L]
+#	RewriteRule ^vendor/(.*) vendor/$1 [L]
+#	RewriteRule ^core/(.*) core/$1 [L]
+#	RewriteRule ^uploads/(.*) uploads/$1 [L]
+#	RewriteRule ^responser/(.*) responser/$1 [L]
+#	RewriteRule ^tmp/(.*) tmp/$1 [L]
+#	RewriteRule ^modulos/(.*) modulos/$1 [L]
+#	RewriteRule ^adm_main.php(.*) adm_main.php$1 [L]
+#	RewriteRule ^$ index.php [L]
+#	RewriteRule ^index.php index.php [L]
+#	RewriteRule ^phpinfo.php phpinfo.php [L]
+#	RewriteRule ^logout.php logout.php [L]
 	
-	RewriteRule (.*) /not_found [R=404]
+#	RewriteRule (.*) /not_found [R=404]
 	
 
 </IfModule>

@@ -10,7 +10,7 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
      * Identificar tabela que deve ser excluida
      */
 
-        $itens = $_POST[itens];
+        $itens = $_POST["itens"];
         $c = 0;
         foreach($itens as $key=>$valor){
             if($c > 0){
@@ -28,7 +28,9 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
                 WHERE
                     {$where}";
         $mysql = $module->connection->query($sql);
-        $dados = $mysql[0];
+		if( !empty($mysql) )
+        	$dados = $mysql[0];
+		
 
         // se conseguir excluir o arquivo fisicamente, então exclui dados do DB
         try{

@@ -237,7 +237,7 @@
                             echo '<tr>';
                         }
                         ?>
-                        <td valign="top" <?php echo $params['inline']?>>
+                        <td valign="top">
                             <center>
                                 <img src="core/libs/imageviewer/visualiza_foto.php?table=galeria_fotos_imagens&thumbs=yes&myid=<?php echo $dados["id"]; ?>&maxxsize=160&maxysize=100" />
                                 <br clear="all" />
@@ -246,7 +246,7 @@
                                  * Editar comentário
                                  */
                                 $commentedImages = false;
-                                if( !empty($moduloConfig["commented_images"]) ){
+                                if( !empty($moduloConfig["commented_images"]) && !empty($moduloConfig["commented_images"]["valor"]) ){
                                     if( $moduloConfig["commented_images"]["valor"] == "1" )
                                         $commentedImages = true;
                                 }

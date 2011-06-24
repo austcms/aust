@@ -34,7 +34,6 @@ class ModController extends ModActionController
         $num_por_pagina = '20';
         $this->set('numPorPagina', $num_por_pagina);//(Config::getInstance()->LeOpcao($nome_modulo.'_paginacao')) ? Config::getInstance()->LeOpcao($nome_modulo.'_paginacao') : '10';
         $this->set('page', $pagina);//(Config::getInstance()->LeOpcao($nome_modulo.'_paginacao')) ? Config::getInstance()->LeOpcao($nome_modulo.'_paginacao') : '10';
-
         /*
          * SQL para listagem
          */

@@ -155,7 +155,7 @@ class Module extends ActiveModule
      */
     function __construct($austNode = ""){
 
-        $this->austNode = $austNode;
+        $this->austNode($austNode);
 
         if( !empty($_GET['w']) AND is_numeric($_GET['w']) )
             $this->w = $_GET['w'];

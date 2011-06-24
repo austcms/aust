@@ -9,7 +9,7 @@ if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'):
  *
  * Verificações de Migrations de módulos
  */
-    $migrationsMods = new MigrationsMods( $conexao );
+    $migrationsMods = new MigrationsMods( Connection::getInstance() );
 
     /*
      * INSTALA MÓDULO

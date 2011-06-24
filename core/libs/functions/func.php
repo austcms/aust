@@ -89,7 +89,8 @@
 	
 	function getFileIcon($ext){
 	    $ext = explode('.', $ext);
-	    $ext = reset(array_reverse($ext));
+		$ext = array_reverse($ext);
+	    $ext = reset($ext);
 		
 		$icons = array(
 			'file_doc.png' => array(
