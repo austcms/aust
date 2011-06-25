@@ -10,6 +10,7 @@ class ModDispatcher
 	
 	public $module;
 	public $austNode;
+	public $controller = "mod";
 	
 	public function __construct($austNode){
 		$this->austNode = $austNode;
@@ -46,7 +47,7 @@ class ModDispatcher
 	}
 
 	public function controller(){
-		return "mod";
+		return $this->controller;
 	}
 	
 	public function dispatch(){
