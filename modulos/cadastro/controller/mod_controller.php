@@ -240,6 +240,7 @@ class ModController extends ModActionController
 		}
 		
 		$this->doRender = false;
+		$this->autoRender = false;
         $this->create($params);
         $this->render('form');
     }

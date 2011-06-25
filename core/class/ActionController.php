@@ -117,10 +117,11 @@ class ActionController
 			$viewFile = $this->_viewFile().$this->_action().".php";
 		}
 
-		if( !file_exists($viewFile) ){
+		if( $shouldRender && !file_exists($viewFile) ){
 			trigger_error("Module's view (".$viewFile.") doesn't exist");
 		}
-        elseif( $shouldRender ){
+
+		if( $shouldRender && file_exists($viewFile) ){
             ob_start();
             include($viewFile);
             $content_for_layout = ob_get_contents();

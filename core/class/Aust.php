@@ -827,7 +827,7 @@ class Aust {
         if(is_file(MODULES_DIR.$pasta_do_modulo.'/listar.php')) {
             return MODULES_DIR.$pasta_do_modulo.'/listar.php';
         } else {
-            return 'content.inc/listar.inc.php';
+            return VIEWS_DIR.'content/listar.inc.php';
         }
     }
 

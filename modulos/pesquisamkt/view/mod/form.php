@@ -570,7 +570,7 @@ if( !empty($perguntasQuantidade) ):
          * O arquivo inserido é /embed/form.php do módulo que $embed==true
          */
 
-            //include(INC_DIR.'content.inc/form_embed.php');
+            //include(VIEWS_DIR.'content/form_embed.php');
 
         ?>
         <tr>
@@ -629,7 +629,7 @@ endif;
      * É padrão e pode ser copiado para todos os forms
      */
 
-        include(INC_DIR.'content.inc/form_embedownform.php');
+        include(VIEWS_DIR.'content/form_embedownform.php');
 ?>
 
 

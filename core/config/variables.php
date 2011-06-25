@@ -78,7 +78,7 @@ define("TMP_DIR", 						THIS_TO_BASEURL."tpm/");
  	define('CONTENT_DISPATCHER', 		'content');
 	define('MODULES', 					'content'); # alias for content_dispatcher
 	
-    define('CONTENT_TRIGGERS_DIR', 		INC_DIR.'content.inc/');
+    define('CONTENT_TRIGGERS_DIR', 		VIEWS_DIR.'content/');
         define('CREATE_ACTION', 		'create');
         define('EDIT_ACTION', 			'edit');
         define('LISTING_ACTION', 		'listing');
