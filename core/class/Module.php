@@ -485,18 +485,16 @@ class Module extends ActiveModule
             $where = $where . " AND ".$this->austField." IN ('".$austNodeForSql."')";
         }
 
-		$user = User::getInstance();
-		$userId = $user->getId();
-
+		$userId = User::getInstance()->getId();
 		if( !in_array(
-				$user->type(),
+				User::getInstance()->type(),
 				array('Webmaster', 'Root', 'root', 'Moderador', 'Administrador')
 			) &&
 			!empty($userId) &&
 			( Connection::getInstance()->tableHasField($this->useThisTable(), $this->authorField) )
 		)
 		{
-			$where .= " AND (".$this->authorField." = ".$user->getId().")";
+			$where .= " AND (".$this->authorField." = ".User::getInstance()->getId().")";
 		}
 
 		/*

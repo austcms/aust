@@ -11,7 +11,6 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
     
     public function setUp(){
 		
-		User::getInstance()->userinfo = array();
 		installModule('conteudo');
 		$this->user = new User;
 		
@@ -73,15 +72,18 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
 
 
     function testLoadSql(){
-		unset($_SESSION['login']);
-#        $this->assertType('string', $this->obj->loadSql() );
-#        $this->assertType('string', $this->obj->loadSql(array( 'limit' => 0, )) );
+		User::getInstance()->userInfo = array();
+		User::getInstance()->id = null;
+		$_SESSION['login'] = null;
+		
+        $this->assertType('string', $this->obj->loadSql() );
+        $this->assertType('string', $this->obj->loadSql(array( 'limit' => 0, )) );
         $this->assertEquals('textos', $this->obj->useThisTable() );
 
-		$user = getUser();
-        $_SESSION['login']['id'] = $user["id"];
+		$userId = getAdminId();
+        $_SESSION['login']['id'] = $userId;
         $_SESSION['login']['username'] = 'test_user';
-
+		
 		User::getInstance()->type('Webmaster');
         /*
          * Verifica SQL gerado, se é gerado corretamente
@@ -103,7 +105,7 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
         $this->assertEquals( trim("SELECT id, titulo, visitantes, categoria AS cat, ".
                         "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as adddate, ".
                         "(SELECT nome FROM categorias AS c WHERE id=cat ) AS node ".
-                        "FROM textos WHERE 1=1 AND (autor = ".$user['id'].") ".
+                        "FROM textos WHERE 1=1 AND (autor = ".$userId.") ".
                         "ORDER BY id DESC ".
                         "LIMIT 0,25"),
                         trim($sql) );
@@ -114,7 +116,7 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
         $this->assertEquals( trim("SELECT id, titulo, visitantes, categoria AS cat, ".
                         "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as adddate, ".
                         "(SELECT nome FROM categorias AS c WHERE id=cat ) AS node ".
-                        "FROM textos WHERE 1=1 AND id='1' AND (autor = ".$user['id'].") ".
+                        "FROM textos WHERE 1=1 AND id='1' AND (autor = ".$userId.") ".
                         "ORDER BY id DESC ".
                         "LIMIT 50,25"),
                         trim($sql) );
@@ -125,7 +127,7 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
         $this->assertEquals( trim("SELECT id, titulo, visitantes, categoria AS cat, ".
                         "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as adddate, ".
                         "(SELECT nome FROM categorias AS c WHERE id=cat ) AS node ".
-                        "FROM textos WHERE 1=1 AND id='1' AND categoria IN ('3','4') AND (autor = ".$user['id'].") ".
+                        "FROM textos WHERE 1=1 AND id='1' AND categoria IN ('3','4') AND (autor = ".$userId.") ".
                         "ORDER BY id DESC ".
                         "LIMIT 50,25"),
                         trim($sql) );
