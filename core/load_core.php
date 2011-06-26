@@ -15,6 +15,8 @@ include_once(CORE_DIR."libs/functions/func_text_format.php");
 include_once(CORE_DIR."libs/functions/func_form_manipulation.php");
 include_once(CORE_DIR."libs/functions/date.php");
 
+include_once(INC_DIR.'inc_categorias_functions.php');
+
 #    require_once(CORE_DIR.'config/installation/dbschema.php');
 #    $dbSchema = new dbSchema($dbSchema, $conexao);
 ?>

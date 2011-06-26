@@ -65,7 +65,7 @@ class ContentController extends ActionController {
 	         * Carrega classe do módulo e cria objeto
 	         */
 	        $moduloNome = (empty($modInfo['className'])) ? 'Classe' : $modInfo['className'];
-	        include(MODULES_DIR.$modDir.$moduloNome.'.php');
+	        include_once(MODULES_DIR.$modDir.$moduloNome.'.php');
 
 	        $modulo = new $moduloNome();
 	        unset( $modDbSchema );
@@ -73,7 +73,7 @@ class ContentController extends ActionController {
         /**
          * ModController é o controller principal do módulo
          */
-        include(MODULES_DIR.$modDir.MOD_CONTROLLER);
+        include_once(MODULES_DIR.$modDir.MOD_CONTROLLER);
 
 		$this->autoRender = false;
 		$modDispatcher = new ModDispatcher($aust_node);

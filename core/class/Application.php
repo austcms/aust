@@ -32,8 +32,6 @@ class Application {
 		 */
 		    include(CORE_DIR.'load_core.php');
 		
-	        include_once(INC_DIR.'inc_categorias_functions.php');
-		
 		$this->showUi = $showUi;
 		if( !$this->showUi )
 			return true;

@@ -10,9 +10,10 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
     public $lastSaveId;
     
     public function setUp(){
-	
+		
+		User::getInstance()->userinfo = array();
 		installModule('conteudo');
-		$this->user = User::getInstance();
+		$this->user = new User;
 		
         /*
          * MÓDULOS ATUAL
@@ -72,17 +73,16 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
 
 
     function testLoadSql(){
-        $this->assertType('string', $this->obj->loadSql() );
-        $this->assertType('string', $this->obj->loadSql(
-                    array(
-                        'limit' => 0,
-                    ))
-                );
+		unset($_SESSION['login']);
+#        $this->assertType('string', $this->obj->loadSql() );
+#        $this->assertType('string', $this->obj->loadSql(array( 'limit' => 0, )) );
         $this->assertEquals('textos', $this->obj->useThisTable() );
 
 		$user = getUser();
-        $_SESSION['login']['id'] = 1;
-		$this->user->tipo = 'Webmaster';
+        $_SESSION['login']['id'] = $user["id"];
+        $_SESSION['login']['username'] = 'test_user';
+
+		User::getInstance()->type('Webmaster');
         /*
          * Verifica SQL gerado, se é gerado corretamente
          */
@@ -97,7 +97,7 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
                         trim($sql) );
 
 
-		$this->user->tipo = 'Reporter';
+		User::getInstance()->type('Reporter');
         $sql = $this->obj->loadSql( array('') );
         $sql = preg_replace('/\n|\t/Us', "", preg_replace('/\s{2,}/s', " ", $sql));
         $this->assertEquals( trim("SELECT id, titulo, visitantes, categoria AS cat, ".

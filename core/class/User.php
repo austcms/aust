@@ -65,6 +65,10 @@ class User {
         return $this->tipo;
     }
 
+	public function isRoot(){
+		return ($this->type() == $this->rootType());
+	}
+
     /**
      * tipo() alias-> type()
      *

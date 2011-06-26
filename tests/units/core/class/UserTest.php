@@ -97,6 +97,18 @@ class UserTest extends PHPUnit_Framework_TestCase
 	function testRootType(){
 		$this->assertEquals("Webmaster", User::getInstance()->rootType());
 	}
+
+	function testIsRoot(){
+		$query = Connection::getInstance()->query("SELECT id FROM admins LIMIT 1");
+		$query = reset($query);
+		$id = $query["id"];
+
+        // connect
+        $_SESSION['login']['id'] = $id;
+        $_SESSION['login']['username'] = 'test_user';
+		$this->assertTrue( $this->obj->isRoot() );
+
+	}
 	
 	function testHasUser(){
 		$this->assertTrue($this->obj->hasUser());

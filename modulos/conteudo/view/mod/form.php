@@ -53,11 +53,11 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
 
 
 
-<form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?section=<?php echo $_GET["section"] ?>&action=save" enctype="multipart/form-data" >
+<form method="post" action="adm_main.php?section=<?php echo MODULES ?>&action=save" enctype="multipart/form-data" >
 <input type="hidden" name="metodo" value="<?php echo $_GET['action'];?>">
 
 <?php if($_GET['action'] == 'create'){ ?>
-    <input type="hidden" name="frmautor" value="<?php echo $_SESSION['loginid'];?>">
+    <input type="hidden" name="frmautor" value="<?php echo User::getInstance()->getId(); ?>">
 <?php } else { ?>
     <input type="hidden" name="frmautor" value="<?php ifisset( $dados['autor'] );?>">
 <?php }?>
@@ -135,15 +135,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
 
             </div>
             <?php
-            /*
-             * Nova_Categoria?
-             */
-            $showNovaCategoria = false;
-            if( !empty($moduloConfig["nova_categoria"]) ){
-                if( $moduloConfig["nova_categoria"]["valor"] == "1" )
-                    $showNovaCategoria = true;
-            }
-            if( $showNovaCategoria ){
+            if( $module->getStructureConfig("nova_categoria") == "1" || User::getInstance()->isRoot() ){
                 lbCategoria($austNode);
             }
             ?>
@@ -250,34 +242,30 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
      * ORDEM
      */
     $showOrdem = false; // por padrão, não mostra
-    if( !empty($moduloConfig["ordenate"]) ){
-        if( $moduloConfig["ordenate"]["valor"] == "1" )
-            $showOrdem = true;
-    }
-    if( $showOrdem ){
-    ?>
-    <tr>
-        <td valign="top"><label>Ordem:</label></td>
-        <td>
-            <select name="frmordem" class="select">
-                <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '10'); ?> value="10">10</option>
-                <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '9'); ?> value="9">9</option>
-                <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '8'); ?> value="8">8</option>
-                <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '7'); ?> value="7">7</option>
-                <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '6'); ?> value="6">6</option>
-                <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '5'); ?> value="5">5</option>
-                <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '4'); ?> value="4">4</option>
-                <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '3'); ?> value="3">3</option>
-                <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '2'); ?> value="2">2</option>
-                <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '1'); ?> value="1">1</option>
-            </select>
-            <p class="explanation">
-                Selecione um número que representa a importância deste item.
-                Quanto maior o número, maior a prioridade.
-            </p>
-        </td>
-    </tr>
-    <?php
+    if( $module->getStructureConfig("ordenate") ) {
+	    ?>
+	    <tr>
+	        <td valign="top"><label>Ordem:</label></td>
+	        <td>
+	            <select name="frmordem" class="select">
+	                <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '10'); ?> value="10">10</option>
+	                <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '9'); ?> value="9">9</option>
+	                <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '8'); ?> value="8">8</option>
+	                <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '7'); ?> value="7">7</option>
+	                <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '6'); ?> value="6">6</option>
+	                <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '5'); ?> value="5">5</option>
+	                <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '4'); ?> value="4">4</option>
+	                <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '3'); ?> value="3">3</option>
+	                <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '2'); ?> value="2">2</option>
+	                <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '1'); ?> value="1">1</option>
+	            </select>
+	            <p class="explanation">
+	                Selecione um número que representa a importância deste item.
+	                Quanto maior o número, maior a prioridade.
+	            </p>
+	        </td>
+	    </tr>
+	    <?php
     }
     ?>
 
@@ -312,12 +300,8 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
      * ORDEM
      */
     $showModo = false; // por padrão, não mostra
-    if( !empty($moduloConfig["modo_de_visualizacao"]) ){
-        if( $moduloConfig["modo_de_visualizacao"]["valor"] == "1" )
-            $showModo = true;
-    }
-    if( $showModo ){
-    ?>
+    if( $module->getStructureConfig("modo_de_visualizacao") ){
+    	?>
         <tr>
             <td valign="top"><label>Modo:</label></td>
             <td>
@@ -376,5 +360,5 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
 
 <br />
 <p>
-    <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
+    <a href="adm_main.php?section=<?php echo MODULES ?>"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
 </p>

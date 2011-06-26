@@ -487,6 +487,7 @@ class Module extends ActiveModule
 
 		$user = User::getInstance();
 		$userId = $user->getId();
+
 		if( !in_array(
 				$user->type(),
 				array('Webmaster', 'Root', 'root', 'Moderador', 'Administrador')

@@ -24,4 +24,11 @@ function installModule($moduleName){
     );
     return ModulesManager::getInstance()->configuraModulo($param);	
 }
+
+function getAdminId(){
+	$query = Connection::getInstance()->query("SELECT id FROM admins LIMIT 1");
+	$query = reset($query);
+	$id = $query["id"];
+	return $id;
+}
 ?>
