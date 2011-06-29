@@ -12,8 +12,11 @@ class ModDispatcher
 	public $austNode;
 	public $controller = "mod";
 	
-	public function __construct($austNode){
+	public function __construct($austNode, $controller = "mod"){
+		$this->controller = $controller;
+		
 		$this->austNode = $austNode;
+
 		$this->module = ModulesManager::getInstance()->modelInstance($austNode);
 	}
 	
@@ -36,7 +39,7 @@ class ModDispatcher
     }
 
 	public function directory(){
-		return Aust::getInstance()->LeModuloDaEstrutura($this->austNode)."/";
+		return ModulesManager::getInstance()->directory($this->austNode);
 	}
 
 	public function action(){

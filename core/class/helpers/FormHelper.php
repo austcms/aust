@@ -37,7 +37,7 @@ class FormHelper
          * Verifica se o usuário especificou um controller que deverá
          * ser usado para salvar as informações do formulário
          */
-        $controller = (empty($options["controller"])) ? 'conteudo' : $options["controller"];
+        $controller = (empty($options["controller"])) ? 'content' : $options["controller"];
         /**
          * Action
          *

@@ -125,6 +125,17 @@ class Model extends Aust
 
         return false;
     }
+
+    static function getInstance(){
+        static $instance;
+
+        if( !$instance ){
+            $instance[0] = new Model;
+        }
+
+        return $instance[0];
+    }
+	
 }
 
 ?>

@@ -47,5 +47,14 @@ class ActionControllerTest extends PHPUnit_Framework_TestCase
 		$this->assertRegExp('/View test from content controller./', $controller->render());
 		$this->assertTrue($controller->isRendered);
 	}
+	
+	function test_controllerPathName(){
+		$_GET["section"] = "content";
+		$_GET["action"] = "test";
+        $controller = new ActionController();
+		
+		$this->assertEquals("action", $controller->_controllerPathName());
+	}
+	
 }
 ?>

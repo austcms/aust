@@ -322,7 +322,8 @@ class ModController extends ModActionController
 			$files = $this->module->files;
 			
 			// insert date
-			$table = reset(array_keys($this->data));
+			$table = array_keys($this->data);
+			$table = reset($table);
 
 			if( empty($w) )
 				$this->data[$table]['created_on'] = date("Y-m-d H:i:s");
@@ -332,7 +333,8 @@ class ModController extends ModActionController
 			/*
 			 *		2) Salva dados principais (não relacionados);
 			 */
-            $resultado = $this->model->save($this->data);
+			# Model
+            $resultado = Model::getInstance()->save($this->data);
             if( !empty($w) AND $w > 0 )
                 $lastInsertId = $w;
             else

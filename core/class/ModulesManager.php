@@ -84,8 +84,13 @@ class ModulesManager
     }
 
 	public function modelInstance($austNode = ""){
-		if( empty($austNode) || !is_numeric($austNode) )
+		if( empty($austNode) )
 			return false;
+		
+		if( !is_numeric($austNode) && is_string($austNode) ){
+			if( !$this->exists($austNode) )
+				return false;
+		}
 		
 		include_once($this->modelClassFile($austNode));
 		$modelClassName = $this->modelClassName($austNode);
@@ -93,19 +98,38 @@ class ModulesManager
 	}
 
 	public function modelClassFile($austNode){
-		return MODULES_DIR.$this->directory($austNode).$this->modelClassName($austNode).".php";
+		if( is_numeric($austNode) )
+			$directory = $this->directory($austNode);
+		elseif( is_string($austNode) )
+			$directory = $austNode."/";
+
+		return MODULES_DIR.$directory.$this->modelClassName($austNode).".php";
 	}
 
 	public function modelClassName($austNode){
-		if( !is_file(MODULES_DIR.$this->directory($austNode).MOD_CONFIG) )
+		if( is_numeric($austNode) )
+			$directory = $this->directory($austNode);
+		elseif( is_string($austNode) )
+			$directory = $austNode."/";
+		
+		if( !is_file(MODULES_DIR.$directory.MOD_CONFIG) )
 			return false;
 		
-		include(MODULES_DIR.$this->directory($austNode).MOD_CONFIG);
+		include(MODULES_DIR.$directory.MOD_CONFIG);
 		return $modInfo["className"];
 	}
 
 	public function directory($austNode){
-		return Aust::getInstance()->LeModuloDaEstrutura($austNode)."/";
+		if( is_numeric($austNode) )
+			return Aust::getInstance()->LeModuloDaEstrutura($austNode).'/';
+		elseif( is_string($austNode) )
+			return $austNode.'/';
+		
+		return false;
+	}
+	
+	public function exists($moduleName){
+		return is_dir(MODULES_DIR.$moduleName);
 	}
 
     /*

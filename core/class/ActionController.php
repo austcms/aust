@@ -48,6 +48,13 @@ class ActionController
 			return $this->customAction;
 		return Dispatcher::getInstance()->action();
 	}
+
+	function _controllerPathName(){
+		$controllerName = get_class($this);
+		$controllerName = str_replace("Controller", "", $controllerName);
+		$controllerName = strtolower($controllerName);
+		return $controllerName;
+	}
 	
 	function _actionExists(){
         return method_exists($this, $this->_action());

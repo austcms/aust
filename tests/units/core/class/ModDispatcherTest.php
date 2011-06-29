@@ -39,6 +39,11 @@ class ModDispatcherTest extends PHPUnit_Framework_TestCase
         $obj = new ModDispatcher($this->params);
 		$this->assertEquals(MODULES_DIR."conteudo/".MOD_CONTROLLER_DIR."mod_controller.php", $obj->controllerFile());
 	}
+
+	function testSetupControllerWithoutStructure(){
+        $dispatcher = new ModDispatcher('agenda', 'setup');
+		$this->assertEquals("setup", $dispatcher->controller());
+	}	
 	
 }
 ?>

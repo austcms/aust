@@ -16,7 +16,7 @@ class ModActionController extends ActionController
 	 * @param $param:array
 	 * 			'austNode':int
 	 */
-    function __construct($austNode){
+    function __construct($austNode = ""){
 
 		if( $austNode === false )
 			return false;
@@ -141,7 +141,8 @@ class ModActionController extends ActionController
     }
 
 	public function _viewFile(){
-		return MODULES_DIR.$this->module->directory().MOD_VIEW_DIR."mod/";
+		$directory = ModulesManager::getInstance()->directory($this->austNode);
+		return MODULES_DIR.$directory.MOD_VIEW_DIR.$this->_controllerPathName()."/";
 	}
 	
     public function test_action(){
@@ -180,12 +181,13 @@ class ModActionController extends ActionController
         if( !empty($this->{$str}) )
             return false;
 
+		$modDir = ModulesManager::getInstance()->directory($this->austNode);
         if( empty($str) )
             return false;
-        if( !is_file(MODULES_DIR.$this->modDir.MOD_MODELS_DIR.$str.".php") )
+        if( !is_file(MODULES_DIR.$modDir.MOD_MODELS_DIR.$str.".php") )
             return false;
 
-        include_once MODULES_DIR.$this->modDir.MOD_MODELS_DIR.$str.".php";
+        include_once MODULES_DIR.$modDir.MOD_MODELS_DIR.$str.".php";
         $this->{$str} = new $str;
 
         return true;

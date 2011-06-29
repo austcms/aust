@@ -14,8 +14,15 @@ class SetupController extends ModActionController
     function beforeFilter(){
         $_SESSION['exPOST'] = $_POST;
         $this->set('exPOST', $_SESSION['exPOST']);
+		if( !empty($_POST) && !empty($_POST['setupAction']) ){
+			$this->customAction = $_POST['setupAction'];
+		}
+		parent::beforeFilter();
     }
 
+	function index(){
+
+	}
     /**
      * setuppronto()
      *
@@ -31,8 +38,6 @@ class SetupController extends ModActionController
 		
         global $aust_charset;
 
-        $this->autoRender = false;
-		
 		$fields = array();
 		$i = 0;
 		// prepara array com campos
@@ -67,7 +72,7 @@ class SetupController extends ModActionController
             'father' => $_POST['categoria_chefe'],
             'class' => 'estrutura',
             'type' => $_POST['modulo'],
-            'author' => $this->administrador->LeRegistro('id'),
+            'author' => User::getInstance()->getId(),
 			'fields' => $fields,
 			'options' => array(
 				'approval' => $_POST['aprovacao'],
@@ -76,10 +81,8 @@ class SetupController extends ModActionController
 			),
         );
 
-		pr($params);
-
 		if( $this->CadastroSetup->createStructure($params) ){
-			echo "O sistema de cadastro foi criado com sucesso.";
+			$this->render();
 		}
 		
 		
