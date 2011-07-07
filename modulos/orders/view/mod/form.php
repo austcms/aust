@@ -33,16 +33,12 @@ Status:
 if( $cart['pending'] == '1' ){
 	echo 'PENDENTE';
 	?>
-	<a href="adm_main.php?section=<?php echo $_GET['section']?>&action=<?php echo $_GET['action']?>&aust_node=<?php echo $_GET['aust_node']?>&w=<?php echo $_GET['w']?>&pending=0">
-		Não pendente
-	</a>
+	(<a href="adm_main.php?section=<?php echo $_GET['section']?>&action=<?php echo $_GET['action']?>&aust_node=<?php echo $_GET['aust_node']?>&w=<?php echo $_GET['w']?>&pending=0">Não pendente</a>)
 	<?php
 } else {
 	echo 'Não pendente';
 	?>
-	<a href="adm_main.php?section=<?php echo $_GET['section']?>&action=<?php echo $_GET['action']?>&aust_node=<?php echo $_GET['aust_node']?>&w=<?php echo $_GET['w']?>&pending=1">
-		pendente
-	</a>
+	(<a href="adm_main.php?section=<?php echo $_GET['section']?>&action=<?php echo $_GET['action']?>&aust_node=<?php echo $_GET['aust_node']?>&w=<?php echo $_GET['w']?>&pending=1">pendente</a>)
 	<?php
 }
 ?>

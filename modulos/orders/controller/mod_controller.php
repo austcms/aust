@@ -75,30 +75,30 @@ class ModController extends ModsController
     public function edit(){
 
 
-				$products = $this->modulo->getStructureConfig("aust_products");
-		        $sql = "
-		                SELECT
-		                    *
-		                FROM
-		                    st_order_items
-		                WHERE
-		                    order_id='".$_GET['w']."'
-		                ";
+		$products = $this->modulo->getStructureConfig("aust_products");
+        $sql = "
+                SELECT
+                    *
+                FROM
+                    st_order_items
+                WHERE
+                    order_id='".$_GET['w']."'
+                ";
 
-		        $query = $this->modulo->connection->query($sql);
+        $query = $this->modulo->connection->query($sql);
 
-				$cartSql = $this->modulo->loadSql( array('id' => $_GET['w']) );
-				$cart = $this->connection->query($cartSql);
-				$cart = reset($cart);
-		
-				if( !empty($_GET['pending']) || is_string($_GET['pending']) ){
-					if( $_GET['pending'] == '1' || $_GET['pending'] == '0' ){
-						$sql = "UPDATE st_orders SET pending='".$_GET['pending']."' WHERE id='".$_GET['w']."'";
-						$this->connection->exec($sql);
-						$cart['pending'] = $_GET['pending'];
-					}
-				}
-		
+		$cartSql = $this->modulo->loadSql( array('Orders.id' => $_GET['w']) );
+		$cart = $this->connection->query($cartSql);
+		$cart = reset($cart);
+
+		if( isset($_GET['pending']) && is_string($_GET['pending']) ){
+			if( $_GET['pending'] == '1' || $_GET['pending'] == '0' ){
+				$sql = "UPDATE st_orders SET pending='".$_GET['pending']."' WHERE id='".$_GET['w']."'";
+				$this->connection->exec($sql);
+				$cart['pending'] = $_GET['pending'];
+			}
+		}
+
         $this->set('cart', $cart );
         $this->set('dados', $query );
         

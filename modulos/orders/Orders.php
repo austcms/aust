@@ -97,8 +97,7 @@ class Orders extends Module
 				$clientLeftJoin
                 WHERE 
 					1=1 $id
-                ORDER BY Orders.pending DESC, Orders.paid DESC, Orders.scheduled_on DESC, 
-					Orders.id DESC
+                ORDER BY Orders.id DESC, Orders.pending DESC, Orders.paid DESC, Orders.scheduled_on DESC
 				LIMIT 0,50
                 ";
 		
