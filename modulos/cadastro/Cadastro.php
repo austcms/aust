@@ -824,8 +824,9 @@ class Cadastro extends Module {
 			 * O código abaixo faz com que 'especie' seja igual a text,
 			 * enquanto os demais continuam sendo 'string'
 			 */
-			if( $value['Type'] == 'text' AND
-			 	$result[$fieldName]['especie'] == 'string' )
+			if( $value['Type'] == 'text' &&
+			 	!empty($result[$fieldName]['especie']) && 
+				$result[$fieldName]['especie'] == 'string' )
 				$result[$fieldName]['especie'] = 'text';
 		}
 
@@ -1158,7 +1159,7 @@ class Cadastro extends Module {
      * @param mixed $param contém o id ou nome da estrutura desejada
      * @return array 
      */
-    public function LeTabelaDaEstrutura($param){
+    public function LeTabelaDaEstrutura($param = array()){
 
         /**
          * $param é uma integer
