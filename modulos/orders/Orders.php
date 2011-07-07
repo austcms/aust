@@ -29,6 +29,11 @@ class Orders extends Module
 		"Orders.gateway_complete",
 		"Orders.gateway_cancelled",
 		"Orders.paid_on",
+		"Orders.freight_service",
+		"Orders.freight_value",
+		"Orders.sent",
+		"Orders.total_price",
+		"Orders.deadline_days"
 	);
 
 	public $austField = 'node_id';

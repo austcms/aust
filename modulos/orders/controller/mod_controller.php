@@ -99,6 +99,14 @@ class ModController extends ModsController
 			}
 		}
 
+		if( isset($_GET['sent']) && is_string($_GET['sent']) ){
+			if( $_GET['sent'] == '1' || $_GET['sent'] == '0' ){
+				$sql = "UPDATE st_orders SET sent='".$_GET['sent']."' WHERE id='".$_GET['w']."'";
+				$this->connection->exec($sql);
+				$cart['sent'] = $_GET['sent'];
+			}
+		}
+
         $this->set('cart', $cart );
         $this->set('dados', $query );
         

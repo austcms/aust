@@ -50,7 +50,7 @@ $counting = 1;
 foreach( $query as $dados ){
 	
 	$statusClass = 'ready';
-	if( $dados['pending'] == '1' ){
+	if( $dados['sent'] == '0' ){
 		$statusClass = 'pending';
 	}
 	if( $dados['gateway_complete'] == '0' ){
@@ -80,11 +80,11 @@ foreach( $query as $dados ){
 				<h2>Aguardando</h2>
 				Pedido não pago 
 				<?php
-			} else if( $dados['pending'] == '1' ){
+			} else if( $dados['sent'] == '0' ){
 				if( $dados['gateway_complete'] == '1' ){
 					?>
 					<h2>Pago e Pendente</h2>
-					Entrega pendente
+					Envio pendente
 					<?php
 				} else if( $dados['gateway_complete'] == '0' ){
 					?>
