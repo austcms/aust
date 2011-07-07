@@ -87,7 +87,7 @@ class ModController extends ModsController
 
         $query = $this->modulo->connection->query($sql);
 
-		$cartSql = $this->modulo->loadSql( array('Orders.id' => $_GET['w']) );
+		$cartSql = $this->modulo->loadSql( array('id' => $_GET['w']) );
 		$cart = $this->connection->query($cartSql);
 		$cart = reset($cart);
 

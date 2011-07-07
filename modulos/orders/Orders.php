@@ -67,9 +67,9 @@ class Orders extends Module
 
         if( !empty($id) ){
             if( is_array($id) ){
-                $id = " AND id IN ('".implode("','", $id)."')";
+                $id = " AND Orders.id IN ('".implode("','", $id)."')";
             } else {
-                $id = " AND id='$id'";
+                $id = " AND Orders.id='$id'";
             }
         }
 		
