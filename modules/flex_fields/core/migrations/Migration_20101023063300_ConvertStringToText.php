@@ -30,7 +30,8 @@ class Migration_20101023063300_ConvertStringToText extends Migrations
 							chave='tabela'
 						)
 					";
-			$tableName = reset( Connection::getInstance()->query($sql) );
+			$query = Connection::getInstance()->query($sql);
+			$tableName = reset( $query );
 			$tableName = $tableName['valor'];
 			
 			$describe = Connection::getInstance()->describeTable($tableName, true);
