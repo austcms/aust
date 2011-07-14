@@ -1,5 +1,5 @@
 <?php
-require_once 'PHPUnit/Framework.php';
+// require_once 'PHPUnit/Framework.php';
 
 #####################################
 require_once 'tests/config/auto_include.php';

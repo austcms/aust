@@ -1,5 +1,5 @@
 <?php
-require_once 'PHPUnit/Framework.php';
+// require_once 'PHPUnit/Framework.php';
 
 #####################################
 
@@ -35,7 +35,7 @@ class ImageTest extends PHPUnit_Framework_TestCase
 			array(
 				'name' => 'meu arquivo.jpg',
 				'type' => 'image/jpeg',
-				'tmp_name' => 'tests/test_files/test_file.gif',
+				'tmp_name' => TEST_FILES_DIR.'test_file.gif',
 				'error' => '0',
 				'size' => '7777',
 			),
@@ -58,7 +58,7 @@ class ImageTest extends PHPUnit_Framework_TestCase
 			array(
 				'name' => 'meu arquivo.jpg',
 				'type' => 'image/jpeg',
-				'tmp_name' => 'tests/test_files/test_file.gif',
+				'tmp_name' => TEST_FILES_DIR.'test_file.gif',
 				'error' => '0',
 				'size' => '7777',
 			),

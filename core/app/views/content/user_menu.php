@@ -75,7 +75,7 @@ foreach($siteQuery as $chave=>$valor){
                     unset($modInfo);
                     include(MODULES_DIR.$estruturas['tipo'].'/'.MOD_CONFIG);
 
-                    echo ''.$modInfo['nome'].'';
+                    echo ''.$modInfo['name'].'';
                 } else {
                     echo ''.$estruturas['tipo'].'';
                 }

@@ -30,15 +30,15 @@ $modInfo = array(
     /**
      * 'nome': Nome humano do módulo
      */
-    'nome' => 'Cadastro',
+    'name' => 'Flexible Fields',
     /**
      * 'className': Classe oficial do módulo
      */
-    'className' => 'Cadastro',
+    'className' => 'FlexFields',
     /**
      * 'descricao': Descrição que facilita compreender a função do módulo
      */
-    'descricao' => 'Módulo gerenciador de cadastros',
+    'description' => 'Campos flexíveis.',
     /**
      * 'estrutura': Se pode ser instalada como estrutura (Textos podem)
      */

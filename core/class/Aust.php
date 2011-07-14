@@ -85,7 +85,7 @@ class Aust {
 
         if(is_file(MODULES_DIR.$modulo.'/config.php')) {
             include(MODULES_DIR.$modulo.'/config.php');
-            $tipo_legivel = $modInfo['nome'];
+            $tipo_legivel = $modInfo['name'];
         } else {
             $tipo_legivel = NULL;
         }
@@ -647,7 +647,7 @@ class Aust {
         $tipo = $query[0]['tipo'];
         if(is_file(MODULES_DIR.$tipo.'/config.php')) {
             include(MODULES_DIR.$tipo.'/config.php');
-            return $modInfo['nome'];
+            return $modInfo['name'];
         } else {
             return NULL;
         }

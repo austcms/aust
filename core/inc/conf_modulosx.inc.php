@@ -344,9 +344,9 @@ if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'):
                          * Tem configurador?
                          */
                         if(is_file(MODULES_DIR.$modulo['path'].'/configurar_modulo.php')){
-                            echo '<a href="adm_main.php?section=conf_modulos&action=configurar_modulo&modulo='.$modulo['path'].'" style="text-decoration: none;">'.$modulo['config']['nome'].'</a>';
+                            echo '<a href="adm_main.php?section=conf_modulos&action=configurar_modulo&modulo='.$modulo['path'].'" style="text-decoration: none;">'.$modulo['config']['name'].'</a>';
                         } else {
-                            echo $modulo['config']['nome'];
+                            echo $modulo['config']['name'];
                         }
                         ?>
                         </strong>

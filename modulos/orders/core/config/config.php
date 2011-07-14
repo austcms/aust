@@ -29,7 +29,7 @@ $modInfo = array(
     /**
      * 'nome': Nome humano do módulo
      */
-    'nome' => 'Orders',
+    'name' => 'Orders',
     /**
      * 'className': Classe oficial do módulo
      */
@@ -37,7 +37,7 @@ $modInfo = array(
     /**
      * 'descricao': Descrição que facilita compreender a função do módulo
      */
-    'descricao' => 'Módulo gerenciador de pedidos e transações.',
+    'description' => 'Módulo gerenciador de pedidos e transações.',
     /**
      * 'estrutura': Se pode ser instalada como estrutura (Textos podem)
      */

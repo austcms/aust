@@ -1,5 +1,5 @@
 <?php
-require_once 'PHPUnit/Framework.php';
+// require_once 'PHPUnit/Framework.php';
 
 #####################################
 require_once 'tests/config/auto_include.php';
@@ -7,19 +7,19 @@ require_once 'core/class/SQLObject.class.php';
 require_once 'core/config/variables.php';
 #####################################
 
-class CadastroTest extends PHPUnit_Framework_TestCase
+class FlexFieldsTest extends PHPUnit_Framework_TestCase
 {
 
     public function setUp(){
 
-		installModule('cadastro');
+		installModule('flex_fields');
     
         /*
          * MÓDULOS ATUAL
          *
          * Diretório do módulo
          */
-        $this->mod = 'cadastro';
+        $this->mod = 'flex_fields';
 
         /*
          * Informações de conexão com banco de dados
@@ -323,7 +323,7 @@ class CadastroTest extends PHPUnit_Framework_TestCase
 	
 	function testAustNode(){
 		$_GET["aust_node"] = 777;
-		$obj = new Cadastro();
+		$obj = new FlexFields();
 		$obj->setAustNode(777);
 		$this->assertEquals(777, $obj->austNode);
 	}

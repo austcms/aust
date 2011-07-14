@@ -30,7 +30,7 @@ $modInfo = array(
     /**
      * 'nome': Nome humano do módulo
      */
-    'nome' => 'Imagens',
+    'name' => 'Imagens',
     /**
      * 'className': Classe oficial do módulo
      */
@@ -38,7 +38,7 @@ $modInfo = array(
     /**
      * 'descricao': Descrição que facilita compreender a função do módulo
      */
-    'descricao' => 'Módulo gerenciador de imagens e banners',
+    'description' => 'Módulo gerenciador de imagens e banners',
     /**
      * 'estrutura': Se pode ser instalada como estrutura (Textos podem)
      */

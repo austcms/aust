@@ -59,7 +59,7 @@ $sites = Aust::getInstance()->getStructures();
                          */
                         include(MODULES_DIR.$structure['tipo'].'/'.MOD_CONFIG);
 
-                        $type = $modInfo['nome'];
+                        $type = $modInfo['name'];
                     } else {
                         $type = $structure['tipo'];
                     }

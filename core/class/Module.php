@@ -1172,7 +1172,6 @@ class Module extends ActiveModule
          * Load Migrations
          */
         $migrationsMods = new MigrationsMods( $this->conexao );
-        //$migrationsStatus = MigrationsMods::getInstance()->status();
 
         if( is_array($params) ){
             
@@ -1182,7 +1181,6 @@ class Module extends ActiveModule
                 /**
                  * Carrega arquivos do módulo atual
                  */
-                //include($pastas.'/index.php');
                 if( !is_file($pastas.'/'.MOD_CONFIG) )
                     continue; // cai fora se não tem config
                 
@@ -1923,7 +1921,6 @@ class Module extends ActiveModule
     function leModulos() {
 
         $modulos = Connection::getInstance()->query("SELECT * FROM modulos");
-        //pr($modulos);
         return $modulos;
 
         $diretorio = MODULES_DIR; // pega o endereço do diretório
@@ -1931,11 +1928,10 @@ class Module extends ActiveModule
             if (is_dir ($pastas)) {
                 if( is_file($pastas.'/'.MOD_CONFIG )) {
                     if( include($pastas.'/'.MOD_CONFIG )) {
-                    //include_once($pastas.'/index.php');
-                        if(!empty($modInfo['nome'])) {
+                        if(!empty($modInfo['name'])) {
                             $str = $result_format;
-                            $str = str_replace("&%nome", $modInfo['nome'] , $str);
-                            $str = str_replace("&%descricao", $modInfo['descricao'], $str);
+                            $str = str_replace("&%nome", $modInfo['name'] , $str);
+                            $str = str_replace("&%descricao", $modInfo['description'], $str);
                             $str = str_replace("&%pasta", str_replace($diretorio,"",$pastas), $str);
                             $str = str_replace("&%diretorio", str_replace($diretorio,"",$pastas), $str);
                             echo $str;

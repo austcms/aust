@@ -1,5 +1,5 @@
 <?php
-require_once 'PHPUnit/Framework.php';
+// require_once 'PHPUnit/Framework.php';
 require_once 'tests/config/auto_include.php';
 require_once 'core/class/SQLObject.class.php';
 require_once 'core/config/variables.php';

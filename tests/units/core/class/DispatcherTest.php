@@ -1,5 +1,5 @@
 <?php
-require_once 'PHPUnit/Framework.php';
+// require_once 'PHPUnit/Framework.php';
 require_once 'tests/config/auto_include.php';
 
 class DispatcherTest extends PHPUnit_Framework_TestCase

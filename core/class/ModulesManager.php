@@ -518,7 +518,7 @@ class ModulesManager
                     modulos
                         (tipo,chave,valor,pasta,nome,descricao,embed,embedownform,somenteestrutura,autor)
                 VALUES
-                    ('$tipo','$chave','$valor','$pasta','".$modInfo['nome']."','".$modInfo['descricao']."','".$modInfo['embed']."','".$modInfo['embedownform']."','".$modInfo['somenteestrutura']."','$autor')
+                    ('$tipo','$chave','$valor','$pasta','".$modInfo['name']."','".$modInfo['description']."','".$modInfo['embed']."','".$modInfo['embedownform']."','".$modInfo['somenteestrutura']."','$autor')
             ";
 
         if(Connection::getInstance()->exec($sql, 'CREATE_TABLE')) {
@@ -544,11 +544,10 @@ class ModulesManager
             if (is_dir ($pastas)) {
                 if( is_file($pastas.'/'.MOD_CONFIG )) {
                     if( include($pastas.'/'.MOD_CONFIG )) {
-                    //include_once($pastas.'/index.php');
-                        if(!empty($modInfo['nome'])) {
+                        if(!empty($modInfo['name'])) {
                             $str = $result_format;
-                            $str = str_replace("&%nome", $modInfo['nome'] , $str);
-                            $str = str_replace("&%descricao", $modInfo['descricao'], $str);
+                            $str = str_replace("&%nome", $modInfo['name'] , $str);
+                            $str = str_replace("&%descricao", $modInfo['description'], $str);
                             $str = str_replace("&%pasta", str_replace($diretorio,"",$pastas), $str);
                             $str = str_replace("&%diretorio", str_replace($diretorio,"",$pastas), $str);
                             echo $str;

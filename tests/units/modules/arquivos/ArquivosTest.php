@@ -1,5 +1,5 @@
 <?php
-require_once 'PHPUnit/Framework.php';
+// require_once 'PHPUnit/Framework.php';
 
 #####################################
 require_once 'tests/config/auto_include.php';
@@ -86,7 +86,7 @@ class ArquivosTest extends PHPUnit_Framework_TestCase
      */
     function testUploadFile(){
 
-        $fileDir[] = 'tests/test_files/test_file.gif';
+        $fileDir[] = TEST_FILES_DIR.'test_file.gif';
         $files = array(
             'file1' => array(
                 'name' => 'up_'.basename($fileDir[0]),

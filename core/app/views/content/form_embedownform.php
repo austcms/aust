@@ -60,7 +60,7 @@
 
                         if(empty($titulo)){
                             include($valor['pasta'].'/config.php');
-                            $titulo = $modInfo['nome'];
+                            $titulo = $modInfo['name'];
                         }
 
                         ?>
