@@ -61,6 +61,24 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 			)",
 			'CREATE TABLE'
 		);
+
+		$this->obj->connection->exec(
+			"CREATE TABLE table_for_unittests_files
+			(
+				id int auto_increment,
+				maintable_id int,
+				type varchar(80),
+				title varchar(250),
+				description text,
+				reference varchar(120),
+				reference_table varchar(120),
+				reference_field varchar(120),
+				categoria_id int,
+				admin_id int,
+				PRIMARY KEY (id)
+			)",
+			'CREATE TABLE'
+		);
 		
 		$this->obj->connection->exec(
 			"INSERT INTO cadastros_conf
@@ -77,18 +95,59 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 				('estrutura','table_images','table_for_unittests_images', '7777')
 			"
 		);
+
+		$this->obj->connection->exec(
+			"INSERT INTO cadastros_conf
+				(tipo,chave,valor,categorias_id)
+				VALUES
+				('estrutura','table_files','table_for_unittests_files', '7777')
+			"
+		);
+		$this->obj->connection->exec(
+			"INSERT INTO cadastros_conf
+				(tipo,chave,valor,especie,categorias_id)
+				VALUES
+				('campo','file','File', 'files','7777')
+			"
+		);
 		
 	}
 	
 	function destroyEnvironment(){
 		$this->obj->connection->exec('DROP TABLE table_for_unittests', 'CREATE TABLE');
 		$this->obj->connection->exec('DROP TABLE table_for_unittests_images', 'CREATE TABLE');
+		$this->obj->connection->exec('DROP TABLE table_for_unittests_files', 'CREATE TABLE');
 		
 		$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='7777'");
 		$this->obj->connection->exec("DELETE FROM config WHERE local='7777'");
 	}
 
 
+	function testGetFiles(){
+		$this->createEnvironment();
+		$this->obj->connection->exec(
+			"INSERT INTO table_for_unittests_files
+				(maintable_id,title,categoria_id,reference_field, type)
+				VALUES
+				('777','title', '7777', 'file', 'main')
+			"
+		);
+		$params = array(
+			'w' => '777',
+			'field' => 'file',
+			'austNode' => '7777',
+			'tableFiles' => 'table_for_unittests_files'
+		);
+
+		$files = $this->obj->getFiles($params);
+		$this->assertType('array', $files);
+		$notEmpty = !empty($files);
+		$this->assertTrue($notEmpty);
+		$this->assertEquals('777', $files[0]['maintable_id']);
+		$this->assertEquals('file', $files[0]['reference_field']);
+		
+		$this->destroyEnvironment();
+	}
     /*
      * TÍTULOS DIVISORES
      */

@@ -67,7 +67,7 @@ define("TMP_DIR", 						THIS_TO_BASEURL."tpm/");
      * Diretório dos módu1os
      */
 
-	define('MODULES_DIR', 				THIS_TO_BASEURL."modulos/");
+	define('MODULES_DIR', 				THIS_TO_BASEURL."modules/");
 	define('MODULOS_DIR', 				MODULES_DIR);
     define('INC_DIR', 					CORE_DIR.'inc/');
     

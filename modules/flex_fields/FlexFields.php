@@ -40,12 +40,6 @@ class FlexFields extends Module {
 
     function __construct($param = ''){
 
-
-        /**
-         * A classe Pai inicializa algumas varíaveis importantes. A linha a
-         * seguir assegura-se de que estas variáveis estarão presentes nesta
-         * classe.
-         */
         parent::__construct($param);
     }
 
@@ -84,7 +78,7 @@ class FlexFields extends Module {
 		$austNode = $params['austNode'];
 		$field = $params['field'];
 		
-		$tableFiles = $this->configurations['estrutura']['table_files']['valor'];
+		$tableFiles = (empty($params['tableFiles'])) ? $this->configurations['estrutura']['table_files']['valor'] : $params["tableFiles"];
 		
 		$sql = "SELECT
 					*
@@ -97,7 +91,6 @@ class FlexFields extends Module {
 					type='main'
 				ORDER BY t.id DESC
 				";
-
 		$query = Connection::getInstance()->query($sql);
 		
 		return $query;
