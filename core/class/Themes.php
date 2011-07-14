@@ -101,7 +101,7 @@ class Themes {
 
         $tmp = Connection::getInstance()->query($sql);
 
-        if(empty($tmp[0]['valor']))
+        if(empty($tmp[0]['valor']) || !is_dir(THEMES_DIR.$tmp[0]['valor']))
             return Registry::read('defaultTheme');
 
         return $tmp[0]['valor'];

@@ -237,118 +237,57 @@
 
         </div>
     </div>
-    <?php
-    /*
-     * DEBUG
-     */
-    ?>
-    <div id="link_bottom">
-        <div class="links_admin">
+    
+        
+</div>
+
+<?php
+/*
+ * DEBUG
+ */
+?>
+<div id="footer_admin_dashboard">
+    <div class="links_admin">
+        <?php
+        if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'){
+            ?>
+            <div class="borda"></div>
+            <br />
+                <span class="para_webmaster">Para Webmasters:</span><a href="adm_main.php?section=conf_modulos" class="restrito">Configurar Módulos</a>
+                <a href="adm_main.php?section=categorias" class="restrito">Categorias</a>
+                <a href="adm_main.php?section=import_export_structures" class="restrito">Importar/Exportar Estruturas</a>
             <?php
-            if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'){
-                ?>
-                <div class="borda"></div>
-                <br />
-                    <span class="para_webmaster">Para Webmasters:</span><a href="adm_main.php?section=conf_modulos" class="restrito">Configurar Módulos</a>
-                    <a href="adm_main.php?section=categorias" class="restrito">Categorias</a>
-                    <a href="adm_main.php?section=import_export_structures" class="restrito">Importar/Exportar Estruturas</a>
-                <?php
-                if( Registry::read('debugLevel') > 1 ){
+            if( Registry::read('debugLevel') > 1 ){
 
-                    /*
-                     * CACHE
-                     */
-                    $cacheDirs = Registry::read('permission_needed_dirs');
-                    foreach( $cacheDirs as $dir ){
-                        if( !is_writable($dir) OR
-                            !is_readable($dir))
-                        {
-                            $cacheError[] = $dir;
-                        }
+                /*
+                 * CACHE
+                 */
+                $cacheDirs = Registry::read('permission_needed_dirs');
+                foreach( $cacheDirs as $dir ){
+                    if( !is_writable($dir) OR
+                        !is_readable($dir))
+                    {
+                        $cacheError[] = $dir;
                     }
-                    if( !empty($cacheError) ){
+                }
+                if( !empty($cacheError) ){
 
-                        ?>
-                        <table class="debug">
-                        <tr class="header">
-                            <td>
-                            <strong>Cache</strong>
-                            </td>
-                        </tr>
-                        <?php
-                        foreach( $cacheError as $dir ){
-                            ?>
-                            <tr class="list">
-                                <td>
-                                <span>
-                                <strong><?php echo $dir ?></strong>
-                                com permissão negada.
-                                </span>
-                                </td>
-                            </tr>
-                            <?php
-                        }
-                        ?>
-                        </table>
-                        <?php
-                    }
                     ?>
-
                     <table class="debug">
                     <tr class="header">
-                        <td class="sql">
-                        <strong>SQLs</strong>
-                        </td>
-                        <td class="result">
-                        <strong>Results</strong>
-                        </td>
-                        <td class="time">
-                        <strong>Seconds</strong>
+                        <td>
+                        <strong>Cache</strong>
                         </td>
                     </tr>
                     <?php
-
-                    $debugVars = Registry::read('debug');
-                    foreach( $debugVars as $vars ){
-                        $sqlCommands = array(
-                            "SELECT", "UPDATE", "DELETE", "INSERT", "REPLACE",
-                            "FROM", "ASC", "WHERE", "ORDER BY", "LIMIT", "TABLES",
-                            "LEFT JOIN", "DISTINCT", "COUNT", "ON", "DESCRIBE", "SHOW",
-                            "INTO", "VALUES", "SET", "ALTER",
-                            "IN", "NOT IN", " OR ", " AND ", " AS ", "DESC",
-                            " and ", " as "
-                        );
-                        $boldSqlCommands = array();
-                        foreach( $sqlCommands as $valor ){
-                            $boldSqlCommands[] = "<strong>".$valor."</strong>";
-                        }
-                        $sql = str_replace($sqlCommands, $boldSqlCommands, $vars['sql'] );
-
-                        /*
-                         * Result
-                         */
-                        $errorClass = '';
-                        if( is_string($vars['result']) ){
-                            $errorClass = 'error';
-                        }
+                    foreach( $cacheError as $dir ){
                         ?>
-                        <tr class="list <?php echo $errorClass; ?>">
-                        <td class="sql "  valign="top">
-                            <?php echo $sql; ?>
-                        </td>
-                        <td class="result" valign="top">
-                            <?php echo $vars['result']; ?>
-                        </td>
-                        <td class="time" valign="top">
-                            <?php echo substr(number_format($vars['time'], 4, '.', ''), 0, 5); ?>
-                        </td>
-                        </tr>
-                        <tr style="height: 1px;">
-                            <td colspan="3" style="font-size: 0px; background: #eeeeee;">
-                            </td>
-                        </tr>
-                        <tr style="height: 5px;">
-                            <td colspan="3" style="font-size: 0px;">
+                        <tr class="list">
+                            <td>
+                            <span>
+                            <strong><?php echo $dir ?></strong>
+                            com permissão negada.
+                            </span>
                             </td>
                         </tr>
                         <?php
@@ -357,17 +296,75 @@
                     </table>
                     <?php
                 }
+                ?>
+
+                <table class="debug">
+                <tr class="header">
+                    <td class="sql">
+                    <strong>SQLs</strong>
+                    </td>
+                    <td class="result">
+                    <strong>Results</strong>
+                    </td>
+                    <td class="time">
+                    <strong>Seconds</strong>
+                    </td>
+                </tr>
+                <?php
+
+                $debugVars = Registry::read('debug');
+                foreach( $debugVars as $vars ){
+                    $sqlCommands = array(
+                        "SELECT", "UPDATE", "DELETE", "INSERT", "REPLACE",
+                        "FROM", "ASC", "WHERE", "ORDER BY", "LIMIT", "TABLES",
+                        "LEFT JOIN", "DISTINCT", "COUNT", "ON", "DESCRIBE", "SHOW",
+                        "INTO", "VALUES", "SET", "ALTER",
+                        "IN", "NOT IN", " OR ", " AND ", " AS ", "DESC",
+                        " and ", " as "
+                    );
+                    $boldSqlCommands = array();
+                    foreach( $sqlCommands as $valor ){
+                        $boldSqlCommands[] = "<strong>".$valor."</strong>";
+                    }
+                    $sql = str_replace($sqlCommands, $boldSqlCommands, $vars['sql'] );
+
+                    /*
+                     * Result
+                     */
+                    $errorClass = '';
+                    if( is_string($vars['result']) ){
+                        $errorClass = 'error';
+                    }
+                    ?>
+                    <tr class="list <?php echo $errorClass; ?>">
+                    <td class="sql "  valign="top">
+                        <?php echo $sql; ?>
+                    </td>
+                    <td class="result" valign="top">
+                        <?php echo $vars['result']; ?>
+                    </td>
+                    <td class="time" valign="top">
+                        <?php echo substr(number_format($vars['time'], 4, '.', ''), 0, 5); ?>
+                    </td>
+                    </tr>
+                    <tr style="height: 1px;">
+                        <td colspan="3" style="font-size: 0px; background: #eeeeee;">
+                        </td>
+                    </tr>
+                    <tr style="height: 5px;">
+                        <td colspan="3" style="font-size: 0px;">
+                        </td>
+                    </tr>
+                    <?php
+                }
+                ?>
+                </table>
+                <?php
             }
-            ?>
-        </div>
+        }
+        ?>
     </div>
-        
-    <div id="bottom">
-    
-    </div>
-
 </div>
-
 
 <div id="mask">
 </div>

@@ -49,6 +49,19 @@ $sites = Aust::getInstance()->getStructures();
                  */
                 foreach( $site['Structures'] as $structure ):
 
+					if( !is_dir(MODULES_DIR.$structure['tipo']."/") ){
+						?>
+						<tr class="list">
+	                        <td class="title" colspan="1">
+	                            <span><?php echo $structure['nome'] ?></span>
+	                        </td>
+	                        <td class="options" colspan="2">
+	                            <span><em>(módulo com problemas, contacte o administrador)</em></span>
+	                        </td>
+						</tr>	
+						<?php
+						continue;
+					}
                     /*
                      * Use o comando 'continue' para pular o resto do loop atual
                      */
@@ -105,7 +118,7 @@ $sites = Aust::getInstance()->getStructures();
                     </tr>
                     <?php endforeach; ?>
                     <tr class="footer">
-                        <td colspan="4"></td>
+                        <td colspan="3"></td>
                     </tr>
                     </table>
 

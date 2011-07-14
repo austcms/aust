@@ -14,55 +14,56 @@ if( !empty($_GET['current_theme']) ){
     }
 }
 
-//$c = $widgets->getInstalledWidgets($params);
-
 ?>
 <h2>
     Aparência
 </h2>
 <p>
-    Personalize o seu gerenciador com os temas abaixo.
+    Personalize o seu gerenciador com os temas abaixo. Outros usuários não serão afetados com sua alteração.
 </p>
-<p>
-    É simples e rápido. Escolha o tema e aperte no botão instalar.
-</p>
-<p style="font-size: 0.9em; color: silver;">
-    Em breve mais temas.
-</p>
-<?php
-    $mensagem = array(
-        'classe' => 'sucesso',
-        'mensagem' => '<strong>Sucesso: </strong> Tema Instalado!',
+
+<div id="themes">
+
+	<?php
+	    $mensagem = array(
+	        'classe' => 'sucesso',
+	        'mensagem' => '<strong>Sucesso: </strong> Tema Instalado!',
         
-    );
+	    );
 
-    if( !empty($_GET['status']) && $_GET['status'] == 'installed' ){
-        EscreveBoxMensagem($mensagem);
-    }
-    
-    foreach( Themes::getInstance()->getThemes() as $theme ){
-    ?>
+	    if( !empty($_GET['status']) && $_GET['status'] == 'installed' ){
+	        EscreveBoxMensagem($mensagem);
+	    }
+    	$i = 0;
+	    foreach( Themes::getInstance()->getThemes() as $theme ){
+			$i++;
+	    	?>
 
-    <div id="themes">
-        <div class="theme">
+	        <div class="theme">
 
-            <div class="theme_name">
-                <h3> <?php echo $theme['name']; ?> </h3>
-            </div>
+	            <div class="theme_name">
+	                <h3> <?php echo $theme['name']; ?> </h3>
+	            </div>
 
-            <div class="screenshot">
-                <?php echo '<img src="'.$theme['screenshotFile'].'" />'; ?>
-            </div>
-            <div class="instalar">
-                <a href="adm_main.php?section=themes&current_theme=<?php echo $theme['themeName']?>"></a>
-            </div>
-        </div>
-    </div>
+	            <div class="screenshot">
+	                <?php echo '<img src="'.$theme['screenshotFile'].'" />'; ?>
+	            </div>
+	            <div class="instalar">
+	                <a href="adm_main.php?section=themes&current_theme=<?php echo $theme['themeName']?>"></a>
+	            </div>
+	        </div>
 
-    <?php
-    }
+	    	<?php
+			if( $i >= 3 ){
+				?>
+				<br clear="all" />
+				<?php
+				$i = 0;
+			}
+	    }
 
-?>
+	?>
+</div>
 <br clear="all" />
 <p>
     <a href="adm_main.php"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>

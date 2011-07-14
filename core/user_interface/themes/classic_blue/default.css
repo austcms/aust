@@ -1,7 +1,7 @@
 /*
 Name: Default
-Author:
-Description:
+Author: Alexandre de Oliveira
+Description: Official theme
 
 */
 
@@ -42,11 +42,18 @@ div#navegacao {
 }
     div#menu ul li a {
         background: #efefef;
+				border-bottom: 1px solid #e8e8e8;
+				-moz-border-radius-topleft: 3px;
+				-moz-border-radius-topright: 3px;
+				-webkit-border-topleft-radius: 3px;
+				-webkit-border-topright-radius: 3px;
     }
         div#menu ul li a:hover {
             background: white;
+						border-bottom: 1px solid #fff;
         }
-	div#menu ul li a.selecionado {
+		div#menu ul li a.selecionado {
+				border-bottom: 1px solid #fff;
         background: white;
         color: black;
         font-weight: bold;
