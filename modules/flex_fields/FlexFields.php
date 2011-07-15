@@ -966,18 +966,22 @@ class FlexFields extends Module {
         /**
          * Se $categorias estiver vazio (nunca deverá acontecer)
          */
-        if(!empty($categorias)){
-            $order = ' ORDER BY id ASC';
-            $where = ' WHERE ';
-            $c = 0;
-            foreach($categorias as $key=>$valor){
-                if($c == 0)
-                    $where = $where . 'node_id=\''.$key.'\'';
-                else
-                    $where = $where . ' OR node_id=\''.$key.'\'';
-                $c++;
-            }
+        if( empty($categorias) ){
+			$categorias = array($this->austNode() => '0');
+		}
+        
+		$order = ' ORDER BY id ASC';
+        $where = ' WHERE ';
+        $c = 0;
+        foreach($categorias as $key=>$valor){
+            if($c == 0)
+                $where = $where . 'node_id=\''.$key.'\'';
+            else
+                $where = $where . ' OR node_id=\''.$key.'\'';
+            $c++;
         }
+
+
         /**
          *  SQL para verificar na tabela CADASTRO_CONF quais campos existem
          */
@@ -991,7 +995,7 @@ class FlexFields extends Module {
                             id=cat
                     ) AS node
                 FROM
-                    ".$this->config["arquitetura"]["table"]." AS conf ".
+                    flex_fields_config AS conf ".
                 $where.
                 $order;
 
@@ -1003,7 +1007,7 @@ class FlexFields extends Module {
         /**
          * Configurações
          */
-        $tP = "tabelaPrincipal";
+        $tP = "mainTable";
         /**
          * Monta algumas arrays para montar um novo SQL definitivo
          *
@@ -1109,13 +1113,26 @@ class FlexFields extends Module {
 
             } else {
                 $mostrar = implode(",", $mostrar["chave"]).",";
-
             }
-			$fields = "".$tP.".id,
-			            $mostrar
-			            ".implode(", ", $leftJoinCampos).$virgula."
-			            ".$tP.".approved AS des_approved";
 
+			/* fields */
+			if( !empty($param['fields']) && $param['fields'] == "*" ){
+				$fields = $tP.".*";
+			} else {
+				$fields = "".$tP.".id,
+				            $mostrar
+				            ".implode(", ", $leftJoinCampos).$virgula."
+				            ".$tP.".approved AS des_approved";
+			}
+			
+			/* order */
+			if( !empty($param['order']) ){
+				$order = $param['order'];
+			} else {
+				$order = $tP.".id DESC";
+			}
+			
+			/* conditions */
             $conditions = "    
                     FROM
                         ".$est["tabela"][0]." AS ".$tP."
@@ -1125,15 +1142,26 @@ class FlexFields extends Module {
                         1=1
                         $searchQuery
                     ORDER BY
-                        ".$tP.".id DESC
+                        $order
                     ";
 
-			// total rows
+			/* total rows */
 			$countSql = "SELECT count(*) as rows ".$conditions;
 			$this->totalRows = $this->_getTotalRows($countSql);
 			
-			$sql = "SELECT $fields ".$conditions.$this->_limitSql(array('page'=>$this->page()));
+			$sql = "SELECT $fields ".$conditions;
+			/* limit */
+			$limit = null;
+			if( !empty($param['limit']) )
+				$limit = $param['limit'];
 			
+			$sql.= $this->_limitSql(
+				array(
+					'page' => $this->page(),
+					'limit' => $limit
+				)
+			);
+
         } elseif( $metodo == "edit" ){
             $sql = "SELECT
                         id, ".implode(",", $campos["chave"])."

@@ -98,6 +98,66 @@ class Fixture {
 		Connection::getInstance()->exec($sql);
 	}
 	
+	public function createApiData(){
+		$this->destroy();
+		installModule('flex_fields');
+		
+        $modelName = 'FlexFieldsSetup';
+        $modDir = 'flex_fields';
+        $mod = 'FlexFields';
+        include_once MODULES_DIR.$modDir.'/'.$mod.'.php';
+        include_once MODULES_DIR.$modDir.'/'.MOD_MODELS_DIR.$modelName.'.php';
+        
+        $flexFieldsSetup = new $modelName;
+        $flexFields = new $mod;
+
+		Connection::getInstance()->query("INSERT INTO categorias (nome,classe) VALUES ('Website777','categoria-chefe')");
+		$lastInsert = Connection::getInstance()->lastInsertId();
+		
+		$params = array(
+            'name' => 'News',
+            'father' => $lastInsert,
+            'class' => 'estrutura',
+            'type' => 'flex_fields',
+            'author' => 1,
+			'fields' => array(
+				array(
+					'name' => 'Title',
+					'type' => 'string',
+					'description' => 'Description',
+				),
+				array(
+					'name' => 'Text',
+					'type' => 'text',
+					'description' => 'Description',
+				),
+				array(
+					'name' => 'Relational 1-n-1',
+					'type' => 'relational_onetoone',
+					'description' => 'haha777',
+					'refTable' => 'ref_table',
+					'refField' => 'ref_field',
+				),
+				array(
+					'name' => 'Relational 1-to-n',
+					'type' => 'relational_onetomany',
+					'description' => 'haha777',
+					'refTable' => 'ref_table',
+					'refField' => 'ref_field',
+				),
+			),
+			'options' => array(
+				'approval' => '',
+				'pre_password' => '',
+				'description' => '',
+			),
+			
+		);
+		
+		$result = $flexFieldsSetup->createStructure($params);
+		return $result;
+	}
+	
 	static function getInstance(){
         static $instance;
 

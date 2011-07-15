@@ -293,8 +293,10 @@ class Module extends ActiveModule
          */
         elseif( is_array($param) ){
 			
-           	$austNode = array($param['austNode']=>'');
-            $paramForLoadSql['austNode'] = array($param['austNode']=>'');
+			if( !empty($param['austNode']) )
+           		$austNode = array($param['austNode']=>'');
+			
+            $paramForLoadSql = $param;
         }
         /*
          * Se $params é um número, significa que é um número
@@ -304,6 +306,9 @@ class Module extends ActiveModule
             $paramForLoadSql['id'] = $param;
 
         }
+
+		if( empty($austNode) )
+			$austNode = $this->austNode();
 
 		// counts rows
 		$this->totalRows = $this->_getTotalRows($paramForLoadSql);

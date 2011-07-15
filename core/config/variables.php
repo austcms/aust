@@ -112,6 +112,7 @@ define("TMP_DIR", 						THIS_TO_BASEURL."tpm/");
  * Classes
  */
 	define("CLASS_DIR", 				CORE_DIR.'class/');
+	define("API_CLASS_DIR", 			CLASS_DIR.'api/');
 	define("CLASS_LOADER", 				CLASS_DIR.'_autoload.php');
 	define("CLASS_FILE_SUFIX", 			".class");
 

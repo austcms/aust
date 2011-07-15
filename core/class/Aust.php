@@ -35,6 +35,30 @@ class Aust {
         return $instance[0];
     }
 
+	function getStructureIdByName($string){
+		$string = strtolower($string);
+		$sql = "SELECT id
+				FROM categorias
+				WHERE
+					lower(nome) LIKE '$string' AND
+					classe = 'estrutura'
+				";
+		$query = Connection::getInstance()->query($sql);
+		if( empty($query) )
+			return false;
+		
+		$result = array();
+		if( count($query) == 1){
+			$result = reset($query);
+			$result = array($result["id"]);
+		} else {
+			foreach( $query as $record ){
+				$result[] = $record['id'];
+			}
+		}
+		return $result;
+	}
+
 	/**
 	 * getStructureInstance()
 	 *

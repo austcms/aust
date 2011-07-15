@@ -35,6 +35,8 @@ function autoload($className) {
         require 'core/class/helpers/'.$className.'.php';
     elseif( is_file('core/class/helpers/'.$className.'.class.php') )
         require 'core/class/helpers/'.$className.'.class.php';
+    elseif( is_file('core/class/api/'.$className.'.php') )
+        require 'core/class/api/'.$className.'.php';
     else
         require 'core/class/'.$className.'.class.php';
 }

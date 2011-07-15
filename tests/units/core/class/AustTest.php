@@ -128,6 +128,38 @@ class AustTest extends PHPUnit_Framework_TestCase
 		// TEST #2
 		$this->assertFalse( $this->obj->create( array() ) );
 	}
+	
+	function testGetStructureIdByName(){
+		$this->obj->connection->query("INSERT INTO categorias (nome,classe) VALUES ('TestFather777','categoria')");
+		$lastInsert = $this->obj->connection->lastInsertId();
+		
+	    $params = array(
+	        'father' => $lastInsert,
+	        'name' => 'Football',
+	        'description' => 'A Football section',
+	        'class' => 'estrutura',
+	        'type' => 'flex_fields',
+	        'author' => '1',
+	    );
+		
+		$id = $this->obj->create($params);
+		$result = $this->obj->getStructureIdByName("Football");
+		$this->assertArrayHasKey("0", $result);
+		$this->assertEquals($id, $result[0]);
 
+		$secondId = $this->obj->create($params);
+		$secondResult = $this->obj->getStructureIdByName("Football");
+		$this->assertArrayHasKey("0", $secondResult);
+		$this->assertArrayHasKey("1", $secondResult);
+		$this->assertTrue(in_array($id, $secondResult));
+		$this->assertTrue(in_array($secondId, $secondResult));
+
+		$secondResult = $this->obj->getStructureIdByName("football");
+		$this->assertArrayHasKey("0", $secondResult);
+		$this->assertArrayHasKey("1", $secondResult);
+		$this->assertTrue(in_array($id, $secondResult));
+		$this->assertTrue(in_array($secondId, $secondResult));
+
+	}
 }
 ?>
