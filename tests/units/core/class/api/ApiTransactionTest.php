@@ -9,18 +9,9 @@ class ApiTransactionTest extends PHPUnit_Framework_TestCase
         $this->obj = new ApiTransaction();
     }
 
-    function testAskVersionJson(){
-		$params = array(
-			'data_format' => 'json',
-			'version' => 'true'
-		);
-		$return = $this->obj->perform($params);
-		$this->assertEquals('{"result":"0.0.1"}', $return);
-    }
-	
-	function testGetData(){
+	function createContent(){
 		Fixture::getInstance()->createApiData();
-		
+		Connection::getInstance()->exec('DELETE FROM news');
 		$sql = "INSERT INTO news
 					(title, text)
 					VALUES
@@ -35,6 +26,20 @@ class ApiTransactionTest extends PHPUnit_Framework_TestCase
 						)
 				";
 		Connection::getInstance()->exec($sql);
+	}
+	
+    function testAskVersionJson(){
+		$params = array(
+			'data_format' => 'json',
+			'version' => 'true'
+		);
+		$return = $this->obj->perform($params);
+		$this->assertEquals('{"result":"0.0.1"}', $return);
+    }
+	
+	// returns Array
+	function testGetData(){
+		$this->createContent();
 		
 		$query = array(
 			'query' => 'News',
@@ -47,6 +52,52 @@ class ApiTransactionTest extends PHPUnit_Framework_TestCase
 		$this->assertType('array', $return);
 		$this->assertEquals(2, count($return));
 		$this->assertEquals('Amazon Takes On California', $return[0]['title']);
+
+		$query = array(
+			'query' => 'News',
+			'order' => 'id+desc',
+			'limit' => 4,
+			'fields' => '*'
+		);
+
+		$return = $this->obj->getData($query);
+		$this->assertType('array', $return);
+		$this->assertEquals(3, count($return));
+		$this->assertEquals('Google+ Improves on Facebook', $return[0]['title']);
+		
+		
+	}
+
+	// returns Array
+	function testPerform(){
+		$this->createContent();
+		$query = array(
+			'query' => 'News',
+			'order' => 'title;id',
+			'limit' => 2,
+			'fields' => '*'
+		);
+
+		$return = $this->obj->perform($query);
+		$this->assertType('string', $return);
+		$return = json_decode($return, true);
+		$return = $return['result'];
+		$this->assertEquals(2, count($return));
+		$this->assertEquals('Amazon Takes On California', $return[0]['title']);
+
+		$query = array(
+			'query' => 'News',
+			'order' => 'id+desc',
+			'limit' => 4,
+			'fields' => '*'
+		);
+
+		$return = $this->obj->perform($query);
+		$this->assertType('string', $return);
+		$return = json_decode($return, true);
+		$return = $return['result'];
+		$this->assertEquals(3, count($return));
+		$this->assertEquals('Google+ Improves on Facebook', $return[0]['title']);
 		
 		
 	}

@@ -22,13 +22,8 @@ class ApiTransaction {
 		if( array_key_exists('version', $get) ){
 			$result = $this->version();
 		} else {
-			
 			$result = $this->getData($get);
-			
 		}
-		
-		
-		
 		
 		if( empty($result) )
 			$result = '';
@@ -56,7 +51,7 @@ class ApiTransaction {
 	public function getData($get){
 		
 		$structureIds = $this->queryParser()->structureId($get);
-		if( !is_array($structureIds) && count($structureIds) == 0 )
+		if( !is_array($structureIds) || count($structureIds) == 0 )
 			return false;
 
 		$order = $this->queryParser()->order($get);
