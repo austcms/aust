@@ -30,6 +30,19 @@ class ApiQueryParserTest extends PHPUnit_Framework_TestCase
 		$query['limit'] = null;
 		$this->assertEquals('100', $this->obj->limit($query));
 	}
+	
+	function testFields(){
+		$query['fields'] = '*';
+		$this->assertEquals('*', $this->obj->fields($query));
+
+		unset($query['fields']);
+		$this->assertEquals('*', $this->obj->fields($query));
+
+		$query['fields'] = 'title;number';
+		$this->assertType('array', $this->obj->fields($query));
+		$this->assertContains('title', $this->obj->fields($query));
+		$this->assertContains('number', $this->obj->fields($query));
+	}
 
 	function testGetStructure(){
 		$newsId = Fixture::getInstance()->createApiData();

@@ -64,11 +64,40 @@ class ApiTransactionTest extends PHPUnit_Framework_TestCase
 		$this->assertType('array', $return);
 		$this->assertEquals(3, count($return));
 		$this->assertEquals('Google+ Improves on Facebook', $return[0]['title']);
-		
-		
 	}
-
+	
 	// returns Array
+	function testGetDataWithDifferentFieldsSpecified(){
+		$this->createContent();
+		
+		$query = array(
+			'query' => 'News',
+			'limit' => 2,
+			'fields' => 'text'
+		);
+
+		$return = $this->obj->getData($query);
+		$this->assertType('array', $return);
+		$this->assertEquals(2, count($return));
+		$this->assertArrayHasKey('text', $return[0]);
+		$this->assertArrayNotHasKey('title', $return[0]);
+
+		$query = array(
+			'query' => 'News',
+			'limit' => 2,
+			'fields' => 'id;title'
+		);
+
+		$return = $this->obj->getData($query);
+		$this->assertType('array', $return);
+		$this->assertEquals(2, count($return));
+		$this->assertArrayHasKey('id', $return[0]);
+		$this->assertArrayHasKey('title', $return[0]);
+		$this->assertArrayNotHasKey('text', $return[0]);
+	}
+	
+
+	// returns JSON
 	function testPerform(){
 		$this->createContent();
 		$query = array(

@@ -1116,9 +1116,23 @@ class FlexFields extends Module {
             }
 
 			/* fields */
-			if( !empty($param['fields']) && $param['fields'] == "*" ){
-				$fields = $tP.".*";
-			} else {
+			if( !empty($param['fields']) ){
+				if( $param['fields'] == "*" ){
+					$fields = $tP.".*";
+				}
+				elseif( is_array($param['fields']) ){
+					
+					foreach( $param['fields'] as $currentField ){
+						$fieldsInArray[] = $tP.".".$currentField;
+					}
+					$fields = implode(", ", $fieldsInArray);
+				}
+				elseif( is_string($params['fields']) ){
+					$fields = $params['fields'];
+				}
+			} 
+			
+			if( empty($fields) ) {
 				$fields = "".$tP.".id,
 				            $mostrar
 				            ".implode(", ", $leftJoinCampos).$virgula."

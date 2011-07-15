@@ -56,6 +56,7 @@ class ApiTransaction {
 
 		$order = $this->queryParser()->order($get);
 		$limit = $this->queryParser()->limit($get);
+		$fields = $this->queryParser()->fields($get);
 		$result = array();
 
 		foreach( $structureIds as $structureId ){
@@ -63,7 +64,7 @@ class ApiTransaction {
 			$structureInstance = ModulesManager::getInstance()->modelInstance($structureId);
 			$items = $structureInstance->load(
 				array(
-					'fields' => '*',
+					'fields' => $fields,
 					'order' => $order,
 					'limit' => $limit
 				)

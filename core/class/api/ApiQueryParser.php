@@ -24,6 +24,17 @@ class ApiQueryParser {
 		return Aust::getInstance()->getStructureIdByName($structure);
 	}
 	
+	public function fields($get){
+		if( empty($get['fields']) || $get['fields'] == "*" )
+			return '*';
+		
+		$fields = explode(';', $get['fields']);
+		if( empty($fields) )
+			return '*';
+			
+		return $fields;
+	}
+	
 	public function order($get){
 		if( empty($get['order']) )
 			return 'id ASC';
