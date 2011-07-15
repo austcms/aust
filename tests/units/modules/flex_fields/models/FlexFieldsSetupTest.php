@@ -3,18 +3,20 @@
 
 #####################################
 require_once 'tests/config/auto_include.php';
-require_once 'core/class/SQLObject.class.php';
-require_once 'core/config/variables.php';
-#####################################
-include_once MODULES_DIR.'cadastro/Cadastro.php';
+include_once MODULES_DIR.'flex_fields/FlexFields.php';
 
-class CadastroSetupTest extends PHPUnit_Framework_TestCase
+class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 {
 
     function setUp(){
-        $modelName = 'CadastroSetup';
-        $mod = 'Cadastro';
-        include_once MODULES_DIR.$mod.'/'.MOD_MODELS_DIR.$modelName.'.php';
+
+		Fixture::getInstance()->destroy();
+		installModule('flex_fields');
+		
+        $modelName = 'FlexFieldsSetup';
+        $modDir = 'flex_fields';
+        $mod = 'FlexFields';
+        include_once MODULES_DIR.$modDir.'/'.MOD_MODELS_DIR.$modelName.'.php';
         
         $this->obj = new $modelName;
         $this->Cadastro = new $mod;
@@ -136,7 +138,7 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 		/*
 		 * CONFIGURATIONS
 		 *
-		 * cada campo tem dados salvos em cadastros_conf
+		 * cada campo tem dados salvos em flex_fields_config
 		 *
 		 */
 
@@ -151,8 +153,8 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					'class' => 'password',
 				);
 
-				$expectedSql = "INSERT INTO cadastros_conf ".
-	                           "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem) ".
+				$expectedSql = "INSERT INTO flex_fields_config ".
+	                           "(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr) ".
 	                           "VALUES ".
 	                           "('campo','field_one','Field One','This is a comment',777,'777',0,0,1,0,1,'password',1)";
 
@@ -173,8 +175,8 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					'class' => 'files',
 				);
 
-				$expectedSql = "INSERT INTO cadastros_conf ".
-	                           "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem) ".
+				$expectedSql = "INSERT INTO flex_fields_config ".
+	                           "(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr) ".
 	                           "VALUES ".
 	                           "('campo','field_one','Field One','This is a comment',777,'777',0,0,1,0,1,'files',1)";
 
@@ -205,7 +207,7 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 	                    'reference varchar(120),'.
 	                    'reference_table varchar(120),'.
 	                    'reference_field varchar(120),'.
-	                    'categoria_id int,'.
+	                    'node_id int,'.
 	                    'created_on datetime,'.
 	                    'updated_on datetime,'.
 	                    'admin_id int,'.
@@ -223,8 +225,8 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					$this->obj->austNode = '777';
 					$sql = 
 					    "INSERT INTO ".
-	                    "cadastros_conf ".
-	                    "(tipo,chave,valor,categorias_id,adddate,desativado,desabilitado,publico,restrito,aprovado) ".
+	                    "flex_fields_config ".
+	                    "(type,property,value,node_id,created_on,deactivated,disabled,public,restricted,approved) ".
 	                    "VALUES ".
 	                    "('estrutura','table_files','minhatabela_files',777, '".date('Y-m-d H:i:s')."',0,0,1,0,1)";
 
@@ -259,13 +261,14 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					$this->obj->filesTableName = 'minhatabela_files';
 					$this->obj->austNode = '777';
 					$this->obj->createConfigurationForFiles();
-
-					$created = $this->obj->connection->query("SELECT id FROM cadastros_conf WHERE categorias_id='".$this->obj->austNode."' AND valor='minhatabela_files' AND chave='table_files'");
+					
+					$sql = "SELECT id FROM flex_fields_config WHERE node_id='".$this->obj->austNode."' AND value='minhatabela_files' AND property='table_files'";
+					$created = $this->obj->connection->query($sql);
 					if( !empty($created) ) $created = true;
 					else $created = false;
 
-					$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='".$this->obj->austNode."' AND valor='minhatabela_files' AND chave='table_files'");
-					$deleted = $this->obj->connection->query("SELECT id FROM cadastros_conf WHERE categorias_id='".$this->obj->austNode."' AND valor='minhatabela_files' AND chave='table_files'");
+					$this->obj->connection->exec("DELETE FROM flex_fields_config WHERE node_id='".$this->obj->austNode."' AND value='minhatabela_files' AND property='table_files'");
+					$deleted = $this->obj->connection->query("SELECT id FROM flex_fields_config WHERE node_id='".$this->obj->austNode."' AND value='minhatabela_files' AND property='table_files'");
 					if( empty($deleted) ) $deleted = true;
 					else $deleted = false;
 
@@ -290,8 +293,8 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					'refField' => 'nome',
 				);
 
-				$expectedSql = "INSERT INTO cadastros_conf ".
-	                           "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem,ref_tabela,ref_campo) ".
+				$expectedSql = "INSERT INTO flex_fields_config ".
+	                           "(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr,ref_table,ref_field) ".
 	                           "VALUES ".
 	                           "('campo','field_one','Field One','This is a comment',777,'777',0,0,1,0,1,'relacional_umparaum',1,'categorias','nome')";
 
@@ -321,8 +324,8 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					'referenceTable' => 'tabelaum_tabelarelacional_categorias'
 				);
 
-				$expectedSql = "INSERT INTO cadastros_conf ".
-	                           "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem,ref_tabela,ref_campo,referencia,ref_parent_field,ref_child_field) ".
+				$expectedSql = "INSERT INTO flex_fields_config ".
+	                           "(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr,ref_table,ref_field,reference,ref_parent_field,ref_child_field) ".
 	                           "VALUES ".
 	                           "('campo','field_one','Field One','This is a comment',777,'777',0,0,1,0,1,'relacional_umparamuitos',1,'categorias','nome','tabelaum_tabelarelacional_categorias','parent','child')";
 
@@ -378,8 +381,8 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					'class' => 'images'
 				);
 
-				$expectedSql = "INSERT INTO cadastros_conf ".
-	                           "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem) ".
+				$expectedSql = "INSERT INTO flex_fields_config ".
+	                           "(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr) ".
 	                           "VALUES ".
 	                           "('campo','field_one','Field One','This is a comment',777,'777',0,0,1,0,1,'images',1)";
 
@@ -412,7 +415,7 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 		                    'reference varchar(120),'.
 		                    'reference_table varchar(120),'.
 		                    'reference_field varchar(120),'.
-		                    'categoria_id int,'.
+		                    'node_id int,'.
 		                    'created_on datetime,'.
 		                    'updated_on datetime,'.
 		                    'admin_id int,'.
@@ -430,8 +433,8 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 						$this->obj->austNode = '777';
 						$sql = 
 						    "INSERT INTO ".
-		                    "cadastros_conf ".
-		                    "(tipo,chave,valor,categorias_id,adddate,desativado,desabilitado,publico,restrito,aprovado) ".
+		                    "flex_fields_config ".
+		                    "(type,property,value,node_id,created_on,deactivated,disabled,public,restricted,approved) ".
 		                    "VALUES ".
 		                    "('estrutura','table_images','minhatabela_images',777, '".date('Y-m-d H:i:s')."',0,0,1,0,1)";
 
@@ -468,12 +471,12 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 						$this->obj->austNode = '777';
 						$this->obj->createConfigurationForImages();
 
-						$created = $this->obj->connection->query("SELECT id FROM cadastros_conf WHERE categorias_id='".$this->obj->austNode."' AND valor='minhatabela_images' AND chave='table_images'");
+						$created = $this->obj->connection->query("SELECT id FROM flex_fields_config WHERE node_id='".$this->obj->austNode."' AND value='minhatabela_images' AND property='table_images'");
 						if( !empty($created) ) $created = true;
 						else $created = false;
 
-						$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='".$this->obj->austNode."' AND valor='minhatabela_images' AND chave='table_images'");
-						$deleted = $this->obj->connection->query("SELECT id FROM cadastros_conf WHERE categorias_id='".$this->obj->austNode."' AND valor='minhatabela_images' AND chave='table_images'");
+						$this->obj->connection->exec("DELETE FROM flex_fields_config WHERE node_id='".$this->obj->austNode."' AND value='minhatabela_images' AND property='table_images'");
+						$deleted = $this->obj->connection->query("SELECT id FROM flex_fields_config WHERE node_id='".$this->obj->austNode."' AND value='minhatabela_images' AND property='table_images'");
 						if( empty($deleted) ) $deleted = true;
 						else $deleted = false;
 
@@ -497,8 +500,8 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					'class' => 'string',
 				);
 
-				$expectedSql = "INSERT INTO cadastros_conf ".
-	                           "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem) ".
+				$expectedSql = "INSERT INTO flex_fields_config ".
+	                           "(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr) ".
 	                           "VALUES ".
 	                           "('campo','field_one','Field One','This is a comment','777','777',0,0,1,0,1,'string',1)";
 
@@ -597,13 +600,15 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 				'father' => $lastInsert,
 		        'name' => 'Teste777',
 		        'description' => 'Teste777',
-		        'class' => 'cadastro',
+		        'class' => 'flex_fields',
 		        'type' => 'estrutura',
 		        'author' => '1',
 		    );
 
 			$result = $this->obj->saveStructure($params);
-			$saved = reset($this->obj->connection->query("SELECT * FROM categorias WHERE nome='Teste777' AND classe='cadastro'") );
+			$query = Connection::getInstance()->query("SELECT * FROM categorias WHERE nome='Teste777' AND classe='flex_fields'");
+			$saved = reset( $query );
+			$this->assertType('array', $saved);
 
 			$this->obj->connection->query("DELETE FROM categorias WHERE nome='Teste777'");
 			$this->obj->connection->query("DELETE FROM categorias WHERE id='".$lastInsert."'");
@@ -611,7 +616,7 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 			$this->assertType('int', $result);
 			$this->assertArrayHasKey('nome', $saved);
 			$this->assertEquals('Teste777', $saved['nome']);
-			$this->assertEquals('cadastro', $saved['classe']);
+			$this->assertEquals('flex_fields', $saved['classe']);
 			$this->assertEquals('estrutura', $saved['tipo']);
 			$empty = empty($saved['descricao']);
 			$this->assertFalse( $empty );
@@ -632,7 +637,7 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 		// Função multifuncional, serve tanto para criar novas
 		// estruturas como para editar antigas.
 		function testCreateMainTable(){
-			$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='7777'");
+			$this->obj->connection->exec("DELETE FROM flex_fields_config WHERE node_id='7777'");
 			$this->obj->connection->query("DROP TABLE testunit");
 			$this->obj->mainTable = 'testunit';
 			$this->obj->austNode = '7777';
@@ -641,16 +646,16 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 			
 			$saved = $this->obj->connection->hasTable('testunit');
 			
-			$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE chave='tabela' AND tipo='estrutura' AND categorias_id='7777'");
+			$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='tabela' AND type='estrutura' AND node_id='7777'");
 			$this->assertArrayHasKey('0', $conf );
 			$this->assertArrayNotHasKey('1', $conf );
-			$this->assertEquals('testunit', $conf[0]['valor'] );
+			$this->assertEquals('testunit', $conf[0]['value'] );
 
 			$this->obj->connection->query("DROP TABLE testunit");
 			
 			$this->assertTrue($result);
 			$this->assertTrue($saved);
-			$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='7777'");
+			$this->obj->connection->exec("DELETE FROM flex_fields_config WHERE node_id='7777'");
 		}
 		
 		function testAddFieldWithoutName(){
@@ -660,14 +665,14 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 		// usado para reiniciar as tabelas
 			function restartTable(){
 				$this->obj->connection->query("DROP TABLE testunit");
-				$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='7777'");
+				$this->obj->connection->exec("DELETE FROM flex_fields_config WHERE node_id='7777'");
 				$this->obj->mainTable = 'testunit';
 				$this->obj->austNode = '7777';
 				$this->obj->createMainTable();
 			}
 			function destroyTests(){
 				$this->obj->connection->query("DROP TABLE testunit");
-				$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='7777'");
+				$this->obj->connection->exec("DELETE FROM flex_fields_config WHERE node_id='7777'");
 				$this->obj->connection->exec("DELETE FROM categorias WHERE nome='TestUnit'");
 			}
 		
@@ -692,7 +697,7 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					$result = $this->obj->addField($params);
 				
 					$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'campo_1') );
-					$this->assertArrayHasKey('0', $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_1' AND categorias_id='7777'") );
+					$this->assertArrayHasKey('0', $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE type='campo' AND property='campo_1' AND node_id='7777'") );
 					$this->destroyTests();
 			}
 		
@@ -710,10 +715,10 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					$result = $this->obj->addField($params);
 		
 					$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'campo_1'), 'Text: campo_1 not created.' );
-					$query = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_1' AND categorias_id='7777'");
+					$query = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE type='campo' AND property='campo_1' AND node_id='7777'");
 					$this->assertArrayHasKey('0', $query );
 					$query = reset($query);
-					$this->assertEquals('text', $query['especie'] );
+					$this->assertEquals('text', $query['specie'] );
 					$this->destroyTests();
 			}
 		
@@ -731,9 +736,9 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					$result = $this->obj->addField($params);
 
 					$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'campo_1') );
-					$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_1' AND categorias_id='7777'");
+					$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE type='campo' AND property='campo_1' AND node_id='7777'");
 					$this->assertArrayHasKey('0', $conf );
-					$this->assertEquals('password', $conf[0]['especie'] );
+					$this->assertEquals('password', $conf[0]['specie'] );
 					$this->destroyTests();
 			}
 		
@@ -751,7 +756,7 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					$result = $this->obj->addField($params);
 
 					$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'campo_1') );
-					$this->assertArrayHasKey('0', $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_1' AND categorias_id='7777'") );
+					$this->assertArrayHasKey('0', $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE type='campo' AND property='campo_1' AND node_id='7777'") );
 				
 					// campo do tipo date?
 					$result = $this->obj->connection->query('DESCRIBE testunit');
@@ -782,9 +787,9 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 
 					$this->assertTrue( $this->obj->connection->hasTable('testunit_files') );
 					$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'file_field') );
-					$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='file_field' AND categorias_id='7777'");
+					$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE type='campo' AND property='file_field' AND node_id='7777'");
 					$this->assertArrayHasKey('0', $conf );
-					$this->assertEquals('files', $conf[0]['especie'] );
+					$this->assertEquals('files', $conf[0]['specie'] );
 					$this->obj->connection->exec("DROP TABLE testunit_files");
 					
 					$this->destroyTests();
@@ -817,10 +822,10 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 						}
 					}
 					
-					$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_1' AND categorias_id='7777'");
+					$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE type='campo' AND property='campo_1' AND node_id='7777'");
 					$this->assertArrayHasKey('0', $conf );
-					$this->assertEquals('ref_table', $conf[0]['ref_tabela'] );
-					$this->assertEquals('ref_field', $conf[0]['ref_campo'] );
+					$this->assertEquals('ref_table', $conf[0]['ref_table'] );
+					$this->assertEquals('ref_field', $conf[0]['ref_field'] );
 					$this->destroyTests();
 			}
 
@@ -846,10 +851,10 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					$this->assertTrue( $this->obj->connection->hasTable('testunit_ref_field_ref_table') );
 					$this->assertTrue( $this->obj->connection->tableHasField('testunit_ref_field_ref_table', 'testunit_id') );
 					$this->assertTrue( $this->obj->connection->tableHasField('testunit_ref_field_ref_table', 'ref_table_id') );
-					$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_1' AND categorias_id='7777'");
+					$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE type='campo' AND property='campo_1' AND node_id='7777'");
 					$this->assertArrayHasKey('0', $conf );
-					$this->assertEquals('ref_table', $conf[0]['ref_tabela'] );
-					$this->assertEquals('ref_field', $conf[0]['ref_campo'] );
+					$this->assertEquals('ref_table', $conf[0]['ref_table'] );
+					$this->assertEquals('ref_field', $conf[0]['ref_field'] );
 					$this->assertEquals('testunit_id', $conf[0]['ref_parent_field'] );
 					$this->assertEquals('ref_table_id', $conf[0]['ref_child_field'] );
 					
@@ -889,10 +894,10 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					$this->assertTrue( $this->obj->connection->hasTable('testunit_id_testunit') );
 					$this->assertTrue( $this->obj->connection->tableHasField('testunit_id_testunit', 'parent_testunit_id') );
 					$this->assertTrue( $this->obj->connection->tableHasField('testunit_id_testunit', 'testunit_id') );
-					$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_2' AND categorias_id='7777'");
+					$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE type='campo' AND property='campo_2' AND node_id='7777'");
 					$this->assertArrayHasKey('0', $conf );
-					$this->assertEquals('testunit', $conf[0]['ref_tabela'] );
-					$this->assertEquals('id', $conf[0]['ref_campo'] );
+					$this->assertEquals('testunit', $conf[0]['ref_table'] );
+					$this->assertEquals('id', $conf[0]['ref_field'] );
 					$this->assertEquals('parent_testunit_id', $conf[0]['ref_parent_field'] );
 					$this->assertEquals('testunit_id', $conf[0]['ref_child_field'] );
 
@@ -918,7 +923,7 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					$result = $this->obj->addField($params);
 		
 					$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'campo_1_images'), 'Text: campo_1_images not created.' );
-					$this->assertArrayHasKey('0', $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='campo_1_images' AND categorias_id='7777'") );
+					$this->assertArrayHasKey('0', $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE type='campo' AND property='campo_1_images' AND node_id='7777'") );
 					$this->destroyTests();
 			}
 
@@ -971,9 +976,13 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					$this->Cadastro->austNode = '7777';
 		
 					$fields = $this->Cadastro->getFields();
-					$this->assertEquals('3', $fields['field_1']['ordem'] );
-					$this->assertEquals('1', $fields['field_2']['ordem'] );
-					$this->assertEquals('2', $fields['field_3']['ordem'] );
+					$this->assertArrayHasKey('field_1', $fields );
+					$this->assertArrayHasKey('field_2', $fields );
+					$this->assertArrayHasKey('field_3', $fields );
+
+					$this->assertEquals('3', $fields['field_1']['order_nr'] );
+					$this->assertEquals('1', $fields['field_2']['order_nr'] );
+					$this->assertEquals('2', $fields['field_3']['order_nr'] );
 					
 					$new_field = array(
 						'name' => 'Field 4',
@@ -981,7 +990,7 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					);
 					$result = $this->obj->addField($new_field);
 					$fields = $this->Cadastro->getFields();
-					$this->assertEquals('4', $fields['field_4']['ordem'] );
+					$this->assertEquals('4', $fields['field_4']['order_nr'] );
 					
 					$new_field = array(
 						'name' => 'Field 5',
@@ -990,20 +999,20 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 					);
 					$result = $this->obj->addField($new_field);
 					$fields = $this->Cadastro->getFields();
-					$this->assertEquals('4', $fields['field_5']['ordem'] );
-					$this->assertEquals('5', $fields['field_4']['ordem'] );
+					$this->assertEquals('4', $fields['field_5']['order_nr'] );
+					$this->assertEquals('5', $fields['field_4']['order_nr'] );
 					
 					
 					//$this->assertTrue(  );
-//					$this->assertArrayHasKey('0', $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE tipo='campo' AND chave='field_1' AND categorias_id='7777'") );
+//					$this->assertArrayHasKey('0', $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE type='campo' AND property='field_1' AND node_id='7777'") );
 					$this->destroyTests();
 			}
 
 
 		function testSaveStructureConfiguration(){
-			// testa as configurações sobre o cadastro que não
+			// testa as configurações sobre o flex_fields que não
 			// tem a ver com os campos.
-			$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='777'");
+			$this->obj->connection->exec("DELETE FROM flex_fields_config WHERE node_id='777'");
 			
 			$this->obj->austNode = 777;
 			$params = array(
@@ -1014,22 +1023,22 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 			
 			$this->obj->saveStructureConfiguration($params);
 			$this->obj->saveStructureConfiguration($params);
-			$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE chave='aprovacao' AND tipo='config' AND categorias_id='777'");
+			$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='aprovacao' AND type='config' AND node_id='777'");
 			$this->assertArrayHasKey('0', $conf );
 			$this->assertArrayNotHasKey('1', $conf );
-			$this->assertEquals('1', $conf[0]['valor'] );
+			$this->assertEquals('1', $conf[0]['value'] );
 
-			$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE chave='pre_senha' AND tipo='config' AND categorias_id='777'");
+			$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='pre_senha' AND type='config' AND node_id='777'");
 			$this->assertArrayHasKey('0', $conf );
 			$this->assertArrayNotHasKey('1', $conf );
-			$this->assertEquals('123', $conf[0]['valor'] );
+			$this->assertEquals('123', $conf[0]['value'] );
 
-			$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE chave='descricao' AND tipo='config' AND categorias_id='777'");
+			$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='descricao' AND type='config' AND node_id='777'");
 			$this->assertArrayHasKey('0', $conf );
 			$this->assertArrayNotHasKey('1', $conf );
-			$this->assertEquals('descrição 777', $conf[0]['valor'] );
+			$this->assertEquals('descrição 777', $conf[0]['value'] );
 			
-			$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='777'");
+			$this->obj->connection->exec("DELETE FROM flex_fields_config WHERE node_id='777'");
 			// test PARÂMETROS
 			$params = array(
 				'options' => array(
@@ -1038,12 +1047,12 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 			);
 			
 			$this->obj->saveStructureConfiguration($params);
-			$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE chave='aprovacao' AND tipo='config' AND categorias_id='777'");
+			$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='aprovacao' AND type='config' AND node_id='777'");
 			$this->assertArrayHasKey('0', $conf );
 			$this->assertArrayNotHasKey('1', $conf );
-			$this->assertEquals('0', $conf[0]['valor'] );
+			$this->assertEquals('0', $conf[0]['value'] );
 			
-			$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='777'");
+			$this->obj->connection->exec("DELETE FROM flex_fields_config WHERE node_id='777'");
 		}
 		
 		
@@ -1051,7 +1060,7 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 	    function testCreateStructure(){
 		
 			$this->obj->connection->exec("DROP TABLE testunit");
-			$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='7777' OR comentario='haha777' OR valor='testunit' OR valor='haha777' ");
+			$this->obj->connection->exec("DELETE FROM flex_fields_config WHERE node_id='7777' OR commentary='haha777' OR value='testunit' OR value='haha777' ");
 			$this->obj->connection->exec("DELETE FROM categorias WHERE nome='TestUnit' AND subordinado_nome_encoded='testepai777'");
 			$this->obj->connection->exec("DELETE FROM categorias WHERE nome='testunit'");
 			$this->obj->connection->query("INSERT INTO categorias (nome,classe) VALUES ('TestePai777','categoria-chefe')");
@@ -1061,7 +1070,7 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 	            'name' => 'TestUnit',
 	            'father' => $lastInsert,
 	            'class' => 'estrutura',
-	            'type' => 'cadastro',
+	            'type' => 'flex_fields',
 	            'author' => 1,
 				'fields' => array(
 					array(
@@ -1110,52 +1119,52 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 			
 			// verifica configurações da tabela
 				// test 3.1
-				$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE chave='descricao' AND tipo='config' AND categorias_id='$austNode'");
+				$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='descricao' AND type='config' AND node_id='$austNode'");
 				$this->assertArrayHasKey('0', $conf );
-				$this->assertEquals('haha777', $conf[0]['valor'], 'Did not save description. #3.1' );
-				$this->assertEquals($austNode, $conf[0]['categorias_id'], 'Did not save austNode.' );
+				$this->assertEquals('haha777', $conf[0]['value'], 'Did not save description. #3.1' );
+				$this->assertEquals($austNode, $conf[0]['node_id'], 'Did not save austNode.' );
 				// test 3.2
-				$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE chave='pre_senha' AND tipo='config' AND categorias_id='$austNode'");
+				$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='pre_senha' AND type='config' AND node_id='$austNode'");
 				$this->assertArrayHasKey('0', $conf );
-				$this->assertEquals('haha777', $conf[0]['valor'], 'Did not save pre_password. #3.2' );
-				$this->assertEquals($austNode, $conf[0]['categorias_id'], 'Did not save austNode.' );
+				$this->assertEquals('haha777', $conf[0]['value'], 'Did not save pre_password. #3.2' );
+				$this->assertEquals($austNode, $conf[0]['node_id'], 'Did not save austNode.' );
 				// test 3.3
-				$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE chave='aprovacao' AND tipo='config' AND categorias_id='$austNode'");
+				$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='aprovacao' AND type='config' AND node_id='$austNode'");
 				$this->assertArrayHasKey('0', $conf );
-				$this->assertEquals('haha777', $conf[0]['valor'], 'Did not save approval. #3.3' );
-				$this->assertEquals($austNode, $conf[0]['categorias_id'], 'Did not save austNode.' );
+				$this->assertEquals('haha777', $conf[0]['value'], 'Did not save approval. #3.3' );
+				$this->assertEquals($austNode, $conf[0]['node_id'], 'Did not save austNode.' );
 				// test 3.4
-				$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE chave='tabela' AND tipo='estrutura' AND categorias_id='$austNode'");
+				$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='tabela' AND type='estrutura' AND node_id='$austNode'");
 				$this->assertArrayHasKey('0', $conf );
-				$this->assertEquals('testunit', $conf[0]['valor'], 'Did not save table properties. #3.4' );
-				$this->assertEquals($austNode, $conf[0]['categorias_id'], 'Did not save austNode.' );
+				$this->assertEquals('testunit', $conf[0]['value'], 'Did not save table properties. #3.4' );
+				$this->assertEquals($austNode, $conf[0]['node_id'], 'Did not save austNode.' );
 			
 			// verifica configurações dos campos
 			$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'campo_1') );
 			$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'campo_2') );
 			$this->assertTrue( $this->obj->connection->tableHasField('testunit', 'campo_3') );
 				// test 4.1
-				$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE chave='campo_1' AND tipo='campo' AND categorias_id='$austNode'");
+				$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='campo_1' AND type='campo' AND node_id='$austNode'");
 				$this->assertArrayHasKey('0', $conf );
-				$this->assertEquals('Campo 1', $conf[0]['valor'], 'Did not save field campo_1. #4.1' );
-				$this->assertEquals('haha777', $conf[0]['comentario'], 'Did not save field campo_1. #4.1' );
-				$this->assertEquals($austNode, $conf[0]['categorias_id'], 'Did not save austNode.' );
+				$this->assertEquals('Campo 1', $conf[0]['value'], 'Did not save field campo_1. #4.1' );
+				$this->assertEquals('haha777', $conf[0]['commentary'], 'Did not save field campo_1. #4.1' );
+				$this->assertEquals($austNode, $conf[0]['node_id'], 'Did not save austNode.' );
 				// test 4.2 - relational_onetoone
-				$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE chave='campo_2' AND tipo='campo' AND categorias_id='$austNode'");
+				$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='campo_2' AND type='campo' AND node_id='$austNode'");
 				$this->assertArrayHasKey('0', $conf );
-				$this->assertEquals('Campo 2', $conf[0]['valor'], 'Did not save field campo_1. #4.2' );
-				$this->assertEquals('haha777', $conf[0]['comentario'], 'Did not save field campo_1. #4.2' );
-				$this->assertEquals('ref_table', $conf[0]['ref_tabela'] );
-				$this->assertEquals('ref_field', $conf[0]['ref_campo'] );
-				$this->assertEquals($austNode, $conf[0]['categorias_id'], 'Did not save austNode.' );
+				$this->assertEquals('Campo 2', $conf[0]['value'], 'Did not save field campo_1. #4.2' );
+				$this->assertEquals('haha777', $conf[0]['commentary'], 'Did not save field campo_1. #4.2' );
+				$this->assertEquals('ref_table', $conf[0]['ref_table'] );
+				$this->assertEquals('ref_field', $conf[0]['ref_field'] );
+				$this->assertEquals($austNode, $conf[0]['node_id'], 'Did not save austNode.' );
 				// test 4.3 - relational_onetomany
-				$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE chave='campo_3' AND tipo='campo' AND categorias_id='$austNode'");
+				$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='campo_3' AND type='campo' AND node_id='$austNode'");
 				$this->assertArrayHasKey('0', $conf );
-				$this->assertEquals('Campo 3', $conf[0]['valor'], 'Did not save field campo_1. #4.3' );
-				$this->assertEquals('haha777', $conf[0]['comentario'], 'Did not save field campo_1. #4.3' );
-				$this->assertEquals('ref_table', $conf[0]['ref_tabela'] );
-				$this->assertEquals('ref_field', $conf[0]['ref_campo'] );
-				$this->assertEquals($austNode, $conf[0]['categorias_id'], 'Did not save austNode.' );
+				$this->assertEquals('Campo 3', $conf[0]['value'], 'Did not save field campo_1. #4.3' );
+				$this->assertEquals('haha777', $conf[0]['commentary'], 'Did not save field campo_1. #4.3' );
+				$this->assertEquals('ref_table', $conf[0]['ref_table'] );
+				$this->assertEquals('ref_field', $conf[0]['ref_field'] );
+				$this->assertEquals($austNode, $conf[0]['node_id'], 'Did not save austNode.' );
 				$this->assertTrue( $this->obj->connection->hasTable('testunit_ref_field_ref_table') );
 			
 			/*
@@ -1171,17 +1180,17 @@ class CadastroSetupTest extends PHPUnit_Framework_TestCase
 				$this->obj->addField($newField);
 			
 				$this->assertTrue( $this->obj->connection->hasTable('testunit_files') );
-				$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE chave='new_field' AND tipo='campo' AND categorias_id='$austNode'");
+				$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='new_field' AND type='campo' AND node_id='$austNode'");
 				$this->assertArrayHasKey('0', $conf );
-				$this->assertEquals('New Field', $conf[0]['valor'], 'Did not save New Field configuration. #5' );
-				$this->assertEquals('files', $conf[0]['especie'], 'Did not save New Field as "file". #5' );
-				$this->assertEquals('4', $conf[0]['ordem'], 'Did not save New Field as "file". #5' );
+				$this->assertEquals('New Field', $conf[0]['value'], 'Did not save New Field configuration. #5' );
+				$this->assertEquals('files', $conf[0]['specie'], 'Did not save New Field as "file". #5' );
+				$this->assertEquals('4', $conf[0]['order_nr'], 'Did not save New Field as "file". #5' );
 			
 			
 			
 			$this->obj->connection->exec("DELETE FROM categorias WHERE nome='TestePai777'");
 			$this->obj->connection->exec("DELETE FROM categorias WHERE nome='TestUnit' AND subordinado_nome_encoded='testepai777'");
-			$this->obj->connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='$austNode' OR comentario='haha777' OR valor='testunit' OR valor='haha777' ");
+			$this->obj->connection->exec("DELETE FROM flex_fields_config WHERE node_id='$austNode' OR commentary='haha777' OR value='testunit' OR value='haha777' ");
 			$this->obj->connection->exec("DROP TABLE testunit");
 			$this->obj->connection->exec("DROP TABLE testunit_files");
 			$this->obj->connection->exec("DROP TABLE testunit_images");

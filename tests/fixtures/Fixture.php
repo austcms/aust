@@ -35,8 +35,9 @@ class Fixture {
 	}
 	
 	public function destroy(){
-		foreach( $this->tables as $tables ){
-			Connection::getInstance()->exec("DELETE FROM ". $tables);
+		foreach( $this->tables as $table ){
+			$sql = "DELETE FROM ". $table;
+			Connection::getInstance()->exec($sql);
 		}
 	}
 	

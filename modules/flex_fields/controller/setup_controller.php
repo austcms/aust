@@ -114,11 +114,11 @@ class SetupController extends ModActionController
             /**
              * TRATAMENTO DE CAMPOS
              *
-             * Gera o SQL dos campos para salvar em 'cadastros_conf'
+             * Gera o SQL dos campos para salvar em 'flex_fields_config'
              */
             /*
              * Loop por cada campo para geração de SQL para salvar suas
-             * configurações em 'cadastros_conf'.
+             * configurações em 'flex_fields_config'.
              */
             $ordem = 0; // A ordem do campo
             $camposExistentes = array();
@@ -262,7 +262,7 @@ class SetupController extends ModActionController
                      */
                     if($_POST['campo_tipo'][$i] == 'pw'){
                         $sql_campos[] =
-                                    "INSERT INTO cadastros_conf
+                                    "INSERT INTO flex_fields_config
                                         (tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem)
                                     VALUES
                                         ('campo','".$campo."','".$_POST['campo'][$i]."','".$_POST['campo_descricao'][$i]."',".$status_insert.", ".$this->administrador->LeRegistro('id').",0,0,1,0,1,'password',".$ordem.")";
@@ -273,7 +273,7 @@ class SetupController extends ModActionController
                     elseif($_POST['campo_tipo'][$i] == 'arquivo'){
                         $cria_tabela_arquivos = TRUE;
                         $sql_campos[] =
-                                    "INSERT INTO cadastros_conf
+                                    "INSERT INTO flex_fields_config
                                         (tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem)
                                     VALUES
                                         ('campo','".$campo."','".$_POST['campo'][$i]."','".$_POST['campo_descricao'][$i]."',".$status_insert.", ".$this->administrador->LeRegistro('id').",0,0,1,0,1,'arquivo',".$ordem.")";
@@ -283,7 +283,7 @@ class SetupController extends ModActionController
                      */
                     elseif($_POST['campo_tipo'][$i] == 'relacional_umparaum'){
                         $sql_campos[] =
-                                    "INSERT INTO cadastros_conf
+                                    "INSERT INTO flex_fields_config
                                         (tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem,ref_tabela,ref_campo)
                                     VALUES
                                         ('campo','".$campo."','".$_POST['campo'][$i]."','".$_POST['campo_descricao'][$i]."',".$status_insert.", ".$this->administrador->LeRegistro('id').",0,0,1,0,1, 'relacional_umparaum',".$ordem.", '".$_POST['relacionado_tabela_'.($i+1)]."', '".$_POST['relacionado_campo_'.($i+1)]."')";
@@ -377,7 +377,7 @@ class SetupController extends ModActionController
                         unset($sql);
 
                         $sql_campos[] =
-                                    "INSERT INTO cadastros_conf
+                                    "INSERT INTO flex_fields_config
                                         (tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem,ref_tabela,ref_campo,referencia)
                                     VALUES
                                         ('campo','".$campo."','".$_POST['campo'][$i]."','".$_POST['campo_descricao'][$i]."',".$status_insert.", ".$this->administrador->LeRegistro('id').",0,0,1,0,1, 'relacional_umparamuitos',".$ordem.", '".$_POST['relacionado_tabela_'.($i+1)]."', '".$_POST['relacionado_campo_'.($i+1)]."', '$tabelasRelacionadasNome')";
@@ -387,7 +387,7 @@ class SetupController extends ModActionController
                         //$comentarios = 'Tabela relacional para as tabelas '.$tabela.' e '.$tabelaRelacionada;
                         /*
                         $sql_campos[] =
-                                    "INSERT INTO cadastros_conf
+                                    "INSERT INTO flex_fields_config
                                         (tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem,ref_tabela,ref_campo)
                                     VALUES
                                         ('tabela_relacional','".$campo."','".$tabelasRelacionadasNome."','$comentarios',".$status_insert.", ".$this->administrador->LeRegistro('id').",0,0,1,0,1, 'relacional_umparamuitos',".$ordem.", '".$_POST['relacionado_tabela_'.($i+1)]."', '".$_POST['relacionado_campo_'.($i+1)]."')";
@@ -401,7 +401,7 @@ class SetupController extends ModActionController
                      */
                     else {
                         $sql_campos[] =
-                                    "INSERT INTO cadastros_conf
+                                    "INSERT INTO flex_fields_config
                                         (tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem)
                                     VALUES
                                         ('campo','".$campo."','".$_POST['campo'][$i]."','".$_POST['campo_descricao'][$i]."',".$status_insert.", ".$this->administrador->LeRegistro('id').",0,0,1,0,1,'string',".$ordem.")";
@@ -462,7 +462,7 @@ class SetupController extends ModActionController
             /*
              * Executa QUERY na base de dados
              *
-             * Se retornar sucesso, salva configurações gerais sobre o cadastro na tabela cadastros_conf
+             * Se retornar sucesso, salva configurações gerais sobre o cadastro na tabela flex_fields_config
              */
             pr( $sql );
             //var_dump($this->module);
@@ -482,7 +482,7 @@ class SetupController extends ModActionController
 
                     $sql_conf_arquivos =
                                 "INSERT INTO
-                                    cadastros_conf
+                                    flex_fields_config
                                     (tipo,chave,valor,categorias_id,adddate,autor,desativado,desabilitado,publico,restrito,aprovado)
                                 VALUES
                                     ('estrutura','tabela_arquivos','".$tabela."_arquivos',".$status_insert.", '".date('Y-m-d H:i:s')."', ".$this->administrador->LeRegistro('id').",0,0,1,0,1)
@@ -504,7 +504,7 @@ class SetupController extends ModActionController
                 // salva configuração sobre aprovação quanto ao cadastro
                     $sql_conf_2 =
                                 "INSERT INTO
-                                    cadastros_conf
+                                    flex_fields_config
                                     (tipo,chave,valor,nome,especie,categorias_id,adddate,autor,desativado,desabilitado,publico,restrito,aprovado)
                                 VALUES
                                     ('config','aprovacao','".$_SESSION['exPOST']['aprovacao']."','Aprovação','bool',".$status_insert.", '".date('Y-m-d H:i:s')."', ".$this->administrador->LeRegistro('id').",0,0,1,0,1)
@@ -518,7 +518,7 @@ class SetupController extends ModActionController
                 // DESCRIÇÃO: salva o parágrafo introdutório ao formulário
                     $sql_conf_2 =
                                 "INSERT INTO
-                                    cadastros_conf
+                                    flex_fields_config
                                     (tipo,chave,valor,nome,especie,categorias_id,adddate,autor,desativado,desabilitado,publico,restrito,aprovado)
                                 VALUES
                                     ('config','descricao','".$_SESSION['exPOST']['descricao']."','Descrição','blob',".$status_insert.", '".date('Y-m-d H:i:s')."', ".$this->administrador->LeRegistro('id').",0,0,1,0,1)
@@ -532,7 +532,7 @@ class SetupController extends ModActionController
                 // salva configuração sobre pré-senha para o cadastro
                     $sql_conf_2 =
                                 "INSERT INTO
-                                    cadastros_conf
+                                    flex_fields_config
                                     (tipo,chave,valor,nome,especie,categorias_id,adddate,autor,desativado,desabilitado,publico,restrito,aprovado)
                                 VALUES
                                     ('config','pre_senha','".$_SESSION['exPOST']['pre_senha']."','Pré-senha','string',".$status_insert.", '".date('Y-m-d H:i:s')."', ".$this->administrador->LeRegistro('id').",0,0,1,0,1)
@@ -549,7 +549,7 @@ class SetupController extends ModActionController
                 // configurações sobre a estrutura, como tabela a ser usada
                 $sql_conf =
                             "INSERT INTO
-                                cadastros_conf
+                                flex_fields_config
                                 (tipo,chave,valor,categorias_id,adddate,autor,desativado,desabilitado,publico,restrito,aprovado)
                             VALUES
                                 ('estrutura','tabela','".RetiraAcentos(mb_strtolower(str_replace(' ', '_', $_SESSION['exPOST']['nome']), 'UTF-8'))."',".$status_insert.", '".date('Y-m-d H:i:s')."', ".$this->administrador->LeRegistro('id').",0,0,1,0,1)

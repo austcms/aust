@@ -15,7 +15,7 @@
  *
  * @author kurko
  */
-class CadastroSetup extends ModsSetup {
+class FlexFieldsSetup extends ModsSetup {
 
 	/**
 	 * @var $austNode integer What category does this structure belongs to?
@@ -289,12 +289,10 @@ class CadastroSetup extends ModsSetup {
 			 * Relational_onetoone
 			 */
 			else if( in_array($type, array('relational_onetoone','relacional_umparaum') ) ){
-				
 				if( empty($params['refTable']) ) continue;
 				$this->addColumn($params);
 				$sql = $this->createFieldConfigurationSql_RelationalOneToOne($params);
 				Connection::getInstance()->exec($sql);
-				
 			}
 			/*
 			 * relational_onetomany
@@ -402,20 +400,21 @@ class CadastroSetup extends ModsSetup {
 	function getFieldOrder($field = ''){
 		
 		if( !empty($field) ){
-			$sql = "SELECT ordem
-					FROM cadastros_conf
+			$sql = "SELECT order_nr
+					FROM flex_fields_config
 					WHERE
-						categorias_id='".$this->austNode."' AND
-						tipo='campo' AND
-						chave='".$field."'
+						node_id='".$this->austNode."' AND
+						type='campo' AND
+						property='".$field."'
 						";
-			$query = reset(Connection::getInstance()->query($sql));
+			$query = Connection::getInstance()->query($sql);
+			$query = reset($query);
 
-			if( empty($query['ordem']) )
+			if( empty($query['order_nr']) )
 				return false;
 			else {
 				$this->fieldOrder = '';
-				return $query['ordem'];
+				return $query['order_nr'];
 			}
 		}
 		
@@ -425,16 +424,16 @@ class CadastroSetup extends ModsSetup {
 		 * e atribui ordem 1.
 		 */
 		if( empty($this->fieldOrder) ){
-			$sql = "SELECT MAX(ordem) as ordem
-					FROM cadastros_conf
-					WHERE categorias_id='".$this->austNode."'";
+			$sql = "SELECT MAX(order_nr) as order_nr
+					FROM flex_fields_config
+					WHERE node_id='".$this->austNode."'";
 			$query = Connection::getInstance()->query($sql);
 			$query = reset($query);
 
-			if( empty($query['ordem']) )
+			if( empty($query['order_nr']) )
 				$this->fieldOrder = 1;
 			else
-				$this->fieldOrder = $query['ordem']+1;
+				$this->fieldOrder = $query['order_nr']+1;
 		}
 		
 		$fieldOrder = $this->fieldOrder;
@@ -457,12 +456,12 @@ class CadastroSetup extends ModsSetup {
 	 */
 	function updateAboveOrders($int){
 		$sql = "UPDATE
-					cadastros_conf
+					flex_fields_config
 				SET
-					ordem=ordem+1
+					order_nr=order_nr+1
 				WHERE
-					categorias_id='".$this->austNode."' AND
-					ordem >= $int
+					node_id='".$this->austNode."' AND
+					order_nr >= $int
 				";
 
 		return Connection::getInstance()->exec($sql);
@@ -488,8 +487,8 @@ class CadastroSetup extends ModsSetup {
 			$params['order'] = $this->getFieldOrder();
 
         $sql =
-            "INSERT INTO cadastros_conf ".
-            "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem) ".
+            "INSERT INTO flex_fields_config ".
+            "(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr) ".
             "VALUES ".
             "('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",'".$params['author']."',0,0,1,0,1,'$class',".$params['order'].")";
 		return $sql;
@@ -506,8 +505,8 @@ class CadastroSetup extends ModsSetup {
 			$params['order'] = $this->getFieldOrder();
 
         $sql =
-            "INSERT INTO cadastros_conf ".
-            "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem) ".
+            "INSERT INTO flex_fields_config ".
+            "(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr) ".
             "VALUES ".
             "('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",'".$params['author']."',0,0,1,0,1,'$class',".$params['order'].")";
 		return $sql;
@@ -543,7 +542,7 @@ class CadastroSetup extends ModsSetup {
 		            'reference varchar(120),'.
 		            'reference_table varchar(120),'.
 		            'reference_field varchar(120),'.
-		            'categoria_id int,'.
+		            'node_id int,'.
 		            'created_on datetime,'.
 		            'updated_on datetime,'.
 		            'admin_id int,'.
@@ -561,8 +560,8 @@ class CadastroSetup extends ModsSetup {
 	
 		        $sql =
 		             "INSERT INTO ".
-		             "cadastros_conf ".
-		             "(tipo,chave,valor,categorias_id,adddate,desativado,desabilitado,publico,restrito,aprovado) ".
+		             "flex_fields_config ".
+		             "(type,property,value,node_id,created_on,deactivated,disabled,public,restricted,approved) ".
 		             "VALUES ".
 		             "('estrutura','table_images','".$this->imagesTableName."',".$this->austNode.", '".date('Y-m-d H:i:s')."',0,0,1,0,1)";
 				return $sql;
@@ -615,8 +614,8 @@ class CadastroSetup extends ModsSetup {
 			$params['order'] = $this->getFieldOrder();
 
         $sql =
-            "INSERT INTO cadastros_conf ".
-            "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem) ".
+            "INSERT INTO flex_fields_config ".
+            "(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr) ".
             "VALUES ".
             "('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",'".$params['author']."',0,0,1,0,1,'$class',".$params['order'].")";
 		return $sql;
@@ -655,7 +654,7 @@ class CadastroSetup extends ModsSetup {
                 'reference varchar(120),'.
                 'reference_table varchar(120),'.
                 'reference_field varchar(120),'.
-                'categoria_id int,'.
+                'node_id int,'.
                 'created_on datetime,'.
                 'updated_on datetime,'.
                 'admin_id int,'.
@@ -673,8 +672,8 @@ class CadastroSetup extends ModsSetup {
 			
             $sql =
                  "INSERT INTO ".
-                 "cadastros_conf ".
-                 "(tipo,chave,valor,categorias_id,adddate,desativado,desabilitado,publico,restrito,aprovado) ".
+                 "flex_fields_config ".
+                 "(type,property,value,node_id,created_on,deactivated,disabled,public,restricted,approved) ".
                  "VALUES ".
                  "('estrutura','table_files','".$this->filesTableName."',".$this->austNode.", '".date('Y-m-d H:i:s')."',0,0,1,0,1)";
 			return $sql;
@@ -707,9 +706,10 @@ class CadastroSetup extends ModsSetup {
 			if( empty($this->austNode) ) return false;
 			
 			$sql = $this->createSqlForFileConfiguration();
+
 			if( !$sql ) return false;
 			$result = Connection::getInstance()->exec($sql);
-			
+
 			if( $result ){
 				return true;
 			}
@@ -730,8 +730,8 @@ class CadastroSetup extends ModsSetup {
 			$params['order'] = $this->getFieldOrder();
 
         $sql =
-			"INSERT INTO cadastros_conf ".
-            "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem,ref_tabela,ref_campo) ".
+			"INSERT INTO flex_fields_config ".
+            "(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr,ref_table,ref_field) ".
             "VALUES ".
             "('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",'".$params['author']."',0,0,1,0,1,'$class',".$params['order'].",'".$params['refTable']."','".$params['refField']."')";
 		return $sql;
@@ -751,9 +751,9 @@ class CadastroSetup extends ModsSetup {
 		if( empty($params['refParentField']) ) $params['refParentField'] = '';
 
         $sql =
-			"INSERT INTO cadastros_conf ".
-            "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem,".
-				"ref_tabela,ref_campo,referencia,ref_parent_field,ref_child_field) ".
+			"INSERT INTO flex_fields_config ".
+            "(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr,".
+				"ref_table,ref_field,reference,ref_parent_field,ref_child_field) ".
             "VALUES ".
             "('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",'".$params['author']."',0,0,1,0,1,'$class',".$params['order'].",'".
 				$params['refTable']."','".$params['refField']."','".$params['referenceTable']."','".$params['refParentField']."','".$params['refChildField']."')";
@@ -855,8 +855,8 @@ class CadastroSetup extends ModsSetup {
 			$params['order'] = $this->getFieldOrder();
 
         $sql =
-			"INSERT INTO cadastros_conf ".
-            "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem) ".
+			"INSERT INTO flex_fields_config ".
+            "(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr) ".
             "VALUES ".
             "('campo','".$params['name']."','".$params['label']."','".$params['comment']."','".$params['austNode']."','".$params['author']."',0,0,1,0,1,'$class',".$params['order'].")";
 		return $sql;
@@ -873,8 +873,8 @@ class CadastroSetup extends ModsSetup {
 			$params['order'] = $this->getFieldOrder();
 
         $sql =
-			"INSERT INTO cadastros_conf ".
-            "(tipo,chave,valor,comentario,categorias_id,autor,desativado,desabilitado,publico,restrito,aprovado,especie,ordem) ".
+			"INSERT INTO flex_fields_config ".
+            "(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr) ".
             "VALUES ".
             "('campo','".$params['name']."','".$params['label']."','".$params['comment']."','".$params['austNode']."','".$params['author']."',0,0,1,0,1,'$class',".$params['order'].")";
 		return $sql;
@@ -938,42 +938,42 @@ class CadastroSetup extends ModsSetup {
 		foreach( $params as $key=>$value ){
 			
 			if( $key == 'approval' ){
-				Connection::getInstance()->exec("DELETE FROM cadastros_conf WHERE tipo='config' AND chave='aprovacao' AND categorias_id='$austNode'");
+				Connection::getInstance()->exec("DELETE FROM flex_fields_config WHERE type='config' AND property='aprovacao' AND node_id='$austNode'");
                 $sql =
 	                "INSERT INTO
-	                    cadastros_conf
-	                    (tipo,chave,valor,nome,especie,categorias_id,adddate,autor,desativado,desabilitado,publico,restrito,aprovado)
+	                    flex_fields_config
+	                    (type,property,value,name,specie,node_id,created_on,admin_id,deactivated,disabled,public,restricted,approved)
 	                VALUES
 	                    ('config','aprovacao','".$value."','Aprovação','bool',".$austNode.", '".date('Y-m-d H:i:s')."', '".$this->user."',0,0,1,0,1)
 	                ";
                 Connection::getInstance()->exec($sql);
 
 			} else if( $key == 'pre_password' ){
-				Connection::getInstance()->exec("DELETE FROM cadastros_conf WHERE tipo='config' AND chave='pre_senha' AND categorias_id='$austNode'");
+				Connection::getInstance()->exec("DELETE FROM flex_fields_config WHERE type='config' AND property='pre_senha' AND node_id='$austNode'");
                 $sql =
 	                "INSERT INTO
-	                    cadastros_conf
-	                    (tipo,chave,valor,nome,especie,categorias_id,adddate,autor,desativado,desabilitado,publico,restrito,aprovado)
+	                    flex_fields_config
+	                    (type,property,value,name,specie,node_id,created_on,admin_id,deactivated,disabled,public,restricted,approved)
 	                VALUES
 	                    ('config','pre_senha','".$value."','Pré-Senha','string',".$austNode.", '".date('Y-m-d H:i:s')."', '".$this->user."',0,0,1,0,1)
 	                ";
                 Connection::getInstance()->exec($sql);
 			} else if( $key == 'description' ){
-				Connection::getInstance()->exec("DELETE FROM cadastros_conf WHERE tipo='config' AND chave='descricao' AND categorias_id='$austNode'");
+				Connection::getInstance()->exec("DELETE FROM flex_fields_config WHERE type='config' AND property='descricao' AND node_id='$austNode'");
                 $sql =
 	                "INSERT INTO
-	                    cadastros_conf
-	                    (tipo,chave,valor,nome,especie,categorias_id,adddate,autor,desativado,desabilitado,publico,restrito,aprovado)
+	                    flex_fields_config
+	                    (type,property,value,name,specie,node_id,created_on,admin_id,deactivated,disabled,public,restricted,approved)
 	                VALUES
 	                    ('config','descricao','".$value."','Descrição','blob',".$austNode.", '".date('Y-m-d H:i:s')."', '".$this->user."',0,0,1,0,1)
 	                ";
                 Connection::getInstance()->exec($sql);
 			} else if( $key == 'table' ){
-				Connection::getInstance()->exec("DELETE FROM cadastros_conf WHERE tipo='estrutura' AND chave='tabela' AND categorias_id='$austNode'");
+				Connection::getInstance()->exec("DELETE FROM flex_fields_config WHERE type='estrutura' AND property='tabela' AND node_id='$austNode'");
                 $sql =
 	                "INSERT INTO
-	                    cadastros_conf
-	                    (tipo,chave,valor,nome,especie,categorias_id,adddate,autor,desativado,desabilitado,publico,restrito,aprovado)
+	                    flex_fields_config
+	                    (type,property,value,name,specie,node_id,created_on,admin_id,deactivated,disabled,public,restricted,approved)
 	                VALUES
 	                    ('estrutura','tabela','".$value."','Tabela Principal','blob',".$austNode.", '".date('Y-m-d H:i:s')."', '".$this->user."',0,0,1,0,1)
 	                ";
@@ -1006,7 +1006,6 @@ class CadastroSetup extends ModsSetup {
 			
 		if( empty($params) )
 			return false;
-		
 		$aust = Aust::getInstance();
 		$return = Aust::getInstance()->create($params);
 		if( is_numeric($return) )

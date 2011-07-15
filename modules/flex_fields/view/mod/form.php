@@ -11,11 +11,11 @@
  * Informações deste cadastro
  */
 $infoCadastro = $module->pegaInformacoesCadastro($austNode);
-$tabelaCadastro = $infoCadastro["estrutura"]['tabela']["valor"];
+$tabelaCadastro = $infoCadastro["estrutura"]['tabela']["value"];
 
 $tabelaImagens = null;
-if( !empty($infoCadastro["estrutura"]['table_images']["valor"]) )
-	$tabelaImagens = $infoCadastro["estrutura"]['table_images']["valor"];
+if( !empty($infoCadastro["estrutura"]['table_images']["value"]) )
+	$tabelaImagens = $infoCadastro["estrutura"]['table_images']["value"];
 
 /*
  * ...
@@ -63,7 +63,7 @@ if( $_GET['action'] == "edit" ){
 	$options = array(
 		'action' => 'edit&aust_node='.$austNode.'&w='.$w,
 	);
-	echo $form->create( $infoCadastro["estrutura"]["tabela"]["valor"], $options );
+	echo $form->create( $infoCadastro["estrutura"]["tabela"]["value"], $options );
 	?>
 	<div id="lightbox-panel" class="window lb_images">
 		<input type="hidden" name="type" value="image_options" />
@@ -139,12 +139,12 @@ if( $_GET['action'] == "edit" ){
 	</form>
 
 <?php
-echo $form->create( $infoCadastro["estrutura"]["tabela"]["valor"] );
+echo $form->create( $infoCadastro["estrutura"]["tabela"]["value"] );
 /*
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?<?php echo $_SERVER['QUERY_STRING'];?>&action=gravar">
  * 
  */
-$nodeIdFieldName = 'data['.$infoCadastro["estrutura"]["tabela"]["valor"].'][node_id]';
+$nodeIdFieldName = 'data['.$infoCadastro["estrutura"]["tabela"]["value"].'][node_id]';
 ?>
 <input type="hidden" name="metodo" value="<?php echo $_GET["action"];?>" />
 <input type="hidden" name="frmcreated_on" value="<?php echo date("Y-m-d H:i:s"); ?>">
@@ -230,8 +230,8 @@ foreach( $camposForm as $chave=>$valor ){
         ?>
         <h3><?php echo $divisorTitles[$valor['nomeFisico']]['valor']; ?></h3>
         <?php
-        if( !empty($divisorTitles[$valor['nomeFisico']]['comentario']) ){
-            echo '<p>'.$divisorTitles[$valor['nomeFisico']]['comentario'].'</p>';
+        if( !empty($divisorTitles[$valor['nomeFisico']]['commentary']) ){
+            echo '<p>'.$divisorTitles[$valor['nomeFisico']]['commentary'].'</p>';
         }
 		$useInput = true;
     }
@@ -308,9 +308,9 @@ foreach( $camposForm as $chave=>$valor ){
 			);
 		} elseif ( !empty($currencyMask) && !is_numeric($currencyMask) ){
 			$fieldClass[] = "currency_field";
-			if( empty($valor["valor"]) )
-				$valor["valor"] = 0;
-			$valor["valor"] = Resources::numberToCurrency($valor["valor"], $this->module->language());
+			if( empty($valor["value"]) )
+				$valor["value"] = 0;
+			$valor["value"] = Resources::numberToCurrency($valor["value"], $this->module->language());
 		}
 	
 		$useInput = true;
@@ -318,8 +318,8 @@ foreach( $camposForm as $chave=>$valor ){
 		$useInput = true;
 	}
 
-    if( empty($valor["valor"]) || $valor["valor"] == '' ){
-        $valor["valor"] = "";
+    if( empty($valor["value"]) || $valor["value"] == '' ){
+        $valor["value"] = "";
     }
 
     if( empty($inputType) ){
@@ -331,8 +331,8 @@ foreach( $camposForm as $chave=>$valor ){
 	 * tipo images não precisa desta técnica, pois são diferentes.
 	 */
 	$after = false;
-	if( !empty($valor['comentario']) )
-		$after = '<p class="explanation">'.$valor['comentario'].'</p>';
+	if( !empty($valor['commentary']) )
+		$after = '<p class="explanation">'.$valor['commentary'].'</p>';
 
 	if( $useInput ){
 	    /**
@@ -342,7 +342,7 @@ foreach( $camposForm as $chave=>$valor ){
 	                                    "label" => $valor["label"],
 	                                    "select" => $select,
 	                                    "checkbox" => $checkbox,
-	                                    "value" => (string) $valor["valor"],
+	                                    "value" => (string) $valor["value"],
 	                                    "type" => $inputType,
 										'after' => $after,
 										"class" => implode(" ", $fieldClass)

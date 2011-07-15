@@ -37,7 +37,6 @@ function autoload($className) {
         require 'core/class/helpers/'.$className.'.class.php';
     else
         require 'core/class/'.$className.'.class.php';
-
 }
 
 spl_autoload_register('autoload');
@@ -45,4 +44,5 @@ spl_autoload_register('autoload');
 require_once(THIS_TO_BASEURL."tests/config/integrity_check.php");
 require_once(THIS_TO_BASEURL."tests/fixtures/Fixture.php");
 require_once(THIS_TO_BASEURL."tests/config/test_helpers.php");
+Fixture::getInstance()->destroy();
 ?>

@@ -19,18 +19,18 @@ $precisa_aprovacao = $module->pegaConfig(Array('estrutura'=>$_GET['aust_node'], 
  * FILTROS ESPECIAIS
  */
 if( $fieldsCount > 0 ){
-    $sql = "SELECT valor
+    $sql = "SELECT value
             FROM
-                cadastros_conf
+                flex_fields_config
             WHERE
-                tipo='filtros_especiais' AND
-                chave='email' AND
-                categorias_id='".$_GET["aust_node"]."'
+                type='filtros_especiais' AND
+                property='email' AND
+                node_id='".$_GET["aust_node"]."'
             ";
     $filtroEspecial = $module->connection->query($sql);
 
     if( !empty($filtroEspecial[0]) )
-        $filtroEspecial = $filtroEspecial[0]["valor"];
+        $filtroEspecial = $filtroEspecial[0]["value"];
 
     if( !empty($filtroEspecial) ){
         $sql = "SELECT
@@ -121,7 +121,7 @@ if( $fieldsCount > 0 ){
             /*
              * Se este cadastro precisa de aprovação, mostra botão para aprovar usuário
              */
-            if($precisa_aprovacao['valor'] == '1'){ ?>
+            if($precisa_aprovacao['value'] == '1'){ ?>
                 <input type="submit" class="js_confirm" name="aprovar" value="Aprovar" />
                 <?php
             }

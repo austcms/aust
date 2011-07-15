@@ -1,20 +1,14 @@
 <?php
-/**
- * MOD MIGRATION
- * 
- * Ajusta para text o tipo que antes chamava-se string
- * 
- */
 class Migration_20101023063300_ConvertStringToText extends Migrations
 {
     function up(){
 
-		$sql = "SELECT categorias_id, chave, id
-				FROM cadastros_conf
+		$sql = "SELECT node_id, key, id
+				FROM flex_fields_config
 				WHERE 
-					tipo='campo' AND
+					type='field' AND
 					(
-						especie='string'
+						specie='string'
 					)
 				";
 		
@@ -22,22 +16,22 @@ class Migration_20101023063300_ConvertStringToText extends Migrations
 		
 		$sqls = array();
 		foreach( $fields as $field ){
-			$sql = "SELECT valor
-					FROM cadastros_conf
+			$sql = "SELECT value
+					FROM flex_fields_config
 					WHERE 
-						tipo='estrutura' AND
+						type='estrutura' AND
 						(
-							chave='tabela'
+							key='tabela'
 						)
 					";
 			$query = Connection::getInstance()->query($sql);
 			$tableName = reset( $query );
-			$tableName = $tableName['valor'];
+			$tableName = $tableName['value'];
 			
 			$describe = Connection::getInstance()->describeTable($tableName, true);
 			
-			if( $describe[$field['chave']]['Type'] == 'text' ){
-				$sqls[] = "UPDATE cadastros_conf SET especie='text' WHERE id='".$field['id']."'";
+			if( $describe[$field['key']]['Type'] == 'text' ){
+				$sqls[] = "UPDATE flex_fields_config SET specie='text' WHERE id='".$field['id']."'";
 			}
 			
 		}
@@ -51,12 +45,12 @@ class Migration_20101023063300_ConvertStringToText extends Migrations
 
     function down(){
 
-		$sql = "SELECT categorias_id, chave, id
-				FROM cadastros_conf
+		$sql = "SELECT node_id, key, id
+				FROM flex_fields_config
 				WHERE 
-					tipo='campo' AND
+					type='campo' AND
 					(
-						especie='text'
+						specie='text'
 					)
 				";
 		
@@ -64,21 +58,21 @@ class Migration_20101023063300_ConvertStringToText extends Migrations
 		
 		$sqls = array();
 		foreach( $fields as $field ){
-			$sql = "SELECT valor
-					FROM cadastros_conf
+			$sql = "SELECT value
+					FROM flex_fields_config
 					WHERE 
-						tipo='estrutura' AND
+						type='estrutura' AND
 						(
-							chave='tabela'
+							key='tabela'
 						)
 					";
 			$tableName = reset( Connection::getInstance()->query($sql) );
-			$tableName = $tableName['valor'];
+			$tableName = $tableName['value'];
 			
 			$describe = Connection::getInstance()->describeTable($tableName, true);
 			
-			if( $describe[$field['chave']]['Type'] == 'varchar(250)' ){
-				$sqls[] = "UPDATE cadastros_conf SET especie='string' WHERE id='".$field['id']."'";
+			if( $describe[$field['key']]['Type'] == 'varchar(250)' ){
+				$sqls[] = "UPDATE flex_fields_config SET specie='string' WHERE id='".$field['id']."'";
 			}
 			
 		}

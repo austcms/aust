@@ -1,27 +1,21 @@
 <?php
-/**
- * MOD MIGRATION
- * 
- * Insere campo node_id em tabelas antigas de cadastro
- * 
- */
 class Migration_20101130114000_InsertNodeId extends Migrations
 {
     function up(){
 
-		$sql = "SELECT categorias_id, valor, id
-				FROM cadastros_conf
+		$sql = "SELECT node_id, value, id
+				FROM flex_fields_config
 				WHERE 
-					tipo='estrutura' AND
+					type='estrutura' AND
 					(
-						chave='tabela'
+						key='tabela'
 					)
 				";
 
 		$fields = Connection::getInstance()->query($sql);
 		foreach( $fields as $field ){
 	        $schema = array(
-	            'table' => $field['valor'],
+	            'table' => $field['value'],
 	            'field' => 'node_id',
 	            'type' => 'int',
 	            'position' => 'AFTER id'
@@ -34,12 +28,12 @@ class Migration_20101130114000_InsertNodeId extends Migrations
 
     function down(){
 
-		$sql = "SELECT categorias_id, valor, id
-				FROM cadastros_conf
+		$sql = "SELECT node_id, valor, id
+				FROM flex_fields_config
 				WHERE 
-					tipo='estrutura' AND
+					type='estrutura' AND
 					(
-						chave='tabela'
+						key='tabela'
 					)
 				";
 		
@@ -47,7 +41,7 @@ class Migration_20101130114000_InsertNodeId extends Migrations
 		
 		$sqls = array();
 		foreach( $fields as $field ){
-	        $this->dropField($field['valor'], 'node_id');
+	        $this->dropField($field['value'], 'node_id');
 		}
 
         return true;

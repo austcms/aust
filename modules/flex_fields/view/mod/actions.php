@@ -42,7 +42,7 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
         }
 
 		$sql = "SELECT *
-				FROM cadastros_conf
+				FROM flex_fields_config
 				WHERE 
 					tipo='campo' AND
 					(

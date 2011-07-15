@@ -65,7 +65,7 @@ include(CORE_CONFIG_DIR."core.php");
 
     $sql = "SELECT valor
             FROM
-                cadastros_conf
+                flex_fields_config
             WHERE
                 tipo='filtros_especiais' AND
                 chave='".$_GET["option"]."' AND

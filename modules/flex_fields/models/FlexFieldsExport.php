@@ -7,7 +7,7 @@
  * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @since v0.1.6, 09/07/2009
  */
-class CadastroExport extends ModuleExport {
+class FlexFieldsExport extends ModuleExport {
 
 	/*
 	 * EXPORT
@@ -40,7 +40,7 @@ class CadastroExport extends ModuleExport {
 		/*
 		 * Salva configurações das tabelas e campos
 		 */
-		$connection->exec("DELETE FROM cadastros_conf WHERE categorias_id='".$st['id']."'");
+		$connection->exec("DELETE FROM flex_fields_config WHERE categorias_id='".$st['id']."'");
 
 		/*
 		 * Cria tabelas e campos físicos

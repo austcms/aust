@@ -204,6 +204,7 @@ class Aust {
                         '$classe','$tipo','$tipo_legivel',
                         '".$autor."'
                     )";
+
         if( Connection::getInstance()->exec($sql) ) {
             return (int) Connection::getInstance()->lastInsertId();
         }

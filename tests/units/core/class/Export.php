@@ -116,7 +116,7 @@ class ExportTest extends PHPUnit_Framework_TestCase
 		$this->obj->connection->exec("DELETE FROM categorias WHERE nome='Teste777'");
 		$this->obj->connection->exec(
 			"DELETE FROM
-				cadastros_conf
+				flex_fields_config
 			WHERE
 				categorias_id='".$this->lastSite."' OR
 				comentario='haha777' OR
@@ -291,7 +291,7 @@ class ExportTest extends PHPUnit_Framework_TestCase
 			$existentSt[] = $value['nome'];
 		}
 
-		$conf = $this->obj->connection->query("SELECT * FROM cadastros_conf WHERE chave='campo_1777'");
+		$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE chave='campo_1777'");
 		$this->assertEquals(1, count($conf), 'Salvando várias vezes a mesma configuração');
 
 		$this->resetTables();

@@ -45,7 +45,7 @@ if(!empty($_GET['function'])){
     if($_GET['function'] == "desativar"){
         $sql = "
                 UPDATE
-                    cadastros_conf
+                    flex_fields_config
                 SET
                     desativado='1'
                 WHERE
@@ -63,7 +63,7 @@ if(!empty($_GET['function'])){
     if($_GET['function'] == "ativar"){
         $sql = "
                 UPDATE
-                    cadastros_conf
+                    flex_fields_config
                 SET
                     desativado='0'
                 WHERE
@@ -82,7 +82,7 @@ if(!empty($_GET['function'])){
     if($_GET['function'] == "necessario"){
         $sql = "
                 UPDATE
-                    cadastros_conf
+                    flex_fields_config
                 SET
                     necessario='1'
                 WHERE
@@ -101,7 +101,7 @@ if(!empty($_GET['function'])){
     if($_GET['function'] == "desnecessario"){
         $sql = "
                 UPDATE
-                    cadastros_conf
+                    flex_fields_config
                 SET
                     necessario='0'
                 WHERE
@@ -122,7 +122,7 @@ if(!empty($_GET['function'])){
     if($_GET['function'] == "listar"){
         $sql = "
                 UPDATE
-                    cadastros_conf
+                    flex_fields_config
                 SET
                     listagem='1'
                 WHERE
@@ -143,7 +143,7 @@ if(!empty($_GET['function'])){
     if($_GET['function'] == "naolistar"){
         $sql = "
                 UPDATE
-                    cadastros_conf
+                    flex_fields_config
                 SET
                     listagem='0'
                 WHERE
@@ -165,7 +165,7 @@ if(!empty($_GET['function'])){
     if($_GET['function'] == 'desativar' AND !empty($_GET['w'])){
         $sql = "
                 UPDATE
-                    cadastros_conf
+                    flex_fields_config
                 SET
                     tipo='campodesativado'
 

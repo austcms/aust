@@ -1280,8 +1280,8 @@ class Module extends ActiveModule
 			
 			$sql = "DELETE FROM aust_relations WHERE slave_id='".$params["aust_node"]."'";
 			Connection::getInstance()->exec($sql);
-
-			$relationalName = $moduleConfig['nome'];
+			
+			$relationalName = $moduleConfig['name'];
 			if( !empty($moduleConfig['relationalName']) )
 				$relationalName = $moduleConfig['relationalName'];
 
@@ -1445,9 +1445,9 @@ class Module extends ActiveModule
 			if( $confClass == 'field' ){
 
 				$fields = $this->getFields();
+				
 				if( empty($fields) )
 					return array();
-					
 	            foreach($queryTmp as $valor) {
 		
 					// $prop: toma o nome da propriedade
@@ -1464,7 +1464,7 @@ class Module extends ActiveModule
 							 * Tipo do campo bate com o field_type da configuração?
 							 */
 							if( !empty($configValue['field_type'])
-								AND $configValue['field_type'] == $fields[$prop]['especie'] )
+								AND $configValue['field_type'] == $fields[$prop]['specie'] )
 							{
 								if( empty($query[$prop][$configName]) ){
 		                    		$query[$prop][$configName] = $configValue;

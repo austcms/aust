@@ -1,27 +1,21 @@
 <?php
-/**
- * MOD MIGRATION
- * 
- * Insere campo visitants em tabelas antigas de cadastro
- * 
- */
 class Migration_20110205051700_InsertVisitants extends Migrations
 {
     function up(){
 
-		$sql = "SELECT categorias_id, valor, id
-				FROM cadastros_conf
+		$sql = "SELECT node_id, value, id
+				FROM flex_fields_config
 				WHERE 
-					tipo='estrutura' AND
+					type='estrutura' AND
 					(
-						chave='tabela'
+						key='tabela'
 					)
 				";
 
 		$fields = Connection::getInstance()->query($sql);
 		foreach( $fields as $field ){
 	        $schema = array(
-	            'table' => $field['valor'],
+	            'table' => $field['value'],
 	            'field' => 'visitants',
 	            'type' => 'int',
 	            'position' => 'AFTER updated_on',
@@ -35,12 +29,12 @@ class Migration_20110205051700_InsertVisitants extends Migrations
 
     function down(){
 
-		$sql = "SELECT categorias_id, valor, id
-				FROM cadastros_conf
+		$sql = "SELECT node_id, value, id
+				FROM flex_fields_config
 				WHERE 
-					tipo='estrutura' AND
+					type='estrutura' AND
 					(
-						chave='tabela'
+						key='tabela'
 					)
 				";
 		
@@ -48,7 +42,7 @@ class Migration_20110205051700_InsertVisitants extends Migrations
 		
 		$sqls = array();
 		foreach( $fields as $field ){
-	        $this->dropField($field['valor'], 'visitants');
+	        $this->dropField($field['value'], 'visitants');
 		}
 
         return true;

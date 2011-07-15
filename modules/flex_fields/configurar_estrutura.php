@@ -20,8 +20,8 @@
 
 $tabela_da_estrutura = $module->getTable();
 
-include_once $module->getIncludeFolder().'/'.MOD_MODELS_DIR.'CadastroSetup.php';
-$setup = new CadastroSetup();
+include_once $module->getIncludeFolder().'/'.MOD_MODELS_DIR.'FlexFieldsSetup.php';
+$setup = new FlexFieldsSetup();
 $setup->austNode = $_GET['aust_node'];
 $setup->mainTable = $module->getTable();
 
@@ -120,13 +120,13 @@ if(!empty($_POST['configurar_opcoes'])){
         if(strpos($key, 'frm') === 0){
             $key = str_replace("frm", "", $key);
             $sql = "UPDATE
-                        cadastros_conf
+                        flex_fields_config
                     SET
                         valor='".$valor."'
                     WHERE
-                        chave='".$key."' AND
-                        tipo='config' AND
-                        categorias_id='".$_GET['aust_node']."'
+                        property='".$key."' AND
+                        type='config' AND
+                        node_id='".$_GET['aust_node']."'
             ";
             
             if($module->connection->exec($sql)){
@@ -153,12 +153,12 @@ if(!empty($_GET['function'])){
     if($_GET['function'] == "desativar"){
         $sql = "
                 UPDATE
-                    cadastros_conf
+                    flex_fields_config
                 SET
-                    desativado='1'
+                    deactivated='1'
                 WHERE
-                    chave='".$_GET['w']."' AND
-                    categorias_id='".$_GET['aust_node']."'
+                    property='".$_GET['w']."' AND
+                    node_id='".$_GET['aust_node']."'
         ";
         if($module->connection->exec($sql))
             $status[] = "Campo desativado com sucesso";
@@ -171,12 +171,12 @@ if(!empty($_GET['function'])){
     if($_GET['function'] == "ativar"){
         $sql = "
                 UPDATE
-                    cadastros_conf
+                    flex_fields_config
                 SET
-                    desativado='0'
+                    deactivated='0'
                 WHERE
-                    chave='".$_GET['w']."' AND
-                    categorias_id='".$_GET['aust_node']."'
+                    property='".$_GET['w']."' AND
+                    node_id='".$_GET['aust_node']."'
         ";
         if($module->connection->exec($sql))
             $status[] = "Campo ativado com sucesso";
@@ -190,12 +190,12 @@ if(!empty($_GET['function'])){
     if($_GET['function'] == "necessario"){
         $sql = "
                 UPDATE
-                    cadastros_conf
+                    flex_fields_config
                 SET
-                    necessario='1'
+                    needed='1'
                 WHERE
-                    chave='".$_GET['w']."' AND
-                    categorias_id='".$_GET['aust_node']."'
+                    property='".$_GET['w']."' AND
+                    node_id='".$_GET['aust_node']."'
         ";
         if($module->connection->exec($sql))
             $status[] = "Preenchimento do campo ajustado para necessário com sucesso.";
@@ -209,12 +209,12 @@ if(!empty($_GET['function'])){
     if($_GET['function'] == "desnecessario"){
         $sql = "
                 UPDATE
-                    cadastros_conf
+                    flex_fields_config
                 SET
-                    necessario='0'
+                    needed='0'
                 WHERE
-                    chave='".$_GET['w']."' AND
-                    categorias_id='".$_GET['aust_node']."'
+                    property='".$_GET['w']."' AND
+                    node_id='".$_GET['aust_node']."'
         ";
         if($module->connection->exec($sql))
             $status[] = "Não é necessário preenchimento obrigatório do campo ajustado com sucesso.";
@@ -230,12 +230,12 @@ if(!empty($_GET['function'])){
     if($_GET['function'] == "listar"){
         $sql = "
                 UPDATE
-                    cadastros_conf
+                    flex_fields_config
                 SET
-                    listagem='1'
+                    listing='1'
                 WHERE
-                    chave='".$_GET['w']."' AND
-                    categorias_id='".$_GET['aust_node']."'
+                    property='".$_GET['w']."' AND
+                    node_id='".$_GET['aust_node']."'
         ";
         if($module->connection->exec($sql))
             $status[] = "Campo aparecerá na listagem de cadastro.";
@@ -251,12 +251,12 @@ if(!empty($_GET['function'])){
     if($_GET['function'] == "naolistar"){
         $sql = "
                 UPDATE
-                    cadastros_conf
+                    flex_fields_config
                 SET
-                    listagem='0'
+                    listing='0'
                 WHERE
-                    chave='".$_GET['w']."' AND
-                    categorias_id='".$_GET['aust_node']."'
+                    property='".$_GET['w']."' AND
+                    node_id='".$_GET['aust_node']."'
         ";
         if($module->connection->exec($sql))
             $status[] = "O campo selecionado não aparecerá mais em listagens.";
@@ -273,9 +273,9 @@ if(!empty($_GET['function'])){
     if($_GET['function'] == 'desativar' AND !empty($_GET['w'])){
         $sql = "
                 UPDATE
-                    cadastros_conf
+                    flex_fields_config
                 SET
-                    tipo='campodesativado'
+                    type='campodesativado'
 
 
 ";
@@ -332,12 +332,12 @@ if(!empty($_GET['function'])){
                  * Verifica se o campo é editável ou infra-estrutura (ex. de campos: id, adddate, aprovado)
                  */
                 $sql = "SELECT
-                            valor, desativado, listagem, IFNULL(necessario, '0') as necessario
+                            value, deactivated, listing, IFNULL(needed, '0') as needed
                         FROM
-                            cadastros_conf
+                            flex_fields_config
                         WHERE
-                            chave='".$chave."' AND
-                            categorias_id='".$_GET['aust_node']."'
+                            property='".$chave."' AND
+                            node_id='".$_GET['aust_node']."'
                         LIMIT 0,2
                         ";
                 $result = $module->connection->query($sql);
@@ -347,7 +347,7 @@ if(!empty($_GET['function'])){
                     <li>
                     <?php echo $chave; ?>
                     <?php
-                    if($dados['desativado'] == '1'){
+                    if($dados['deactivated'] == '1'){
                         ?>
                         <a href="adm_main.php?section=<?php echo $_GET['section']?>&aust_node=<?php echo $_GET['aust_node']?>&action=<?php echo $_GET['action']?>&function=ativar&w=<?php echo $chave; ?>">
                             Ativar
@@ -362,7 +362,7 @@ if(!empty($_GET['function'])){
                     }
                     ?> -
                     <?php
-                    if($dados['necessario'] == '0'){
+                    if($dados['needed'] == '0'){
                         ?>
                         <a href="adm_main.php?section=<?php echo $_GET['section']?>&aust_node=<?php echo $_GET['aust_node']?>&action=<?php echo $_GET['action']?>&function=necessario&w=<?php echo $chave; ?>">
                             Necessario
@@ -377,7 +377,7 @@ if(!empty($_GET['function'])){
                     }
                     ?> -
                     <?php
-                    if( $dados['listagem'] < '1' ){
+                    if( $dados['listing'] < '1' ){
                         ?>
                         <a href="adm_main.php?section=<?php echo $_GET['section']?>&aust_node=<?php echo $_GET['aust_node']?>&action=<?php echo $_GET['action']?>&function=listar&w=<?php echo $chave; ?>">
                             Listar
@@ -496,12 +496,12 @@ if(!empty($_GET['function'])){
                         foreach($fields as $campo=>$valor){
                             // verifica se o campo é editável ou infra-estrutura (ex. de campos: id, adddate, aprovado)
                             $sql = "SELECT
-                                        valor, chave
+                                        value, property
                                     FROM
-                                        cadastros_conf
+                                        flex_fields_config
                                     WHERE
-                                        chave='".$campo."' AND
-										categorias_id='".$_GET['aust_node']."'
+                                        property='".$campo."' AND
+										node_id='".$_GET['aust_node']."'
                                     LIMIT 0,2
                                     ";
                             $result = $module->connection->query($sql,"ASSOC");
@@ -510,9 +510,9 @@ if(!empty($_GET['function'])){
                                 $i++;
                                 // se for primeiro registro, escreve <option> com opção de "ANTES DE <campo>"
                                 if($i == "1"){
-                                    echo '<option value="first_field">Antes de '.$result["valor"].'</option>';
+                                    echo '<option value="first_field">Antes de '.$result["value"].'</option>';
                                 }
-                                echo '<option value="'.$result["chave"].'">Depois de '.$result["valor"].'</option>';
+                                echo '<option value="'.$result["property"].'">Depois de '.$result["value"].'</option>';
                             }
 
                         }
@@ -582,12 +582,12 @@ if(!empty($_GET['function'])){
                      * Busca campos do DB
                      */
                     $sql = "SELECT
-                                chave, valor
+                                property, value
                             FROM
-                                cadastros_conf
+                                flex_fields_config
                             WHERE
-                                tipo='campo' AND
-                                categorias_id='".$_GET['aust_node']."'
+                                type='campo' AND
+                                node_id='".$_GET['aust_node']."'
                             ";
                     $dados = $module->connection->query($sql,"ASSOC");
                     ?>
@@ -599,7 +599,7 @@ if(!empty($_GET['function'])){
                          */
                         foreach($dados as $valor){
                             ?>
-                            <option value="BEFORE <?php echo $valor["chave"]?>"><?php echo $valor["valor"]?></option>
+                            <option value="BEFORE <?php echo $valor["property"]?>"><?php echo $valor["value"]?></option>
                             <?php
                         }
                         ?>
@@ -620,9 +620,9 @@ if(!empty($_GET['function'])){
             } else {
                 foreach( $divisorTitles as $div ){
                     ?>
-                    <strong><?php echo $div['valor'];?></strong>
+                    <strong><?php echo $div['value'];?></strong>
                     <br clear="all" />
-                    <em><?php echo $div['descricao'];?></em>
+                    <em><?php echo $div['description'];?></em>
                     <a href="adm_main.php?section=<?php echo $_GET['section']?>&aust_node=<?php echo $_GET['aust_node']?>&action=<?php echo $_GET['action']?>&deleteDivisor=<?php echo $div['id'] ?>#divisors">Excluir</a>
                     <br clear="all" />
                     <br clear="all" />
@@ -654,13 +654,13 @@ if(!empty($_GET['function'])){
             if( !empty($_POST["filtro_especial_campo_email"])
                 AND $_POST["filtro_especial_campo_email"] == "Salvar" ){
 
-                $sql = "DELETE FROM cadastros_conf WHERE tipo='filtros_especiais'";
+                $sql = "DELETE FROM flex_fields_config WHERE tipo='filtros_especiais'";
                 $module->connection->exec($sql);
 
                 if( !empty($_POST['email']) ){
                     $sql = "INSERT INTO
-                                cadastros_conf
-                                (tipo, chave, valor, categorias_id)
+                                flex_fields_config
+                                (type, property, value, node_id)
                             VALUES
                                 ('filtros_especiais', 'email', '".$_POST['email']."', '".$_GET["aust_node"]."')
                             ";
@@ -668,17 +668,17 @@ if(!empty($_GET['function'])){
                 }
             }
 
-            $sql = "SELECT valor
+            $sql = "SELECT value
                     FROM
-                        cadastros_conf
+                        flex_fields_config
                     WHERE
-                        tipo='filtros_especiais' AND
-                        chave='email' AND
-                        categorias_id='".$_GET["aust_node"]."'
+                        type='filtros_especiais' AND
+                        property='email' AND
+                        node_id='".$_GET["aust_node"]."'
                     ";
             $dados = $module->connection->query($sql);
-			if( !empty($dados[0]["valor"]) )
-            	$dados = $dados[0]["valor"];
+			if( !empty($dados[0]["value"]) )
+            	$dados = $dados[0]["value"];
 			else 
 				$dados = '';
 
@@ -783,7 +783,6 @@ if(!empty($_GET['function'])){
             <?php
             $configurations = $module->loadModConf(null,'field');
 			$fields = $module->getFields(false);
-			//pr($fields);
             if( !empty($configurations) && is_array($configurations) ){
                 ?>
 
@@ -795,12 +794,12 @@ if(!empty($_GET['function'])){
                 <?php
 
                 foreach( $fields as $fieldName=>$fieldOptions ){
-					if( empty($fieldOptions["valor"]) )
+					if( empty($fieldOptions["value"]) )
 						continue;
                     ?>
 
                     <div class="campo">
-                        <div><?php echo $fieldOptions["valor"] ?></div>
+                        <div><?php echo $fieldOptions["value"] ?></div>
                         <div style="margin-left: 15px">
 	                        <?php
 							if( empty($configurations[$fieldName]) )
@@ -809,7 +808,7 @@ if(!empty($_GET['function'])){
 							foreach( $configurations[$fieldName] as $key=>$options ){
 								
 								if( !empty($options['field_type']) AND
-									$options['field_type'] != $fieldOptions['especie']
+									$options['field_type'] != $fieldOptions['specie']
 								)
 									continue;
 									
@@ -895,32 +894,32 @@ if(!empty($_GET['function'])){
                 $sql = "SELECT
                             *
                         FROM
-                            cadastros_conf
+                            flex_fields_config
                         WHERE
-                            tipo='config' AND
-                            categorias_id='".$_GET['aust_node']."'
+                            type='config' AND
+                            node_id='".$_GET['aust_node']."'
                         ";
                 $result = $module->connection->query($sql);
                 foreach($result as $dados){
                     ?>
                         <div class="campo">
-                            <label><?php echo $dados['nome']?>:</label>
+                            <label><?php echo $dados['name']?>:</label>
                             <?php
                             /*
                              * Mostra o campo de acordo
                              */
-                            if($dados['especie'] == 'bool'){ ?>
-                                <select name="frm<?php echo $dados['chave']?>">
-                                    <option <? makeselected($dados['valor'], '1') ?> value="1">Sim</option>
-                                    <option <? makeselected($dados['valor'], '0') ?> value="0">Não</option>
+                            if($dados['specie'] == 'bool'){ ?>
+                                <select name="frm<?php echo $dados['property']?>">
+                                    <option <? makeselected($dados['value'], '1') ?> value="1">Sim</option>
+                                    <option <? makeselected($dados['value'], '0') ?> value="0">Não</option>
                                 </select>
-                            <? } elseif($dados['especie'] == 'string') { ?>
-                                <input type="text" name="frm<?php echo $dados['chave']?>" value="<?php echo $dados['valor']?>" />
-                            <? } elseif($dados['especie'] == 'blob') { ?>
-                                <textarea name="frm<?php echo $dados['chave']?>" cols="35" rows="3"><?php echo $dados['valor']?></textarea>
+                            <? } elseif($dados['specie'] == 'string') { ?>
+                                <input type="text" name="frm<?php echo $dados['property']?>" value="<?php echo $dados['value']?>" />
+                            <? } elseif($dados['specie'] == 'blob') { ?>
+                                <textarea name="frm<?php echo $dados['property']?>" cols="35" rows="3"><?php echo $dados['value']?></textarea>
 
                             <? } else { ?>
-                                <textarea name="frm<?php echo $dados['chave']?>" cols="30" rows="3"><?php echo $dados['valor']?></textarea>
+                                <textarea name="frm<?php echo $dados['property']?>" cols="30" rows="3"><?php echo $dados['value']?></textarea>
                             <? } ?>
                         </div>
                     <?

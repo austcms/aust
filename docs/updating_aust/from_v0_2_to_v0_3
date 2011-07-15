@@ -1,0 +1,44 @@
+How to update from v0.2 to v0.3
+===============================
+
+Modules have changed. Now FlexFields took place as the main module, instead of Cadastro.
+
+
+Updating From Cadastro to FlexFields
+====================================
+
+First, run FlexFields migrations. It'll give the flex_fields_config table.
+
+Now run:
+
+UPDATE
+	categorias
+	SET
+		tipo='flex_fields'
+	WHERE
+		tipo='cadastro'
+
+Change the table name 'categorias' to the table which has all the Aust nodes.
+
+Then, convert all current field data to FlexFields:
+
+INSERT INTO
+	flex_fields_config
+	(name,type, property, value,node_id,created_on,deactivated,disabled,public,restricted,approved,
+	needed, class, specie, reference, order_nr, ref_child_field, ref_parent_field, ref_field, ref_table, description, listing, admin_id
+	)
+	(
+	SELECT 
+		nome,tipo,chave,valor,categorias_id,adddate,desativado,desabilitado,publico,restrito,aprovado,
+		necessario, classe,
+		especie,referencia,ordem,ref_child_field,ref_parent_field,ref_campo,ref_tabela,descricao, listagem, autor
+	FROM
+		cadastros_conf
+		)
+		
+		
+Now we need to make a few changes in Image and File tables. Run the following
+query for all image and files tables related to a FlexField structure.
+
+	ALTER TABLE some_structure_images CHANGE categoria_id node_id int;
+

@@ -79,7 +79,7 @@ class ModController extends ModActionController
          */
         $infoTabelaFisica = $this->module->getPhysicalFields(
             array(
-                "tabela" => $infoCadastro["estrutura"]["tabela"]["valor"],
+                "tabela" => $infoCadastro["estrutura"]["tabela"]["value"],
                 "by" => "Field",
             )
         );
@@ -100,7 +100,7 @@ class ModController extends ModActionController
                 $sql = "SELECT
                             node_id, ".implode(",", array_keys($campos))."
                         FROM
-                            ".$infoCadastro["estrutura"]["tabela"]["valor"]."
+                            ".$infoCadastro["estrutura"]["tabela"]["value"]."
                         WHERE
                             id=".$w."
                         ";
@@ -125,14 +125,14 @@ class ModController extends ModActionController
              *
              * Engine:
              *      Pega os registros da tabela do cadastro e os registros
-             *      da tabela cadastros_conf e verifica cada um, tentando
-             *      coincindi-los. Se algum campo não consta na tabela cadastros_conf
+             *      da tabela flex_fields_config e verifica cada um, tentando
+             *      coincindi-los. Se algum campo não consta na tabela flex_fields_config
              *      não é mostrado seu input, pois provavelmente é um campo
              *      de configuração.
              *
              */
-            $type  = $valor["especie"];
-            if( !empty($valor['valor']) ){
+            $type  = $valor["specie"];
+            if( !empty($valor['value']) ){
 
                 /**
                  * LEVANTAMENTO DE INFORMAÇÕES SOBRE CAMPOS
@@ -145,26 +145,26 @@ class ModController extends ModActionController
                  * Se há valores carregados do DB para edição
                  */
                 if( !empty($dados) ){
-                    if( array_key_exists($valor["chave"], $dados) ){
-                        $camposForm[ $valor["chave"] ]["valor"] = $dados[ $valor["chave"] ];
+                    if( array_key_exists($valor["property"], $dados) ){
+                        $camposForm[ $valor["property"] ]["value"] = $dados[ $valor["property"] ];
                     }
                 }
-                $camposForm[ $valor["chave"] ]["label"] = $valor['valor'];
-                $camposForm[ $valor["chave"] ]["nomeFisico"] = $valor['chave'];
-                $camposForm[ $valor["chave"] ]["comentario"] = $valor['comentario'];
-                $camposForm[ $valor["chave"] ]["tipo"]["especie"] = $valor["especie"];
-                $camposForm[ $valor["chave"] ]["tipo"]["referencia"] = $valor["referencia"];
-                $camposForm[ $valor["chave"] ]["tipo"]["tabelaReferencia"] = $valor["ref_tabela"];
-                $camposForm[ $valor["chave"] ]["tipo"]["refParentField"] = $valor["ref_parent_field"];
-                $camposForm[ $valor["chave"] ]["tipo"]["refChildField"] = $valor["ref_child_field"];
-                $camposForm[ $valor["chave"] ]["tipo"]["tabelaReferenciaCampo"] = $valor["ref_campo"];
-                $camposForm[ $valor["chave"] ]["tipo"]["tipoFisico"] = $infoTabelaFisica[ $valor["chave"] ]["Type"];
+                $camposForm[ $valor["property"] ]["label"] = $valor['value'];
+                $camposForm[ $valor["property"] ]["nomeFisico"] = $valor['property'];
+                $camposForm[ $valor["property"] ]["comentario"] = $valor['commentary'];
+                $camposForm[ $valor["property"] ]["tipo"]["especie"] = $valor["specie"];
+                $camposForm[ $valor["property"] ]["tipo"]["referencia"] = $valor["reference"];
+                $camposForm[ $valor["property"] ]["tipo"]["tabelaReferencia"] = $valor["ref_table"];
+                $camposForm[ $valor["property"] ]["tipo"]["refParentField"] = $valor["ref_parent_field"];
+                $camposForm[ $valor["property"] ]["tipo"]["refChildField"] = $valor["ref_child_field"];
+                $camposForm[ $valor["property"] ]["tipo"]["tabelaReferenciaCampo"] = $valor["ref_field"];
+                $camposForm[ $valor["property"] ]["tipo"]["tipoFisico"] = $infoTabelaFisica[ $valor["property"] ]["Type"];
 
 				/*
 				 * Campo Images
 				 */
-				if( $valor['especie'] == 'images' ){
-	                $camposForm[ $valor["chave"] ]["tipo"]["tabelaReferencia"] = $infoCadastro['estrutura']["table_images"]['valor'];
+				if( $valor['specie'] == 'images' ){
+	                $camposForm[ $valor["property"] ]["tipo"]["tabelaReferencia"] = $infoCadastro['estrutura']["table_images"]['value'];
 				}
             }
 
@@ -178,7 +178,7 @@ class ModController extends ModActionController
          * Informações sobre o cadastro completo
          */
         $this->set('infoCadastro', $infoCadastro);
-        $this->set('formIntro', $infoCadastro["config"]["descricao"]["valor"]);
+        $this->set('formIntro', $infoCadastro["config"]["descricao"]["value"]);
         /**
          * Lança as informações sobre campos para o view
          */
@@ -278,8 +278,8 @@ class ModController extends ModActionController
         /*
          * UPDATE?
          */
-        if( !empty($this->data[ $infoCadastro["estrutura"]["tabela"]["valor"] ]["id"] ) ){
-            $w = $this->data[ $infoCadastro["estrutura"]["tabela"]["valor"]] [ "id"];
+        if( !empty($this->data[ $infoCadastro["estrutura"]["tabela"]["value"] ]["id"] ) ){
+            $w = $this->data[ $infoCadastro["estrutura"]["tabela"]["value"]] [ "id"];
         }
 
         /**
@@ -287,7 +287,7 @@ class ModController extends ModActionController
          */
         $infoTabelaFisica = $this->module->getPhysicalFields(
             array(
-                "tabela" => $infoCadastro["estrutura"]["tabela"]["valor"],
+                "tabela" => $infoCadastro["estrutura"]["tabela"]["value"],
                 "by" => "Field",
             )
         );
@@ -367,7 +367,7 @@ class ModController extends ModActionController
 							if( !empty($infoCadastro['campo'][$field]['ref_parent_field']) )
 								$ref_field = $infoCadastro['campo'][$field]['ref_parent_field'];
 							else
-								$ref_field = $infoCadastro["estrutura"]["tabela"]["valor"]."_id";
+								$ref_field = $infoCadastro["estrutura"]["tabela"]["value"]."_id";
 						
 						
 	                        $relational[$field][$tabela][$campo][$ref_field] = $lastInsertId;
@@ -389,7 +389,7 @@ class ModController extends ModActionController
 						if( !empty($infoCadastro['campo'][$field]['ref_parent_field']) )
 							$ref_field = $infoCadastro['campo'][$field]['ref_parent_field'];
 						else
-							$ref_field = $infoCadastro["estrutura"]["tabela"]["valor"]."_id";
+							$ref_field = $infoCadastro["estrutura"]["tabela"]["value"]."_id";
 
 	                    $sql = "DELETE FROM
 	                                $key

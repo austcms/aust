@@ -207,7 +207,7 @@ class Export
 	 *		uma estrutura. Se uma das chaves da estrutura for 'exportData', significa
 	 * 		que são dados que precisam ser importados usando uma classe especial do módulo.
 	 *
-	 *		O módulo Cadastro, por exemplo, possui a tabela cadastros_conf. O tratamento
+	 *		O módulo Cadastro, por exemplo, possui a tabela flex_fields_config. O tratamento
 	 *		dos dados desta tabela específica precisa ser feito por uma classe de
 	 *		importação especial do módulo Cadastro.
 	 */

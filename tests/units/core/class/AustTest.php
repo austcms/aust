@@ -1,11 +1,5 @@
 <?php
-
-#####################################
 require_once 'tests/config/auto_include.php';
-require_once 'core/class/SQLObject.class.php';
-
-
-#####################################
 
 class AustTest extends PHPUnit_Framework_TestCase
 {
@@ -21,7 +15,6 @@ class AustTest extends PHPUnit_Framework_TestCase
          */
         
         $this->conexao = Connection::getInstance();
-        require_once('core/class/Aust.php');
         $this->obj = new Aust($this->conexao);
     }
 

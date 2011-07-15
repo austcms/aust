@@ -9,7 +9,7 @@ if( empty($_GET['section']) )
  * Verifica se há a necessidade de aprovação de cadastro e se há alguém necessitando aprovação
  */
 $precisa_aprovacao = $module->pegaConfig(Array('estrutura'=>$austNode, 'chave'=>'aprovacao'));
-if($precisa_aprovacao['valor'] == '1'){
+if($precisa_aprovacao['value'] == '1'){
     $sql = "SELECT id FROM ".$module->LeTabelaDeDados($austNode)." WHERE approved=0 or approved IS NULL";
     $result = $module->connection->query($sql);
     if( count($result) > 0 ){
@@ -88,7 +88,7 @@ if(count($resultado) > 0){
                             echo $dados[$campo];
                             if( StructurePermissions::getInstance()->canEdit($austNode) )
                                 echo '</a>';
-                            if( $precisa_aprovacao['valor'] == '1'
+                            if( $precisa_aprovacao['value'] == '1'
                                  AND (
                                      $dados['des_approved'] == 0
                                      OR empty($dados['des_approved']) )
@@ -111,7 +111,7 @@ if(count($resultado) > 0){
                                 }
                             }
 							
-							$fieldEncodedName = $fieldsConfiguration[$campo]["chave"];
+							$fieldEncodedName = $fieldsConfiguration[$campo]["property"];
 							if( $module->getFieldConfig($fieldEncodedName, 'currency_mask') ){
 								echo Resources::numberToCurrency($dados[$campo], $module->language());
 							} elseif( $module->getFieldConfig($fieldEncodedName, 'boolean_field') == "1" ){

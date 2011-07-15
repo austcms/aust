@@ -279,7 +279,7 @@ $modInfo = array(
      * resumo a qualquer requisitante (chamado responser).
      */
     'arquitetura' => array(
-        'table' => 'cadastros_conf',
+        'table' => 'flex_fields_config',
         'foreignKey' => 'categoria',
     ),
 

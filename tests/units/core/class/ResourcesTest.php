@@ -3,7 +3,7 @@
 
 #####################################
 require_once 'tests/config/auto_include.php';
-require_once 'core/class/SQLObject.class.php';
+
 #####################################
 
 class ResourcesTest extends PHPUnit_Framework_TestCase

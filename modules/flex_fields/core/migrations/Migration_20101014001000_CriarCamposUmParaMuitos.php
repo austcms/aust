@@ -1,27 +1,21 @@
 <?php
-/**
- * MOD MIGRATION
- * 
- * Migration de um módulos
- * 
- */
 class Migration_20101014001000_CriarCamposUmParaMuitos extends Migrations
 {
     function up(){
 
         $schema = array(
-            'table' => 'cadastros_conf',
+            'table' => 'flex_fields_config',
             'field' => 'ref_child_field',
             'type' => 'VARCHAR(60)',
-            'position' => 'AFTER ref_campo'
+            'position' => 'AFTER ref_field'
         );
         $this->addField($schema);
 
         $schema = array(
-            'table' => 'cadastros_conf',
+            'table' => 'flex_fields_config',
             'field' => 'ref_parent_field',
             'type' => 'VARCHAR(60)',
-            'position' => 'AFTER ref_campo'
+            'position' => 'AFTER ref_field'
         );
         $this->addField($schema);
 
@@ -29,8 +23,8 @@ class Migration_20101014001000_CriarCamposUmParaMuitos extends Migrations
     }
 
     function down(){
-        $this->dropField('cadastros_conf', 'ref_parent_field');
-        $this->dropField('cadastros_conf', 'ref_child_field');
+        $this->dropField('flex_fields_config', 'ref_parent_field');
+        $this->dropField('flex_fields_config', 'ref_child_field');
         return true;
     }
 
