@@ -54,23 +54,29 @@ class ApiTransaction {
 		if( !is_array($structureIds) || count($structureIds) == 0 )
 			return false;
 
+		$where = $this->queryParser()->where($get);
 		$order = $this->queryParser()->order($get);
 		$limit = $this->queryParser()->limit($get);
 		$fields = $this->queryParser()->fields($get);
 		$result = array();
-
+		
+		$queryParameters = array(
+			'fields' => $fields,
+			'where' => $where,
+			'order' => $order,
+			'limit' => $limit
+		);
+		
 		foreach( $structureIds as $structureId ){
 			
 			$structureInstance = ModulesManager::getInstance()->modelInstance($structureId);
 			$items = $structureInstance->load(
-				array(
-					'fields' => $fields,
-					'order' => $order,
-					'limit' => $limit
-				)
+				$queryParameters
 			);
 			$result = array_merge($result, $items);
 		}
+		if( empty($result) )
+			$result = 0;
 		return $result;
 		
 	}

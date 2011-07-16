@@ -49,6 +49,7 @@ if(Connection::getInstance()->dbExists()){
      *
      * O resultado é guardado em dbSchema::schemaStatus
      */
+	$dbSchema = dbSchema::getInstance();
     $dbSchema->verificaSchema();
     //echo $dbSchema->schemaStatus;
 

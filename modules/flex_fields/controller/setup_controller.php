@@ -34,7 +34,7 @@ class SetupController extends ModActionController
      */
     function setuppronto(){
         
-        $this->loadModel("CadastroSetup");
+        $this->loadModel("FlexFieldsSetup");
 		
         global $aust_charset;
 
@@ -81,7 +81,7 @@ class SetupController extends ModActionController
 			),
         );
 
-		if( $this->CadastroSetup->createStructure($params) ){
+		if( $this->FlexFieldsSetup->createStructure($params) ){
 			$this->render();
 		}
 		
@@ -93,7 +93,7 @@ class SetupController extends ModActionController
          * Verifica se consegue gravar a estrutura (provavelmente na tabela
          * 'categorias').
          */
-		$status_insert = $this->CadastroSetup->create( $params );
+		$status_insert = $this->FlexFieldsSetup->create( $params );
         if( $status_insert ){
             
             $status_setup[] = "Categoria criada com sucesso.";

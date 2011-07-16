@@ -35,6 +35,25 @@ class ApiQueryParser {
 		return $fields;
 	}
 	
+	public function where($get){
+		$result = array();
+		foreach( $get as $key=>$value ){
+			if( substr($key, 0, 6) == 'where_' ){
+				$value = str_replace("+", ' ', $value);
+				if( strlen($value) > 1 )
+					$value = str_replace("*", '%', $value); // for using on SQL LIKE '%word'
+
+				if( strstr($value, ';') )
+					$value = explode(";", $value);
+				
+				$field = substr($key, 6);
+				$result[$field] = $value;
+			}
+		}
+		
+		return $result;
+	}
+	
 	public function order($get){
 		if( empty($get['order']) )
 			return 'id ASC';

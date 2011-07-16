@@ -962,7 +962,7 @@ class FlexFields extends Module {
         $search = (empty($param['search'])) ? '' : $param['search'];
         $searchField = (empty($param['search_field'])) ? '' : $param['search_field'];
         $w = (empty($param['id'])) ? '' : $param['id'];
-
+		
         /**
          * Se $categorias estiver vazio (nunca deverá acontecer)
          */
@@ -1100,12 +1100,12 @@ class FlexFields extends Module {
             
             if( !empty($searchQueryArray) )
                 $searchQuery = "AND (".implode(" OR ", $searchQueryArray).")";
-            //pr($campos);
         }
 		
         /**
          * Novo SQL
          */
+		$where = '';
         if( $metodo == "listing" ){
 
             if( empty($mostrar) ){
@@ -1138,6 +1138,30 @@ class FlexFields extends Module {
 				            ".implode(", ", $leftJoinCampos).$virgula."
 				            ".$tP.".approved AS des_approved";
 			}
+
+			/* where */
+			if( !empty($param['where']) ){
+				if( is_array($param['where']) ){
+					foreach( $param['where'] as $field=>$condition ){
+						
+						if( is_string($condition) )
+							$where[] = $tP.".".$field." LIKE '".addslashes($condition)."'";
+						elseif( is_array($condition) ){
+							
+							foreach( $condition as $value )
+								$subWhere[] = $tP.".".$field." LIKE '".addslashes($value)."'";
+
+							if( !empty($subWhere) )
+								$where[] = "(".implode(" OR ", $subWhere).")";
+
+						}
+					}
+					$where = implode(" AND ", $where);
+				}
+				$where = ' AND '.$where;
+			} else {
+				$where = "";
+			}
 			
 			/* order */
 			if( !empty($param['order']) ){
@@ -1147,17 +1171,14 @@ class FlexFields extends Module {
 			}
 			
 			/* conditions */
-            $conditions = "    
-                    FROM
-                        ".$est["tabela"][0]." AS ".$tP."
-
-                    ".implode(" ", $leftJoin)."
-                    WHERE
-                        1=1
-                        $searchQuery
-                    ORDER BY
-                        $order
-                    ";
+            $conditions = "".
+                    "FROM ".
+                        $est["tabela"][0]." AS ".$tP." ".
+						implode(" ", $leftJoin)." ".
+                    "WHERE ".
+                        "1=1".$searchQuery.$where." ".
+                    "ORDER BY ".
+                        "$order";
 
 			/* total rows */
 			$countSql = "SELECT count(*) as rows ".$conditions;

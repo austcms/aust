@@ -310,10 +310,10 @@ class Module extends ActiveModule
 		if( empty($austNode) )
 			$austNode = $this->austNode();
 
-		// counts rows
-		$this->totalRows = $this->_getTotalRows($paramForLoadSql);
-		
 		$sql = $this->loadSql($paramForLoadSql);
+
+		// counts rows
+		$this->totalRows = $this->_getTotalRows($sql);
 
         $qry = Connection::getInstance()->query($sql);
         if( empty($qry) )

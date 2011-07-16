@@ -96,7 +96,67 @@ class ApiTransactionTest extends PHPUnit_Framework_TestCase
 		$this->assertArrayNotHasKey('text', $return[0]);
 	}
 	
+	// returns Array
+	function testGetDataWithConditionOfTitle(){
+		$this->createContent();
+		
+		// #2.1
+		$query = array(
+			'query' => 'News',
+			'fields' => 'title;text',
+			'where_title' => 'new+service+offers+music+in+quantity,+not+by+song',
+		);
 
+		$return = $this->obj->getData($query);
+		$this->assertType('array', $return);
+		$this->assertEquals(1, count($return));
+		$this->assertArrayHasKey('text', $return[0]);
+		$this->assertEquals('New Service Offers Music in Quantity, Not by Song', $return[0]['title']);
+		$this->assertContains('co-founder and public face', $return[0]['text']);
+	}
+	
+	
+	
+	// returns Array
+	function testGetDataWithConditionOfTitleAndWordInText(){
+		$this->createContent();
+
+		// #2.2
+		$query = array(
+			'query' => 'News',
+			'fields' => 'id;title;text',
+			'where_title' => 'new+service+offers+music+in+quantity,+not+by+song',
+			'where_text' => '*public*',
+		);
+
+		$return = $this->obj->getData($query);
+		$this->assertType('array', $return);
+		$this->assertEquals(1, count($return));
+		$this->assertArrayHasKey('text', $return[0]);
+		$this->assertEquals('New Service Offers Music in Quantity, Not by Song', $return[0]['title']);
+		$this->assertContains('co-founder and public face', $return[0]['text']);
+
+	}
+	
+	// returns Array
+	function testGetDataWithConditionOfTwoPossibleTitles(){
+		$this->createContent();
+		
+		// #2.4
+		$query = array(
+			'query' => 'News',
+			'fields' => 'id;title;text',
+			'where_title' => '*new+service+offers*;*google*',
+		);
+
+		$return = $this->obj->getData($query);
+		$this->assertType('array', $return);
+		$this->assertEquals(2, count($return));
+		$this->assertArrayHasKey('text', $return[0]);
+		$this->assertEquals('New Service Offers Music in Quantity, Not by Song', $return[0]['title']);
+		$this->assertContains('co-founder and public face', $return[0]['text']);
+	}
+	
 	// returns JSON
 	function testPerform(){
 		$this->createContent();
