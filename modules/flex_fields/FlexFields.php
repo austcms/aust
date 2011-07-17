@@ -818,6 +818,7 @@ class FlexFields extends Module {
 			 * enquanto os demais continuam sendo 'string'
 			 */
 			if( $value['Type'] == 'text' AND
+				!empty($result[$fieldName]['specie']) AND
 			 	$result[$fieldName]['specie'] == 'string' )
 				$result[$fieldName]['specie'] = 'text';
 		}
