@@ -45,8 +45,8 @@ div#navegacao {
 				border-bottom: 1px solid #e8e8e8;
 				-moz-border-radius-topleft: 3px;
 				-moz-border-radius-topright: 3px;
-				-webkit-border-topleft-radius: 3px;
-				-webkit-border-topright-radius: 3px;
+				-webkit-border-top-left-radius: 3px;
+				-webkit-border-top-right-radius: 3px;
     }
         div#menu ul li a:hover {
             background: white;
