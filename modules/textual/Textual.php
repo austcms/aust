@@ -58,7 +58,7 @@ class Textual extends Module
 
 	public function load($params = array()){
 		$qry = parent::load($params);
-		rsort($qry);
+		#rsort($qry);
 		
 		return $qry;
 	}

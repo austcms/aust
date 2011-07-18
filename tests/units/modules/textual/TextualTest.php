@@ -93,7 +93,7 @@ class TextualTest extends PHPUnit_Framework_TestCase
         $this->assertEquals( trim("SELECT id, title, pageviews, node_id AS cat, ".
                         "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as created_on, ".
                         "(SELECT nome FROM categorias AS c WHERE id=cat ) AS node ".
-                        "FROM textual WHERE 1=1 ".
+                        "FROM textual AS mainTable WHERE 1=1 ".
                         "ORDER BY id DESC ".
                         "LIMIT 0,25"),
                         trim($sql) );
@@ -105,7 +105,7 @@ class TextualTest extends PHPUnit_Framework_TestCase
         $this->assertEquals( trim("SELECT id, title, pageviews, node_id AS cat, ".
                         "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as created_on, ".
                         "(SELECT nome FROM categorias AS c WHERE id=cat ) AS node ".
-                        "FROM textual WHERE 1=1 AND (admin_id = ".$userId.") ".
+                        "FROM textual AS mainTable WHERE 1=1 AND (admin_id = ".$userId.") ".
                         "ORDER BY id DESC ".
                         "LIMIT 0,25"),
                         trim($sql) );
@@ -116,7 +116,7 @@ class TextualTest extends PHPUnit_Framework_TestCase
         $this->assertEquals( trim("SELECT id, title, pageviews, node_id AS cat, ".
                         "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as created_on, ".
                         "(SELECT nome FROM categorias AS c WHERE id=cat ) AS node ".
-                        "FROM textual WHERE 1=1 AND id='1' AND (admin_id = ".$userId.") ".
+                        "FROM textual AS mainTable WHERE 1=1 AND id='1' AND (admin_id = ".$userId.") ".
                         "ORDER BY id DESC ".
                         "LIMIT 50,25"),
                         trim($sql) );
@@ -127,7 +127,7 @@ class TextualTest extends PHPUnit_Framework_TestCase
         $this->assertEquals( trim("SELECT id, title, pageviews, node_id AS cat, ".
                         "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as created_on, ".
                         "(SELECT nome FROM categorias AS c WHERE id=cat ) AS node ".
-                        "FROM textual WHERE 1=1 AND id='1' AND node_id IN ('3','4') AND (admin_id = ".$userId.") ".
+                        "FROM textual AS mainTable WHERE 1=1 AND id='1' AND node_id IN ('3','4') AND (admin_id = ".$userId.") ".
                         "ORDER BY id DESC ".
                         "LIMIT 50,25"),
                         trim($sql) );
@@ -565,7 +565,7 @@ class TextualTest extends PHPUnit_Framework_TestCase
 
         $this->obj->fieldsToLoad = "*";
         $result = $this->obj->load($lastId);
-		
+
         /* test #1 */
             $str = "http://mywebsite.com/news/%id/%title_encoded";
             $this->obj->structureConfig = array(

@@ -133,7 +133,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
 
             </div>
             <?php
-            if( $module->getStructureConfig("nova_categoria") == "1" || User::getInstance()->isRoot() ){
+            if( $module->getStructureConfig("new_aust_node") == "1" || User::getInstance()->isRoot() ){
                 lbCategoria($austNode);
             }
             ?>

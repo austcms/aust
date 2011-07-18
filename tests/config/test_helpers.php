@@ -31,4 +31,8 @@ function getAdminId(){
 	$id = $query["id"];
 	return $id;
 }
+
+function query($str){
+	return Connection::getInstance()->query($str);
+}
 ?>

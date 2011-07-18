@@ -5,15 +5,21 @@ require_once 'tests/config/auto_include.php';
 
 class ModuleTest extends PHPUnit_Framework_TestCase
 {
-
-    public function testInitialization(){
+	
+	function setUp(){
+		installModule('textual');
+		Fixture::getInstance()->create();
+	}
+	
+    function testInitialization(){
+		require_once MODULES_DIR.'textual/Textual.php';
 		if( empty($this->structureId) ){
-			$query = Connection::getInstance()->query("SELECT id FROM categorias WHERE tipo='conteudo' AND classe='estrutura' LIMIT 1");
+			$query = Connection::getInstance()->query("SELECT id FROM categorias WHERE tipo='textual' AND classe='estrutura' LIMIT 1");
 			$this->assertArrayHasKey(0, $query);
 			$this->structureId = $query[0]["id"];
 		}
 		
-        $this->obj = new Module($this->structureId);
+        $this->obj = new Textual($this->structureId);
     }
 
 }

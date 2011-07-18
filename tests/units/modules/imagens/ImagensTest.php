@@ -50,7 +50,7 @@ class ImagensTest extends PHPUnit_Framework_TestCase
         $this->assertEquals( trim("SELECT id, titulo, visitantes, systempath, categoria AS cat, ".
                         "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as adddate, ".
                         "(SELECT nome FROM categorias AS c WHERE id=cat ) AS node ".
-                        "FROM imagens WHERE 1=1 ".
+                        "FROM imagens AS mainTable WHERE 1=1 ".
                         "ORDER BY id DESC ".
                         "LIMIT 0,25"),
                         trim($sql) );
@@ -61,7 +61,7 @@ class ImagensTest extends PHPUnit_Framework_TestCase
         $this->assertEquals( trim("SELECT id, titulo, visitantes, systempath, categoria AS cat, ".
                         "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as adddate, ".
                         "(SELECT nome FROM categorias AS c WHERE id=cat ) AS node ".
-                        "FROM imagens WHERE 1=1 AND id='1' ".
+                        "FROM imagens AS mainTable WHERE 1=1 AND id='1' ".
                         "ORDER BY id DESC ".
                         "LIMIT 50,25"),
                         trim($sql) );
@@ -72,7 +72,7 @@ class ImagensTest extends PHPUnit_Framework_TestCase
         $this->assertEquals( trim("SELECT id, titulo, visitantes, systempath, categoria AS cat, ".
                         "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as adddate, ".
                         "(SELECT nome FROM categorias AS c WHERE id=cat ) AS node ".
-                        "FROM imagens WHERE 1=1 AND id='1' AND categoria IN ('3','4') ".
+                        "FROM imagens AS mainTable WHERE 1=1 AND id='1' AND categoria IN ('3','4') ".
                         "ORDER BY id DESC ".
                         "LIMIT 50,25"),
                         trim($sql) );

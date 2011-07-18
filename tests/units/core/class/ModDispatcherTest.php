@@ -11,7 +11,7 @@ class ModDispatcherTest extends PHPUnit_Framework_TestCase
 	function setUp(){
 		Fixture::getInstance()->create();
 		if( empty($this->structureId) ){
-			$query = Connection::getInstance()->query("SELECT id FROM categorias WHERE tipo='conteudo' AND classe='estrutura' LIMIT 1");
+			$query = Connection::getInstance()->query("SELECT id FROM categorias WHERE tipo='textual' AND classe='estrutura' LIMIT 1");
 			$this->assertArrayHasKey(0, $query);
 			$this->structureId = $query[0]["id"];
 		}
@@ -26,7 +26,7 @@ class ModDispatcherTest extends PHPUnit_Framework_TestCase
 	
 	function testDirectory(){
         $obj = new ModDispatcher($this->params);
-		$this->assertEquals("conteudo/", $obj->directory());
+		$this->assertEquals("textual/", $obj->directory());
 	}
 	
 	function testGetAction(){
@@ -37,7 +37,7 @@ class ModDispatcherTest extends PHPUnit_Framework_TestCase
 	
 	function testControllerFile(){
         $obj = new ModDispatcher($this->params);
-		$this->assertEquals(MODULES_DIR."conteudo/".MOD_CONTROLLER_DIR."mod_controller.php", $obj->controllerFile());
+		$this->assertEquals(MODULES_DIR."textual/".MOD_CONTROLLER_DIR."mod_controller.php", $obj->controllerFile());
 	}
 
 	function testSetupControllerWithoutStructure(){

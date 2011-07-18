@@ -170,7 +170,7 @@ class Module extends ActiveModule
          */
             $this->user = User::getInstance();
 
-		if( !defined("TESTING") || !TESTING )
+//		if( !defined("TESTING") || !TESTING )
         	$this->config = $this->loadConfig();
 		
 		if( !empty($this->config['viewmodes']) )
@@ -448,10 +448,9 @@ class Module extends ActiveModule
 
         if( is_array($options) ){
             $id = (empty($options['id']) || $options['id'] == 0) ? '' : $options['id'];
-            $austNode = empty($options['austNode']) ? array() : $options['austNode'];
+            $austNode = empty($options['austNode']) ? $this->austNode() : $options['austNode'];
             $page = empty($options['page']) ? false : $options['page'];
             $limit = empty($options['limit']) ? $defaultLimit : $options['limit'];
-            $customWhere = empty($options['where']) ? '' : ' '.$options['where'];
 
             if( empty($options['order']) ){
                 if( empty($this->order) )
@@ -481,6 +480,7 @@ class Module extends ActiveModule
         /*
          * Gera condições para sql
          */
+
         $where = '';
         if( !empty($austNode) ) {
             if( !is_array($austNode) ){
@@ -532,9 +532,26 @@ class Module extends ActiveModule
         }
 
         $fieldsInSql = array();
-        $fields = 'id, ';
+        $fields = '';
+        $tP = "mainTable";
 
-        if( !empty( $this->describedTable[$this->useThisTable()] ) ){
+		if( is_array($options) && !empty($options['fields']) ){
+			if( $options['fields'] == "*" ){
+				$fields = $tP.".*";
+			}
+			elseif( is_array($options['fields']) ){
+				
+				foreach( $options['fields'] as $currentField ){
+					$fieldsInArray[] = $tP.".".$currentField;
+				}
+				$fields = implode(", ", $fieldsInArray);
+			}
+			elseif( is_string($options['fields']) ){
+				$fields = $options['fields'];
+			}
+		}
+		
+		else if( !empty( $this->describedTable[$this->useThisTable()] ) ){
             $fieldsToLoad = $this->fieldsToLoad;
             if( !is_array($fieldsToLoad) ){
                 $fieldsToLoad = array($fieldsToLoad);
@@ -544,7 +561,7 @@ class Module extends ActiveModule
                 //if( array_key_exists($field, $this->describedTable[$this->useThisTable()]) ){
                 if( $field == "*"){
                     unset($fieldsInSql);
-                    $fieldsInSql[] = "*";
+                    $fieldsInSql[] = $tP.".*";
                     $fields = "";
                     break;
                 } else {
@@ -552,22 +569,46 @@ class Module extends ActiveModule
                 }
             }
 
+	        if( !empty($fieldsInSql) )
+	            $fields = implode(', ', $fieldsInSql);
         }
 
-        if( !empty($fieldsInSql) )
-            $fields.= implode(', ', $fieldsInSql).',';
+		/* where */
+		if( is_array($options) && !empty($options['where']) ){
+			if( is_array($options['where']) ){
+				foreach( $options['where'] as $field=>$condition ){
+					
+					if( is_string($condition) )
+						$tmpWhere[] = $tP.".".$field." LIKE '".addslashes($condition)."'";
+					elseif( is_array($condition) ){
+						
+						foreach( $condition as $value )
+							$subWhere[] = $tP.".".$field." LIKE '".addslashes($value)."'";
+
+						if( !empty($subWhere) )
+							$tmpWhere[] = "(".implode(" OR ", $subWhere).")";
+
+					}
+				}
+				$where.= " AND ". implode(" AND ", $tmpWhere);
+			}
+		}
+
 
 		/*
 		 * countTotalRows
 		 */
 		if( !empty($options['countTotalRows']) AND $options['countTotalRows'] === true )
-			$fields = 'count(id) as rows, ';
+			$fields = 'count(id) as rows ';
 		
+		if( !empty($fields) )
+			$fields.= ",";
 		
         /*
          * Sql para listagem
          */
         $sql = "SELECT
+					id,
                     $fields
                     ".$this->austField." AS cat,
                     DATE_FORMAT(".$this->date['created_on'].", '".$this->date['standardFormat']."') as ".$this->date['created_on'].",
@@ -579,10 +620,10 @@ class Module extends ActiveModule
                             id=cat
                     ) AS node
                 FROM
-                    ".$this->useThisTable()."
-                WHERE 1=1$id".
-                $where."".$customWhere.
-                " ORDER BY ".$order."
+                    ".$this->useThisTable()." AS mainTable
+                WHERE 1=1$id
+                $where
+                 ORDER BY ".$order."
                 $limitStr";
 
 		if( empty($options['countTotalRows']) )

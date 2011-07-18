@@ -66,15 +66,13 @@ class ApiTransaction {
 			'order' => $order,
 			'limit' => $limit
 		);
-		
+
 		foreach( $structureIds as $structureId ){
-			
 			$structureInstance = ModulesManager::getInstance()->modelInstance($structureId);
-			$items = $structureInstance->load(
-				$queryParameters
-			);
+			$items = $structureInstance->load( $queryParameters );
 			$result = array_merge($result, $items);
 		}
+
 		if( empty($result) )
 			$result = 0;
 		return $result;

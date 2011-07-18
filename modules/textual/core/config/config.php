@@ -43,17 +43,9 @@ $modInfo = array(
             "label" => "Tem resumo?",
             "inputType" => "checkbox",
         ),
-        'nova_categoria' => array(
+        'new_aust_node' => array(
             "value" => "",
             "label" => "Permite criar categoria?",
-            "inputType" => "checkbox",
-        ),
-        /*
-         * Há opção para selecionar o modo de visualização?
-         */
-        'modo_de_visualizacao' => array(
-            "value" => "",
-            "label" => "Opção Modo de Visualização?",
             "inputType" => "checkbox",
         ),
         'generate_preview_url' => array(
@@ -94,7 +86,7 @@ $modInfo = array(
      * pelos valores abaixo
      */
     'replaceFieldsValueIfEmpty' => array(
-        'titulo' => '[Sem título]',
+        'title' => '[Sem título]',
     ),
 
     /**

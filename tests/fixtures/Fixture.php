@@ -5,8 +5,9 @@ class Fixture {
 		"aust" 		=> "categorias",
 		"users"		=> "admins",
 		"modules"	=> "modulos",
-		"texts"		=> "textos"
 	);
+	
+	public $siteId;
 	
 	function __construct(){
 		$this->destroy();
@@ -42,7 +43,7 @@ class Fixture {
 	}
 	
 	public function createStructures(){
-		
+		Connection::getInstance()->exec("DELETE FROM ".$this->tables["aust"]);
 		$aust = 
 			"INSERT INTO ".$this->tables["aust"]."
 				(nome, nome_encoded, classe, autor)
@@ -50,13 +51,13 @@ class Fixture {
 				('Site', 'site', 'categoria-chefe', '1')
 				";
 		Connection::getInstance()->exec($aust);
-		$siteId = Connection::getInstance()->lastInsertId();
+		$this->siteId = Connection::getInstance()->lastInsertId();
 
 		$aust = 
 			"INSERT INTO ".$this->tables["aust"]."
 				(nome, nome_encoded, tipo, subordinadoid, autor)
 			VALUES
-				('News', 'news', 'conteudo', ".$siteId.", '1')
+				('News', 'news', 'textual', ".$this->siteId.", '1')
 				";
 		Connection::getInstance()->exec($aust);
 
@@ -64,7 +65,7 @@ class Fixture {
 			"INSERT INTO ".$this->tables["aust"]."
 				(nome, nome_encoded, classe, tipo, subordinadoid, autor)
 			VALUES
-				('News', 'news', 'estrutura', 'conteudo', ".$siteId.", '1')
+				('News', 'news', 'estrutura', 'textual', ".$this->siteId.", '1')
 				";
 		Connection::getInstance()->exec($aust);
 		$textsId = Connection::getInstance()->lastInsertId();
@@ -73,17 +74,9 @@ class Fixture {
 			"INSERT INTO ".$this->tables["aust"]."
 				(nome, nome_encoded, classe, tipo, subordinadoid, autor)
 			VALUES
-				('Calendar', 'calendar', 'estrutura', 'agenda', ".$siteId.", '1')
+				('Calendar', 'calendar', 'estrutura', 'agenda', ".$this->siteId.", '1')
 				";
 		Connection::getInstance()->exec($aust);
-		
-		$texts = 
-			"INSERT INTO ".$this->tables["texts"]."
-				(categoria, titulo, titulo_encoded, texto, adddate, autor)
-			VALUES
-				(".$textsId.", 'New text', 'new_text', 'This is a new text for news.', '2011-06-21 11:58:00', '1')
-				";
-		Connection::getInstance()->exec($texts);		
 	}
 	
 	public function createInstalledModules(){
@@ -92,7 +85,7 @@ class Fixture {
 			"INSERT INTO ".$this->tables["modules"]."
 				(tipo, 		chave, valor, 		pasta, 		nome, 		embed,	autor)
 			VALUES
-				('módulo', 'dir', 'conteudo', 	'conteudo', 'Conteúdo', '0',	'1'),
+				('módulo', 'dir', 'textual', 	'textual',  'Textual', '0',	'1'),
 				('módulo', 'dir', 'agenda', 	'agenda', 	'Agenda', 	'0',	'1')
 				";
 		Connection::getInstance()->exec($sql);
@@ -156,6 +149,18 @@ class Fixture {
 		
 		$result = $flexFieldsSetup->createStructure($params);
 		return $result;
+	}
+	
+	public function createApiTextualData(){
+		$this->createStructures();
+		$aust = 
+			"INSERT INTO ".$this->tables["aust"]."
+				(nome, nome_encoded, classe, tipo, subordinadoid, autor)
+			VALUES
+				('Articles', 'articles', 'estrutura', 'textual', ".$this->siteId.", '1')
+				";
+		Connection::getInstance()->exec($aust);
+		return Connection::getInstance()->lastInsertId();
 	}
 	
 	static function getInstance(){
