@@ -78,7 +78,7 @@ $modInfo = array(
      * Opções de gerenciamento deste módulo
      *
      */
-    'opcoes' => array(
+    'actions' => array(
         'listing' => 'Ver',
     ),
     /*

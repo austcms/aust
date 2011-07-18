@@ -94,7 +94,7 @@ $modInfo = array(
      * Opções de gerenciamento deste módulo
      *
      */
-    'opcoes' => array(
+    'actions' => array(
         'create' => 'Novo',
         'listing' => 'Listar',
     ),

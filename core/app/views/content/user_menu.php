@@ -106,7 +106,7 @@ foreach($siteQuery as $chave=>$valor){
                         /**
                          * Links para opções de gerenciamento de cada estrutura
                          */
-                        $opt = (is_array($modInfo['opcoes'])) ? $modInfo['opcoes'] : Array();
+                        $opt = (is_array($modInfo['actions'])) ? $modInfo['actions'] : Array();
                         foreach ($opt as $chave=>$valor) {
                             echo '<li><a href="adm_main.php?section='.$_GET['section'].'&action='.$chave.'&aust_node='.$estruturas['id'].'">'.$valor.'</a></li>';
                         }

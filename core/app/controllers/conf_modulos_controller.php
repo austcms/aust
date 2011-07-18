@@ -27,10 +27,8 @@ class Conf_modulosController extends ActionController {
             $param = array(
                 'config' => $modInfo,
                 'user' => User::getInstance(),
-                //'modDbSchema' => $modDbSchema,
             );
             $modulo = new $moduloNome($param);
-            //unset( $modDbSchema );
 
             /**
              * JAVASCRIPT
@@ -43,11 +41,6 @@ class Conf_modulosController extends ActionController {
             //}
             include(MODULES_DIR.$_POST['modulo'].'/'.MOD_SETUP_CONTROLLER);
 
-            /**
-             * SetupController
-             *
-             * Chama o controller que vai carregar o setup
-             */
             $setupAction = ( empty( $_POST['setupAction'] ) ) ? '' : $_POST['setupAction'];
             /**
              * 'action': $setupAction contém informações de $_POST['setupAction']
@@ -59,7 +52,6 @@ class Conf_modulosController extends ActionController {
                 'exPOST' => $_POST,
             );
 			$this->autoRender = false;
-//            $setup = new SetupController( $_POST['modulo'], "setup", $params );
 			
 			$setup = new ModDispatcher( $_POST['modulo'], "setup");
 			$setup->dispatch();

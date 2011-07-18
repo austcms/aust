@@ -31,9 +31,9 @@ if(count($est) > 0){
         echo '<td valign="top">';
         echo '<a href="#" class="link_pai_do_est_options" onmouseover="javascript: est_options('.$valor['id'].')">'.$valor['nome'].'</a>';
         echo '<div class="est_options" id="est_options_'.$valor['id'].'">';
-        if(is_array($modInfo['opcoes'])){
+        if(is_array($modInfo['actions'])){
             $i = 0;
-            foreach($modInfo['opcoes'] as $opcao=>$opcaonome){
+            foreach($modInfo['actions'] as $opcao=>$opcaonome){
                 if($i > 0) echo ', ';
                 echo '<a href="adm_main.php?section=content&action='.$opcao.'&aust_node='.$valor['id'].'">'.$opcaonome.'</a>';
                 $i++;

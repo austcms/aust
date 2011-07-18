@@ -163,7 +163,7 @@
 			 */
 
 			$moreOptions = array();
-			foreach( $modInfo['opcoes'] as $actionName=>$humanName ){
+			foreach( $modInfo['actions'] as $actionName=>$humanName ){
 				if( $actionName == $action )
 					continue;
 				$moreOptions[] = '<a href="adm_main.php?section='.MODULES.'&action='.$actionName.'&aust_node='.$austNode.'">'.$humanName.'</a>';

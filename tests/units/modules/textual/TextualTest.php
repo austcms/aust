@@ -2,16 +2,13 @@
 // require_once 'PHPUnit/Framework.php';
 require_once 'tests/config/auto_include.php';
 
-require_once 'core/config/variables.php';
-require_once 'core/libs/functions/func.php';
-
-class ConteudoTest extends PHPUnit_Framework_TestCase
+class TextualTest extends PHPUnit_Framework_TestCase
 {
     public $lastSaveId;
     
     public function setUp(){
 		
-		installModule('conteudo');
+		installModule('textual');
 		$this->user = new User;
 		
         /*
@@ -19,7 +16,7 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
          *
          * Diretório do módulo
          */
-        $this->mod = 'conteudo';
+        $this->mod = 'textual';
 
         /*
          * Informações de conexão com banco de dados
@@ -70,30 +67,33 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
 
 	}
 
+	function testAuthorField(){
+		$this->assertEquals('admin_id', $this->obj->authorField);
+	}
 
     function testLoadSql(){
+		Fixture::getInstance()->create();
 		User::getInstance()->userInfo = array();
 		User::getInstance()->id = null;
 		$_SESSION['login'] = null;
 		
-        $this->assertType('string', $this->obj->loadSql() );
-        $this->assertType('string', $this->obj->loadSql(array( 'limit' => 0, )) );
-        $this->assertEquals('textos', $this->obj->useThisTable() );
+        $this->assertEquals('textual', $this->obj->useThisTable() );
 
 		$userId = getAdminId();
+		$this->assertFalse( empty($userId) );
         $_SESSION['login']['id'] = $userId;
         $_SESSION['login']['username'] = 'test_user';
-		
 		User::getInstance()->type('Webmaster');
         /*
-         * Verifica SQL gerado, se é gerado corretamente
+         * Right SQLs?
          */
         $sql = $this->obj->loadSql( array('') );
+        $this->assertType('string', $sql );
         $sql = preg_replace('/\n|\t/Us', "", preg_replace('/\s{2,}/s', " ", $sql));
-        $this->assertEquals( trim("SELECT id, titulo, visitantes, categoria AS cat, ".
-                        "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as adddate, ".
+        $this->assertEquals( trim("SELECT id, title, pageviews, node_id AS cat, ".
+                        "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as created_on, ".
                         "(SELECT nome FROM categorias AS c WHERE id=cat ) AS node ".
-                        "FROM textos WHERE 1=1 ".
+                        "FROM textual WHERE 1=1 ".
                         "ORDER BY id DESC ".
                         "LIMIT 0,25"),
                         trim($sql) );
@@ -102,10 +102,10 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
 		User::getInstance()->type('Reporter');
         $sql = $this->obj->loadSql( array('') );
         $sql = preg_replace('/\n|\t/Us', "", preg_replace('/\s{2,}/s', " ", $sql));
-        $this->assertEquals( trim("SELECT id, titulo, visitantes, categoria AS cat, ".
-                        "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as adddate, ".
+        $this->assertEquals( trim("SELECT id, title, pageviews, node_id AS cat, ".
+                        "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as created_on, ".
                         "(SELECT nome FROM categorias AS c WHERE id=cat ) AS node ".
-                        "FROM textos WHERE 1=1 AND (autor = ".$userId.") ".
+                        "FROM textual WHERE 1=1 AND (admin_id = ".$userId.") ".
                         "ORDER BY id DESC ".
                         "LIMIT 0,25"),
                         trim($sql) );
@@ -113,10 +113,10 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
         unset($sql);
         $sql = $this->obj->loadSql( array('page'=>3, 'id'=>'1') );
         $sql = preg_replace('/\n|\t/Us', "", preg_replace('/\s{2,}/s', " ", $sql));
-        $this->assertEquals( trim("SELECT id, titulo, visitantes, categoria AS cat, ".
-                        "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as adddate, ".
+        $this->assertEquals( trim("SELECT id, title, pageviews, node_id AS cat, ".
+                        "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as created_on, ".
                         "(SELECT nome FROM categorias AS c WHERE id=cat ) AS node ".
-                        "FROM textos WHERE 1=1 AND id='1' AND (autor = ".$userId.") ".
+                        "FROM textual WHERE 1=1 AND id='1' AND (admin_id = ".$userId.") ".
                         "ORDER BY id DESC ".
                         "LIMIT 50,25"),
                         trim($sql) );
@@ -124,17 +124,19 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
         unset($sql);
         $sql = $this->obj->loadSql( array('page'=>3, 'id'=>'1', 'austNode' => array('3'=>'','4'=>'')) );
         $sql = preg_replace('/\n|\t/Us', "", preg_replace('/\s{2,}/s', " ", $sql));
-        $this->assertEquals( trim("SELECT id, titulo, visitantes, categoria AS cat, ".
-                        "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as adddate, ".
+        $this->assertEquals( trim("SELECT id, title, pageviews, node_id AS cat, ".
+                        "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as created_on, ".
                         "(SELECT nome FROM categorias AS c WHERE id=cat ) AS node ".
-                        "FROM textos WHERE 1=1 AND id='1' AND categoria IN ('3','4') AND (autor = ".$userId.") ".
+                        "FROM textual WHERE 1=1 AND id='1' AND node_id IN ('3','4') AND (admin_id = ".$userId.") ".
                         "ORDER BY id DESC ".
                         "LIMIT 50,25"),
                         trim($sql) );
+
+		Fixture::getInstance()->destroy();
     }
 
     function testUseThisTable(){
-        $this->assertEquals('textos', $this->obj->useThisTable() );
+        $this->assertEquals('textual', $this->obj->useThisTable() );
     }
 
 
@@ -158,29 +160,27 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
 
         $params = array(
             'method' => 'criar',
-            'frmadddate' => '2010-02-12 19:30:42',
-            'frmautor' => '1',
+            'frmcreated_on' => '2010-02-12 19:30:42',
+            'frmadmin_id' => '1',
             'w' => '',
             'aust_node' => '2',
-            'frmcategoria' => '777',
-            'frmtitulo' => 'teste7777',
-            'frmtexto' => 'Esta notícia foi inserida via teste unitário',
-            'contentTable' => 'textos',
+            'frmnode_id' => '777',
+            'frmtitle' => 'teste7777',
+            'frmtext' => 'Esta notícia foi inserida via teste unitário',
+            'contentTable' => 'textual',
             'submit' => 'Enviar!',
         );
 
         $this->assertTrue( $this->obj->save($params) );
 
         $params = array(
-            'titulo' => 'teste7777',
+            'title' => 'teste7777',
         );
 
         /**
          * Verifica se realmente salvou os dados
-         *
-         *      Conteudo
          */
-            $sql = "SELECT id FROM textos WHERE titulo='".$params['titulo']."'";
+            $sql = "SELECT id FROM textual WHERE title='".$params['title']."'";
             $this->assertArrayHasKey(0,
                     $this->obj->connection->query($sql), 'Não salvou o conteúdo'
                 );
@@ -192,12 +192,12 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
 
     }
 
-    function testSimplesLoads(){
+    function testSimpleLoads(){
 		$_SESSION['login'] = null;
 		$user = User::getInstance();
 		$user->reset();
 		
-        $sql = "INSERT INTO textos (titulo, categoria) VALUES ('teste7777_777','777')";
+        $sql = "INSERT INTO textual (title, node_id) VALUES ('teste7777_777','777')";
         $this->obj->connection->exec($sql);
         $catLastInsertId = $this->obj->connection->lastInsertId();
 
@@ -212,7 +212,7 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
                 'Não carregou por aust_node.'
             );
         
-        $this->obj->connection->query("DELETE FROM textos WHERE titulo='teste7777_777'");
+        $this->obj->connection->query("DELETE FROM textual WHERE title='teste7777_777'");
 
 
     }
@@ -233,7 +233,7 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
                 )
             ),
             'options' => array(
-                'targetTable' => 'textos',
+                'targetTable' => 'textual',
                 'w' => '2',
             )
         );
@@ -247,10 +247,10 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
         $params = array(
             array(
                 'id' => '5',
-                'titulo' => 'titulo'
+                'title' => 'title'
             ),
             array(
-                'titulo' => 'titulo2'
+                'title' => 'title2'
             )
         );
 
@@ -258,10 +258,10 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
                 array(
                     '5' => array(
                         'id' => '5',
-                        'titulo' => 'titulo'
+                        'title' => 'title'
                     ),
                     '6' => array(
-                        'titulo' => 'titulo2'
+                        'title' => 'title2'
                     )
                 ),
                 $this->obj->_organizesLoadedData($params)
@@ -279,14 +279,14 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
 
         $params = array(
             'method' => 'criar',
-            'frmadddate' => '2010-02-12 19:30:42',
-            'frmautor' => '1',
+            'frmcreated_on' => '2010-02-12 19:30:42',
+            'frmadmin_id' => '1',
             'w' => '',
             'aust_node' => '2',
-            'frmcategoria' => '4',
-            'frmtitulo' => 'Notícia de teste123456789',
-            'frmtexto' => 'Esta notícia foi inserida via teste unitário',
-            'contentTable' => 'textos',
+            'frmnode_id' => '4',
+            'frmtitle' => 'Notícia de teste123456789',
+            'frmtext' => 'Esta notícia foi inserida via teste unitário',
+            'contentTable' => 'textual',
             'submit' => 'Enviar!',
         );
 
@@ -297,8 +297,10 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
     }
 
 
-
-    function testSaveAndLoadWithEmbedData(){
+	/*
+	 * TODO - Privilege was taken out
+	 */
+    function SaveAndLoadWithEmbedData(){
         /*
          * Salva dados no DB para que se possa testar
          */
@@ -320,8 +322,8 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
             'method' => 'create',
             'w' => '',
             'aust_node' => $catLastInsertId,
-            'frmcategoria' => $catLastInsertId,
-            'frmtitulo' => 'teste7777',
+            'frmnode_id' => $catLastInsertId,
+            'frmtitle' => 'teste7777',
             'embed' => array(
                 '0' => array(
                     'className' => 'Privilegios',
@@ -348,13 +350,13 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
          *
          *      Arquivos -> Privilégios
          */
-            $sql = "SELECT id FROM textos WHERE titulo='teste7777'";
+            $sql = "SELECT id FROM textual WHERE title='teste7777'";
             $this->assertArrayHasKey(0,
                     $this->obj->connection->query($sql),
                     'Não salvou o arquivo.'
                 );
             $lastInsertId = $this->obj->w;
-            $sqlPriv = "SELECT id FROM privilegio_target WHERE target_id='$lastInsertId' AND privilegio_id='2' AND target_table='textos'";
+            $sqlPriv = "SELECT id FROM privilegio_target WHERE target_id='$lastInsertId' AND privilegio_id='2' AND target_table='textual'";
             $this->assertArrayHasKey(0,
                 $this->obj->connection->query($sqlPriv) , 'Não salvou privilégio'
             );
@@ -371,9 +373,9 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
          * Exclui dados do DB antes dos testes, senão os dados ficam todos
          * no DB, pois com um erro acima este código não é rodado.
          */
-        $this->obj->connection->query("DELETE FROM textos WHERE titulo='teste7777'");
+        $this->obj->connection->query("DELETE FROM textual WHERE title='teste7777'");
         $this->obj->connection->query("DELETE FROM categorias WHERE nome='teste7777'");
-        $this->obj->connection->query("DELETE FROM privilegio_target WHERE target_id='$lastInsertId' AND (privilegio_id IN ('2','3')) AND target_table='textos'");
+        $this->obj->connection->query("DELETE FROM privilegio_target WHERE target_id='$lastInsertId' AND (privilegio_id IN ('2','3')) AND target_table='textual'");
         $sql = "DELETE FROM modulos_conf WHERE id='$modConfLastInsertId' AND valor='teste7777'";
         $this->obj->connection->query($sql);
 
@@ -392,9 +394,9 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
             'method' => 'create',
             'w' => '',
             'aust_node' => '7777',
-            'frmcategoria' =>  '7777',
-            'frmtitulo' => '',
-            'frmtexto' => 'teste7777',
+            'frmnode_id' =>  '7777',
+            'frmtitle' => '',
+            'frmtext' => 'teste7777',
             'embed' => array(
                 '0' => array(
                     'className' => 'Privilegios',
@@ -417,7 +419,7 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
         );
         $query = $this->obj->load($params);
 
-        $this->obj->connection->exec("DELETE FROM textos WHERE texto='teste7777' OR categoria='7777'");
+        $this->obj->connection->exec("DELETE FROM textual WHERE text='teste7777' OR node_id='7777'");
 
         /*
          * Análise do Teste
@@ -546,21 +548,24 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
 
         $params = array(
             'method' => 'criar',
-            'frmadddate' => '2010-02-12 19:30:42',
-            'frmautor' => '1',
+            'frmcreated_on' => '2010-02-12 19:30:42',
+            'frmadmin_id' => '1',
             'w' => '',
-            'frmcategoria' => '777',
-            'frmtitulo' => 'testGetGeneratedUrl',
-            'frmtexto' => 'Esta notícia foi inserida via teste unitário',
-            'contentTable' => 'textos',
+            'frmnode_id' => '777',
+            'frmtitle' => 'testGetGeneratedUrl',
+            'frmtext' => 'Esta notícia foi inserida via teste unitário',
+            'contentTable' => 'textual',
             'submit' => 'Enviar!',
         );
 
+		$this->assertEquals('title_encoded', $this->obj->titleEncodedField);
+
         $this->obj->save($params);
         $lastId = $this->obj->connection->lastInsertId();
-        $this->obj->fieldsToLoad = "*";
-        $this->obj->load($lastId);
 
+        $this->obj->fieldsToLoad = "*";
+        $result = $this->obj->load($lastId);
+		
         /* test #1 */
             $str = "http://mywebsite.com/news/%id/%title_encoded";
             $this->obj->structureConfig = array(
@@ -583,7 +588,7 @@ class ConteudoTest extends PHPUnit_Framework_TestCase
                     "test #1.1"
                 );
 
-        $this->obj->connection->query("DELETE FROM textos WHERE categoria='777' AND titulo='testGetGeneratedUrl'");
+        $this->obj->connection->query("DELETE FROM textual WHERE node_id='777' AND title='testGetGeneratedUrl'");
     }
 
 

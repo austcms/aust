@@ -67,17 +67,7 @@ $modInfo = array(
         'actived' => false,
     ),
 
-    /**
-     * Opções de gerenciamento de conteúdo
-     *
-     * A opções a seguir dizem respeito a qualquer ação que envolva
-     * a interação do módulo com conteúdo.
-     */
-    /**
-     * Opções de gerenciamento deste módulo
-     *
-     */
-    'opcoes' => array(
+    'actions' => array(
         'create' => 'Novo',
         'listing' => 'Listar',
     ),

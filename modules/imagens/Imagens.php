@@ -27,6 +27,7 @@ class Imagens extends Module
 	);
 
 	public $authorField = "autor";
+	public $austField = "categoria";
 
 	public $defaultLimit = 25;
 	

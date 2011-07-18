@@ -1,6 +1,10 @@
+API SPECIFICATIONS
+====
+
 Version: 0.0.1
 
-1) Basic query
+
+1) Basic Queries
 ====
 
 #1.1: order, limit and all fields
@@ -29,7 +33,7 @@ Version: 0.0.1
 
 	/api.json?query=News&module=texts&id=10&fields=title
 
-2) Using where:
+2) Using WHERE:
 ====
 
 #2.1: Using WHERE
@@ -70,3 +74,41 @@ Version: 0.0.1
 		title LIKE '%new service offers% OR title LIKE 'google%'
 
 	/api.json?query=News&where_title=*new+service+offers*;google*
+
+
+3) Complex Data Retrieval
+====
+
+#3.1: FlexFields use case: lots of images
+
+	Structure: News
+	Module: flex_fields
+	We want:
+		Suppose FlexFields has a fields containing many photos. 
+		The photos should return as multiple keys in 'photos' field
+		(one for each picture).
+		
+	Comment:
+		This will generate a WHERE subquery using OR as logic, i.e.
+		title LIKE '%new service offers% OR title LIKE 'google%'
+
+	/api.json?query=News
+
+
+4) Custom Module API Options
+====
+
+#4.1: Retrieving the last 14 photos inserted in FlexFields 
+
+	Structure: News
+	Module: flex_fields
+	We want:
+		Sometimes, a peculiar feature will have to be implemented by the Module itself.
+		Let's say that you need to get the last 14 photos from FlexFields, independent
+		of the record. 14 last pics by date, no matter what the record.
+		
+		In the example below, the 'field_photos_only' is a module feature, not Aust's core.
+		It should be implemented by the module itself.
+
+	/api.json?query=News&field_photos_only&limit=14
+

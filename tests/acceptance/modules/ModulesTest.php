@@ -39,11 +39,7 @@ class ModulesAcceptanceTest extends PHPUnit_Framework_TestCase
 			"name",
 			"className",
 			"description",
-			"estrutura",
-			"somenteestrutura",
-			"embed",
-			"embedownform",
-			"opcoes",
+			"actions",
 			"configurations"
 		);
 		foreach( $this->modulesDirs as $module ){

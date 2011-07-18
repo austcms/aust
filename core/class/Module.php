@@ -34,12 +34,13 @@ class Module extends ActiveModule
         );
 
         public $fieldsToLoad = array(
-            'titulo', 'visitantes'
+            'title', 'pageviews'
         );
 
+		public $titleEncodedField = 'title_encoded';
 		public $authorField = "admin_id";
 
-        public $austField = 'categoria';
+        public $austField = 'node_id';
         public $order = 'id DESC';
 
 		public $defaultLimit = '25';
@@ -446,7 +447,7 @@ class Module extends ActiveModule
         $order = 'id DESC';
 
         if( is_array($options) ){
-            $id = empty($options['id']) ? '' : $options['id'];
+            $id = (empty($options['id']) || $options['id'] == 0) ? '' : $options['id'];
             $austNode = empty($options['austNode']) ? array() : $options['austNode'];
             $page = empty($options['page']) ? false : $options['page'];
             $limit = empty($options['limit']) ? $defaultLimit : $options['limit'];
@@ -468,8 +469,8 @@ class Module extends ActiveModule
         if( !empty($options)
             AND !is_array($options) )
             $id = $options;
-        
-        if( !empty($id) ){
+
+        if( !empty($id) && $id > 0 ){
             if( is_array($id) ){
                 $id = " AND id IN ('".implode("','", $id)."')";
             } else {
@@ -532,6 +533,7 @@ class Module extends ActiveModule
 
         $fieldsInSql = array();
         $fields = 'id, ';
+
         if( !empty( $this->describedTable[$this->useThisTable()] ) ){
             $fieldsToLoad = $this->fieldsToLoad;
             if( !is_array($fieldsToLoad) ){
@@ -568,7 +570,7 @@ class Module extends ActiveModule
         $sql = "SELECT
                     $fields
                     ".$this->austField." AS cat,
-                    DATE_FORMAT(".$this->date['created_on'].", '".$this->date['standardFormat']."') as adddate,
+                    DATE_FORMAT(".$this->date['created_on'].", '".$this->date['standardFormat']."') as ".$this->date['created_on'].",
                     (	SELECT
                             nome
                         FROM
@@ -735,8 +737,8 @@ class Module extends ActiveModule
             if( count($this->lastQuery) >= 1 ){
                 $lastQuery = reset($this->lastQuery);
             }
-            if( !empty($lastQuery['titulo_encoded']) ){
-                $titleEncoded = $lastQuery['titulo_encoded'];
+            if( !empty($lastQuery[ $this->titleEncodedField ]) ){
+                $titleEncoded = $lastQuery[ $this->titleEncodedField ];
 
                 $result = str_replace("%title_encoded", $titleEncoded, $result);
             }
