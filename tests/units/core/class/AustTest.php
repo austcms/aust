@@ -28,6 +28,16 @@ class AustTest extends PHPUnit_Framework_TestCase
     function testGetStructures(){
         $this->assertType('array', $this->obj->getStructures() );
     }
+	
+	function testGetStructure(){
+		Fixture::getInstance()->create();
+		$query = Connection::getInstance()->query("SELECT id FROM categorias WHERE tipo='textual' AND classe='estrutura' LIMIT 1");
+		$structureId = $query[0]["id"];
+		
+		$structure = $this->obj->getStructureById($structureId);
+		$this->assertType("array", $structure);
+		$this->assertEquals($structureId, $structure["id"]);
+	}
 
     function testGetStructuresByFather(){
         $this->assertType('array', $this->obj->getStructuresByFather('1') );

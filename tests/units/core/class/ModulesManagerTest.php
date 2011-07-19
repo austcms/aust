@@ -19,13 +19,13 @@ class ModulesManagerTest extends PHPUnit_Framework_TestCase
         $this->obj = new ModulesManager();
 		
 		$modulesInstalled = array(
-			"conteudo",
+			"textual",
 			"agenda"
 		);
 		$result = $this->obj->getModuleInformation($modulesInstalled);
 
-		$this->assertEquals("Conteudo", $result["conteudo"]["config"]["className"]);
-		$this->assertEquals("conteudo", $result["conteudo"]["path"]);
+		$this->assertEquals("Textual", $result["textual"]["config"]["className"]);
+		$this->assertEquals("textual", $result["textual"]["path"]);
 		
     }
 

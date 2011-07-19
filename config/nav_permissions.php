@@ -27,7 +27,7 @@ $navPermissoes = array(
                                 //'Moderador'
                             )
                         ),
-                    'conf_modulos' =>
+                    'control_panel' =>
                         array('au-permissao' =>
                             array('Webmaster')
                         )
@@ -61,7 +61,7 @@ class NAVIGATION_PERMISSIONS_CONFIGURATIONS {
                 //'Moderador'
             )
         ),
-        'conf_modulos' => array(
+        'control_panel' => array(
             'au-permissao' => array(
                 'Webmaster'
             )

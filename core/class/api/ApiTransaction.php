@@ -79,5 +79,29 @@ class ApiTransaction {
 		
 	}
 	
+	public function ensureArray($get){
+		if( is_array($get) )
+			return $get;
+		
+		if( empty($get) or !is_string($get) )
+			return false;
+		
+		$get = preg_replace('/(.*\?)/', '', $get);
+		
+		$splitE = explode("&", $get);
+		
+		$get = array();
+		foreach( $splitE as $values ){
+			$keyValue = explode("=", $values);
+			if( !empty($keyValue[1]) )
+				$get[$keyValue[0]] = $keyValue[1];
+			else if( !empty($keyValue[0]) )
+				$get[] = $keyValue[0];
+			$keyValue = null;
+		}
+		
+		return $get;
+	}
+	
 }
 ?>

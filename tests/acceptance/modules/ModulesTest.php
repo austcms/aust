@@ -34,6 +34,12 @@ class ModulesAcceptanceTest extends PHPUnit_Framework_TestCase
 		}
 	}
 
+	function testHasControlPanelFileForStructure(){
+		foreach( $this->modulesDirs as $module ){
+			$this->assertTrue( file_exists( $module.MOD_VIEW_DIR.CONTROL_PANEL_DISPATCHER."/structure_configuration.php" ), $module." has no config file for structure configuration." );
+		}
+	}
+
 	function testConfigHasKeys(){
 		$shouldHaveKeys = array(
 			"name",

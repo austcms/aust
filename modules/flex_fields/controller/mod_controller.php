@@ -69,7 +69,7 @@ class ModController extends ModActionController
          * Pega todas as informações sobre a estrutura (austNode) atual
          * em formato array
          */
-        $estrutura = Aust::getInstance()->pegaInformacoesDeEstrutura( $this->austNode );
+        $estrutura = Aust::getInstance()->getStructureById( $this->austNode );
         /**
          * Pega informações sobre o cadastro na tabela cadastro_conf
          */

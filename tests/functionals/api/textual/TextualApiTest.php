@@ -30,15 +30,6 @@ class TextualApiTest extends PHPUnit_Framework_TestCase
 		Connection::getInstance()->exec($sql);
 	}
 	
-    function testAskVersionJson(){
-		$params = array(
-			'data_format' => 'json',
-			'version' => 'true'
-		);
-		$return = $this->obj->perform($params);
-		$this->assertEquals('{"result":"0.0.1"}', $return);
-    }
-	
 	// returns Array
 	function testGetDataAll(){
 		
@@ -155,6 +146,24 @@ class TextualApiTest extends PHPUnit_Framework_TestCase
 		$this->assertArrayHasKey('text', $return[0]);
 		$this->assertEquals('New Service Offers Music in Quantity, Not by Song', $return[0]['title']);
 		$this->assertContains('co-founder and public face', $return[0]['text']);
+	}
+
+	// returns Array
+	function testGetDataWithNodeName(){
+		$this->createContent();
+		
+		$query = array(
+			'query' => 'Articles',
+			'fields' => 'id;title;text;node;node_tipo;node_classe',
+			'where_title' => '*new+service+offers*;*google*',
+		);
+
+		$return = $this->obj->getData($query);
+		$this->assertArrayHasKey('text', $return[0], $return);
+		$this->assertEquals('New Service Offers Music in Quantity, Not by Song', $return[0]['title']);
+		$this->assertEquals('Articles', $return[0]['node']);
+		$this->assertEquals('textual', $return[0]['node_tipo']);
+		$this->assertEquals('estrutura', $return[0]['node_classe']);
 	}
 	
 	// returns JSON

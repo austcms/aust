@@ -161,7 +161,7 @@ switch($_GET['action']){
                                 <div class="links">
                                     <ul>
                                         <li>
-                                            <a href="adm_main.php?section=conf_modulos">Gerenciar Módulos e Estruturas</a>
+                                            <a href="adm_main.php?section=control_panel">Gerenciar Módulos e Estruturas</a>
                                         </li>
                                     </ul>
                                 </div>

@@ -47,10 +47,12 @@ class ImagensTest extends PHPUnit_Framework_TestCase
          */
         $sql = $this->obj->loadSql( array('') );
         $sql = preg_replace('/\n|\t/Us', "", preg_replace('/\s{2,}/s', " ", $sql));
-        $this->assertEquals( trim("SELECT id, titulo, visitantes, systempath, categoria AS cat, ".
+        $this->assertEquals( trim("SELECT mainTable.id AS id, titulo, visitantes, systempath, categoria AS cat, ".
                         "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as adddate, ".
                         "(SELECT nome FROM categorias AS c WHERE id=cat ) AS node ".
-                        "FROM imagens AS mainTable WHERE 1=1 ".
+                        "FROM imagens AS mainTable ".
+						"LEFT JOIN categorias AS austTable ON mainTable.categoria = austTable.id ".
+						"WHERE 1=1 ".
                         "ORDER BY id DESC ".
                         "LIMIT 0,25"),
                         trim($sql) );
@@ -58,10 +60,12 @@ class ImagensTest extends PHPUnit_Framework_TestCase
         unset($sql);
         $sql = $this->obj->loadSql( array('page'=>3, 'id'=>'1') );
         $sql = preg_replace('/\n|\t/Us', "", preg_replace('/\s{2,}/s', " ", $sql));
-        $this->assertEquals( trim("SELECT id, titulo, visitantes, systempath, categoria AS cat, ".
+        $this->assertEquals( trim("SELECT mainTable.id AS id, titulo, visitantes, systempath, categoria AS cat, ".
                         "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as adddate, ".
                         "(SELECT nome FROM categorias AS c WHERE id=cat ) AS node ".
-                        "FROM imagens AS mainTable WHERE 1=1 AND id='1' ".
+                        "FROM imagens AS mainTable ".
+						"LEFT JOIN categorias AS austTable ON mainTable.categoria = austTable.id ".
+						"WHERE 1=1 AND mainTable.id='1' ".
                         "ORDER BY id DESC ".
                         "LIMIT 50,25"),
                         trim($sql) );
@@ -69,10 +73,12 @@ class ImagensTest extends PHPUnit_Framework_TestCase
         unset($sql);
         $sql = $this->obj->loadSql( array('page'=>3, 'id'=>'1', 'austNode' => array('3'=>'categoria1','4'=>'categoria1')) );
         $sql = preg_replace('/\n|\t/Us', "", preg_replace('/\s{2,}/s', " ", $sql));
-        $this->assertEquals( trim("SELECT id, titulo, visitantes, systempath, categoria AS cat, ".
+        $this->assertEquals( trim("SELECT mainTable.id AS id, titulo, visitantes, systempath, categoria AS cat, ".
                         "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as adddate, ".
                         "(SELECT nome FROM categorias AS c WHERE id=cat ) AS node ".
-                        "FROM imagens AS mainTable WHERE 1=1 AND id='1' AND categoria IN ('3','4') ".
+                        "FROM imagens AS mainTable ".
+						"LEFT JOIN categorias AS austTable ON mainTable.categoria = austTable.id ".
+						"WHERE 1=1 AND mainTable.id='1' AND mainTable.categoria IN ('3','4') ".
                         "ORDER BY id DESC ".
                         "LIMIT 50,25"),
                         trim($sql) );

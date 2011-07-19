@@ -2,7 +2,7 @@
 // require_once 'PHPUnit/Framework.php';
 require_once 'tests/config/auto_include.php';
 
-class ApiTransactionTest extends PHPUnit_Framework_TestCase
+class FlexFieldsApiTest extends PHPUnit_Framework_TestCase
 {
 
     public function setUp(){
@@ -28,43 +28,6 @@ class ApiTransactionTest extends PHPUnit_Framework_TestCase
 		Connection::getInstance()->exec($sql);
 	}
 	
-	function testConvertGetStringToArray(){
-		$get = "api.json?query=News&order=title;id&limit=2&fields=*";
-		$array = $this->obj->ensureArray($get);
-		$this->assertArrayHasKey('query', $array);
-		$this->assertArrayHasKey('order', $array);
-		$this->assertArrayHasKey('limit', $array);
-		$this->assertArrayHasKey('fields', $array);
-		$this->assertEquals('News', $array['query']);
-		$this->assertEquals('title;id', $array['order']);
-		$this->assertEquals('2', $array['limit']);
-		$this->assertEquals('*', $array['fields']);
-
-		$get = array("query" => "News", "order" => "title;id", "limit" => "2", "fields" => "*");
-		$array = $this->obj->ensureArray($get);
-		$this->assertArrayHasKey('query', $array);
-		$this->assertArrayHasKey('order', $array);
-		$this->assertArrayHasKey('limit', $array);
-		$this->assertArrayHasKey('fields', $array);
-		$this->assertEquals('News', $array['query']);
-		$this->assertEquals('title;id', $array['order']);
-		$this->assertEquals('2', $array['limit']);
-		$this->assertEquals('*', $array['fields']);
-
-		$get = "query=News&without_a_key&order=title;id&limit=2&fields=*";
-		$array = $this->obj->ensureArray($get);
-		$this->assertArrayHasKey('query', $array);
-		$this->assertArrayHasKey('order', $array);
-		$this->assertArrayHasKey('limit', $array);
-		$this->assertArrayHasKey('fields', $array);
-		$this->assertEquals('News', $array['query']);
-		$this->assertEquals('title;id', $array['order']);
-		$this->assertEquals('2', $array['limit']);
-		$this->assertEquals('*', $array['fields']);
-		$this->assertContains('without_a_key', $array);
-		
-	}
-	
     function testAskVersionJson(){
 		$params = array(
 			'data_format' => 'json',
@@ -75,7 +38,7 @@ class ApiTransactionTest extends PHPUnit_Framework_TestCase
     }
 	
 	// returns Array
-	function testGetDataIsArray(){
+	function testGetData(){
 		$this->createContent();
 		
 		$query = array(
@@ -89,6 +52,18 @@ class ApiTransactionTest extends PHPUnit_Framework_TestCase
 		$this->assertType('array', $return);
 		$this->assertEquals(2, count($return));
 		$this->assertEquals('Amazon Takes On California', $return[0]['title']);
+
+		$query = array(
+			'query' => 'News',
+			'order' => 'id+desc',
+			'limit' => 4,
+			'fields' => '*'
+		);
+
+		$return = $this->obj->getData($query);
+		$this->assertType('array', $return);
+		$this->assertEquals(3, count($return));
+		$this->assertEquals('Google+ Improves on Facebook', $return[0]['title']);
 	}
 	
 	// returns Array
@@ -106,13 +81,26 @@ class ApiTransactionTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals(2, count($return));
 		$this->assertArrayHasKey('text', $return[0]);
 		$this->assertArrayNotHasKey('title', $return[0]);
+
+		$query = array(
+			'query' => 'News',
+			'limit' => 2,
+			'fields' => 'id;title'
+		);
+
+		$return = $this->obj->getData($query);
+		$this->assertType('array', $return);
+		$this->assertEquals(2, count($return));
+		$this->assertArrayHasKey('id', $return[0]);
+		$this->assertArrayHasKey('title', $return[0]);
+		$this->assertArrayNotHasKey('text', $return[0]);
 	}
 	
 	// returns Array
 	function testGetDataWithConditionOfTitle(){
 		$this->createContent();
 		
-		// API SPEC #2.1
+		// #2.1
 		$query = array(
 			'query' => 'News',
 			'fields' => 'title;text',
@@ -133,7 +121,7 @@ class ApiTransactionTest extends PHPUnit_Framework_TestCase
 	function testGetDataWithConditionOfTitleAndWordInText(){
 		$this->createContent();
 
-		// API SPEC #2.2
+		// #2.2
 		$query = array(
 			'query' => 'News',
 			'fields' => 'id;title;text',
@@ -154,7 +142,7 @@ class ApiTransactionTest extends PHPUnit_Framework_TestCase
 	function testGetDataWithConditionOfTwoPossibleTitles(){
 		$this->createContent();
 		
-		// API SPEC #2.4
+		// #2.4
 		$query = array(
 			'query' => 'News',
 			'fields' => 'id;title;text',

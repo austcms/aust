@@ -48,6 +48,11 @@ class Module extends ActiveModule
 		
 		public $viewModes = array();
 
+		// instanciated structure name
+		public $name;
+		// instanciated structure information
+		public $information = array();
+
     /*
      *
      * VARIÁVEIS DE QUERY
@@ -170,8 +175,7 @@ class Module extends ActiveModule
          */
             $this->user = User::getInstance();
 
-//		if( !defined("TESTING") || !TESTING )
-        	$this->config = $this->loadConfig();
+       	$this->config = $this->loadConfig();
 		
 		if( !empty($this->config['viewmodes']) )
 			$this->viewModes = $this->config['viewmodes'];
@@ -181,8 +185,13 @@ class Module extends ActiveModule
 		$this->limit = $this->defaultLimit;
     }
 	
-	function setAustNode($id){
-		$this->austNode = $id;
+	function austNode($id = ""){
+		if( !empty($id) && is_numeric($id) ){
+			$this->information = Aust::getInstance()->getStructureById($id);
+			if( !empty($this->information) )
+				$this->name = $this->information["nome"];
+		}
+		return parent::austnode($id);
 	}
 
     /*
@@ -413,6 +422,8 @@ class Module extends ActiveModule
      * Retorna simplesmente o SQL para então executar Query
      */
     public function loadSql($options = array()){
+        $tP = "mainTable";
+        $austTableAlias = "austTable";
         /*
          * SET DEFAULT OPTIONS
          */
@@ -471,9 +482,9 @@ class Module extends ActiveModule
 
         if( !empty($id) && $id > 0 ){
             if( is_array($id) ){
-                $id = " AND id IN ('".implode("','", $id)."')";
+                $id = " AND ".$tP.".id IN ('".implode("','", $id)."')";
             } else {
-                $id = " AND id='$id'";
+                $id = " AND ".$tP.".id='$id'";
             }
         }
 
@@ -488,7 +499,7 @@ class Module extends ActiveModule
 			} else if(is_array($austNode)) {
 	            $austNodeForSql = implode("','", array_keys($austNode) );
 			}
-            $where = $where . " AND ".$this->austField." IN ('".$austNodeForSql."')";
+            $where = $where . " AND ".$tP.".".$this->austField." IN ('".$austNodeForSql."')";
         }
 
 		$userId = User::getInstance()->getId();
@@ -533,16 +544,26 @@ class Module extends ActiveModule
 
         $fieldsInSql = array();
         $fields = '';
-        $tP = "mainTable";
 
 		if( is_array($options) && !empty($options['fields']) ){
 			if( $options['fields'] == "*" ){
-				$fields = $tP.".*";
+				$fields = $tP.".*, ". $austTableAlias.".nome";
 			}
 			elseif( is_array($options['fields']) ){
 				
 				foreach( $options['fields'] as $currentField ){
-					$fieldsInArray[] = $tP.".".$currentField;
+					
+					if( $currentField == "node" )
+						$fieldsInArray[] = $austTableAlias.".nome AS node_name";
+					elseif( $currentField == "node_id" )
+						$fieldsInArray[] = $austTableAlias.".id AS node_id";
+					elseif( $currentField == "node_module" )
+						$fieldsInArray[] = $austTableAlias.".tipo AS node_module";
+					elseif( preg_match('/node_(.*)/', $currentField, $match) )
+						$fieldsInArray[] = $austTableAlias.".".$match[1]." AS ".$currentField;
+					else
+						$fieldsInArray[] = $tP.".".$currentField;
+					
 				}
 				$fields = implode(", ", $fieldsInArray);
 			}
@@ -608,7 +629,7 @@ class Module extends ActiveModule
          * Sql para listagem
          */
         $sql = "SELECT
-					id,
+					".$tP.".id AS id,
                     $fields
                     ".$this->austField." AS cat,
                     DATE_FORMAT(".$this->date['created_on'].", '".$this->date['standardFormat']."') as ".$this->date['created_on'].",
@@ -619,11 +640,16 @@ class Module extends ActiveModule
                         WHERE
                             id=cat
                     ) AS node
-                FROM
+				FROM
                     ".$this->useThisTable()." AS mainTable
-                WHERE 1=1$id
-                $where
-                 ORDER BY ".$order."
+				LEFT JOIN
+					".Aust::$austTable." AS austTable
+				ON
+					mainTable.".$this->austField." = austTable.id
+                WHERE 1=1
+					$id
+                	$where
+                ORDER BY ".$order."
                 $limitStr";
 
 		if( empty($options['countTotalRows']) )

@@ -90,10 +90,12 @@ class TextualTest extends PHPUnit_Framework_TestCase
         $sql = $this->obj->loadSql( array('') );
         $this->assertType('string', $sql );
         $sql = preg_replace('/\n|\t/Us', "", preg_replace('/\s{2,}/s', " ", $sql));
-        $this->assertEquals( trim("SELECT id, title, pageviews, node_id AS cat, ".
+        $this->assertEquals( trim("SELECT mainTable.id AS id, title, pageviews, node_id AS cat, ".
                         "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as created_on, ".
                         "(SELECT nome FROM categorias AS c WHERE id=cat ) AS node ".
-                        "FROM textual AS mainTable WHERE 1=1 ".
+                        "FROM textual AS mainTable ".
+						"LEFT JOIN categorias AS austTable ON mainTable.node_id = austTable.id ".
+						"WHERE 1=1 ".
                         "ORDER BY id DESC ".
                         "LIMIT 0,25"),
                         trim($sql) );
@@ -102,10 +104,12 @@ class TextualTest extends PHPUnit_Framework_TestCase
 		User::getInstance()->type('Reporter');
         $sql = $this->obj->loadSql( array('') );
         $sql = preg_replace('/\n|\t/Us', "", preg_replace('/\s{2,}/s', " ", $sql));
-        $this->assertEquals( trim("SELECT id, title, pageviews, node_id AS cat, ".
+        $this->assertEquals( trim("SELECT mainTable.id AS id, title, pageviews, node_id AS cat, ".
                         "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as created_on, ".
                         "(SELECT nome FROM categorias AS c WHERE id=cat ) AS node ".
-                        "FROM textual AS mainTable WHERE 1=1 AND (admin_id = ".$userId.") ".
+                        "FROM textual AS mainTable ".
+						"LEFT JOIN categorias AS austTable ON mainTable.node_id = austTable.id ".
+						"WHERE 1=1 AND (admin_id = ".$userId.") ".
                         "ORDER BY id DESC ".
                         "LIMIT 0,25"),
                         trim($sql) );
@@ -113,10 +117,12 @@ class TextualTest extends PHPUnit_Framework_TestCase
         unset($sql);
         $sql = $this->obj->loadSql( array('page'=>3, 'id'=>'1') );
         $sql = preg_replace('/\n|\t/Us', "", preg_replace('/\s{2,}/s', " ", $sql));
-        $this->assertEquals( trim("SELECT id, title, pageviews, node_id AS cat, ".
+        $this->assertEquals( trim("SELECT mainTable.id AS id, title, pageviews, node_id AS cat, ".
                         "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as created_on, ".
                         "(SELECT nome FROM categorias AS c WHERE id=cat ) AS node ".
-                        "FROM textual AS mainTable WHERE 1=1 AND id='1' AND (admin_id = ".$userId.") ".
+                        "FROM textual AS mainTable ".
+						"LEFT JOIN categorias AS austTable ON mainTable.node_id = austTable.id ".
+						"WHERE 1=1 AND mainTable.id='1' AND (admin_id = ".$userId.") ".
                         "ORDER BY id DESC ".
                         "LIMIT 50,25"),
                         trim($sql) );
@@ -124,10 +130,12 @@ class TextualTest extends PHPUnit_Framework_TestCase
         unset($sql);
         $sql = $this->obj->loadSql( array('page'=>3, 'id'=>'1', 'austNode' => array('3'=>'','4'=>'')) );
         $sql = preg_replace('/\n|\t/Us', "", preg_replace('/\s{2,}/s', " ", $sql));
-        $this->assertEquals( trim("SELECT id, title, pageviews, node_id AS cat, ".
+        $this->assertEquals( trim("SELECT mainTable.id AS id, title, pageviews, node_id AS cat, ".
                         "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as created_on, ".
                         "(SELECT nome FROM categorias AS c WHERE id=cat ) AS node ".
-                        "FROM textual AS mainTable WHERE 1=1 AND id='1' AND node_id IN ('3','4') AND (admin_id = ".$userId.") ".
+                        "FROM textual AS mainTable ".
+						"LEFT JOIN categorias AS austTable ON mainTable.node_id = austTable.id ".
+						"WHERE 1=1 AND mainTable.id='1' AND mainTable.node_id IN ('3','4') AND (admin_id = ".$userId.") ".
                         "ORDER BY id DESC ".
                         "LIMIT 50,25"),
                         trim($sql) );

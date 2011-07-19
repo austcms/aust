@@ -387,7 +387,7 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 	function testAustNode(){
 		$_GET["aust_node"] = 777;
 		$obj = new FlexFields();
-		$obj->setAustNode(777);
+		$obj->austNode(777);
 		$this->assertEquals(777, $obj->austNode);
 	}
 	

@@ -546,60 +546,16 @@ class Aust {
     }
 
     /**
-     * get Structures from a site
-	 * 
-	 * (duplicated with getStructureByFather)
-     */
-    public function LeEstruturas($columns, $formato, $chardivisor = '', $charend = '', $order = '', $options = '') {
-        $fields = '';
-        for($i = 0; $i < count($columns); $i++) {
-            $fields .= $columns[$i];
-            if($i != count($columns) - 1) {
-                $fields .= ',';
-            }
-        }
-        $sql = "SELECT
-                    *
-                FROM
-                    categorias
-                WHERE
-                    classe='estrutura'
-                ";
-        $query = Connection::getInstance()->query($sql);
-        $t = count($query);
-        $c = 0;
-        foreach($query as $menu) {
-            $str = $formato;
-            for($i = 0; $i < count($columns); $i++) {
-                $str = str_replace("&%" . $columns[$i], $menu[$columns[$i]], $str);
-            }
-            if(!empty($options)) {
-                $diretorio = MODULES_DIR.$menu['tipo'];
-                foreach (glob($diretorio."*", GLOB_ONLYDIR) as $pastas) {
-                    if(is_file($pastas.'/configurar_estrutura.php')) {
-                        $str = str_replace('&%options', '<a href="adm_main.php?section='.$_GET['section'].'&aust_node='.$menu['id'].'&action=configurar">Configurar</a>', $str);
-                    }
-                }
-                $str = str_replace("&%options", "", $str);
-            }
-            echo $str;
-            if($c < $t-1) {
-                echo $chardivisor;
-            } else {
-                echo $charend;
-            }
-            $c++;
-        }
-    }
-
-    /**
      * Returns information from the selected structure
      *
      * @param int $austNode
      * @return array
      */
-    public function pegaInformacoesDeEstrutura( $austNode ) {
-        $result = Connection::getInstance()->query("SELECT * FROM ".Registry::read("austTable")." WHERE id='".$austNode."'" );
+    public function getStructureById( $austNode ) {
+		$sql = "SELECT * FROM ".Aust::$austTable." WHERE id='".$austNode."'";
+        $result = Connection::getInstance()->query( $sql );
+		if( !empty($result) )
+			$result = reset($result);
         return $result;
     }
 
