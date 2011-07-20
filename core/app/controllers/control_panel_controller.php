@@ -12,21 +12,124 @@ class Control_panelController extends ActionController {
 		){
 			$this->customAction = "setup";
 		} 
-		#else
-#			$this->customAction = "index";
 
 	}
 	
 	function index(){
 		$sites = Aust::getInstance()->getStructures();
 		$this->set('sites', $sites);
+	    $migrationsMods = new MigrationsMods( Connection::getInstance() );
+		$this->set('migrationsMods', $migrationsMods);
+		
+	    if( !empty($_GET['instalar_modulo'])
+	        AND is_dir(MODULES_DIR.$_GET['instalar_modulo']) )
+	    {
+			$this->install_module();
+		}
+		
+        /*
+         * INSTALAR ESTRUTURA SEM SETUP.PHP PRÓPRIO VIA CORE DO AUST
+         *
+         * Se instalar uma estrutura a partir de um módulo com setup.php próprio, faz include neste arquivo para configuração
+         */
+        if(!empty($_POST['inserirestrutura'])  AND !is_file(MODULES_DIR.$_POST['modulo'].'/setup.php')) {
+			$this->install_structure();
+        }
+		
+	}
+	
+	function install_structure(){
+        $result = Aust::getInstance()->gravaEstrutura(
+                        array(
+                            'nome'              => $_POST['nome'],
+                            'categoriaChefe'    => $_POST['categoria_chefe'],
+                            'estrutura'         => 'estrutura',
+                            'publico'           => $_POST['publico'],
+                            'moduloPasta'       => $_POST['modulo'],
+                            'autor'             => User::getInstance()->LeRegistro('id')
+                        )
+                    );
+
+        if( $result )
+            notice('Sucesso: Estrutura instalada com sucesso!');
+        else
+            failure('Ocorreu um erro desconhecido. Tente novamente.');
+
+		redirect("section=".CONTROL_PANEL_DISPATCHER);
+	}
+	
+	function install_module(){
+
+        $path = $_GET['instalar_modulo'];
+        /**
+         * Carrega arquivos dos módulos
+         */
+     	include_once(MODULES_DIR.$path.'/'.MOD_CONFIG);
+
+        $modName = MigrationsMods::getInstance()->getModNameFromPath(MODULES_DIR.$path);
+        /**
+         * Ajusta variáveis para gravação
+         */
+            /**
+             * [embedownform] indica se este módulo possui habilidade
+             * para acoplar-se em formulários de outros módulos
+             * com seu próprio <form></form>
+             */
+            $modInfo['embedownform'] = (empty($modInfo['embedownform'])) ? false : $modInfo['embedownform'];
+            /**
+             * [embed] indica se este módulo possui
+             * habilidade para acoplar-se em formulários de outros módulos
+             */
+            $modInfo['embed'] = (empty($modInfo['embed'])) ? false : $modInfo['embed'];
+            /**
+             * [somenteestrutura] indica se a estrutura conterá categorias ou não.
+             */
+            $modInfo['somenteestrutura'] = (empty($modInfo['somenteestrutura'])) ? false : $modInfo['somenteestrutura'];
+
+        /*
+         * Caso o módulo não tenha migrations, faz a verificação normal das tabelas
+         * a partir de schemas, o que não é recomendado.
+         */
+        if( MigrationsMods::getInstance()->hasMigration($path) ){
+            $installStatus = MigrationsMods::getInstance()->updateMigration($path);
+            $isInstalled = MigrationsMods::getInstance()->isActualVersion($path);
+
+            $param = array(
+                'tipo' => 'módulo',
+                'chave' => 'dir',
+                'valor' => $modName,
+                'pasta' => $path,
+                'modInfo' => $modInfo,
+                'autor' => User::getInstance()->LeRegistro('id'),
+            );
+            ModulesManager::getInstance()->configuraModulo($param);
+
+            notice('Migrations executados com sucesso!');
+        } else {
+            failure('Este módulo não possui Migrations.');
+        }
+		
 	}
 	
 	function structure_configuration(){
 
         $this->directory = MODULES_DIR.Aust::getInstance()->LeModuloDaEstrutura($_GET['aust_node'])."/";
 		$module = ModulesManager::getInstance()->modelInstance($_GET["aust_node"]);
+        $configurations = $module->loadModConf();
+
 		$this->set("module", $module);
+		$this->set("configurations", $configurations);
+
+		if( !empty($_POST['conf_type']) &&
+			$_POST['conf_type'] == "mod_conf" )
+		{
+			$saved = $module->saveModConf($_POST);
+		    if( $saved )
+				notice("Configurações salvas com sucesso.");
+			elseif( $saved === false )
+				failure("Ocorreu um erro");
+
+		}
 		
 	}
 	

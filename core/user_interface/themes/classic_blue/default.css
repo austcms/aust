@@ -2,46 +2,48 @@
 Name: Default
 Author: Alexandre de Oliveira
 Description: Official theme
-
 */
 
-/* BÁSICO */
-body { background: #efefef; }
+/* basic */
+body { background: #efefef url('background.jpg'); }
 
-a { color: #065796; }
-a:hover { color: #0666b1; }
-a.restrito { color: #990000; }
+/* standard */
 
-p { color: #2e2e2e; }
-p.alerta { color: #FF3300; }
+	a { color: #065796; }
+	a:hover { color: #0666b1; }
+	a.restrito { color: #990000; }
 
-h1, h2, h3, h4, h5, h6 { color: #004B85; }
-h1 { color: #004b85; }
-h1.restrito { color: #990000; }
-h2.restrito { color: #990000; margin-top: 15px; }
-h2.falha { color: red; }
-h2.ok { color: #006600; }
+	p { color: #2e2e2e; }
+	p.alerta { color: #FF3300; }
 
-/* Mensagens genéricas */
-span.red { color: #d40000; }
-span.green { color: #006413; }
+	h1, h2, h3, h4, h5, h6 { color: #004B85; }
+	h1 { color: #004b85; }
+	h1.restrito { color: #990000; }
+	h2.restrito { color: #990000; margin-top: 15px; }
+	h2.falha { color: red; }
+	h2.ok { color: #006600; }
 
-/* DIV central - body */
-div.body { background: white; }
+	/* Mensagens genéricas */
+	span.red { color: #d40000; }
+	span.green { color: #006413; }
+
+#global {
+	background: url('top.jpg') repeat-x;
+}
 
 /* TOPO */
 div#top {
-    background: #065796;
+    /* background: #065796; */
 }
     div#top h1 { color: #f5f5f5; }
     div#top a { color: #f5f5f5; }
 
 /* NAVEGAÇÃO */
 div#navegacao {
-    background: #065796;
+    /*  background: #065796; */
 }
     div#menu ul li a {
-        background: #efefef;
+        background: #efefef url('tabs_background.png');
 				border-bottom: 1px solid #e8e8e8;
 				-moz-border-radius-topleft: 3px;
 				-moz-border-radius-topright: 3px;
@@ -58,6 +60,11 @@ div#navegacao {
         color: black;
         font-weight: bold;
     }
+
+/* where content shows up */
+div.body { background: white; }
+
+
     
 /* Links Configurar módulos e permissões */
 div#link_bottom {
@@ -72,17 +79,46 @@ div.widget { background: #fdfdfd; }
 div.widget div.footer { background: #fdfdfd; }
 
 /* PANES */
-table.pane_listing tr.list { background: #fdfdfd; }
+table.pane_listing tr.list { background: #f6f6f6; }
 table.pane_listing tr.footer { background: #fdfdfd; }
-table.pane_listing tr.header { background: #edf6ff; }
- table.pane_listing tr.header td { color: #888888; }
+table.pane_listing tr.header { background: #686868; /* #edf6ff */ }
+ table.pane_listing tr.header td { color: #d5d5d5;/* #888888; */ }
 
 /* TAB PANE -> table.pane_listing - Painel Gerenciar e Configurações*/
 div.panes div.background { background: #fdfdfd; }
     div.panes div.background .header { background: #edf6ff; }
 
-ul.tabs a.current, ul.tabs a.current:hover, ul.tabs li.current a {
-    background: #edf6ff;
+/* tabs */
+ul.tabs a {
+    text-decoration: none;
     color: #2d88cf;
+    background-color: #eee;
+		-moz-border-radius-topleft: 3px;
+		-moz-border-radius-topright: 3px;
+		-webkit-border-top-left-radius: 3px;
+		-webkit-border-top-right-radius: 3px;
 }
 
+	ul.tabs a:hover { color: white; background: #2d88cf; }
+
+ul.tabs a.current, ul.tabs a.current:hover, ul.tabs li.current a {
+    background: #d8d8d8;/* #edf6ff */
+    color: #17486E;
+}
+
+
+/* Structure Control Panel */
+#structure_configuration .structure_variables .header {
+	background: #686868;
+	color: #d5d5d5;
+	padding: 10px;
+	font-weight: bold;
+	-moz-border-radius-topleft: 3px;
+	-moz-border-radius-topright: 3px;
+	-webkit-border-top-left-radius: 3px;
+	-webkit-border-top-right-radius: 3px;
+}
+
+	#structure_configuration .structure_variables .item label {
+		color: #555;
+	}

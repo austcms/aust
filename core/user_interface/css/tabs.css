@@ -23,9 +23,6 @@ ul.tabs {
      * TABS - anchors
      */
     ul.tabs a {
-        /*border-bottom: 1px solid #dddddd;*/
-        /* background: #edf6ff; */
-        /*background: url(img/blue.png) no-repeat -420px 0;*/
         display: inline-block;
         height: auto;
         width: auto;
@@ -36,7 +33,6 @@ ul.tabs {
         margin: 0px;
         float: left;
         background-color: #d8d8d8;
-
     }
     /* Comportamento das Tabs */
         ul.tabs a:active { font-weight: normal; }

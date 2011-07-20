@@ -54,6 +54,11 @@
 
     }
 
+	function redirect($url){
+		header("Location: adm_main.php?".$url);
+		exit();
+	}
+
 	/**
 	 * lineWrap()
 	 * 

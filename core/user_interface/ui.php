@@ -70,302 +70,303 @@
 
 <body bgcolor="white" topmargin=0 leftmargin=0 rightmargin=0>
 
-<div id="top">
-
-    <div class="title">
-        <?php
-        /*
-         * NOME DO SITE - EDITÁVEL
-         */
-        ?>
-        <div class="logotipo">
-            <h1>
-                <a href="adm_main.php?section=index"><?php echo Config::getInstance()->getConfig('site_name'); ?></a>
-            </h1>
-        </div>
-
-        <div class="inicializacaorapida">
-  
-            <?php
-            /*
-             * LINK PARA ALTERAR DADOS OU SENHA
-             */
-            ?>
-            <div id="altera_dados">
-                <a href="logout.php">Sair</a>
-                
-                <a href="adm_main.php?section=admins&action=edit&fm=editar">Alterar meus dados/senha</a>
-                <?php
-                    /*
-                     * INFORMAÇÕES QUE IRÃO DENTRO DE ALTERAR MEUS DADOS
-                     *
-                      <a href="adm_main.php?section=admins&action=passw">Minha senha</a>
-                    | <a href="adm_main.php?section=admins&action=form&fm=editar">Editar meu perfil</a>
-                     *
-                     */
-                ?>
-
-            </div>
-            <div id="conectado_como">
-            <?php /*
-                <p>
-                    Conectado como <strong><?php echo User::getInstance()->LeRegistro('nome');?></strong>.<br />
-                    N&iacute;vel de acesso  <strong><?php echo User::getInstance()->LeRegistro('tipo');?></strong>.
-                </p>
-             *
-             */ ?>
-            </div>
-            <span>
-            <br />
-
-            </span>
-        </div>
-    </div>
-</div>
-<div id="navegacao">
-    <div class="containner">
-        <?php include(THIS_TO_BASEURL.INC_DIR.'menu.inc.php'); ?>
-    </div>
-</div>
-
 <div id="global">
-    <noscript>Seu navegador não suporta JavaScript ou ele não está ativado. Por favor ative para ter uma melhor experiência neste site.</noscript>
+	<div id="top">
+
+	    <div class="title">
+	        <?php
+	        /*
+	         * NOME DO SITE - EDITÁVEL
+	         */
+	        ?>
+	        <div class="logotipo">
+	            <h1>
+	                <a href="adm_main.php?section=index"><?php echo Config::getInstance()->getConfig('site_name'); ?></a>
+	            </h1>
+	        </div>
+
+	        <div class="inicializacaorapida">
+  
+	            <?php
+	            /*
+	             * LINK PARA ALTERAR DADOS OU SENHA
+	             */
+	            ?>
+	            <div id="altera_dados">
+	                <a href="logout.php">Sair</a>
+                
+	                <a href="adm_main.php?section=admins&action=edit&fm=editar">Alterar meus dados/senha</a>
+	                <?php
+	                    /*
+	                     * INFORMAÇÕES QUE IRÃO DENTRO DE ALTERAR MEUS DADOS
+	                     *
+	                      <a href="adm_main.php?section=admins&action=passw">Minha senha</a>
+	                    | <a href="adm_main.php?section=admins&action=form&fm=editar">Editar meu perfil</a>
+	                     *
+	                     */
+	                ?>
+
+	            </div>
+	            <div id="conectado_como">
+	            <?php /*
+	                <p>
+	                    Conectado como <strong><?php echo User::getInstance()->LeRegistro('nome');?></strong>.<br />
+	                    N&iacute;vel de acesso  <strong><?php echo User::getInstance()->LeRegistro('tipo');?></strong>.
+	                </p>
+	             *
+	             */ ?>
+	            </div>
+	            <span>
+	            <br />
+
+	            </span>
+	        </div>
+	    </div>
+	</div>
+	<div id="navegacao">
+	    <div class="containner">
+	        <?php include(THIS_TO_BASEURL.INC_DIR.'menu.inc.php'); ?>
+	    </div>
+	</div>
+
+	<div id="view">
+	    <noscript>Seu navegador não suporta JavaScript ou ele não está ativado. Por favor ative para ter uma melhor experiência neste site.</noscript>
 
 
-    <div class="body">
-        <div class="content">
-		<?php if( notice() ){ ?>
-			<div id="notice">
-			<?php echo notice(); ?>
-			</div>
-		<?php } ?>
+	    <div class="body">
+	        <div class="content">
+			<?php if( notice() ){ ?>
+				<div id="notice">
+				<?php echo notice(); ?>
+				</div>
+			<?php } ?>
 
-		<?php if( failure() ){ ?>
-			<div id="failure">
-			<?php echo failure(); ?>
-			</div>
-		<?php } ?>
+			<?php if( failure() ){ ?>
+				<div id="failure">
+				<?php echo failure(); ?>
+				</div>
+			<?php } ?>
 		
-		<?php
-		/* MODULE NAVIGATION BAR */
-	    if( !empty($_GET["aust_node"]) || !empty($_POST["aust_node"]) ){
-			if( !empty($_GET["aust_node"]) )
-				$austNode = $_GET["aust_node"];
-			elseif( !empty($_POST["aust_node"]) )
-				$austNode = $_POST["aust_node"];
+			<?php
+			/* MODULE NAVIGATION BAR */
+		    if( !empty($_GET["aust_node"]) || !empty($_POST["aust_node"]) ){
+				if( !empty($_GET["aust_node"]) )
+					$austNode = $_GET["aust_node"];
+				elseif( !empty($_POST["aust_node"]) )
+					$austNode = $_POST["aust_node"];
 		
 
-	     	include(MODULES_DIR.$modDir.MOD_CONFIG);
-	        $action = $_GET['action'];
+		     	include(MODULES_DIR.$modDir.MOD_CONFIG);
+		        $action = $_GET['action'];
 
-			/*
-			 * Navegação entre actions de um austNode
-			 */
+				/*
+				 * Navegação entre actions de um austNode
+				 */
 
-			$moreOptions = array();
-			foreach( $modInfo['actions'] as $actionName=>$humanName ){
-				if( $actionName == $action )
-					continue;
-				$moreOptions[] = '<a href="adm_main.php?section='.MODULES.'&action='.$actionName.'&aust_node='.$austNode.'">'.$humanName.'</a>';
-			}
-
-			$visibleNav = true;
-			$relatedMasters = Aust::getInstance()->getRelatedMasters(array($austNode));
-
-			if( !empty($relatedMasters) ){
-
-				$module = Aust::getInstance()->getStructureInstance($austNode);
-				if( !$module->getStructureConfig('related_and_visible') ){
-					$visibleNav = false;
+				$moreOptions = array();
+				foreach( $modInfo['actions'] as $actionName=>$humanName ){
+					if( $actionName == $action )
+						continue;
+					$moreOptions[] = '<a href="adm_main.php?section='.MODULES.'&action='.$actionName.'&aust_node='.$austNode.'">'.$humanName.'</a>';
 				}
 
-			}
+				$visibleNav = true;
+				$relatedMasters = Aust::getInstance()->getRelatedMasters(array($austNode));
 
-			if( !empty($moreOptions) && $visibleNav ){
-				?>
-				<div class="structure_nav_options">
-					Navegação: <?php echo implode(", ", $moreOptions); ?>
-				</div>
-				<?php
-			}
-		}		
-		?>
-        <?php echo $content_for_layout; ?>
+				if( !empty($relatedMasters) ){
+
+					$module = Aust::getInstance()->getStructureInstance($austNode);
+					if( !$module->getStructureConfig('related_and_visible') ){
+						$visibleNav = false;
+					}
+
+				}
+
+				if( !empty($moreOptions) && $visibleNav ){
+					?>
+					<div class="structure_nav_options">
+						Navegação: <?php echo implode(", ", $moreOptions); ?>
+					</div>
+					<?php
+				}
+			}		
+			?>
+	        <?php echo $content_for_layout; ?>
         
-		<?php
-	    /*
-	     * Se for save, redireciona automaticamente
-	     */
-     	$action = "";
-		if( !empty($_GET['action']) ){
-			$action = $_GET['action'];
-		}
-	    if( in_array($action, array(SAVE_ACTION, ACTIONS_ACTION)) &&
-			(
-				empty($_SESSION['no_redirect']) ||
-				!$_SESSION['no_redirect']
-			)
-	 	)
-		{
+			<?php
+		    /*
+		     * Se for save, redireciona automaticamente
+		     */
+	     	$action = "";
+			if( !empty($_GET['action']) ){
+				$action = $_GET['action'];
+			}
+		    if( in_array($action, array(SAVE_ACTION, ACTIONS_ACTION)) &&
+				(
+					empty($_SESSION['no_redirect']) ||
+					!$_SESSION['no_redirect']
+				)
+		 	)
+			{
 
-			unset($_SESSION['selected_items']);
-	        ?>
-	        <div class="loading_timer">
-	            <img src="<?php echo IMG_DIR ?>loading_timer.gif" /> Redirecionando Automaticamente
-	        </div>
-	        <?php
+				unset($_SESSION['selected_items']);
+		        ?>
+		        <div class="loading_timer">
+		            <img src="<?php echo IMG_DIR ?>loading_timer.gif" /> Redirecionando Automaticamente
+		        </div>
+		        <?php
 
-			if( !empty($_POST['redirect_to']) )
-				$goToUrl = $_POST['redirect_to'];
-			else if( !empty($_GET['redirect_to']) )
-				$goToUrl = $_GET['redirect_to'];
-			else
-            	$goToUrl = "adm_main.php?section=".$_GET['section'].'&action=listing&aust_node='.$austNode;
-            ?>
-            <script type="text/javascript">
-                var timeToRefresh = 2;
-                setTimeout(function(){
-                    window.location.href = "<?php echo $goToUrl ?>";
-                }, 2000);
-            </script>
-            <?php
-        }
+				if( !empty($_POST['redirect_to']) )
+					$goToUrl = $_POST['redirect_to'];
+				else if( !empty($_GET['redirect_to']) )
+					$goToUrl = $_GET['redirect_to'];
+				else
+	            	$goToUrl = "adm_main.php?section=".$_GET['section'].'&action=listing&aust_node='.$austNode;
+	            ?>
+	            <script type="text/javascript">
+	                var timeToRefresh = 2;
+	                setTimeout(function(){
+	                    window.location.href = "<?php echo $goToUrl ?>";
+	                }, 2000);
+	            </script>
+	            <?php
+	        }
 
-		$_SESSION['no_redirect'] = false;
+			$_SESSION['no_redirect'] = false;
 		
-		?>
+			?>
 
-        </div>
-    </div>
+	        </div>
+	    </div>
     
         
-</div>
+	</div>
 
-<?php
+	<?php
 /*
- * DEBUG
- */
-?>
-<div id="footer_admin_dashboard">
-    <div class="links_admin">
-        <?php
-        if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'){
-            ?>
-            <div class="borda"></div>
-            <br />
-                <span class="para_webmaster">Para Webmasters:</span><a href="adm_main.php?section=control_panel" class="restrito">Configurar Módulos</a>
-                <a href="adm_main.php?section=categorias" class="restrito">Categorias</a>
-                <a href="adm_main.php?section=import_export_structures" class="restrito">Importar/Exportar Estruturas</a>
-            <?php
-            if( Registry::read('debugLevel') > 1 ){
+	 * DEBUG
+	 */
+	?>
+	<div id="footer_admin_dashboard">
+	    <div class="links_admin">
+	        <?php
+	        if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'){
+	            ?>
+	            <div class="borda"></div>
+	            <br />
+	                <span class="para_webmaster">Para Webmasters:</span><a href="adm_main.php?section=control_panel" class="restrito">Configurar Módulos</a>
+	                <a href="adm_main.php?section=categorias" class="restrito">Categorias</a>
+	                <a href="adm_main.php?section=import_export_structures" class="restrito">Importar/Exportar Estruturas</a>
+	            <?php
+	            if( Registry::read('debugLevel') > 1 ){
 
-                /*
-                 * CACHE
-                 */
-                $cacheDirs = Registry::read('permission_needed_dirs');
-                foreach( $cacheDirs as $dir ){
-                    if( !is_writable($dir) OR
-                        !is_readable($dir))
-                    {
-                        $cacheError[] = $dir;
-                    }
-                }
-                if( !empty($cacheError) ){
+	                /*
+	                 * CACHE
+	                 */
+	                $cacheDirs = Registry::read('permission_needed_dirs');
+	                foreach( $cacheDirs as $dir ){
+	                    if( !is_writable($dir) OR
+	                        !is_readable($dir))
+	                    {
+	                        $cacheError[] = $dir;
+	                    }
+	                }
+	                if( !empty($cacheError) ){
 
-                    ?>
-                    <table class="debug">
-                    <tr class="header">
-                        <td>
-                        <strong>Cache</strong>
-                        </td>
-                    </tr>
-                    <?php
-                    foreach( $cacheError as $dir ){
-                        ?>
-                        <tr class="list">
-                            <td>
-                            <span>
-                            <strong><?php echo $dir ?></strong>
-                            com permissão negada.
-                            </span>
-                            </td>
-                        </tr>
-                        <?php
-                    }
-                    ?>
-                    </table>
-                    <?php
-                }
-                ?>
+	                    ?>
+	                    <table class="debug">
+	                    <tr class="header">
+	                        <td>
+	                        <strong>Cache</strong>
+	                        </td>
+	                    </tr>
+	                    <?php
+	                    foreach( $cacheError as $dir ){
+	                        ?>
+	                        <tr class="list">
+	                            <td>
+	                            <span>
+	                            <strong><?php echo $dir ?></strong>
+	                            com permissão negada.
+	                            </span>
+	                            </td>
+	                        </tr>
+	                        <?php
+	                    }
+	                    ?>
+	                    </table>
+	                    <?php
+	                }
+	                ?>
 
-                <table class="debug">
-                <tr class="header">
-                    <td class="sql">
-                    <strong>SQLs</strong>
-                    </td>
-                    <td class="result">
-                    <strong>Results</strong>
-                    </td>
-                    <td class="time">
-                    <strong>Seconds</strong>
-                    </td>
-                </tr>
-                <?php
+	                <table class="debug">
+	                <tr class="header">
+	                    <td class="sql">
+	                    <strong>SQLs</strong>
+	                    </td>
+	                    <td class="result">
+	                    <strong>Results</strong>
+	                    </td>
+	                    <td class="time">
+	                    <strong>Seconds</strong>
+	                    </td>
+	                </tr>
+	                <?php
 
-                $debugVars = Registry::read('debug');
-                foreach( $debugVars as $vars ){
-                    $sqlCommands = array(
-                        "SELECT", "UPDATE", "DELETE", "INSERT", "REPLACE",
-                        "FROM", "ASC", "WHERE", "ORDER BY", "LIMIT", "TABLES",
-                        "LEFT JOIN", "DISTINCT", "COUNT", "ON", "DESCRIBE", "SHOW",
-                        "INTO", "VALUES", "SET", "ALTER",
-                        "IN", "NOT IN", " OR ", " AND ", " AS ", "DESC",
-                        " and ", " as "
-                    );
-                    $boldSqlCommands = array();
-                    foreach( $sqlCommands as $valor ){
-                        $boldSqlCommands[] = "<strong>".$valor."</strong>";
-                    }
-                    $sql = str_replace($sqlCommands, $boldSqlCommands, $vars['sql'] );
+	                $debugVars = Registry::read('debug');
+	                foreach( $debugVars as $vars ){
+	                    $sqlCommands = array(
+	                        "SELECT", "UPDATE", "DELETE", "INSERT", "REPLACE",
+	                        "FROM", "ASC", "WHERE", "ORDER BY", "LIMIT", "TABLES",
+	                        "LEFT JOIN", "DISTINCT", "COUNT", "ON", "DESCRIBE", "SHOW",
+	                        "INTO", "VALUES", "SET", "ALTER",
+	                        "IN", "NOT IN", " OR ", " AND ", " AS ", "DESC",
+	                        " and ", " as "
+	                    );
+	                    $boldSqlCommands = array();
+	                    foreach( $sqlCommands as $valor ){
+	                        $boldSqlCommands[] = "<strong>".$valor."</strong>";
+	                    }
+	                    $sql = str_replace($sqlCommands, $boldSqlCommands, $vars['sql'] );
 
-                    /*
-                     * Result
-                     */
-                    $errorClass = '';
-                    if( is_string($vars['result']) ){
-                        $errorClass = 'error';
-                    }
-                    ?>
-                    <tr class="list <?php echo $errorClass; ?>">
-                    <td class="sql "  valign="top">
-                        <?php echo $sql; ?>
-                    </td>
-                    <td class="result" valign="top">
-                        <?php echo $vars['result']; ?>
-                    </td>
-                    <td class="time" valign="top">
-                        <?php echo substr(number_format($vars['time'], 4, '.', ''), 0, 5); ?>
-                    </td>
-                    </tr>
-                    <tr style="height: 1px;">
-                        <td colspan="3" style="font-size: 0px; background: #eeeeee;">
-                        </td>
-                    </tr>
-                    <tr style="height: 5px;">
-                        <td colspan="3" style="font-size: 0px;">
-                        </td>
-                    </tr>
-                    <?php
-                }
-                ?>
-                </table>
-                <?php
-            }
-        }
-        ?>
-    </div>
+	                    /*
+	                     * Result
+	                     */
+	                    $errorClass = '';
+	                    if( is_string($vars['result']) ){
+	                        $errorClass = 'error';
+	                    }
+	                    ?>
+	                    <tr class="list <?php echo $errorClass; ?>">
+	                    <td class="sql "  valign="top">
+	                        <?php echo $sql; ?>
+	                    </td>
+	                    <td class="result" valign="top">
+	                        <?php echo $vars['result']; ?>
+	                    </td>
+	                    <td class="time" valign="top">
+	                        <?php echo substr(number_format($vars['time'], 4, '.', ''), 0, 5); ?>
+	                    </td>
+	                    </tr>
+	                    <tr style="height: 1px;">
+	                        <td colspan="3" style="font-size: 0px; background: #eeeeee;">
+	                        </td>
+	                    </tr>
+	                    <tr style="height: 5px;">
+	                        <td colspan="3" style="font-size: 0px;">
+	                        </td>
+	                    </tr>
+	                    <?php
+	                }
+	                ?>
+	                </table>
+	                <?php
+	            }
+	        }
+	        ?>
+	    </div>
+	</div>
 </div>
-
 <div id="mask">
 </div>
 

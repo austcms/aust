@@ -39,6 +39,8 @@ ul { margin-left: 20px; }
 
 table { border-spacing: 0px; padding: 0px; border-collapse: collapse; }
 
+.hidden { display: none !important; }
+
 #notice {
 	background: #B4F8A6;
 	color: #1C9800;

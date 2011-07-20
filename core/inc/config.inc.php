@@ -105,6 +105,9 @@ $options = Config::getInstance()->getConfigs(
              * TIPOS DE CONFIGURAÇÕES
              */
             foreach($options as $type=>$conf){
+				if( !in_array($type, array("Geral", "Privado")) )
+					continue;
+
                 if( Config::getInstance()->hasPermission($type, User::getInstance()->type()) ){
                     ?>
                     <li><a href="#"><?php echo $type ?></a></li>

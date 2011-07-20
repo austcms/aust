@@ -36,8 +36,9 @@ table.pane_listing {
     }
         table.pane_listing tr.list td {
             color: #888888; text-transform: uppercase;
+						border-bottom: 1px solid #f1f1f1;
             font-size: 0.9em;
-            padding: 10px 0 0px 10px;
+            padding: 6px 0 6px 10px;
 
         }
         /* Pane sem conteúdo */
@@ -61,8 +62,8 @@ table.pane_listing {
         table.pane_listing tr.list td.acesso { font-size: 0.7em; }
 
     table.pane_listing tr.footer {
-        height: 10px;
-        border-bottom: 1px solid #f9f9f9;
+        height: 1px;
+        border-bottom: 0px solid #f1f1f1;
     }
 
 /* fim tab panes <<<<<<<<<*/

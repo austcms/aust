@@ -9,66 +9,7 @@ if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'):
  *
  * Verificações de Migrations de módulos
  */
-    $migrationsMods = new MigrationsMods( Connection::getInstance() );
 
-    /*
-     * INSTALA MÓDULO
-     */
-    if( !empty($_GET['instalar_modulo'])
-        AND is_dir(MODULES_DIR.$_GET['instalar_modulo']) )
-    {
-
-        $path = $_GET['instalar_modulo'];
-        /**
-         * Carrega arquivos dos módulos
-         */
-     	include_once(MODULES_DIR.$path.'/'.MOD_CONFIG);
-
-        $modName = MigrationsMods::getInstance()->getModNameFromPath(MODULES_DIR.$path);
-        /**
-         * Ajusta variáveis para gravação
-         */
-            /**
-             * [embedownform] indica se este módulo possui habilidade
-             * para acoplar-se em formulários de outros módulos
-             * com seu próprio <form></form>
-             */
-            $modInfo['embedownform'] = (empty($modInfo['embedownform'])) ? false : $modInfo['embedownform'];
-            /**
-             * [embed] indica se este módulo possui
-             * habilidade para acoplar-se em formulários de outros módulos
-             */
-            $modInfo['embed'] = (empty($modInfo['embed'])) ? false : $modInfo['embed'];
-            /**
-             * [somenteestrutura] indica se a estrutura conterá categorias ou não.
-             */
-            $modInfo['somenteestrutura'] = (empty($modInfo['somenteestrutura'])) ? false : $modInfo['somenteestrutura'];
-
-        /*
-         * Caso o módulo não tenha migrations, faz a verificação normal das tabelas
-         * a partir de schemas, o que não é recomendado.
-         */
-        if( MigrationsMods::getInstance()->hasMigration($path) ){
-            $installStatus = MigrationsMods::getInstance()->updateMigration($path);
-            $isInstalled = MigrationsMods::getInstance()->isActualVersion($path);
-
-            $param = array(
-                'tipo' => 'módulo',
-                'chave' => 'dir',
-                'valor' => $modName,
-                'pasta' => $path,
-                'modInfo' => $modInfo,
-                'autor' => User::getInstance()->LeRegistro('id'),
-            );
-            ModulesManager::getInstance()->configuraModulo($param);
-
-            $status['classe'] = 'sucesso';
-            $status['mensagem'] = '<strong>Sucesso: </strong> Migration executado com sucesso!';
-        } else {
-            $status['classe'] = 'insucesso';
-            $status['mensagem'] = 'Este módulo não possui Migrations.';
-        }
-    }
     /*
      * Migration Status
      */
@@ -135,33 +76,6 @@ if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'):
      * Carrega toda a interface normalmente
      */
     else {
-
-        /*
-         * INSTALAR ESTRUTURA SEM SETUP.PHP PRÓPRIO VIA CORE DO AUST
-         *
-         * Se instalar uma estrutura a partir de um módulo com setup.php próprio, faz include neste arquivo para configuração
-         */
-        if(!empty($_POST['inserirestrutura'])  AND !is_file(MODULES_DIR.$_POST['modulo'].'/setup.php')) {
-            $result = Aust::getInstance()->gravaEstrutura(
-                            array(
-                                'nome'              => $_POST['nome'],
-                                'categoriaChefe'    => $_POST['categoria_chefe'],
-                                'estrutura'         => 'estrutura',
-                                'publico'           => $_POST['publico'],
-                                'moduloPasta'       => $_POST['modulo'],
-                                'autor'             => User::getInstance()->LeRegistro('id')
-                            )
-                        );
-            if($result){
-                $status['classe'] = 'sucesso';
-                $status['mensagem'] = '<strong>Sucesso: </strong> Item inserido com sucesso!';
-            } else {
-                $status['classe'] = 'insucesso';
-                $status['mensagem'] = '<strong>Erro: </strong> Ocorreu um erro desconhecido, tente novamente.';
-            }
-        }
-
-        //
         ?>
         <h2>Configuração: Módulos e Estruturas</h2>
         <?php
@@ -196,7 +110,7 @@ if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'):
 							<?php
 						}
 					}
-                    //Aust::getInstance()->LeEstruturas(Array('id', 'nome', 'tipo'), '<li><strong>&%nome</strong> (módulo &%tipo) &%options</li>', '', '', 'ORDER BY tipo DESC', 'options');
+
                     ?>
                     </ul>
                 </div>

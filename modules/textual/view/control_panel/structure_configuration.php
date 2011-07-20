@@ -20,17 +20,6 @@
 $tabela_da_estrutura = $module->LeTabelaDaEstrutura($_GET['aust_node']);
 
 
-
-/*
- * MOD_CONF
- */
-if( !empty($_POST['conf_type']) AND $_POST['conf_type'] == "mod_conf" ){
-    /**
-     *
-     */
-    $module->saveModConf($_POST);
-}
-
 /**
  * FUNÇÃO
  *
@@ -175,78 +164,12 @@ if(!empty($_GET['function'])){
 }
 ?>
 
-<div class="widget_group">
-    <?
-    /**
-     * CONFIGURAÇÕES
-     *
-     * Listagem dos campos deste cadastro e configuração destes
-     */
-    ?>
+<?php /* use this as template */ ?>
+<div class="widget_group hidden">
     <div class="widget">
         <div class="titulo">
-            <h3>Configurações</h3>
         </div>
         <div class="content">
-            <?php
-            $configurations = $module->loadModConf();
-			//pr($configurations);
-            if( !empty($configurations) && is_array($configurations) ){
-                ?>
-
-                <p>Configure este módulo.</p>
-                <form method="post" action="adm_main.php?section=control_panel&aust_node=<?php echo $_GET['aust_node']; ?>&action=structure_configuration" class="simples pequeno">
-                <input type="hidden" name="conf_type" value="mod_conf" />
-                <input type="hidden" name="aust_node" value="<?php echo $_GET['aust_node']; ?>" />
-                <?php
-
-                foreach( $configurations as $key=>$options ){
-                    ?>
-
-                    <div class="campo">
-                        <label><?php echo $options["label"] ?></label>
-                        <div class="input">
-                            <?php
-                            if( $options["inputType"] == "checkbox" ){
-
-                                /*
-                                 * Verifica valores no banco de dados.
-                                 */
-                                $checked = "";
-                                if( !empty($options['value']) ){
-                                    if( $options["value"] == "1" ){
-                                        $checked = 'checked="checked"';
-                                    }
-                                }
-                                ?>
-                                <input type="hidden" name="data[<?php echo $key; ?>]" value="0" />
-
-                                <input type="checkbox" name="data[<?php echo $key; ?>]" <?php echo $checked; ?> value="1" class="input" />
-                                <?php
-                            }
-
-                            else {
-                                ?>
-                                <input type="text" name="data[<?php echo $key; ?>]" class="input" value="<?php echo $options['value'] ?>" />
-                                <?php
-                            }
-
-                            if( !empty($options['help']) )
-                                tt($options['help']);
-                            ?>
-
-                        </div>
-                    </div>
-                    <br clear="both" />
-
-                    <?php
-                }
-                ?>
-                <input type="submit" name="submit" value="Salvar" />
-                </form>
-                <?php
-            }
-            ?>
 
         </div>
         <div class="footer"></div>
@@ -266,39 +189,25 @@ if(!empty($_GET['function'])){
     </div>
 </div>
 
-<div class="widget_group">
-    <?
-    /**
-     * LISTAGEM DE CAMPOS
-     *
-     * Listagem dos campos deste cadastro e configuração destes
-     */
-    ?>
+<?php /* use this as template */ ?>
+<div class="widget_group hidden">
+
     <div class="widget">
         <div class="titulo">
             <h3></h3>
         </div>
         <div class="content">
             <p></p>
-
         </div>
         <div class="footer"></div>
     </div>
-    <?
-    /*
-     * Opções gerais do cadastro
-     */
-    ?>
+
     <div class="widget">
         <div class="titulo">
             <h3></h3>
         </div>
         <div class="content">
             <p></p>
-            <form method="post" action="<?php echo Config::getInstance()->self;?>" class="simples pequeno">
-
-            </form>
-
         </div>
         <div class="footer"></div>
     </div>
