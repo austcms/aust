@@ -67,7 +67,7 @@ div#navegacao {
     }
 
 /* where content shows up */
-div.body { background: white; }
+div.body { background: url('post-bg.png') repeat-x #fbfbfb; }
 
 
     
