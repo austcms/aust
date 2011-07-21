@@ -8,38 +8,38 @@
  *
  */
 
-div.listing table.calendar {
+divtable.listing table.calendar {
     width: 100%;
     background: #efefef;
 }
 
-div.listing table.calendar tr.days {
+divtable.listing table.calendar tr.days {
     height: 30px;
     vertical-align: top;
     font-size: 0.9em;
 }
 
-div.listing table.calendar td {
+divtable.listing table.calendar td {
     border: 1px solid #dddddd;
     padding: 3px;
 }
 
-div.listing table.calendar td.day {
+divtable.listing table.calendar td.day {
     min-height: 40px;
     min-width: 90px;
 }
 
-div.listing table.calendar tr td.today {
+divtable.listing table.calendar tr td.today {
     background: #fffabe; 
 }
 
-div.listing table.calendar td.day span.day_number {
+divtable.listing table.calendar td.day span.day_number {
     margin-right: 5px;
     font-weight: bold;
     color: #999999;
 }
 
-div.listing table.calendar td.day span.agenda_day_items {
+divtable.listing table.calendar td.day span.agenda_day_items {
     float: left;
     padding: 3px;
     border: 1px solid #aaaaaa;
@@ -47,18 +47,18 @@ div.listing table.calendar td.day span.agenda_day_items {
     color: #999999;
 }
 
-div.listing table.calendar td.day div.agenda_day_item {
+divtable.listing table.calendar td.day div.agenda_day_item {
     border-top: 1px dashed #dddddd;
     padding: 3px 0 7px 0;  
 } 
 
-div.listing table.calendar td.day div.agenda_first_day_item {
+divtable.listing table.calendar td.day div.agenda_first_day_item {
     border-top: 0;
 }
 
-div.listing table.calendar td.day div.agenda_day_actor { color: black; font-weight: bold; }
-div.listing table.calendar td.day div.agenda_day_actor_itself { color: brown; }
-div.listing table.calendar td.day div.agenda_day_time {  }
+divtable.listing table.calendar td.day div.agenda_day_actor { color: black; font-weight: bold; }
+divtable.listing table.calendar td.day div.agenda_day_actor_itself { color: brown; }
+divtable.listing table.calendar td.day div.agenda_day_time {  }
 
 /* div#listing_table */
 div#listing_table { clear: both; display: block; }

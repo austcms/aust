@@ -70,11 +70,7 @@ if(!empty($_POST['inserirmodulo'])){
  *
  * Carrega todas as configurações existentes
  */
-$options = Config::getInstance()->getConfigs(
-        array(
-            //'type' => 'global'
-        )
-    );
+$options = Config::getInstance()->getConfigs();
 
 /*
  * STATUS
@@ -124,7 +120,7 @@ $options = Config::getInstance()->getConfigs(
     <div class="panes">
 
         <?php /* TR Header igual para todas as panes */ ?>
-            <table border="0" class="pane_listing">
+            <table border="0" class="pane_listing listing">
                 <tr class="header">
                     <td class="opcoes">Opções</td>
                 </tr>
@@ -143,6 +139,8 @@ $options = Config::getInstance()->getConfigs(
          * PANE - CONFIGURAÇÕES
          */
         foreach($options as $type=>$conf){
+			if( !in_array($type, array("Geral", "Privado")) )
+				continue;
             /*
              * Usuário tem permissão para modificar estas permissões
              */

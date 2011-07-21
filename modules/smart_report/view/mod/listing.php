@@ -23,8 +23,8 @@
 <a name="list"></a>
 
 <br clear="all" />
-<table cellspacing="0" cellpadding="0" border="0" class="listagem">
-    <tr class="titulo">
+<table cellspacing="0" cellpadding="0" border="0" class="listing">
+    <tr class="header">
 		<td class="">
 			Filtros
 		</td>

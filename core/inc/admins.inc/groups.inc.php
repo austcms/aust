@@ -85,8 +85,8 @@ $query = Connection::getInstance()->query($sql);
 <script type="text/javascript">
 	var groups = new Array();
 </script>
-<table class="listagem pessoas">
-<tr class="titulo">
+<table class="listing pessoas">
+<tr class="header">
     <td>
         Nome
     </td>

@@ -89,33 +89,33 @@ table.form {
     /* Acima de cada listagem há um painel de controle para excluir, bloquear itens, etc */
     div.painel_de_controle { margin-bottom: 10px; padding: 0; float: right; }
     /* Tabela para listagem, seja de conteúdo ou usuários */
-table.listagem { width: 100%; margin: 0px; clear: both; border-collapse: collapse;}
-    table.listagem tr td { padding: 5px; }
-    table.listagem tr td { padding: 5px; margin: 0px;}
+table.listing { width: 100%; margin: 0px; clear: both; border-collapse: collapse;}
+    table.listing tr td { padding: 5px; }
+    table.listing tr td { padding: 5px; margin: 0px;}
 
     
 
-    table.listagem tr.titulo {
+    table.listing tr.header {
             color: #cccccc;
             font-weight: bold;
             background: #333333;
         }
-    /* table.listagem tr.conteudo { height: 20px; } */
-    table.listagem tr.conteudo td {
+    /* table.listing tr.conteudo { height: 20px; } */
+    table.listing tr.conteudo td {
         background: #fafafa;/*#FFF0E1;*/
         border-top: 1px solid white;
         border-bottom: 1px solid #f5f5f5;
     }
-    table.listagem tr.conteudo td a {  }
+    table.listing tr.conteudo td a {  }
 
     /* CAMPOOPTION
      * Campos de opções Ajax em formulários de setup
      */
-        table.listagem tr.conteudo td div.campooptions { background: #f1f1f1; padding: 10px; margin-top: 3px; border: 1px solid silver;  background: red; }
-        table.listagem tr.conteudo td div.campooptions div.campooptions_tabela {  }
-        table.listagem tr.conteudo td div.campooptions div.campooptions_campo {  }
+        table.listing tr.conteudo td div.campooptions { background: #f1f1f1; padding: 10px; margin-top: 3px; border: 1px solid silver;  background: red; }
+        table.listing tr.conteudo td div.campooptions div.campooptions_tabela {  }
+        table.listing tr.conteudo td div.campooptions div.campooptions_campo {  }
 
-table.listagem td.adddate { width: 110px; }
+table.listing td.adddate { width: 110px; }
 
 /* FormHelper (cadastros) */
 form.formHelper { }
@@ -134,7 +134,7 @@ form.formHelper { }
 /*
  * Listagem de Pessoas - table com a class listagem e pessoas
  */
-table.pessoas { width: 505px; margin: 0px; border-collapse: collapse;}
+table.pessoas { width: 505px !important; margin: 0px; border-collapse: collapse;}
 table.pessoas tr.conteudo td a img { padding-right: 5px; }
 
 div.pessoas {

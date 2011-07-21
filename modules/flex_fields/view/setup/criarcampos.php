@@ -29,12 +29,12 @@ foreach($exPOST as $chave=>$valor){
 	Preencha abaixo informações sobre cada campo.</p>
     <h3>Cadastro "<?php echo $_SESSION['exPOST']['nome']?>"</h3>
 
-	<table border="0" class="listagem">
+	<table border="0" class="listing">
 	<col width="15">
 	<col width="160">
 	<col width="400">
 	<col>
-	<tr class="titulo">
+	<tr class="header">
             <td></td>
             <td valign="top">Nome do campo</td>
             <td valign="top">Tipo de campo</td>

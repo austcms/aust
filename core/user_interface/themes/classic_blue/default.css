@@ -11,7 +11,8 @@ body { background: #efefef url('background.jpg'); }
 
 	a { color: #065796; }
 	a:hover { color: #0666b1; }
-	a.restrito { color: #990000; }
+	a.restrito { color: #990000; text-decoration: none; }
+	a.restrito:hover { text-decoration: underline; }
 
 	p { color: #2e2e2e; }
 	p.alerta { color: #FF3300; }
@@ -35,7 +36,11 @@ body { background: #efefef url('background.jpg'); }
 div#top {
     /* background: #065796; */
 }
-    div#top h1 { color: #f5f5f5; }
+    div#top h1 {
+			color: #f5f5f5;
+			text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+			
+	 	}
     div#top a { color: #f5f5f5; }
 
 /* NAVEGAÇÃO */
@@ -71,20 +76,27 @@ div#link_bottom {
     background: white;
 }
 
+.arrow { font-size: 0.8em; }
 
 /* WIDGETS */
-div.widget div.titulo { background: #e9f4ff; }
-div.widget div.titulo h3 { color: #065796; }
+div.widget div.titulo { background: url('top.jpg') #025d96; /* #e9f4ff; */ }
+div.widget div.titulo h3 {
+	color: #dadada; font-weight: bold; /* #888888; */
+	text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
 div.widget { background: #fdfdfd; }
 div.widget div.footer { background: #fdfdfd; }
 
 /* PANES */
-table.pane_listing tr.list { background: #f6f6f6; }
-table.pane_listing tr.footer { background: #fdfdfd; }
-table.pane_listing tr.header { background: #686868; /* #edf6ff */ }
- table.pane_listing tr.header td { color: #d5d5d5;/* #888888; */ }
+table.listing tr.list { background: #f6f6f6; }
+table.listing tr.footer { background: #fdfdfd; }
+table.listing tr.header { background: url('top.jpg') #025d96; /* #edf6ff */ }
+	table.listing tr.header td {
+		color: #dadada; font-weight: bold; /* #888888; */
+		text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+	}
 
-/* TAB PANE -> table.pane_listing - Painel Gerenciar e Configurações*/
+/* TAB PANE -> table.listing - Painel Gerenciar e Configurações*/
 div.panes div.background { background: #fdfdfd; }
     div.panes div.background .header { background: #edf6ff; }
 
@@ -102,8 +114,8 @@ ul.tabs a {
 	ul.tabs a:hover { color: white; background: #2d88cf; }
 
 ul.tabs a.current, ul.tabs a.current:hover, ul.tabs li.current a {
-    background: #d8d8d8;/* #edf6ff */
-    color: #17486E;
+    background: #2d88cf;/* #edf6ff; #d8d8d8 */
+    color: #eaeaea;/* #17486E; */
 }
 
 

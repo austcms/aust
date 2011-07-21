@@ -107,8 +107,8 @@ $sql = "SELECT
 $query = Connection::getInstance()->query($sql);
 //echo $sql;
 ?>
-<table width="680" class="listagem">
-    <tr class="titulo">
+<table width="680" class="listing">
+    <tr class="header">
         <td>
 
         </td>

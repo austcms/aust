@@ -65,7 +65,7 @@ class MigrationsModsTest extends PHPUnit_Framework_TestCase
     
 
 	function testStatus(){
-		$this->assertType("array", $this->obj->status());
+		$this->assertInternalType("array", $this->obj->status());
 		$this->assertArrayHasKey("agenda", $this->obj->status());
 	}
 	

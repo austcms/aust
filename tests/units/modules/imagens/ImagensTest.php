@@ -34,8 +34,8 @@ class ImagensTest extends PHPUnit_Framework_TestCase
     }
 
     function testLoadSql(){
-        $this->assertType('string', $this->obj->loadSql() );
-        $this->assertType('string', $this->obj->loadSql(
+        $this->assertInternalType('string', $this->obj->loadSql() );
+        $this->assertInternalType('string', $this->obj->loadSql(
                     array(
                         'limit' => 0,
                     ))

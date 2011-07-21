@@ -66,7 +66,7 @@ class Config {
                 $field = 'valor';
                 $params = array(
                     'where' => "propriedade='".$property."'",
-                    'mode' => 'single',
+                    'mode' => 'value_only',
 
                 );
             } else {
@@ -74,12 +74,18 @@ class Config {
             }
 
 			$config = $this->getConfigs($params);
-			
-            $result = reset( $config );
+			if( is_string($config) && !empty($config) )
+				return $config;
+
+			if( !empty($config[0]) )
+            	$result = reset( $config );
+			else
+				$result = $config;
+
 			if( empty($result) )
 				return false;
             $result = reset($result);
-            return $result[$field];
+            return $result;
 
         } else {
             return false;
@@ -92,7 +98,7 @@ class Config {
      * @param <array> $params
      * @return <array>
      */
-    public function getConfigs($params = array()){
+    public function getConfigs($params = array(), $valueOnly = false){
 
         /*
          * mode of return
@@ -100,9 +106,23 @@ class Config {
         $mode = (empty($params["mode"])) ? '' : $params["mode"];
         unset($params['mode']);
 
+		$fields = "*";
+		if( $mode == 'value_only' ){
+			$valueOnly = true;
+		}
+
         $where = (empty($params["where"])) ? '' : 'AND ( '. $params["where"].')';
         unset($params['where']);
-
+		
+		if( !empty($params) ){
+			foreach( $params as $properties ){
+				$tmpWhere[] = $properties;
+			}
+			if( !empty($tmpWhere) ){
+				$where.= " AND propriedade IN ('".implode("','", $tmpWhere)."')";
+			}
+		}
+		
         /**
          * Type of configuration, generally global
          */
@@ -111,7 +131,7 @@ class Config {
             $type = array($type);
         $type = (empty($type)) ? '' : ' AND tipo IN (\''. implode("','", $type) .'\')';
 
-        $sql = "SELECT * FROM
+        $sql = "SELECT ".$fields." FROM
                     ".$this->table."
                 WHERE
                     1=1
@@ -122,9 +142,15 @@ class Config {
         $query = Connection::getInstance()->query($sql);
 
         $result = array();
-        foreach( $query as $valor ){
-            $result[$valor['tipo']][] = $valor;
-        }
+		if( $valueOnly && !empty($query) ){
+			foreach( $query as $valor ){
+				$result[$valor['propriedade']] = $valor["valor"];
+			}
+		} else {
+	        foreach( $query as $valor ){
+	            $result[$valor['tipo']][] = $valor;
+	        }
+		}
 
         if( !empty($result) ){
             return $result;

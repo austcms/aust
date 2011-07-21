@@ -39,7 +39,7 @@ class ApiQueryParserTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals('*', $this->obj->fields($query));
 
 		$query['fields'] = 'title;number';
-		$this->assertType('array', $this->obj->fields($query));
+		$this->assertInternalType('array', $this->obj->fields($query));
 		$this->assertContains('title', $this->obj->fields($query));
 		$this->assertContains('number', $this->obj->fields($query));
 	}
@@ -48,7 +48,7 @@ class ApiQueryParserTest extends PHPUnit_Framework_TestCase
 		// case #2.1
 		$query = array('where_title' => 'new+service+offers');
 		$result = $this->obj->where($query);
-		$this->assertType('array', $result);
+		$this->assertInternalType('array', $result);
 		$this->assertArrayHasKey('title', $result);
 		$this->assertRegExp('/new service offers/i', $result['title']);
 
@@ -68,7 +68,7 @@ class ApiQueryParserTest extends PHPUnit_Framework_TestCase
 		// case #2.3
 		$query = array('where_id' => '10');
 		$result = $this->obj->where($query);
-		$this->assertType('array', $result);
+		$this->assertInternalType('array', $result);
 		$this->assertArrayHasKey('id', $result);
 		$this->assertEquals('10', $result['id']);
 
@@ -77,9 +77,9 @@ class ApiQueryParserTest extends PHPUnit_Framework_TestCase
 			'where_title' => 'query+one;query+two*'
 		);
 		$result = $this->obj->where($query);
-		$this->assertType('array', $result);
+		$this->assertInternalType('array', $result);
 		$this->assertArrayHasKey('title', $result);
-		$this->assertType('array', $result['title']);
+		$this->assertInternalType('array', $result['title']);
 		$this->assertEquals('query one', $result['title'][0]);
 		$this->assertEquals('query two%', $result['title'][1]);
 		unset($query);

@@ -4,7 +4,11 @@ API SPECIFICATIONS
 Version: 0.0.1
 
 
-1) Basic Queries
+Content Queries
+====
+
+
+1) Basic Content Queries
 ====
 
 #1.1: order, limit and all fields
@@ -33,7 +37,7 @@ Version: 0.0.1
 
 	/api.json?query=News&module=texts&id=10&fields=title
 
-2) Using WHERE:
+2) Retrieve Content with WHERE:
 ====
 
 #2.1: Using WHERE
@@ -76,7 +80,7 @@ Version: 0.0.1
 	/api.json?query=News&where_title=*new+service+offers*;google*
 
 
-3) Complex Data Retrieval
+3) Retrieve Content with from complex data models
 ====
 
 #3.1: FlexFields use case: lots of images
@@ -95,7 +99,7 @@ Version: 0.0.1
 	/api.json?query=News
 
 
-4) Custom Module API Options
+4) Retrieve Content with custom module API options
 ====
 
 #4.1: Retrieving the last 14 photos inserted in FlexFields 
@@ -112,3 +116,17 @@ Version: 0.0.1
 
 	/api.json?query=News&field_photos_only&limit=14
 
+
+
+Other Queries
+====
+
+1) Get configuration value
+====
+
+#1.1: Get configuration value by property
+
+	We want:
+		To get the value of a configuration with property named "site_title".
+		
+	/api.json?configuration=site_title

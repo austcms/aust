@@ -18,13 +18,13 @@ if($precisa_aprovacao['value'] == '1'){
 }
 ?>
 
-<table class="listagem">
+<table class="listing">
     <?php
     /*
      * Título dos campos
      */
     ?>
-    <tr class="titulo">
+    <tr class="header">
 
         <?php
         $total_td = 0;
@@ -37,7 +37,7 @@ if($precisa_aprovacao['value'] == '1'){
                 } else {
                     $total_td++;
                     ?>
-                    <td bgcolor="#333333" class="<? echo $campo; ?>">
+                    <td class="<? echo $campo; ?>">
                         <?php
                         echo $campo;
                         ?>
@@ -50,7 +50,7 @@ if($precisa_aprovacao['value'] == '1'){
              * Necessita aprovação?
              */
             ?>
-            <td bgcolor="#333333" width="80" align="center">
+            <td width="80" align="center">
                 Opções
             </td>
             <?php

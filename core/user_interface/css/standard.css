@@ -60,3 +60,5 @@ table { border-spacing: 0px; padding: 0px; border-collapse: collapse; }
 	font-weight: bold;
 	margin-bottom: 5px;
 }
+
+.root_user_only { color: #999; font-size: 0.9em; font-style: italic; text-shadow: 1px 1px 3px rgba(0, 0, 0, 0); }

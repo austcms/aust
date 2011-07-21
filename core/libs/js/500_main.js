@@ -17,9 +17,34 @@ var privilegio_escolhido = false;
 $(document).ready(function(){
     lightbox();
 
+
+	// show sql debug messages
+	$('a#show_sql_debug_messages_button').click(function(){
+		var shouldShow = '0';
+		var messages = $("#sql_debug_messages");
+		
+		$(this).html('Debug SQL ');
+		if( messages.is(':visible') ){
+			$(this).append('<span class="arrow">▼</span>');
+			messages.fadeOut();
+		} else {
+			shouldShow = '1';
+			$(this).append('<span class="arrow">▲</span>');
+			messages.fadeIn().removeClass('hidden');
+		}
+		
+		$.post(
+        arquivoAjax+'?lib=show_sql_debug_messages',
+        { show: shouldShow },
+				function(response){
+
+				}
+		);
+    
+	});
+	
 //	$("a[name=modal]").first().click();
 
-//	window.status = $("[name='data[teste][node_id]']").length;
 	$('.check_checkboxes').attr('checked', false).click(function(){
 		
 		window.status = $(this).parents('table').length;
@@ -74,13 +99,9 @@ $(document).ready(function(){
 	// .dragdrop
 	
     $(".dragdrop").sortable({
-//        handle: 'h3',
         opacity: 0.4,
-//        containment: 'document',
         dropOnEmpty: true,
-        stop: function () {
-        }
-
+        stop: function () { }
     });
 	
     // Hints
@@ -194,7 +215,6 @@ function updateCategorySelect(id, node, selected){
         url: arquivoAjax+'?lib=update_category_select',
         data: "node="+node+"&selected="+selected,
         complete: function(response){
-
             if( response.responseText != '' ){
                 $("select[id='"+id+"']").html(response.responseText);
             } else {

@@ -1,5 +1,5 @@
-<table cellspacing="0" cellpadding="0" border="0" class="listagem">
-<tr class="titulo">
+<table cellspacing="0" cellpadding="0" border="0" class="listing">
+<tr class="header">
 	<?php foreach( $query['results'][0] as $field=>$value ){
 		if( $field == '_id') continue;
 	 	?>

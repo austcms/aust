@@ -96,7 +96,7 @@ class ArquivosTest extends PHPUnit_Framework_TestCase
                 'error' => 0,
             ),
         );
-        $this->assertType('integer', $files['file1']['size']);
+        $this->assertInternalType('integer', $files['file1']['size']);
 
         $this->obj->uploadSubDir = 'tests/'.$this->obj->uploadSubDir;
         $this->obj->uploadFile($files);
@@ -205,8 +205,8 @@ class ArquivosTest extends PHPUnit_Framework_TestCase
 
     function testLoadSql(){
         function testLoadSql(){
-            $this->assertType('string', $this->obj->loadSql() );
-            $this->assertType('string', $this->obj->loadSql(
+            $this->assertInternalType('string', $this->obj->loadSql() );
+            $this->assertInternalType('string', $this->obj->loadSql(
                         array(
                             'resultadosPorPagina' => 0,
                         ))

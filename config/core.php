@@ -65,6 +65,14 @@ date_default_timezone_set('America/Sao_Paulo');
 		        'valor' => '0',
 		        'explanation' => 'Em alguns casos, pode ser necessário que administradores tenham uma imagem secundária.',
 		    ),
+		    array(
+		        'tipo' => 'Privado',
+		        'local' => '',
+		        'nome' => 'Mostrar debug SQL',
+		        'propriedade' => 'show_sql_debug_messages',
+		        'valor' => '0',
+		        'explanation' => 'Mostra mensagens SQL no rodapé da página.',
+		    ),
         );
         Registry::write('neededConfig', $neededConfig);
 

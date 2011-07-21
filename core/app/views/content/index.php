@@ -28,7 +28,7 @@ $sites = Aust::getInstance()->getStructures();
              */
             foreach( $sites as $site ): ?>
             <div>
-                <table border="0" class="pane_listing">
+                <table border="0" class="pane_listing listing">
                 <?php if( count($site['Structures']) ): ?>
                     <tr class="header">
                         <td class="secoes">Conteúdos</td>

@@ -49,33 +49,40 @@ class ApiTransaction {
 	}
 	
 	public function getData($get){
-		
-		$structureIds = $this->queryParser()->structureId($get);
-		if( !is_array($structureIds) || count($structureIds) == 0 )
-			return false;
 
-		$where = $this->queryParser()->where($get);
-		$order = $this->queryParser()->order($get);
-		$limit = $this->queryParser()->limit($get);
-		$fields = $this->queryParser()->fields($get);
-		$result = array();
+		if( $this->retrieveFrom($get) == "configuration" ){
+			$properties = $this->getConfigurationFields($get);
+			$value = Config::getInstance()->getConfigs($properties, true);
+			return $value;
+		} else if( $this->retrieveFrom($get) == "structure" ){
 		
-		$queryParameters = array(
-			'fields' => $fields,
-			'where' => $where,
-			'order' => $order,
-			'limit' => $limit
-		);
+			$structureIds = $this->queryParser()->structureId($get);
+			if( !is_array($structureIds) || count($structureIds) == 0 )
+				return false;
 
-		foreach( $structureIds as $structureId ){
-			$structureInstance = ModulesManager::getInstance()->modelInstance($structureId);
-			$items = $structureInstance->load( $queryParameters );
-			$result = array_merge($result, $items);
+			$where = $this->queryParser()->where($get);
+			$order = $this->queryParser()->order($get);
+			$limit = $this->queryParser()->limit($get);
+			$fields = $this->queryParser()->fields($get);
+			$result = array();
+		
+			$queryParameters = array(
+				'fields' => $fields,
+				'where' => $where,
+				'order' => $order,
+				'limit' => $limit
+			);
+
+			foreach( $structureIds as $structureId ){
+				$structureInstance = ModulesManager::getInstance()->modelInstance($structureId);
+				$items = $structureInstance->load( $queryParameters );
+				$result = array_merge($result, $items);
+			}
+
+			if( empty($result) )
+				$result = 0;
+			return $result;
 		}
-
-		if( empty($result) )
-			$result = 0;
-		return $result;
 		
 	}
 	
@@ -101,6 +108,21 @@ class ApiTransaction {
 		}
 		
 		return $get;
+	}
+	
+	public function retrieveFrom($get){
+		if( array_key_exists('configuration', $get) || array_key_exists('config', $get) )
+			return "configuration";
+
+		return "structure";
+	}
+	
+	public function getConfigurationFields($get){
+		$fields = false;
+		if( is_string($get['configuration']) )
+			$fields = explode(';', $get['configuration']);
+			
+		return $fields;
 	}
 	
 }

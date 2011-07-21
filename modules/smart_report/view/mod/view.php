@@ -86,7 +86,7 @@
 	<?php
 	if(count($query['results']) == 0){
 	    ?>
-		<table cellspacing="0" cellpadding="0" border="0" class="listagem">
+		<table cellspacing="0" cellpadding="0" border="0" class="listing">
 	    <tr class="conteudo">
 	        <td colspan="1">
 	            <strong>Nenhum registro encontrado.</strong>

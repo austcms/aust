@@ -608,12 +608,12 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 			$result = $this->obj->saveStructure($params);
 			$query = Connection::getInstance()->query("SELECT * FROM categorias WHERE nome='Teste777' AND classe='flex_fields'");
 			$saved = reset( $query );
-			$this->assertType('array', $saved);
+			$this->assertInternalType('array', $saved);
 
 			$this->obj->connection->query("DELETE FROM categorias WHERE nome='Teste777'");
 			$this->obj->connection->query("DELETE FROM categorias WHERE id='".$lastInsert."'");
 
-			$this->assertType('int', $result);
+			$this->assertInternalType('int', $result);
 			$this->assertArrayHasKey('nome', $saved);
 			$this->assertEquals('Teste777', $saved['nome']);
 			$this->assertEquals('flex_fields', $saved['classe']);
@@ -625,7 +625,7 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 			$this->assertFalse( $this->obj->saveStructure( array() ) );
 
 			// TEST #3
-			$this->assertType('int', $this->obj->austNode() );
+			$this->assertInternalType('int', $this->obj->austNode() );
 		}
 		
 		/*

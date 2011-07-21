@@ -45,7 +45,7 @@ function tt($str = ''){
 function lbCategoria($params){
     if( is_string($params) ){
         $austNode = $params;
-        $categoryInput = 'frmcategoria';
+        $categoryInput = 'frmnode_id';
 
     } else {
         if( empty($params['austNode']) )
@@ -53,7 +53,7 @@ function lbCategoria($params){
         else
             $austNode = $params['austNode'];
 
-        $categoryInput = (empty($params['categoryInput'])) ? 'frmcategoria' : $params['categoryInput'];
+        $categoryInput = (empty($params['categoryInput'])) ? 'frmnode_id' : $params['categoryInput'];
     }
 
     $random = substr( sha1( rand(0, 100) ), rand(5,20));

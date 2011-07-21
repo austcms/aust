@@ -64,7 +64,39 @@ class ApiTransactionTest extends PHPUnit_Framework_TestCase
 		$this->assertContains('without_a_key', $array);
 		
 	}
-	
+
+    function testRetrieveConfiguration(){
+		$params = array(
+			'configuration' => 'site_title',
+			'query' => 'News'
+		);
+		$return = $this->obj->retrieveFrom($params);
+		$this->assertEquals('configuration', $return);
+    }
+
+    function testRetrieveStructureData(){
+		$params = array(
+			'query' => 'News'
+		);
+		$return = $this->obj->retrieveFrom($params);
+		$this->assertEquals('structure', $return);
+    }
+
+    function testGetConfigurationFields(){
+		$params = array(
+			'configuration' => 'site_title'
+		);
+		$return = $this->obj->getConfigurationFields($params);
+		$this->assertTrue( in_array('site_title', $return) );
+
+		$params = array(
+			'configuration' => 'site_title;other_field'
+		);
+		$return = $this->obj->getConfigurationFields($params);
+		$this->assertContains('site_title', $return);
+		$this->assertContains('other_field', $return);
+    }
+		
     function testAskVersionJson(){
 		$params = array(
 			'data_format' => 'json',
@@ -86,7 +118,7 @@ class ApiTransactionTest extends PHPUnit_Framework_TestCase
 		);
 
 		$return = $this->obj->getData($query);
-		$this->assertType('array', $return);
+		$this->assertInternalType('array', $return);
 		$this->assertEquals(2, count($return));
 		$this->assertEquals('Amazon Takes On California', $return[0]['title']);
 	}
@@ -102,7 +134,7 @@ class ApiTransactionTest extends PHPUnit_Framework_TestCase
 		);
 
 		$return = $this->obj->getData($query);
-		$this->assertType('array', $return);
+		$this->assertInternalType('array', $return);
 		$this->assertEquals(2, count($return));
 		$this->assertArrayHasKey('text', $return[0]);
 		$this->assertArrayNotHasKey('title', $return[0]);
@@ -120,7 +152,7 @@ class ApiTransactionTest extends PHPUnit_Framework_TestCase
 		);
 
 		$return = $this->obj->getData($query);
-		$this->assertType('array', $return);
+		$this->assertInternalType('array', $return);
 		$this->assertEquals(1, count($return));
 		$this->assertArrayHasKey('text', $return[0]);
 		$this->assertEquals('New Service Offers Music in Quantity, Not by Song', $return[0]['title']);
@@ -142,7 +174,7 @@ class ApiTransactionTest extends PHPUnit_Framework_TestCase
 		);
 
 		$return = $this->obj->getData($query);
-		$this->assertType('array', $return);
+		$this->assertInternalType('array', $return);
 		$this->assertEquals(1, count($return));
 		$this->assertArrayHasKey('text', $return[0]);
 		$this->assertEquals('New Service Offers Music in Quantity, Not by Song', $return[0]['title']);
@@ -162,7 +194,7 @@ class ApiTransactionTest extends PHPUnit_Framework_TestCase
 		);
 
 		$return = $this->obj->getData($query);
-		$this->assertType('array', $return);
+		$this->assertInternalType('array', $return);
 		$this->assertEquals(2, count($return));
 		$this->assertArrayHasKey('text', $return[0]);
 		$this->assertEquals('New Service Offers Music in Quantity, Not by Song', $return[0]['title']);
@@ -180,7 +212,7 @@ class ApiTransactionTest extends PHPUnit_Framework_TestCase
 		);
 
 		$return = $this->obj->perform($query);
-		$this->assertType('string', $return);
+		$this->assertInternalType('string', $return);
 		$return = json_decode($return, true);
 		$return = $return['result'];
 		$this->assertEquals(2, count($return));
@@ -194,7 +226,7 @@ class ApiTransactionTest extends PHPUnit_Framework_TestCase
 		);
 
 		$return = $this->obj->perform($query);
-		$this->assertType('string', $return);
+		$this->assertInternalType('string', $return);
 		$return = json_decode($return, true);
 		$return = $return['result'];
 		$this->assertEquals(3, count($return));

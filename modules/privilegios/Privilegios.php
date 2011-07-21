@@ -106,7 +106,7 @@ class Privilegios extends Module
         
     }
 
-    public function loadEmbed($param = array()){
+    public function loadEmbed($param){
         $this->mainTable = "privilegio_target";
 
         return parent::loadEmbed($param);

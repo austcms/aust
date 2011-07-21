@@ -51,21 +51,21 @@ class dbSchemaTest extends PHPUnit_Framework_TestCase
         $dbSchema = new dbSchema();
 		$dbSchema->setSchema($this->fixture());
 		
-        $this->assertType('array', $dbSchema->dbSchema );
+        $this->assertInternalType('array', $dbSchema->dbSchema );
     }
 
     function testVerificaSchemaExistente(){
         $dbSchema = new dbSchema();
 		$dbSchema->setSchema($this->fixture());
         
-		$this->assertType('integer', $dbSchema->verificaSchema() );
+		$this->assertInternalType('integer', $dbSchema->verificaSchema() );
     }
 
     function testTabelasAtuais(){
         $dbSchema = new dbSchema();
 		$dbSchema->setSchema($this->fixture());
 		
-        $this->assertType('array', $dbSchema->tabelasAtuais());
+        $this->assertInternalType('array', $dbSchema->tabelasAtuais());
     }
 
     function testIsDbSchemaFormatOk(){

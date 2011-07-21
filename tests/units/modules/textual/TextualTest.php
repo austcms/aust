@@ -88,7 +88,7 @@ class TextualTest extends PHPUnit_Framework_TestCase
          * Right SQLs?
          */
         $sql = $this->obj->loadSql( array('') );
-        $this->assertType('string', $sql );
+        $this->assertInternalType('string', $sql );
         $sql = preg_replace('/\n|\t/Us', "", preg_replace('/\s{2,}/s', " ", $sql));
         $this->assertEquals( trim("SELECT mainTable.id AS id, title, pageviews, node_id AS cat, ".
                         "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as created_on, ".
@@ -149,7 +149,7 @@ class TextualTest extends PHPUnit_Framework_TestCase
 
 
     function testLoadConfig(){
-        $this->assertType('array', $this->obj->loadConfig());
+        $this->assertInternalType('array', $this->obj->loadConfig());
         $this->assertArrayHasKey('className', $this->obj->loadConfig());
     }
     /*

@@ -57,8 +57,8 @@ else
 <br />
 <br />
 
-<table class="listagem">
-<tr class="titulo">
+<table class="listing">
+<tr class="header">
 	<td>Id</td>
 	<td>Título</td>
 	<td>Descrição</td>

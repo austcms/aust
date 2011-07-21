@@ -140,7 +140,7 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 		);
 
 		$files = $this->obj->getFiles($params);
-		$this->assertType('array', $files);
+		$this->assertInternalType('array', $files);
 		$notEmpty = !empty($files);
 		$this->assertTrue($notEmpty);
 		$this->assertEquals('777', $files[0]['maintable_id']);

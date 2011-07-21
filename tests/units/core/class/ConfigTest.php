@@ -64,7 +64,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 		$this->assertFalse($this->obj->getConfig('site_name'));
 	}
 	
-	function testGetConfig(){
+	function testGetConfigWithSingleProperty(){
 		$this->populate();
 		$configuration = $this->obj->getConfig("test_configuration");
 		$this->assertEquals("value?", $configuration );
@@ -93,7 +93,22 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 		$this->assertArrayHasKey("valor", $configurations['general'][0] );
 		$this->assertContains("value?", $configurations['general'][0] );
 		$this->assertArrayNotHasKey("1", $configurations['general'] );
+	}
+
+	function testGetConfigsWithSpecificProperties(){
+		$this->populate();
+        $params = array(
+        	'test_configuration', 'second_test_configuration', 'forbidden_configuration', 
+        );
+
+		$configurations = $this->obj->getConfigs($params, true);
 		
+		$this->assertArrayHasKey("test_configuration", $configurations);
+		$this->assertArrayHasKey("second_test_configuration", $configurations );
+		$this->assertArrayHasKey("forbidden_configuration", $configurations );
+		$this->assertEquals("value?", $configurations["test_configuration"] );
+		$this->assertEquals("value??", $configurations["second_test_configuration"] );
+		$this->assertEquals("value!", $configurations["forbidden_configuration"] );
 	}
 	
 	function testHasPermission(){

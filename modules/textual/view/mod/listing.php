@@ -19,8 +19,8 @@
 	?>
 
 	<br clear="all" />
-	<table cellspacing="0" cellpadding="0" border="0" class="listagem">
-	    <tr class="titulo">
+	<table cellspacing="0" cellpadding="0" border="0" class="listing">
+	    <tr class="header">
         
 	        <?php for($i=0; $i< count($module->config['contentHeader']['campos']); $i++) { ?>
 	                <td class="<? echo $module->config['contentHeader']['campos'][$i]; ?>">
@@ -29,7 +29,7 @@
 	                    ?>
 	                </td>
 	        <?php } ?>
-	        <td bgcolor="#333333" width="80" align="center">
+	        <td width="80" align="center">
 	            Op&ccedil;&otilde;es
 	        </td>
 	    </tr>

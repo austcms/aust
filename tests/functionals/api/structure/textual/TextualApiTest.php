@@ -2,94 +2,85 @@
 // require_once 'PHPUnit/Framework.php';
 require_once 'tests/config/auto_include.php';
 
-class FlexFieldsApiTest extends PHPUnit_Framework_TestCase
+class TextualApiTest extends PHPUnit_Framework_TestCase
 {
 
     public function setUp(){
+		installModule('textual');
+		$this->createContent();
         $this->obj = new ApiTransaction();
     }
 
 	function createContent(){
-		Fixture::getInstance()->createApiData();
-		Connection::getInstance()->exec('DELETE FROM news');
-		$sql = "INSERT INTO news
-					(title, text)
+		$nodeId = Fixture::getInstance()->createApiTextualData();
+		Connection::getInstance()->exec('DELETE FROM textual');
+		$sql = "INSERT INTO textual
+					(node_id, title, text)
 					VALUES
-						('New Service Offers Music in Quantity, Not by Song',
+						('".$nodeId."', 'New Service Offers Music in Quantity, Not by Song',
 						'Daniel Ek, the 28-year-old co-founder and public face of <a href=\"whatever\">Spotify</a>, the European digital music service, paced around the company’s loftlike Manhattan office on Tuesday afternoon, clutching two mobile phones that buzzed constantly.'
 						),
-						('Amazon Takes On California',
+						('".$nodeId."', 'Amazon Takes On California',
 						'SAN FRANCISCO — Amazon, the world’s largest online merchant, has an ambitious and far-reaching new agenda: it wants to rewrite tax policy for the Internet era.'
 						),
-						('Google+ Improves on Facebook',
+						('".$nodeId."', 'Google+ Improves on Facebook',
 						'Google, the most popular Web site on earth, is worried about the second-most popular site. That, of course, would be Facebook.'
 						)
 				";
 		Connection::getInstance()->exec($sql);
 	}
 	
-    function testAskVersionJson(){
-		$params = array(
-			'data_format' => 'json',
-			'version' => 'true'
-		);
-		$return = $this->obj->perform($params);
-		$this->assertEquals('{"result":"0.0.1"}', $return);
-    }
-	
 	// returns Array
-	function testGetData(){
-		$this->createContent();
+	function testGetDataAll(){
 		
 		$query = array(
-			'query' => 'News',
+			'query' => 'Articles',
 			'order' => 'title;id',
 			'limit' => 2,
 			'fields' => '*'
 		);
 
 		$return = $this->obj->getData($query);
-		$this->assertType('array', $return);
+		$this->assertInternalType('array', $return);
 		$this->assertEquals(2, count($return));
 		$this->assertEquals('Amazon Takes On California', $return[0]['title']);
 
 		$query = array(
-			'query' => 'News',
+			'query' => 'Articles',
 			'order' => 'id+desc',
 			'limit' => 4,
 			'fields' => '*'
 		);
 
 		$return = $this->obj->getData($query);
-		$this->assertType('array', $return);
+		$this->assertInternalType('array', $return);
 		$this->assertEquals(3, count($return));
 		$this->assertEquals('Google+ Improves on Facebook', $return[0]['title']);
 	}
 	
 	// returns Array
 	function testGetDataWithDifferentFieldsSpecified(){
-		$this->createContent();
 		
 		$query = array(
-			'query' => 'News',
+			'query' => 'Articles',
 			'limit' => 2,
 			'fields' => 'text'
 		);
 
 		$return = $this->obj->getData($query);
-		$this->assertType('array', $return);
+		$this->assertInternalType('array', $return);
 		$this->assertEquals(2, count($return));
 		$this->assertArrayHasKey('text', $return[0]);
 		$this->assertArrayNotHasKey('title', $return[0]);
 
 		$query = array(
-			'query' => 'News',
+			'query' => 'Articles',
 			'limit' => 2,
 			'fields' => 'id;title'
 		);
 
 		$return = $this->obj->getData($query);
-		$this->assertType('array', $return);
+		$this->assertInternalType('array', $return);
 		$this->assertEquals(2, count($return));
 		$this->assertArrayHasKey('id', $return[0]);
 		$this->assertArrayHasKey('title', $return[0]);
@@ -102,13 +93,13 @@ class FlexFieldsApiTest extends PHPUnit_Framework_TestCase
 		
 		// #2.1
 		$query = array(
-			'query' => 'News',
+			'query' => 'Articles',
 			'fields' => 'title;text',
 			'where_title' => 'new+service+offers+music+in+quantity,+not+by+song',
 		);
 
 		$return = $this->obj->getData($query);
-		$this->assertType('array', $return);
+		$this->assertInternalType('array', $return);
 		$this->assertEquals(1, count($return));
 		$this->assertArrayHasKey('text', $return[0]);
 		$this->assertEquals('New Service Offers Music in Quantity, Not by Song', $return[0]['title']);
@@ -123,14 +114,14 @@ class FlexFieldsApiTest extends PHPUnit_Framework_TestCase
 
 		// #2.2
 		$query = array(
-			'query' => 'News',
+			'query' => 'Articles',
 			'fields' => 'id;title;text',
 			'where_title' => 'new+service+offers+music+in+quantity,+not+by+song',
 			'where_text' => '*public*',
 		);
 
 		$return = $this->obj->getData($query);
-		$this->assertType('array', $return);
+		$this->assertInternalType('array', $return);
 		$this->assertEquals(1, count($return));
 		$this->assertArrayHasKey('text', $return[0]);
 		$this->assertEquals('New Service Offers Music in Quantity, Not by Song', $return[0]['title']);
@@ -144,45 +135,63 @@ class FlexFieldsApiTest extends PHPUnit_Framework_TestCase
 		
 		// #2.4
 		$query = array(
-			'query' => 'News',
+			'query' => 'Articles',
 			'fields' => 'id;title;text',
 			'where_title' => '*new+service+offers*;*google*',
 		);
 
 		$return = $this->obj->getData($query);
-		$this->assertType('array', $return);
+		$this->assertInternalType('array', $return);
 		$this->assertEquals(2, count($return));
 		$this->assertArrayHasKey('text', $return[0]);
 		$this->assertEquals('New Service Offers Music in Quantity, Not by Song', $return[0]['title']);
 		$this->assertContains('co-founder and public face', $return[0]['text']);
+	}
+
+	// returns Array
+	function testGetDataWithNodeName(){
+		$this->createContent();
+		
+		$query = array(
+			'query' => 'Articles',
+			'fields' => 'id;title;text;node;node_tipo;node_classe',
+			'where_title' => '*new+service+offers*;*google*',
+		);
+
+		$return = $this->obj->getData($query);
+		$this->assertArrayHasKey('text', $return[0], $return);
+		$this->assertEquals('New Service Offers Music in Quantity, Not by Song', $return[0]['title']);
+		$this->assertEquals('Articles', $return[0]['node']);
+		$this->assertEquals('textual', $return[0]['node_tipo']);
+		$this->assertEquals('estrutura', $return[0]['node_classe']);
 	}
 	
 	// returns JSON
 	function testPerform(){
 		$this->createContent();
 		$query = array(
-			'query' => 'News',
+			'query' => 'Articles',
 			'order' => 'title;id',
 			'limit' => 2,
 			'fields' => '*'
 		);
 
 		$return = $this->obj->perform($query);
-		$this->assertType('string', $return);
+		$this->assertInternalType('string', $return);
 		$return = json_decode($return, true);
 		$return = $return['result'];
 		$this->assertEquals(2, count($return));
 		$this->assertEquals('Amazon Takes On California', $return[0]['title']);
 
 		$query = array(
-			'query' => 'News',
+			'query' => 'Articles',
 			'order' => 'id+desc',
 			'limit' => 4,
 			'fields' => '*'
 		);
 
 		$return = $this->obj->perform($query);
-		$this->assertType('string', $return);
+		$this->assertInternalType('string', $return);
 		$return = json_decode($return, true);
 		$return = $return['result'];
 		$this->assertEquals(3, count($return));

@@ -26,7 +26,7 @@ class AustTest extends PHPUnit_Framework_TestCase
 	}
 
     function testGetStructures(){
-        $this->assertType('array', $this->obj->getStructures() );
+        $this->assertInternalType('array', $this->obj->getStructures() );
     }
 	
 	function testGetStructure(){
@@ -35,13 +35,13 @@ class AustTest extends PHPUnit_Framework_TestCase
 		$structureId = $query[0]["id"];
 		
 		$structure = $this->obj->getStructureById($structureId);
-		$this->assertType("array", $structure);
+		$this->assertInternalType("array", $structure);
 		$this->assertEquals($structureId, $structure["id"]);
 	}
 
     function testGetStructuresByFather(){
-        $this->assertType('array', $this->obj->getStructuresByFather('1') );
-        $this->assertType('array', $this->obj->getStructuresByFather('999') );
+        $this->assertInternalType('array', $this->obj->getStructuresByFather('1') );
+        $this->assertInternalType('array', $this->obj->getStructuresByFather('999') );
         $this->assertFalse($this->obj->getStructuresByFather() );
     }
 
@@ -127,7 +127,7 @@ class AustTest extends PHPUnit_Framework_TestCase
 		$this->obj->connection->query("DELETE FROM categorias WHERE nome='Test777'");
 		$this->obj->connection->query("DELETE FROM categorias WHERE nome='TestFather777'");
 		
-		$this->assertType('int', $result);
+		$this->assertInternalType('int', $result);
 		$this->assertArrayHasKey('nome', $saved);
 		$this->assertEquals('Test777', $saved['nome']);
 		$this->assertEquals('categoria', $saved['classe']);

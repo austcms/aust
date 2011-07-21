@@ -18,7 +18,7 @@ class ApplicationTest extends PHPUnit_Framework_TestCase
 		 */
 
 		$return = $this->obj->installationDiagnostics();
-        $this->assertType('integer', $return);
+        $this->assertInternalType('integer', $return);
         $this->assertEquals(1, $return);
     }
 

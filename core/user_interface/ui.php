@@ -238,15 +238,9 @@
 
 	        </div>
 	    </div>
-    
-        
 	</div>
 
-	<?php
-/*
-	 * DEBUG
-	 */
-	?>
+	<?php /* DEBUG */ ?>
 	<div id="footer_admin_dashboard">
 	    <div class="links_admin">
 	        <?php
@@ -254,22 +248,41 @@
 	            ?>
 	            <div class="borda"></div>
 	            <br />
-	                <span class="para_webmaster">Para Webmasters:</span><a href="adm_main.php?section=control_panel" class="restrito">Configurar Módulos</a>
+	                <span class="para_webmaster">Para Webmasters:</span>
+					<?php tt('Os links à direita aparecem somente para o usuário com conta <em>root</em>.'); ?>
+					<a href="adm_main.php?section=control_panel" class="restrito">Configurar Módulos</a>
 	                <a href="adm_main.php?section=categorias" class="restrito">Categorias</a>
 	                <a href="adm_main.php?section=import_export_structures" class="restrito">Importar/Exportar Estruturas</a>
-	            <?php
-	            if( Registry::read('debugLevel') > 1 ){
+
+		            <?php
+					$showDebugSQL = "hidden";
+					$arrowDown = true;
+		            if( Config::getInstance()->getConfig('show_sql_debug_messages') ){
+						$showDebugSQL = "";
+						$arrowDown = false;
+					}
+					?>
+
+					<a href="javascript: void(0)" id="show_sql_debug_messages_button" class="restrito">
+						Debug SQL 
+						<span class="arrow"><?php if( $arrowDown ) echo "▼"; else echo "▲"; ?></span>
+					</a>
+					
+				<div id="sql_debug_messages" class="<?php echo $showDebugSQL; ?>">
+					<?php
 
 	                /*
 	                 * CACHE
 	                 */
 	                $cacheDirs = Registry::read('permission_needed_dirs');
-	                foreach( $cacheDirs as $dir ){
-	                    if( !is_writable($dir) OR
-	                        !is_readable($dir))
-	                    {
-	                        $cacheError[] = $dir;
-	                    }
+					if( is_array($cacheDirs) ){
+		                foreach( $cacheDirs as $dir ){
+		                    if( !is_writable($dir) OR
+		                        !is_readable($dir))
+		                    {
+		                        $cacheError[] = $dir;
+		                    }
+						}
 	                }
 	                if( !empty($cacheError) ){
 
@@ -314,56 +327,58 @@
 	                <?php
 
 	                $debugVars = Registry::read('debug');
-	                foreach( $debugVars as $vars ){
-	                    $sqlCommands = array(
-	                        "SELECT", "UPDATE", "DELETE", "INSERT", "REPLACE",
-	                        "FROM", "ASC", "WHERE", "ORDER BY", "LIMIT", "TABLES",
-	                        "LEFT JOIN", "DISTINCT", "COUNT", "ON", "DESCRIBE", "SHOW",
-	                        "INTO", "VALUES", "SET", "ALTER",
-	                        "IN", "NOT IN", " OR ", " AND ", " AS ", "DESC",
-	                        " and ", " as "
-	                    );
-	                    $boldSqlCommands = array();
-	                    foreach( $sqlCommands as $valor ){
-	                        $boldSqlCommands[] = "<strong>".$valor."</strong>";
-	                    }
-	                    $sql = str_replace($sqlCommands, $boldSqlCommands, $vars['sql'] );
+					if( is_array($debugVars) ){
+		                foreach( $debugVars as $vars ){
+		                    $sqlCommands = array(
+		                        "SELECT", "UPDATE", "DELETE", "INSERT", "REPLACE",
+		                        "FROM", "ASC", "WHERE", "ORDER BY", "LIMIT", "TABLES",
+		                        "LEFT JOIN", "DISTINCT", "COUNT", "ON", "DESCRIBE", "SHOW",
+		                        "INTO", "VALUES", "SET", "ALTER",
+		                        "IN", "NOT IN", " OR ", " AND ", " AS ", "DESC",
+		                        " and ", " as "
+		                    );
+		                    $boldSqlCommands = array();
+		                    foreach( $sqlCommands as $valor ){
+		                        $boldSqlCommands[] = "<strong>".$valor."</strong>";
+		                    }
+		                    $sql = str_replace($sqlCommands, $boldSqlCommands, $vars['sql'] );
 
-	                    /*
-	                     * Result
-	                     */
-	                    $errorClass = '';
-	                    if( is_string($vars['result']) ){
-	                        $errorClass = 'error';
-	                    }
-	                    ?>
-	                    <tr class="list <?php echo $errorClass; ?>">
-	                    <td class="sql "  valign="top">
-	                        <?php echo $sql; ?>
-	                    </td>
-	                    <td class="result" valign="top">
-	                        <?php echo $vars['result']; ?>
-	                    </td>
-	                    <td class="time" valign="top">
-	                        <?php echo substr(number_format($vars['time'], 4, '.', ''), 0, 5); ?>
-	                    </td>
-	                    </tr>
-	                    <tr style="height: 1px;">
-	                        <td colspan="3" style="font-size: 0px; background: #eeeeee;">
-	                        </td>
-	                    </tr>
-	                    <tr style="height: 5px;">
-	                        <td colspan="3" style="font-size: 0px;">
-	                        </td>
-	                    </tr>
-	                    <?php
-	                }
+		                    /*
+		                     * Result
+		                     */
+		                    $errorClass = '';
+		                    if( is_string($vars['result']) ){
+		                        $errorClass = 'error';
+		                    }
+		                    ?>
+		                    <tr class="list <?php echo $errorClass; ?>">
+		                    <td class="sql "  valign="top">
+		                        <?php echo $sql; ?>
+		                    </td>
+		                    <td class="result" valign="top">
+		                        <?php echo $vars['result']; ?>
+		                    </td>
+		                    <td class="time" valign="top">
+		                        <?php echo substr(number_format($vars['time'], 4, '.', ''), 0, 5); ?>
+		                    </td>
+		                    </tr>
+		                    <tr style="height: 1px;">
+		                        <td colspan="3" style="font-size: 0px; background: #eeeeee;">
+		                        </td>
+		                    </tr>
+		                    <tr style="height: 5px;">
+		                        <td colspan="3" style="font-size: 0px;">
+		                        </td>
+		                    </tr>
+		                    <?php
+		                }
+					}
 	                ?>
 	                </table>
 	                <?php
 	            }
-	        }
 	        ?>
+			</div>
 	    </div>
 	</div>
 </div>

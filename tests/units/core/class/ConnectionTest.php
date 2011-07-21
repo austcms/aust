@@ -44,11 +44,11 @@ class ConnectionTest extends PHPUnit_Framework_TestCase
 
 
     function testWrongQuery(){
-        $this->assertType('array', Connection::getInstance()->query('blabla'));
+        $this->assertInternalType('array', Connection::getInstance()->query('blabla'));
     }
 
 	function test_acquireTablesList(){
-		$this->assertType('array', Connection::getInstance()->_acquireTablesList() );
+		$this->assertInternalType('array', Connection::getInstance()->_acquireTablesList() );
 		
 		if( !in_array($this->standardTableName, Connection::getInstance()->_acquireTablesList() ) )
 			$this->fail('Not acquiring table on SHOW TABLE');

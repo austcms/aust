@@ -28,7 +28,7 @@ class ModuleTest extends PHPUnit_Framework_TestCase
         $this->obj = new Textual($this->structureId);
 
 		$this->assertEquals("News", $this->obj->name);
-		$this->assertType("array", $this->obj->information);
+		$this->assertInternalType("array", $this->obj->information);
 		$this->assertEquals("News", $this->obj->information["nome"]);
 		$this->assertEquals($this->structureId, $this->obj->information["id"]);
 	}

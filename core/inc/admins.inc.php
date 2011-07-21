@@ -113,8 +113,8 @@ if(	!empty($_GET['action']) &&
     //echo $sql;
 
     ?>
-    <table class="listagem pessoas">
-    <tr class="titulo">
+    <table class="listing pessoas">
+    <tr class="header">
         <td>
 
         </td>
