@@ -125,7 +125,44 @@
 	</div>
 	<div id="navegacao">
 	    <div class="containner">
-	        <?php include(THIS_TO_BASEURL.INC_DIR.'menu.inc.php'); ?>
+			<?php
+			/* Navigation bar */
+			$usuario_tipo = User::getInstance()->LeRegistro("tipo");
+
+			if(empty($_GET['section']))
+			    $_GET['section'] = "";
+			?>
+			<div id="menu">
+			<ul>
+			    <li><a <?php MenuSelecionado($_GET['section'], "content"); ?> href="adm_main.php?section=content">Gerenciar Conteúdo</a></li>
+
+			    <li class="opcao_direita"><a <?php MenuSelecionado($_GET['section'], "themes"); ?> href="adm_main.php?section=themes">Aparência</a></li>
+			    <?php
+			    /*
+			     * CONFIGURAÇÕES
+			     *
+			     * Se o usuário é WEBMASTER
+			     */
+			    if($usuario_tipo == "Webmaster" OR $usuario_tipo == "Administrador"){ ?>
+			        <li><a <?php MenuSelecionado($_GET['section'], "config"); ?> href="adm_main.php?section=config">Configurações</a></li>
+			    <?php
+			    }
+			    /*
+			     * PESSOAS E PERMISSÕES
+			     */
+			    if( $usuario_tipo == "Webmaster"
+			        OR $usuario_tipo == "Administrador"
+			        OR $usuario_tipo == "Moderador")
+			    {
+			        ?>
+			        <li class="opcao_permissoes"><a <?php MenuSelecionado($_GET['section'], "admins"); ?> href="adm_main.php?section=admins">Pessoas e Permissões</a></li>
+			        <?php
+			    }
+			    ?>
+
+			</ul>
+
+			</div>
 	    </div>
 	</div>
 
@@ -251,8 +288,7 @@
 	                <span class="para_webmaster">Para Webmasters:</span>
 					<?php tt('Os links à direita aparecem somente para o usuário com conta <em>root</em>.'); ?>
 					<a href="adm_main.php?section=control_panel" class="restrito">Configurar Módulos</a>
-	                <a href="adm_main.php?section=categorias" class="restrito">Categorias</a>
-	                <a href="adm_main.php?section=import_export_structures" class="restrito">Importar/Exportar Estruturas</a>
+	                <a href="adm_main.php?section=categorias" class="restrito">Taxonomia</a>
 
 		            <?php
 					$showDebugSQL = "hidden";

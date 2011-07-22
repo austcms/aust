@@ -149,7 +149,7 @@ if(	!empty($_GET['action']) &&
 		?>
         <div class="botao">
             <div class="bt_permissoes">
-                <a href="adm_main.php?section=permissoes"></a>
+                <a href="adm_main.php?section=admins&action=permissions"></a>
             </div>
         </div>
         <div class="botao">

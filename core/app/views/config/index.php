@@ -1,19 +1,6 @@
 <?php
 
 /*
- * Status?
- */
-if( !empty($_GET['status']) ){
-    unset($status);
-    $st = $_GET['status'];
-    if( $st == '1' ){
-        $status['classe'] = 'sucesso';
-        $status['mensagem'] = '<strong>Sucesso: </strong> As informações foram salvas com sucesso.';
-    }
-}
-
-
-/*
  * Salva configuração
  */
 if( !empty($_POST['gravar']) && $_POST['gravar'] ){
@@ -72,11 +59,6 @@ if(!empty($_POST['inserirmodulo'])){
  */
 $options = Config::getInstance()->getConfigs();
 
-/*
- * STATUS
- */
-    if( !empty($status) )
-        EscreveBoxMensagem($status);
 ?>
 <h2>Configurações</h2>
 <p>
@@ -147,7 +129,7 @@ $options = Config::getInstance()->getConfigs();
             if( Config::getInstance()->hasPermission($type, User::getInstance()->type()) ){
                 ?>
                 <div class="background">
-                    <form method="post" action="adm_main.php?section=<?php echo $_GET['section'];?>">
+                    <form method="post" action="adm_main.php?section=config">
                     <table class="form">
                     <?php
                     foreach( $conf as $properties ){
