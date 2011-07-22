@@ -16,7 +16,7 @@
 	
 </tr>
 <?php foreach($query['results'] as $item){ ?>
-    <tr class="conteudo">
+    <tr class="list">
 		<?php foreach( $item as $field=>$value ){
 			if( $field == '_id') continue;
 			?>

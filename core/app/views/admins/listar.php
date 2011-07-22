@@ -128,7 +128,7 @@ $query = Connection::getInstance()->query($sql);
 <?php
 foreach($query as $dados){
 ?>
-    <tr class="conteudo">
+    <tr class="list">
         <td>
             <?php echo $dados["id"]?>
         </td>

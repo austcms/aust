@@ -32,7 +32,7 @@
 <?php
 if(count($query) == 0){
     ?>
-    <tr class="conteudo">
+    <tr class="list">
         <td colspan="1">
             <strong>Nenhum registro encontrado.</strong>
         </td>
@@ -41,7 +41,7 @@ if(count($query) == 0){
 } else {
     foreach($query as $dados){
         ?>
-        <tr class="conteudo">
+        <tr class="list">
 			<td>
 				
 	            <a href="adm_main.php?section=<?php echo $_GET['section'] ?>&action=view&aust_node=<?php echo $_GET['aust_node']?>&w=<?php echo $dados["id"]?>">

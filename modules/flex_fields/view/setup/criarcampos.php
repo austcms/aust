@@ -41,7 +41,7 @@ foreach($exPOST as $chave=>$valor){
             <td valign="top">Descrição<br /><span style="font-weight: normal">Servirá de ajuda aos usuários</span></td>
 	</tr>
 	<?php for ($i = 1; $i <= $_SESSION['exPOST']['qtd_campos']; $i++){ ?>
-	<tr class="conteudo">
+	<tr class="list">
             <td align="center" style="font-weight: bold;" valign="top">
             <?php echo $i;?>
             </td>

@@ -16,7 +16,7 @@
 if(count($query) > 0){
     foreach($query as $dados){
     ?>
-        <tr class="conteudo">
+        <tr class="list">
             <?php
             /*******************************
             *

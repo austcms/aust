@@ -87,7 +87,7 @@
 	if(count($query['results']) == 0){
 	    ?>
 		<table cellspacing="0" cellpadding="0" border="0" class="listing">
-	    <tr class="conteudo">
+	    <tr class="list">
 	        <td colspan="1">
 	            <strong>Nenhum registro encontrado.</strong>
 	        </td>

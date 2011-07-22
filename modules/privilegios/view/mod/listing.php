@@ -88,7 +88,7 @@ if( StructurePermissions::getInstance()->canDelete($austNode) ){
 <?php
 if(count($query) == 0){
     ?>
-    <tr class="conteudo">
+    <tr class="list">
         <td colspan="<?php echo $i+1;?>">
             <strong>Nenhum registro encontrado.</strong>
         </td>
@@ -97,7 +97,7 @@ if(count($query) == 0){
 } else {
     foreach($query as $dados){
         ?>
-        <tr class="conteudo">
+        <tr class="list">
             <?php
             /*******************************
             *

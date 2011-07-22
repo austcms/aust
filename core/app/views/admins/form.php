@@ -43,15 +43,12 @@ if($fm == 'editar'){
 }
 ?>
 
-<p style="margin-top: 15px;">
-    <a href="adm_main.php?section=admins"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
-</p>
 <h2>Novo Usuário</h2>
 <p>
     <strong>Cadastre</strong> a seguir um novo usuário para este gerenciador.
 </p>
 
-<form method="post" action="adm_main.php?section=admins&action=gravar" enctype="multipart/form-data">
+<form method="post" action="adm_main.php?section=admins&action=save" enctype="multipart/form-data">
 <input type="hidden" name="metodo" value="<?php echo $fm?>">
 <input type="hidden" name="w" value="<?php ifisset($dados['id'])?>">
 <input type="hidden" name="frmsupervisionado" value="0" />
@@ -59,7 +56,7 @@ if($fm == 'editar'){
 
 <table cellpadding=0 cellspacing="3" class="form">
 <tr>
-    <td class="first" valign="top">Função:</td>
+    <td class="first" valign="top">Grupo:</td>
     <td class="second">
         <div class="input_painel">
             <div class="containner">
@@ -73,7 +70,7 @@ if($fm == 'editar'){
                 if( User::getInstance()->LeRegistro('id') != $dados['id'] AND
                     in_array(strtolower(User::getInstance()->tipo), array('root','webmaster','administrador' ) ) )
                 {
-                    ?><div style=" width: 120px; display: table; float: left;"><?php
+                    ?><div class="admins_types_radio"><?php
 
                     $sql = "SELECT
                                 nome, id, descricao
@@ -89,7 +86,7 @@ if($fm == 'editar'){
                     }
                     ?>
                     </div>
-                    <div style="width: 270px; min-height: 100px; float: right;">
+                    <div class="admins_types_descriptions">
 
                     <?php
                         foreach($query as $result){
@@ -112,10 +109,8 @@ if($fm == 'editar'){
                     $query = Connection::getInstance()->query($sql);
                     $result = $query[0];
                     ?>
-                    <p>
-                        <strong><?php echo $result['nome'];?></strong> do sistema.
-                    </p>
-                <?php
+                    	<strong><?php echo $result['nome'];?></strong> do sistema.
+                	<?php
                 }
                 ?>
                 </div>
@@ -195,7 +190,7 @@ if($fm == 'criar'){ ?>
 			<?php
 		}
 		?>
-        <input class="text" type="file" name="photo" />
+        <input type="file" name="photo" />
         <p class="explanation" id="exists_login">
             Deixe em branco para não alterar a atual.
         </p>
@@ -216,7 +211,7 @@ if( Config::getInstance()->getConfig('user_has_secondary_image') ){ ?>
 			}
 			?>
 		
-	        <input class="text" type="file" name="secondary_photo" />
+	        <input type="file" name="secondary_photo" />
 	        <p class="explanation" id="exists_login">
 	            Deixe em branco para não alterar a atual.
 	        </p>
@@ -256,13 +251,10 @@ if( Config::getInstance()->getConfig('user_has_secondary_image') ){ ?>
 <tr>
     <td colspan="2">
         <center>
-            <input type="submit" value="Salvar" class="submit">
+            <input type="submit" value="Salvar">
         </center>
     </td>
 </tr>
 </table>
 
 </form>
-<p style="margin-top: 15px;">
-    <a href="adm_main.php?section=admins"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
-</p>

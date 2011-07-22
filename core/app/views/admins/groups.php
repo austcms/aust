@@ -102,7 +102,7 @@ foreach($query as $dados){
 	if( in_array($dados['nome'], array("Webmaster", "Root") ) )
 		continue;
 ?>
-    <tr class="conteudo">
+    <tr class="list">
         <td>
 			<script type="text/javascript">
 				groups[<?php echo $dados["id"]?>] = {

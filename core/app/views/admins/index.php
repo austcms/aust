@@ -1,69 +1,4 @@
 <?php
-
-/*
- * BLOQUEAR/DESBLOQUEAR PESSOA
- */
-if( !empty($_GET['block'])
-    AND $_GET['block'] == "block")
-{
-
-    $sql = "UPDATE
-                admins
-            SET
-                is_blocked='1'
-            WHERE
-                id='$w' AND
-                tipo<>( SELECT id FROM admins_tipos WHERE nome IN ('Webmaster', 'Root') )
-            ";
-
-    // se executar query, EscreveBoxMensagem mostra mensagem padrão
-    if(Connection::getInstance()->exec($sql)){
-		$resultado = TRUE;
-	} else {
-		$resultado = FALSE;
-	}
-
-	if($resultado){
-		$status['classe'] = 'sucesso';
-		$status['mensagem'] = '<strong>Sucesso: </strong> Usuário bloqueado com sucesso!';
-	} else {
-		$status['classe'] = 'insucesso';
-		$status['mensagem'] = '<strong>Erro: </strong> Erro ao bloquear usuário.';
-	}
-	EscreveBoxMensagem($status);
-
-} elseif( !empty( $_GET['block'] )
-          AND $_GET['block'] == "unblock" ){
-    $sql = "UPDATE
-                admins
-            SET
-                is_blocked=0
-            WHERE
-                id='$w'
-            ";
-    // se executar query, EscreveBoxMensagem mostra mensagem padrão
-    if(Connection::getInstance()->exec($sql)){
-		$resultado = TRUE;
-	} else {
-		$resultado = FALSE;
-	}
-
-	if($resultado){
-		$status['classe'] = 'sucesso';
-		$status['mensagem'] = '<strong>Sucesso: </strong> Usuário desbloqueado com sucesso!';
-	} else {
-		$status['classe'] = 'insucesso';
-		$status['mensagem'] = '<strong>Erro: </strong> Erro ao desbloquear usuário.';
-	}
-	EscreveBoxMensagem($status);
-}
-
-if(	!empty($_GET['action']) ){
-    if( $_GET['action'] == 'edit' ){
-        $_GET['action'] = 'form';
-    }
-}
-
 if(	!empty($_GET['action']) &&
  	file_exists(INC_DIR.'admins.inc/'.$_GET['action'].'.inc.php') )
 {
@@ -131,7 +66,7 @@ if(	!empty($_GET['action']) &&
     <?php
     foreach($query as $dados){
     ?>
-        <tr class="conteudo">
+        <tr class="list">
             <td>
                 <?php echo $dados["id"]?>
             </td>
@@ -179,10 +114,6 @@ if(	!empty($_GET['action']) &&
     }
     ?>
     </table>
-
-    <p style="margin-top: 15px;">
-        <a href="adm_main.php?section=admins"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
-    </p>
 
     </div>
 

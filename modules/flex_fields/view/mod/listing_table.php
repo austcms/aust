@@ -67,7 +67,7 @@ if(count($resultado) > 0){
          * Valor dos campos
          */
         ?>
-        <tr class="conteudo">
+        <tr class="list">
             <?php
             $total_td = 0;
             foreach($dados as $campo=>$valor) {

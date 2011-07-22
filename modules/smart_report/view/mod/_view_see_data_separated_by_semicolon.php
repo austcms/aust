@@ -17,7 +17,7 @@ if( !empty($query['results']) &&
 				Dados separados por ponto e vírgula
 			</td>
 		</tr>
-	    <tr class="conteudo">
+	    <tr class="list">
 	        <td colspan="1">
 				<?php echo implode("; ", $eachData); ?>
 	        </td>
