@@ -1,5 +1,3 @@
-<h2>Atualização de Categoria</h2>
-
 <?php
 
 /*
@@ -91,25 +89,12 @@ if(!empty($status_imagem) AND $status_imagem == true){
 $result = Connection::getInstance()->exec($sql);
 
 if ( $result > 0 ){
-    echo '<p style="color: green;">As informações foram salvas com sucesso!</p>';
-    echo '
-        <p>
-            <a href="adm_main.php?section='.$_GET['section'].'&action=list_content"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
-        </p>';
-
+    notice('As informações foram salvas com sucesso!');
 } elseif ( is_int($result) AND $result == 0 ){
-    echo '<p style="color: green;">Os dados enviados são idênticos aos já existentes. Nenhuma alteração feita.</p>';
-    echo '
-        <p>
-            <a href="adm_main.php?section='.$_GET['section'].'&action=list_content"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
-        </p>';
+    notice('Os dados enviados são idênticos aos já existentes. Nenhuma alteração feita.');
 } else {
-    echo '<p style="color: red;">Ocorreu um erro desconhecido ao salvar as informações. Tente novamente.</p>';
-    echo '
-        <p>
-            <a href="adm_main.php?section='.$_GET['section'].'"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
-        </p>';
+    failure('Ocorreu um erro desconhecido ao salvar as informações. Tente novamente.');
+	unset($_POST['force_redirect']);
 }
-
 
 ?>

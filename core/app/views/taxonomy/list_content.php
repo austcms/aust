@@ -124,7 +124,7 @@ if(!empty($_GET['block']) AND $_GET['block'] == "delete"){
                 }
             }
         }
-        BuildCategoriasStructure($_GET['section']);
+        BuildCategoriasStructure('categorias');
 
     ?>
     </div>

@@ -238,7 +238,10 @@
 			if( !empty($_GET['action']) ){
 				$action = $_GET['action'];
 			}
-		    if( in_array($action, array(SAVE_ACTION, ACTIONS_ACTION)) &&
+		    if( ( 
+					(!empty($_POST['force_redirect']) && $_POST['force_redirect']) || 
+					in_array($action, array(SAVE_ACTION, ACTIONS_ACTION))
+				) &&
 				(
 					empty($_SESSION['no_redirect']) ||
 					!$_SESSION['no_redirect']
@@ -288,7 +291,7 @@
 	                <span class="para_webmaster">Para Webmasters:</span>
 					<?php tt('Os links à direita aparecem somente para o usuário com conta <em>root</em>.'); ?>
 					<a href="adm_main.php?section=control_panel" class="restrito">Configurar Módulos</a>
-	                <a href="adm_main.php?section=categorias" class="restrito">Taxonomia</a>
+	                <a href="adm_main.php?section=taxonomy" class="restrito">Taxonomia</a>
 
 		            <?php
 					$showDebugSQL = "hidden";

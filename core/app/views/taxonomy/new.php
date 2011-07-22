@@ -9,7 +9,7 @@
     }
 ?>
 
-<form method="post" action="adm_main.php?section=<?php echo $_GET['section'];?>&action=gravar" enctype="multipart/form-data">
+<form method="post" action="adm_main.php?section=<?php echo $_GET['section'];?>&action=save" enctype="multipart/form-data">
 <input type="hidden" name="action" value="gravar">
 <input type="hidden" name="frmclasse" value="categoria">
 

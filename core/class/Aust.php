@@ -863,7 +863,6 @@ class Aust {
      * @return <string>
      */
     public function getCategoryHtmlSelect($austNode, $currentNode = ''){
-        include_once(INC_DIR."inc_categorias_functions.php");
         $tmp = BuildDDList( Registry::read('austTable') ,'frmcategoria', User::getInstance()->tipo ,$austNode, $currentNode, false, true);
         return $tmp;
     }
