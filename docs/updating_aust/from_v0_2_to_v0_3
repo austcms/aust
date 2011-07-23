@@ -42,3 +42,70 @@ query for all image and files tables related to a FlexField structure.
 
 	ALTER TABLE some_structure_images CHANGE categoria_id node_id int;
 
+
+Then, delete 'cadastros_conf' table:
+
+	DROP TABLE cadastros_conf
+
+From Conteudo to Textual
+========================
+
+???
+
+From GaleriaDeFotos to PhotoGallery
+===================================
+
+UPDATE categorias SET tipo='photo_gallery' WHERE tipo='galeriafotos'
+
+Then, install the PhotoGallery module. Now, pass all current data to the new tables.
+
+	INSERT INTO
+		photo_gallery
+		(
+			node_id, title, title_encoded, subtitle, summary, text, link,
+			order_nr, ref, ref_id, local, class, specie, created_on, expire_on, pageviews,
+			admin_id
+		)
+		(
+			SELECT 
+				categoria, titulo, titulo_encoded, subtitulo, resumo, texto, link,
+				ordem, ref, ref_id, local, classe, especie, adddate, expiredate, visitantes,
+				autor
+			FROM
+				galeria_fotos
+		)
+
+
+The images themselves:
+
+	INSERT INTO
+		photo_gallery_images
+		(
+			gallery_id, content_id, node_id,
+			order_nr, title, title_encoded, subtitle,
+			summary, text, link,
+			image_path, image_systempath,
+			image_bytes, image_binary_data, image_name, image_type,
+			ref, ref_id, is_cover,
+			local, class, specie, created_on, expire_on, pageviews,
+			admin_id
+		)
+		(
+			SELECT 
+				galeria_foto_id, content_id, category_id,
+				ordem, titulo, titulo_encoded, subtitulo,
+				resumo, texto, link,
+				path, systempath,
+				bytes, dados, nome, tipo,
+				ref, ref_id, capa,
+				local, classe, especie, adddate, expiredate, visitantes,
+				autor
+			FROM
+				galeria_fotos_imagens
+		)
+
+Then, delete the old tables:
+
+	DROP TABLE galeria_fotos
+	DROP TABLE galeria_fotos_imagens
+

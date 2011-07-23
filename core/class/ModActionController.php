@@ -28,7 +28,7 @@ class ModActionController extends ActionController
 			return false;
 		
 		$this->module = ModulesManager::getInstance()->modelInstance($austNode);
-		
+
 		if( defined('DO_ACT') && !DO_ACT ){
 			$this->shouldCallAction = false;
 		}

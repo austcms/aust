@@ -12,7 +12,7 @@ class ModController extends ModActionController
 {
 
     public function listing(){
-        $this->set('h2', 'Listando conteúdo: '.Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']) );
+        $this->set('title', Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']) );
         $this->set('nome_modulo', Aust::getInstance()->LeModuloDaEstrutura($_GET['aust_node']) );
 
 		$categorias = Aust::getInstance()->LeCategoriasFilhas('',$_GET['aust_node']);
@@ -46,10 +46,10 @@ class ModController extends ModActionController
 				$sql = "SELECT
 							id as w
 						FROM
-							galeria_fotos
+							".$this->module->mainTable."
 						WHERE
 							ref_id='".$_GET['related_w']."' AND
-							categoria='".$_GET['aust_node']."'
+							node_id='".$_GET['aust_node']."'
 						";
 				$result = Connection::getInstance()->query($sql);
 				if( !empty($result) ){
@@ -63,7 +63,7 @@ class ModController extends ModActionController
 					$master = Aust::getInstance()->getStructureInstance($_GET['related_master']);
 			        $sql = "
 			                SELECT
-			                    titulo
+			                    title
 			                FROM
 			                    ".$master->getContentTable()."
 			                WHERE
@@ -76,8 +76,8 @@ class ModController extends ModActionController
 					$ref = Aust::getInstance()->getField($_GET['related_master'], 'nome_encoded');
 
 					$sql = "INSERT INTO
-								galeria_fotos
-							(ref_id, ref, categoria, titulo,adddate)
+								".$this->module->mainTable."
+							(ref_id, ref, node_id, title, created_on)
 							VALUES
 							('".$_GET['related_w']."', '".$ref."', '".$_GET['aust_node']."', '".addslashes($query['titulo'])."', '".date('Y-m-d H:i:s')."')
 							";
@@ -95,7 +95,7 @@ class ModController extends ModActionController
                     ".$this->module->useThisTable()."
                 WHERE
                     id='$w' AND
-					categoria='".$_GET['aust_node']."'
+					node_id='".$_GET['aust_node']."'
                 ";
 
         $query = $this->module->connection->query($sql, "ASSOC");
@@ -109,6 +109,48 @@ class ModController extends ModActionController
     public function save(){
         
     }
+
+	public function actions(){
+		if( empty($_POST['itens']) ){
+		    failure('Nenhum item selecionado.');
+		}
+
+		if( !empty($_POST['deletar']) ){
+	        /*
+	         * Identificar tabela que deve ser excluida
+	         */
+
+	            $itens = $_POST['itens'];
+	            $c = 0;
+	            foreach($itens as $key=>$valor){
+	                if($c > 0){
+	                    $where = $where." OR id='".$valor."'";
+	                } else {
+	                    $where = "id='".$valor."'";
+	                }
+	                $c++;
+	            }
+	            $sql = "DELETE FROM
+	                        ".$this->module->LeTabelaDaEstrutura($_GET['aust_node'])."
+	                    WHERE
+	                        $where
+	                        ";
+
+	            if(Connection::getInstance()->exec($sql)){
+	                $resultado = TRUE;
+	            } else {
+	                $resultado = FALSE;
+	            }
+
+	            if($resultado){
+	                notice('Os dados foram excluídos com sucesso.');
+	            } else {
+	                failure('Ocorreu um erro ao excluir os dados.');
+	            }
+
+		} 
+		
+	}
     
 }
 ?>

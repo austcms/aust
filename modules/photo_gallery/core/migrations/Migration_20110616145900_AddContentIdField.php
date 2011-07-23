@@ -4,16 +4,16 @@ class Migration_20110616145900_AddContentIdField extends Migrations
     function up(){
 
         $schema = array(
-            'table' => 'galeria_fotos_imagens',
+            'table' => 'photo_gallery_images',
             'field' => 'content_id',
             'type' => "int",
-            'position' => 'AFTER galeria_foto_id'
+            'position' => 'AFTER gallery_id'
         );
         $this->addField($schema);
 
         $schema = array(
-            'table' => 'galeria_fotos_imagens',
-            'field' => 'category_id',
+            'table' => 'photo_gallery_images',
+            'field' => 'node_id',
             'type' => "int",
             'position' => 'AFTER id'
         );
@@ -23,7 +23,8 @@ class Migration_20110616145900_AddContentIdField extends Migrations
 	}
 	
 	function down(){
-        $this->dropField('galeria_fotos_imagens', 'content_id');
+        $this->dropField('photo_gallery_images', 'content_id');
+        $this->dropField('photo_gallery_images', 'node_id');
 		
 		return true;
 	}

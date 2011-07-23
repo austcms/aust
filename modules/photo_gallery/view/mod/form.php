@@ -23,7 +23,7 @@
  * [Se novo conteúdo]
  */
     if($_GET['action'] == 'create'){
-        $tagh2 = "Criar: ". Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
+        $tagh2 = "Novo: ". Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
         $tagp = 'Crie uma nova galeria de fotos a seguir. Comece configurando as '.
                 'informações básicas da galeria e depois suas fotos.';
         $dados = array('id' => '');
@@ -47,10 +47,11 @@
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?section=<?php echo $_GET["section"] ?>&action=save" enctype="multipart/form-data" >
 <input type="hidden" name="metodo" value="<?php echo $_GET['action'];?>">
 <?php if($_GET['action'] == 'create'){ ?>
-    <input type="hidden" name="frmadddate" value="<?php echo date("Y-m-d H:i:s"); ?>">
-    <input type="hidden" name="frmautor" value="<?php echo $_SESSION['loginid'];?>">
+    <input type="hidden" name="frmcreated_on" value="<?php echo date("Y-m-d H:i:s"); ?>">
+    <input type="hidden" name="frmupdated_on" value="<?php echo date("Y-m-d H:i:s"); ?>">
+    <input type="hidden" name="frmadmin_id" value="<?php echo $_SESSION['loginid'];?>">
 <?php } else { ?>
-
+    <input type="hidden" name="frmupdated_on" value="<?php echo date("Y-m-d H:i:s"); ?>">
 <?php }?>
 <input type="hidden" name="w" value="<?php ifisset( $dados['id'] );?>">
 <input type="hidden" name="aust_node" value="<?php echo $austNode; ?>">
@@ -101,7 +102,7 @@
     /*
      * Mostra imagem preview
      */
-    if( !empty($dados["bytes"]) && $dados["bytes"] > 0 ){
+    if( !empty($dados["image_bytes"]) && $dados["image_bytes"] > 0 ){
         ?>
         <tr>
             <td valign="top" class="first">Imagem atual:</td>
@@ -120,7 +121,7 @@
     <tr>
         <td valign="top" class="first"><label>Título da galeria:</label></td>
         <td class="second">
-            <INPUT TYPE='text' NAME='frmtitulo' class='text' value='<?php if( !empty($dados['titulo']) ) echo $dados['titulo'];?>' />
+            <INPUT TYPE='text' NAME='frmtitle' class='text' value='<?php if( !empty($dados['title']) ) echo $dados['title'];?>' />
             <p class="explanation">
             Exemplo: Fotos do Segundo Encontro Nacional
             </p>
@@ -129,7 +130,7 @@
 	<?php
 	} else {
 		?>
-        <INPUT TYPE='hidden' NAME='frmtitulo' value='<?php if( !empty($dados['titulo']) ) echo $dados['titulo'];?>' />
+        <input type='hidden' name='frmtitle' value='<?php if( !empty($dados['title']) ) echo $dados['title'];?>' />
 		<?php
 	}
 	?>
@@ -142,7 +143,7 @@
     <tr>
         <td valign="top"><label>Resumo:</label></td>
         <td>
-            <INPUT TYPE='text' NAME='frmresumo' class='text' value='<?php if( !empty($dados['resumo']) ) echo $dados['resumo'];?>' />
+            <input type='text' name='frmsummary' class='text' value='<?php if( !empty($dados['summary']) ) echo $dados['summary'];?>' />
             <p class="explanation">
 
             </p>
@@ -161,17 +162,17 @@
     <tr>
         <td valign="top"><label>Ordem:</label></td>
         <td>
-            <select name="frmordem" class="select">
-                <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '10'); ?> value="10">10</option>
-                <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '9'); ?> value="9">9</option>
-                <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '8'); ?> value="8">8</option>
-                <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '7'); ?> value="7">7</option>
-                <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '6'); ?> value="6">6</option>
-                <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '5'); ?> value="5">5</option>
-                <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '4'); ?> value="4">4</option>
-                <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '3'); ?> value="3">3</option>
-                <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '2'); ?> value="2">2</option>
-                <option <?php if( !empty($dados['ordem']) ) makeselected($dados['ordem'], '1'); ?> value="1">1</option>
+            <select name="frmorder_nr" class="select">
+                <option <?php if( !empty($dados['order_nr']) ) makeselected($dados['order_nr'], '10'); ?> value="10">10</option>
+                <option <?php if( !empty($dados['order_nr']) ) makeselected($dados['order_nr'], '9'); ?> value="9">9</option>
+                <option <?php if( !empty($dados['order_nr']) ) makeselected($dados['order_nr'], '8'); ?> value="8">8</option>
+                <option <?php if( !empty($dados['order_nr']) ) makeselected($dados['order_nr'], '7'); ?> value="7">7</option>
+                <option <?php if( !empty($dados['order_nr']) ) makeselected($dados['order_nr'], '6'); ?> value="6">6</option>
+                <option <?php if( !empty($dados['order_nr']) ) makeselected($dados['order_nr'], '5'); ?> value="5">5</option>
+                <option <?php if( !empty($dados['order_nr']) ) makeselected($dados['order_nr'], '4'); ?> value="4">4</option>
+                <option <?php if( !empty($dados['order_nr']) ) makeselected($dados['order_nr'], '3'); ?> value="3">3</option>
+                <option <?php if( !empty($dados['order_nr']) ) makeselected($dados['order_nr'], '2'); ?> value="2">2</option>
+                <option <?php if( !empty($dados['order_nr']) ) makeselected($dados['order_nr'], '1'); ?> value="1">1</option>
             </select>
             <p class="explanation">
                 Selecione um número que representa a importância deste item.
@@ -192,7 +193,7 @@
             <td valign="top"><label>Descrição da galeria: </label>
             </td>
             <td>
-                <textarea name="frmtexto" id="jseditor" rows="8" style="width: 400px"><?php if( !empty($dados['texto']) ) echo $dados['texto'];?></textarea>
+                <textarea name="frmtext" id="jseditor" rows="8" style="width: 400px"><?php if( !empty($dados['text']) ) echo $dados['text'];?></textarea>
             <br />
             </td>
         </tr>
@@ -209,7 +210,7 @@
         <td colspan="2">
                 <?php
                 if( !empty($_GET["delete"]) AND $_GET["delete"] > 0 ){
-                    $sql = "DELETE FROM galeria_fotos_imagens
+                    $sql = "DELETE FROM photo_gallery_images
                             WHERE id='".$_GET["delete"]."'";
                     if( $module->connection->exec($sql) ){
                         echo "<div style='color: green;'>";
@@ -227,8 +228,8 @@
                     echo '<table width="99%" style="margin-bottom: 15px;">';
 
 
-                    $sql = "SELECT id, nome, texto FROM galeria_fotos_imagens
-                            WHERE galeria_foto_id='".$w."' ORDER BY ordem ASC";
+                    $sql = "SELECT id, image_name, text FROM photo_gallery_images
+                            WHERE gallery_id='".$w."' ORDER BY order_nr ASC";
 
                     $query = $module->connection->query($sql, "ASSOC");
                     $c = 1;
@@ -239,7 +240,7 @@
                         ?>
                         <td valign="top">
                             <center>
-                                <img src="core/libs/imageviewer/visualiza_foto.php?table=galeria_fotos_imagens&thumbs=yes&myid=<?php echo $dados["id"]; ?>&maxxsize=160&maxysize=100" />
+                                <img src="core/libs/imageviewer/visualiza_foto.php?table=photo_gallery_images&thumbs=yes&myid=<?php echo $dados["id"]; ?>&maxxsize=160&maxysize=100" />
                                 <br clear="all" />
                                 <?php
                                 /*
@@ -253,13 +254,13 @@
                                 if( $commentedImages ){
                                     ?>
                                     <div id="image_comment_text_<?php echo $dados["id"]; ?>">
-                                        <?php echo $dados["texto"]; ?>
+                                        <?php echo $dados["text"]; ?>
                                     </div>
                                     <a href="javascript: void(0);" id="image_comment_icon_<?php echo $dados["id"]; ?>" onclick="$('#image_comment_input_<?php echo $dados["id"]; ?>').show(); $('#comment_<?php echo $dados["id"]; ?>').focus(); $(this).hide()">
                                         <img src="core/user_interface/img/icons/comment_15x15.png" alt="Comentar" border="0" />
                                     </a>
                                     <div class="image_comment_input" style="display: none;" id="image_comment_input_<?php echo $dados["id"]; ?>">
-                                        <textarea style="margin-top: 3px; width: 130px; display: block;" class="comment_textareas" id="comment_<?php echo $dados["id"]; ?>" name="<?php echo $dados["id"]; ?>" ><?php echo $dados["texto"]; ?></textarea>
+                                        <textarea style="margin-top: 3px; width: 130px; display: block;" class="comment_textareas" id="comment_<?php echo $dados["id"]; ?>" name="<?php echo $dados["id"]; ?>" ><?php echo $dados["text"]; ?></textarea>
                                         <input type="button" id="image_comment_button_<?php echo $dados["id"]; ?>" value="Salvar comentário" onclick="javascript: addCommentInImage(<?php echo $dados["id"]; ?>)" />
                                     </div>
 
@@ -338,8 +339,3 @@
 </table>
 
 </form>
-
-<br />
-<p>
-    <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
-</p>

@@ -57,8 +57,8 @@ if( !empty($_POST) AND $save  ) {
     /*
      * Últimos ajustes de campos a serem inseridos
      */
-    $_POST["frmcategoria"] = $_POST["aust_node"];
-    $_POST['frmtitulo_encoded'] = encodeText($_POST['frmtitulo']);
+    $_POST["frmnode_id"] = $_POST["aust_node"];
+    $_POST['frmtitle_encoded'] = encodeText($_POST['frmtitle']);
 
 
 
@@ -154,9 +154,9 @@ if( !empty($_POST) AND $save  ) {
 										'".$austNode."',
 				                        '".$_POST['w']."',
 										'".$contentId."',
-				                        IFNULL( ( SELECT MAX(g.ordem)+1 as gordem FROM galeria_fotos_imagens as g
-				                          WHERE g.galeria_foto_id='".$_POST["w"]."'
-				                          GROUP BY g.ordem ORDER BY gordem DESC LIMIT 1
+				                        IFNULL( ( SELECT MAX(g.order_nr)+1 as gordem FROM photo_gallery_images as g
+				                          WHERE g.gallery_id='".$_POST["w"]."'
+				                          GROUP BY g.order_nr ORDER BY gordem DESC LIMIT 1
 				                        ), '1'),
 				                        '".$valor["size"]."',
 				                        '".$finalName['systemPath']."',
@@ -168,23 +168,23 @@ if( !empty($_POST) AND $save  ) {
 					
 				} else {
 	
-	                $sqlImagem = "INSERT INTO galeria_fotos_imagens
+	                $sqlImagem = "INSERT INTO photo_gallery_images
 	                                (
-									category_id
-									galeria_foto_id,
-	                                ordem,
-	                                bytes,
-	                                dados,
-	                                nome,
-	                                tipo,
+									node_id
+									gallery_id,
+	                                order_nr,
+	                                image_bytes,
+	                                image_binary_data,
+	                                image_name,
+	                                image_tipo,
 	                                adddate)
 	                                VALUES
 	                                (
 	                                    '".$_POST["aust_node"]."'
 										'".$_POST['w']."',
-	                                    IFNULL( ( SELECT MAX(g.ordem)+1 as gordem FROM galeria_fotos_imagens as g
-	                                      WHERE g.galeria_foto_id='".$_POST["w"]."'
-	                                      GROUP BY g.ordem ORDER BY gordem DESC LIMIT 1
+	                                    IFNULL( ( SELECT MAX(g.order_nr)+1 as gordem FROM photo_gallery_images as g
+	                                      WHERE g.gallery_id='".$_POST["w"]."'
+	                                      GROUP BY g.order_nr ORDER BY gordem DESC LIMIT 1
 	                                    ), '1'),
 	                                    '".$valor["size"]."',
 	                                    '".addslashes(file_get_contents($valor["tmp_name"]) )."',
@@ -205,8 +205,11 @@ if( !empty($_POST) AND $save  ) {
 
 		if( !empty($sqlBuffer) ){
 
-			$sql = "INSERT INTO galeria_fotos_imagens
-					(category_id, galeria_foto_id, content_id, ordem, bytes, systempath, path, nome, tipo, adddate, texto)
+			$sql = "INSERT INTO photo_gallery_images
+					(
+						node_id, gallery_id, content_id, order_nr,
+						image_bytes, image_systempath, image_path, image_name, image_type, created_on, text
+					)
                     VALUES ".implode(",", $sqlBuffer);
 
             if( ! $this->module->connection->exec($sql) )
@@ -231,18 +234,11 @@ if( !empty($_POST) AND $save  ) {
 	//	echo 'hey - '.count($imagem);
 //	exit();
 
-    if($resultado) {
-        $status['classe'] = 'sucesso';
-        $status['mensagem'] = '<strong>Sucesso: </strong> As informações foram salvas com sucesso.';
+    if( $resultado ){
+        notice('As informações foram salvas com sucesso.');
     } else {
-        $status['classe'] = 'insucesso';
-        $status['mensagem'] = '<strong>Erro: </strong> Ocorreu um erro ao salvar informações. Se você tentou copiar um texto do Microsoft Word, provavelmente há letras/caracteres neste texto que não podem ser lidos por seu navegador. Experimente verificar se não há nada de estranho (alguma letra) entre este texto. Se houver, entre em contato com o administrador e explique o que está acontecendo.';
+        failure('Ocorreu um erro ao salvar informações. Se você tentou copiar um texto do Microsoft Word, provavelmente há letras/caracteres neste texto que não podem ser lidos por seu navegador. Experimente verificar se não há nada de estranho (alguma letra) entre este texto. Se houver, entre em contato com o administrador e explique o que está acontecendo.');
     }
-    EscreveBoxMensagem($status);
 
 }
 ?>
-<br />
-<p>
-    <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
-</p>

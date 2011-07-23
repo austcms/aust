@@ -1,21 +1,8 @@
-<?php
-/**
- * Listagem dos dados cadastrados deste módulo. É carregado dinamicamente pelo
- * Core do Aust.
- *
- * @package Módulo Texto
- * @category Listagem
- * @name Listar
- * @author Alexandre de Oliveira <alexandreoliveira@gmail.com>
- * @version v0.1
- * @since 
- */
-?>
 <div class="listagem">
 <?php
 
 ?>
-<h2><?php echo $h2;?></h2>
+<h2><?php echo $title;?></h2>
 <p>Abaixo você encontra a listagem dos últimos itens desta categoria.</p>
 <?php
 if((!empty($filter)) AND ($filter <> 'off')){
@@ -165,7 +152,5 @@ if(count($query) == 0){
 
 ?>
 
-<p style="margin-top: 15px;">
-	<a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
-</p>
+
 </div>

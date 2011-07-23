@@ -571,7 +571,6 @@ class Module extends ActiveModule
 				$fields = $options['fields'];
 			}
 		}
-		
 		else if( !empty( $this->describedTable[$this->useThisTable()] ) ){
             $fieldsToLoad = $this->fieldsToLoad;
             if( !is_array($fieldsToLoad) ){
