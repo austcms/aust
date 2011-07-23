@@ -18,12 +18,12 @@ $austNode = (!empty($_GET['aust_node'])) ? $_GET['aust_node'] : '';
 
 
 if($_GET['action'] == 'edit'){
-    $h1 = 'Edite informações do arquivo';
+    $h1 = 'Editar: '.$this->module->name;
     $sql = "
             SELECT
                 *
             FROM
-                arquivos
+                ".$this->module->useThisTable()."
             WHERE
                 id='".$_GET['w']."'
             ";
@@ -53,14 +53,14 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
 
     <input type="hidden" name="w" value="<?php if( !empty($_GET['w']) ) echo $_GET['w']; ?>">
     <input type="hidden" name="aust_node" value="<?php echo $austNode;?>">
-    <input type="hidden" name="frmcategoria_id" value="<?php echo $austNode;?>">
+    <input type="hidden" name="frmnode_id" value="<?php echo $austNode;?>">
     <input type="hidden" name="frmcreated_on" value="<?php echo date("Y-m-d H:i:s"); ?>">
 
     <input type="hidden" name="frmurl" value="<?php if( !empty($dados['url']) ) echo $dados['url']; ?>">
-    <input type="hidden" name="frmarquivo_nome" value="<?php if( !empty($dados['arquivo_nome']) ) echo $dados['arquivo_nome'];?>">
-    <input type="hidden" name="frmarquivo_tipo" value="<?php if( !empty($dados['arquivo_tipo']) ) echo $dados['arquivo_tipo'];?>">
-    <input type="hidden" name="frmarquivo_tamanho" value="<?php if( !empty($dados['arquivo_tamanho']) ) echo $dados['arquivo_tamanho']; ?>">
-    <input type="hidden" name="frmadmin_id" value="<?php if( !empty($dados['autor']) ) echo $dados['autor']; else echo User::getInstance()->LeRegistro('id');?>">
+    <input type="hidden" name="frmfile_name" value="<?php if( !empty($dados['file_name']) ) echo $dados['file_name'];?>">
+    <input type="hidden" name="frmfile_type" value="<?php if( !empty($dados['file_type']) ) echo $dados['file_type'];?>">
+    <input type="hidden" name="frmfile_size" value="<?php if( !empty($dados['file_size']) ) echo $dados['file_size']; ?>">
+    <input type="hidden" name="frmadmin_id" value="<?php if( !empty($dados['admin_id']) ) echo $dados['admin_id']; else echo User::getInstance()->LeRegistro('id');?>">
     
     <table border=0 cellpadding=0 cellspacing=0 class="form">
     <?php
@@ -76,9 +76,9 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
                 <?php
             	$current_node = $austNode;
                 if($fm == "edit"){
-                    $current_node = $dados['categoria_id'];
+                    $current_node = $dados['node_id'];
                 }
-                echo BuildDDList( Registry::read('austTable'), 'frmcategoria_id', 0, $austNode, $current_node );
+                echo BuildDDList( Registry::read('austTable'), 'frmnode_id', 0, $austNode, $current_node );
                 ?>
                 </div>
                 <?php
@@ -88,7 +88,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
                 if( $module->getStructureConfig('nova_categoria') == 1 ){
                     $param = array(
                         'austNode' => $austNode,
-                        'categoryInput' => 'frmcategoria_id',
+                        'categoryInput' => 'frmnode_id',
                     );
                     lbCategoria( $param );
                 }
@@ -99,12 +99,12 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
     <?php
     } else {
         if($fm == "edit"){
-            $current_node = $dados['categoria_id'];
+            $current_node = $dados['node_id'];
         } else {
             $current_node = $austNode;
         }
         ?>
-        <input type="hidden" name="frmcategoria_id" value="<?php echo $current_node; ?>">
+        <input type="hidden" name="frmnode_id" value="<?php echo $current_node; ?>">
         <?php
     }
     ?>
@@ -124,19 +124,19 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
 			 */
 			if( $fm == "edit"){
 				?>
-				<img src="<?php echo getFileIcon($dados['arquivo_nome']);?>" align="left" />
+				<img src="<?php echo getFileIcon($dados['file_name']);?>" align="left" />
                 <span style="position: relative; left: 7px; top: 4px; display: block">
                     <strong>
 					<?php
 					if( empty($dados['original_filename']) )
-						echo lineWrap($dados['arquivo_nome'], 64);
+						echo lineWrap($dados['file_name'], 64);
 					else
 						echo lineWrap($dados['original_filename'], 64);
 					?>
 					</strong>
 					<br />
 					<span class="filesize">
-						<?php echo convertFilesize( $dados['arquivo_tamanho'] ); ?>Mb
+						<?php echo convertFilesize( $dados['file_size'] ); ?>Mb
 					</span>
                 </span>
 				<br />
@@ -191,7 +191,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
     <tr>
         <td valign="top" class="first">Título: </td>
         <td class="second">
-            <input type="text" name="frmtitulo" value="<?php if( !empty($dados['titulo']) ) echo $dados['titulo'];?>" class="text" />
+            <input type="text" name="frmtitle" value="<?php if( !empty($dados['title']) ) echo $dados['title'];?>" class="text" />
             <?php tt('Digite um título. Lembre-se, títulos começam com letra maiúscula e não leva
                 ponto final.'); ?>
             <p class="explanation_example">
@@ -216,7 +216,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
         <tr>
             <td valign="top">Descrição: </td>
             <td>
-                <textarea name="frmdescricao" id="jseditor" rows="8" cols="45" style="font-size: 11px; font-family: verdana;"><?php ifisset( str_replace("\n","<br>",$dados['descricao']) ); // Para TinyMCE ?></textarea>
+                <textarea name="frmdescription" id="jseditor" rows="8" cols="45" style="font-size: 11px; font-family: verdana;"><?php ifisset( str_replace("\n","<br>",$dados['description']) ); // Para TinyMCE ?></textarea>
                 <p class="explanation">
                     Digite uma descrição para este arquivo.
                 </p>
@@ -255,8 +255,4 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
     <strong><?php echo $maxSize ?>Mb</strong> neste servidor.
 </p>
 
-
-<p>
-    <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
-</p>
 

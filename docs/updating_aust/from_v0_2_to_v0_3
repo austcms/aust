@@ -109,3 +109,37 @@ Then, delete the old tables:
 	DROP TABLE galeria_fotos
 	DROP TABLE galeria_fotos_imagens
 
+
+From Arquivos to Files
+======================
+
+Convert the structure module:
+	
+	UPDATE categorias SET tipo='files' WHERE tipo='arquivos'
+
+Move data to Files table:
+
+	INSERT INTO
+		files
+		(
+			node_id, title, description, local, url,
+			file_name, file_type, file_size, file_extension,
+			reference, pageviews, blocked, approved,
+			admin_id,
+			original_filename, title_encoded, systemurl, created_on, updated_on
+		)
+		(
+			SELECT 
+				categoria_id, titulo, descricao, local, url,
+				arquivo_nome, arquivo_tipo, arquivo_tamanho, arquivo_extensao,
+				referencia, visitantes, bloqueado, aprovado,
+				admin_id,
+				original_filename, titulo_encoded, systemurl, created_on, updated_on
+			FROM
+				arquivos
+		)
+
+Then:
+
+	DROP TABLE arquivos
+

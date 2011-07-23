@@ -4,19 +4,16 @@
  *
  * Classe contendo funcionalidades deste módulo
  *
- * @package Modulos
- * @name Arquivos
  * @author Alexandre de Oliveira <chavedomundo@gmail.com>
- * @version 0.2
  * @since v0.1.5, 30/05/2009
  */
-class Arquivos extends Module
+class Files extends Module
 {
     /**
      *
      * @var <string> Tabela principal de dados
      */
-    public $mainTable = 'arquivos';
+    public $mainTable = 'files';
 
     public $date = array(
         'standardFormat' => '%d/%m/%Y',
@@ -25,7 +22,7 @@ class Arquivos extends Module
     );
 
 	public $fieldsToLoad = array(
-	    'titulo', 'visitantes', 'original_filename', 'arquivo_nome'
+	    'title', 'pageviews', 'original_filename', 'file_name'
 	);
 
 	public $authorField = "admin_id";
@@ -42,7 +39,7 @@ class Arquivos extends Module
      */
     public $uploadSubDir;
 
-	public $austField = 'categoria_id';
+	public $austField = 'node_id';
 
     /**
      *
@@ -155,13 +152,13 @@ class Arquivos extends Module
             $filename = $file['name'];
 
             //ajusta o $_POST para salvar dados no DB
-            $this->forPost[$filename]['frmarquivo_nome'] = $newFilename;
-            $this->forPost[$filename]['frmarquivo_tipo'] = $file['type'];
-            $this->forPost[$filename]['frmarquivo_tamanho'] = $file['size'];
-            if( !isset($_POST['frmarquivo_nome']) && $this->testMode )
-                $_POST['frmarquivo_nome'] = "teste";
+            $this->forPost[$filename]['frmfile_name'] = $newFilename;
+            $this->forPost[$filename]['frmfile_type'] = $file['type'];
+            $this->forPost[$filename]['frmfile_size'] = $file['size'];
+            if( !isset($_POST['frmfile_name']) && $this->testMode )
+                $_POST['frmfile_name'] = "teste";
 
-            $this->forPost[$filename]['frmarquivo_extensao'] = $this->getExtension($_POST['frmarquivo_nome']);
+            $this->forPost[$filename]['frmfile_extension'] = $this->getExtension($_POST['frmfile_name']);
 
             /**
              * Caminho de onde a imagem ficará

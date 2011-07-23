@@ -7,14 +7,14 @@ require_once 'tests/config/auto_include.php';
 require_once 'core/config/variables.php';
 #####################################
 
-class ArquivosTest extends PHPUnit_Framework_TestCase
+class FilesTest extends PHPUnit_Framework_TestCase
 {
 
     public function setUp(){
 
 		installModule('privilegios');
 
-		$moduleName = 'arquivos';
+		$moduleName = 'files';
 		include(MODULES_DIR.$moduleName.'/'.MOD_CONFIG);
 
 		Connection::getInstance()->exec("DELETE FROM migrations_mods WHERE module_name='".$moduleName."'");
@@ -38,7 +38,7 @@ class ArquivosTest extends PHPUnit_Framework_TestCase
          *
          * Diretório do módulo
          */
-        $this->mod = 'arquivos';
+        $this->mod = 'files';
 
         /*
          * Informações de conexão com banco de dados
@@ -133,11 +133,11 @@ class ArquivosTest extends PHPUnit_Framework_TestCase
         /*
          * INSERT sql
          */
-        $this->assertEquals('arquivos', $this->obj->useThisTable() );
+        $this->assertEquals('files', $this->obj->useThisTable() );
         $sql = $this->obj->generateSqlFromForm($post, 'new');
         $sql = preg_replace('/\n|\t/Us', "", $sql);
         $sql = preg_replace('/\s{2,}/s', " ", $sql);
-        $this->assertEquals( trim("INSERT INTO arquivos (campo1) VALUES ('valor1')"),
+        $this->assertEquals( trim("INSERT INTO files (campo1) VALUES ('valor1')"),
                 trim($sql) );
 
         /*
@@ -147,7 +147,7 @@ class ArquivosTest extends PHPUnit_Framework_TestCase
         $sql = $this->obj->generateSqlFromForm($post, 'edit');
         $sql = preg_replace('/\n|\t/Us', "", $sql);
         $sql = preg_replace('/\s{2,}/s', " ", $sql);
-        $this->assertEquals( trim("UPDATE arquivos SET campo1='valor1' WHERE id='1'"),
+        $this->assertEquals( trim("UPDATE files SET campo1='valor1' WHERE id='1'"),
                 trim($sql) );
 
     }
@@ -162,8 +162,8 @@ class ArquivosTest extends PHPUnit_Framework_TestCase
             'w' => '',
             'aust_node' => '777',
             'frmadmin_id' => '1',
-            'frmcategoria_id' => '777',
-            'frmtitulo' => 'arquivo_de_teste_unitario',
+            'frmnode_id' => '777',
+            'frmtitle' => 'arquivo_de_teste_unitario',
             'embed' => array(
                 '0' => array(
                     'className' => 'Privilegios',
@@ -185,12 +185,12 @@ class ArquivosTest extends PHPUnit_Framework_TestCase
          *
          *      Arquivos -> Privilégios
          */
-            $sql = "SELECT id FROM arquivos WHERE titulo='arquivo_de_teste_unitario' AND categoria_id='777'";
+            $sql = "SELECT id FROM files WHERE title='arquivo_de_teste_unitario' AND node_id='777'";
             $this->assertArrayHasKey(0,
                     $this->obj->connection->query($sql), 'Não salvou o arquivo'
                 );
             $lastInsertId = $this->obj->w;
-            $sqlPriv = "SELECT id FROM privilegio_target WHERE target_id='$lastInsertId' AND privilegio_id='2' AND target_table='arquivos'";
+            $sqlPriv = "SELECT id FROM privilegio_target WHERE target_id='$lastInsertId' AND privilegio_id='2' AND target_table='files'";
             $this->assertArrayHasKey(0,
                 $this->obj->connection->query($sqlPriv) , 'Não salvou privilégio'
             );
@@ -198,7 +198,7 @@ class ArquivosTest extends PHPUnit_Framework_TestCase
         /**
          * Exclui dados do DB
          */
-        $this->obj->connection->query("DELETE FROM arquivos WHERE titulo='arquivo_de_teste_unitario' AND categoria_id='777'");
+        $this->obj->connection->query("DELETE FROM files WHERE title='arquivo_de_teste_unitario' AND node_id='777'");
         $this->obj->connection->query("DELETE FROM privilegio_target WHERE target_id='$lastInsertId' AND privilegio_id='2' AND target_table='arquivos'");
 
     }

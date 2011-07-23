@@ -10,7 +10,7 @@ class Migration_20101018162000_AddFieldOriginalFilename extends Migrations
     function up(){
 
         $schema = array(
-            'table' => 'arquivos',
+            'table' => 'files',
             'field' => 'original_filename',
             'type' => 'VARCHAR(250)',
             'position' => 'AFTER url'
@@ -21,7 +21,7 @@ class Migration_20101018162000_AddFieldOriginalFilename extends Migrations
     }
 
     function down(){
-        $this->dropField('arquivos', 'original_filename');
+        $this->dropField('files', 'original_filename');
         return true;
 
     }
