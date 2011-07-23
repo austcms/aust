@@ -143,3 +143,42 @@ Then:
 
 	DROP TABLE arquivos
 
+
+From Imagens to Images
+======================
+
+Convert the structure module:
+
+	UPDATE categorias SET tipo='imagens' WHERE tipo='images'
+
+Install the module. Move data to Files table:
+
+	INSERT INTO
+		images
+		(
+			node_id, title, title_encoded, subtitle, summary,
+			description, link, order_nr,
+			image_bytes, image_binary_data, image_name, image_type,
+			reference, reference_id,
+			local, class, specie,
+			created_on, expire_on, pageviews, admin_id,
+			image_path, image_systempath
+		)
+		(
+			SELECT 
+				categoria, titulo, titulo_encoded, subtitulo, resumo,
+				texto, link, ordem,
+				bytes, dados, nome, tipo,
+				ref, ref_id,
+				local, classe, especie,
+				adddate, expiredate, visitantes, autor,
+				path, systempath
+			FROM
+				imagens
+		)
+		
+
+Then, terminate the old module:
+
+	DROP TABLE imagens
+	

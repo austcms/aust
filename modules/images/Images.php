@@ -12,9 +12,9 @@
  * @since v0.1.5, 30/05/2009
  */
 
-class Imagens extends Module
+class Images extends Module
 {
-    public $mainTable = 'imagens';
+    public $mainTable = 'images';
 
     public $date = array(
         'standardFormat' => '%d/%m/%Y',
@@ -23,11 +23,11 @@ class Imagens extends Module
     );
 
 	public $fieldsToLoad = array(
-	    'titulo', 'visitantes', 'systempath'
+	    'title', 'pageviews', 'systempath'
 	);
 
-	public $authorField = "autor";
-	public $austField = "categoria";
+	public $authorField = "admin_id";
+	public $austField = "node_id";
 
 	public $defaultLimit = 25;
 	
