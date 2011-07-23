@@ -48,7 +48,7 @@ class ModController extends ModActionController
         $this->set('h1', $h1);
 
         $sql = "SELECT
-                    id,nome
+                    id, nome
                 FROM
                     ".Aust::$austTable."
                 WHERE
@@ -135,39 +135,39 @@ class ModController extends ModActionController
 						
 						if( $editing ){
 							$oldFile = reset( $this->module->load($id) );
-							if( !empty($oldFile['systempath']) ){
-								$oldFile = $oldFile['systempath'];
+							if( !empty($oldFile['image_systempath']) ){
+								$oldFile = $oldFile['image_systempath'];
 								if( file_exists($oldFile) ){
 									unlink($oldFile);
 								}
 							}
 						}
 						
-		                $_POST["frmsystempath"] = '';
-		                $_POST["frmpath"] = '';
+		                $_POST["frmimage_systempath"] = '';
+		                $_POST["frmimage_path"] = '';
 		
-		                $_POST["frmbytes"] = $value["size"];
-		                $_POST["frmdados"] = file_get_contents($value["tmp_name"]);
-		                $_POST["frmnome"] = $value["name"];
-		                $_POST["frmtipo"] = $value["type"];
+		                $_POST["frmimage_bytes"] = $value["size"];
+		                $_POST["frmimage_binary_data"] = file_get_contents($value["tmp_name"]);
+		                $_POST["frmimage_name"] = $value["name"];
+		                $_POST["frmimage_type"] = $value["type"];
 					} else {
 						$paths = $imageHandler->upload($_FILES['frmarquivo']);
 						if( $editing ){
 							$oldFile = reset( $this->module->load($id) );
-							if( !empty($oldFile['systempath']) ){
-								$oldFile = $oldFile['systempath'];
+							if( !empty($oldFile['image_systempath']) ){
+								$oldFile = $oldFile['image_systempath'];
 								if( file_exists($oldFile) ){
 									unlink($oldFile);
 								}
 							}
 						}
 
-		                $_POST["frmdados"] 		= '';
-						$_POST['frmsystempath'] = $paths['systemPath'];
-						$_POST['frmpath'] 		= $paths['webPath'];
-		                $_POST["frmbytes"] 		= $value["size"];
-		                $_POST["frmnome"] 		= $value["name"];
-		                $_POST["frmtipo"] 		= $value["type"];
+		                $_POST["frmimage_binary_data"] 	= '';
+						$_POST['frmimage_systempath'] 	= $paths['systemPath'];
+						$_POST['frmimage_path'] 		= $paths['webPath'];
+		                $_POST["frmimage_bytes"] 		= $value["size"];
+		                $_POST["frmimage_name"] 		= $value["name"];
+		                $_POST["frmimage_type"] 		= $value["type"];
 					}
 
 				} else if( $fileHandler->isFlash($_FILES['frmarquivo']['type']) AND 
@@ -177,8 +177,8 @@ class ModController extends ModActionController
 					$path = $fileHandler->upload($_FILES['frmarquivo']);
 					if( $editing ){
 						$oldFile = reset( $this->module->load($id) );
-						if( !empty($oldFile['systempath']) ){
-							$oldFile = $oldFile['systempath'];
+						if( !empty($oldFile['image_systempath']) ){
+							$oldFile = $oldFile['image_systempath'];
 							if( file_exists($oldFile) ){
 								unlink($oldFile);
 							}
@@ -188,12 +188,12 @@ class ModController extends ModActionController
 					// links não são permitidos em arquivos Flash
 					$_POST['frmlink'] 		= '';
 					
-	                $_POST["frmdados"] 		= '';
-					$_POST['frmsystempath'] = $path['systemPath'];
-					$_POST['frmpath'] 		= $path['webPath'];
-	                $_POST["frmbytes"] 		= $value["size"];
-	                $_POST["frmnome"] 		= $value["name"];
-	                $_POST["frmtipo"] 		= $value["type"];
+	                $_POST["frmimage_binary_data"] 	= '';
+					$_POST['frmimage_systempath'] 	= $path['systemPath'];
+					$_POST['frmimage_path'] 		= $path['webPath'];
+	                $_POST["frmimage_bytes"] 		= $value["size"];
+	                $_POST["frmimage_name"] 		= $value["name"];
+	                $_POST["frmimage_type"] 		= $value["type"];
 					
 				} else {
 					/**
@@ -217,16 +217,16 @@ class ModController extends ModActionController
             /*
              * Prepara a ordem da imagem
              */
-            if( empty($_POST["frmordem"]) ){
+            if( empty($_POST["frmorder_nr"]) ){
                 // seleciona a última ordem do banco de dados
                 $sql = "SELECT
-                            ordem
+                            order_nr
                         FROM
                             ".$this->module->useThisTable()."
                         WHERE
-                            categoria='".$_POST['aust_node']."'
+                            node_id='".$_POST['aust_node']."'
                         ORDER BY
-                            ordem asc
+                            order_nr asc
                         LIMIT 1
                         ";
                 //echo $sql;
@@ -235,7 +235,7 @@ class ModController extends ModActionController
 
                 $ordem = 0;
                 foreach ( $query as $dados ){
-                    $curordem = $dados["ordem"];
+                    $curordem = $dados["order_nr"];
                     if ($curordem >= $ordem)
                         $ordem = $curordem+1;
                 }
@@ -249,11 +249,10 @@ class ModController extends ModActionController
                 /*
                  * Últimos ajustes de campos a serem inseridos
                  */
-                $_POST["frmordem"] = $ordem;
+                $_POST["frmorder_nr"] = $ordem;
             } // fim ordem automática
 
-            $_POST["frmcategoria"] = $_POST["frmcategoria"];
-            $_POST['frmtitulo_encoded'] = encodeText($_POST['frmtitulo']);
+            $_POST['frmtitle_encoded'] = encodeText($_POST['frmtitle']);
 
             /*
              * GROUPED_DATA
@@ -290,7 +289,35 @@ class ModController extends ModActionController
 
     }
 
+	function actions(){
+		if( !empty($_POST['deletar']) ){
+	        /*
+	         * Identificar tabela que deve ser excluida
+	         */
 
+            $itens = $_POST['itens'];
+            $c = 0;
+            foreach($itens as $key=>$valor){
+                if($c > 0){
+                    $where = $where." OR id='".$valor."'";
+                } else {
+                    $where = "id='".$valor."'";
+                }
+                $c++;
+            }
+            $sql = "DELETE FROM
+                        ".$this->module->useThisTable()."
+                    WHERE
+                        $where
+                        ";
+
+            if($this->module->connection->exec($sql)){
+                notice('Os dados foram excluídos com sucesso.');
+            } else {
+                failure('Ocorreu um erro ao excluir os dados.');
+            }
+		}
+	}
     
 }
 ?>

@@ -1,25 +1,14 @@
 <?php
 /**
- * Listagem dos dados cadastrados deste módulo. É carregado dinamicamente pelo
- * Core do Aust.
- *
- * @package Módulo Texto
- * @category Listagem
- * @name Listar
- * @author Alexandre de Oliveira <alexandreoliveira@gmail.com>
- * @version v0.1
- * @since 
+ * @author Alexandre de Oliveira <chavedomundo@gmail.com>
+ * @since v0.1.5, 30/05/2009
  */
-?>
-    
-<a name="list" class="name">&nbsp;</a>
+?>    
 <h2><?php echo $h1;?></h2>
 <?php
 if((!empty($filter)) AND ($filter <> 'off')){
     $addurl = "&filter=$filter&filterw=" . urlencode($filterw);
 }
-
-
 
 /*********************************
 *
@@ -129,8 +118,5 @@ if((!empty($filter)) AND ($filter <> 'off')){
 
 ?>
 
-<p style="margin-top: 15px;">
-	<a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
-</p>
 </div>
 </div>

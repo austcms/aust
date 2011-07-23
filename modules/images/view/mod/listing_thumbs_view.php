@@ -18,7 +18,7 @@ if(count($query) == 0){
 	foreach( $query as $key=>$value){
 		
 		$fromFile = '';
-		if( !empty($value['systempath']) )
+		if( !empty($value['image_systempath']) )
 			$fromFile = '&fromfile=1';
 		
 		if( $i == 0 ){
@@ -32,13 +32,13 @@ if(count($query) == 0){
 			<?php
 			if( StructurePermissions::getInstance()->canEdit($_GET['aust_node']) ){ 
 				?>
-				<a href="adm_main.php?section=<?php echo $_GET['section']?>&action=edit&aust_node=<?php echo $_GET['aust_node']?>&w=<?php echo $value["id"]?>">
+				<a href="adm_main.php?section=<?php echo CONTENT_DISPATCHER ?>&action=edit&aust_node=<?php echo $_GET['aust_node']?>&w=<?php echo $value["id"]?>">
 
 				<?php
 			}
 			$randomNumber = rand(0,10000);
 			?>
-			<div class="image" style="background-image: url(<?php echo IMAGE_VIEWER_DIR?>visualiza_foto.php?table=imagens&thumbs=yes&myid=<?php echo $value["id"]; ?>&minxsize=<?php echo $thumbsW?>&minysize=<?php echo $thumbsH?>&r=<?php echo $randomNumber?><?php echo $fromFile; ?>)">
+			<div class="image" style="background-image: url(<?php echo IMAGE_VIEWER_DIR?>visualiza_foto.php?table=images&thumbs=yes&myid=<?php echo $value["id"]; ?>&minxsize=<?php echo $thumbsW?>&minysize=<?php echo $thumbsH?>&r=<?php echo $randomNumber?><?php echo $fromFile; ?>)">
 			</div>
 			<?php
 			if( StructurePermissions::getInstance()->canEdit($_GET['aust_node']) ){ 
@@ -49,7 +49,7 @@ if(count($query) == 0){
 			?>
 			<div class="info">
 				<input type="checkbox" name="itens[]" value="<?php echo $value['id'];?>" />
-				<?php echo $value['titulo'] ?>
+				<?php echo $value['title'] ?>
 			</div>
 		</span>
 		</td>

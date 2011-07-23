@@ -18,12 +18,12 @@ class Images extends Module
 
     public $date = array(
         'standardFormat' => '%d/%m/%Y',
-        'created_on' => 'adddate',
-        'updated_on' => 'addate'
+        'created_on' => 'created_on',
+        'updated_on' => 'updated_on'
     );
 
 	public $fieldsToLoad = array(
-	    'title', 'pageviews', 'systempath'
+	    'title', 'pageviews', 'image_systempath'
 	);
 
 	public $authorField = "admin_id";
