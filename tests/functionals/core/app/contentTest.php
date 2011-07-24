@@ -11,7 +11,7 @@ class ContentControllerTest extends PHPUnit_Framework_TestCase
 
 	public function testIndex(){
         $this->obj = new ContentController;
-		$this->assertRegExp('/<h2>Gerenciar conteúdo<\/h2>/', $this->obj->render());
+		$this->assertRegExp('/<h2>Gerencie seu conteúdo<\/h2>/', $this->obj->render());
 	}
 
 	public function testConfigurationsWithModule(){

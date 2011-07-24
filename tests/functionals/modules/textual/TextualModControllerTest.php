@@ -63,7 +63,6 @@ class TextualModControllerTest extends PHPUnit_Framework_TestCase
 		$rendered = $this->obj->renderized;
 		
 		$this->assertRegExp('/Criar:/', $rendered);
-		$this->assertRegExp('/<div class="nova_categoria">/', $rendered);
     }
 
 }

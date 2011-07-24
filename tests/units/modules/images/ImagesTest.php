@@ -14,13 +14,13 @@ class ImagensTest extends PHPUnit_Framework_TestCase
 	public $obj;
     
     public function setUp(){
-		installModule('imagens');
+		installModule('images');
         /*
          * MÓDULOS ATUAL
          *
          * Diretório do módulo
          */
-        $this->mod = 'imagens';
+        $this->mod = 'images';
 
         /*
          * Informações de conexão com banco de dados
@@ -40,18 +40,18 @@ class ImagensTest extends PHPUnit_Framework_TestCase
                         'limit' => 0,
                     ))
                 );
-        $this->assertEquals('imagens', $this->obj->useThisTable() );
+        $this->assertEquals('images', $this->obj->useThisTable() );
 
         /*
          * Verifica SQL gerado, se é gerado corretamente
          */
         $sql = $this->obj->loadSql( array('') );
         $sql = preg_replace('/\n|\t/Us', "", preg_replace('/\s{2,}/s', " ", $sql));
-        $this->assertEquals( trim("SELECT mainTable.id AS id, titulo, visitantes, systempath, categoria AS cat, ".
-                        "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as adddate, ".
+        $this->assertEquals( trim("SELECT mainTable.id AS id, title, pageviews, image_systempath, node_id AS cat, ".
+                        "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as created_on, ".
                         "(SELECT nome FROM categorias AS c WHERE id=cat ) AS node ".
-                        "FROM imagens AS mainTable ".
-						"LEFT JOIN categorias AS austTable ON mainTable.categoria = austTable.id ".
+                        "FROM images AS mainTable ".
+						"LEFT JOIN categorias AS austTable ON mainTable.node_id = austTable.id ".
 						"WHERE 1=1 ".
                         "ORDER BY id DESC ".
                         "LIMIT 0,25"),
@@ -60,11 +60,11 @@ class ImagensTest extends PHPUnit_Framework_TestCase
         unset($sql);
         $sql = $this->obj->loadSql( array('page'=>3, 'id'=>'1') );
         $sql = preg_replace('/\n|\t/Us', "", preg_replace('/\s{2,}/s', " ", $sql));
-        $this->assertEquals( trim("SELECT mainTable.id AS id, titulo, visitantes, systempath, categoria AS cat, ".
-                        "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as adddate, ".
+        $this->assertEquals( trim("SELECT mainTable.id AS id, title, pageviews, image_systempath, node_id AS cat, ".
+                        "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as created_on, ".
                         "(SELECT nome FROM categorias AS c WHERE id=cat ) AS node ".
-                        "FROM imagens AS mainTable ".
-						"LEFT JOIN categorias AS austTable ON mainTable.categoria = austTable.id ".
+                        "FROM images AS mainTable ".
+						"LEFT JOIN categorias AS austTable ON mainTable.node_id = austTable.id ".
 						"WHERE 1=1 AND mainTable.id='1' ".
                         "ORDER BY id DESC ".
                         "LIMIT 50,25"),
@@ -73,12 +73,12 @@ class ImagensTest extends PHPUnit_Framework_TestCase
         unset($sql);
         $sql = $this->obj->loadSql( array('page'=>3, 'id'=>'1', 'austNode' => array('3'=>'categoria1','4'=>'categoria1')) );
         $sql = preg_replace('/\n|\t/Us', "", preg_replace('/\s{2,}/s', " ", $sql));
-        $this->assertEquals( trim("SELECT mainTable.id AS id, titulo, visitantes, systempath, categoria AS cat, ".
-                        "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as adddate, ".
+        $this->assertEquals( trim("SELECT mainTable.id AS id, title, pageviews, image_systempath, node_id AS cat, ".
+                        "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as created_on, ".
                         "(SELECT nome FROM categorias AS c WHERE id=cat ) AS node ".
-                        "FROM imagens AS mainTable ".
-						"LEFT JOIN categorias AS austTable ON mainTable.categoria = austTable.id ".
-						"WHERE 1=1 AND mainTable.id='1' AND mainTable.categoria IN ('3','4') ".
+                        "FROM images AS mainTable ".
+						"LEFT JOIN categorias AS austTable ON mainTable.node_id = austTable.id ".
+						"WHERE 1=1 AND mainTable.id='1' AND mainTable.node_id IN ('3','4') ".
                         "ORDER BY id DESC ".
                         "LIMIT 50,25"),
                         trim($sql) );
@@ -99,22 +99,22 @@ class ImagensTest extends PHPUnit_Framework_TestCase
         );
         $_POST = array(
             'method' => 'create',
-            'frmadddate' => '2010-08-24',
-            'frmautor' => '',
-            'frmordem' => '777',
+            'frmcreated_on' => '2010-08-24',
+            'frmadmin_id' => '',
+            'frmorder_nr' => '777',
             'w' => '',
-            'frmcategoria' => '777',
+            'frmnode_id' => '777',
             'aust_node' => '777',
-            'frmtitulo_encoded' => encodeText('777teste'),
-            'frmtitulo' => '777teste',
+            'frmtitle_encoded' => encodeText('777teste'),
+            'frmtitle' => '777teste',
             'frmlink' => '',
             'submit' => 'Enviar!',
         );
         
         $imagem = $this->obj->trataImagem($_FILES);
-        $_POST["frmbytes"] = $imagem["filesize"];
-        $_POST["frmnome"] = $imagem["filename"];
-        $_POST["frmtipo"] = $imagem["filetype"];
+        $_POST["frmimage_bytes"] = $imagem["filesize"];
+        $_POST["frmimage_name"] = $imagem["filename"];
+        $_POST["frmimage_type"] = $imagem["filetype"];
 
         $saveResult = $this->obj->save($_POST);
         $lastInsertId = $this->obj->connection->lastInsertId();
