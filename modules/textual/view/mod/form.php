@@ -114,31 +114,34 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
 		<?php
 	}
 	?>
-    <tr>
-        <td class="first"><label>Categoria:</label></td>
-        <td class="second">
-            <div id="categoriacontainer">
-            <?php
-            $current_node = '';
-            if( $_GET['action'] == "editar" || $_GET['action'] == "edit" ){
-                $current_node = $dados['node_id'];
-                ?>
-                <input type="hidden" name="frmnode_id" value="<?php echo $current_node; ?>">
-                <?php
-            }
+	
+	<?php if( $module->getStructureConfig("aust_node_selection") ){ ?>
+	    <tr>
+	        <td class="first"><label>Categoria:</label></td>
+	        <td class="second">
+	            <div id="categoriacontainer">
+	            <?php
+	            $current_node = '';
+	            if( $_GET['action'] == "editar" || $_GET['action'] == "edit" ){
+	                $current_node = $dados['node_id'];
+	                ?>
+	                <input type="hidden" name="frmnode_id" value="<?php echo $current_node; ?>">
+	                <?php
+	            }
 
-            echo BuildDDList( Registry::read('austTable') ,'frmnode_id', User::getInstance()->tipo ,$austNode, $current_node);
-            ?>
+	            echo BuildDDList( Registry::read('austTable') ,'frmnode_id', User::getInstance()->tipo ,$austNode, $current_node);
+	            ?>
 
 
-            </div>
-            <?php
-            if( $module->getStructureConfig("new_aust_node") == "1" || User::getInstance()->isRoot() ){
-                lbCategoria($austNode);
-            }
-            ?>
-        </td>
-    </tr>
+	            </div>
+	            <?php
+	            if( $this->module->getStructureConfig("new_aust_node") == "1" || User::getInstance()->isRoot() ){
+	                lbCategoria($austNode);
+	            }
+	            ?>
+	        </td>
+	    </tr>
+	<?php } ?>
 	<tr>
 	    <td><label>Título:</label></td>
 	    <td>

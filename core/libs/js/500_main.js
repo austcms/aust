@@ -152,7 +152,7 @@ function newCategory(lbId){
 
     var givenAN = $('#'+lbId+' .aust_node_hidden').val();
     var urlAN = $.getURLParam('aust_node');
-    var catName = $('#'+lbId+' input[name=lb[frmcategoria]]').val();
+    var catName = $('#'+lbId+' input[name=lb[frmnode_id]]').val();
     var categoryInput = $('#'+lbId+' input[name=category_input]').val();
 
     //updateCategorySelect('frmcategoria', givenAN, '');
@@ -169,7 +169,7 @@ function newCategory(lbId){
         url: arquivoAjax+'?lib=new_category',
         data: "urlAN="+urlAN+'&givenAN='+givenAN+'&catName='+catName,
         complete: function(response){
-            //alert(response.responseText);
+
             if( response.responseText > 0 ){
                 $('#'+lbId+' .lb_content').hide();
                 $('#'+lbId+' .lb_content').html('<div class="sucesso">Dados salvos com sucesso.</div>');
@@ -215,6 +215,7 @@ function updateCategorySelect(id, node, selected){
         url: arquivoAjax+'?lib=update_category_select',
         data: "node="+node+"&selected="+selected,
         complete: function(response){
+
             if( response.responseText != '' ){
                 $("select[id='"+id+"']").html(response.responseText);
             } else {

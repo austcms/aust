@@ -14,5 +14,6 @@ include_once(CORE_DIR."libs/functions/func_text_format.php");
 include_once(CORE_DIR."libs/functions/func_form_manipulation.php");
 include_once(CORE_DIR."libs/functions/date.php");
 
-include_once(CORE_DIR.'libs/aust/aust_func_helpers.php');
+include_once(LIBS_DIR.'aust/aust_func_helpers.php');
+include_once(LIBS_DIR.'aust/aust_func.php');
 ?>

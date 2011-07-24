@@ -65,7 +65,7 @@ class ModController extends ModActionController
 
         $this->set('query', $query );
 
-    } // fim listar()
+    }
 
     public function create(){
         $this->render('form');
@@ -96,9 +96,20 @@ class ModController extends ModActionController
     public function save(){
 		if( $_POST['metodo'] == CREATE_ACTION ){
 			$_POST['frmcreated_on'] = date("Y-m-d H:i:s");
+			
+			if( empty($_POST['frmnode_id']) )
+				$_POST['frmnode_id'] = $_POST['aust_node'];
 		}
 		
-        $this->set('resultado', $this->module->save($_POST, $_FILES));
+        $resultado = $this->module->save($_POST, $_FILES);
+		
+		
+		if( $resultado ){
+		    notice('As informações foram salvas com sucesso.');
+		} else {
+		    failure('Ocorreu um erro ao salvar informações. Se você tentou copiar um texto do Microsoft Word, provavelmente há letras/caracteres neste texto que não podem ser lidos por seu navegador. Experimente verificar se não há nada de estranho (alguma letra) entre este texto. Se houver, entre em contato com o administrador e explique o que está acontecendo.');
+		}
+
     }
     
 }

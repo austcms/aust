@@ -43,9 +43,16 @@ $modInfo = array(
             "label" => "Tem resumo?",
             "inputType" => "checkbox",
         ),
+		
+		'aust_node_selection' => array(
+		    "value" => "0",
+		    "label" => "Usuários podem selecionar categoria",
+		    "inputType" => "checkbox",
+		),
         'new_aust_node' => array(
             "value" => "",
-            "label" => "Permite criar categoria?",
+            "label" => "Usuários podem criar categorias",
+			"depends" => "aust_node_selection",
             "inputType" => "checkbox",
         ),
         'generate_preview_url' => array(

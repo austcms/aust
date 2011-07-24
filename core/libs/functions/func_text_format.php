@@ -83,7 +83,7 @@ function lbCategoria($params){
                         <label for="lb_input_categoria_<?php echo $random; ?>">Título:</label>
                     </td>
                     <td>
-                        <input name="lb[frmcategoria]" onkeydown="if (event.keyCode == 13) { newCategory('lb_categoria_<?php echo $random; ?>'); return false; }" id="lb_input_categoria_<?php echo $random; ?>" class="text lb_focus" />
+                        <input name="lb[frmnode_id]" onkeydown="if (event.keyCode == 13) { newCategory('lb_categoria_<?php echo $random; ?>'); return false; }" id="lb_input_categoria_<?php echo $random; ?>" class="text lb_focus" />
                         <p class="explanation">
                             Digite o nome de uma nova categoria. Ex.: 'Geral'
                         </p>

@@ -47,15 +47,42 @@ Then, delete 'cadastros_conf' table:
 
 	DROP TABLE cadastros_conf
 
+
 From Conteudo to Textual
 ========================
 
-???
+	UPDATE categorias SET tipo='textual' WHERE tipo='textos'
+	
+Then, install the module and run:
+
+	INSERT INTO
+		textual
+		(
+			order_nr, node_id, title, title_encoded, subtitle, summary, text,
+			local, url, 
+			pageviews, public, blocked, approved,
+			created_on, admin_id
+			
+		)
+		(
+		SELECT 
+			orderm, categoria, titulo, titulo_encoded, subtitulo, resumo, texto,
+			local, url,
+			visitantes, publico, bloqueado, aprovado,
+			adddate, autor
+		FROM
+			textos
+			)
+			
+Then, once everything's in place, run:
+
+	DROP TABLE textos
+
 
 From GaleriaDeFotos to PhotoGallery
 ===================================
 
-UPDATE categorias SET tipo='photo_gallery' WHERE tipo='galeriafotos'
+	UPDATE categorias SET tipo='photo_gallery' WHERE tipo='galeriafotos'
 
 Then, install the PhotoGallery module. Now, pass all current data to the new tables.
 

@@ -1,4 +1,4 @@
-<h2>Gerenciar conteúdo</h2>
+<h2>Gerencie seu conteúdo</h2>
 <p>
     Selecione qual estrutura você deseja gerenciar.
     <?php tt('Uma estrutura é uma área do site,

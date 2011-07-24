@@ -41,20 +41,10 @@ include(CONFIG_DATABASE_FILE);
 include(CONFIG_DIR.'core.php');
 include(CORE_CONFIG_DIR.'core.php');
 
+include_once(LOAD_CORE);
+
 header("Content-Type: text/html; charset=".$aust_charset['view']);
 
-/**
- * Propriedades do core
- */
-/**
- * Métodos usados pelo sistema
- */
-include(LIB_DIR.'functions/func.php');
-include(LIB_DIR.'functions/func_content.php');
-include(LIB_DIR.'functions/func_text_format.php');
-
-// aust_func
-include(LIBS_DIR.'aust/aust_func.php');
 
 // Conexão
 $conexao = Connection::getInstance();
