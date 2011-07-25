@@ -43,7 +43,7 @@ class Application {
 	    if( !Connection::getInstance()->dbExists() ||
 			($this->installationDiagnostics() != 1) )
 		{
-	        echo 'Erro no sistema: 002.';
+	        header("Location: index.php");
 	    }
 	    /*
 	     * Diagnostics show everything's fine

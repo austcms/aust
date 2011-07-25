@@ -317,6 +317,16 @@ class dbSchema
          */
 
         $checkedSchema = $this->verificaSchema();
+		
+		if( $checkedSchema == -1 ){
+			foreach( $this->camposInexistentes as $table=>$field ){
+				$sql = $this->sqlForMissingFields( array($table => $field) );
+				Connection::getInstance()->exec( $sql, "CREATE_TABLE");
+			}
+			
+			return true;
+		}
+		
         if($checkedSchema != 1 AND $this->isDbSchemaFormatOk($this->dbSchema) ){
 
             /**

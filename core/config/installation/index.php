@@ -23,26 +23,27 @@ date_default_timezone_set('America/Sao_Paulo');
  * Caminho relativo deste arquivo para o diretório base. Edite
  * este arquivo quando você modificar o arquivo instalar.php de local.
  */
-define('THIS_TO_BASEURL', '../');
+if( !defined('THIS_TO_BASEURL') )
+	define('THIS_TO_BASEURL', '../');
 
 /**
  * Configurações do core
  */
-include(THIS_TO_BASEURL."core/config/variables.php");
+include_once(THIS_TO_BASEURL."core/config/variables.php");
 
 /**
  * Carrega todas as classes do sistema
  */
-include(CLASS_LOADER);
+include_once(CLASS_LOADER);
 
 /**
  * Carrega configurações do sistema
  */
-include(CONFIG_CORE_FILE);
-include(CONFIG_DATABASE_FILE);
+include_once(CONFIG_CORE_FILE);
+include_once(CONFIG_DATABASE_FILE);
 
 /**
  * Carrega o setup
  */
-require(INSTALLATION_DIR.'instalar.php');
+require_once(INSTALLATION_DIR.'instalar.php');
 ?>

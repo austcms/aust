@@ -6,7 +6,7 @@
  * to root.
  */
 
-if(!defined('THIS_TO_BASEURL')){
+if( !defined('THIS_TO_BASEURL') ){
     define('THIS_TO_BASEURL', '');
 }
 

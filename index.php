@@ -5,10 +5,7 @@
  * Este arquivo é o centralizador, carregando outros arquivos e classes responsáveis
  * por verificações do setup do sistema, e também login.
  *
- * @package index
- * @name index.php
  * @author Alexandre de Oliveira <chavedomundo@gmail.com>
- * @version 0.1.5
  * @since 25/07/2009
  */
 session_name("aust");
@@ -43,7 +40,7 @@ if( !is_dir('uploads/editor') ){
 require_once("core/load_core.php");
 
 // verifica se banco de dados existe
-if(Connection::getInstance()->dbExists()){
+if( Connection::getInstance()->dbExists() ){
 
     /**
      * Faz verificação do Schema
@@ -77,6 +74,8 @@ if(Connection::getInstance()->dbExists()){
                 require(LOGIN_PATH.'login_form.php');
             }
 
+    } elseif( in_array($dbSchema->schemaStatus, array(0, -1, -2) ) ) {
+		require INSTALLATION_DIR."index.php";
     } else {
 
         // Ops.. algumas tabelas não existem

@@ -83,5 +83,26 @@ class dbSchemaTest extends PHPUnit_Framework_TestCase
         $this->assertRegExp('/CREATE TABLE st_agenda .* evento\.\', description text COMMENT/', $sql );
     }
 
+	function testVerifySchemaAllTablesMissing(){
+		Fixture::getInstance()->dropAllTables();
+        $dbSchema = new dbSchema();
+		$this->assertEquals( 0, $dbSchema->verificaSchema() );
+	}
+
+	function testVerifySchemaSomeTablesMissing(){
+		Fixture::getInstance()->installSchema();
+		$this->assertTrue(Connection::getInstance()->hasTable('admins'));
+		Connection::getInstance()->exec("DROP TABLE admins");
+        $dbSchema = new dbSchema();
+		$this->assertEquals( -2, $dbSchema->verificaSchema() );
+	}
+
+	function testVerifySchemaEverythingIsFine(){
+		Fixture::getInstance()->installSchema();
+        $dbSchema = new dbSchema();
+		$this->assertEquals( 1, $dbSchema->verificaSchema() );
+	}
+
+
 }
 ?>

@@ -42,6 +42,18 @@ class Fixture {
 		}
 	}
 	
+	public function dropAllTables(){
+		$tables = Connection::getInstance()->_acquireTablesList();
+		foreach( $tables as $table ){
+			$sql = "DROP TABLE ". $table;
+			Connection::getInstance()->exec($sql);
+		}
+	}
+	
+	public function installSchema(){
+		dbSchema::getInstance()->instalarSchema();
+	}
+	
 	public function createStructures(){
 		Connection::getInstance()->exec("DELETE FROM ".$this->tables["aust"]);
 		$aust = 
