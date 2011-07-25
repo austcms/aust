@@ -129,6 +129,7 @@ class ActionController
 		}
 
 		if( $shouldRender && file_exists($viewFile) ){
+
             ob_start();
             include($viewFile);
             $content_for_layout = ob_get_contents();

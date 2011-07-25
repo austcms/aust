@@ -48,7 +48,6 @@ class Api {
     }
 	
 	public function dispatch($get){
-		pr($get);
 		$transaction = new ApiTransaction();
 		$solution = $transaction->perform($get);
 		echo $solution;

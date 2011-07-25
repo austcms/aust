@@ -2,6 +2,7 @@
 /*
  * Somente webmasters tem acesso a esta página
  */
+
 if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'):
 ?>
 	<span class="root_user_only">Apenas desenvolvedores acessam esta tela.</span>
@@ -148,20 +149,21 @@ if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'):
                             <label>Módulo: </label>
                                 <?php
                                 $modulosList = ModulesManager::getInstance()->LeModulos();
-                                //pr($modulosList);
                                 ?>
                                 <select name="modulo">
                                     <?php
-                                    foreach( $modulosList  as $moduloDB ){
+									if( !empty($modulosList) ){
+	                                    foreach( $modulosList as $moduloDB ){
 
-                                        ?>
-                                        <option value="<?php echo $moduloDB["valor"] ?>">
-                                            <?php echo $moduloDB["nome"] ?>
-                                        </option>
-                                        <?
-                                    }
-
-                                    unset($moduloDB);
+	                                        ?>
+	                                        <option value="<?php echo $moduloDB["valor"] ?>">
+	                                            <?php echo $moduloDB["nome"] ?>
+	                                        </option>
+	                                        <?php
+	                                    }
+										
+									}
+                                    //unset($moduloDB);
                                     ?>
                                 </select>
                         </div>

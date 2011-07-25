@@ -19,6 +19,7 @@ if( !defined('THIS_TO_BASEURL') )
 define('TESTING', true);
 
 $_SESSION = array();
+$_SERVER['QUERY_STRING'] = "";
 
 require_once CORE_DIR."load_core.php";
 require_once(CORE_DIR."libs/functions/func.php");

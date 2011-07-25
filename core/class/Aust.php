@@ -319,13 +319,7 @@ class Aust {
      * returns a site's information
      */
     public function getSite($columns, $formato, $chardivisor = '', $charend = '', $order = '') {
-
-        for($i = 0; $i < count($columns); $i++) {
-            $fields .= $columns[$i];
-            if($i != count($columns) - 1) {
-                $fields .= ',';
-            }
-        }
+		
         $sql = "SELECT
                     *
                 FROM

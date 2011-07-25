@@ -7,6 +7,9 @@
  */
 class Dispatcher {
 	
+	var $customController = "";
+	var $controller;
+	
 	public function __construct(){
 	}
 	
@@ -91,17 +94,20 @@ class Dispatcher {
 		if( file_exists($this->controllerFile()) ){
 			include_once($this->controllerFile());
 			$controllerName = ucfirst($this->controller())."Controller";
-			$controller = new $controllerName();
+			$this->controller = new $controllerName();
 			return true;
 		}
 		return false;
 	}
 
 	function controllerFile(){
-        if( UiPermissions::getInstance()->isPermittedSection() )
+        if( UiPermissions::getInstance()->isPermittedSection() ){
             return CONTROLLERS_DIR.$this->controller()."_controller.php";
-
-        return MSG_DENIED_ACCESS;
+		}
+		
+		$_GET["section"] = MSG_CONTROLLER;
+		$_GET["action"] = MSG_DENIED_ACCESS_ACTION;
+		return CONTROLLERS_DIR.$this->controller()."_controller.php";
 	}
 	
 	function sectionFile(){

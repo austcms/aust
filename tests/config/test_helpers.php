@@ -35,4 +35,17 @@ function getAdminId(){
 function query($str){
 	return Connection::getInstance()->query($str);
 }
+
+function login(){
+	destroyLogin();
+    $_SESSION['login']['id'] = getAdminId();
+    $_SESSION['login']['username'] = 'test_user';
+	User::getInstance()->type('Webmaster');
+}
+
+function destroyLogin(){
+	User::getInstance()->userInfo = array();
+	User::getInstance()->id = null;
+	$_SESSION['login'] = null;	
+}
 ?>

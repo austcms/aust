@@ -12,10 +12,10 @@ class Control_panelController extends ActionController {
 		){
 			$this->customAction = "setup";
 		} 
-
 	}
 	
 	function index(){
+		
 		$sites = Aust::getInstance()->getStructures();
 		$this->set('sites', $sites);
 	    $migrationsMods = new MigrationsMods( Connection::getInstance() );
@@ -36,6 +36,7 @@ class Control_panelController extends ActionController {
 			$this->install_structure();
         }
 		
+		$this->render("index");
 	}
 	
 	function install_structure(){

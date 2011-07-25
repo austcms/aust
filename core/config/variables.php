@@ -95,6 +95,8 @@ define("TMP_DIR", 						THIS_TO_BASEURL."tpm/");
     define('MSG_VIEW_DIR', 				CORE_CONFIG_DIR.'messages/');
     define('MSG_ERROR_VIEW_DIR', 		MSG_VIEW_DIR.'error/');
     define('MSG_DENIED_ACCESS', 		MSG_ERROR_VIEW_DIR.'access_denied.php');
+    define('MSG_CONTROLLER', 			'messages');
+    define('MSG_DENIED_ACCESS_ACTION', 	'access_denied');
 
 /*
  * General Config
