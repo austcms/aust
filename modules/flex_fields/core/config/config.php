@@ -161,6 +161,15 @@ $modInfo = array(
 	            "inputType" => "checkbox",
 				'help' => 'Este campo de imagem tem descrição? ',
 	        ),
+	        'image_automatic_cache_sizes' => array(
+				'field_type' => 'images',
+	            "value" => "",
+	            "label" => "Cache das imagens",
+	            "inputType" => "text",
+				'help' => 'Defina quais os tamanhos devem ser cacheados automaticamente '.
+						  'inserida. Use ; para definir os tamanhos, e.g. 150x100; 100x75. '.
+						  'Neste exemplo, duas imagens serão cacheadas.'
+	        ),
 	        /*
 	         * Tem imagem secundária?
 	         */

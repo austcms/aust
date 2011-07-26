@@ -117,6 +117,10 @@ if (Connection::getInstance()->count($sql) > 0){
 	
     $fileType = $type;
 
+	if( !empty($dados["image_systempath"]) )
+		$imageSystemPath = $dados["image_systempath"];
+	else if( !empty($dados["systempath"]) )
+		$imageSystemPath = $dados["systempath"];
 	/*
 	 * Algumas imagens estão em arquivos, outros em DB
 	 */
@@ -130,14 +134,14 @@ if (Connection::getInstance()->count($sql) > 0){
     	$fileContent = file_get_contents($noVisualizationFile);
 		$fileType = 'image/jpeg';
 	} else if( $fromfile )
-		$fileContent = file_get_contents($dados["image_systempath"]);
-	else if( !empty($dados["image_systempath"]) )
-		$fileContent = file_get_contents($dados["image_systempath"]);
+		$fileContent = file_get_contents($imageSystemPath);
+	else if( !empty($imageSystemPath) )
+		$fileContent = file_get_contents($imageSystemPath);
 	else
     	$fileContent = $dados["image_binary_data"];
 
     if($thumbs == "yes"){
-        header("Content-Type: ".$fileType);
+        //header("Content-Type: ".$fileType);
 
         $im = imagecreatefromstring($fileContent); //criar uma amostra da imagem original
         $largurao = imagesx($im);// pegar a largura da amostra
