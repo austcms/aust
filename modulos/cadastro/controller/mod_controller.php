@@ -321,7 +321,8 @@ class ModController extends ModsController
 			$files = $this->modulo->files;
 			
 			// insert date
-			$table = reset(array_keys($this->data));
+			$table = array_keys($this->data);
+			$table = reset($table);
 
 			if( empty($w) )
 				$this->data[$table]['created_on'] = date("Y-m-d H:i:s");

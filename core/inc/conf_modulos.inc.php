@@ -310,7 +310,7 @@ if($administrador->LeRegistro('tipo') == 'Webmaster'):
                                         <option value="<?php echo $moduloDB["valor"] ?>">
                                             <?php echo $moduloDB["nome"] ?>
                                         </option>
-                                        <?
+                                        <?php
                                     }
 
                                     unset($moduloDB);

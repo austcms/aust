@@ -1,12 +1,7 @@
 <?php
-require_once 'PHPUnit/Framework.php';
-
-#####################################
 
 require_once 'tests/config/auto_include.php';
 require_once 'config/nav_permissions.php';
-
-#####################################
 
 class ImageTest extends PHPUnit_Framework_TestCase
 {
@@ -52,6 +47,74 @@ class ImageTest extends PHPUnit_Framework_TestCase
 		$this->assertFalse( $this->obj->validate($params) );
 	
     }
+
+	function testGetDimensions(){
+		$image = "tests/test_files/image_sample.jpg";
+		$result = $this->obj->getDimensions($image);
+		$this->assertInternalType('array', $result);
+		$this->assertEquals("100", $result["width"]);
+		$this->assertEquals("80", $result["height"]);
+	}
+
+	function testGetResampleDimensions(){
+		$image = "tests/test_files/image_sample.jpg";
+
+		$result = $this->obj->getResampleDimensions($image, "200x160");
+		$this->assertInternalType('array', $result);
+		$this->assertEquals("100", $result["width"]);
+		$this->assertEquals("80", $result["height"]);
+
+		$result = $this->obj->getResampleDimensions($image);
+		$this->assertInternalType('array', $result);
+		$this->assertEquals("100", $result["width"]);
+		$this->assertEquals("80", $result["height"]);
+
+		$result = $this->obj->getResampleDimensions($image, "200x");
+		$this->assertInternalType('array', $result);
+		$this->assertEquals("100", $result["width"]);
+		$this->assertEquals("80", $result["height"]);
+
+		$result = $this->obj->getResampleDimensions($image, "80x40");
+		$this->assertInternalType('array', $result);
+		$this->assertEquals("80", $result["width"]);
+		$this->assertEquals("64", $result["height"]);
+
+		$result = $this->obj->getResampleDimensions($image, "80x");
+		$this->assertInternalType('array', $result);
+		$this->assertEquals("80", $result["width"]);
+		$this->assertEquals("64", $result["height"]);
+
+		$result = $this->obj->getResampleDimensions($image, "80");
+		$this->assertInternalType('array', $result);
+		$this->assertEquals("80", $result["width"]);
+		$this->assertEquals("64", $result["height"]);
+
+		$result = $this->obj->getResampleDimensions($image, "50x");
+		$this->assertInternalType('array', $result);
+		$this->assertEquals("50", $result["width"]);
+		$this->assertEquals("40", $result["height"]);
+
+		$result = $this->obj->getResampleDimensions($image, " 50x ");
+		$this->assertInternalType('array', $result);
+		$this->assertEquals("50", $result["width"]);
+		$this->assertEquals("40", $result["height"]);
+
+		$result = $this->obj->getResampleDimensions($image, "x40");
+		$this->assertInternalType('array', $result);
+		$this->assertEquals("50", $result["width"]);
+		$this->assertEquals("40", $result["height"]);
+
+		$result = $this->obj->getResampleDimensions($image, " x40");
+		$this->assertInternalType('array', $result);
+		$this->assertEquals("50", $result["width"]);
+		$this->assertEquals("40", $result["height"]);
+
+		$result = $this->obj->getResampleDimensions($image, "50");
+		$this->assertInternalType('array', $result);
+		$this->assertEquals("50", $result["width"]);
+		$this->assertEquals("40", $result["height"]);
+
+	}
 
 	function testIsImage(){
 		$params = array(

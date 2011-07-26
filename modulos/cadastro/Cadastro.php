@@ -459,6 +459,7 @@ class Cadastro extends Module {
 			foreach( $imagesField as $field=>$images ){
 				
 				foreach( $images as $key=>$value ){
+					$originalValue = $value;
 					if( empty($value['name']) OR
 						empty($value['size']) OR
 						empty($value['tmp_name'])
@@ -470,6 +471,7 @@ class Cadastro extends Module {
 					 * Realiza upload e salva os dados
 					 */
 					$imageHandler->prependedPath = $this->getStructureConfig('image_save_path');
+
 					$value = $imageHandler->resample($value);
 					$finalName = $imageHandler->upload($value);
 					
@@ -504,6 +506,25 @@ class Cadastro extends Module {
 							";
 					$this->connection->exec($sql);
 					
+					$shouldCache = $this->getFieldConfig($field, "image_automatic_cache_sizes");
+					if( !empty($shouldCache) ){
+						
+						$cacheSizes = explode(';', $shouldCache);
+						$newValue = $value;
+						foreach( $cacheSizes as $sizeString ){
+							$newValue['tmp_name'] = $finalName["systemPath"];
+
+							$newFilename = 'cached_'.$sizeString."_".$finalName['new_filename'];
+							$newFilename = str_replace(" ", "", $newFilename);
+							$processingTemporaryFile = dirname( $newValue["tmp_name"])."/processing_".$newFilename;
+							
+							copy( $newValue["tmp_name"], $processingTemporaryFile );
+							$newValue["tmp_name"] = $processingTemporaryFile;
+							$imageHandler->resample($newValue, $sizeString);
+							$imageHandler->upload($newValue, $newFilename);
+						}
+					}
+
 				}
 			}
 		}
