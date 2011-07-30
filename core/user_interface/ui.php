@@ -56,7 +56,7 @@
 		elseif( !empty($_POST["aust_node"]) )
 			$austNode = $_POST["aust_node"];
 		
-		$modDir = Aust::getInstance()->LeModuloDaEstrutura($austNode).'/';
+		$modDir = Aust::getInstance()->structureModule($austNode).'/';
         if(is_file(MODULES_DIR.$modDir.'js/jsloader.php')){
             $include_baseurl = MODULES_DIR. substr($modDir, 0, strlen($modDir)-1); // necessário para o arquivo jsloader.php saber onde está fisicamente
             include_once(MODULES_DIR.$modDir.'js/jsloader.php');

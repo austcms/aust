@@ -14,7 +14,7 @@ class ModController extends ModActionController
     public function listing(){
         $this->set('h1', 'Listando conteúdo: '.Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']) );
         
-        $nome_modulo = Aust::getInstance()->LeModuloDaEstrutura($_GET['aust_node']);
+        $nome_modulo = Aust::getInstance()->structureModule($_GET['aust_node']);
         $sql = "SELECT
                     id,nome
                 FROM

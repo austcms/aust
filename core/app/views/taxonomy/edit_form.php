@@ -16,33 +16,25 @@
 ?>
 
 
-<h2>Editar categoria</h2>
-<p>
-    <a href="javascript: history.back();"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
-</p>
-<?php
-    if(!empty($specsection['formnew_description'])){
-        echo $specsection['formnew_description'];
-    }
-?>
+<span class="root_user_only">Apenas desenvolvedores acessam esta tela.</span>
+<h2>Taxonomia: editar categoria</h2>
+<p>Você pode editar a categoria <?php echo $dados['nome']?></p>
 
 <form method="post" action="adm_main.php?section=<?php echo $_GET['section'];?>&action=update" enctype="multipart/form-data">
 <input type="hidden" name="action" value="update">
 <input type="hidden" name="autorid" value="<?php echo $loginid; ?>">
 <input type="hidden" name="w" value="<?php echo $_GET['w']; ?>">
-<table width="670" border=0 cellpadding=0 cellspacing="3">
-<col width="250">
-<col>
+<table width="670" border=0 class="form">
 <tr>
-    <td>Categoria: </td>
+    <td><label>Categoria:</label> </td>
     <td>
         <strong><?php echo $dados['patriarca']?></strong>
     </td>
 </tr>
 <tr>
-    <td valign="top">Nome: </td>
+    <td valign="top"><label>Nome:</label> </td>
     <td>
-        <INPUT TYPE="text" NAME="frmnome" value="<?php echo $dados['nome']?>">
+        <input type="text" class="text" name="frmnome" value="<?php echo $dados['nome']?>">
         <p class="explanation">
             Digite o nome da categoria. (Começa com letra maiúscula e não leva
             ponto final)
@@ -52,13 +44,12 @@
     </td>
 </tr>
 <tr>
-    <td valign="top">Descrição: </td>
+    <td valign="top"><label>Descrição:</label> </td>
     <td>
-        <textarea name="frmdescricao" rows="3" cols="40" id="jseditor" style="font-size: 11px; font-family: verdana;"><?php echo $dados['descricao']?></textarea>
+        <textarea name="frmdescricao" rows="3" cols="40" id="jseditor"><?php echo $dados['descricao']?></textarea>
         <p class="explanation">
             Digite uma breve descrição desta categoria.
         </p>
-        <br /><br />
     </td>
 </tr>
 <?php
@@ -69,8 +60,6 @@
 ?>
 <tr>
     <td valign="top" colspan="2">
-        <h2>Imagem da categoria</h2>
-
         <?php
         /*
          * Mostra foto da categoria se houver
@@ -88,22 +77,24 @@
         }
         ?>
 
-        <p>Altere a imagem da categoria abaixo.</p>
+        <p>
+			Altere abaixo a imagem da categoria.
+		</p>
 
     </td>
 </tr>
 <tr>
-    <td valign="top">Arquivo: </td>
+    <td valign="top"><label>Imagem:</label> </td>
     <td>
         <input type="file" name="arquivo" value="" />
     </td>
 </tr>
 <tr>
-    <td colspan="2" style="padding-top: 30px;"><center><INPUT TYPE="submit" VALUE="Entrar"></center></td>
+    <td colspan="2" style="padding-top: 30px;"><center><input type="submit" value="Enviar"></center></td>
 </tr>
 </table>
 
 </form>
 <p>
-    <a href="javascript: history.back();"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
+    <a href="adm_main.php?section=taxonomy&action=list_content">Voltar</a>
 </p>

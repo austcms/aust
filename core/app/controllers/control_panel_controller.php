@@ -114,7 +114,7 @@ class Control_panelController extends ActionController {
 	
 	function structure_configuration(){
 
-        $this->directory = MODULES_DIR.Aust::getInstance()->LeModuloDaEstrutura($_GET['aust_node'])."/";
+        $this->directory = MODULES_DIR.Aust::getInstance()->structureModule($_GET['aust_node'])."/";
 		$module = ModulesManager::getInstance()->modelInstance($_GET["aust_node"]);
         $configurations = $module->loadModConf();
 

@@ -46,6 +46,8 @@ div.body {
         visibility: hidden;
     }
  
+#menu ul { margin: 0px 0 0 10px; }
+
 
 /* Structure Control Panel */
 #structure_configuration .structure_variables .header {
@@ -156,11 +158,11 @@ div.structure_nav_options {
             }
 
     /********* CATEGORIAS *********/
-            div.body div.content div.structure {  }
+            div.body div.content div.structure { background: url('../img/taxonomy/taxonomy_arrow.png') no-repeat 14px 0px; }
             div#categoriacontainer { float: left; }
             div#categoriacontainer select{ font-size: 1.0em }
             div#categoriacontainer select option.node{ color: #990000; font-weight:normal; background-color: #D9ECFF; }
-            div.structure0 { font-weight: bold; text-transform: uppercase; color: #006600; }
+            div.structure0 { font-weight: bold; text-transform: uppercase; color: #006600; background-image: none !important; }
             div.structure1 { font-weight: normal; text-transform: uppercase; color:#009900; }
             div.structure2 { font-weight: bold; color: #000099; }
             div.structure3 { font-weight: normal; color: #0066FF; }

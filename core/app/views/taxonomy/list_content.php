@@ -14,10 +14,11 @@
 $w = (!empty($_GET['w'])) ? $_GET['w'] : 'NULL';
 ?>
 
-<h2>Listando Categorias</h2>
+<span class="root_user_only">Apenas desenvolvedores acessam esta tela.</span>
+<h2>Taxonomia: visão geral</h2>
 <p>
-    A seguir você pode ver a estrutura de categorias do site. O <strong>conceito é simples</strong>, lembre-se de uma Árvore
-    Genealógica, onde os filhos ficam abaixo dos pais em hierarquia.
+    Veja site, estruturas e categorias abaixo. O conceito é o mesmo de uma árvore
+    genealógica, onde os filhos ficam abaixo dos pais em hierarquia.
 </p>
 <p>
     <strong>Passe o mouse</strong> sobre uma categoria para editá-la.
@@ -92,18 +93,11 @@ if(!empty($_GET['block']) AND $_GET['block'] == "delete"){
                     WHERE
                         cat.subordinadoid = '$parent'
                 ";
-            //echo $sql;
             $query = Connection::getInstance()->query($sql);
-            /**
-             * CATEGORIAS
-             * Mostra as categoria indentadas
-             */
-
-            //pr($query);
             foreach($query as $dados){
 
                 ?>
-                <div class="structure structure<?php echo $level;?>" style="margin-left: <?php echo $level*30;?>px">
+                <div class="structure structure<?php echo $level;?>" style="padding-left: 40px; margin-left: <?php echo ($level-1)*40;?>px">
                     <span onmouseover="javascript: est_options('<?php echo $dados['id']?>')"><?php echo $dados['nome']?></span>
 
                     <?php
@@ -112,9 +106,6 @@ if(!empty($_GET['block']) AND $_GET['block'] == "delete"){
                     }
                     echo '<div class="est_options" style="color: #333333; text-transform: none; font-weight: normal;" id="est_options_'.$dados['id'].'">';
                     echo '<a href="adm_main.php?section='.$_GET['section'].'&action=edit_form&w='.$dados['id'].'" style="color: orange;">Editar descrição</a>';
-                    if(($level <= 1 AND strtolower($usertipo) == strtolower('webmaster')) OR ($level > 1)){
-                        echo ' - <a href="adm_main.php?section='.$table.'&action=list_content&block=delete&w='.$dados['id'].'" class="delete"><img src="img/layoutv1/delete.jpg" height="10" border="0" alt="Deletar" /></a>';
-                    }
                     echo '</div>';
 
                 echo '</div>';
@@ -129,6 +120,6 @@ if(!empty($_GET['block']) AND $_GET['block'] == "delete"){
     ?>
     </div>
 </div>
-<p style="margin-top: 15px;">
-    <a href="adm_main.php?section=<?php echo $_GET['section'];?>"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
+<p>
+    <a href="adm_main.php?section=taxonomy">Voltar</a>
 </p>

@@ -152,7 +152,7 @@ class Connection extends SQLObject {
          * We count how long the queries took. This is the timer init
          */
         $sT = microtime(true);
-        
+
         if($this->PdoExtension()){
             /**
              * Roda o SQL e trás os resultados para um array

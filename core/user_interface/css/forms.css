@@ -20,13 +20,13 @@
     form div.input { display: inline; width: 100%; float: left; }
     form input.text { width: 470px; font-size: 1.3em; height: 22px; padding: 0px 2px; } /* standard */
     form select { font-size: 1.0em; height: 22px; display: inline-block; }
-    form textarea { margin-bottom: 10px; width: 100%; }
+    form textarea { margin-bottom: 10px; min-height: 90px; width: 100%; }
     form input.submit { display: block; font-size: 1.4em; padding: 10px; margin-bottom: 5px; clear: both; }
 
 		form div.currency_field input { width: 120px; text-align: right; }
 
 
-    form p.explanation { margin: 0; font-size: 12px; color: #999999; }
+    form p.explanation { margin: 3px 0 0 0; font-size: 0.9em; color: #999999; }
     form p.explanation_example { margin: 0; margin-bottom: 15px; font-size: 12px; color: #FF9900; }
 
 /* Classes 'simples' & 'pequeno' são de forms do core não, não de modulso */
@@ -73,7 +73,7 @@ table.form {
 }
 	table.form > tbody > tr > td { padding-bottom: 10px; }
     table.form tr td.label { padding-top: 5px; vertical-align: top; }
-    table.form td.first { width: 180px; }
+    table.form > tbody > tr > td:first-child { width: 160px; }
     table.form label { font-weight: bold; color: #444444; }
     table.form input.text { font-size: 1.3em; font-weight: bold; width: 420px; }
     table.form input.date_text { font-size: 1.3em; font-weight: bold; width: 120px; }

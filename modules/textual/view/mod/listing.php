@@ -131,7 +131,4 @@
 
 	?>
 
-	<p style="margin-top: 15px;">
-		<a href="adm_main.php?section=<?php echo MODULES ?>"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
-	</p>
 </div>

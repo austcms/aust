@@ -8,6 +8,11 @@ class ModulesManagerTest extends PHPUnit_Framework_TestCase
 
 	function setUp(){
 		Fixture::getInstance()->create();
+		Aust::getInstance()->_structureCache = array();
+		Aust::getInstance()->_structureModuleCache = array();
+	}
+	
+	function tearDown(){
 	}
 	
     public function testInitialization(){
@@ -59,7 +64,7 @@ class ModulesManagerTest extends PHPUnit_Framework_TestCase
 			$this->assertArrayHasKey(0, $query);
 			$structureId = $query[0]["id"];
 		}
-
+		Aust::getInstance()->_structureCache = array();
 		$this->assertEquals("Agenda", $obj->modelClassName($structureId));
 	}
 

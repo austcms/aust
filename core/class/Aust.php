@@ -18,6 +18,8 @@ class Aust {
 
     public $_recursiveLimit = 50;
     public $_recursiveCurrent = 1;
+	public $_structureModuleCache = array();
+	public $_structureCache = array();
 
     function __construct(){
         $this->conexao = Connection::getInstance();
@@ -67,7 +69,7 @@ class Aust {
 	 * @param $austNode (int)
 	 */
 	function getStructureInstance($austNode){
-	    $modDir = $this->LeModuloDaEstrutura($austNode).'/';
+	    $modDir = $this->structureModule($austNode).'/';
 
         include(MODULES_DIR.$modDir.MOD_CONFIG);
         $module = (empty($modInfo['className'])) ? 'Classe' : $modInfo['className'];
@@ -199,7 +201,7 @@ class Aust {
 
 
             if($dados['classe'] == "estrutura") {
-                $tipo = $this->LeModuloDaEstrutura($dados['id']);
+                $tipo = $this->structureModule($dados['id']);
                 $i++;
             } else {
                 $subordinadoidtmp = $dados['subordinadoid'];
@@ -546,10 +548,17 @@ class Aust {
      * @return array
      */
     public function getStructureById( $austNode ) {
+		
+		if( array_key_exists($austNode, $this->_structureCache) )
+			return $this->_structureCache[$austNode];
+	
 		$sql = "SELECT * FROM ".Aust::$austTable." WHERE id='".$austNode."'";
         $result = Connection::getInstance()->query( $sql );
+
 		if( !empty($result) )
 			$result = reset($result);
+			
+		$this->_structureCache[$austNode] = $result;
         return $result;
     }
 
@@ -585,7 +594,6 @@ class Aust {
                     ".$where."
                 ".$orderby." ".$limit;
         $query = Connection::getInstance()->query($sql);
-
         //pr($mysql);
 
         $estruturas_array = array();
@@ -597,8 +605,17 @@ class Aust {
         }
         return $estruturas_array;
     }
-    // retorna o módulo responsável por determinada estrutura
-    function LeModuloDaEstrutura($node) {
+
+    /**
+ 	 * What module is responsible for a given structure?
+	 *
+	 * @param $node (int)
+	 */
+    function structureModule($node) {
+	
+		if( array_key_exists($node, $this->_structureModuleCache) )
+			return $this->_structureModuleCache[$node];
+	
         $sql = "SELECT
                 	tipo
                 FROM
@@ -606,7 +623,9 @@ class Aust {
                 WHERE
                 	id=$node";
         $query = Connection::getInstance()->query($sql);
-        return $query[0]['tipo'];
+
+		$this->_structureModuleCache[$node] = $query[0]['tipo'];
+        return $this->_structureModuleCache[$node];
     }
 
     // retorna o nome legível do módulo
@@ -798,7 +817,7 @@ class Aust {
      */
     // LISTAR: funÃ§Ã£o que retorna diretÃ³rio e arquivo para include da listagem do mÃ³dulo da estrutura com id $aust_node
     function AustListar($aust_node = '0') {
-        $pasta_do_modulo = $this->LeModuloDaEstrutura($aust_node);
+        $pasta_do_modulo = $this->structureModule($aust_node);
         if(is_file(MODULES_DIR.$pasta_do_modulo.'/listar.php')) {
             return MODULES_DIR.$pasta_do_modulo.'/listar.php';
         } else {

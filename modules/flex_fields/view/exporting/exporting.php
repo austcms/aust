@@ -54,7 +54,7 @@ include(CORE_CONFIG_DIR."core.php");
     include(CORE_DIR.'load_core.php');
 
     $aust = new Aust(Connection::getInstance());
-    $modDir = Aust::getInstance()->LeModuloDaEstrutura($aust_node).'/';
+    $modDir = Aust::getInstance()->structureModule($aust_node).'/';
     include(MODULES_DIR.$modDir.MOD_CONFIG);
     include(MODULES_DIR.$modDir.'Cadastro.php');
     $param = array(

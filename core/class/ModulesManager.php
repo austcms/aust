@@ -121,7 +121,7 @@ class ModulesManager
 
 	public function directory($austNode){
 		if( is_numeric($austNode) )
-			return Aust::getInstance()->LeModuloDaEstrutura($austNode).'/';
+			return Aust::getInstance()->structureModule($austNode).'/';
 		elseif( is_string($austNode) )
 			return $austNode.'/';
 		

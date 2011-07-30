@@ -212,7 +212,3 @@ if( $fieldsCount > 0 ){
     }
 
 ?>
-
-<p style="margin-top: 15px;">
-	<a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
-</p>

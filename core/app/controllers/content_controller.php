@@ -49,7 +49,7 @@ class ContentController extends ActionController {
 	     * Identifica qual é a pasta do módulo responsável por esta
 	     * estrutura/categoria
 	     */
-	    $modDir = Aust::getInstance()->LeModuloDaEstrutura($aust_node).'/';
+	    $modDir = Aust::getInstance()->structureModule($aust_node).'/';
 
 	    /*
 	     *
@@ -59,7 +59,6 @@ class ContentController extends ActionController {
 	    /**
 	     * Carrega arquivos principal do módulo requerido
 	     */
-
      		include(MODULES_DIR.$modDir.MOD_CONFIG);
 	        /**
 	         * Carrega classe do módulo e cria objeto

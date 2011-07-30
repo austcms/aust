@@ -24,7 +24,7 @@ if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'):
      * Module's JS
      */
     if(!empty($_GET['aust_node'])){
-        $modulo = Aust::getInstance()->LeModuloDaEstrutura($_GET['aust_node']);
+        $modulo = Aust::getInstance()->structureModule($_GET['aust_node']);
         if(is_file(MODULES_DIR.$modulo.'/js/jsloader.php')){
             $include_baseurl = MODULES_DIR.$modulo;
             include_once(MODULES_DIR.$modulo.'/js/jsloader.php');
@@ -40,7 +40,7 @@ if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'):
      * Configure a structure
      */
     if($_GET['action'] == 'configurar'){
-        $diretorio = MODULES_DIR.Aust::getInstance()->LeModuloDaEstrutura($_GET['aust_node']); // pega o endereço do diretório
+        $diretorio = MODULES_DIR.Aust::getInstance()->structureModule($_GET['aust_node']); // pega o endereço do diretório
         foreach (glob($diretorio."*", GLOB_ONLYDIR) as $pastas) {
             if(is_file($pastas.'/configurar_estrutura.php')){
 				$module = ModulesManager::getInstance()->modelInstance($_GET["aust_node"]);
@@ -132,7 +132,7 @@ if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'):
                 </div>
                 <div class="content">
                     <p>
-                        Selecione abaixo a categoria-chefe, o nome da estrutura (ex.: Notícias, Artigos, Arquivos) e o módulo adequado.
+                        Selecione abaixo o site, o módulo adequado e o nome da estrutura (ex.: Notícias, Artigos, Arquivos).
                     </p>
                     <form action="adm_main.php?section=<?php echo $_GET['section'];?>" method="post" class="simples pequeno">
                         <input type="hidden" value="1" name="publico" />
@@ -277,37 +277,6 @@ if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'):
                     }
                     ?>
                     </div>
-
-                </div>
-                <div class="footer"></div>
-            </div>
-
-            <div class="widget">
-                <div class="titulo">
-                    <h3>Versões dos Módulos</h3>
-                </div>
-                <div class="content">
-
-                    <div style="margin-bottom: 10px;">
-                        <ul>
-                        <?php
-                        foreach( $migrationsStatus as $modName=>$status ){
-                            ?>
-                            <li>
-                            <?php
-                            if( $status ){
-                                echo $modName.': Ok.';
-                            } else {
-                                echo $modName.': Requer atualização.';
-                            }
-                            ?>
-                            </li>
-                            <?php
-                        }
-                        ?>
-                        </ul>
-                    </div>
-
 
                 </div>
                 <div class="footer"></div>
