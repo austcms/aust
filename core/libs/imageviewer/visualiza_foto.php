@@ -49,7 +49,7 @@ include_once(THIS_TO_BASEURL."core/config/variables.php");
 /**
  * Carrega dados do DB
  */
-require_once(CONFIG_DIR.'database.php');
+require_once(CONFIG_DATABASE_FILE);
 require_once(CLASS_LOADER);
 $conexao = Connection::getInstance();
 
@@ -76,9 +76,9 @@ if (!empty($myid)){
 	if (empty($myordem))
 		$ordem = "";
 	else if ($myordem > 0)
-		$ordem = "AND ordem=$myordem";
+		$ordem = "AND order_nr=$myordem";
 	else
-		$ordem = "AND ordem=1";
+		$ordem = "AND order_nr=1";
 		
 	if(empty($idfrom))
 		$idfrom = "id";
@@ -99,13 +99,15 @@ if (!empty($myid)){
     $sql = "SELECT * FROM $tabelaimg WHERE id=".$ids[rand(0,count($ids)-1)];
 }
 
-$query = $conexao->query($sql);
+$query = Connection::getInstance()->query($sql);
 $dados = $query[0];
-if ($conexao->count($sql) > 0){
+if (Connection::getInstance()->count($sql) > 0){
 
 	$type = '';
 	if( !empty($dados["file_type"]) )
 		$type = $dados["file_type"];
+	else if( !empty($dados["image_type"]) )
+		$type = $dados["image_type"];
 	else if( !empty($dados["filetype"]) )
 		$type = $dados["filetype"];
 	else if( !empty($dados["tipo"]) )
@@ -115,10 +117,14 @@ if ($conexao->count($sql) > 0){
 	
     $fileType = $type;
 
+	if( !empty($dados["image_systempath"]) )
+		$imageSystemPath = $dados["image_systempath"];
+	else if( !empty($dados["systempath"]) )
+		$imageSystemPath = $dados["systempath"];
 	/*
 	 * Algumas imagens estão em arquivos, outros em DB
 	 */
-	if( !empty($dados["tipo"]) && $dados["tipo"] == 'application/x-shockwave-flash' ){
+	if( !empty($dados["image_type"]) && $dados["image_type"] == 'application/x-shockwave-flash' ){
 		
 		$noVisualizationFile = str_replace(
 			IMAGE_VIEWER_DIR.basename(__FILE__),
@@ -128,14 +134,14 @@ if ($conexao->count($sql) > 0){
     	$fileContent = file_get_contents($noVisualizationFile);
 		$fileType = 'image/jpeg';
 	} else if( $fromfile )
-		$fileContent = file_get_contents($dados["systempath"]);
-	else if( !empty($dados["systempath"]) )
-		$fileContent = file_get_contents($dados["systempath"]);
+		$fileContent = file_get_contents($imageSystemPath);
+	else if( !empty($imageSystemPath) )
+		$fileContent = file_get_contents($imageSystemPath);
 	else
-    	$fileContent = $dados["dados"];
+    	$fileContent = $dados["image_binary_data"];
 
     if($thumbs == "yes"){
-        header("Content-Type: ".$fileType);
+        //header("Content-Type: ".$fileType);
 
         $im = imagecreatefromstring($fileContent); //criar uma amostra da imagem original
         $largurao = imagesx($im);// pegar a largura da amostra
@@ -193,8 +199,6 @@ if ($conexao->count($sql) > 0){
 			imagefilledrectangle($nova, 0, 0, $largurad, $alturad, $transparent);
 		}
 
-
-//        $nova = imagecreatetruecolor($largurad,$alturad);//criar uma imagem em branco
         if(empty($quality)) $quality = 3;
         if($quality > 5) $quality = 3;
         if(empty($resample))
@@ -203,53 +207,24 @@ if ($conexao->count($sql) > 0){
             fastimagecopyresampled($nova,$im,0,0,0,0,$largurad,$alturad,$largurao,$alturao,$quality);//copiar sobre a imagem em branco a amostra diminuindo conforma as especificações da miniatura
         else if($resample == "no")
             imagecopyresampled($nova,$im,0,0,0,0,$largurad,$alturad,$largurao,$alturao);//copiar sobre a imagem em branco a amostra diminuindo conforma as especificações da miniatura
-        //if(empty($quality)) $quality = 80;
 
-        /* INSERE MARCADAGUA */
-        $automarca = "no";
-        if ($automarca == "yes"){
-            $watermark = imagecreatefrompng('../img/v2/marcapedroosorionet.png');
-            $watermark_width = imagesx($watermark);  
-            $watermark_height = imagesy($watermark);
-            //$size = getimagesize($nova);  
-            $dest_x = $largurad - $watermark_width;// - 5;  
-            $dest_y = $alturad - $watermark_height;// - 5;
-            //$dest_x = $size[0] - $watermark_width - 5;  
-            //$dest_y = $size[1] - $watermark_height - 5;
-            
-            $ptr_white = imageColorAllocate($watermark,0,0,0);
-            imageColorTransparent($watermark,$ptr_white);
-            //imagealphablending($watermark, true);
-            
-            imagecopymerge($nova, $watermark, $dest_x, $dest_y, 0, 0, $watermark_width, $watermark_height, 60);
-            //imagecopy($nova, $watermark, $dest_x, $dest_y, 0, 0, $watermark_width, $watermark_height);
-            imagedestroy($watermark);            
-            //echo "done";
-
-            if($resample == "no") 
-                imagejpeg($nova, '', 85);
-            else
-                imagejpeg($nova);//, '', $quality);
-        } else {
-
-            if( !empty($resample) AND $resample == "no")
-                imagejpeg($nova, '', 90);
-            else
-                imagepng($nova);//, '', $quality);
-        }
-        
-        
+		if( !empty($resample) AND $resample == "no")
+			imagejpeg($nova, '', 90);
+		else
+			imagepng($nova);//, '', $quality);
+		
+		
         imagedestroy($nova);
     } else {
         header("Content-Type: ". $type);
-        echo $dados["dados"];
+        echo $dados["image_binary_data"];
     }
 } else {
-  $sql = "SELECT tipo,dados FROM $tabelaimg WHERE id='0'";
+  $sql = "SELECT image_type, image_binary_data FROM $tabelaimg WHERE id='0'";
   $r = mysql_query($sql);
 
-  Header("Content-Type: ".mysql_result($r,0,"tipo"));
-  echo mysql_result($r,0,"dados");
+  Header("Content-Type: ".mysql_result($r,0,"image_type"));
+  echo mysql_result($r,0,"image_binary_data");
 }
 
 ?>

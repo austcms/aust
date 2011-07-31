@@ -35,10 +35,11 @@ class UiPermissions {
         /**
          * Inicializa com dados do usuário atual
          */
-        
-        $this->permissionConfigurations['navegation'] = NAVEGATION_PERMISSIONS_CONFIGURATIONS::$navegation;
-        $this->permissionConfigurations['configurations'] = NAVEGATION_PERMISSIONS_CONFIGURATIONS::$configurations;
-        $this->permissionConfigurations['widgets'] = NAVEGATION_PERMISSIONS_CONFIGURATIONS::$widgets;
+
+	    include_once(NAVIGATION_PERMISSIONS_FILE);
+        $this->permissionConfigurations['navigation'] = NAVIGATION_PERMISSIONS_CONFIGURATIONS::$navigation;
+        $this->permissionConfigurations['configurations'] = NAVIGATION_PERMISSIONS_CONFIGURATIONS::$configurations;
+        $this->permissionConfigurations['widgets'] = NAVIGATION_PERMISSIONS_CONFIGURATIONS::$widgets;
         $this->connection = Connection::getInstance();
     }
 
@@ -69,7 +70,7 @@ class UiPermissions {
      */
     function canAccessWidgets(){
         $user = User::getInstance();
-        if( in_array($user->LeRegistro('tipo'), $this->permissionConfigurations['widgets']) )
+        if( in_array($user->LeRegistro('group'), $this->permissionConfigurations['widgets']) )
             return true;
 
         return false;
@@ -83,14 +84,24 @@ class UiPermissions {
      *
      * @return <bool>
      */
-    function isPermittedSection(){
+    function isPermittedSection($options = array()){
+		
+		$controller = Dispatcher::getInstance()->controller();
+		$action = Dispatcher::getInstance()->action();
 
-        $navPermissoes = $this->permissionConfigurations['navegation'];
+		if( !empty($options) ){
+			if( !empty($options["controller"]) )
+				$controller = $options["controller"];
+			if( !empty($options["action"]) )
+				$action = $options["action"];
+		}
+		
+        $navPermissoes = $this->permissionConfigurations['navigation'];
         $administrador = User::getInstance();
         /**
          * Se uma seção foi especificada
          */
-        if(!empty($_GET['section'])){
+        if(!empty($controller)){
 
             /**
              * @todo - planejar carregamento em formato MVC
@@ -98,30 +109,22 @@ class UiPermissions {
             /**
              * Verifica se há permissões quanto à seção atual
              */
-            if( !empty($navPermissoes[$_GET['section']]) AND is_array($navPermissoes[$_GET['section']])){
+            if( !empty($navPermissoes[$controller]) AND is_array($navPermissoes[$controller])){
 
                 /**
                  * Verifica se há permissões quanto ao action atual
                  */
-                if( !empty($navPermissoes[$_GET['section']][$_GET['action']])
-                    AND is_array($navPermissoes[$_GET['section']][$_GET['action']])
+                if( !empty($navPermissoes[$controller][$action])
+                    AND is_array($navPermissoes[$controller][$action])
                 ){
 
                     /**
                      * Verifica se o tipo de usuário conectado tem permissão quanto ao action atual
                      */
-                    if(in_array(strtolower($administrador->LeRegistro('tipo')), arraytolower($navPermissoes[$_GET['section']][$_GET['action']]))){
-                        /**
-                         * Se está tudo ok, se há permissões para este usuário
-                         */
-
+                    if(in_array(strtolower(User::getInstance()->type()), arraytolower($navPermissoes[$controller][$action])))
                         return true;
-                    } else {
-                        /**
-                         * Se o usuário não tem permissão para acessar esta página
-                         */
+                    else
                         return false;
-                    }
                 }
                 /**
                  * Não há permissões definidas quanto ao action atual
@@ -129,8 +132,8 @@ class UiPermissions {
                 /**
                  * Verifica se o action atual não é bloqueado para todos os usuários
                  */
-                elseif( !empty($navPermissoes[$_GET['section']]['au-permissao'])
-                        AND is_array($navPermissoes[$_GET['section']]['au-permissao'])
+                elseif( !empty($navPermissoes[$controller]['au-permissao'])
+                        AND is_array($navPermissoes[$controller]['au-permissao'])
                 ){
                     /**
                      * O action é bloqueado a todos os usuários.
@@ -138,7 +141,7 @@ class UiPermissions {
                      * Verifica o ranking do usuário atual e ve se este tem
                      * alguma permissão.
                      */
-                    if(in_array(strtolower($administrador->LeRegistro('tipo')), arraytolower($navPermissoes[$_GET['section']]['au-permissao']))){
+                    if(in_array(strtolower(User::getInstance()->LeRegistro('group')), arraytolower($navPermissoes[$controller]['au-permissao']))){
                         return true;
                     } else {
                         return false;

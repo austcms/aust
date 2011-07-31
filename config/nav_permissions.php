@@ -5,7 +5,6 @@
  * 'au-permissao' significa que ninguém tem acesso, exceto quem estiver
  * especificado.
  */
-
 $navPermissoes = array(
                     'categorias' =>
                         array('new' =>
@@ -28,7 +27,7 @@ $navPermissoes = array(
                                 //'Moderador'
                             )
                         ),
-                    'conf_modulos' =>
+                    'control_panel' =>
                         array('au-permissao' =>
                             array('Webmaster')
                         )
@@ -39,9 +38,9 @@ $configPermissoes = array(
     'Geral' => '*',
 );
 
-class NAVEGATION_PERMISSIONS_CONFIGURATIONS {
+class NAVIGATION_PERMISSIONS_CONFIGURATIONS {
     
-    static $navegation = array(
+    static $navigation = array(
         'categorias' =>
             array('new' =>
                 array(
@@ -62,7 +61,7 @@ class NAVEGATION_PERMISSIONS_CONFIGURATIONS {
                 //'Moderador'
             )
         ),
-        'conf_modulos' => array(
+        'control_panel' => array(
             'au-permissao' => array(
                 'Webmaster'
             )

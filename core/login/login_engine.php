@@ -9,13 +9,13 @@
 
 header("Cache-Control: no-cache, must-revalidate");
 
-include_once("config/core.php");
-include_once("config/database.php");
+include_once(CONFIG_CORE_FILE);
+include_once(CONFIG_DATABASE_FILE);
 
 /**
  * Carrega classes necessárias
  */
-include_once(CLASS_DIR."/_carrega_classes.inc.php");
+include_once(CLASS_LOADER);
 
 $conexao = Connection::getInstance();
 
@@ -28,19 +28,19 @@ $conexao = Connection::getInstance();
 $login1 = str_replace("'","''",$_POST["login"]);
 $senha1 = str_replace("'","''",$_POST["senha"]);
 $sql = "SELECT
-            admins.*, admins_tipos.nome as tnome
+            admins.*, admin_groups.name as 'group'
         FROM
             admins
         LEFT JOIN
-            admins_tipos
-        ON admins.tipo=admins_tipos.id
+            admin_groups
+        ON admins.admin_group_id=admin_groups.id
         WHERE
             admins.login='$login1' AND
-            admins.senha='$senha1'
+            admins.password='$senha1'
         LIMIT 0,1
         ";
 
-$query = $conexao->query($sql);
+$query = Connection::getInstance()->query($sql);
 
 $blocked = reset($query);
 
@@ -63,8 +63,8 @@ if( !empty($query)
 
     $_SESSION['loginlogin'] = $login1;
     $_SESSION['loginid'] = $dados["id"];
-    $_SESSION['loginnome'] = $dados["nome"];
-    $_SESSION['logintipo'] = $dados["tnome"];
+    $_SESSION['loginnome'] = $dados["name"];
+    $_SESSION['logintipo'] = $dados["group"];
     header("Location: adm_main.php");
 }
 /*

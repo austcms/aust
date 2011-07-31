@@ -65,12 +65,12 @@ div.widget { background: #fdfdfd; }
 div.widget div.footer { background: #fdfdfd; }
 
 /* PANES */
-table.pane_listing tr.list { background: #fdfdfd; }
-table.pane_listing tr.footer { background: #fdfdfd; }
-table.pane_listing tr.header { background: #ebf5d5; }
- table.pane_listing tr.header td { color: #888888; }
+table.listing tr.list { background: #fdfdfd; }
+table.listing tr.footer { background: #fdfdfd; }
+table.listing tr.header { background: #ebf5d5; }
+ table.listing tr.header td { color: #888888; }
 
-/* TAB PANE -> table.pane_listing - Painel Gerenciar e Configurações*/
+/* TAB PANE -> table.listing - Painel Gerenciar e Configurações*/
 div.panes div.background { background: #fdfdfd; }
     div.panes div.background .header { background: #fdfdfd; }
 

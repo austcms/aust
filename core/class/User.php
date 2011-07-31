@@ -18,7 +18,7 @@ class User {
 
     function __construct() {
         $this->conexao = Connection::getInstance();
-        $this->tipo = $this->LeRegistro('tipo');
+        $this->tipo = $this->LeRegistro('group');
 
     }
 
@@ -41,6 +41,10 @@ class User {
 
     }
 
+	public function rootType(){
+		return "Webmaster";
+	}
+	
     /**
      * type()
      *
@@ -48,12 +52,22 @@ class User {
      *
      * @return <string>
      */
-    public function type(){
+    public function type($newType = ""){
+	
+		if( !empty($newType) ){
+			$this->tipo = $newType;
+			return $newType;
+		}
+		
 		if( empty($this->tipo) ){
-			$this->tipo = $this->LeRegistro('tipo');
+			$this->tipo = $this->LeRegistro('group');
 		}
         return $this->tipo;
-    } // end type()
+    }
+
+	public function isRoot(){
+		return ($this->type() == $this->rootType());
+	}
 
     /**
      * tipo() alias-> type()
@@ -74,8 +88,11 @@ class User {
      */
     public function redirectForbiddenSession(){
         if( !empty($this->forbiddenCode) ){
-            header("Location: logout.php?status=".$this->forbiddenCode);
-            exit();
+
+			if( !defined("TESTING") || TESTING !== true ){
+            	header("Location: logout.php?status=".$this->forbiddenCode);
+            	exit();
+			}
             return true;
         }
 
@@ -120,9 +137,10 @@ class User {
      * @return <bool>
      */
     public function isLogged(){
-        if( !empty($_SESSION['login']['id']) AND
-            $_SESSION['login']['id'] > 0 AND
-            !empty( $_SESSION['login']['username'] ) )
+        if( !empty($_SESSION['login']['id']) 	&&
+            $_SESSION['login']['id'] > 0 		&&
+            ( !empty($_SESSION['login']['username']) || !empty( $_SESSION['login']['login']))
+		)
         {
             return true;
         }
@@ -158,7 +176,7 @@ class User {
      * @return <int>
      */
     public function getTypeId(){
-        return $this->LeRegistro('tipoid');
+        return $this->LeRegistro('group_id');
     } // end getTypeId()
 
     /**
@@ -171,30 +189,29 @@ class User {
         if( !empty($this->userInfo[$campo]) )
             return $this->userInfo[$campo];
 
-        if( !isset($_SESSION) )
+        if( !isset($_SESSION) || empty($_SESSION['login']) )
             return false;
 
-        if( $campo == 'tipo' ){
-            $statement = "admins_tipos.nome as tipo";
-        } else if( $campo == 'tipoid' ){
-            $statement = "admins_tipos.id as tipoid";
+        if( $campo == 'group' ){
+            $statement = "admin_groups.name as 'group'";
+        } else if( $campo == 'group_id' ){
+            $statement = "admin_groups.id as group_id";
         } else {
             $statement = "admins.$campo as $campo";
         }
-
         $sql = "SELECT
                     $statement,
                     admins.is_blocked
                 FROM
                     admins
                 LEFT JOIN
-                    admins_tipos
-                ON admins.tipo=admins_tipos.id
+                    admin_groups
+                ON admins.admin_group_id=admin_groups.id
                 WHERE
                     admins.id='".$_SESSION['login']['id']."'
                 ";
 
-        $query = $this->conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
 
         if( empty($query) )
             return false;
@@ -209,15 +226,15 @@ class User {
 
     public function getNameById($id){
         $sql = "SELECT
-                    admins.nome
+                    admins.name
                 FROM
                     admins
                 WHERE
                     id='$id'
                 ";
 
-        $query = reset( $this->conexao->query($sql) );
-        $name = $query['nome'];
+        $query = reset( Connection::getInstance()->query($sql) );
+        $name = $query['name'];
 
         return $name;
     }
@@ -231,22 +248,33 @@ class User {
     public function getAllUsers(){
         $sql = "SELECT
                     admins.*,
-                    admins_tipos.nome as tipo,
-                    admins_tipos.id as aid
+                    admin_groups.name as 'group',
+                    admin_groups.id as aid
                 FROM
                     admins
                 LEFT JOIN
-                    admins_tipos
-                ON admins.tipo=admins_tipos.id
+                    admin_groups
+                ON admins.admin_group_id=admin_groups.id
                 ORDER BY
-                    admins_tipos.id ASC
+                    admin_groups.id ASC
                 LIMIT 100
                 ";
 
-        $query = $this->conexao->query($sql);
+        $query = Connection::getInstance()->query($sql);
 
         return $query;
     }
+
+	public function hasUser(){
+        $sql = "SELECT
+					admins.id
+                FROM
+					admins, admin_groups
+                WHERE
+					admins.admin_group_id=admin_groups.id
+                LIMIT 0,2";
+		return (Connection::getInstance()->count($sql) > 0) ? true : false;
+	}
 
 	function reset(){
 		$this->id 			= false;

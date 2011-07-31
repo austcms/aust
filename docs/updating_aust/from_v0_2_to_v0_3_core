@@ -1,0 +1,106 @@
+How to update the core from v0.2 to v0.3
+===============================
+
+The core has changed its database characteristics. Apply the following
+queries to update from v0.2 to v0.3.
+
+You need to run these queries before running the v0.3. After everything is
+updated, then you run v0.3 and it'll update what's missing.
+
+
+Admin have fields and tables renamed
+====================================
+
+	RENAME TABLE admins_tipos to admin_groups;
+	ALTER TABLE admin_groups CHANGE nome name varchar(120);
+	ALTER TABLE admin_groups CHANGE nome_abrev name_abrev varchar(30);
+	ALTER TABLE admin_groups CHANGE descricao description text;
+	ALTER TABLE admin_groups CHANGE publico public int;
+	ALTER TABLE admin_groups CHANGE data created_on datetime;
+	ALTER TABLE admin_groups CHANGE autor admin_id int;
+
+
+	ALTER TABLE admins CHANGE tipo admin_group_id int;
+	ALTER TABLE admins CHANGE nome name varchar(250);
+	ALTER TABLE admins CHANGE senha password text;
+	ALTER TABLE admins CHANGE adddate created_on datetime;
+	ALTER TABLE admins CHANGE autor admin_id int;
+	ALTER TABLE admins DROP COLUMN orkut;
+	ALTER TABLE admins DROP COLUMN telefone;
+	ALTER TABLE admins DROP COLUMN celular;
+	ALTER TABLE admins DROP COLUMN supervisionado;
+
+
+	RENAME TABLE admins_photos TO admin_photos;
+	ALTER TABLE admin_photos CHANGE path file_path text;
+	ALTER TABLE admin_photos CHANGE systempath file_sytempath text;
+
+
+	RENAME TABLE admins_permissions TO admin_permissions;
+	ALTER TABLE admin_permissions CHANGE admins_id admin_id int;
+	ALTER TABLE admin_permissions CHANGE admins_tipos_id admin_group_id int;
+	ALTER TABLE admin_permissions CHANGE categorias_id node_id int;
+	ALTER TABLE admin_permissions CHANGE tipo type varchar(80);
+	ALTER TABLE admin_permissions CHANGE adddate created_on datetime;
+	ALTER TABLE admin_permissions CHANGE autor author_id int;
+
+
+Updating Categorias to Taxonomy
+====================================
+
+First, run FlexFields migrations. It'll give the flex_fields_config table.
+
+Now run:
+
+CREATE TABLE taxonomy (
+	id int NOT NULL auto_increment,
+	name varchar(240),
+	name_encoded varchar(240),
+	structure_name varchar(240),
+	structure_name_encoded varchar(240),
+	father_id int COMMENT "this category's father id",
+	father_name_encoded varchar(240),
+	description text,
+	class varchar(200),
+	type varchar(200),
+	editable int default "0" COMMENT "by default, nothing is editable by normal users",
+	visible int default "1",
+	related_to int COMMENT "Galleries related to News, for example, have News' id on this field",
+	public int default "1",
+	admin_id varchar(120),
+	order_nr int,
+	UNIQUE (id),
+	INDEX (id),
+	INDEX (name_encoded),
+	INDEX (structure_name),
+	INDEX (related_to)
+);
+
+Then, convert all current data:
+
+INSERT INTO
+	taxonomy
+	(
+		id, name, name_encoded, structure_name, structure_name_encoded,
+		father_id, father_name_encoded,
+		description,
+		class, type, editable, visible, related_to, public, admin_id,
+		order_nr
+	)
+	(
+	SELECT
+		id, nome, nome_encoded, patriarca, patriarca_encoded,
+		subordinadoid, subordinado_nome_encoded,
+		descricao,
+		classe, tipo, editable, visible, related_to, publico, autor,
+		order_nr
+	FROM
+		categorias
+		)
+		
+		
+Then, delete 'cadastros_conf' table:
+
+	DROP TABLE categorias
+
+

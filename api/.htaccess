@@ -1,0 +1,5 @@
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+
+	RewriteRule ^api.json?(.*) api.php?data_format=json&query=$1 [QSA,L]
+</IfModule>

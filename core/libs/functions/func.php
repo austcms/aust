@@ -54,6 +54,11 @@
 
     }
 
+	function redirect($url){
+		header("Location: adm_main.php?".$url);
+		exit();
+	}
+
 	/**
 	 * lineWrap()
 	 * 
@@ -89,7 +94,8 @@
 	
 	function getFileIcon($ext){
 	    $ext = explode('.', $ext);
-	    $ext = reset(array_reverse($ext));
+		$ext = array_reverse($ext);
+	    $ext = reset($ext);
 		
 		$icons = array(
 			'file_doc.png' => array(
@@ -461,7 +467,7 @@ function loadHtmlEditor($params = ""){
 	echo 'var elementsToLoad = "'.$elements.'";';
 	echo '</script>';
 	
-    include_once(THIS_TO_BASEURL.BASECODE_JS.'html_editor.php');
+    include_once(BASECODE_JS.'html_editor.php');
 }
 
 /*

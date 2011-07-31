@@ -3,32 +3,40 @@
 
 body { 
 	margin: 0;
-	background: #ededed;
-	font-family: 'Trebuchet MS', Helvetica, Arial, sans-serif;
+	background: url('installation_background.jpg') #ddd;
+	font-family: 'Corbel', Helvetica, Arial, sans-serif;
 	font-size: 76%;
 	height: 100%;
 	text-align: center;
-
+	text-shadow: 1px 1px #fdfdfd; 
 }
 
 a { color: blue; }
-p { margin: 0; font-size: 1.0em; margin-bottom: 22px; }
-h1 { font-size: 2.5em; color: navy; } 
+p { margin: 0; font-size: 1.2em; margin-bottom: 22px; }
+h1 { font-size: 2.5em; margin-top: 0; color: #035387; } 
 h2 { font-size: 1.6em; } 
 
+.error { color: #D70202; font-weight: bold; }
 
 #outer {
 	width: 600px;
-	background: white;
+	position: absolute;
+  left: 50%; margin-left: -300px;
+  top: 50%; margin-top: -280px; /* height de .inside -20px */
+  
+	background: url('installation_panel_background.jpg') white;
 	text-align: left;
-	margin: 0 auto;
-	margin-top: 20px;
+	
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	-moz-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+	-webkit-box-shadow: 0px 10px 50px rgba(0, 0, 0, 0.5);
 }
 
-#conteudo { margin: 20px; display: table; }
+#conteudo { margin: 20px; display: block; }
 	
-form.simples label { display: block; font-size: 1.3em; }
-form.simples input { font-size: 1.2em; height: 20px; margin-bottom: 20px; }
-form.simples input.submit { display: block; font-size: 1.2em; height: 46px; padding: 10px; margin-bottom: 15px; }
-form .campo { display: block; padding-bottom: 10px; }
 
+label { display: block; font-size: 1.2em; font-weight: bold; }
+input[type=text], input[type=password] { font-size: 1.2em; height: 25px; width: 550px; margin-bottom: 20px; }
+.campo { display: block; padding-bottom: 10px; }

@@ -5,15 +5,11 @@
  * Este arquivo é o centralizador, carregando outros arquivos e classes responsáveis
  * por verificações do setup do sistema, e também login.
  *
- * @package index
- * @name index.php
  * @author Alexandre de Oliveira <chavedomundo@gmail.com>
- * @version 0.1.5
  * @since 25/07/2009
  */
 session_name("aust");
 session_start();
-
 /**
  * Carrega variáveis do sistema
  */
@@ -22,17 +18,16 @@ require_once("core/config/variables.php");
 /**
  * Carrega todas as classes do sistema
  */
-include(CLASS_DIR."_carrega_classes.inc.php");
+include(CLASS_LOADER);
 
 include("config/core.php");
-if( !file_exists("config/database.php") ){
+if( !file_exists(CONFIG_DATABASE_FILE) ){
     echo "N&aacute;o h&aacute; um arquivo de configura&ccedil;&atilde;o de banco de dados. Crie um.";
     exit();
 }
-include("config/database.php");
+include(CONFIG_DATABASE_FILE);
 
 require(INSTALLATION_DIR."dbschema.php");
-
 
 $conexao = Connection::getInstance();
 
@@ -45,13 +40,14 @@ if( !is_dir('uploads/editor') ){
 require_once("core/load_core.php");
 
 // verifica se banco de dados existe
-if($conexao->DBExiste){
+if( Connection::getInstance()->dbExists() ){
 
     /**
      * Faz verificação do Schema
      *
      * O resultado é guardado em dbSchema::schemaStatus
      */
+	$dbSchema = dbSchema::getInstance();
     $dbSchema->verificaSchema();
 
     // verificação tabela por tabela quais existem ($db_tabelas é Array)
@@ -62,7 +58,7 @@ if($conexao->DBExiste){
          */
 
             // Se deve-se criar um admin no sistema (pois não há um)
-            if( !empty($_POST['configurar']) AND ($_POST['configurar'] == 'criar_admin') OR (!$conexao->VerificaAdmin()) ){
+            if( !empty($_POST['configurar']) AND ($_POST['configurar'] == 'criar_admin') OR (!User::getInstance()->hasUser()) ){
                 require(INSTALLATION_DIR.'criar_admin.inc.php');
 
             // Deve-se configurar o sistema
@@ -78,6 +74,8 @@ if($conexao->DBExiste){
                 require(LOGIN_PATH.'login_form.php');
             }
 
+    } elseif( in_array($dbSchema->schemaStatus, array(0, -1, -2) ) ) {
+		require INSTALLATION_DIR."index.php";
     } else {
 
         // Ops.. algumas tabelas não existem
@@ -85,7 +83,7 @@ if($conexao->DBExiste){
     }
 } else {
 
-    // $conexao->ConstruirDB($sqlparaconstruirdb);
+    // Connection::getInstance()->ConstruirDB($sqlparaconstruirdb);
 
     // Ops.. Não há uma conexão funcionando
     echo 'Erro no Sistema: 001.';

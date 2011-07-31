@@ -20,13 +20,13 @@
     form div.input { display: inline; width: 100%; float: left; }
     form input.text { width: 470px; font-size: 1.3em; height: 22px; padding: 0px 2px; } /* standard */
     form select { font-size: 1.0em; height: 22px; display: inline-block; }
-    form textarea { margin-bottom: 10px; width: 100%; }
+    form textarea { margin-bottom: 10px; min-height: 90px; width: 100%; }
     form input.submit { display: block; font-size: 1.4em; padding: 10px; margin-bottom: 5px; clear: both; }
 
 		form div.currency_field input { width: 120px; text-align: right; }
 
 
-    form p.explanation { margin: 0; font-size: 12px; color: #999999; }
+    form p.explanation { margin: 3px 0 0 0; font-size: 0.9em; color: #999999; }
     form p.explanation_example { margin: 0; margin-bottom: 15px; font-size: 12px; color: #FF9900; }
 
 /* Classes 'simples' & 'pequeno' são de forms do core não, não de modulso */
@@ -51,8 +51,8 @@
     }
 
     form div.input_painel div.containner {
-        margin: 0px;
-        padding: 5px;
+        margin: 10px;
+        padding: 0px;
         display: table;
     }
 
@@ -73,7 +73,7 @@ table.form {
 }
 	table.form > tbody > tr > td { padding-bottom: 10px; }
     table.form tr td.label { padding-top: 5px; vertical-align: top; }
-    table.form td.first { width: 180px; }
+    table.form > tbody > tr > td:first-child { width: 160px; }
     table.form label { font-weight: bold; color: #444444; }
     table.form input.text { font-size: 1.3em; font-weight: bold; width: 420px; }
     table.form input.date_text { font-size: 1.3em; font-weight: bold; width: 120px; }
@@ -89,33 +89,33 @@ table.form {
     /* Acima de cada listagem há um painel de controle para excluir, bloquear itens, etc */
     div.painel_de_controle { margin-bottom: 10px; padding: 0; float: right; }
     /* Tabela para listagem, seja de conteúdo ou usuários */
-table.listagem { width: 100%; margin: 0px; clear: both; border-collapse: collapse;}
-    table.listagem tr td { padding: 5px; }
-    table.listagem tr td { padding: 5px; margin: 0px;}
+table.listing { width: 100%; margin: 0px; clear: both; border-collapse: collapse;}
+    table.listing tr td { padding: 5px; }
+    table.listing tr td { padding: 5px; margin: 0px;}
 
     
 
-    table.listagem tr.titulo {
+    table.listing tr.header {
             color: #cccccc;
             font-weight: bold;
             background: #333333;
         }
-    /* table.listagem tr.conteudo { height: 20px; } */
-    table.listagem tr.conteudo td {
+    /* table.listing tr.conteudo { height: 20px; } */
+    table.listing tr.conteudo td {
         background: #fafafa;/*#FFF0E1;*/
         border-top: 1px solid white;
         border-bottom: 1px solid #f5f5f5;
     }
-    table.listagem tr.conteudo td a {  }
+    table.listing tr.conteudo td a {  }
 
     /* CAMPOOPTION
      * Campos de opções Ajax em formulários de setup
      */
-        table.listagem tr.conteudo td div.campooptions { background: #f1f1f1; padding: 10px; margin-top: 3px; border: 1px solid silver;  background: red; }
-        table.listagem tr.conteudo td div.campooptions div.campooptions_tabela {  }
-        table.listagem tr.conteudo td div.campooptions div.campooptions_campo {  }
+        table.listing tr.conteudo td div.campooptions { background: #f1f1f1; padding: 10px; margin-top: 3px; border: 1px solid silver;  background: red; }
+        table.listing tr.conteudo td div.campooptions div.campooptions_tabela {  }
+        table.listing tr.conteudo td div.campooptions div.campooptions_campo {  }
 
-table.listagem td.adddate { width: 110px; }
+table.listing td.adddate { width: 110px; }
 
 /* FormHelper (cadastros) */
 form.formHelper { }
@@ -134,7 +134,7 @@ form.formHelper { }
 /*
  * Listagem de Pessoas - table com a class listagem e pessoas
  */
-table.pessoas { width: 505px; margin: 0px; border-collapse: collapse;}
+table.pessoas { width: 505px !important; margin: 0px; border-collapse: collapse;}
 table.pessoas tr.conteudo td a img { padding-right: 5px; }
 
 div.pessoas {

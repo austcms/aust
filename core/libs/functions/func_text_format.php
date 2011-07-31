@@ -45,7 +45,7 @@ function tt($str = ''){
 function lbCategoria($params){
     if( is_string($params) ){
         $austNode = $params;
-        $categoryInput = 'frmcategoria';
+        $categoryInput = 'frmnode_id';
 
     } else {
         if( empty($params['austNode']) )
@@ -53,7 +53,7 @@ function lbCategoria($params){
         else
             $austNode = $params['austNode'];
 
-        $categoryInput = (empty($params['categoryInput'])) ? 'frmcategoria' : $params['categoryInput'];
+        $categoryInput = (empty($params['categoryInput'])) ? 'frmnode_id' : $params['categoryInput'];
     }
 
     $random = substr( sha1( rand(0, 100) ), rand(5,20));
@@ -64,7 +64,7 @@ function lbCategoria($params){
      * é bom, mas por exemplo, falta algo para esta função, por
      * exemplo.
      */
-    if( !in_array(strtolower($administrador->tipo), array('webmaster', 'root', 'administrador', 'moderador')) ){
+    if( !in_array(strtolower(User::getInstance()->tipo), array('webmaster', 'root', 'administrador', 'moderador')) ){
         return false;
     }
     ?>
@@ -83,7 +83,7 @@ function lbCategoria($params){
                         <label for="lb_input_categoria_<?php echo $random; ?>">Título:</label>
                     </td>
                     <td>
-                        <input name="lb[frmcategoria]" onkeydown="if (event.keyCode == 13) { newCategory('lb_categoria_<?php echo $random; ?>'); return false; }" id="lb_input_categoria_<?php echo $random; ?>" class="text lb_focus" />
+                        <input name="lb[frmnode_id]" onkeydown="if (event.keyCode == 13) { newCategory('lb_categoria_<?php echo $random; ?>'); return false; }" id="lb_input_categoria_<?php echo $random; ?>" class="text lb_focus" />
                         <p class="explanation">
                             Digite o nome de uma nova categoria. Ex.: 'Geral'
                         </p>

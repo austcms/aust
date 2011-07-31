@@ -1,0 +1,209 @@
+How to update from v0.2 to v0.3
+===============================
+
+Modules have changed. Now FlexFields took place as the main module, instead of Cadastro.
+
+
+Updating From Cadastro to FlexFields
+====================================
+
+First, run FlexFields migrations. It'll give the flex_fields_config table.
+
+Now run:
+
+UPDATE
+	categorias
+	SET
+		tipo='flex_fields'
+	WHERE
+		tipo='cadastro'
+
+Then, convert all current field data to FlexFields:
+
+INSERT INTO
+	flex_fields_config
+	(name,type, property, value,node_id,created_on,deactivated,disabled,public,restricted,approved,
+	needed, class, specie, reference, order_nr, ref_child_field, ref_parent_field, ref_field, ref_table, description, listing, admin_id
+	)
+	(
+	SELECT 
+		nome,tipo,chave,valor,categorias_id,adddate,desativado,desabilitado,publico,restrito,aprovado,
+		necessario, classe,
+		especie,referencia,ordem,ref_child_field,ref_parent_field,ref_campo,ref_tabela,descricao, listagem, autor
+	FROM
+		cadastros_conf
+		)
+		
+		
+Now we need to make a few changes in Image and File tables. Run the following
+query for all image and files tables related to a FlexField structure.
+
+	ALTER TABLE some_structure_images CHANGE categoria_id node_id int;
+
+
+Then, delete 'cadastros_conf' table:
+
+	DROP TABLE cadastros_conf
+
+
+From Conteudo to Textual
+========================
+
+	UPDATE taxonomy SET tipo='textual' WHERE tipo='textos'
+	
+Then, install the module and run:
+
+	INSERT INTO
+		textual
+		(
+			order_nr, node_id, title, title_encoded, subtitle, summary, text,
+			local, url, 
+			pageviews, public, blocked, approved,
+			created_on, admin_id
+			
+		)
+		(
+		SELECT 
+			orderm, categoria, titulo, titulo_encoded, subtitulo, resumo, texto,
+			local, url,
+			visitantes, publico, bloqueado, aprovado,
+			adddate, autor
+		FROM
+			textos
+			)
+			
+Then, once everything's in place, run:
+
+	DROP TABLE textos
+
+
+From GaleriaDeFotos to PhotoGallery
+===================================
+
+	UPDATE taxonomy SET tipo='photo_gallery' WHERE tipo='galeriafotos'
+
+Then, install the PhotoGallery module. Now, pass all current data to the new tables.
+
+	INSERT INTO
+		photo_gallery
+		(
+			node_id, title, title_encoded, subtitle, summary, text, link,
+			order_nr, ref, ref_id, local, class, specie, created_on, expire_on, pageviews,
+			admin_id
+		)
+		(
+			SELECT 
+				categoria, titulo, titulo_encoded, subtitulo, resumo, texto, link,
+				ordem, ref, ref_id, local, classe, especie, adddate, expiredate, visitantes,
+				autor
+			FROM
+				galeria_fotos
+		)
+
+
+The images themselves:
+
+	INSERT INTO
+		photo_gallery_images
+		(
+			gallery_id, content_id, node_id,
+			order_nr, title, title_encoded, subtitle,
+			summary, text, link,
+			image_path, image_systempath,
+			image_bytes, image_binary_data, image_name, image_type,
+			ref, ref_id, is_cover,
+			local, class, specie, created_on, expire_on, pageviews,
+			admin_id
+		)
+		(
+			SELECT 
+				galeria_foto_id, content_id, category_id,
+				ordem, titulo, titulo_encoded, subtitulo,
+				resumo, texto, link,
+				path, systempath,
+				bytes, dados, nome, tipo,
+				ref, ref_id, capa,
+				local, classe, especie, adddate, expiredate, visitantes,
+				autor
+			FROM
+				galeria_fotos_imagens
+		)
+
+Then, delete the old tables:
+
+	DROP TABLE galeria_fotos
+	DROP TABLE galeria_fotos_imagens
+
+
+From Arquivos to Files
+======================
+
+Convert the structure module:
+	
+	UPDATE taxonomy SET tipo='files' WHERE tipo='arquivos'
+
+Move data to Files table:
+
+	INSERT INTO
+		files
+		(
+			node_id, title, description, local, url,
+			file_name, file_type, file_size, file_extension,
+			reference, pageviews, blocked, approved,
+			admin_id,
+			original_filename, title_encoded, systemurl, created_on, updated_on
+		)
+		(
+			SELECT 
+				categoria_id, titulo, descricao, local, url,
+				arquivo_nome, arquivo_tipo, arquivo_tamanho, arquivo_extensao,
+				referencia, visitantes, bloqueado, aprovado,
+				admin_id,
+				original_filename, titulo_encoded, systemurl, created_on, updated_on
+			FROM
+				arquivos
+		)
+
+Then:
+
+	DROP TABLE arquivos
+
+
+From Imagens to Images
+======================
+
+Convert the structure module:
+
+	UPDATE taxonomy SET tipo='imagens' WHERE tipo='images'
+
+Install the module. Move data to Files table:
+
+	INSERT INTO
+		images
+		(
+			node_id, title, title_encoded, subtitle, summary,
+			description, link, order_nr,
+			image_bytes, image_binary_data, image_name, image_type,
+			reference, reference_id,
+			local, class, specie,
+			created_on, expire_on, pageviews, admin_id,
+			image_path, image_systempath
+		)
+		(
+			SELECT 
+				categoria, titulo, titulo_encoded, subtitulo, resumo,
+				texto, link, ordem,
+				bytes, dados, nome, tipo,
+				ref, ref_id,
+				local, classe, especie,
+				adddate, expiredate, visitantes, autor,
+				path, systempath
+			FROM
+				imagens
+		)
+		
+
+Then, terminate the old module:
+
+	DROP TABLE imagens
+	

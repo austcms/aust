@@ -111,7 +111,7 @@ class Image extends File
      * @param array $file O mesmo formato vindo do formulário
      * @return mixed Retorna o endereço do arquivo salvo
      */
-    public function upload($file = ""){
+    public function upload($file = "", $customFilename = ""){
         if( empty($file) )
             return false;
 
@@ -125,13 +125,16 @@ class Image extends File
         /*
          * Gera um nome único para a imagem SHA1
          */
-        if( $this->filenameType == "sha1" )
+     	if( !empty($customFilename) )
+			$fileName = $customFilename;
+        else if( $this->filenameType == "sha1" )
             $fileName = sha1(uniqid(time())) . "." . $this->getExtension($file["name"]);
         else if( $this->filenameType == "md5" )
             $fileName = md5(uniqid(time())) . "." . $this->getExtension($file["name"]);
         else
             $fileName = $file["name"];
-
+		
+		$fileName = str_replace(" ", "", $fileName);
         /*
          * Caminho de onde a imagem ficará
          */
@@ -155,11 +158,13 @@ class Image extends File
         $this->lastSize = $file["size"];
         $this->lastType = $file["type"];
         $this->lastFilename = $file["name"];
-
         /*
          * UPLOAD DA IMAGEM
          */
-        if( move_uploaded_file($file["tmp_name"], $filePath) ){
+		$uploadedFile = copy($file["tmp_name"], $filePath);
+		unlink($file["tmp_name"]);
+		
+        if( $uploadedFile ){
 
             $this->lastSystemPath = $systemFilePath;
             $this->lastWebPath = $webFilePath;
@@ -184,8 +189,10 @@ class Image extends File
      * @param string $height Valor padrão de altura
      * @return array
      */
-    function resample($files, $width = "1280", $height = "1024"){
-
+    function resample($files, $dimensions = "1280x1024"){
+		$dimensions = $this->getResampleDimensions($files, $dimensions);
+		$largurad = $dimensions['width'];
+		$alturad = $dimensions['height'];
         /*
          * Toma dados de $files
          */
@@ -219,13 +226,13 @@ class Image extends File
 
         /*
          * Configura o tamanho da nova imagem
-         */
+         *
         if($largurao > $width)
             $largurad = $width;
         else
             $largurad = $largurao; // definir a altura da miniatura em px
-
-        $alturad = ($alturao*$largurad)/$largurao; // calcula a largura da imagem a partir da altura da miniatura
+*/
+//        $alturad = ($alturao*$largurad)/$largurao; // calcula a largura da imagem a partir da altura da miniatura
         $nova = imagecreatetruecolor($largurad,$alturad); // criar uma imagem em branco
 
 		// PNG ou GIF, ajusta transparência
@@ -271,6 +278,108 @@ class Image extends File
 
     }
 
+	public function getDimensions($filePath){
+		
+		if( is_string($filePath) )
+			$extension = $this->getExtension($filePath);
+		else if( is_array($filePath) ){
+			$extension = $this->getExtension($filePath['name']);
+			$filePath = $filePath["tmp_name"];
+		}
+
+		if( $extension == "jpeg" || $extension == "jpg" )
+ 	        $image = imagecreatefromjpeg($filePath);
+		else if( $extension == "png" || $extension == "png" )
+ 	        $image = imagecreatefrompng($filePath);
+		else
+			return false;
+		
+		$result["width"] = imagesx($image);
+		$result["height"] = imagesy($image);
+		return $result;
+	}
+	
+	public function getResampleDimensions($filePath, $wantedDimensions = false){
+
+		$dimensions = $this->getDimensions($filePath);
+		$originalWidth = $dimensions['width'];
+		$originalHeight = $dimensions['height'];
+
+		if( !$wantedDimensions ){
+			return array(
+				'width' => $originalWidth,
+				'height' => $originalHeight
+			);
+		}
+			
+		$dimensions = trim($wantedDimensions);
+		$noWidth = ( substr($dimensions, 0, 1) == "x" );
+		$widthHeight = explode("x", $dimensions);
+		
+		if( $noWidth ){
+			$wantedWidth = false;
+			$wantedHeight = $widthHeight[1];
+		} else {
+			$wantedWidth = $widthHeight[0];
+			$wantedHeight = false;
+			if( !empty($widthHeight[1]) ){
+				$wantedHeight = $widthHeight[1];
+			}
+		}
+
+		if( is_numeric($wantedWidth) &&
+			$wantedWidth > $originalWidth
+		){
+			$wantedWidth = $originalWidth;
+		}
+		if( is_numeric($wantedHeight) &&
+			$wantedHeight > $originalHeight
+		){
+			$wantedHeight = $originalHeight;
+		}
+
+		if( empty($height) || empty($width) ){
+			if( !empty($wantedWidth) && empty($wantedHeight) ){
+				$ratio = $originalWidth / $wantedWidth;
+				$height = $originalHeight / $ratio;
+				$width = $wantedWidth;
+			}
+			else if( empty($wantedWidth) && !empty($wantedHeight) ){
+				$ratio = $originalHeight / $wantedHeight;
+				$width = $originalWidth / $ratio;
+				$height = $wantedHeight;
+			}
+			else if( !empty($wantedWidth) && !empty($wantedHeight) ){
+				$ratio = $originalWidth / $wantedWidth;
+				$height = $originalHeight / $ratio;
+				
+				if( $height > $originalHeight ){
+					$wantedHeight = $originalHeight;
+					$height = $originalHeight;
+					$ratio = $originalHeight / $wantedHeight;
+					$width = $originalWidth / $ratio;
+				}
+				
+				if( empty($width) )
+					$width = $wantedWidth;
+				if( empty($height) )
+					$height = $wantedHeight;
+			}
+			else {
+				return array(
+					"width" => false,
+					"height" => false
+				);
+			}
+		}
+		
+		return array(
+			'width' => $width,
+			'height' => $height
+		);
+		
+	}
+	
     /*
      *
      * VALIDAÇÃO

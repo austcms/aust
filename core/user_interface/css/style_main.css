@@ -1,0 +1,284 @@
+/***************************
+*
+*	BODY = CORPO
+*
+***************************/
+.dragdrop {
+	cursor: move;
+}
+
+div#view {
+	width: 760px;
+	margin: 0 auto;
+	margin-bottom: 5px;
+}
+
+div.body {
+    width: 760px;
+    text-align: left;
+    margin: 0 auto;
+    font-size: 1.0em;
+
+		-moz-border-radius-bottomleft: 4px;
+		-moz-border-radius-bottomright: 4px;
+		-webkit-border-bottom-left-radius: 4px;
+		-webkit-border-bottom-right-radius: 4px;
+		border-bottomleft-radius: 4px;
+		border-bottomright-radius: 4px;
+		-moz-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+		-webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
+		background: white;
+}
+    div.body div.content {
+        padding: 0px;
+        margin: 0px 20px 0px 20px;
+        padding: 10px 0;
+        padding-bottom: 20px;
+        display: block;
+        width: 720px;
+    }
+
+    div.body div.content:after{
+        content: ".";
+        clear: both;
+        display: block;
+        font-size: 0;
+        visibility: hidden;
+    }
+ 
+#menu ul { margin: 0px 0 0 10px; }
+
+
+/* Structure Control Panel */
+#structure_configuration .structure_variables .header {
+	background: #ddd;
+	padding: 10px;
+	font-weight: bold;
+}
+
+	#structure_configuration .structure_variables .item {
+		background: #f4f4f4;
+		border-bottom: 1px solid white; padding: 0 10px;
+		margin: 0;
+		display: table;
+		width: 700px;
+	}
+		#structure_configuration .structure_variables .item:hover { background: #f6f6f6; }
+	#structure_configuration .structure_variables .item label {
+		float: left; width: 65%; cursor: pointer; padding: 10px 0px;
+	}
+	#structure_configuration .structure_variables .item div.input { 
+		float: left; width: 35%; padding: 10px 0px;
+	}
+
+		#structure_configuration .structure_variables input[type=submit] { margin: 10px; }
+
+/* Users views */
+
+.admins_types_radio {
+	width: 150px; min-height: 20px; float: left;
+	margin: 0 15px 0 0;
+}
+.admins_types_descriptions {
+	width: 270px; min-height: 20px; float: left;
+}
+
+
+/* Structures */
+
+div.body div.content h1 { margin-top: 0px; }
+
+div.structure_nav_options {
+	background: #eee;
+	color: #666;
+	font-size: 0.9em;
+	padding: 5px;
+	display: block;
+	margin: 0 0 15px 0;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+}
+   /*
+    * HIGHLIGHTS: painel com informações importantes
+    */
+
+       div.highlights_painel {
+           background: #f0f0f0;
+           min-height: 80px;
+           width: 100%;
+           border: 1px solid silver;
+           padding: 0px;
+           margin-bottom: 20px;
+           display: table;
+       }
+
+       div.highlights_painel div.containner {
+           margin: 10px;
+           display: table;
+       }
+
+
+    /*
+     * BOX DE MENSAGENS
+     *
+     * Painel onde encontram-se opções
+     */
+            /* Status */
+            div.body div.content div.box-metade {
+                    width: 340px;
+                    background: red;
+                    margin-right: 10px;
+                    float: left;
+            }
+            div.body div.content div.box-dois { margin: 0; }
+
+            div.body div.content div.box-full {
+                    width: 100%;
+                    background: white;
+                    display: table;
+                    margin-right: 0px;
+                    margin-bottom: 10px;
+            }
+            div.box { width: 710px; background: #dddddd; padding-bottom: 1px; }
+            div.box div.titulo { padding: 5px; }
+            div.box div.titulo h2 { font-size: 1.2em; margin: 0; }
+            div.box div.corpo { margin: 1px; margin-bottom: 0; padding: 10px; background: white; }
+            div.box div.rodape { margin: 10px; padding: 10px; background: white; }
+            div.alerta { background: #ffee60; padding: 5px; border: 1px solid orange; margin-bottom: 10px; }
+            div.pergunta { background: yellow; padding: 15px 0; border: 0px solid yellow; text-align: center; }
+            div.sucesso { background: #D9FFD9; color: #006413; padding: 5px; border: 1px solid #009900 }
+            div.insucesso { background: #f68585; padding: 5px; border: 1px solid #db4343 }
+
+            /* Status em Lightbox */
+
+            .window .lb_content div.sucesso {
+                background: transparent;
+                border: 0px;
+                color: #27c702; font-weight: bold; font-style: italic;
+            }
+
+    /********* CATEGORIAS *********/
+            div.body div.content div.structure { background: url('../img/taxonomy/taxonomy_arrow.png') no-repeat 14px 0px; }
+            div#categoriacontainer { float: left; }
+            div#categoriacontainer select{ font-size: 1.0em }
+            div#categoriacontainer select option.node{ color: #990000; font-weight:normal; background-color: #D9ECFF; }
+            div.structure0 { font-weight: bold; text-transform: uppercase; color: #006600; background-image: none !important; }
+            div.structure1 { font-weight: normal; text-transform: uppercase; color:#009900; }
+            div.structure2 { font-weight: bold; color: #000099; }
+            div.structure3 { font-weight: normal; color: #0066FF; }
+            div.structure4, div.structure5, div.structure6, div.structure7, div.structure8 { font-weight: normal; font-style: italic; }
+
+
+
+/* Paginations */
+			div.body div.content div.paginacao { margin: 0 auto; text-align: center; margin-top: 15px; margin-bottom: 15px; }
+
+
+	/* SEE-INFO */
+			div.body div.content div.detalhes { display: block; }
+						div.body div.content div.detalhes div.campo { float: left; display: inline; font-weight: bold; }
+						div.body div.content div.detalhes div.detalhe { float: left; display: inline; margin-left: 5px; }
+
+	/* Resultado de uma açao */
+			div.body div.content div.alert_box { text-align: center; width: 680px; display: table; }
+			div.body div.content div.alert_box div.containner { margin:0 auto; text-align: center; padding: 15px; background: #FFFF99; }
+				div.body div.content div.alert_box div.containner p {  }
+
+    /* EST_OPTIONS
+     * Campos de opções rápidas
+     */
+        table tr td a.link_pai_do_est_options { text-decoration: none; }
+        table tr td a.link_pai_do_est_options:hover { text-decoration: none; }
+
+        table tr td div.est_options a { color: orange; text-decoration: underline; }
+        table tr td div.est_options a:hover { color: #00b53c; text-decoration: none; }
+        table tr td div.est_options div.campooptions_tabela {  }
+        table tr td div.est_options div.campooptions_campo {  }
+        table tr td span.est_options_info { color: #666666; }
+
+/* Formatação em geral */
+.filesize { font-size: 0.85em; color: #666; }
+
+/***************************
+*
+*	RODAPÉ
+*
+***************************/
+
+div#bottom {
+	width: 760px;
+	height: 13px;
+	/*background: url(img/rodape.png);*/
+  background: white;
+	font-size: 1px;
+	margin: 0 auto;
+}
+
+ 
+/*
+ * Links Permissões e configurar módulos
+ */
+div#footer_admin_dashboard {
+	color: #888;
+	width: 760px;
+  display: block;
+	margin: 0 auto;
+  font-size: 0.9em;
+}
+div#footer_admin_dashboard div.borda {
+  border-bottom: 0px solid #f4f4f4;
+  padding: 0px;
+  margin: 0;
+  font-size: 0px;
+}
+div#footer_admin_dashboard div.links_admin {
+    text-align: left;
+		
+}
+div#footer_admin_dashboard div.links_admin a {
+    padding-left: 0px;
+}
+div#footer_admin_dashboard span.para_webmaster {
+    padding-left: 15px;
+    color: silver;
+}
+
+/*
+ * Pessoas e permissões
+ */
+
+div#permissoesAtuais .structure {
+    border-bottom: 1px solid #efefef;
+    margin: 0 0 5px 0;
+    padding: 0 0 5px 0;
+}
+    div#permissoesAtuais .title {
+        font-weight: bold;
+    }
+    div#permissoesAtuais .actions {
+        margin: 5px 0 0 15px;
+        color: #666666;
+    }
+
+/* DEBUG */
+table.debug {
+    width: 96%;
+    margin: 15px auto;
+    font-size: 1em;
+    font-family: 'Monaco', 'System', Monospace;
+}
+    table.debug tr.header td { padding-right: 5px; }
+    table.debug td.sql { padding-bottom: 5px; }
+    table.debug tr.list td.time,
+    table.debug tr.list td.result { text-align: center; }
+
+    table.debug tr.error { color: red; font-style: italic; }
+
+/* ELEMENTOS MENORES */
+
+div.loading_timer {
+    margin: 15px 0 15px 0;
+    color: #666666;
+}
+    div.loading_timer img { margin: 0px 3px 0px 0; }
+

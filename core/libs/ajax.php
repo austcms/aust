@@ -24,7 +24,7 @@ include(THIS_TO_BASEURL.'core/config/variables.php');
 /**
  * Carrega as configurações de conexão do banco de dados
  */
-include(THIS_TO_BASEURL.CONFIG_DIR.'database.php');
+include(CONFIG_DATABASE_FILE);
 
 
 /**
@@ -32,29 +32,19 @@ include(THIS_TO_BASEURL.CONFIG_DIR.'database.php');
  * Carrega classes automaticamente
  *
  */
-    include_once(THIS_TO_BASEURL.CLASS_DIR.'_carrega_classes.inc.php');
+    include_once(CLASS_LOADER);
 
 
 /**
  * Configurações do core do sistema
  */
-include(THIS_TO_BASEURL.CONFIG_DIR.'core.php');
-include(THIS_TO_BASEURL.CORE_CONFIG_DIR.'core.php');
+include(CONFIG_DIR.'core.php');
+include(CORE_CONFIG_DIR.'core.php');
+
+include_once(LOAD_CORE);
 
 header("Content-Type: text/html; charset=".$aust_charset['view']);
 
-/**
- * Propriedades do core
- */
-/**
- * Métodos usados pelo sistema
- */
-include(THIS_TO_BASEURL.LIB_DIR.'functions/func.php');
-include(THIS_TO_BASEURL.LIB_DIR.'functions/func_content.php');
-include(THIS_TO_BASEURL.LIB_DIR.'functions/func_text_format.php');
-
-// aust_func
-include(THIS_TO_BASEURL.LIBS_DIR.'aust/aust_func.php');
 
 // Conexão
 $conexao = Connection::getInstance();

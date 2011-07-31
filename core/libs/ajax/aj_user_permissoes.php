@@ -11,21 +11,21 @@ $conditions = (empty($_POST['id'])) ? array() : array('id' => $_POST['id']);
  */
 if( !empty($_POST['id']) ){
     if( $_POST['tipo'] == 'userTipo'){
-        $agente = $conexao->find(array(
-                                    'table' => 'admins_tipos',
+        $agente = Connection::getInstance()->find(array(
+                                    'table' => 'admin_groups',
                                     'conditions' => array(
                                         'id' => $_POST['id'],
                                     ),
-                                    'fields' => array('id', 'nome'),
+                                    'fields' => array('id', 'name'),
                                 ), 'all'
         );
     } else {
-        $agente = $conexao->find(array(
+        $agente = Connection::getInstance()->find(array(
                                     'table' => 'admins',
                                     'conditions' => array(
                                         'id' => $_POST['id'],
                                     ),
-                                    'fields' => array('id', 'nome'),
+                                    'fields' => array('id', 'name'),
                                 ), 'all'
         );
     }
@@ -45,16 +45,16 @@ if( !empty($_POST['id']) ){
  */
 if(empty($_GET['action'])){
     ?>
-    <p>Permissões > <strong><?php echo $agente['0']['nome']; ?></strong></p>
+    <p>Permissões > <strong><?php echo $agente['0']['name']; ?></strong></p>
     <?php
 
-    $categorias = $conexao->find(array(
-                                    'table' => 'categorias',
+    $categorias = Connection::getInstance()->find(array(
+                                    'table' => 'taxonomy',
                                     'conditions' => array(
                                         //'id' => $_POST['id'],
-                                        'classe' => 'estrutura',
+                                        'class' => 'estrutura',
                                     ),
-                                    'fields' => array('id', 'nome', 'classe', 'tipo_legivel'),
+                                    'fields' => array('id', 'name', 'class', 'type'),
                                 ), 'all'
     );
 
@@ -65,15 +65,15 @@ if(empty($_GET['action'])){
      */
 
     if($_POST['tipo'] == 'userTipo'){
-        $permissoesCondition = array('admins_tipos_id' => $_POST['id']);
+        $permissoesCondition = array('admin_group_id' => $_POST['id']);
     } elseif($_POST['tipo'] == 'user'){
-        $permissoesCondition = array('admins_id' => $_POST['id']);
+        $permissoesCondition = array('admin_id' => $_POST['id']);
     }
-    $permissoes = $conexao->find(array(
-                                    'table' => 'admins_permissions',
+    $permissoes = Connection::getInstance()->find(array(
+                                    'table' => 'admin_permissions',
                                     'conditions' => $permissoesCondition,
 
-                                    'fields' => array('categorias_id', 'action'),
+                                    'fields' => array('node_id', 'action'),
                                 ), 'all'
     );
 
@@ -85,7 +85,7 @@ if(empty($_GET['action'])){
     $categoriasChecked = array();
     foreach($permissoes as $valor){
         if( !empty($valor['action']) )
-            $categoriasChecked[ $valor['categorias_id'] ][$valor['action']] = true;
+            $categoriasChecked[ $valor['node_id'] ][$valor['action']] = true;
     }
 
     //pr($categoriasChecked);
@@ -118,7 +118,7 @@ if(empty($_GET['action'])){
         ?>
         <div class="structure">
         <div class="title">
-            <?php echo $valor['nome']; ?>
+            <?php echo $valor['name']; ?>
         </div>
         <div class="actions">
             <?php
@@ -134,10 +134,10 @@ if(empty($_GET['action'])){
                 ?>
                 <input
                     type="checkbox"
-                    id="<?php echo $valor['nome'].'_'.$action; ?>"
+                    id="<?php echo $valor['name'].'_'.$action; ?>"
                      <?php echo isCheckedPermission($valor['id'], $action) ?>
                     onchange="alteraPermissao('tipo=<?php echo $_POST['tipo']; ?>&agentid=<?php echo $agente['0']['id']; ?>&categoria=<?php echo $valor['id']; ?>&action=<?php echo $action; ?>', this)"
-                    value="<?php echo $valor['nome']; ?>" />
+                    value="<?php echo $valor['name']; ?>" />
                     <?php echo $action_name; ?>
                 <?php
             }
@@ -156,7 +156,6 @@ if(empty($_GET['action'])){
  */
 } elseif($_GET['action'] == 'altera_permissao'){
 
-    pr($_POST);
     /**
      * Cria permissão
      */
@@ -165,21 +164,21 @@ if(empty($_GET['action'])){
          * Se for para uma categoria de usuários (ex.: Administradores, Moderadores, etc)
          */
         if($_POST['tipo'] == 'userTipo'){
-            $agenteTipo = 'admins_tipos_id';
+            $agenteTipo = 'admin_group_id';
         /**
          * Permissão relacionada a um usuário
          */
         } elseif($_POST['tipo'] == 'user'){
-            $agenteTipo = 'admins_id';
+            $agenteTipo = 'admin_id';
         }
         /**
          * Cria SQL
          */
         $sql = "INSERT INTO
-                    admins_permissions
-                    (".$agenteTipo.",categorias_id,tipo,adddate,action)
+                    admin_permissions
+                    (".$agenteTipo.",node_id,type,created_on, action)
                 VALUES
-                    ('".$_POST['agentid']."','".$_POST['categoria']."','permit','".DataParaMySQL('horario')."', '".$_POST['action']."')
+                    ('".$_POST['agentid']."','".$_POST['categoria']."','permit','".date("Y-m-d H:i:s")."', '".$_POST['action']."')
                 ";
 
     /**
@@ -190,24 +189,24 @@ if(empty($_GET['action'])){
          * Se for para uma categoria de usuários (ex.: Administradores, Moderadores, etc)
          */
         if($_POST['tipo'] == 'userTipo'){
-            $agenteTipo = 'admins_tipos_id';
+            $agenteTipo = 'admin_group_id';
         /**
          * Permissão relacionada a um usuário
          */
         } elseif($_POST['tipo'] == 'user'){
-            $agenteTipo = 'admins_id';
+            $agenteTipo = 'admin_id';
         }
 
         $sql = "DELETE FROM
-                    admins_permissions
+                    admin_permissions
                 WHERE
                     ".$agenteTipo."='".$_POST['agentid']."' AND
-                    categorias_id='".$_POST['categoria']."' AND
+                    node_id='".$_POST['categoria']."' AND
                     action='".$_POST['action']."'
                 ";
     }
 
-    if($conexao->exec($sql)){
+    if(Connection::getInstance()->exec($sql)){
         echo '1';
     } else {
         echo '0';
