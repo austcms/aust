@@ -18,36 +18,31 @@
  */
 $dbSchema['admins'] = array(
     'id' => 'int auto_increment',
-    'tipo' => 'int',
-    'nome' => 'varchar(120)',
+    'admin_group_id' => 'int',
+    'name' => 'varchar(120)',
     'login' => 'varchar(40)',
-    'senha' => 'varchar(40)',
+    'password' => 'varchar(40)',
     'email' => 'varchar(200)',
-    'twitter' => 'varchar(200)',
-    'orkut' => 'varchar(200)',
-    'facebook' => 'varchar(200)',
-    'telefone' => 'varchar(200)',
-    'celular' => 'varchar(200)',
-    'sexo' => 'varchar(40)',
-    'biografia' => 'text',
-    'supervisionado' => 'int',
-    'adddate' => 'datetime',
+    'twitter' => 'varchar(250)',
+    'facebook' => 'varchar(250)',
+    'created_on' => 'datetime',
+    'updated_on' => 'datetime',
     'is_blocked' => 'int default "0"',
     'is_deleted' => 'int default "0"',
-    'autor' => 'int',
+    'admin_id' => 'int',
     'dbSchemaTableProperties' => array(
         'PRIMARY KEY' => '(id)',
         'UNIQUE' => 'id (id)',
     )
 );
 
-	$dbSchema['admins_photos'] = array(
+	$dbSchema['admin_photos'] = array(
 	    'id' => 'int auto_increment',
 	    'admin_id' => 'int',
 		'image_type' => 'varchar(30)',
 	    'title' => 'text',
-	    'systempath' => 'text',
-	    'path' => 'text',
+	    'file_systempath' => 'text',
+	    'file_path' => 'text',
 	    'file_name' => 'text',
 	    'file_type' => 'varchar(20)',
 	    'file_size' => 'varchar(20)',
@@ -59,39 +54,38 @@ $dbSchema['admins'] = array(
 	    )
 	);
 
-$dbSchema['admins_permissions'] = array(
+$dbSchema['admin_permissions'] = array(
     'id' => 'int auto_increment',
-    'admins_id' => 'int',
-    'admins_tipos_id' => 'int',
-    'categorias_id' => 'int',
-    'tipo' => 'varchar(80) COMMENT \'Tipo de permissão: permit, deny, etc\'',
-    'action' => 'varchar(80) COMMENT \'Action: create, edit, listing, etc\'',
-    'adddate' => 'datetime',
-    'autor' => 'int',
+    'admin_id' => 'int',
+    'admin_group_id' => 'int',
+    'node_id' => 'int',
+    'type' => 'varchar(80) COMMENT \'kind of permission: permit, deny etc\'',
+    'action' => 'varchar(80) COMMENT \'action: create, edit, listing etc\'',
+    'created_on' => 'datetime',
+    'author_id' => 'int',
     'dbSchemaTableProperties' => array(
         'PRIMARY KEY' => '(id)',
         'UNIQUE' => 'id (id)',
     )
 );
 
-$dbSchema['admins_tipos'] = array(
+$dbSchema['admin_groups'] = array(
     'id' => 'int auto_increment',
-    'nome' => 'varchar(120)',
-    'nome_abrev' => 'varchar(30)',
-    'descricao' => 'text',
-    'supervisionado' => 'bool',
-    'publico' => ' bool COMMENT \'Indica se este tipo é público (pode ser listado) ou não.\'',
-    'data' => 'datetime',
-    'autor' => 'int',
+    'name' => 'varchar(120)',
+    'name_abrev' => 'varchar(30)',
+    'description' => 'text',
+    'public' => 'int',
+    'created_on' => 'datetime',
+    'admin_in' => 'int',
     'dbSchemaTableProperties' => array(
         'PRIMARY KEY' => '(id)',
         'UNIQUE' => 'id (id)',
     ),
     'dbSchemaSQLQuery' => array(
-        "INSERT INTO admins_tipos(nome,data,publico) VALUES('Webmaster','".date("Y-m-d H:i:s")."',0)",
-        "INSERT INTO admins_tipos(nome,publico,nome_abrev,data,descricao) VALUES('Administrador',1,'Adm','".date("Y-m-d H:i:s")."','Administradores têm total acesso ao gerenciar. Somente eles têm poder para criar novos usuários, alterar hierarquias e configurar o gerenciador.')",
-        "INSERT INTO admins_tipos(nome,publico,data,descricao) VALUES('Moderador',1,'".date("Y-m-d H:i:s")."','Moderadores têm poder de restringir o acesso ao gerenciamento de conteúdo e bloquear colaboradores. Ele que define que usuários podem escrever notícias, por exemplo.')",
-        "INSERT INTO admins_tipos(nome,publico,data,descricao) VALUES('Colaborador',1,'".date("Y-m-d H:i:s")."','Colaboradores podem somente gerenciar conteúdos. Não podem gerenciar pessoas nem modificar configurações importantes.')",
+        "INSERT INTO admin_groups(name,created_on,public) VALUES('Webmaster','".date("Y-m-d H:i:s")."',0)",
+        "INSERT INTO admin_groups(name,public,name_abrev,created_on,description) VALUES('Administrador',1,'Adm','".date("Y-m-d H:i:s")."','Administradores têm total acesso ao gerenciar. Somente eles têm poder para criar novos usuários, alterar hierarquias e configurar o gerenciador.')",
+        "INSERT INTO admin_groups(name,public,created_on,description) VALUES('Moderador',1,'".date("Y-m-d H:i:s")."','Moderadores têm poder de restringir o acesso ao gerenciamento de conteúdo e bloquear colaboradores. Ele que define que usuários podem escrever notícias, por exemplo.')",
+        "INSERT INTO admin_groups(name,public,created_on,description) VALUES('Colaborador',1,'".date("Y-m-d H:i:s")."','Colaboradores podem somente gerenciar conteúdos. Não podem gerenciar pessoas nem modificar configurações importantes.')",
     )
 );
 

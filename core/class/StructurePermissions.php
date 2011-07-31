@@ -26,7 +26,7 @@
 class StructurePermissions extends SQLObject {
 
     var $admins_id;
-    var $admins_tipos_id;
+    var $admin_group_id;
     /**
      *
      * @var class Classe responsável pela conexão com o banco de dados
@@ -48,7 +48,7 @@ class StructurePermissions extends SQLObject {
         $user = User::getInstance();
 
         $this->admins_id = $user->getId();
-        $this->admins_tipos_id = $user->getTypeId();
+        $this->admin_group_id = $user->getTypeId();
 
         $this->conexao = Connection::getInstance();
     }
@@ -136,7 +136,7 @@ class StructurePermissions extends SQLObject {
      *
      * @param array $param Contém atributos e condições de leitura
      *      - 'admins_id' => id do usuário a ser lido
-     *      - 'admins_tipos_id' => id do grupo de usuários (tabela admins_tipos)
+     *      - 'admin_group_id' => id do grupo de usuários (tabela admin_groups)
      *
      * @return array Retorna todas as estruturas e categorias permitidas em
      * formato simplicado (array(0 => 'categoria 1', 1 => 'categoria 2', ...))
@@ -150,19 +150,19 @@ class StructurePermissions extends SQLObject {
         /**
          * Se nenhum parâmetro de usuário for passado, lê o usuário atual
          */
-        if( empty($param['admins_tipos_id']) and empty($param['admins_id']) ){
+        if( empty($param['admin_group_id']) and empty($param['admins_id']) ){
             $agente = array(
                 'admins_id' => $this->admins_id,
-                'admins_tipos_id' => $this->admins_tipos_id,
+                'admin_group_id' => $this->admin_group_id,
             );
 
         /**
          * Se nenhum dos dois estão vazios (usuário e grupo de usuário)
          */
-        } elseif(!empty($param['admins_tipos_id']) and !empty($param['admins_id'])){
+        } elseif(!empty($param['admin_group_id']) and !empty($param['admins_id'])){
             $agente = array(
                 'admins_id' => $this->admins_id,
-                'admins_tipos_id' => $this->admins_tipos_id,
+                'admin_group_id' => $this->admin_group_id,
             );
 
         } else {
@@ -177,9 +177,9 @@ class StructurePermissions extends SQLObject {
             /**
              * Ou de um grupo de usuários específico
              */
-            } elseif( !empty($param['admins_tipos_id']) ) {
+            } elseif( !empty($param['admin_group_id']) ) {
                 $agente = array(
-                    'admins_tipos_id' => $param['admins_tipos_id']
+                    'admin_group_id' => $param['admin_group_id']
                 );
             }
             
@@ -191,7 +191,7 @@ class StructurePermissions extends SQLObject {
          * resultados
          */
         $permissoesSql = $this->find(array(
-                                        'table' => 'admins_permissions',
+                                        'table' => 'admin_permissions',
                                         'conditions' => array(
                                             'OR' => $agente,
                                         ),

@@ -54,7 +54,7 @@ if( !empty($_GET['block'])
                     SELECT
                         id
                     FROM
-                        admins_tipos
+                        admin_groups
                     WHERE
                         nome='Colaborador')
             WHERE
@@ -95,14 +95,14 @@ Legenda:
 </p>
 <?php
 $sql = "SELECT
-            admins.id, admins.nome, admins.login, admins.tipo AS atipo,
-            admins_tipos.nome AS tipo, admins_tipos.id AS aid
+            admins.id, admins.name, admins.login, admins.admin_group_id AS atipo,
+            admin_groups.nome AS tipo, admin_groups.id AS aid
         FROM
             admins
         LEFT JOIN
-            admins_tipos
+            admin_groups
         ON
-            admins.tipo=admins_tipos.id
+            admins.admin_group_id=admin_groups.id
         ";
 $query = Connection::getInstance()->query($sql);
 //echo $sql;

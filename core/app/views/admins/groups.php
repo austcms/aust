@@ -11,16 +11,16 @@ $admin = User::getInstance();
 if( !empty($_POST['new_group']) && !empty($_POST['name']) ){
 	
 	$sql = "SELECT id
-	        FROM admins_tipos
+	        FROM admin_groups
 	        WHERE
-	            nome LIKE '".$_POST['name']."'";
+	            name LIKE '".$_POST['name']."'";
 	
 	$query = Connection::getInstance()->query($sql);
 	if( count($query) < 1 ){
 	
 		$sql = "INSERT INTO
-					admins_tipos
-		        (nome, descricao, publico, data)
+					admin_groups
+		        (name, description, public, created_on)
 				VALUES
 				('".$_POST['name']."', '".$_POST['description']."', '1', '".date('Y-m-d H:i:s')."')";
 		$query = Connection::getInstance()->query($sql);
@@ -41,10 +41,10 @@ if( !empty($_POST['edit_group']) &&
 {
 	
 	$sql = "UPDATE
-				admins_tipos
+				admin_groups
 			SET
-				nome='".$_POST['name']."',
-				descricao='".$_POST['description']."'
+				name='".$_POST['name']."',
+				description='".$_POST['description']."'
 			WHERE
 				id='".$_POST['id']."'
 			";
@@ -74,7 +74,7 @@ if( !empty($query) ){
 $sql = "SELECT
 			*
         FROM
-            admins_tipos
+            admin_groups
         ORDER BY id ASC
         ";
 $query = Connection::getInstance()->query($sql);
@@ -99,23 +99,23 @@ $query = Connection::getInstance()->query($sql);
 </tr>
 <?php
 foreach($query as $dados){
-	if( in_array($dados['nome'], array("Webmaster", "Root") ) )
+	if( in_array($dados['name'], array("Webmaster", "Root") ) )
 		continue;
 ?>
     <tr class="list">
         <td>
 			<script type="text/javascript">
 				groups[<?php echo $dados["id"]?>] = {
-					'name': '<?php echo $dados["nome"]?>',
-					'description' : '<?php echo $dados["descricao"]; ?>'
+					'name': '<?php echo $dados["name"]?>',
+					'description' : '<?php echo $dados["description"]; ?>'
 				};
 			</script>
 		
-            <?php echo $dados["nome"]?>
+            <?php echo $dados["name"]?>
         </td>
 
         <td style="color: #666; font-size: 0.8em">
-            <?php echo $dados['descricao']; ?>
+            <?php echo $dados['description']; ?>
         </td>
         <td>
             <a href="javascript: void(0)" onclick="editGroup('<?php echo $dados["id"]; ?>')" style="text-decoration: none;" title="Editar"><img src="<?php echo IMG_DIR?>edit.png" alt="Editar" border="0" /></a>
@@ -166,7 +166,7 @@ foreach($query as $dados){
 </div>
 
 <p style="margin-top: 15px;">
-    <a href="adm_main.php?section=admins"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
+    <a href="adm_main.php?section=admins">Voltar</a>
 </p>
 
 </div>
@@ -182,7 +182,7 @@ foreach($query as $dados){
     /*
      * Nova pessoa
      */
-// 	if( in_array( User::getInstance()->LeRegistro("tipo"), $navPermissoes['admins']['form'] ) ){
+// 	if( in_array( User::getInstance()->LeRegistro("group"), $navPermissoes['admins']['form'] ) ){
     if( UiPermissions::getInstance()->isPermittedSection() ){
 
         ?>

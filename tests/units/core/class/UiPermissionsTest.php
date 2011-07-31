@@ -24,13 +24,13 @@ class UiPermissionsTest extends PHPUnit_Framework_TestCase
     }
 
     function testCanAccessWidgets(){
-        $this->user->userInfo['tipo'] = "Administrador";
+        $this->user->userInfo['group'] = "Administrador";
         $this->assertTrue( $this->obj->canAccessWidgets() );
 
-        $this->user->userInfo['tipo'] = "Colaborador";
+        $this->user->userInfo['group'] = "Colaborador";
         $this->assertTrue( $this->obj->canAccessWidgets() );
 
-        $this->user->userInfo['tipo'] = "Outro Usuário";
+        $this->user->userInfo['group'] = "Outro Usuário";
         $this->assertFalse( $this->obj->canAccessWidgets() );
     }
 

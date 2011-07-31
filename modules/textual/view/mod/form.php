@@ -334,9 +334,3 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
 
 
 ?>
-
-
-<br />
-<p>
-    <a href="adm_main.php?section=<?php echo MODULES ?>"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
-</p>

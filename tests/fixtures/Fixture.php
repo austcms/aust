@@ -19,7 +19,7 @@ class Fixture {
 		
 		$authors[] = 
 			"INSERT INTO admins
-				(tipo, nome, login, senha, email)
+				(admin_group_id, name, login, password, email)
 			VALUES
 				('1', 'Test User', 'test_user', '123', 'testuser@austtest.com')
 				";

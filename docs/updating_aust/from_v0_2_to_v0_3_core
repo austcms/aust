@@ -8,6 +8,43 @@ You need to run these queries before running the v0.3. After everything is
 updated, then you run v0.3 and it'll update what's missing.
 
 
+Admin have fields and tables renamed
+====================================
+
+	RENAME TABLE admins_tipos to admin_groups;
+	ALTER TABLE admin_groups CHANGE nome name varchar(120);
+	ALTER TABLE admin_groups CHANGE nome_abrev name_abrev varchar(30);
+	ALTER TABLE admin_groups CHANGE descricao description text;
+	ALTER TABLE admin_groups CHANGE publico public int;
+	ALTER TABLE admin_groups CHANGE data created_on datetime;
+	ALTER TABLE admin_groups CHANGE autor admin_id int;
+
+
+	ALTER TABLE admins CHANGE tipo admin_group_id int;
+	ALTER TABLE admins CHANGE nome name varchar(250);
+	ALTER TABLE admins CHANGE senha password text;
+	ALTER TABLE admins CHANGE adddate created_on datetime;
+	ALTER TABLE admins CHANGE autor admin_id int;
+	ALTER TABLE admins DROP COLUMN orkut;
+	ALTER TABLE admins DROP COLUMN telefone;
+	ALTER TABLE admins DROP COLUMN celular;
+	ALTER TABLE admins DROP COLUMN supervisionado;
+
+
+	RENAME TABLE admins_photos TO admin_photos;
+	ALTER TABLE admin_photos CHANGE path file_path text;
+	ALTER TABLE admin_photos CHANGE systempath file_sytempath text;
+
+
+	RENAME TABLE admins_permissions TO admin_permissions;
+	ALTER TABLE admin_permissions CHANGE admins_id admin_id int;
+	ALTER TABLE admin_permissions CHANGE admins_tipos_id admin_group_id int;
+	ALTER TABLE admin_permissions CHANGE categorias_id node_id int;
+	ALTER TABLE admin_permissions CHANGE tipo type varchar(80);
+	ALTER TABLE admin_permissions CHANGE adddate created_on datetime;
+	ALTER TABLE admin_permissions CHANGE autor author_id int;
+
+
 Updating Categorias to Taxonomy
 ====================================
 
@@ -37,7 +74,7 @@ CREATE TABLE taxonomy (
 	INDEX (name_encoded),
 	INDEX (structure_name),
 	INDEX (related_to)
-)
+);
 
 Then, convert all current data:
 
@@ -53,7 +90,7 @@ INSERT INTO
 	(
 	SELECT
 		id, nome, nome_encoded, patriarca, patriarca_encoded,
-		father_id, subordinado_nome_encoded,
+		subordinadoid, subordinado_nome_encoded,
 		descricao,
 		classe, tipo, editable, visible, related_to, publico, autor,
 		order_nr

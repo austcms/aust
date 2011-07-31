@@ -33,9 +33,13 @@ class AdminsController extends ActionController {
 		$resultado = false;
 		if(!empty($_POST)) {
 
-		    if( empty($_POST['frmsenha']))
-		        unset($_POST['frmsenha']);
+		    if( empty($_POST['frmpassword']))
+		        unset($_POST['frmpassword']);
 
+			if( $_POST['metodo'] == 'criar' ){
+				$_POST['frmadmin_id'] = User::getInstance()->LeRegistro('id');
+				$_POST['frmcreated_on'] = date("Y-m-d H:i:s");
+			}
 			$c = 0;
 		    foreach($_POST as $key=>$valor) {
 		        // se o argumento $_POST contém 'frm' no início
@@ -101,7 +105,7 @@ class AdminsController extends ActionController {
 			if( !empty($_FILES['photo']) && !empty($_FILES['photo']['name']) ){
 				$value = $_FILES['photo'];
 
-				$sql = "SELECT * FROM admins_photos
+				$sql = "SELECT * FROM admin_photos
 						WHERE admin_id='".$lastInsertId."' AND image_type='primary'
 						";
 				$query = Connection::getInstance()->query($sql);
@@ -109,7 +113,7 @@ class AdminsController extends ActionController {
 					if( file_exists($row['systempath']) )
 						unlink($row['systempath']);
 				}
-				Connection::getInstance()->exec("DELETE FROM admins_photos WHERE admin_id='".$lastInsertId."' AND image_type='primary'");
+				Connection::getInstance()->exec("DELETE FROM admin_photos WHERE admin_id='".$lastInsertId."' AND image_type='primary'");
 
 
 				$imageHandler = Image::getInstance();
@@ -122,13 +126,13 @@ class AdminsController extends ActionController {
 				/*
 				 * Salva SQL da imagem
 				 */
-				$sql = "INSERT INTO admins_photos
+				$sql = "INSERT INTO admin_photos
 						(
 							admin_id,
 							image_type,
 							title,
-							systempath,
-							path,
+							file_systempath,
+							file_path,
 							file_name,
 							file_type,
 							file_size,
@@ -157,7 +161,7 @@ class AdminsController extends ActionController {
 			if( !empty($_FILES['secondary_photo']) && !empty($_FILES['secondary_photo']['name']) ){
 				$value = $_FILES['secondary_photo'];
 
-				$sql = "SELECT * FROM admins_photos
+				$sql = "SELECT * FROM admin_photos
 						WHERE admin_id='".$lastInsertId."' AND image_type='secondary'
 						";
 				$query = Connection::getInstance()->query($sql);
@@ -165,7 +169,7 @@ class AdminsController extends ActionController {
 					if( file_exists($row['systempath']) )
 						unlink($row['systempath']);
 				}
-				Connection::getInstance()->exec("DELETE FROM admins_photos WHERE admin_id='".$lastInsertId."' AND image_type='secondary'");
+				Connection::getInstance()->exec("DELETE FROM admin_photos WHERE admin_id='".$lastInsertId."' AND image_type='secondary'");
 
 
 				$imageHandler = Image::getInstance();
@@ -178,13 +182,13 @@ class AdminsController extends ActionController {
 				/*
 				 * Salva SQL da imagem
 				 */
-				$sql = "INSERT INTO admins_photos
+				$sql = "INSERT INTO admin_photos
 						(
 							admin_id,
 							image_type,
 							title,
-							systempath,
-							path,
+							file_systempath,
+							file_path,
 							file_name,
 							file_type,
 							file_size,
@@ -239,7 +243,7 @@ class AdminsController extends ActionController {
 				    is_blocked='".$blockValue."'
 				WHERE
 				    id='".$_GET["w"]."' AND
-				    tipo!=( SELECT id FROM admins_tipos WHERE nome IN ('Webmaster', 'Root') )
+				    admin_group_id!=( SELECT id FROM admin_groups WHERE name IN ('Webmaster', 'Root') )
 				";
 
 	    if( Connection::getInstance()->exec($sql) !== false )

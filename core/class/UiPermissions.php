@@ -70,7 +70,7 @@ class UiPermissions {
      */
     function canAccessWidgets(){
         $user = User::getInstance();
-        if( in_array($user->LeRegistro('tipo'), $this->permissionConfigurations['widgets']) )
+        if( in_array($user->LeRegistro('group'), $this->permissionConfigurations['widgets']) )
             return true;
 
         return false;
@@ -141,7 +141,7 @@ class UiPermissions {
                      * Verifica o ranking do usuário atual e ve se este tem
                      * alguma permissão.
                      */
-                    if(in_array(strtolower(User::getInstance()->LeRegistro('tipo')), arraytolower($navPermissoes[$controller]['au-permissao']))){
+                    if(in_array(strtolower(User::getInstance()->LeRegistro('group')), arraytolower($navPermissoes[$controller]['au-permissao']))){
                         return true;
                     } else {
                         return false;

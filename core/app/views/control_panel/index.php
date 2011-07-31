@@ -3,7 +3,7 @@
  * Somente webmasters tem acesso a esta página
  */
 
-if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'):
+if(User::getInstance()->LeRegistro('group') == 'Webmaster'):
 ?>
 	<span class="root_user_only">Apenas desenvolvedores acessam esta tela.</span>
 <?php

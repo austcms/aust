@@ -15,7 +15,7 @@
  * Carrega permissões do usuário atual
  */
 $param = array(
-    'admins_tipos_id' => User::getInstance()->LeRegistro('tipoid'),
+    'admin_group_id' => User::getInstance()->LeRegistro('group_id'),
     'admins_id' => User::getInstance()->LeRegistro('id'),
     'conexao' => Connection::getInstance(),
     /*

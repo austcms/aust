@@ -111,7 +111,7 @@
 	            <?php /*
 	                <p>
 	                    Conectado como <strong><?php echo User::getInstance()->LeRegistro('nome');?></strong>.<br />
-	                    N&iacute;vel de acesso  <strong><?php echo User::getInstance()->LeRegistro('tipo');?></strong>.
+	                    N&iacute;vel de acesso  <strong><?php echo User::getInstance()->LeRegistro('group');?></strong>.
 	                </p>
 	             *
 	             */ ?>
@@ -127,7 +127,7 @@
 	    <div class="containner">
 			<?php
 			/* Navigation bar */
-			$usuario_tipo = User::getInstance()->LeRegistro("tipo");
+			$usuario_tipo = User::getInstance()->LeRegistro("group");
 
 			if(empty($_GET['section']))
 			    $_GET['section'] = "";
@@ -284,7 +284,7 @@
 	<div id="footer_admin_dashboard">
 	    <div class="links_admin">
 	        <?php
-	        if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'){
+	        if(User::getInstance()->LeRegistro('group') == 'Webmaster'){
 	            ?>
 	            <div class="borda"></div>
 	            <br />

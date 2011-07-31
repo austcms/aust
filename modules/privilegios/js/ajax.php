@@ -95,7 +95,7 @@ if($_POST['action'] == 'altera_relacionamentos'){
          * Se for para uma categoria de usuários (ex.: Administradores, Moderadores, etc)
          */
         if($_POST['tipo'] == 'userTipo'){
-            $agenteTipo = 'admins_tipos_id';
+            $agenteTipo = 'admin_group_id';
         /**
          * Permissão relacionada a um usuário
          */

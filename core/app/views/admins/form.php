@@ -10,31 +10,27 @@ $w = (empty($_GET['w'])) ? $w = User::getInstance()->LeRegistro('id') : $w = $_G
 
 $dados = array(
     'id' => '',
-    'nome' => '',
-    'titulo' => '',
-    'senha' => '',
+    'name' => '',
+    'password' => '',
     'email' => '',
-    'telefone' => '',
-    'biografia' => '',
-    'celular' => '',
-    'sexo' => '',
+    'description' => '',
     'login' => '',
 );
 
 if($fm == 'editar'){
     $sql = "SELECT
                 admins.*,
-				admins_photos.id as pid,
+				admin_photos.id as pid,
 				(
-					SELECT id FROM admins_photos WHERE image_type='secondary' AND admin_id=admins.id
+					SELECT id FROM admin_photos WHERE image_type='secondary' AND admin_id=admins.id
 				) as sid
             FROM
                 admins
 			LEFT JOIN
-				admins_photos
+				admin_photos
 			ON
-				admins.id=admins_photos.admin_id
-				AND admins_photos.image_type='primary'
+				admins.id=admin_photos.admin_id
+				AND admin_photos.image_type='primary'
             WHERE
                 admins.id='".$w."'";
     $query = Connection::getInstance()->query($sql);
@@ -51,8 +47,6 @@ if($fm == 'editar'){
 <form method="post" action="adm_main.php?section=admins&action=save" enctype="multipart/form-data">
 <input type="hidden" name="metodo" value="<?php echo $fm?>">
 <input type="hidden" name="w" value="<?php ifisset($dados['id'])?>">
-<input type="hidden" name="frmsupervisionado" value="0" />
-<input type="hidden" name="frmautor" value="<?php echo User::getInstance()->LeRegistro('id');?>" />
 
 <table cellpadding=0 cellspacing="3" class="form">
 <tr>
@@ -73,15 +67,15 @@ if($fm == 'editar'){
                     ?><div class="admins_types_radio"><?php
 
                     $sql = "SELECT
-                                nome, id, descricao
+                                name, id, description
                             FROM
-                                admins_tipos
+                                admin_groups
                             WHERE
-                                publico=1";
+                                public = 1";
                     $query = Connection::getInstance()->query($sql);
                     foreach($query as $result){
                         ?>
-                        <input type="radio" <?php if($fm == 'editar') makechecked($result['id'], $dados['tipo']); else echo 'checked'; ?> name="frmtipo" value="<?php echo $result['id']?>" onclick="javascript: form_hierarquia(this.value);" /> <?php echo $result['nome']?><br />
+                        <input type="radio" <?php if($fm == 'editar') makechecked($result['id'], $dados['admin_group_id']); else echo 'checked'; ?> name="frmadmin_group_id" value="<?php echo $result['id']?>" onclick="javascript: form_hierarquia(this.value);" /> <?php echo $result['name']?><br />
                         <?php
                     }
                     ?>
@@ -91,7 +85,7 @@ if($fm == 'editar'){
                     <?php
                         foreach($query as $result){
                             ?>
-                            <p class="admin-hierarquia" id="hierarquia<?php echo $result['id']?>"><?php echo str_replace($result['nome'], '<strong>'.$result['nome'].'</strong>', $result['descricao']);?></p>
+                            <p class="admin-hierarquia" id="hierarquia<?php echo $result['id']?>"><?php echo str_replace($result['name'], '<strong>'.$result['name'].'</strong>', $result['description']);?></p>
                             <?php
                         }
                 }
@@ -100,16 +94,16 @@ if($fm == 'editar'){
                  */
                 else {
                     $sql = "SELECT
-                                nome, id, descricao
+                                name, id, description
                             FROM
-                                admins_tipos
+                                admin_groups
                             WHERE
-                                id='".$dados['tipo']."'";
+                                id='".$dados['admin_group_id']."'";
                         //echo $sql;
                     $query = Connection::getInstance()->query($sql);
                     $result = $query[0];
                     ?>
-                    	<strong><?php echo $result['nome'];?></strong> do sistema.
+                    	<strong><?php echo $result['name'];?></strong> do sistema.
                 	<?php
                 }
                 ?>
@@ -121,8 +115,8 @@ if($fm == 'editar'){
 <tr>
     <td valign="top">Nome completo:</td>
     <td>
-        <input class="text" type="text" name="frmnome" value="<?php ifisset($dados['nome'])?>" <?php if($fm == 'criar'){ echo 'onKeyUp="javascript: alreadyexists(this.value, \'nome\', \'Digite o nome completo do usuário que será cadastrado.\',\'#999999\',\'Verifique se este usuário já não existe, pois este nome já foi cadastrado.\',\'red\',\'adm\');"'; } ?> />
-        <p class="explanation" id="exists_nome">
+        <input class="text" type="text" name="frmname" value="<?php ifisset($dados['name'])?>" <?php if($fm == 'criar'){ echo 'onKeyUp="javascript: alreadyexists(this.value, \'name\', \'Digite o nome completo do usuário que será cadastrado.\',\'#999999\',\'Verifique se este usuário já não existe, pois este nome já foi cadastrado.\',\'red\',\'adm\');"'; } ?> />
+        <p class="explanation" id="exists_name">
             Digite o nome completo do usuário que será cadastrado.
         </p>
     </td>
@@ -145,7 +139,7 @@ if($fm == 'criar'){ ?>
     <tr>
         <td valign="top">Senha de acesso: </td>
         <td>
-            <input type="password" name="frmsenha" class="text" />
+            <input type="password" name="frmpassword" class="text" />
             <p class="explanation" >
                 Senha para acesso ao gerenciador.
             </p>
@@ -159,7 +153,7 @@ if($fm == 'criar'){ ?>
     <tr>
         <td valign="top">Senha de acesso: </td>
         <td>
-            <input type="password" name="frmsenha" class="text" value="" />
+            <input type="password" name="frmpassword" class="text" value="" />
             <p class="explanation" >
                 Insira uma nova senha para alterar a atual ou
                 deixe este campo em branco para não modificá-la.
@@ -182,7 +176,7 @@ if($fm == 'criar'){ ?>
     <td valign="top">Foto: </td>
     <td>
 		<?php
-		$imagesPath = IMAGE_VIEWER_DIR."visualiza_foto.php?table=admins_photos&fromfile=true&thumbs=yes&minxsize=20&minysize=100&myid=";
+		$imagesPath = IMAGE_VIEWER_DIR."visualiza_foto.php?table=admin_photos&fromfile=true&thumbs=yes&minxsize=20&minysize=100&myid=";
 		if( !empty($dados['pid']) ){
 			?>
 			<img src="<?php echo $imagesPath.$dados['pid'] ?>">
@@ -219,35 +213,6 @@ if( Config::getInstance()->getConfig('user_has_secondary_image') ){ ?>
 	</tr>
 
 <?php } ?>
-<?php /*
-<tr>
-    <td valign="top">
-        <p style="margin: 0;">Este usuário será supervisionado?</p>
-
-    </td>
-    <td valign="top">
-        <select name="frmsupervisionado" onChange="javascript: form_supervisionado(this.value);">
-            <option value="sim">Sim</option>
-            <option value="nao">Não</option>
-        </select>
-        <p style="margin: 0; font-size: 12px; color: green;" id="supervisionadosim">
-            <strong>Sim</strong> significa que todo conteúdo inserido por este usuário
-            precisará da aprovação de um moderador ou administrador.
-        </p>
-        <p style="margin: 0; font-size: 12px; color: #999999; border-top: 1px dashed silver" id="supervisionadonao">
-            <strong>Não</strong> supervisionado significa que este usuário pode
-            adicionar conteúdos a vontade.
-        </p>
-        <p class="explanation">
-            Exceto artigos. Colunistas têm livre acesso. Você pode, contudo, bloquear o
-            usuário a qualquer momento.
-        </p>
-
-    </td>
-</tr>
- *
- */
-?>
 <tr>
     <td colspan="2">
         <center>

@@ -64,7 +64,7 @@
                 /**
                  * Se Webmaster, pode editar configurações de Administradores
                  */
-                if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'){
+                if(User::getInstance()->LeRegistro('group') == 'Webmaster'){
                     $adminsTiposCarregar = array('Webmaster');
                 } else {
                     $adminsTiposCarregar = array('Webmaster', 'Administrador');
@@ -74,18 +74,18 @@
                  * Lista os tipos de usuários
                  */
                 $adminsTipos = Connection::getInstance()->find(array(
-                                            'table' => 'admins_tipos',
+                                            'table' => 'admin_groups',
                                             'conditions' => array(
                                                 'NOT' => array(
-                                                    'nome' => $adminsTiposCarregar,
+                                                    'name' => $adminsTiposCarregar,
                                                 ),
                                             ),
-                                            'fields' => array('id', 'nome'),
+                                            'fields' => array('id', 'name'),
                                         ), 'all'
                 );
                 foreach($adminsTipos as $valor){
                     ?>
-                    <input type="radio" name="agente" onclick="javascript: mostraPermissoes('<?php echo $valor['id']; ?>','userTipo')" id="<?php echo $valor['nome']; ?>" name="<?php echo $valor['id']?>" /> <?php echo $valor['nome']; ?><br />
+                    <input type="radio" name="agente" onclick="javascript: mostraPermissoes('<?php echo $valor['id']; ?>','userTipo')" id="<?php echo $valor['name']; ?>" name="<?php echo $valor['id']?>" /> <?php echo $valor['name']; ?><br />
                     <?php
                 }
             ?>
@@ -110,7 +110,6 @@
             </p>
             <ul>
             <?php
-            //echo User::getInstance()->LeRegistro('id');
                 /**
                  * Lista os tipos de usuários
                  */
@@ -118,22 +117,22 @@
                                         array(
                                             'table' => 'admins',
                                             'join' => array(
-                                                'LEFT JOIN admins_tipos ON admins.tipo=admins_tipos.id',
+                                                'LEFT JOIN admin_groups ON admins.admin_group_id=admin_groups.id',
                                             ),
                                             
                                             'conditions' => array(
                                                 'NOT' => array(
                                                     'admins.id' => User::getInstance()->LeRegistro('id'),
-                                                    'admins_tipos.nome' => 'Webmaster'
+                                                    'admin_groups.name' => 'Webmaster'
                                                 ),
                                             ),
-                                            'fields' => array('admins.id', 'admins.nome'),
-                                            'order' => array('admins_tipos.nome ASC', 'admins.nome ASC')
+                                            'fields' => array('admins.id', 'admins.name'),
+                                            'order' => array('admin_groups.name ASC', 'admins.name ASC')
                                         ), 'all'
                 );
                 foreach($adminsTipos as $valor){
                     ?>
-                    <input type="radio" name="agente" onclick="mostraPermissoes('<?php echo $valor['id']; ?>','user')" id="<?php echo $valor['nome']; ?>" name="<?php echo $valor['id']?>" /> <?php echo $valor['nome']; ?><br />
+                    <input type="radio" name="agente" onclick="mostraPermissoes('<?php echo $valor['id']; ?>','user')" id="<?php echo $valor['name']; ?>" name="<?php echo $valor['id']?>" /> <?php echo $valor['name']; ?><br />
                     <?php
                 }
             ?>

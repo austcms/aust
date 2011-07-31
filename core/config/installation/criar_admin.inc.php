@@ -44,15 +44,15 @@ if( $formOk ){
     } else {
 
         $sql = "INSERT INTO
-                    admins(tipo,nome,login,senha,email,adddate)
+                    admins(admin_group_id, name, login, password, email, created_on)
                 VALUES
                     (
                         (SELECT
                             id
                         FROM
-                            admins_tipos
+                            admin_groups
                         WHERE
-                            nome='Webmaster' order by id ASC limit 1),
+                            name='Webmaster' order by id ASC limit 1),
                     '{$_POST['frmnomeaust']}','{$_POST['frmloginaust']}','{$_POST['frmsenhaaust']}','{$_POST['frmemailaust']}','".date("Y-m-d H:i:s")."'
                     )";
 

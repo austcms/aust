@@ -34,18 +34,17 @@ if(	!empty($_GET['action']) &&
     <?php
     $sql = "SELECT
                 admins.*,
-                admins.id, admins.nome, admins.login, admins.tipo AS atipo,
-                admins_tipos.nome AS tipo, admins_tipos.id AS aid
+                admins.id, admins.name as 'name', admins.login, admins.admin_group_id AS 'atipo',
+                admin_groups.name AS tipo, admin_groups.id AS aid
             FROM
                 admins
             LEFT JOIN
-                admins_tipos
+                admin_groups
             ON
-                admins.tipo=admins_tipos.id
+                admins.admin_group_id=admin_groups.id
             ORDER BY aid ASC
             ";
     $query = Connection::getInstance()->query($sql);
-    //echo $sql;
 
     ?>
     <table class="listing pessoas">
@@ -71,7 +70,7 @@ if(	!empty($_GET['action']) &&
                 <?php echo $dados["id"]?>
             </td>
             <td>
-                <?php echo $dados["nome"]?>
+                <?php echo $dados["name"]?>
             </td>
 
             <td>
@@ -137,7 +136,7 @@ if(	!empty($_GET['action']) &&
             </div>
             <?php
         }
-        if( in_array( User::getInstance()->LeRegistro("tipo"), array("Webmaster", "Root", "Administrador") ) ){
+        if( in_array( User::getInstance()->LeRegistro("group"), array("Webmaster", "Root", "Administrador") ) ){
 	        ?>
 	        <div class="botao">
 	            <div class="bt_grupos">
