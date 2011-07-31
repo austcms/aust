@@ -53,9 +53,9 @@ if(Aust::getInstance()->Instalado()){
 	<form method="post" action="<?php echo $_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'];?>" class="simples">
 	<h3>Formulário</h3>
 	<div class="campo">
-	<label>Nome da categoria-chefe:</label>
+	<label>Nome do site:</label>
 	<div class="input">
-	<input type="text" name="nome" />
+	<input type="text" name="name" />
 	<p class="explanation">Não use maiúsculas nem espaços nem acentos.</p>
 	<p class="explanation">Ex.: site1; site2; juridico</p>
 	</div>

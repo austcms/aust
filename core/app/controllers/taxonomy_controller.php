@@ -6,14 +6,14 @@ class TaxonomyController extends ActionController {
 	
 	function save(){
 
-		$texto = $_POST['frmdescricao'];
+		$texto = $_POST['frmdescription'];
 		$texto = str_replace("\"","\"", $texto);
 		$texto = str_replace("'","\'", $texto);
 
 	    $params = array(
-	        'father' => $_POST["frmsubordinadoid"],
-	        'name' => $_POST['frmnome'],
-			'description' => $_POST["frmdescricao"],
+	        'father' => $_POST["frmfather_id"],
+	        'name' => $_POST['frmname'],
+			'description' => $texto,
 	        'author' => User::getInstance()->getId(),
 	    );
 
@@ -70,7 +70,7 @@ class TaxonomyController extends ActionController {
             failure('Ocorreu um erro desconhecido, tente novamente.');
         }
 		
-		$_POST['redirect_to'] = 'adm_main.php?section=taxonomy';
+		$_POST['redirect_to'] = 'adm_main.php?section=taxonomy&list_content';
 
 	}
 	

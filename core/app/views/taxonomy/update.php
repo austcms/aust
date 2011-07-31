@@ -66,15 +66,15 @@ if( !empty($_FILES['arquivo']) ){
 /**
  * Ajusta dados vindos via POST para criar sql
  */
-$texto = $_POST['frmdescricao'];
+$texto = $_POST['frmdescription'];
 $texto = str_replace("\"","\"", $texto);
 $texto = str_replace("'","\'", $texto);
 
 
-$sql = "UPDATE categorias
+$sql = "UPDATE taxonomy
         SET
-            nome='".$_POST['frmnome']."',
-            descricao='".$texto."'
+            name='".$_POST['frmname']."',
+            description='".$texto."'
         WHERE
             id='".$_POST['w']."'
         ";

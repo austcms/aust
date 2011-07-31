@@ -363,7 +363,7 @@ function categoriasub(dados) {
 function buscacategoriasub(dados){
     $.post("ajax.php", {
         acao: "subordinado",
-        subordinadoid: dados
+        father_id: dados
     }, function(txt){
         //alert(txt);
         if(txt > 0){

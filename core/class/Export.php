@@ -280,7 +280,7 @@ class Export
 				unset($st['modConfig']);
 			}
 			
-			$st['subordinadoid'] = $siteId;
+			$st['father_id'] = $siteId;
 			$stFields = array_keys($st);
 			$stData = $st;
 			

@@ -49,9 +49,9 @@ class ImagensTest extends PHPUnit_Framework_TestCase
         $sql = preg_replace('/\n|\t/Us', "", preg_replace('/\s{2,}/s', " ", $sql));
         $this->assertEquals( trim("SELECT mainTable.id AS id, title, pageviews, image_systempath, node_id AS cat, ".
                         "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as created_on, ".
-                        "(SELECT nome FROM categorias AS c WHERE id=cat ) AS node ".
+                        "(SELECT name FROM taxonomy AS c WHERE id=cat ) AS node ".
                         "FROM images AS mainTable ".
-						"LEFT JOIN categorias AS austTable ON mainTable.node_id = austTable.id ".
+						"LEFT JOIN taxonomy AS austTable ON mainTable.node_id = austTable.id ".
 						"WHERE 1=1 ".
                         "ORDER BY id DESC ".
                         "LIMIT 0,25"),
@@ -62,9 +62,9 @@ class ImagensTest extends PHPUnit_Framework_TestCase
         $sql = preg_replace('/\n|\t/Us', "", preg_replace('/\s{2,}/s', " ", $sql));
         $this->assertEquals( trim("SELECT mainTable.id AS id, title, pageviews, image_systempath, node_id AS cat, ".
                         "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as created_on, ".
-                        "(SELECT nome FROM categorias AS c WHERE id=cat ) AS node ".
+                        "(SELECT name FROM taxonomy AS c WHERE id=cat ) AS node ".
                         "FROM images AS mainTable ".
-						"LEFT JOIN categorias AS austTable ON mainTable.node_id = austTable.id ".
+						"LEFT JOIN taxonomy AS austTable ON mainTable.node_id = austTable.id ".
 						"WHERE 1=1 AND mainTable.id='1' ".
                         "ORDER BY id DESC ".
                         "LIMIT 50,25"),
@@ -75,9 +75,9 @@ class ImagensTest extends PHPUnit_Framework_TestCase
         $sql = preg_replace('/\n|\t/Us', "", preg_replace('/\s{2,}/s', " ", $sql));
         $this->assertEquals( trim("SELECT mainTable.id AS id, title, pageviews, image_systempath, node_id AS cat, ".
                         "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as created_on, ".
-                        "(SELECT nome FROM categorias AS c WHERE id=cat ) AS node ".
+                        "(SELECT name FROM taxonomy AS c WHERE id=cat ) AS node ".
                         "FROM images AS mainTable ".
-						"LEFT JOIN categorias AS austTable ON mainTable.node_id = austTable.id ".
+						"LEFT JOIN taxonomy AS austTable ON mainTable.node_id = austTable.id ".
 						"WHERE 1=1 AND mainTable.id='1' AND mainTable.node_id IN ('3','4') ".
                         "ORDER BY id DESC ".
                         "LIMIT 50,25"),

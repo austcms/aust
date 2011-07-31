@@ -189,7 +189,7 @@ class Module extends ActiveModule
 		if( !empty($id) && is_numeric($id) ){
 			$this->information = Aust::getInstance()->getStructureById($id);
 			if( !empty($this->information) )
-				$this->name = $this->information["nome"];
+				$this->name = $this->information["name"];
 		}
 		return parent::austnode($id);
 	}
@@ -326,6 +326,7 @@ class Module extends ActiveModule
 		$this->totalRows = $this->_getTotalRows($sql);
 
         $qry = Connection::getInstance()->query($sql);
+
         if( empty($qry) )
             return array();
 
@@ -547,14 +548,14 @@ class Module extends ActiveModule
 
 		if( is_array($options) && !empty($options['fields']) ){
 			if( $options['fields'] == "*" ){
-				$fields = $tP.".*, ". $austTableAlias.".nome";
+				$fields = $tP.".*, ". $austTableAlias.".name";
 			}
 			elseif( is_array($options['fields']) ){
 				
 				foreach( $options['fields'] as $currentField ){
 					
 					if( $currentField == "node" )
-						$fieldsInArray[] = $austTableAlias.".nome AS node_name";
+						$fieldsInArray[] = $austTableAlias.".name AS node_name";
 					elseif( $currentField == "node_id" )
 						$fieldsInArray[] = $austTableAlias.".id AS node_id";
 					elseif( $currentField == "node_module" )
@@ -633,9 +634,9 @@ class Module extends ActiveModule
                     ".$this->austField." AS cat,
                     DATE_FORMAT(".$this->date['created_on'].", '".$this->date['standardFormat']."') as ".$this->date['created_on'].",
                     (	SELECT
-                            nome
+                            name
                         FROM
-                            categorias AS c
+                            taxonomy AS c
                         WHERE
                             id=cat
                     ) AS node
@@ -973,11 +974,11 @@ class Module extends ActiveModule
 
         $result = array();
         $sql = "SELECT
-                    c.tipo
+                    c.type
                 FROM
                     modulos_conf AS m
                 INNER JOIN
-                    categorias AS c
+                    taxonomy AS c
                 ON
                     m.categoria_id=c.id
                 WHERE
@@ -991,15 +992,15 @@ class Module extends ActiveModule
 
         foreach( $query as $valor ){
 
-            if( !file_exists( MODULES_DIR.$valor["tipo"].'/'.MOD_CONFIG ) )
+            if( !file_exists( MODULES_DIR.$valor["type"].'/'.MOD_CONFIG ) )
                 continue;
 
-            include(MODULES_DIR.$valor["tipo"].'/'.MOD_CONFIG);
+            include(MODULES_DIR.$valor["type"].'/'.MOD_CONFIG);
 
-            if( !file_exists( MODULES_DIR.$valor["tipo"].'/'.$modInfo['className'].'.php' ) )
+            if( !file_exists( MODULES_DIR.$valor["type"].'/'.$modInfo['className'].'.php' ) )
                 continue;
             
-            include_once(MODULES_DIR.$valor["tipo"].'/'.$modInfo['className'].'.php');
+            include_once(MODULES_DIR.$valor["type"].'/'.$modInfo['className'].'.php');
 
             $result[] = new $modInfo['className'];
         }
@@ -1419,7 +1420,7 @@ class Module extends ActiveModule
 							 		(slave_id, slave_name, master_id, created_on, updated_on)
 									VALUES
 									('".$params["aust_node"]."', 
-									(SELECT nome FROM categorias WHERE id='".$params["aust_node"]."'), 
+									(SELECT name FROM taxonomy WHERE id='".$params["aust_node"]."'), 
 									'".$valor."', '".$todayDateTime."', '".$todayDateTime."')";
 							Connection::getInstance()->exec($sql);
 						}
@@ -1831,7 +1832,7 @@ class Module extends ActiveModule
          * $param['where'] tem-se uma parte do código SQL necessário para tal.
          */
         $param = array(
-            "where" => "tipo='textos' and classe='estrutura'"
+            "where" => "tipo='textos' AND class='estrutura'"
         );
 
         $estruturas = Aust::getInstance()->LeEstruturasParaArray($param);
@@ -2036,13 +2037,13 @@ class Module extends ActiveModule
      */
     function LeModulosEmbed() {
         $sql = "SELECT
-                    DISTINCT m.pasta, m.nome, m.chave, m.valor, c.id, c.nome
+                    DISTINCT m.pasta, m.nome, m.chave, m.valor, c.id, c.name
                 FROM
                     modulos as m
                 INNER JOIN
-                    categorias as c
+                    taxonomy as c
                 ON
-                    m.valor=c.tipo
+                    m.valor=c.type
                 WHERE
                     m.embed='1'
                 ";

@@ -305,7 +305,7 @@ class ModulesManager
          * $param['where'] tem-se uma parte do código SQL necessário para tal.
          */
         $param = array(
-            "where" => "tipo='textos' and classe='estrutura'"
+            "where" => "tipo='textos' AND class='estrutura'"
         );
 
         $estruturas = Aust::getInstance()->LeEstruturasParaArray($param);

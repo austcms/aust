@@ -4,37 +4,28 @@
  * Carrega dados das tabelas para amostragem do formulário de edição
  */
 
-    $sql = "SELECT
-                *
-            FROM
-                categorias
-            WHERE
-                id='".$_GET['w']."'
-    ";
-    $query = Connection::getInstance()->query($sql);
-    $dados = $query[0];
+	$dados = Aust::getInstance()->getStructureById($_GET['w']);
 ?>
 
 
 <span class="root_user_only">Apenas desenvolvedores acessam esta tela.</span>
 <h2>Taxonomia: editar categoria</h2>
-<p>Você pode editar a categoria <?php echo $dados['nome']?></p>
+<p>Você pode editar a categoria <?php echo $dados['name']?></p>
 
 <form method="post" action="adm_main.php?section=<?php echo $_GET['section'];?>&action=update" enctype="multipart/form-data">
 <input type="hidden" name="action" value="update">
-<input type="hidden" name="autorid" value="<?php echo $loginid; ?>">
 <input type="hidden" name="w" value="<?php echo $_GET['w']; ?>">
 <table width="670" border=0 class="form">
 <tr>
     <td><label>Categoria:</label> </td>
     <td>
-        <strong><?php echo $dados['patriarca']?></strong>
+        <strong><?php echo $dados['structure_name']?></strong>
     </td>
 </tr>
 <tr>
     <td valign="top"><label>Nome:</label> </td>
     <td>
-        <input type="text" class="text" name="frmnome" value="<?php echo $dados['nome']?>">
+        <input type="text" class="text" name="frmname" value="<?php echo $dados['name']?>">
         <p class="explanation">
             Digite o nome da categoria. (Começa com letra maiúscula e não leva
             ponto final)
@@ -46,7 +37,7 @@
 <tr>
     <td valign="top"><label>Descrição:</label> </td>
     <td>
-        <textarea name="frmdescricao" rows="3" cols="40" id="jseditor"><?php echo $dados['descricao']?></textarea>
+        <textarea name="frmdescription" rows="3" cols="40" id="jseditor"><?php echo $dados['description']?></textarea>
         <p class="explanation">
             Digite uma breve descrição desta categoria.
         </p>

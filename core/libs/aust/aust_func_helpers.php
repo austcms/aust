@@ -8,7 +8,7 @@
 function ShowStructure($table){
     $sql = "
             SELECT
-                id, titulo, subordinadoid, classe
+                id, titulo, father_id, classe
             FROM
                 $table
             WHERE
@@ -62,17 +62,17 @@ function _BuildDDListItems($table, $escala = '', $parent=0, $level=0, $current_n
 
     $iSQL="
         SELECT
-        lp.id, lp.subordinadoid, lp.nome, lp.tipo,
+        lp.id, lp.father_id, lp.name, lp.type,
         ( SELECT COUNT(*)
-        FROM
-        $table As clp
-        WHERE
-        clp.subordinadoid=lp.id
+	        FROM
+	        $table AS clp
+	        WHERE
+	        clp.father_id=lp.id
         ) As num_sub_nodes
         FROM
-        $table AS lp
+        	$table AS lp
         WHERE
-        lp.subordinadoid = '$parent'
+        	lp.father_id = '$parent'
     ";
     //	  echo $iSQL;
     $query = Connection::getInstance()->query($iSQL);
@@ -80,7 +80,7 @@ function _BuildDDListItems($table, $escala = '', $parent=0, $level=0, $current_n
 
     foreach ($query as $myrow){
   		//se fôr um nó, serão efectuadas algumas modificações
-		  if (_IsNode($myrow["num_sub_nodes"],$myrow["subordinadoid"])){
+		  if (_IsNode($myrow["num_sub_nodes"],$myrow["father_id"])){
 		      $prefix="";
 		      $class='class="node"';
 		  }else{
@@ -88,14 +88,14 @@ function _BuildDDListItems($table, $escala = '', $parent=0, $level=0, $current_n
 		      $class = '';
 		  }
 
-		  $tmp_nome = $myrow['nome'];
+		  $tmp_nome = $myrow['name'];
 		  $selected = '';
 		  if($current_node == $myrow['id']){
 		      $tmp_nome.= ' <- Atualmente';
 		      $selected = 'selected="selected" style="font-weight: bold;"';
 		  }
 		  //construir item
-		  if($myrow["subordinadoid"] == 0){
+		  if($myrow["father_id"] == 0){
 		      if($escala == "webmaster"){
 		          $items.="<option value='".$myrow['id']."' $selected $class>$indent$prefix$tmp_nome</option>";
 		      } else {

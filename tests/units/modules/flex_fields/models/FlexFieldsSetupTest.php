@@ -592,7 +592,7 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 		// salva dados da nova estrutura na tabela 'categorias'
 		function testSaveStructureIntoDatabase(){
 
-			$this->obj->connection->query("INSERT INTO categorias (nome,classe) VALUES ('TestePai777','categoria-chefe')");
+			$this->obj->connection->query("INSERT INTO taxonomy (name,class) VALUES ('TestePai777','categoria-chefe')");
 			$lastInsert = $this->obj->connection->lastInsertId();
 
 			// TEST #1
@@ -606,19 +606,19 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 		    );
 
 			$result = $this->obj->saveStructure($params);
-			$query = Connection::getInstance()->query("SELECT * FROM categorias WHERE nome='Teste777' AND classe='flex_fields'");
+			$query = Connection::getInstance()->query("SELECT * FROM taxonomy WHERE name='Teste777' AND class='flex_fields'");
 			$saved = reset( $query );
 			$this->assertInternalType('array', $saved);
 
-			$this->obj->connection->query("DELETE FROM categorias WHERE nome='Teste777'");
-			$this->obj->connection->query("DELETE FROM categorias WHERE id='".$lastInsert."'");
+			$this->obj->connection->query("DELETE FROM taxonomy WHERE name='Teste777'");
+			$this->obj->connection->query("DELETE FROM taxonomy WHERE id='".$lastInsert."'");
 
 			$this->assertInternalType('int', $result);
-			$this->assertArrayHasKey('nome', $saved);
-			$this->assertEquals('Teste777', $saved['nome']);
-			$this->assertEquals('flex_fields', $saved['classe']);
-			$this->assertEquals('estrutura', $saved['tipo']);
-			$empty = empty($saved['descricao']);
+			$this->assertArrayHasKey('name', $saved);
+			$this->assertEquals('Teste777', $saved['name']);
+			$this->assertEquals('flex_fields', $saved['class']);
+			$this->assertEquals('estrutura', $saved['type']);
+			$empty = empty($saved['description']);
 			$this->assertFalse( $empty );
 
 			// TEST #2
@@ -673,7 +673,7 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 			function destroyTests(){
 				$this->obj->connection->query("DROP TABLE testunit");
 				$this->obj->connection->exec("DELETE FROM flex_fields_config WHERE node_id='7777'");
-				$this->obj->connection->exec("DELETE FROM categorias WHERE nome='TestUnit'");
+				$this->obj->connection->exec("DELETE FROM taxonomy WHERE nome='TestUnit'");
 			}
 		
 		/*
@@ -1061,9 +1061,9 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 		
 			$this->obj->connection->exec("DROP TABLE testunit");
 			$this->obj->connection->exec("DELETE FROM flex_fields_config WHERE node_id='7777' OR commentary='haha777' OR value='testunit' OR value='haha777' ");
-			$this->obj->connection->exec("DELETE FROM categorias WHERE nome='TestUnit' AND subordinado_nome_encoded='testepai777'");
-			$this->obj->connection->exec("DELETE FROM categorias WHERE nome='testunit'");
-			$this->obj->connection->query("INSERT INTO categorias (nome,classe) VALUES ('TestePai777','categoria-chefe')");
+			$this->obj->connection->exec("DELETE FROM taxonomy WHERE name='TestUnit' AND father_name_encoded='testepai777'");
+			$this->obj->connection->exec("DELETE FROM taxonomy WHERE name='testunit'");
+			$this->obj->connection->query("INSERT INTO taxonomy (name,class) VALUES ('TestePai777','categoria-chefe')");
 			$lastInsert = $this->obj->connection->lastInsertId();
 			
 			$params = array(
@@ -1112,10 +1112,10 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 			$this->assertEquals('testunit', $this->obj->mainTable);
 			
 			// verifica se categoria foi criada
-			$conf = $this->obj->connection->query("SELECT * FROM categorias WHERE id='$austNode'");
+			$conf = $this->obj->connection->query("SELECT * FROM taxonomy WHERE id='$austNode'");
 			$this->assertArrayHasKey('0', $conf, 'Not saving category.' );
 			$this->assertArrayNotHasKey('1', $conf );
-			$this->assertEquals('estrutura', $conf[0]['classe'], 'Did not save as structure.' );
+			$this->assertEquals('estrutura', $conf[0]['class'], 'Did not save as structure.' );
 			
 			// verifica configurações da tabela
 				// test 3.1
@@ -1188,8 +1188,8 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 			
 			
 			
-			$this->obj->connection->exec("DELETE FROM categorias WHERE nome='TestePai777'");
-			$this->obj->connection->exec("DELETE FROM categorias WHERE nome='TestUnit' AND subordinado_nome_encoded='testepai777'");
+			$this->obj->connection->exec("DELETE FROM taxonomy WHERE name='TestePai777'");
+			$this->obj->connection->exec("DELETE FROM taxonomy WHERE name='TestUnit' AND father_name_encoded='testepai777'");
 			$this->obj->connection->exec("DELETE FROM flex_fields_config WHERE node_id='$austNode' OR commentary='haha777' OR value='testunit' OR value='haha777' ");
 			$this->obj->connection->exec("DROP TABLE testunit");
 			$this->obj->connection->exec("DROP TABLE testunit_files");

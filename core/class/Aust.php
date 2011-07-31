@@ -11,7 +11,7 @@
 
 class Aust {
 
-    static $austTable = 'categorias';
+    static $austTable = 'taxonomy';
     protected $AustCategorias = Array();
     public $connection;
     protected $conexao;
@@ -40,10 +40,10 @@ class Aust {
 	function getStructureIdByName($string){
 		$string = strtolower($string);
 		$sql = "SELECT id
-				FROM categorias
+				FROM taxonomy
 				WHERE
-					lower(nome) LIKE '$string' AND
-					classe = 'estrutura'
+					lower(name) LIKE '$string' AND
+					class = 'estrutura'
 				";
 		$query = Connection::getInstance()->query($sql);
 		if( empty($query) )
@@ -117,16 +117,16 @@ class Aust {
         }
 
         $sql = "INSERT INTO
-            categorias
-            (
-            nome,subordinadoid,classe,tipo,tipo_legivel,publico,autor,
-            nome_encoded
-            )
-                        VALUES
-            (
-            '$nome','$categoria_chefe','estrutura','$modulo','$tipo_legivel',$publico,'$autor',
-            '$nome_encoded'
-            )
+	            taxonomy
+	            (
+		            name,father_id,class,type,public,admin_id,
+		            name_encoded
+	            )
+				VALUES
+	            (
+		            '$nome','$categoria_chefe','estrutura','$modulo',$publico,'$autor',
+		            '$nome_encoded'
+	            )
                 ";
         /**
          * Retorna o id do registro feito
@@ -164,62 +164,58 @@ class Aust {
          * Loops to find out who's the Patriarch of this new category
          */
         $i = 0;
-        $subordinadoidtmp = $father;
+        $father_idtmp = $father;
 
         while( $i < 1 ) {
             $sql = "SELECT
-                        id, nome, subordinadoid, classe, nome_encoded,tipo,tipo_legivel
+                        id, name, father_id, class, name_encoded, type
                     FROM
-                        categorias
+                        taxonomy
                     WHERE
                         id='$father'
                     ";
-
             $query = Connection::getInstance()->query($sql);
-			
+
 			if( empty($query[0]) )
 				return false;
 				
             $dados = $query[0];
 
             if( empty($tipo) ) {
-                $tipo = $dados['tipo'];
-                $tipoLegivel = $dados['tipo_legivel'];
+                $tipo = $dados['type'];
             }
 
             /*
              * Patriarch
              */
-            if( !empty($dados['patriarca']) )
-                $patriarca = $dados['patriarca'];
+            if( !empty($dados['name']) )
+                $patriarca = $dados['name'];
             else
                 $patriarca = $this->getPatriarch($dados['id']);
 
             $catNameEncoded = encodeText( $catName );
             $patriarcaEncoded = encodeText( $patriarca );
-            $subordinadoNomeEncoded = encodeText( $dados['nome'] );
+            $subordinadoNomeEncoded = encodeText( $dados['name'] );
 
-
-            if($dados['classe'] == "estrutura") {
+            if($dados['class'] == "estrutura") {
                 $tipo = $this->structureModule($dados['id']);
                 $i++;
             } else {
-                $subordinadoidtmp = $dados['subordinadoid'];
+                $father_idtmp = $dados['father_id'];
                 $i++;
             }
-            $tipo_legivel = $this->LeModuloDaEstruturaLegivel($dados['id']);
 
         }
 
         $sql = "INSERT INTO
-                    categorias
+                    taxonomy
                     (
-                        nome, nome_encoded,
-                        descricao,
-                        patriarca, patriarca_encoded,
-                        subordinadoid,subordinado_nome_encoded,
-                        classe,tipo,tipo_legivel,
-                        autor
+                        name, name_encoded,
+                        description,
+                        structure_name, structure_name_encoded,
+                        father_id, father_name_encoded,
+                        class, type,
+                        admin_id
                     )
                 VALUES
                     (
@@ -227,7 +223,7 @@ class Aust {
                         '$descricao',
                         '$patriarca', '$patriarcaEncoded',
                         '$father', '$subordinadoNomeEncoded',
-                        '$classe','$tipo','$tipo_legivel',
+                        '$classe','$tipo',
                         '".$autor."'
                     )";
 
@@ -244,9 +240,9 @@ class Aust {
             return false;
 
         $sql = "SELECT
-                    id, nome, patriarca, subordinadoid, classe
+                    id, name, structure_name, father_id, class
                 FROM
-                    categorias
+                    taxonomy
                 WHERE
                     id='$id'";
 		$query = Connection::getInstance()->query($sql);
@@ -255,24 +251,24 @@ class Aust {
         /**
          * Category without patriarch, go for its father's patriarch
          */
-        if( empty($query['patriarca'])
-                AND $query['classe'] == 'categoria' ) {
+        if( empty($query['father_id'])
+                AND $query['class'] == 'categoria' ) {
             $this->_recursiveCurrent++;
-            return $this->getPatriarch($query['subordinadoid']);
+            return $this->getPatriarch($query['father_id']);
         }
         /*
          * No patriarch, but it's an structure, so it is itself
          */
-        elseif( empty($query['patriarca'])
-                AND $query['classe'] == 'estrutura' ) {
-            return $query['nome'];
+        elseif( empty($query['father_id'])
+                AND $query['class'] == 'estrutura' ) {
+            return $query['name'];
         }
         /*
          * A patriarch is already defined
          */
         else {
             $this->_recursiveCurrent = 1;
-            return $query['patriarca'];
+            return $query['father_id'];
         }
     }
 
@@ -307,8 +303,8 @@ class Aust {
 
     public function createSite($name, $description = '') {
         $sql = "INSERT INTO
-                    categorias
-                        (nome,descricao,classe,tipo,subordinadoid)
+                    taxonomy
+                        (name, description, class, type, father_id)
                 VALUES
                     ('$name','$description','categoria-chefe','','0')";
         return Connection::getInstance()->exec($sql);
@@ -325,9 +321,9 @@ class Aust {
         $sql = "SELECT
                     *
                 FROM
-                    categorias
+                    taxonomy
                 WHERE
-                    classe='categoria-chefe'
+                    class='categoria-chefe'
                 ";
         $query = Connection::getInstance()->query($sql);
         $t = count($query);
@@ -363,11 +359,11 @@ class Aust {
          * SITES
          */
         $sql = "SELECT
-                    c.*, c.nome as name
+                    c.*, c.name as name
                 FROM
-                    categorias AS c
+                    taxonomy AS c
                 WHERE
-                    c.subordinadoid='0'
+                    c.father_id='0'
 					$where
                 ";
 
@@ -520,21 +516,21 @@ class Aust {
          * Structures of given site
         */
         $sql = "SELECT
-                    lp.*, lp.nome as name, lp.tipo as tipo,
+                    lp.*, lp.name as name, lp.type as type,
                     ( SELECT COUNT(*)
                     FROM
                     ".self::$austTable." As clp
                     WHERE
-                    clp.subordinadoid=lp.id
+                    clp.father_id=lp.id
                     ) As num_sub_nodes
                 FROM
                     ".self::$austTable." AS lp
                 WHERE
-                    lp.subordinadoid = '".$id."' AND
-                    lp.classe = 'estrutura'
+                    lp.father_id = '".$id."' AND
+                    lp.class = 'estrutura'
                 ORDER BY
-                    lp.tipo DESC,
-                    lp.nome ASC
+                    lp.type DESC,
+                    lp.name ASC
         ";
         $query = Connection::getInstance()->query($sql);
 
@@ -572,35 +568,25 @@ class Aust {
         if(!empty($param['where'])) {
             $where = $param['where'];
         } else {
-            $where = "classe='estrutura'";
+            $where = "class='estrutura'";
         }
 
-        /**
-         * $orderby: Ordenado por
-         */
         $orderby = (empty($param['orderby'])) ? '' : $param['orderby'];
-        /**
-         * $limit: Limite de rows retornados
-         */
         $limit = (empty($param['limit'])) ? '' : $param['limit'];
 
-
-        // seleciona todas as estruturas
         $sql = "SELECT
                     *
                 FROM
-                    categorias
+                    taxonomy
                 WHERE
                     ".$where."
                 ".$orderby." ".$limit;
         $query = Connection::getInstance()->query($sql);
-        //pr($mysql);
 
         $estruturas_array = array();
-        //while($dados = mysql_fetch_array($mysql)){
         foreach($query as $chave=>$valor) {
-            $estruturas_array[$valor['id']]['nome'] = $valor['nome'];
-            $estruturas_array[$valor['id']]['tipo'] = $valor['tipo'];
+            $estruturas_array[$valor['id']]['nome'] = $valor['name'];
+            $estruturas_array[$valor['id']]['tipo'] = $valor['type'];
             $estruturas_array[$valor['id']]['id'] = $valor['id'];
         }
         return $estruturas_array;
@@ -617,28 +603,28 @@ class Aust {
 			return $this->_structureModuleCache[$node];
 	
         $sql = "SELECT
-                	tipo
+                	type
                 FROM
-                	categorias
+                	taxonomy
                 WHERE
                 	id=$node";
         $query = Connection::getInstance()->query($sql);
 
-		$this->_structureModuleCache[$node] = $query[0]['tipo'];
+		$this->_structureModuleCache[$node] = $query[0]['type'];
         return $this->_structureModuleCache[$node];
     }
 
     // retorna o nome legível do módulo
     function LeModuloDaEstruturaLegivel($node) {
         $sql = "SELECT
-                                tipo
-                        FROM
-                                categorias
-                        WHERE
-                                id=$node";
+                        type
+                FROM
+                        taxonomy
+                WHERE
+                        id=$node";
 
         $query = Connection::getInstance()->query($sql);
-        $tipo = $query[0]['tipo'];
+        $tipo = $query[0]['type'];
         if(is_file(MODULES_DIR.$tipo.'/config.php')) {
             include(MODULES_DIR.$tipo.'/config.php');
             return $modInfo['name'];
@@ -654,7 +640,7 @@ class Aust {
         $sql = "SELECT
                     $field
                 FROM
-                    categorias
+                    taxonomy
                 WHERE
                     id=$node";
         $query = Connection::getInstance()->query($sql);
@@ -672,13 +658,13 @@ class Aust {
      */
     public function leNomeDaEstrutura($node) {
         $sql = "SELECT
-                    nome
+                    name
                 FROM
-                    categorias
+                    taxonomy
                 WHERE
                     id=$node";
         $query = Connection::getInstance()->query($sql);
-        return $query[0]['nome'];
+        return $query[0]['name'];
     }
 
     function LimpaVariavelCategorias() {
@@ -729,7 +715,7 @@ class Aust {
         /**
          * Guarda qual o id do pai para carregar suas filhas
          */
-        $where = "lp.subordinadoid = '$parent'";
+        $where = "lp.father_id = '$parent'";
         /**
          * Se não for especificada uma estrutura, carrega todas as categorias da categoria chefe
          * especificada
@@ -738,19 +724,19 @@ class Aust {
             if(is_int($categoriachefe)) {
                 $where = $where . " AND lp.id='".$categoriachefe."'";
             } elseif(is_string($categoriachefe)) {
-                $where = $where . " AND lp.nome='".$categoriachefe."'";
+                $where = $where . " AND lp.name='".$categoriachefe."'";
             }
         }
         /**
          * Monta o SQL
          */
         $sql="SELECT
-					lp.id, lp.subordinadoid, lp.nome, lp.classe,
+					lp.id, lp.father_id, lp.name, lp.class,
 					( SELECT COUNT(*)
 						FROM
 							".self::$austTable." As clp
 						WHERE
-							clp.subordinadoid=lp.id
+							clp.father_id=lp.id
 					) As num_sub_nodes
 				FROM
 					".self::$austTable." AS lp
@@ -764,7 +750,7 @@ class Aust {
         $items = '';
         foreach ( $query as $chave=>$myrow ) {
 
-            $this->AustCategorias[$myrow['id']] = $myrow['nome'];
+            $this->AustCategorias[$myrow['id']] = $myrow['name'];
 
             //chamar recursivamente a função
             $items.=$this->LeCategoriasFilhasCopy($categoriachefe, $myrow["id"], $level+1, $current_node);
@@ -857,7 +843,7 @@ class Aust {
         $sql = "SELECT
                     id
                 FROM
-                    categorias";
+                    taxonomy";
         return Connection::getInstance()->count($sql);
     }
 

@@ -38,7 +38,7 @@ class ModulesManagerTest extends PHPUnit_Framework_TestCase
 		$obj = new ModulesManager();
 
 		if( empty($this->structureId) ){
-			$query = Connection::getInstance()->query("SELECT id FROM categorias WHERE tipo='agenda' AND classe='estrutura' LIMIT 1");
+			$query = Connection::getInstance()->query("SELECT id FROM taxonomy WHERE type='agenda' AND class='estrutura' LIMIT 1");
 			$this->assertArrayHasKey(0, $query);
 			$structureId = $query[0]["id"];
 		}
@@ -60,7 +60,7 @@ class ModulesManagerTest extends PHPUnit_Framework_TestCase
 		$obj = new ModulesManager();
 
 		if( empty($this->structureId) ){
-			$query = Connection::getInstance()->query("SELECT id FROM categorias WHERE tipo='agenda' AND classe='estrutura' LIMIT 1");
+			$query = Connection::getInstance()->query("SELECT id FROM taxonomy WHERE type='agenda' AND class='estrutura' LIMIT 1");
 			$this->assertArrayHasKey(0, $query);
 			$structureId = $query[0]["id"];
 		}
@@ -80,7 +80,7 @@ class ModulesManagerTest extends PHPUnit_Framework_TestCase
 		$this->assertFalse($obj->modelInstance());
 
 		if( empty($this->structureId) ){
-			$query = Connection::getInstance()->query("SELECT id FROM categorias WHERE tipo='textual' AND classe='estrutura' LIMIT 1");
+			$query = Connection::getInstance()->query("SELECT id FROM taxonomy WHERE type='textual' AND class='estrutura' LIMIT 1");
 			$this->assertArrayHasKey(0, $query);
 			$structureId = $query[0]["id"];
 		}

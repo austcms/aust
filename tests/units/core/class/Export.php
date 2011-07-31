@@ -50,7 +50,7 @@ class ExportTest extends PHPUnit_Framework_TestCase
 	}
 
 	function populate(){
-		Aust::getInstance()->connection->exec("INSERT INTO categorias (nome,classe,subordinadoid) VALUES ('TestePai777','categoria-chefe','0')");
+		Aust::getInstance()->connection->exec("INSERT INTO categorias (nome,classe,father_id) VALUES ('TestePai777','categoria-chefe','0')");
 		$lastInsert = Aust::getInstance()->connection->lastInsertId();
 		$this->lastSite = $lastInsert;
 		
@@ -101,7 +101,7 @@ class ExportTest extends PHPUnit_Framework_TestCase
 		);
 		
 		// Pega ID da estrutura salva
-		$st = reset(Aust::getInstance()->connection->query("SELECT id FROM categorias WHERE nome='Teste777Conteudo'"));
+		$st = reset(Aust::getInstance()->connection->query("SELECT id FROM taxonomy WHERE nome='Teste777Conteudo'"));
 		
 		$stId = $st['id'];
 		Aust::getInstance()->connection->exec("INSERT INTO config (tipo,local,propriedade,valor) VALUES('mod_conf','$stId','teste777777','teste777777')");
@@ -110,10 +110,10 @@ class ExportTest extends PHPUnit_Framework_TestCase
     }
 
 	function resetTables(){
-		$this->obj->connection->exec("DELETE FROM categorias WHERE nome='Teste777Cadastro'");
-		$this->obj->connection->exec("DELETE FROM categorias WHERE nome='Teste777Conteudo'");
-		$this->obj->connection->exec("DELETE FROM categorias WHERE nome='TestePai777'");
-		$this->obj->connection->exec("DELETE FROM categorias WHERE nome='Teste777'");
+		$this->obj->connection->exec("DELETE FROM taxonomy WHERE nome='Teste777Cadastro'");
+		$this->obj->connection->exec("DELETE FROM taxonomy WHERE nome='Teste777Conteudo'");
+		$this->obj->connection->exec("DELETE FROM taxonomy WHERE nome='TestePai777'");
+		$this->obj->connection->exec("DELETE FROM taxonomy WHERE nome='Teste777'");
 		$this->obj->connection->exec(
 			"DELETE FROM
 				flex_fields_config
@@ -231,13 +231,13 @@ class ExportTest extends PHPUnit_Framework_TestCase
 		$this->obj->importSite(reset(json_decode($json, true)));
 		
 		// salvou o site?
-			$conf = $this->obj->connection->query("SELECT * FROM categorias WHERE nome='TestePai777'");
-			$this->assertEquals('0', $conf[0]['subordinadoid'], 'Did not save the site.' );
+			$conf = $this->obj->connection->query("SELECT * FROM taxonomy WHERE nome='TestePai777'");
+			$this->assertEquals('0', $conf[0]['father_id'], 'Did not save the site.' );
 			$siteId = $conf[0]['id'];
 
 		// CONTEUDO
-			$conf = $this->obj->connection->query("SELECT * FROM categorias WHERE nome='Teste777Conteudo'");
-			$this->assertEquals($siteId, $conf[0]['subordinadoid'], 'Did not save the conteudo.' );
+			$conf = $this->obj->connection->query("SELECT * FROM taxonomy WHERE nome='Teste777Conteudo'");
+			$this->assertEquals($siteId, $conf[0]['father_id'], 'Did not save the conteudo.' );
 			$this->assertEquals('estrutura', $conf[0]['classe'], 'Did not save the conteudo.' );
 			$conteudoId = $conf[0]['id'];
 		
@@ -246,8 +246,8 @@ class ExportTest extends PHPUnit_Framework_TestCase
 				$this->assertEquals('teste777777', $conf[0]['valor'], 'Not importing modConfig.' );
 				
 		// CADASTRO
-			$conf = $this->obj->connection->query("SELECT * FROM categorias WHERE nome='Teste777Cadastro'");
-			$this->assertEquals($siteId, $conf[0]['subordinadoid'], 'Did not save the cadastro.' );
+			$conf = $this->obj->connection->query("SELECT * FROM taxonomy WHERE nome='Teste777Cadastro'");
+			$this->assertEquals($siteId, $conf[0]['father_id'], 'Did not save the cadastro.' );
 			$this->assertEquals('estrutura', $conf[0]['classe'], 'Did not save the cadastro.' );
 			
 			// criou tabelas tb?
@@ -280,7 +280,7 @@ class ExportTest extends PHPUnit_Framework_TestCase
 		$this->obj->importSite(reset(json_decode($json, true)));
 		$this->obj->importSite(reset(json_decode($json, true)));
 
-		$conf = $this->obj->connection->query("SELECT * FROM categorias WHERE classe='estrutura'");
+		$conf = $this->obj->connection->query("SELECT * FROM taxonomy WHERE classe='estrutura'");
 		
 		$existentSt = array();
 		foreach( $conf as $value ){

@@ -6,10 +6,6 @@
 
 <form method="post" action="adm_main.php?section=<?php echo $_GET['section'];?>&action=save" enctype="multipart/form-data">
 <input type="hidden" name="action" value="gravar">
-<input type="hidden" name="frmclasse" value="categoria">
-
-<input type="hidden" name="autorid" value="<?php echo $_SESSION['loginid']; ?>">
-<input type="hidden" name="autornome" value="<?php echo $_SESSION['loginnome']; ?>">
 <table width="670" border=0 cellpadding=0 cellspacing=0 class="form">
 <tr>
     <td valign="top"><label>Categoria:</label> </td>
@@ -20,7 +16,7 @@
         $escala = (empty($escala)) ? '' : $escala;
 
         Aust::getInstance()->EstruturasSemCategorias();
-        echo BuildDDList(Aust::$austTable, 'frmsubordinadoid', $escala);
+        echo BuildDDList(Aust::$austTable, 'frmfather_id', $escala);
         ?>
         </div>
         <p class="explanation">
@@ -33,7 +29,7 @@
 <tr>
     <td valign="top"><label>Nome:</label> </td>
     <td>
-        <input type="text" name="frmnome" class="text">
+        <input type="text" name="frmname" class="text">
         <p class="explanation">
             Digite o nome da categoria. (Começa com letra maiúscula e não leva
             ponto final)
@@ -45,7 +41,7 @@
 <tr>
     <td valign="top"><label>Descrição:</label> </td>
     <td>
-        <textarea name="frmdescricao" id="jseditor"></textarea>
+        <textarea name="frmdescription" id="jseditor"></textarea>
         <p class="explanation">
             Digite uma breve descrição desta categoria.
         </p>

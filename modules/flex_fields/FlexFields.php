@@ -1010,9 +1010,8 @@ class FlexFields extends Module {
         $sql = "SELECT
                     *, node_id AS cat,
                     (	SELECT
-                            nome
-                        FROM
-                            categorias AS c
+                            name
+                        FROM taxonomy AS c
                         WHERE
                             id=cat
                     ) AS node

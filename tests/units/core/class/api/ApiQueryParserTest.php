@@ -105,7 +105,7 @@ class ApiQueryParserTest extends PHPUnit_Framework_TestCase
 				";
 		Connection::getInstance()->exec($sql);
 		
-		$sql = "SELECT id FROM categorias WHERE nome='News' AND classe='estrutura'";
+		$sql = "SELECT id FROM taxonomy WHERE name='News' AND class='estrutura'";
 		$newsId = Connection::getInstance()->query($sql);
 		$newsId = reset($newsId);
 		$newsId = $newsId['id'];

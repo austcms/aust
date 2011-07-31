@@ -81,28 +81,28 @@ if(!empty($_GET['block']) AND $_GET['block'] == "delete"){
             global $conexao;
             $sql = "
                     SELECT
-                        cat.id, cat.subordinadoid, cat.nome, cat.autor, cat.tipo, cat.tipo_legivel,
+                        cat.id, cat.father_id, cat.name, cat.admin_id, cat.type,
                         ( SELECT COUNT(*)
                         FROM
                             $table AS clp
                         WHERE
-                            clp.subordinadoid=cat.id
+                            clp.father_id=cat.id
                         ) AS num_sub_nodes
                     FROM
                         $table AS cat
                     WHERE
-                        cat.subordinadoid = '$parent'
+                        cat.father_id = '$parent'
                 ";
             $query = Connection::getInstance()->query($sql);
             foreach($query as $dados){
 
                 ?>
                 <div class="structure structure<?php echo $level;?>" style="padding-left: 40px; margin-left: <?php echo ($level-1)*40;?>px">
-                    <span onmouseover="javascript: est_options('<?php echo $dados['id']?>')"><?php echo $dados['nome']?></span>
+                    <span onmouseover="javascript: est_options('<?php echo $dados['id']?>')"><?php echo $dados['name']?></span>
 
                     <?php
-                    if($level <= 1 AND !empty($dados['tipo_legivel'])){
-                        echo '<span style="text-transform: lowercase; color: #999999" class="tipo_legivel">('.$dados['tipo_legivel'].')</span>';
+                    if($level <= 1 AND !empty($dados['type'])){
+                        echo '<span style="text-transform: lowercase; color: #999999" class="tipo_legivel">('.$dados['type'].')</span>';
                     }
                     echo '<div class="est_options" style="color: #333333; text-transform: none; font-weight: normal;" id="est_options_'.$dados['id'].'">';
                     echo '<a href="adm_main.php?section='.$_GET['section'].'&action=edit_form&w='.$dados['id'].'" style="color: orange;">Editar descrição</a>';
@@ -115,7 +115,7 @@ if(!empty($_GET['block']) AND $_GET['block'] == "delete"){
                 }
             }
         }
-        BuildCategoriasStructure('categorias');
+        BuildCategoriasStructure('taxonomy');
 
     ?>
     </div>

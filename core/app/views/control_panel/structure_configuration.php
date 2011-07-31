@@ -1,7 +1,7 @@
 <div id="structure_configuration">
 
 <h2>
-	Configure: <?php echo $module->information["nome"] ?>
+	Configure: <?php echo $module->information["name"] ?>
 </h2>
 
 <?php

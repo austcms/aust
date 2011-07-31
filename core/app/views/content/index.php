@@ -49,7 +49,7 @@ $sites = Aust::getInstance()->getStructures();
                  */
                 foreach( $site['Structures'] as $structure ):
 
-					if( !is_dir(MODULES_DIR.$structure['tipo']."/") ){
+					if( !is_dir(MODULES_DIR.$structure['type']."/") ){
 						?>
 						<tr class="list">
 	                        <td class="title" colspan="1">
@@ -66,11 +66,11 @@ $sites = Aust::getInstance()->getStructures();
                      * Use o comando 'continue' para pular o resto do loop atual
                      */
                     unset($modInfo);
-                    if(is_file(MODULES_DIR.$structure['tipo'].'/'.MOD_CONFIG)){
+                    if(is_file(MODULES_DIR.$structure['type'].'/'.MOD_CONFIG)){
                         /*
                          * Pega dados do módulo. $modInfo existe.
                          */
-                        include(MODULES_DIR.$structure['tipo'].'/'.MOD_CONFIG);
+                        include(MODULES_DIR.$structure['type'].'/'.MOD_CONFIG);
 
                         $type = $modInfo['name'];
                     } else {

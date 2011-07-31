@@ -2,7 +2,7 @@
 class Fixture {
 
 	public $tables = array(
-		"aust" 		=> "categorias",
+		"aust" 		=> "taxonomy",
 		"users"		=> "admins",
 		"modules"	=> "modulos",
 	);
@@ -58,7 +58,7 @@ class Fixture {
 		Connection::getInstance()->exec("DELETE FROM ".$this->tables["aust"]);
 		$aust = 
 			"INSERT INTO ".$this->tables["aust"]."
-				(nome, nome_encoded, classe, autor)
+				(name, name_encoded, class, admin_id)
 			VALUES
 				('Site', 'site', 'categoria-chefe', '1')
 				";
@@ -67,7 +67,7 @@ class Fixture {
 
 		$aust = 
 			"INSERT INTO ".$this->tables["aust"]."
-				(nome, nome_encoded, tipo, subordinadoid, autor)
+				(name, name_encoded, type, father_id, admin_id)
 			VALUES
 				('News', 'news', 'textual', ".$this->siteId.", '1')
 				";
@@ -75,7 +75,7 @@ class Fixture {
 
 		$aust = 
 			"INSERT INTO ".$this->tables["aust"]."
-				(nome, nome_encoded, classe, tipo, subordinadoid, autor)
+				(name, name_encoded, class, type, father_id, admin_id)
 			VALUES
 				('News', 'news', 'estrutura', 'textual', ".$this->siteId.", '1')
 				";
@@ -84,7 +84,7 @@ class Fixture {
 
 		$aust = 
 			"INSERT INTO ".$this->tables["aust"]."
-				(nome, nome_encoded, classe, tipo, subordinadoid, autor)
+				(name, name_encoded, class, type, father_id, admin_id)
 			VALUES
 				('Calendar', 'calendar', 'estrutura', 'agenda', ".$this->siteId.", '1')
 				";
@@ -116,7 +116,7 @@ class Fixture {
         $flexFieldsSetup = new $modelName;
         $flexFields = new $mod;
 
-		Connection::getInstance()->query("INSERT INTO categorias (nome,classe) VALUES ('Website777','categoria-chefe')");
+		Connection::getInstance()->query("INSERT INTO taxonomy (name,class) VALUES ('Website777','categoria-chefe')");
 		$lastInsert = Connection::getInstance()->lastInsertId();
 		
 		$params = array(
@@ -167,7 +167,7 @@ class Fixture {
 		$this->createStructures();
 		$aust = 
 			"INSERT INTO ".$this->tables["aust"]."
-				(nome, nome_encoded, classe, tipo, subordinadoid, autor)
+				(name, name_encoded, class, type, father_id, admin_id)
 			VALUES
 				('Articles', 'articles', 'estrutura', 'textual', ".$this->siteId.", '1')
 				";

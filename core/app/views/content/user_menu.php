@@ -13,9 +13,9 @@
 $sql = "SELECT
             id,nome
         FROM
-            categorias
+            taxonomy
         WHERE
-            subordinadoid='0'
+            father_id='0'
         ";
 
 $siteQuery = Connection::getInstance()->query($sql);
@@ -40,21 +40,21 @@ foreach($siteQuery as $chave=>$valor){
      */
     $sql = "
             SELECT
-                lp.id, lp.subordinadoid, lp.nome, lp.tipo as tipo,
+                lp.id, lp.father_id, lp.name, lp.type as type,
                 ( SELECT COUNT(*)
                 FROM
                 $aust_table As clp
                 WHERE
-                clp.subordinadoid=lp.id
+                clp.father_id=lp.id
                 ) As num_sub_nodes
             FROM
                 $aust_table AS lp
             WHERE
-                lp.subordinadoid = '".$valor['id']."' AND
-                lp.classe = 'estrutura'
+                lp.father_id = '".$valor['id']."' AND
+                lp.class = 'estrutura'
             ORDER BY
-                lp.tipo DESC,
-                lp.nome ASC
+                lp.type DESC,
+                lp.name ASC
     ";
 
     $query = Connection::getInstance()->query($sql);
@@ -63,7 +63,7 @@ foreach($siteQuery as $chave=>$valor){
         $cur_tipo = (empty($cur_tipo)) ? '' : $cur_tipo;
 
 
-        if($cur_tipo <> $estruturas['tipo']){
+        if($cur_tipo <> $estruturas['type']){
             ?>
         <tr height="1">
             <td colspan="2" bgcolor="silver"></td>
@@ -71,19 +71,19 @@ foreach($siteQuery as $chave=>$valor){
             <tr>
                 <td colspan="2" valign="top"><strong>
                 <?php
-                if(is_file(MODULES_DIR.$estruturas['tipo'].'/'.MOD_CONFIG)){
+                if(is_file(MODULES_DIR.$estruturas['type'].'/'.MOD_CONFIG)){
                     unset($modInfo);
-                    include(MODULES_DIR.$estruturas['tipo'].'/'.MOD_CONFIG);
+                    include(MODULES_DIR.$estruturas['type'].'/'.MOD_CONFIG);
 
                     echo ''.$modInfo['name'].'';
                 } else {
-                    echo ''.$estruturas['tipo'].'';
+                    echo ''.$estruturas['type'].'';
                 }
                 ?>
                 </strong></td>
             </tr>
         <?php }
-        $cur_tipo = $estruturas['tipo'];
+        $cur_tipo = $estruturas['type'];
 
         /**
          * Verifica permissões
@@ -97,7 +97,7 @@ foreach($siteQuery as $chave=>$valor){
                  */
                 if($estruturas['num_sub_nodes'] > 0 or ($modInfo['somenteestrutura'] == TRUE)){ ?>
                     <td valign="top">
-                        <?php echo $estruturas['nome']; ?>
+                        <?php echo $estruturas['name']; ?>
                     </td>
                     <td>
                         <ul class="opcoes">
@@ -116,7 +116,7 @@ foreach($siteQuery as $chave=>$valor){
                     </td>
                 <?php } else { ?>
                     <td valign="top">
-                        <span style="color: silver"><?php echo $estruturas['nome'];?></span>
+                        <span style="color: silver"><?php echo $estruturas['name'];?></span>
                     </td>
                     <td>
                         <span style="color: silver">É necessário cadastrar categorias.</span>

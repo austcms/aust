@@ -154,7 +154,7 @@ class TextualApiTest extends PHPUnit_Framework_TestCase
 		
 		$query = array(
 			'query' => 'Articles',
-			'fields' => 'id;title;text;node;node_tipo;node_classe',
+			'fields' => 'id;title;text;node;node_type;node_class',
 			'where_title' => '*new+service+offers*;*google*',
 		);
 
@@ -162,8 +162,8 @@ class TextualApiTest extends PHPUnit_Framework_TestCase
 		$this->assertArrayHasKey('text', $return[0], $return);
 		$this->assertEquals('New Service Offers Music in Quantity, Not by Song', $return[0]['title']);
 		$this->assertEquals('Articles', $return[0]['node']);
-		$this->assertEquals('textual', $return[0]['node_tipo']);
-		$this->assertEquals('estrutura', $return[0]['node_classe']);
+		$this->assertEquals('textual', $return[0]['node_type']);
+		$this->assertEquals('estrutura', $return[0]['node_class']);
 	}
 	
 	// returns JSON

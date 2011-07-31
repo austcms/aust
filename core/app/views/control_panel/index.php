@@ -106,8 +106,8 @@ if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'):
 						foreach( $site['Structures'] as $structure ){
 							?>
 							<li>
-								<strong><?php echo $structure["nome"] ?></strong>
-								(módulo <?php echo $structure["tipo"] ?>)
+								<strong><?php echo $structure["name"] ?></strong>
+								(módulo <?php echo $structure["type"] ?>)
 								<a href="adm_main.php?section=<?php echo CONTROL_PANEL_DISPATCHER ?>&aust_node=<?php echo $structure["id"] ?>&action=structure_configuration">Configurar</a>
 							</li>
 							<?php
@@ -140,7 +140,7 @@ if(User::getInstance()->LeRegistro('tipo') == 'Webmaster'):
                             <label>Categoria-chefe: </label>
                                 <select name="categoria_chefe">
                                     <?php
-                                    Aust::getInstance()->getSite(Array('id', 'nome'), '<option value="&%id">&%nome</option>', '', '');
+                                    Aust::getInstance()->getSite(Array('id', 'name'), '<option value="&%id">&%name</option>', '', '');
                                     ?>
                                 </select>
                         </div>

@@ -18,8 +18,6 @@ UPDATE
 	WHERE
 		tipo='cadastro'
 
-Change the table name 'categorias' to the table which has all the Aust nodes.
-
 Then, convert all current field data to FlexFields:
 
 INSERT INTO
@@ -51,7 +49,7 @@ Then, delete 'cadastros_conf' table:
 From Conteudo to Textual
 ========================
 
-	UPDATE categorias SET tipo='textual' WHERE tipo='textos'
+	UPDATE taxonomy SET tipo='textual' WHERE tipo='textos'
 	
 Then, install the module and run:
 
@@ -82,7 +80,7 @@ Then, once everything's in place, run:
 From GaleriaDeFotos to PhotoGallery
 ===================================
 
-	UPDATE categorias SET tipo='photo_gallery' WHERE tipo='galeriafotos'
+	UPDATE taxonomy SET tipo='photo_gallery' WHERE tipo='galeriafotos'
 
 Then, install the PhotoGallery module. Now, pass all current data to the new tables.
 
@@ -142,7 +140,7 @@ From Arquivos to Files
 
 Convert the structure module:
 	
-	UPDATE categorias SET tipo='files' WHERE tipo='arquivos'
+	UPDATE taxonomy SET tipo='files' WHERE tipo='arquivos'
 
 Move data to Files table:
 
@@ -176,7 +174,7 @@ From Imagens to Images
 
 Convert the structure module:
 
-	UPDATE categorias SET tipo='imagens' WHERE tipo='images'
+	UPDATE taxonomy SET tipo='imagens' WHERE tipo='images'
 
 Install the module. Move data to Files table:
 

@@ -19,9 +19,9 @@ class AustTest extends PHPUnit_Framework_TestCase
     }
 
 	function tearDown(){
-		$this->obj->connection->query("DELETE FROM categorias WHERE nome='Test777'");
-		$this->obj->connection->query("DELETE FROM categorias WHERE nome='TestFather777'");
-		$this->obj->connection->query("DELETE FROM categorias WHERE nome='Test777Hidden'");
+		$this->obj->connection->query("DELETE FROM taxonomy WHERE name='Test777'");
+		$this->obj->connection->query("DELETE FROM taxonomy WHERE name='TestFather777'");
+		$this->obj->connection->query("DELETE FROM taxonomy WHERE name='Test777Hidden'");
 		$this->obj->connection->query("DELETE FROM config WHERE explanation='test'");
 	}
 
@@ -31,7 +31,7 @@ class AustTest extends PHPUnit_Framework_TestCase
 	
 	function testGetStructure(){
 		Fixture::getInstance()->create();
-		$query = Connection::getInstance()->query("SELECT id FROM categorias WHERE tipo='textual' AND classe='estrutura' LIMIT 1");
+		$query = Connection::getInstance()->query("SELECT id FROM taxonomy WHERE type='textual' AND class='estrutura' LIMIT 1");
 		$structureId = $query[0]["id"];
 		
 		$structure = $this->obj->getStructureById($structureId);
@@ -62,16 +62,16 @@ class AustTest extends PHPUnit_Framework_TestCase
 	}
 
 	function testGetStructuresAndHideInvisible(){
-		$this->obj->connection->query("DELETE FROM categorias WHERE nome='Test777'");
-		$this->obj->connection->query("DELETE FROM categorias WHERE nome='TestFather777'");
+		$this->obj->connection->query("DELETE FROM taxonomy WHERE name='Test777'");
+		$this->obj->connection->query("DELETE FROM taxonomy WHERE name='TestFather777'");
 
-		$this->obj->connection->query("INSERT INTO categorias (nome,subordinadoid,classe) VALUES ('TestFather777','0','categoria-chefe')");
+		$this->obj->connection->query("INSERT INTO taxonomy (name,father_id,class) VALUES ('TestFather777','0','categoria-chefe')");
 		$siteId = $this->obj->connection->lastInsertId();
 
-		$this->obj->connection->query("INSERT INTO categorias (nome,subordinadoid,classe) VALUES ('Test777', '".$siteId."', 'estrutura')");
+		$this->obj->connection->query("INSERT INTO taxonomy (name,father_id,class) VALUES ('Test777', '".$siteId."', 'estrutura')");
 		$stId = $this->obj->connection->lastInsertId();
 
-		$this->obj->connection->query("INSERT INTO categorias (nome,subordinadoid,classe) VALUES ('Test777Hidden', '".$siteId."', 'estrutura')");
+		$this->obj->connection->query("INSERT INTO taxonomy (name,father_id,class) VALUES ('Test777Hidden', '".$siteId."', 'estrutura')");
 		$hiddenStId = $this->obj->connection->lastInsertId();
 
 		$this->obj->connection->query(
@@ -88,13 +88,13 @@ class AustTest extends PHPUnit_Framework_TestCase
 		$hasHiddenStructure = false;
 		
 		foreach( $aust as $siteKeys => $sites ){
-			if( $sites['Site']['nome'] == "TestFather777" )
+			if( $sites['Site']['name'] == "TestFather777" )
 				$hasSite = true;
 			
 			foreach( $sites['Structures'] as $key => $data ){
-				if( $data["nome"] == "Test777" )
+				if( $data["name"] == "Test777" )
 					$hasStructure = true;
-				elseif( $data["nome"] == "Test777Hidden" )
+				elseif( $data["name"] == "Test777Hidden" )
 					$hasHiddenStructure = true;
 			}
 		}
@@ -108,7 +108,7 @@ class AustTest extends PHPUnit_Framework_TestCase
 	function testCreateNewCategory(){
 
 		// TEST #1
-		$this->obj->connection->query("INSERT INTO categorias (nome,classe) VALUES ('TestFather777','categoria')");
+		$this->obj->connection->query("INSERT INTO taxonomy (name,class) VALUES ('TestFather777','categoria')");
 		$lastInsert = $this->obj->connection->lastInsertId();
 		
 	    $params = array(
@@ -121,18 +121,18 @@ class AustTest extends PHPUnit_Framework_TestCase
 	    );
 		
 		$result = $this->obj->create($params);
-		$query = $this->obj->connection->query("SELECT * FROM categorias WHERE nome='Test777' AND subordinadoid='".$lastInsert."'");
+		$query = $this->obj->connection->query("SELECT * FROM taxonomy WHERE name='Test777' AND father_id='".$lastInsert."'");
 		$saved = reset( $query );
 		
-		$this->obj->connection->query("DELETE FROM categorias WHERE nome='Test777'");
-		$this->obj->connection->query("DELETE FROM categorias WHERE nome='TestFather777'");
+		$this->obj->connection->query("DELETE FROM taxonomy WHERE name='Test777'");
+		$this->obj->connection->query("DELETE FROM taxonomy WHERE name='TestFather777'");
 		
 		$this->assertInternalType('int', $result);
-		$this->assertArrayHasKey('nome', $saved);
-		$this->assertEquals('Test777', $saved['nome']);
-		$this->assertEquals('categoria', $saved['classe']);
-		$this->assertEquals('modulo777', $saved['tipo']);
-		$empty = empty($saved['descricao']);
+		$this->assertArrayHasKey('name', $saved);
+		$this->assertEquals('Test777', $saved['name']);
+		$this->assertEquals('categoria', $saved['class']);
+		$this->assertEquals('modulo777', $saved['type']);
+		$empty = empty($saved['description']);
 		$this->assertFalse( $empty );
 		
 		// TEST #2
@@ -140,7 +140,7 @@ class AustTest extends PHPUnit_Framework_TestCase
 	}
 	
 	function testGetStructureIdByName(){
-		$this->obj->connection->query("INSERT INTO categorias (nome,classe) VALUES ('TestFather777','categoria')");
+		$this->obj->connection->query("INSERT INTO taxonomy (name,class) VALUES ('TestFather777','categoria')");
 		$lastInsert = $this->obj->connection->lastInsertId();
 		
 	    $params = array(
