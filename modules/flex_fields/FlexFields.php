@@ -1244,21 +1244,21 @@ class FlexFields extends Module {
          * $param é uma integer
          */
         if( is_int($param) or $param > 0 ){
-            $estrutura = "categorias.id='".$param."'";
+            $estrutura = "taxonomy.id='".$param."'";
         }
         /**
          * $param é uma string
          */
         elseif( is_string($param) ){
-            $estrutura = "categorias.nome='".$param."'";
+            $estrutura = "taxonomy.nome='".$param."'";
         }
 
         $sql = "SELECT
                     flex_fields_config.valor AS valor
                 FROM
-                    flex_fields_config, categorias
+                    flex_fields_config, taxonomy
                 WHERE
-                    categorias.id=flex_fields_config.node_id AND
+                    taxonomy.id=flex_fields_config.node_id AND
                     {$estrutura} AND
                     flex_fields_config.tipo='estrutura' AND
                     flex_fields_config.chave='tabela'
@@ -1369,11 +1369,11 @@ class FlexFields extends Module {
             $sql = "SELECT
                         flex_fields_config.valor AS valor
                     FROM
-                        flex_fields_config,categorias
+                        flex_fields_config,taxonomy
                     WHERE
-                        flex_fields_config.node_id=categorias.id AND
-                        categorias.tipo='cadastro' AND
-                        categorias.nome='".$estrutura."' AND
+                        flex_fields_config.node_id=taxonomy.id AND
+                        taxonomy.tipo='cadastro' AND
+                        taxonomy.nome='".$estrutura."' AND
                         flex_fields_config.chave='".$chave."'
                     ";
         }
@@ -1393,17 +1393,17 @@ class FlexFields extends Module {
     */
     public function LeTabelaDeDados($param) {
         if(is_int($param) or $param > 0) {
-            $estrutura = "categorias.id='".$param."'";
+            $estrutura = "taxonomy.id='".$param."'";
         } elseif(is_string($param)) {
-            $estrutura = "categorias.nome='".$param."'";
+            $estrutura = "taxonomy.nome='".$param."'";
         }
 
         $sql = "SELECT
                     flex_fields_config.value AS value
                 FROM
-                    flex_fields_config, categorias
+                    flex_fields_config, taxonomy
                 WHERE
-                    categorias.id=flex_fields_config.node_id AND
+                    taxonomy.id=flex_fields_config.node_id AND
                 {$estrutura} AND
                     flex_fields_config.type='estrutura' AND
                     flex_fields_config.property='tabela'
