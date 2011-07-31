@@ -1,10 +1,10 @@
 <span class="root_user_only">Apenas desenvolvedores acessam esta tela.</span>
 <?php
 if(!empty($_POST['categoria_chefe']) AND $_POST['categoria_chefe'] <> ''){
-	if(Aust::getInstance()->createSite($_POST['nome'], '')){
+	if(Aust::getInstance()->createSite($_POST['name'], '')){
 		?>
-		<h2 class="ok">Categoria-chefe incluida com sucesso!</h2>
-		<p>Simples assim. Inserimos a primeira categoria com sucesso.</p>
+		<h2 class="ok">Site incluído com sucesso!</h2>
+		<p>Este foi o primeiro site. Agora você construirá estruturas como notícias.</p>
 		<?php
 	} else {
 		?>
@@ -42,9 +42,9 @@ if(Aust::getInstance()->Instalado()){
 	<?php
 } else {
 	?>
-	<h2 class="falha">Nenhuma categoria encontrada!</h2>
+	<h2>Taxonomia</h2>
 	<p>
-	Não foi encontrada nenhuma categoria. Provavelmente você está <strong>instalando</strong> o sistema.
+		Não foi encontrada nenhum site cadastrado. Provavelmente você está <strong>instalando</strong> o sistema.
 	</p>
 	<p>
 	Crie abaixo a <strong>categoria-chefe</strong> do site.
