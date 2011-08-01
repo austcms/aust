@@ -231,44 +231,9 @@
     }
     ?>
 
-    <?php
-    /*
-     * EMBED
-     * mostra <input> de módulos embed
-     *
-     * Embed significa que os <input>s aqui mostrados serão enviados juntamente
-     * com o <form> principal
-     *
-     * O arquivo inserido é /embed/form.php do módulo que $embed==true
-     */
-
-        include(VIEWS_DIR.'content/form_embed.php');
-
-    ?>
     <tr>
         <td colspan="2" style="padding-top: 10px;"><center><INPUT TYPE="submit" VALUE="Enviar!" name="submit" class="submit"></center></td>
     </tr>
 </table>
 
 </form>
-
-
-<?php
-    /*
-     * EMBED OWN FORM
-     * mostra <input> de módulos embedownform
-     *
-     * Embed Own Form significa que o formulário possui a própria tag <form>, não
-     * dependendo do <form> principal
-     *
-     * É padrão e pode ser copiado para todos os forms
-     */
-
-        //include(VIEWS_DIR.'content/form_embedownform.php');
-?>
-
-
-<br />
-<p>
-	<a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
-</p>

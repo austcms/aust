@@ -37,8 +37,8 @@ class ControlPanelTest extends PHPUnit_Framework_TestCase
 		$this->assertRegExp('/Files/', $rendered);
 
 		/* what about no modules installed? */
-		$this->assertTrue(Connection::getInstance()->hasTable('modulos_conf'));
-		Connection::getInstance()->exec("DELETE FROM modulos_conf");
+		$this->assertTrue(Connection::getInstance()->hasTable('modules_installed'));
+		Connection::getInstance()->exec("DELETE FROM modules_installed");
         $this->obj = new Dispatcher;
 		$this->obj->dispatch();
 		$rendered = $this->obj->controller->render();

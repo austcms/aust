@@ -225,23 +225,6 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
         <?php
     }
     ?>
-
-    <?php
-    /*
-     * EMBED
-     * mostra <input> de módulos embed
-     *
-     * Embed significa que os <input>s aqui mostrados serão enviados juntamente
-     * com o <form> principal
-     *
-     * O arquivo inserido é /embed/form.php do módulo que $embed==true
-     */
-
-        include(VIEWS_DIR.'content/form_embed.php');
-
-    ?>
-
-
     <tr>
         <td colspan="2"><center><input type="submit" value="Enviar" class="submit"></center></td>
     </tr>

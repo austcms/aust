@@ -95,7 +95,7 @@ foreach($siteQuery as $chave=>$valor){
                 /**
                  * Escreve o nome da estrutura
                  */
-                if($estruturas['num_sub_nodes'] > 0 or ($modInfo['somenteestrutura'] == TRUE)){ ?>
+                if($estruturas['num_sub_nodes'] > 0 or ($modInfo['structure_only'] == TRUE)){ ?>
                     <td valign="top">
                         <?php echo $estruturas['name']; ?>
                     </td>

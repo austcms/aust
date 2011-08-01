@@ -814,17 +814,17 @@ class Aust {
     // Lê somente estruturas que não devem ter categorias e grava em uma $_SESSION
     function EstruturasSemCategorias() {
 	
-		if( !empty($_SESSION['somenteestrutura']) )
-        	unset( $_SESSION['somenteestrutura']);
+		if( !empty($_SESSION['structure_only']) )
+        	unset( $_SESSION['structure_only']);
 		
         $diretorio = MODULES_DIR; // pega o endereço do diretório
         foreach (glob($diretorio."*", GLOB_ONLYDIR) as $pastas) {
             if(is_file($pastas.'/config.php')) {
                 include($pastas.'/config.php');
-                if($modInfo['somenteestrutura']) {
+                if($modInfo['structure_only']) {
 
                     $tmparray = array_reverse( explode("/", $pastas));
-                    $_SESSION['somenteestrutura'][] = $tmparray[0];
+                    $_SESSION['structure_only'][] = $tmparray[0];
                 }
                 //echo 'oi' ;
             }

@@ -4,7 +4,7 @@ class Fixture {
 	public $tables = array(
 		"aust" 		=> "taxonomy",
 		"users"		=> "admins",
-		"modules"	=> "modulos",
+		"modules"	=> "modules_installed",
 	);
 	
 	public $siteId;
@@ -95,10 +95,10 @@ class Fixture {
 		return true;
 		$sql = 
 			"INSERT INTO ".$this->tables["modules"]."
-				(tipo, 		chave, valor, 		pasta, 		nome, 		embed,	autor)
+				(property, value, 		directory, 		name, 		admin_id)
 			VALUES
-				('módulo', 'dir', 'textual', 	'textual',  'Textual', '0',	'1'),
-				('módulo', 'dir', 'agenda', 	'agenda', 	'Agenda', 	'0',	'1')
+				('dir', 'textual', 	'textual',  'Textual', '1'),
+				('dir', 'agenda', 	'agenda', 	'Agenda',	'1')
 				";
 		Connection::getInstance()->exec($sql);
 	}

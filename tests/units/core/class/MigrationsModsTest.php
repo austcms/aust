@@ -39,7 +39,7 @@ class MigrationsModsTest extends PHPUnit_Framework_TestCase
 	}
 	
 	function uninstallModules(){
-		Connection::getInstance()->exec("DELETE FROM modulos WHERE valor IN ('".implode("','", $this->modules())."')");
+		Connection::getInstance()->exec("DELETE FROM modules_installed WHERE value IN ('".implode("','", $this->modules())."')");
 		$sql = "DELETE FROM migrations_mods WHERE module_name IN ('".implode("','", $this->modules())."')";
 		Connection::getInstance()->exec($sql);
 	}

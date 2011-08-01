@@ -259,13 +259,6 @@ class Module extends ActiveModule
                 $this->w = Connection::getInstance()->conn->lastInsertId();
             }
 
-            /*
-             *
-             * EMBED SAVE
-             *
-             */
-            $this->saveEmbeddedModules($this->getDataForEmbeddedSaving($post));
-
             return true;
         }
 
@@ -332,35 +325,6 @@ class Module extends ActiveModule
 
         $qry = $this->_organizesLoadedData($qry);
 
-        $embedModules = $this->getRelatedEmbed($austNode);
-
-        if( empty($embedModules)
-            OR empty($this->loadedIds) )
-        {
-            $qry = serializeArray($qry);
-            $this->lastQuery = $qry;
-            return $qry;
-        }
-
-        /*
-         * Carrega dados dos módulos relacionados via embed
-         */
-        $paramForEmbedLoad = array(
-            'target_id' => $this->loadedIds,
-            'target_table' => $this->useThisTable()
-        );
-
-        foreach( $embedModules as $object ){
-            $embedResults[get_class($object)] = $object->loadEmbed($paramForEmbedLoad);
-            //$qry = array_merge( $qry, $object->loadEmbed($paramForEmbedLoad) );
-        }
-
-        foreach( $embedResults as $module=>$embedResult ){
-            foreach( $embedResult as $mainId=>$eachEmbed ){
-                $qry[$mainId][$module] = $eachEmbed;
-            }
-        }
-        
         $qry = serializeArray($qry);
         $this->lastQuery = $qry;
         return $qry;
@@ -850,235 +814,6 @@ class Module extends ActiveModule
         return $this->useThisTable();
     }
 
-    /*
-     *
-     * EMBED
-     *
-     */
-    /*
-     * EMBED -> CRUD
-     */
-    /**
-     * saveEmbed()
-     *
-     * Após save() de um módulo X ser invocado, saveEmbed() é chamado
-     * em cada módulo relacionado a X pela forma Embed.
-     *
-     * Quanto aos parâmetros, eis o formato correto:
-     *
-     *      Valores necessários:
-     *      array(
-     *          # dados de cada módulo embed, em 0, 1, 2, ..., n
-     *          'embedModules' => array(
-     *              0 => array(
-     *                  'className' => 'NomeDaClasseDesteMódulo',
-     *                  'dir' => 'diretório/do/módulo'
-     *                  'data' => array(
-     *                      'contém todos os dados que serão salvos'
-     *                  )
-     *              ),
-     *              1 => valores_da_segunda_estrutura_embed...,
-     *              # provavelmente o formulário já terá os valores
-     *              # inputs dos embed de forma que este formato já
-     *              # esteja pronto
-     *          ),
-     *          'options' => array(
-     *              targetTable => 'nome_da_tabela_da_estrutura_líder',
-     *              id => 'last_insert_id da estrutura líder',
-     *              # como a estrutura líder há pouco inseriu um novo
-     *              # registro, o id deste estará na chave acima.
-     *          )
-     *      )
-     *
-     * @param <array> $params
-     * @return <bool>
-     */
-    public function saveEmbed($params = array()){
-        return false;
-    }
-
-    public function deleteEmbed(){
-        return false;
-    }
-
-    public function loadEmbed($param){
-        $targetId = $param['target_id'];
-
-        if( !is_array($targetId) )
-            $targetId = array($targetId);
-
-        $targetTable = $param['target_table'];
-
-        $sql = "SELECT
-                    id, privilegio_id,
-                    target_id
-                FROM
-                    ".$this->useThisTable()."
-                WHERE
-                    target_id IN ('". implode("','", $targetId)."') AND
-                    target_table='$targetTable'
-                ";
-
-        $query = Connection::getInstance()->query($sql);
-
-        if( empty($query) )
-            return array();
-
-        foreach( $query as $valor ){
-            $result[$valor['target_id']][] = $valor;
-        }
-
-        return $result;
-    }
-
-    /*
-     * EMBED -> DEFINIÇÕES
-     */
-
-    /**
-     * getDataForEmbeddedSaving()
-     *
-     * Retorna todos os dados necessário para começar a salvar
-     * os embed.
-     *
-     * @param <array> $post
-     * @return <array>
-     */
-    function getDataForEmbeddedSaving($post){
-        if( !isset($post['embed']) )
-            $post['embed'] = array();
-        
-        $embedData = array(
-            'embedModules' => $post['embed'],
-            'options' => array(
-                'targetTable' => $this->mainTable,
-                'w' => $this->w,
-            )
-        );
-
-        return $embedData;
-    }
-
-    /**
-     * getRelatedEmbed()
-     *
-     * Dado uma estrutura, verifica quais outras estruturas sao associadas a ele
-     * para fazer um embed.
-     *
-     * Retorna array com objetos dos módulos relacionados
-     *
-     * @param int $austNode
-     * @return array of objects
-     */
-    public function getRelatedEmbed($austNode){
-
-        $result = array();
-        $sql = "SELECT
-                    c.type
-                FROM
-                    modulos_conf AS m
-                INNER JOIN
-                    taxonomy AS c
-                ON
-                    m.categoria_id=c.id
-                WHERE
-                    m.tipo='relacionamentos' AND
-                    c.id='".$austNode."'
-                ";
-
-        $query = Connection::getInstance()->query($sql);
-        if( empty($query) )
-            return array();
-
-        foreach( $query as $valor ){
-
-            if( !file_exists( MODULES_DIR.$valor["type"].'/'.MOD_CONFIG ) )
-                continue;
-
-            include(MODULES_DIR.$valor["type"].'/'.MOD_CONFIG);
-
-            if( !file_exists( MODULES_DIR.$valor["type"].'/'.$modInfo['className'].'.php' ) )
-                continue;
-            
-            include_once(MODULES_DIR.$valor["type"].'/'.$modInfo['className'].'.php');
-
-            $result[] = new $modInfo['className'];
-        }
-
-        return $result;
-    } // fim getRelatedEmbed()
-
-    /**
-     * getRelatedEmbedAsArray()
-     *
-     * Dado uma estrutura, verifica quais outras estruturas sao associadas a ele
-     * para fazer um embed.
-     *
-     * Se a estrutura é Notícias, verifica quais outras podem fazer embed nos
-     * seus formulários.
-     *
-     * Retorna array com ids das estruturas relacionadas
-     *
-     * @param int $austNode
-     * @return array
-     */
-    public function getRelatedEmbedAsArray($austNode){
-        $sql = "SELECT
-                    categoria_id
-                FROM
-                    modulos_conf as m
-                WHERE
-                    m.tipo='relacionamentos' AND
-                    m.valor='".$austNode."'
-                ";
-        $query = Connection::getInstance()->query($sql);
-        $tmp = array();
-        foreach( $query as $valor ){
-            $tmp[] = $valor["categoria_id"];
-        }
-        return $tmp;
-    } // fim getRelatedEmbedAsArray()
-
-    /**
-     * saveEmbeddedModules()
-     *
-     * Salva todos os dados de um formulário de embed's.
-     *
-     * @param <array> $data
-     * @return <bool>
-     */
-    public function saveEmbeddedModules($data){
-
-        //pr( $data );
-        if( empty($data) )
-            return false;
-
-        if( empty($data['embedModules']) )
-            return false;
-
-        foreach($data['embedModules'] AS $embedModule) {
-
-            $modDir = $embedModule['dir'];
-
-            if( is_file($modDir.'/'.MOD_CONFIG) ){
-                include($modDir."/".MOD_CONFIG);
-
-                $className = $modInfo['className'];
-                include_once($modDir."/".$className.'.php');
-
-                $param = $this->params;
-
-                $this->{$className} = new $className($this->params);
-                $dataToSave = array_merge($embedModule, $data['options']);
-
-                $this->{$className}->saveEmbed($dataToSave);
-            }
-
-        } // fim do foreach por cada estrutura com embed
-
-        return true;
-    } // fim saveEmbeddedModules()
-
 /*
  *
  * MÈTODOS DE SUPORTE
@@ -1278,10 +1013,10 @@ class Module extends ActiveModule
     public function verificaInstalacaoRegistro($options = array()) {
 
         if( !empty($options["pasta"]) ){
-            $where = "pasta='".$options["pasta"]."'";
+            $where = "directory='".$options["pasta"]."'";
         }
 
-        $sql = "SELECT id FROM modulos WHERE ".$where;
+        $sql = "SELECT id from modules_installed WHERE ".$where;
         $query = Connection::getInstance()->query($sql);
         if( !$query ){
             return false;
@@ -1994,8 +1729,8 @@ class Module extends ActiveModule
      */
     function leModulos() {
 
-        $modulos = Connection::getInstance()->query("SELECT * FROM modulos");
-        return $modulos;
+        $modules = Connection::getInstance()->query("SELECT * FROM modules_installed");
+        return $modules;
 
         $diretorio = MODULES_DIR; // pega o endereço do diretório
         foreach (glob($diretorio."*", GLOB_ONLYDIR) as $pastas) {
@@ -2033,136 +1768,26 @@ class Module extends ActiveModule
     }
 
     /*
-     * Retorna os módulos que tem a propriedade Embed como TRUE
-     */
-    function LeModulosEmbed() {
-        $sql = "SELECT
-                    DISTINCT m.pasta, m.nome, m.chave, m.valor, c.id, c.name
-                FROM
-                    modulos as m
-                INNER JOIN
-                    taxonomy as c
-                ON
-                    m.valor=c.type
-                WHERE
-                    m.embed='1'
-                ";
-        $query = Connection::getInstance()->query($sql);
-        $i = 0;
-        $return = '';
-
-        foreach($query as $dados) {
-            $return[$i] = $dados;
-            $i++;
-        }
-        return $return;
-    }
-
-    /**
-     * Retorna os módulos que tem a propriedade EmbedOwnForm = TRUE
-     *
-     * EmbedOwnForm significa módulos que vão dentro de formulário de
-     * inclusão/edição de conteúdo, exceto aqueles que tem seu próprio formulário
-     *
-     * @return array Todos os módulos com habilidade Embed
-     */
-
-    function LeModulosEmbedOwnForm() {
-        $sql = "SELECT
-                    DISTINCT pasta, nome, chave, valor
-                FROM
-                    modulos
-                WHERE
-                    embedownform='1'
-                ";
-        $query = Connection::getInstance()->query($sql);
-
-        $return = '';
-        $i = 0;
-        foreach($query as $dados) {
-            $return[$i]['pasta'] = $dados['pasta'];
-            $return[$i]['nome'] = $dados['nome'];
-            $return[$i]['chave'] = $dados['chave'];
-            $return[$i]['valor'] = $dados['valor'];
-            $i++;
-        }
-        return $return;
-    }
-
-    /**
-     * Retorna somente EmbedOwnForms liberados para serem mostrados
-     * na $estrutura indicada.
-     *
-     * @return array
-     */
-    function leModulosEmbedOwnFormLiberados($estrutura) {
-        $sql = "SELECT
-                    id, nome
-                FROM
-                    modulos_conf
-                WHERE
-                    valor='".$estrutura."'
-                ";
-        $query = Connection::getInstance()->query($sql);
-
-        $return = '';
-        foreach($query as $dados) {
-            $return[] = $dados['nome'];
-        }
-        return $return;
-    }
-
-    /*
      * retorna o nome de cada módulo e suas informações em formato array
      */
     function LeModulosParaArray() {
         $sql = "SELECT
-                    DISTINCT pasta, nome, chave, valor
+                    DISTINCT directory, name, property, value
                 FROM
-                    modulos
+                    modules_installed
                 ";
         $query = Connection::getInstance()->query($sql);
         $i = 0;
         foreach($query as $dados) {
-            $return[$i]['pasta'] = $dados['pasta'];
-            $return[$i]['nome'] = $dados['nome'];
-            $return[$i]['chave'] = $dados['chave'];
-            $return[$i]['valor'] = $dados['valor'];
+            $return[$i]['pasta'] = $dados['directory'];
+            $return[$i]['nome'] = $dados['name'];
+            $return[$i]['chave'] = $dados['property'];
+            $return[$i]['valor'] = $dados['value'];
             $i++;
         }
         return $return;
     }
 
-
-
-
-    /*
-     *
-     * TRATAMENTO DE IMAGENS
-     *
-     */
-
-    function fastimagecopyresampled (&$dst_image, $src_image, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h, $quality) {
-        if (empty($src_image) || empty($dst_image)) { return false; }
-        if ($quality <= 1) {
-            $temp = imagecreatetruecolor ($dst_w + 1, $dst_h + 1);
-            imagecopyresized ($temp, $src_image, $dst_x, $dst_y, $src_x, $src_y, $dst_w + 1, $dst_h + 1, $src_w, $src_h);
-            imagecopyresized ($dst_image, $temp, 0, 0, 0, 0, $dst_w, $dst_h, $dst_w, $dst_h);
-            imagedestroy ($temp);
-        } elseif ($quality < 5 && (($dst_w * $quality) < $src_w || ($dst_h * $quality) < $src_h)) {
-            $tmp_w = $dst_w * $quality;
-            $tmp_h = $dst_h * $quality;
-            $temp = imagecreatetruecolor ($tmp_w + 1, $tmp_h + 1);
-            imagecopyresized ($temp, $src_image, $dst_x * $quality, $dst_y * $quality, $src_x, $src_y, $tmp_w + 1, $tmp_h + 1, $src_w, $src_h);
-            imagecopyresampled ($dst_image, $temp, 0, 0, 0, 0, $dst_w, $dst_h, $tmp_w, $tmp_h);
-            imagedestroy ($temp);
-        } else {
-            imagecopyresampled ($dst_image, $src_image, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h);
-        }
-        return true;
-    }
-
-	
 	/*
 	 * EXPORT
 	 */

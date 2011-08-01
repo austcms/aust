@@ -104,3 +104,18 @@ Then, delete 'cadastros_conf' table:
 	DROP TABLE categorias
 
 
+Updating Modulos to Modules
+====================================
+
+	RENAME TABLE modulos TO modules_installed;
+	ALTER TABLE modules_installed CHANGE chave property varchar(120);
+	ALTER TABLE modules_installed CHANGE valor value varchar(120);
+	ALTER TABLE modules_installed CHANGE pasta directory varchar(120);
+	ALTER TABLE modules_installed CHANGE nome name varchar(120);
+	ALTER TABLE modules_installed CHANGE descricao description text;
+	ALTER TABLE modules_installed CHANGE somenteestrutura structure_only int;
+	ALTER TABLE modules_installed CHANGE publico public int;
+	ALTER TABLE modules_installed CHANGE autor admin_id int;
+
+
+	DROP TABLE modulos_conf;

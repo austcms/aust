@@ -4,8 +4,7 @@
  *
  * Carrega dados necessário sobre o módulo
  *
- * @package Modulos
- * @name Index
+  * @name Index
  * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @since v0.1.6, 06/07/2009
  */

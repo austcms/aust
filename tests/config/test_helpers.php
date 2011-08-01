@@ -9,9 +9,7 @@ function installModule($moduleName){
 	include(MODULES_DIR.$moduleName.'/'.MOD_CONFIG);
 
 	Connection::getInstance()->exec("DELETE FROM migrations_mods WHERE module_name='".$moduleName."'");
-    $modInfo['embedownform'] = (empty($modInfo['embedownform'])) ? false : $modInfo['embedownform'];
-    $modInfo['embed'] = (empty($modInfo['embed'])) ? false : $modInfo['embed'];
-    $modInfo['somenteestrutura'] = (empty($modInfo['somenteestrutura'])) ? false : $modInfo['somenteestrutura'];
+    $modInfo['structure_only'] = (empty($modInfo['structure_only'])) ? false : $modInfo['structure_only'];
 
 	MigrationsMods::getInstance()->updateMigration($moduleName);
     $param = array(

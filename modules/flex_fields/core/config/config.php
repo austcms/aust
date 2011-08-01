@@ -4,8 +4,7 @@
  *
  * Arquivo contendo informações sobre este módulo
  *
- * @package Modulos
- * @name Config
+  * @name Config
  * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @version 0.2
  * @since v0.1.6, 06/07/2009
@@ -44,18 +43,10 @@ $modInfo = array(
      */
     'estrutura' => true,
     /**
-     * 'somenteestrutura': É uma estrutura somente, sem categorias? (cadastros,
+     * 'structure_only': É uma estrutura somente, sem categorias? (cadastros,
      * por exemplo)
      */
-    'somenteestrutura' => true,
-    /**
-     * 'embed': É do tipo embed?
-     */
-    'embed' => false,
-    /**
-     * 'embedownform': É do tipo embed que tem seu próprio formulário?
-     */
-    'embedownform' => false,
+    'structure_only' => true,
 
     /**
      * RESPONSER

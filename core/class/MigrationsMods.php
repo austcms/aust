@@ -275,7 +275,7 @@ class MigrationsMods
      *
      * Pega o nome de um módulo a partir do seu diretório.
      *
-     * ex. a partir de modulos/conteudo, será retornado 'conteudo'.
+     * ex. a partir de modules/conteudo, será retornado 'conteudo'.
      */
     function getModNameFromPath($modName){
 		$modName = array_reverse(explode("/", $modName));

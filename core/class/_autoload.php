@@ -21,6 +21,5 @@ function __autoload($class){
  * HELPERS
  */
 include(CLASS_DIR."Helpers.php");
-include(CLASS_DIR."helpers/EmbedFormsHelper.php");
 include(CLASS_DIR."helpers/HtmlHelper.php");
 ?>

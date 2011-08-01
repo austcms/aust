@@ -148,16 +148,16 @@ if(User::getInstance()->LeRegistro('group') == 'Webmaster'):
                         <div class="campo">
                             <label>Módulo: </label>
                                 <?php
-                                $modulosList = ModulesManager::getInstance()->LeModulos();
+                                $modulesList = ModulesManager::getInstance()->LeModulos();
                                 ?>
                                 <select name="modulo">
                                     <?php
-									if( !empty($modulosList) ){
-	                                    foreach( $modulosList as $moduloDB ){
+									if( !empty($modulesList) ){
+	                                    foreach( $modulesList as $moduloDB ){
 
 	                                        ?>
-	                                        <option value="<?php echo $moduloDB["valor"] ?>">
-	                                            <?php echo $moduloDB["nome"] ?>
+	                                        <option value="<?php echo $moduloDB["value"] ?>">
+	                                            <?php echo $moduloDB["name"] ?>
 	                                        </option>
 	                                        <?php
 	                                    }

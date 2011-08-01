@@ -12,15 +12,11 @@ class FilesTest extends PHPUnit_Framework_TestCase
 
     public function setUp(){
 
-		installModule('privilegios');
-
 		$moduleName = 'files';
 		include(MODULES_DIR.$moduleName.'/'.MOD_CONFIG);
 
 		Connection::getInstance()->exec("DELETE FROM migrations_mods WHERE module_name='".$moduleName."'");
-        $modInfo['embedownform'] = (empty($modInfo['embedownform'])) ? false : $modInfo['embedownform'];
-        $modInfo['embed'] = (empty($modInfo['embed'])) ? false : $modInfo['embed'];
-        $modInfo['somenteestrutura'] = (empty($modInfo['somenteestrutura'])) ? false : $modInfo['somenteestrutura'];
+        $modInfo['structure_only'] = (empty($modInfo['structure_only'])) ? false : $modInfo['structure_only'];
 
 		MigrationsMods::getInstance()->updateMigration($moduleName);
 	    $param = array(
@@ -164,18 +160,6 @@ class FilesTest extends PHPUnit_Framework_TestCase
             'frmadmin_id' => '1',
             'frmnode_id' => '777',
             'frmtitle' => 'arquivo_de_teste_unitario',
-            'embed' => array(
-                '0' => array(
-                    'className' => 'Privilegios',
-                    'dir' => MODULES_DIR.'privilegios',
-                    'privilegio' => '1',
-                    'data' => array(
-                        'privid' => array(
-                            '0' => '2',
-                        )
-                    )
-                )
-            )
         );
 
         $this->assertTrue( $this->obj->save($data, array()) );
@@ -190,16 +174,11 @@ class FilesTest extends PHPUnit_Framework_TestCase
                     $this->obj->connection->query($sql), 'Não salvou o arquivo'
                 );
             $lastInsertId = $this->obj->w;
-            $sqlPriv = "SELECT id FROM privilegio_target WHERE target_id='$lastInsertId' AND privilegio_id='2' AND target_table='files'";
-            $this->assertArrayHasKey(0,
-                $this->obj->connection->query($sqlPriv) , 'Não salvou privilégio'
-            );
 
         /**
          * Exclui dados do DB
          */
         $this->obj->connection->query("DELETE FROM files WHERE title='arquivo_de_teste_unitario' AND node_id='777'");
-        $this->obj->connection->query("DELETE FROM privilegio_target WHERE target_id='$lastInsertId' AND privilegio_id='2' AND target_table='arquivos'");
 
     }
 

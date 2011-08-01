@@ -5,8 +5,7 @@
  *
  * Classe contendo funcionalidades deste módulo
  *
- * @package Modulos
- * @name Textos
+  * @name Textos
  * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @version 0.2
  * @since v0.1.5, 30/05/2009

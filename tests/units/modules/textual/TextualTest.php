@@ -225,31 +225,6 @@ class TextualTest extends PHPUnit_Framework_TestCase
 
     }
 
-    function testSaveEmbeddedModules(){
-
-        $params = array(
-            'embedModules' => array (
-                0 => array(
-                    'className' => 'Privilegios',
-                    'dir' => MODULES_DIR.'privilegios',
-                    'privilegio' => '1',
-                    'data' => array(
-                        'privid' => array(
-                            '0' => '1',
-                        )
-                    )
-                )
-            ),
-            'options' => array(
-                'targetTable' => 'textual',
-                'w' => '2',
-            )
-        );
-
-        $this->assertTrue( $this->obj->saveEmbeddedModules($params) );
-        
-
-    }
 
     function test_OrganizesLoadedData(){
         $params = array(
@@ -305,94 +280,6 @@ class TextualTest extends PHPUnit_Framework_TestCase
     }
 
 
-	/*
-	 * TODO - Privilege was taken out
-	 */
-    function SaveAndLoadWithEmbedData(){
-        /*
-         * Salva dados no DB para que se possa testar
-         */
-
-        /*
-         * Simula
-         */
-        $sql = "INSERT INTO categorias (nome,tipo) VALUES ('teste7777','privilegios')";
-        $this->obj->connection->query($sql);
-        $catLastInsertId = $this->obj->connection->lastInsertId();
-        $sql = "INSERT INTO modulos_conf (categoria_id,tipo,propriedade,valor) VALUES ('$catLastInsertId','relacionamentos','id','teste7777')";
-        $this->obj->connection->query($sql);
-        $modConfLastInsertId = $this->obj->connection->lastInsertId();
-
-        /*
-         * Salva um arquivo sem upload
-         */
-        $data = array(
-            'method' => 'create',
-            'w' => '',
-            'aust_node' => $catLastInsertId,
-            'frmnode_id' => $catLastInsertId,
-            'frmtitle' => 'teste7777',
-            'embed' => array(
-                '0' => array(
-                    'className' => 'Privilegios',
-                    'dir' => MODULES_DIR.'privilegios',
-                    'privilegio' => '1',
-                    'data' => array(
-                        'privid' => array(
-                            '0' => '2',
-                            '1' => '3',
-                        )
-                    )
-                )
-            )
-        );
-
-        $this->assertTrue( $this->obj->save($data, array()) );
-
-
-
-        /**
-         * Simula
-         *
-         * Verifica se realmente salvou os dados
-         *
-         *      Arquivos -> Privilégios
-         */
-            $sql = "SELECT id FROM textual WHERE title='teste7777'";
-            $this->assertArrayHasKey(0,
-                    $this->obj->connection->query($sql),
-                    'Não salvou o arquivo.'
-                );
-            $lastInsertId = $this->obj->w;
-            $sqlPriv = "SELECT id FROM privilegio_target WHERE target_id='$lastInsertId' AND privilegio_id='2' AND target_table='textual'";
-            $this->assertArrayHasKey(0,
-                $this->obj->connection->query($sqlPriv) , 'Não salvou privilégio'
-            );
-
-        /*
-         * VERIFICA LOAD()
-         */
-        $params = array(
-            'austNode' => array($catLastInsertId=>''),
-        );
-        $result = $this->obj->load($params);
-
-        /**
-         * Exclui dados do DB antes dos testes, senão os dados ficam todos
-         * no DB, pois com um erro acima este código não é rodado.
-         */
-        $this->obj->connection->query("DELETE FROM textual WHERE title='teste7777'");
-        $this->obj->connection->query("DELETE FROM taxonomy WHERE nome='teste7777'");
-        $this->obj->connection->query("DELETE FROM privilegio_target WHERE target_id='$lastInsertId' AND (privilegio_id IN ('2','3')) AND target_table='textual'");
-        $sql = "DELETE FROM modulos_conf WHERE id='$modConfLastInsertId' AND valor='teste7777'";
-        $this->obj->connection->query($sql);
-
-        //var_dump($result);
-        $this->assertArrayHasKey(0, $result, "Module::load() não funcionando" );
-        $this->assertArrayHasKey('Privilegios', reset($result), "Dados embed de Module::load() não retornam" );
-    }
-
-    // alguns campos configurados não podem ser vazios.
     function testReplaceFieldsValueIfEmpty(){
 
         /*
@@ -405,19 +292,6 @@ class TextualTest extends PHPUnit_Framework_TestCase
             'frmnode_id' =>  '7777',
             'frmtitle' => '',
             'frmtext' => 'teste7777',
-            'embed' => array(
-                '0' => array(
-                    'className' => 'Privilegios',
-                    'dir' => MODULES_DIR.'privilegios',
-                    'privilegio' => '1',
-                    'data' => array(
-                        'privid' => array(
-                            '0' => '2',
-                            '1' => '3',
-                        )
-                    )
-                )
-            )
         );
 
         $this->assertTrue( $this->obj->save($data, array()) );
@@ -447,7 +321,6 @@ class TextualTest extends PHPUnit_Framework_TestCase
                 }
             }
         }
-        //$this->assertArrayHasKey(0, $result, "Module::load() não funcionando" );
     }
 
 	/*

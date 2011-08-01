@@ -124,7 +124,6 @@ if( !empty($_POST) AND $save  ) {
     if( $query OR $_POST['metodo'] == 'edit' ) {
         $resultado = TRUE;
 
-        // se estiver criando um registro, guarda seu id para ser usado por módulos embed a seguir
         if($_POST['metodo'] == 'create') {
             $_POST['w'] = $this->module->connection->conn->lastInsertId();
         }

@@ -66,39 +66,9 @@ if(!empty($_POST)) {
     if($query !== false) {
         $resultado = TRUE;
 
-        // se estiver criando um registro, guarda seu id para ser usado por módulos embed a seguir
         if($_POST['metodo'] == 'criar') {
             $_POST['w'] = $this->module->connection->conn->lastInsertId();
         }
-
-
-        /*
-         * carrega módulos que contenham propriedade embed
-        */
-        $embed = $this->module->LeModulosEmbed();
-
-        // salva o objeto do módulo atual para fazer embed
-        if( !empty($embed) ) {
-            /*
-             * Caso tenha embed, serão carregados modulos embed. O objeto do módulo atual
-             * é $modulo, sendo que dos embed também. Então guardamos $modulo,
-             * fazemos unset nele e reccaregamos no final do script.
-            */
-
-            $tempmodulo = $modulo;
-            unset($modulo);
-            foreach($embed AS $chave=>$valor) {
-                foreach($valor AS $chave2=>$valor2) {
-                    if($chave2 == 'pasta') {
-                        if(is_file($valor2.'/embed/gravar.php')) {
-                            include($valor2.'/index.php');
-                            include($valor2.'/embed/gravar.php');
-                        }
-                    }
-                }
-            }
-            $modulo = $tempmodulo;
-        } // fim do embed
 
     } else {
         $resultado = FALSE;
@@ -115,7 +85,3 @@ if(!empty($_POST)) {
 
 }
 ?>
-<br />
-<p>
-    <a href="adm_main.php?section=<?php echo $_GET['section']?>"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
-</p>

@@ -178,34 +178,16 @@ $dbSchema['config'] = array(
     )
 );
 
-$dbSchema['modulos'] = array(
+$dbSchema['modules_installed'] = array(
     'id' => 'int NOT NULL auto_increment',
-    'tipo' => 'varchar(120)',
-    'chave' => 'varchar(120)',
-    'valor' => 'varchar(120)',
-    'pasta' => 'varchar(120)',
-    'nome' => 'varchar(120)',
-    'descricao' => 'varchar(120)',
-    'embed' => 'bool',
-    'embedownform' => 'bool',
-    'somenteestrutura' => 'bool',
-    'publico' => 'bool',
-    'autor' => 'int',
-    'dbSchemaTableProperties' => array(
-        'PRIMARY KEY' => '(id)',
-        'UNIQUE' => 'id (id)',
-    )
-);
-$dbSchema['modulos_conf'] = array(
-    'id' => 'int NOT NULL auto_increment',
-    'categoria_id' => 'int COMMENT "O id da categoria que recebe esta configuração."',
-    'tipo' => 'varchar(50) COMMENT "Tipo de conf. Ex.: relacionamento"',
-    'local' => 'varchar(50)',
-    'nome' => 'text COMMENT "Um nome humano para esta configuração, se necessário"',
-    'propriedade' => 'varchar(100) COMMENT "O nome da propriedade."',
-    'valor' => 'text COMMENT "O valor da conf propriamente dita"',
-    'observacao' => 'text',
-    'autor' => 'varchar(120)',
+    'property' => 'varchar(120)',
+    'value' => 'varchar(120)',
+    'directory' => 'varchar(120)',
+    'name' => 'varchar(120)',
+    'description' => 'varchar(120)',
+    'structure_only' => 'bool',
+    'public' => 'bool',
+    'admin_id' => 'int',
     'dbSchemaTableProperties' => array(
         'PRIMARY KEY' => '(id)',
         'UNIQUE' => 'id (id)',

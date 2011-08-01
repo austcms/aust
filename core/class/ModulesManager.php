@@ -214,10 +214,10 @@ class ModulesManager
     public function verificaInstalacaoRegistro($options = array()) {
 
         if( !empty($options["pasta"]) ){
-            $where = "pasta='".MODULES_DIR.$options["pasta"]."'";
+            $where = "directory='".MODULES_DIR.$options["pasta"]."'";
         }
 
-        $sql = "SELECT id FROM modulos WHERE ".$where;
+        $sql = "SELECT id from modules_installed WHERE ".$where;
         $query = Connection::getInstance()->query($sql);
 		
         if( empty($query[0]['id']) ){
@@ -512,13 +512,13 @@ class ModulesManager
         $autor = (empty($param['autor'])) ? '' : $param['autor'];
 
 
-        Connection::getInstance()->exec("DELETE FROM modulos WHERE pasta='".$pasta."'");
+        Connection::getInstance()->exec("DELETE from modules_installed WHERE directory='".$pasta."'");
 
         $sql = "INSERT INTO
-                    modulos
-                        (tipo,chave,valor,pasta,nome,descricao,embed,embedownform,somenteestrutura,autor)
+                    modules_installed
+                        (property,value,directory,name,description,structure_only,admin_id)
                 VALUES
-                    ('$tipo','$chave','$valor','$pasta','".$modInfo['name']."','".$modInfo['description']."','".$modInfo['embed']."','".$modInfo['embedownform']."','".$modInfo['somenteestrutura']."','$autor')
+                    ('$chave','$valor','$pasta','".$modInfo['name']."','".$modInfo['description']."','".$modInfo['structure_only']."','$autor')
             ";
 
         if(Connection::getInstance()->exec($sql, 'CREATE_TABLE')) {
@@ -535,9 +535,9 @@ class ModulesManager
      */
     function leModulos() {
 
-        $modulos = Connection::getInstance()->query("SELECT * FROM modulos");
-        //pr($modulos);
-        return $modulos;
+        $modules = Connection::getInstance()->query("SELECT * FROM modules_installed");
+        //pr($modules);
+        return $modules;
 
         $diretorio = MODULES_DIR; // pega o endereço do diretório
         foreach (glob($diretorio."*", GLOB_ONLYDIR) as $pastas) {
@@ -547,9 +547,9 @@ class ModulesManager
                         if(!empty($modInfo['name'])) {
                             $str = $result_format;
                             $str = str_replace("&%nome", $modInfo['name'] , $str);
-                            $str = str_replace("&%descricao", $modInfo['description'], $str);
+                            $str = str_replace("&%description", $modInfo['description'], $str);
                             $str = str_replace("&%pasta", str_replace($diretorio,"",$pastas), $str);
-                            $str = str_replace("&%diretorio", str_replace($diretorio,"",$pastas), $str);
+                            $str = str_replace("&%directory", str_replace($diretorio,"",$pastas), $str);
                             echo $str;
                             if($c < $t-1) {
                                 echo $chardivisor;
@@ -572,137 +572,25 @@ class ModulesManager
     }
 
     /*
-     * Retorna os módulos que tem a propriedade Embed como TRUE
-     */
-    function LeModulosEmbed() {
-        $sql = "SELECT
-                    DISTINCT m.pasta, m.nome, m.chave, m.valor, c.id, c.nome
-                FROM
-                    modulos as m
-                INNER JOIN
-                    categorias as c
-                ON
-                    m.valor=c.tipo
-                WHERE
-                    m.embed='1'
-                ";
-        $query = Connection::getInstance()->query($sql);
-        $i = 0;
-        $return = '';
-
-        foreach($query as $dados) {
-            $return[$i] = $dados;
-            $i++;
-        }
-        return $return;
-    }
-
-    /**
-     * Retorna os módulos que tem a propriedade EmbedOwnForm = TRUE
-     *
-     * EmbedOwnForm significa módulos que vão dentro de formulário de
-     * inclusão/edição de conteúdo, exceto aqueles que tem seu próprio formulário
-     *
-     * @return array Todos os módulos com habilidade Embed
-     */
-
-    function LeModulosEmbedOwnForm() {
-        $sql = "SELECT
-                    DISTINCT pasta, nome, chave, valor
-                FROM
-                    modulos
-                WHERE
-                    embedownform='1'
-                ";
-        $query = Connection::getInstance()->query($sql);
-
-        $return = '';
-        $i = 0;
-        foreach($query as $dados) {
-            $return[$i]['pasta'] = $dados['pasta'];
-            $return[$i]['nome'] = $dados['nome'];
-            $return[$i]['chave'] = $dados['chave'];
-            $return[$i]['valor'] = $dados['valor'];
-            $i++;
-        }
-        return $return;
-    }
-
-    /**
-     * Retorna somente EmbedOwnForms liberados para serem mostrados
-     * na $estrutura indicada.
-     *
-     * @return array
-     */
-    function leModulosEmbedOwnFormLiberados($estrutura) {
-        $sql = "SELECT
-                    id, nome
-                FROM
-                    modulos_conf
-                WHERE
-                    valor='".$estrutura."'
-                ";
-        $query = Connection::getInstance()->query($sql);
-
-        $return = '';
-        foreach($query as $dados) {
-            $return[] = $dados['nome'];
-        }
-        return $return;
-    }
-
-    /*
      * retorna o nome de cada módulo e suas informações em formato array
      */
     function LeModulosParaArray() {
         $sql = "SELECT
-                    DISTINCT pasta, nome, chave, valor
+                    DISTINCT directory, name, property, value
                 FROM
-                    modulos
+                    modules_installed
                 ";
         $query = Connection::getInstance()->query($sql);
         $i = 0;
         foreach($query as $dados) {
-            $return[$i]['pasta'] = $dados['pasta'];
-            $return[$i]['nome'] = $dados['nome'];
-            $return[$i]['chave'] = $dados['chave'];
-            $return[$i]['valor'] = $dados['valor'];
+            $return[$i]['pasta'] = $dados['directory'];
+            $return[$i]['nome'] = $dados['name'];
+            $return[$i]['chave'] = $dados['property'];
+            $return[$i]['valor'] = $dados['value'];
             $i++;
         }
         return $return;
     }
 
-
-
-
-    /*
-     *
-     * TRATAMENTO DE IMAGENS
-     *
-     */
-
-    function fastimagecopyresampled (&$dst_image, $src_image, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h, $quality) {
-        if (empty($src_image) || empty($dst_image)) { return false; }
-        if ($quality <= 1) {
-            $temp = imagecreatetruecolor ($dst_w + 1, $dst_h + 1);
-            imagecopyresized ($temp, $src_image, $dst_x, $dst_y, $src_x, $src_y, $dst_w + 1, $dst_h + 1, $src_w, $src_h);
-            imagecopyresized ($dst_image, $temp, 0, 0, 0, 0, $dst_w, $dst_h, $dst_w, $dst_h);
-            imagedestroy ($temp);
-        } elseif ($quality < 5 && (($dst_w * $quality) < $src_w || ($dst_h * $quality) < $src_h)) {
-            $tmp_w = $dst_w * $quality;
-            $tmp_h = $dst_h * $quality;
-            $temp = imagecreatetruecolor ($tmp_w + 1, $tmp_h + 1);
-            imagecopyresized ($temp, $src_image, $dst_x * $quality, $dst_y * $quality, $src_x, $src_y, $tmp_w + 1, $tmp_h + 1, $src_w, $src_h);
-            imagecopyresampled ($dst_image, $temp, 0, 0, 0, 0, $dst_w, $dst_h, $tmp_w, $tmp_h);
-            imagedestroy ($temp);
-        } else {
-            imagecopyresampled ($dst_image, $src_image, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h);
-        }
-        return true;
-    }
-
-
 }
-
-
 ?>

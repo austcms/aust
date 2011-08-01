@@ -59,9 +59,9 @@ seguinte estrutura:
         |  \
         |   \
         |    \
-        |     --- Módulo B --- Módulo-Embed
-        |            \
-      Módulo C         ------ Módulo-Embed
+        |     --- Módulo B
+        |
+      Módulo C
 
 No caso da estrutura Notícias, ela usará o módulo Textual, que possui os formulários já prontos.
 

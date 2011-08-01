@@ -72,20 +72,9 @@ class Control_panelController extends ActionController {
          * Ajusta variáveis para gravação
          */
             /**
-             * [embedownform] indica se este módulo possui habilidade
-             * para acoplar-se em formulários de outros módulos
-             * com seu próprio <form></form>
+             * ['structure_only'] indica se a estrutura conterá categorias ou não.
              */
-            $modInfo['embedownform'] = (empty($modInfo['embedownform'])) ? false : $modInfo['embedownform'];
-            /**
-             * [embed] indica se este módulo possui
-             * habilidade para acoplar-se em formulários de outros módulos
-             */
-            $modInfo['embed'] = (empty($modInfo['embed'])) ? false : $modInfo['embed'];
-            /**
-             * [somenteestrutura] indica se a estrutura conterá categorias ou não.
-             */
-            $modInfo['somenteestrutura'] = (empty($modInfo['somenteestrutura'])) ? false : $modInfo['somenteestrutura'];
+            $modInfo['structure_only'] = (empty($modInfo['structure_only'])) ? false : $modInfo['structure_only'];
 
         /*
          * Caso o módulo não tenha migrations, faz a verificação normal das tabelas
