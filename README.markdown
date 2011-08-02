@@ -1,4 +1,6 @@
-# Aust CMS
+Atenção: Versão Alpha. Não utilize em produção.
+
+### Aust CMS
 
 Aust é um CMS modular open source que segue uma abordagem moderna e mais eficiente para
 o gerenciamento de conteúdos de sites. Completamente separado do site principal, o
@@ -9,7 +11,7 @@ Por entregar conteúdo através de uma API, integra-se com sites em qualquer lin
 
 Leia o Wiki para mais informações.
 
-## Como instalar e usar
+### Como instalar e usar
 
 1. Faça o download do Aust e coloque-o em um diretório do seu servidor
 2. Crie um banco de dados ('aust', por exemplo). Renomeie o arquivo config/database.sample.php
@@ -42,47 +44,6 @@ Acesse no seu navegador http://endereco-do-aust/api/api.json?query=noticias. Bas
 
 Antes dos lançamento do Aust na v0.3, vamos trabalhar em algumas bibliotecas para a leitura desta API.
 
-## Estruturas de Conteúdo
+### Licença
 
-O Aust é composto por Módulos, enquanto seu site é composto por Estruturas.
-
-Um __Módulo__ possui as funcionalidades, formulários e mecanismos para uma estrutura.
-Uma __Estrutura__ é uma seção do seu site, como Notícias, Artigos, Imagens, entre outros.
-
-
-O AustCMS foi iniciado em set/2008. Sua arquitetura é baseada na
-seguinte estrutura:
-
-       ----
-      |CORE|----- Módulo A
-       ----
-        |  \
-        |   \
-        |    \
-        |     --- Módulo B
-        |
-      Módulo C
-
-No caso da estrutura Notícias, ela usará o módulo Textual, que possui os formulários já prontos.
-
-
-MÓDULOS ATUAIS
----------------------------------------
-
-Atualmente, o sistema conta com os seguintes módulos:
-
-- Agenda: possui interface para controlar datas e horários.
-- Files: possibilidade de upload de arquivos.
-- FlexibleFields: este módulo possui capacidade de criar tabelas e campos, de forma
-			que pode-se reconstruir virtualmente qualquer domínio sem necessidade
-			de tocar em códigos-fonte.
-- Textual: módulo mais utilizado, serve para inserir textos como notícias e artigos.
-- PhotoGallery: usado quando precisa agrupar imagens em galerias.
-- Images: cadastro de imagens separadamente, como banners e destaques.
-
-Em desenvolvimento:
-
-- Pesquisa de Marketing (alpha): utilizado para enquete e questionários maiores.
-- Privilégios (alpha): conecta-se aos conteúdos de outros módulos para prover
-			privilégios a usuários cadastrados.
-- YouTube (alpha): usado para cadastrar vídeos do YouTube, com preview no formulário de edição.
+Leia o arquivo LICENSE para conhecer a licença de uso do Aust CMS.
