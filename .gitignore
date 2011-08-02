@@ -7,3 +7,6 @@ core/cache/*
 core/user_interface/cache/*
 .gitignore~
 .crane
+.settings
+.buildpath
+.project
