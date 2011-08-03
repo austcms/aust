@@ -25,7 +25,7 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
         EscreveBoxMensagem($status);
         ?>
         </form>
-    <?
+    <?php
     // se estiver confirmada a exclusão
     } elseif(($_GET['confirm'] == "delete") AND (count($_POST['itens']) > 0)){
         $itens = $_POST[itens];

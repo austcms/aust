@@ -19,14 +19,14 @@ if(isset($_POST[configurar])){
                     <h1 style="color: green;">Configuração terminada com sucesso!</h1>
                     <p>Pronto, novo usuário cadastrado.</p>
                     <p><a href="<?php echo $_SERVER['PHP_SELF'];?>">Próximo passo...</a></p>
-                <?
+                <?php
                 }
                 else
                 {?>
                     <h1 style="color: red;">Ops... Não foi possível cadastrar o usuário.!</h1>
                     <p>Ocorreu um erro estranho. Entre em contato com o programador responsável por isto.</p>
                     <p><a href="<?php echo $_SERVER['PHP_SELF'];?>">Voltar</a></p>
-                <?
+                <?php
                 }
 
     		}

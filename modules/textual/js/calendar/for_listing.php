@@ -1,6 +1,6 @@
 <?php header("Content-Type: text/html; charset=ISO-8859-1",true) ?>
 <div class="calendario">
-<?
+<?php
 /****************************************************
 *	Script desenvolvido por Alexandre de Oliveira.
 *	Pedro Osório, RS - Brasil
@@ -115,9 +115,9 @@
         
             <table border=0 cellpadding=0 cellspacing=0 width=130>
             <tr>
-                <td width="4"><a href="javascript: MostraCalendario(<?=$incremento-1;?>,<?=$categoria;?>)" class="incremento">«</a></td>
+                <td width="4"><a href="javascript: MostraCalendario(<?php $incremento-1;?>,<?php $categoria;?>)" class="incremento">«</a></td>
                 <td class="titulo_mesano"><?php echo $mes_ .'/'. $year; ?></td>
-                <td width="4"><a href="javascript: MostraCalendario(<?=$incremento+1;?>,<?=$categoria;?>)" class="incremento">»</a></td>
+                <td width="4"><a href="javascript: MostraCalendario(<?php $incremento+1;?>,<?php $categoria;?>)" class="incremento">»</a></td>
             </tr>
             </table>
         
@@ -166,11 +166,11 @@
                 }
 				if($agenda[sprintf("%02d", $day)]["id"] <> ''){
 					?>
-					<td class="<?=$myclass;?>"><a href="index.php?section=content&austd=<?=$agenda[sprintf("%02d", $day)]["categorianome"];?>&dia=<?=sprintf("%02d", $day);?>&mes=<?=sprintf("%02d", $month);?>&ano=<?=sprintf("%04d", $year);?>"><?=$day;?></a></td>
+					<td class="<?php $myclass;?>"><a href="index.php?section=content&austd=<?php $agenda[sprintf("%02d", $day)]["categorianome"];?>&dia=<?php sprintf("%02d", $day);?>&mes=<?php sprintf("%02d", $month);?>&ano=<?php sprintf("%04d", $year);?>"><?php $day;?></a></td>
 					<?php
 				} else {
 					?>
-					<td class="<?=$myclass;?>"><?=$day;?></td>
+					<td class="<?php $myclass;?>"><?php $day;?></td>
 					<?php
 				}
                 $offset++;

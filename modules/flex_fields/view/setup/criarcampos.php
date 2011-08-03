@@ -60,7 +60,7 @@ foreach($exPOST as $chave=>$valor){
                     <option value="relational_onetomany">Relacional 1-para-muitos (tabela)</option>
                 </select>
             <div class="campooptions" id="<?php echo 'campooption'.$i?>">
-                <?
+                <?php
                 /*
                  * Se <select campo_tipo> for relacional, então cria dois campos <select>
                  *

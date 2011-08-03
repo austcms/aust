@@ -41,7 +41,7 @@ if( $_GET['action'] == "edit" ){
         <a target="_blank" href="adm_main.php?section=<?php echo $_GET["section"] ?>&action=printing&theme=blank&aust_node=<?php echo $_GET['aust_node'] ?>&w=<?php echo $_GET['w'] ?>">
         Versão para impressão
         </a>
-        <?
+        <?php
     }
 }
 ?>

@@ -2,7 +2,7 @@
     <tr class="header">
 
         <?php for($i=0; $i< count($module->config['contentHeader']['campos']); $i++) { ?>
-                <td class="<? echo $module->config['contentHeader']['campos'][$i]; ?>">
+                <td class="<?php echo $module->config['contentHeader']['campos'][$i]; ?>">
                     <?php
                         echo $module->config['contentHeader']['camposNome'][$i];
                     ?>
@@ -12,7 +12,7 @@
             Op&ccedil;&otilde;es
         </td>
     </tr>
-<?
+<?php
 if(count($query) > 0){
     foreach($query as $dados){
     ?>
@@ -59,7 +59,7 @@ if(count($query) > 0){
         <strong>Não há arquivos cadastrados.</strong>
         </td>
     </tr>
-    <?
+    <?php
 }
 ?>
 </table>

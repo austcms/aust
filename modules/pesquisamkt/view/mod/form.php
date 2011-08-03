@@ -306,7 +306,7 @@ if( $_GET["action"] == "edit" ){
 		        ?>
 		    </div>
 		</div>
-	    <?
+	    <?php
 	} // fim id(!do_not_show_result)
 }
 ?>
@@ -417,7 +417,7 @@ if( !empty($perguntasQuantidade) ):
 							}
 							?>:&nbsp;
                         </div>
-                        <input type="text" size="43" name="perguntas[<?php echo $pid ?>]" value="<? if(!empty($pergunta)) echo $pergunta["texto"]; ?>" />
+                        <input type="text" size="43" name="perguntas[<?php echo $pid ?>]" value="<?php if(!empty($pergunta)) echo $pergunta["texto"]; ?>" />
                         <br clear="both" />
                     </div>
                     <?php
@@ -444,7 +444,7 @@ if( !empty($perguntasQuantidade) ):
                         if( $pergunta["tipo"] == "aberta" ){
                             ?>
                             <div style="font-style: italic; margin-left: 160px; width: 330px; margin-bottom: 10px">Esta será uma pergunta aberta, portanto não serão apresentadas alternativas ao usuário, mas sim uma caixa de texto para escrever sua resposta.</div>
-                            <?
+                            <?php
                         }
                         /*
                          * Pergunta fechada, mostra alternativas
@@ -480,7 +480,7 @@ if( !empty($perguntasQuantidade) ):
 										}
 										?>
                                     </div>
-                                    <input type="text" size="40" name="resposta[<?php echo $pid ?>][<?php echo $prid ?>]" value="<? if(!empty($prtitulo)) echo $prtitulo; ?>" />
+                                    <input type="text" size="40" name="resposta[<?php echo $pid ?>][<?php echo $prid ?>]" value="<?php if(!empty($prtitulo)) echo $prtitulo; ?>" />
                                     <br clear="both" />
                                 </div>
                                 <?php
@@ -601,6 +601,6 @@ else:
         </tr>
     </table>
     </form>
-    <?
+    <?php
 endif;
 ?>

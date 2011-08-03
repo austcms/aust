@@ -5,4 +5,4 @@
 <h1>Configurar o Aust</h1>
 <p>Olá. Esta é a <strong>configuração</strong> do sistema.</p>
 
-<? require 'instalar/rodape.inc.php'; ?>
+<?php require 'instalar/rodape.inc.php'; ?>

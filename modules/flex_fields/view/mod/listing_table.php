@@ -37,7 +37,7 @@ if($precisa_aprovacao['value'] == '1'){
                 } else {
                     $total_td++;
                     ?>
-                    <td class="<? echo $campo; ?>">
+                    <td class="<?php echo $campo; ?>">
                         <?php
                         echo $campo;
                         ?>
@@ -57,7 +57,7 @@ if($precisa_aprovacao['value'] == '1'){
         }
         ?>
     </tr>
-<?
+<?php
 /**
  * LISTAGEM DO CONTÉUDO EM SI
  */

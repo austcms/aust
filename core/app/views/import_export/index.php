@@ -45,7 +45,7 @@ if( !empty($_GET['export']) ){
 <?php } ?>
 
 <div class="widget_group">
-    <?
+    <?php
     /**
      * CONFIGURAÇÕES
      *
@@ -108,7 +108,7 @@ if( !empty($_GET['export']) ){
 </div>
 
 <div class="widget_group">
-    <?
+    <?php
     /**
      * LISTAGEM DE CAMPOS
      *

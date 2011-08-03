@@ -352,13 +352,13 @@ if(!empty($_GET['function'])){
                         <a href="adm_main.php?section=<?php echo $_GET['section']?>&aust_node=<?php echo $_GET['aust_node']?>&action=<?php echo $_GET['action']?>&function=ativar&w=<?php echo $chave; ?>">
                             Ativar
                         </a>
-                        <?
+                        <?php
                     } else {
                     ?>
                         <a href="adm_main.php?section=<?php echo $_GET['section']?>&aust_node=<?php echo $_GET['aust_node']?>&action=<?php echo $_GET['action']?>&function=desativar&w=<?php echo $chave; ?>">
                             Desativar
                         </a>
-                    <?
+                    <?php
                     }
                     ?> -
                     <?php
@@ -367,13 +367,13 @@ if(!empty($_GET['function'])){
                         <a href="adm_main.php?section=<?php echo $_GET['section']?>&aust_node=<?php echo $_GET['aust_node']?>&action=<?php echo $_GET['action']?>&function=necessario&w=<?php echo $chave; ?>">
                             Necessario
                         </a>
-                        <?
+                        <?php
                     } else {
                     ?>
                         <a href="adm_main.php?section=<?php echo $_GET['section']?>&aust_node=<?php echo $_GET['aust_node']?>&action=<?php echo $_GET['action']?>&function=desnecessario&w=<?php echo $chave; ?>">
                             Não necessário
                         </a>
-                    <?
+                    <?php
                     }
                     ?> -
                     <?php
@@ -388,7 +388,7 @@ if(!empty($_GET['function'])){
                         <a href="adm_main.php?section=<?php echo $_GET['section']?>&aust_node=<?php echo $_GET['aust_node']?>&action=<?php echo $_GET['action']?>&function=naolistar&w=<?php echo $chave; ?>">
                             Não Listar
                         </a>
-                        <?
+                        <?php
                     }
                     ?>
                     </li>
@@ -456,7 +456,7 @@ if(!empty($_GET['function'])){
                 </div>
                 <?php // <select> em ajax ?>
                 <div class="campooptions" id="<?php echo 'campooption0'?>">
-                    <?
+                    <?php
                     /*
                      * Se <select campo_tipo> for relacional, então cria dois campos <select>
                      *
@@ -698,7 +698,7 @@ if(!empty($_GET['function'])){
 </div>
 
 <div class="widget_group">
-    <?
+    <?php
     /**
      * CONFIGURAÇÕES
      *
@@ -877,7 +877,7 @@ if(!empty($_GET['function'])){
         <div class="footer"></div>
     </div>
 
-    <?
+    <?php
     /*
      * Opções gerais do cadastro
      */
@@ -910,19 +910,19 @@ if(!empty($_GET['function'])){
                              */
                             if($dados['specie'] == 'bool'){ ?>
                                 <select name="frm<?php echo $dados['property']?>">
-                                    <option <? makeselected($dados['value'], '1') ?> value="1">Sim</option>
-                                    <option <? makeselected($dados['value'], '0') ?> value="0">Não</option>
+                                    <option <?php makeselected($dados['value'], '1') ?> value="1">Sim</option>
+                                    <option <?php makeselected($dados['value'], '0') ?> value="0">Não</option>
                                 </select>
-                            <? } elseif($dados['specie'] == 'string') { ?>
+                            <?php } elseif($dados['specie'] == 'string') { ?>
                                 <input type="text" name="frm<?php echo $dados['property']?>" value="<?php echo $dados['value']?>" />
-                            <? } elseif($dados['specie'] == 'blob') { ?>
+                            <?php } elseif($dados['specie'] == 'blob') { ?>
                                 <textarea name="frm<?php echo $dados['property']?>" cols="35" rows="3"><?php echo $dados['value']?></textarea>
 
-                            <? } else { ?>
+                            <?php } else { ?>
                                 <textarea name="frm<?php echo $dados['property']?>" cols="30" rows="3"><?php echo $dados['value']?></textarea>
-                            <? } ?>
+                            <?php } ?>
                         </div>
-                    <?
+                    <?php
                 }
                 ?>
                 <br />

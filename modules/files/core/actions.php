@@ -30,7 +30,7 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
         EscreveBoxMensagem($status);
         ?>
         </form>
-    <?
+    <?php
     // se estiver confirmada a exclusão
     } else if($_GET['confirm'] == "delete"){
         $itens = $_POST[itens];
@@ -102,7 +102,7 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
         EscreveBoxMensagem($status);
         ?>
         </form>
-    <?
+    <?php
     // se estiver confirmada a ação
     } else if($_GET['confirm'] == "aprovar"){
         $itens = $_POST[itens];

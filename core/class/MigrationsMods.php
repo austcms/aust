@@ -220,7 +220,7 @@ class MigrationsMods
     /**
      * _comparesActualVersion()
      *
-     * @param <???> $mod
+     * @param ? $mod
      * @return <bool>
      */
     public function _comparesActualVersion($mod){

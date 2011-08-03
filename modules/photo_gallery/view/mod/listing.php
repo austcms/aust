@@ -34,7 +34,7 @@ if( StructurePermissions::getInstance()->canDelete($austNode) ){
     <tr class="header">
         
         <?php for($i=0; $i< count($module->config['contentHeader']['campos']); $i++) { ?>
-                <td class="<? echo $module->config['contentHeader']['campos'][$i]; ?>">
+                <td class="<?php echo $module->config['contentHeader']['campos'][$i]; ?>">
                     <?php
                         echo $module->config['contentHeader']['camposNome'][$i];
                     ?>
