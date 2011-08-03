@@ -21,10 +21,13 @@ require_once("core/config/variables.php");
 include(CLASS_LOADER);
 
 include("config/core.php");
+
 if( !file_exists(CONFIG_DATABASE_FILE) ){
-    echo "N&aacute;o h&aacute; um arquivo de configura&ccedil;&atilde;o de banco de dados. Crie um.";
+	$errorStatus = "no_database_configuration";
+	require INSTALLATION_DIR."messages.php";
     exit();
 }
+
 include(CONFIG_DATABASE_FILE);
 
 require(INSTALLATION_DIR."dbschema.php");
@@ -32,10 +35,18 @@ require(INSTALLATION_DIR."dbschema.php");
 $conexao = Connection::getInstance();
 
 if( !is_dir('uploads') ){
-	mkdir('uploads', 0777);
+	if( !@mkdir('uploads', 0777) ){
+		$errorStatus = "no_permission_create_uploads";
+		require INSTALLATION_DIR."messages.php";
+	    exit();
+	}
 }
 if( !is_dir('uploads/editor') ){
-	mkdir('uploads/editor', 0777);
+	if( !@mkdir('uploads/editor', 0777) ){
+		$errorStatus = "no_permission_create_uploads_editor";
+		require INSTALLATION_DIR."messages.php";
+	    exit();
+	}
 }
 require_once("core/load_core.php");
 

@@ -343,6 +343,27 @@ class Aust {
         }
     }
 
+	public function anySiteExists(){
+        $sql = "SELECT
+                    name
+                FROM
+                    taxonomy
+                WHERE
+                    class='categoria-chefe'
+                ";
+        $query = Connection::getInstance()->query($sql);
+		if( count($query) > 0 )
+        	return true;
+		return false;
+	}
+	
+	public function createFirstSiteAutomatically(){
+		if( !$this->anySiteExists() )
+			if( $this->createSite("Site") )
+				return true;
+		return false;
+	}
+
     /**
      * getStructures()
      *

@@ -34,6 +34,11 @@ h2 { font-size: 1.6em; }
 	-webkit-box-shadow: 0px 10px 50px rgba(0, 0, 0, 0.5);
 }
 
+	#outer.error_message {
+	  left: 50%; margin-left: -300px;
+	  top: 50%; margin-top: -100px; /* height de .inside -20px */
+	}
+	
 #conteudo { margin: 20px; display: block; }
 	
 

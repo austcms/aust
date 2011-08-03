@@ -8,7 +8,7 @@
 
 <body>
 
-<div id="outer">
+<div id="outer" class="<?php if( !empty($errorStatus) ) echo 'error_message'; ?>">
   <div id="conteudo">
         
 

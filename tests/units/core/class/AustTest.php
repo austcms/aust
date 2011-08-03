@@ -28,6 +28,19 @@ class AustTest extends PHPUnit_Framework_TestCase
     function testGetStructures(){
         $this->assertInternalType('array', $this->obj->getStructures() );
     }
+
+	function testHasSite(){
+		$this->obj->connection->query("DELETE FROM taxonomy");
+        $this->assertFalse($this->obj->anySiteExists() );
+		$this->obj->connection->query("INSERT INTO taxonomy (name,father_id,class) VALUES ('TestFather777','0','categoria-chefe')");
+        $this->assertTrue($this->obj->anySiteExists() );
+	}
+
+	function testCreateFirstSiteAutomatically(){
+		$this->obj->connection->query("DELETE FROM taxonomy");
+        $this->assertTrue($this->obj->createFirstSiteAutomatically() );
+        $this->assertFalse($this->obj->createFirstSiteAutomatically() );
+	}
 	
 	function testGetStructure(){
 		Fixture::getInstance()->create();

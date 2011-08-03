@@ -1,14 +1,6 @@
 <?php header("Content-Type: text/html; charset=ISO-8859-1",true) ?>
 <div class="calendario">
 <?php
-/****************************************************
-*	Script desenvolvido por Alexandre de Oliveira.
-*	Pedro Osório, RS - Brasil
-*	chavedomundo@gmail.com
-*	28/07/2008 - Atualização do sistema
-*	Qualquer dúvida referente a este script,		
-*	mail-me!										
-****************************************************/
 
 	$modulo = 0;
 	if($modulo == 1){

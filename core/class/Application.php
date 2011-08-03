@@ -11,6 +11,12 @@ class Application {
 
     function __construct($showUi = true) {
 
+		if( !file_exists(CONFIG_DATABASE_FILE) ){
+	        header("Location: index.php");
+			exit();
+		}
+			
+		
 		require_once(CONFIG_DATABASE_FILE);
 
 		include_once(LIB_DIR."aust/aust_func.php");
@@ -32,6 +38,8 @@ class Application {
 		 */
 		    include(CORE_DIR.'load_core.php');
 		
+		Aust::getInstance()->createFirstSiteAutomatically();
+		
 		$this->showUi = $showUi;
 		if( !$this->showUi )
 			return true;
@@ -44,6 +52,7 @@ class Application {
 			($this->installationDiagnostics() != 1) )
 		{
 	        header("Location: index.php");
+			exit();
 	    }
 	    /*
 	     * Diagnostics show everything's fine

@@ -58,7 +58,9 @@ if( $formOk ){
 
         $query = Connection::getInstance()->exec($sql);
 
-        if($query){ ?>
+		Aust::getInstance()->createFirstSiteAutomatically();
+
+        if( $query ){ ?>
             <h1>Conta criada com sucesso</h1>
             <p>Parabéns, a instalação acabou.</p>
             <p><a href="<?php echo THIS_TO_BASEURL; ?>index.php">Ir à tela de login</a></p>
@@ -69,7 +71,7 @@ if( $formOk ){
             <h1 style="color: red;">Ops... Não foi possível cadastrar o usuário.!</h1>
             <p>Ocorreu um erro estranho. Entre em contato com o programador responsável por isto.</p>
             <p><a href="<?php echo THIS_TO_BASEURL ?>index.php">Voltar</a></p>
-        <?php
+        	<?php
 			$showForm = false;
         }
     }
