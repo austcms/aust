@@ -128,7 +128,43 @@ $sites = Aust::getInstance()->getStructures();
 			endforeach; ?>
     </div>
 
-</div><?php // FIM DO DIV PAINEL GERENCIAR ?>
+</div>
 
-<br clear="all" />
+<?php
+$cacheDirs = Registry::read('permission_needed_dirs');
+$permissionGranted = true;
+foreach( $cacheDirs as $dir ){
+    if( !is_writable($dir) OR
+        !is_readable($dir))
+    {
+		$permissionGranted = false;
+    }
+}
+
+if( !$permissionGranted ){
+	?>
+	<br clear="all" />
+	<div style="display:table">
+		<p>
+			Os seguintes diretórios estão sem permissão de escrita. Por favor, conceda permissão.
+		</p>
+		<ul>
+		<?php
+	    foreach( $cacheDirs as $dir ){
+	        if( !is_writable($dir) OR
+	            !is_readable($dir))
+	        {
+				?>
+				<li><?php echo $dir ?></li>
+				<?php
+	        }
+		}
+		?>
+		</ul>
+		<p>Erros acontecerão se você não ajustar as permissões destes diretórios</p>
+	</div>
+	<?php
+}
+?>
+
 <br clear="all" />
