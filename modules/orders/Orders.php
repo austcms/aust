@@ -37,10 +37,6 @@ class Orders extends Module
 
 	public $austField = 'node_id';
 	
-    function __construct(){
-        parent::__construct(array());
-    }
-
     /**
      * getInstance()
      *
