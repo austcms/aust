@@ -64,6 +64,7 @@ div.tooltip {
         div.tooltip div.text p {
             margin: 0 5px 0 5px;
             padding-top: 0;
+						font-weight: normal !important;
         }
 
     div.tooltip div.bottom {

@@ -36,6 +36,13 @@ class Control_panelController extends ActionController {
 			$this->install_structure();
         }
 		
+		$hasStructures = false;
+		foreach( $sites as $site )
+			if( !empty($site['Structures']) )
+				$hasStructures = true;
+				
+		$this->set('hasStructures', $hasStructures);
+
 		$this->render("index");
 	}
 	

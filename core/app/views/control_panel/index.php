@@ -37,50 +37,13 @@ if(User::getInstance()->LeRegistro('group') == 'Webmaster'):
     }
 
     /*
-     * Configure a structure
-     */
-    if($_GET['action'] == 'configurar'){
-        $diretorio = MODULES_DIR.Aust::getInstance()->structureModule($_GET['aust_node']); // pega o endereço do diretório
-        foreach (glob($diretorio."*", GLOB_ONLYDIR) as $pastas) {
-            if(is_file($pastas.'/configurar_estrutura.php')){
-				$module = ModulesManager::getInstance()->modelInstance($_GET["aust_node"]);
-				include($pastas.'/configurar_estrutura.php');
-            }
-        }
-    }
-    /*
-     * Configure a module
-     */
-    else if($_GET['action'] == 'configurar_modulo'){
-        $pastas = $_GET['modulo'];
-        if(is_file($pastas.'/configurar_modulo.php')){
-            include($pastas.'/configurar_modulo.php');
-        }
-    }
-
-    /*
-     * INSTALAR/CRIAR ESTRUTURA COM SETUP PRÓPRIO
-     *
-     * Se instalar uma estrutura a partir de um módulo com setup próprio, faz
-     * includes neste arquivo para configuração.
-     */
-    elseif( !empty($_POST['inserirestrutura'])
-            AND (
-                ( is_file( MODULES_DIR.$_POST['modulo'].'/'.MOD_SETUP_CONTROLLER ) )
-                OR ( is_file( MODULES_DIR.$_POST['modulo'].'/setup.php' ) )
-            )
-    ){
-		# on the controlller
-    }
-
-    /*
      * NENHUMA DAS OPÇÕES ACIMA, CARREGAR A PÁGINA NORMALMENTE
      *
      * Carrega toda a interface normalmente
      */
     else {
         ?>
-        <h2>Configuração: Módulos e Estruturas</h2>
+        <h2>Configurar Módulos e Estruturas</h2>
         <?php
         if( !empty($status) AND is_array($status)){
             EscreveBoxMensagem($status);
@@ -88,34 +51,36 @@ if(User::getInstance()->LeRegistro('group') == 'Webmaster'):
         ?>
 
         <div class="widget_group">
-            <?php
-            /*
-             * LISTAGEM DAS ESTRUTURAS CRIADAS
-             */
-            ?>
             <div class="widget">
                 <div class="titulo">
-                    <h3>Estruturas instaladas</h3>
+                    <h3>
+						Estruturas instaladas
+						<?php tt("Estruturas são seções do site, como Notícias, Artigos, entre outros."); ?>
+					</h3>
                 </div>
                 <div class="content">
-                    <p>Abaixo, as estruturas instaladas.</p>
-                    <ul>
-                    <?php
-					foreach( $sites as $site ){
+					<?php if( $hasStructures ){ ?>
+	                    <p>Abaixo, as estruturas instaladas.</p>
+	                    <ul>
+	                    <?php
+						foreach( $sites as $site ){
 						
-						foreach( $site['Structures'] as $structure ){
-							?>
-							<li>
-								<strong><?php echo $structure["name"] ?></strong>
-								(módulo <?php echo $structure["type"] ?>)
-								<a href="adm_main.php?section=<?php echo CONTROL_PANEL_DISPATCHER ?>&aust_node=<?php echo $structure["id"] ?>&action=structure_configuration">Configurar</a>
-							</li>
-							<?php
+							foreach( $site['Structures'] as $structure ){
+								?>
+								<li>
+									<strong><?php echo $structure["name"] ?></strong>
+									(módulo <?php echo $structure["type"] ?>)
+									<a href="adm_main.php?section=<?php echo CONTROL_PANEL_DISPATCHER ?>&aust_node=<?php echo $structure["id"] ?>&action=structure_configuration">Configurar</a>
+								</li>
+								<?php
+							}
 						}
-					}
 
-                    ?>
-                    </ul>
+	                    ?>
+	                    </ul>
+					<?php } else { ?>
+						<p>Não há estruturas instaladas ainda.</p>
+					<?php } ?>
                 </div>
                 <div class="footer"></div>
             </div>
@@ -131,28 +96,27 @@ if(User::getInstance()->LeRegistro('group') == 'Webmaster'):
                     <h3>Instalar Estrutura</h3>
                 </div>
                 <div class="content">
-                    <p>
-                        Selecione abaixo o site, o módulo adequado e o nome da estrutura (ex.: Notícias, Artigos, Arquivos).
-                    </p>
-                    <form action="adm_main.php?section=<?php echo $_GET['section'];?>" method="post" class="simples pequeno">
-                        <input type="hidden" value="1" name="publico" />
-                        <div class="campo">
-                            <label>Categoria-chefe: </label>
-                                <select name="categoria_chefe">
-                                    <?php
-                                    Aust::getInstance()->getSite(Array('id', 'name'), '<option value="&%id">&%name</option>', '', '');
-                                    ?>
-                                </select>
-                        </div>
-                        <br />
-                        <div class="campo">
-                            <label>Módulo: </label>
-                                <?php
-                                $modulesList = ModulesManager::getInstance()->LeModulos();
-                                ?>
-                                <select name="modulo">
-                                    <?php
-									if( !empty($modulesList) ){
+                    <?php
+                    $modulesList = ModulesManager::getInstance()->LeModulos();
+                    if( !empty($modulesList) ){ ?>
+	                    <p>
+	                        Selecione abaixo o site, o módulo adequado e o nome da estrutura (ex.: Notícias, Artigos, Arquivos).
+	                    </p>
+	                    <form action="adm_main.php?section=<?php echo $_GET['section'];?>" method="post" class="simples pequeno">
+	                        <input type="hidden" value="1" name="publico" />
+	                        <div class="campo">
+	                            <label>Categoria-chefe: </label>
+	                                <select name="categoria_chefe">
+	                                    <?php
+	                                    Aust::getInstance()->getSite(Array('id', 'name'), '<option value="&%id">&%name</option>', '', '');
+	                                    ?>
+	                                </select>
+	                        </div>
+	                        <br />
+	                        <div class="campo">
+	                            <label>Módulo: </label>
+	                                <select name="modulo">
+	                                    <?php									
 	                                    foreach( $modulesList as $moduloDB ){
 
 	                                        ?>
@@ -161,25 +125,33 @@ if(User::getInstance()->LeRegistro('group') == 'Webmaster'):
 	                                        </option>
 	                                        <?php
 	                                    }
-										
-									}
-                                    //unset($moduloDB);
-                                    ?>
-                                </select>
-                        </div>
-                        <br />
-                        <div class="campo">
-                            <label>Nome da estrutura:</label>
-                            <div class="input">
-                                <input type="text" name="nome" class="input" />
-                                <p class="explanation">Ex.: Notícias, Artigos</p>
-                            </div>
-                        </div>
-                        <div class="campo">
-                            <input type="submit" name="inserirestrutura" value="Enviar!" class="submit" />
-                        </div>
+	                                    $moduloDB = null;
+	                                    ?>
+	                                </select>
+	                        </div>
+	                        <br />
+	                        <div class="campo">
+	                            <label>Nome da estrutura:</label>
+	                            <div class="input">
+	                                <input type="text" name="nome" class="input" />
+	                                <p class="explanation">Ex.: Notícias, Artigos</p>
+	                            </div>
+	                        </div>
+	                        <div class="campo">
+	                            <input type="submit" name="inserirestrutura" value="Criar estrutura" class="submit" />
+	                        </div>
 
-                    </form>
+	                    </form>
+
+					<?php } else { ?>
+						<p>
+							Não é possível instalar estruturas sem módulos.
+						</p>
+						<p>
+							Primeiro, instale um módulo na coluna da direita.
+							<?php tt("Após instalar um módulo, você poderá instalar uma estrutura."); ?>
+						</p>
+					<?php } ?>
                 </div>
                 <div class="footer"></div>
             </div>
@@ -196,7 +168,12 @@ if(User::getInstance()->LeRegistro('group') == 'Webmaster'):
             ?>
             <div class="widget">
                 <div class="titulo">
-                    <h3>Módulos disponíveis</h3>
+                    <h3>
+						Módulos disponíveis
+						<?php tt("Módulos compõem os formulários e funcionalidades das estruturas, ".
+								 "dando formato a elas.<br /><br />Ao instalar um módulo, tabelas ".
+								 "são criadas e tornam-se disponíveis para uso."); ?>
+					</h3>
                 </div>
                 <div class="content">
 
@@ -208,16 +185,7 @@ if(User::getInstance()->LeRegistro('group') == 'Webmaster'):
                         <div>
 
                         <strong>
-                        <?php
-                        /*
-                         * Tem configurador?
-                         */
-                        if(is_file(MODULES_DIR.$modulo['path'].'/configurar_modulo.php')){
-                            echo '<a href="adm_main.php?section=control_panel&action=configurar_modulo&modulo='.$modulo['path'].'" style="text-decoration: none;">'.$modulo['config']['name'].'</a>';
-                        } else {
-                            echo $modulo['config']['name'];
-                        }
-                        ?>
+                        	<?php echo $modulo['config']['name']; ?>
                         </strong>
                         <br />
                         <?php echo $modulo['config']['description'];
@@ -252,23 +220,7 @@ if(User::getInstance()->LeRegistro('group') == 'Webmaster'):
                             echo '<br /><span class="red">Não Instalado,</span> ';
                             echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&instalar_modulo='.$path.'">instalar agora</a><br />';
                         }
-                        /*
-                        if( $module->verificaInstalacaoTabelas()
-                            AND $module->verificaInstalacaoRegistro(array("pasta"=>$pastas)) )
-                        {
-                            $conteudo.= '<div style="color: green;">Instalado</div>';
 
-                        } else if( $module->verificaInstalacaoTabelas() ){
-                            $conteudo.= '<div style="color: orange;">Tabela instalada, registro no DB não.<br />';
-                            $conteudo.= '<a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&instalar_modulo='.$pastas.'">Tentar instalar</a></div>';
-                        } else if( $module->verificaInstalacaoRegistro(array("pasta"=>$pastas)) ){
-                            $conteudo.= '<div style="color: orange;">Tabela não instalada, registro no DB sim.</div>';
-                        } else {
-                            $conteudo.= '<div style="color: red;">Não Instalado, ';
-                            $conteudo.= '<a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&instalar_modulo='.$pastas.'">clique para instalar</a></div>';
-                        }
-                         *
-                         */
                         ?>
 
                         <br />

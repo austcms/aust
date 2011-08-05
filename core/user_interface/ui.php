@@ -81,7 +81,7 @@
 	        ?>
 	        <div class="logotipo">
 	            <h1>
-	                <a href="adm_main.php?section=index"><?php echo Config::getInstance()->getConfig('site_name'); ?></a>
+	                <a href="adm_main.php"><?php echo Config::getInstance()->getConfig('site_name'); ?></a>
 	            </h1>
 	        </div>
 

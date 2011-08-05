@@ -21,7 +21,7 @@
     form input.text { width: 470px; font-size: 1.3em; height: 22px; padding: 0px 2px; } /* standard */
     form select { font-size: 1.0em; height: 22px; display: inline-block; }
     form textarea { margin-bottom: 10px; min-height: 90px; width: 100%; }
-    form input.submit { display: block; font-size: 1.4em; padding: 10px; margin-bottom: 5px; clear: both; }
+    form input.submit { }
 
 		form div.currency_field input { width: 120px; text-align: right; }
 
@@ -33,7 +33,7 @@
     form.simples label { float: left; width: 240px; font-size: 1.0em; font-weight: normal; color: #333333; }
     form.simples div.input { display: inline; width: 420px; float: left; }
     form.simples input.text { font-size: 1.0em; height: 20px; width: 300px; }
-    form.simples input.submit { display: block; font-size: 1.2em; height: 46px; padding: 10px; margin-bottom: 5px; clear: both; }
+    form.simples input.submit { }
     form.simples select { font-size: 1em; height: 24px;  }
 
     form.pequeno div.input { display: inline; width: 150px; float: left; }
