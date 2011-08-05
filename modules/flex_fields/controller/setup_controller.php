@@ -64,6 +64,16 @@ class SetupController extends ModActionController
 			
 			$i++;
 		}
+		
+		if( empty($_POST['aprovacao']) )
+			$_POST['aprovacao'] = "";
+		
+		if( empty($_POST['pre_senha']) )
+			$_POST['pre_senha'] = "";
+		
+		if( empty($_POST['descricao']) )
+			$_POST['descricao'] = "";
+		
         /**
          * Parâmetros para gravar uma nova estrutura no DB.
          */

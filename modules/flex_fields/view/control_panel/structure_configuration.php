@@ -6,18 +6,7 @@
  *
  * Inicialmente há todo o código PHP para executar as funções requisitadas e o FORM html está no final do documento. O action
  * dos FORMs enviam as informações para a própria página
- *
- * @package Módulos
- * @category Cadastro
- * @name Configurar Estrutura
- * @author Alexandre de Oliveira <chavedomundo@gmail.com>
- * @since v0.1.6 16/08/2009
  */
-
-/**
- * INICIALIZAÇÃO
- */
-
 $tabela_da_estrutura = $module->getTable();
 
 include_once $module->getIncludeFolder().'/'.MOD_MODELS_DIR.'FlexFieldsSetup.php';
@@ -122,7 +111,7 @@ if(!empty($_POST['configurar_opcoes'])){
             $sql = "UPDATE
                         flex_fields_config
                     SET
-                        valor='".$valor."'
+                        value='".$valor."'
                     WHERE
                         property='".$key."' AND
                         type='config' AND
@@ -283,10 +272,7 @@ if(!empty($_GET['function'])){
 }
 ?>
 
-<h2>Configuração: <?php echo Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node'])?></h2>
-<p>
-    Configure esta estrutura de cadastro.
-</p>
+
 <?php if(!empty($status)){ ?>
     <div class="box-full">
         <div class="box alerta">
@@ -926,7 +912,7 @@ if(!empty($_GET['function'])){
                 }
                 ?>
                 <br />
-                <input type="submit" name="configurar_opcoes" value="Enviar!" />
+                <input type="submit" name="configurar_opcoes" value="Enviar" />
             </form>
 
         </div>

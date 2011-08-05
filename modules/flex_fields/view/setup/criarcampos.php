@@ -10,7 +10,7 @@
             //echo $_SESSION['exPOST']['nome'];
 ?>
 
-<h2>Setup de cadastro: configuração inicial</h2>
+<h2>Flexfields: configurar campos</h2>
 <form action="" method="post" class="normal">
 
 <?php
@@ -24,10 +24,11 @@ foreach($exPOST as $chave=>$valor){
 
     <input type="hidden" name="setupAction" value="setuppronto" />
 
-	<p>Configurando esta estrutura...</p>
-	<p>Seu cadastro terá <?php echo '<strong>'.$_POST['qtd_campos'].'</strong>'; if($_POST['qtd_campos'] == 1) echo ' campo'; else echo ' campos';?>.
-	Preencha abaixo informações sobre cada campo.</p>
-    <h3>Cadastro "<?php echo $_SESSION['exPOST']['nome']?>"</h3>
+	<p>
+		Foram escolhidos <?php echo ''.$_POST['qtd_campos'].''; if($_POST['qtd_campos'] == 1) echo ' campo'; else echo ' campos';?>.
+
+		Preencha abaixo informações sobre cada campo para a nova estrutura <em><?php echo $_SESSION['exPOST']['nome']?></em>.
+	</p>
 
 	<table border="0" class="listing">
 	<col width="15">
@@ -79,7 +80,8 @@ foreach($exPOST as $chave=>$valor){
 	</tr>
 	<?php } ?>
 	</table>
-
-	<input type='submit' value="Enviar!" name='setup_ready' />
+	<br clear="both" />
+	<br />
+	<input type='submit' value="Enviar" name='setup_ready' />
 
 </form>

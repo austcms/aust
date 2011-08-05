@@ -560,7 +560,7 @@ if( !empty($perguntasQuantidade) ):
         </tr>
 
         <tr>
-            <td colspan="2" style="padding-top: 10px;"><center><INPUT TYPE="submit" VALUE="Enviar!" name="submit" class="submit"></center></td>
+            <td colspan="2" style="padding-top: 10px;"><center><INPUT TYPE="submit" value="Enviar" name="submit" class="submit"></center></td>
         </tr>
     </table>
 
@@ -597,7 +597,7 @@ else:
             </td>
         </tr>
         <tr>
-            <td colspan="2" style="padding-top: 10px;"><center><INPUT TYPE="submit" VALUE="Enviar!" name="submit" class="submit"></center></td>
+            <td colspan="2" style="padding-top: 10px;"><center><INPUT TYPE="submit" value="Enviar" name="submit" class="submit"></center></td>
         </tr>
     </table>
     </form>

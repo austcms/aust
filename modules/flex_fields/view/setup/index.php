@@ -11,7 +11,7 @@
 
 
 ?>
-<h2>Setup de cadastro: configuração inicial</h2>
+<h2>FlexFields: nova estrutura</h2>
 <form action="" method="post" class="normal">
 
 <?php
@@ -24,9 +24,9 @@ foreach($exPOST as $chave=>$valor){
 ?>
 <input type="hidden" name="setupAction" value="criarcampos" />
 
-<p>Aqui nós configuraremos esta estrutura.</p>
+
 <div class="campo">
-    <label>Quantos campos terá seu cadastro?</label>
+    <label>Quantos campos terá sua nova estrutura?</label>
     <div class="input">
     <select name="qtd_campos" style="width: 70px;">
         <?php
@@ -40,27 +40,10 @@ foreach($exPOST as $chave=>$valor){
     </select>
     </div>
 </div>
+<br />
+<br />
 <div class="campo">
-    <label>Será necessário aprovação para completar cadastro?</label>
-    <div class="input">
-        <input type="radio" name="aprovacao" value="1" /> Sim, será necessária aprovação de um administrador após cadastro<br />
-        <input type="radio" checked="checked" name="aprovacao" value="0" /> Não, qualquer usuário poderá se cadastrar
-    </div>
-</div>
-<div class="campo">
-    <label>Se for necessário que o usuário digite uma senha para poder se cadastrar, especifique:</label>
-    <div class="input">
-    <input type="text" name="pre_senha" value="" />
-    </div>
-</div>
-<div class="campo">
-    <label>Parágrafo introdutório ao formulário:</label>
-    <div class="input">
-    <textarea name="descricao" cols="50" rows="3"></textarea>
-    </div>
-</div>
-<div class="campo">
-    <input type="submit" value="Enviar!" class="submit" />
+    <input type="submit" value="Enviar" class="submit" />
 </div>
 
 </form>

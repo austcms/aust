@@ -60,7 +60,7 @@ if(Aust::getInstance()->Instalado()){
 	<p class="explanation">Ex.: site1; site2; juridico</p>
 	</div>
 	</div>
-	<input type="submit" name="categoria_chefe" value="Enviar!" class="submit" />
+	<input type="submit" name="categoria_chefe" value="Enviar" class="submit" />
 	</form>
 
 
