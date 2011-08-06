@@ -11,7 +11,7 @@
 class ModController extends ModActionController
 {
 
-    var $helpers = array('Form');
+    public $helpers = array('Form');
 	public $doRender = true;
 
     public function listing(){

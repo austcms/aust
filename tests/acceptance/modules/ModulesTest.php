@@ -9,7 +9,7 @@ require_once 'tests/config/auto_include.php';
 class ModulesAcceptanceTest extends PHPUnit_Framework_TestCase
 {
     
-	var $modulesDirs = array();
+	public $modulesDirs = array();
     function setUp(){
 		
 	    $this->modulesDirs = array();

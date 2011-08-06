@@ -5,8 +5,8 @@
  */
 class ApiQueryParser {
 	
-	var $dataFormat = 'json';
-	var $queryParser;
+	public $dataFormat = 'json';
+	public $queryParser;
 
     function __construct() {
 

@@ -6,26 +6,26 @@
  */
 class Widgets
 {
-    var $conexao;
+    public $conexao;
 
     /**
      * Id do usuário logado.
      *
      * @var <string>
      */
-    var $userId = '';
+    public $userId = '';
 
-    var $isWidget = false;
+    public $isWidget = false;
 
     /**
      * Contém todos os widgets instalados.
      * 
      * @var <array> 
      */
-    var $installedWidgets = array();
+    public $installedWidgets = array();
 
-    var $_title;
-    var $_html;
+    public $_title;
+    public $_html;
 
     function __construct($envParams, $userId, $widgetPath = ''){
         $this->envParams = $envParams;

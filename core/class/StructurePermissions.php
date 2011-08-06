@@ -25,15 +25,15 @@
 
 class StructurePermissions extends SQLObject {
 
-    var $admins_id;
-    var $admin_group_id;
+    public $admins_id;
+    public $admin_group_id;
     /**
      *
      * @var class Classe responsável pela conexão com o banco de dados
      */
     protected $conexao;
 
-    var $permissoes = array();
+    public $permissoes = array();
 
     /**
      *

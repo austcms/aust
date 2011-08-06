@@ -15,7 +15,7 @@ class MigrationsMods
      *
      * @var <object> Conexão principal com o DB
      */
-    var $conexao;
+    public $conexao;
 
     function  __construct() {
         $this->conexao = Connection::getInstance();

@@ -1,7 +1,7 @@
 <?php
 class Control_panelController extends ActionController {
 	
-	var $directory;
+	public $directory;
 	
 	function beforeFilter(){
 		if( !empty($_POST['inserirestrutura']) &&

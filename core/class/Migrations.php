@@ -11,21 +11,21 @@
  */
 class Migrations
 {
-    var $conexao; // refatorar: verificar se não está sendo usado e retirar
-    var $connection;
+    public $conexao; // refatorar: verificar se não está sendo usado e retirar
+    public $connection;
 
     /**
      * Versão do Migration atual.
      *
      * @var <string>
      */
-    var $version = '';
+    public $version = '';
     /**
      * Nome do módulo atual.
      *
      * @var <string>
      */
-    var $modName = '';
+    public $modName = '';
 
     function __construct($modName, $conexao = ''){
         $this->conexao = Connection::getInstance();

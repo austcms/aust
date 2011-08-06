@@ -1,6 +1,6 @@
 <?php
 class User {
-    var $login;
+    public $login;
     /**
      *
      * @var class Classe responsável pela conexão com o banco de dados

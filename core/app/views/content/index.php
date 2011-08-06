@@ -133,12 +133,15 @@ $sites = Aust::getInstance()->getStructures();
 <?php
 $cacheDirs = Registry::read('permission_needed_dirs');
 $permissionGranted = true;
-foreach( $cacheDirs as $dir ){
-    if( !is_writable($dir) OR
-        !is_readable($dir))
-    {
-		$permissionGranted = false;
-    }
+
+if( !empty($cacheDirs) && is_array($cacheDirs) ){
+	foreach( $cacheDirs as $dir ){
+	    if( !is_writable($dir) OR
+	        !is_readable($dir))
+	    {
+			$permissionGranted = false;
+	    }
+	}
 }
 
 if( !$permissionGranted ){

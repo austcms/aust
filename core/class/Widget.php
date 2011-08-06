@@ -14,22 +14,22 @@ class Widget
      *
      * @var <array_of_objects>
      */
-    var $envParams;
+    public $envParams;
     
-    var $conexao;
+    public $conexao;
 
     /**
      * Verifica se já foi renderizado
      *
      * @var <bool>
      */
-    var $_preRendered = false;
+    public $_preRendered = false;
     /**
      * Tooltips do Widget
      *
      * @var <array>
      */
-    var $_tt = '';
+    public $_tt = '';
 
     function __construct($envParams, $data){
         $this->envParams = $envParams;

@@ -7,8 +7,8 @@
  */
 class Dispatcher {
 	
-	var $customController = "";
-	var $controller;
+	public $customController = "";
+	public $controller;
 	
 	public function __construct(){
 	}
