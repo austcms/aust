@@ -25,9 +25,9 @@ class ModController extends ModActionController
         /**
          * <h2> HEADER
          */
-        $this->set('h1', Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']) );
+        $this->set('h1', Aust::getInstance()->getStructureNameById($_GET['aust_node']) );
 
-        $categorias = Aust::getInstance()->LeCategoriasFilhas('',$_GET['aust_node']);
+        $categorias = Aust::getInstance()->getNodeChildren($_GET['aust_node']);
         $categorias[$_GET['aust_node']] = 'Estrutura';
 
         /*
@@ -57,7 +57,7 @@ class ModController extends ModActionController
 
     public function view($param = array()){
 
-        $this->set('tagh2', Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']) );
+        $this->set('tagh2', Aust::getInstance()->getStructureNameById($_GET['aust_node']) );
 
 		$this->showControls = false;
 		if( $this->module->getStructureConfig('activate_actions') == '1' )

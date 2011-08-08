@@ -1,5 +1,5 @@
 <?php
-$h1 = ''.Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
+$h1 = ''.Aust::getInstance()->getStructureNameById($_GET['aust_node']);
 $nome_modulo = Aust::getInstance()->structureModule($_GET['aust_node']);
 $sql = "SELECT
             id,nome

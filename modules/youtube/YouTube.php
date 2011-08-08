@@ -46,19 +46,6 @@ class YouTube extends Module
 	}
 
     /**
-     * RESPONSER
-     *
-     * Carrega conteúdo para leitura externa. Retorna, geralmente, em array.
-     */
-
-    public function retornaResumo(){
-        return parent::retornaResumo();
-    }
-
-
-
-
-    /**
      * @todo - comentar
      *
      *

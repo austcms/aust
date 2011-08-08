@@ -9,6 +9,9 @@
 
 class Aust {
 
+	/**
+	 * Name of the taxonomy table
+	 */
     static $austTable = 'taxonomy';
 
 	/**
@@ -26,16 +29,12 @@ class Aust {
 
     protected $AustCategorias = Array();
     public $connection;
-    protected $conexao;
 
-    public $_recursiveLimit = 50;
-    public $_recursiveCurrent = 1;
 	public $_structureModuleCache = array();
 	public $_structureCache = array();
 
     function __construct(){
         $this->connection = Connection::getInstance();
-        unset($this->AustCategorias);
     }
 
     static function getInstance(){
@@ -123,11 +122,32 @@ class Aust {
             return FALSE;
         }
     }
+
+	/**
+	 * Creates a new site inside Aust. Multiple sites can be managed in one CMS instance.
+	 *
+     * @param string $name of the new site (e.g. 'my site', 'Site' etc)
+     * @param string $description of the new site
+	 * @return int id f the created site
+	 */
+	public function createSite($name, $description = '') {
+		$sql = "INSERT INTO
+					taxonomy
+						(name, description, class, father_id)
+					VALUES
+						('$name', '$description', 'categoria-chefe', '0')";
+		return Connection::getInstance()->exec($sql);
+	}
 	
 	/**
 	 * Creates a new structure's category.
 	 *
 	 * Automaticaly finds out what is the structure and what is the site.
+	 *
+     * @param array $param Contains the following indexes:
+     *      string  [name]              structure's name;
+     *      int     [father]		    its father id, either a structure or category
+     *      string  [description]
 	 *
 	 * @return int id created
 	 */
@@ -226,15 +246,9 @@ class Aust {
 		return true;
 	}
 
-    public function createSite($name, $description = '') {
-        $sql = "INSERT INTO
-                    taxonomy
-                        (name, description, class, type, father_id)
-                VALUES
-                    ('$name','$description','categoria-chefe','','0')";
-        return Connection::getInstance()->exec($sql);
-    }
-
+	/*
+	 * If not site was found, creates one automatically.
+	 */
 	public function createFirstSiteAutomatically(){
 		if( !$this->anySiteExists() )
 			if( $this->createSite("Site") )
@@ -261,7 +275,6 @@ class Aust {
 	public function getSiteByCategoryId($id = ''){
 		return $this->getSomethingByNodeId($id, 'site');
 	}
-		
 
     /**
      * returns a site's information
@@ -437,7 +450,7 @@ class Aust {
      * @param int $austNode
      * @return array
      */
-    public function getStructureById( $austNode ) {
+    public function getStructureById($austNode) {
 		
 		if( array_key_exists($austNode, $this->_structureCache) )
 			return $this->_structureCache[$austNode];
@@ -451,12 +464,29 @@ class Aust {
 		$this->_structureCache[$austNode] = $result;
         return $result;
     }
+    /**
+     * Returns information from the selected structure
+     *
+     * @param int $austNode
+     * @return array
+     */
+    public function getStructureNameById($id) {
+		$structure = $this->getStructureById($id);
+		return $structure['name'];
+    }
 
     public function getStructureByCategoryId($id) {
 		return $this->getSomethingByNodeId($id, 'structure');
     }
 
-
+	/**
+	 * Some relational structures can be configurated as invisible. For example,
+	 * a PhotoGallery structure can be slave of a Textual structure, the first
+	 * having pics of the second. The first should not appear on the management
+	 * listing for final users. This finds out which one should be invisible.
+	 *
+	 * @return array with a structures listing
+	 */
 	function getInvisibleStructures(){
         $sql = "SELECT
                     local
@@ -475,6 +505,13 @@ class Aust {
 		return $result;
 	}
 
+	/**
+	 * Some structures can stay as slaves of others. For example,
+	 * a PhotoGallery structure can be slave of a Textual structure, the first
+	 * having pics of the second.
+	 *
+	 * @return array with a structures listing
+	 */
 	function getRelatedSlaves($ids = array()){
 		if( empty($ids) )
 			return array();
@@ -501,6 +538,13 @@ class Aust {
 		return $return;
 	}
 
+	/**
+	 * Some structures can stay as masters of others. For example,
+	 * a Textual structure can be master of a PhotoGallery structure, the second
+	 * having pics of the first.
+	 *
+	 * @return array with a structures listing
+	 */
 	function getRelatedMasters($ids = array()){
 		if( empty($ids) )
 			return array();
@@ -526,7 +570,8 @@ class Aust {
 		}
 		
 		return $return;
-	}	
+	}
+		
     /**
      * getStructuresBySite()
      *
@@ -535,7 +580,7 @@ class Aust {
      * @param <int> $id
      * @return <array>
      */
-    public function getStructuresBySite($id='') {
+    public function getStructuresBySite($id = '') {
         if( empty($id) )
             return false;
 
@@ -570,6 +615,22 @@ class Aust {
 	 * 
 	 */
 
+	/**
+	 * getSomethingByNodeId()
+	 * 
+	 * This method shouldn't be used directly. This is used by:
+	 *
+	 * 		- getStructureByCategoryId
+	 * 		- getSiteByCategoryId
+	 * 
+     *
+     * @param <int> $id of the node you want to retrieve the site or structure
+     * @param <string> $targetKeyword
+	 * 					'site':			if you want to know the site of given category
+	 * 					'structure':	if you want to know the structure of a given category
+	 * 
+     * @return <array>
+	 */
 	function getSomethingByNodeId($id, $targetKeyword = ""){
 		
 		if( empty($id) || !is_numeric($id) )
@@ -600,40 +661,6 @@ class Aust {
 		return $this->getSomethingByNodeId($fatherId, $targetKeyword);
 		
 	}
-	
-    /**
-     * Retorna o nome de cada estrutura do sistema (notícias, artigos, etc) no formato ARRAY
-     *
-     * @param array $param
-     * @return array
-     */
-    function LeEstruturasParaArray($param = '') {
-        if(!empty($param['where'])) {
-            $where = $param['where'];
-        } else {
-            $where = "class='estrutura'";
-        }
-
-        $orderby = (empty($param['orderby'])) ? '' : $param['orderby'];
-        $limit = (empty($param['limit'])) ? '' : $param['limit'];
-
-        $sql = "SELECT
-                    *
-                FROM
-                    taxonomy
-                WHERE
-                    ".$where."
-                ".$orderby." ".$limit;
-        $query = Connection::getInstance()->query($sql);
-
-        $estruturas_array = array();
-        foreach($query as $chave=>$valor) {
-            $estruturas_array[$valor['id']]['nome'] = $valor['name'];
-            $estruturas_array[$valor['id']]['tipo'] = $valor['type'];
-            $estruturas_array[$valor['id']]['id'] = $valor['id'];
-        }
-        return $estruturas_array;
-    }
 
     /**
  	 * What module is responsible for a given structure?
@@ -657,25 +684,9 @@ class Aust {
         return $this->_structureModuleCache[$node];
     }
 
-    // retorna o nome legível do módulo
-    function LeModuloDaEstruturaLegivel($node) {
-        $sql = "SELECT
-                        type
-                FROM
-                        taxonomy
-                WHERE
-                        id=$node";
-
-        $query = Connection::getInstance()->query($sql);
-        $tipo = $query[0]['type'];
-        if(is_file(MODULES_DIR.$tipo.'/config.php')) {
-            include(MODULES_DIR.$tipo.'/config.php');
-            return $modInfo['name'];
-        } else {
-            return NULL;
-        }
-    }
-
+	/**
+	 * Return value from a specific $field where record's id equals $id
+	 */
     public function getField($node, $field = '') {
 		if( empty($field) )
 			$field = "*";
@@ -693,90 +704,38 @@ class Aust {
         	return $query[0][$field];
     }
 
-    /**
-     * Retorna o nome de estrutura/categoria de acordo com seu ID
-     *
-     * @param int $node É o ID da estrutura/categoria a ser buscada
-     * @return string Nome da estrutura/categoria
-     */
-    public function leNomeDaEstrutura($node) {
-        $sql = "SELECT
-                    name
-                FROM
-                    taxonomy
-                WHERE
-                    id=$node";
-        $query = Connection::getInstance()->query($sql);
-        return $query[0]['name'];
-    }
-
-    function LimpaVariavelCategorias() {
-        if(is_array($this->AustCategorias)) {
-            foreach($this->AustCategorias as $key=>$valor) {
+    function cleanCategoryCache() {
+        if(is_array($this->AustCategorias))
+            foreach($this->AustCategorias as $key=>$valor)
                 array_pop($this->AustCategorias);
-            }
-        }
     }
 
-	/*
-	 *
-	 * Category related
-	 *
-	 */
+	 /**
+	  * Retrieves all children of a given node.
+	  *
+	  * @param int $id of the node we want to know the children
+	  * @return array with all the children
+	  */
+	 function getNodeChildren($nodeId) {
+	
+	     $this->AustCategorias = array();
+	     $this->_getNodeChildrenEngine($nodeId);
+
+	     $result = $this->AustCategorias;
+	     $this->cleanCategoryCache();
+	     return $result;
+	 }
 
     /**
-     * Retorna todas as filhas da categoria
-     *
-     * @author Alexandre de Oliveira (chavedomundo@gmail.com)
-     *
-     * @param string    $categoriachefe
-     * @param int       $parent
-     * @param int       $level
-     * @param int       $current_node
-     * @return array    retorna array com todas as filhas da categoria dita categorias requisitadas
-     */
-    function categoriasFilhas($params) {
+	 * Serves for the purpose of looping around itself recursively, retrieving all
+	 * children of a given node.
+	 */
+    function _getNodeChildrenEngine($parent=0, $level=0, $current_node=-1) {
 
-        /**
-         * Trata cada variável recebida
-         */
-        $pai = (empty($params['pai'])) ? 0 : $params['pai'];
-        $categoriaChefe = (empty($params['categoriaChefe'])) ? '' : $params['categoriaChefe'];
-        $nivel = (empty($params['nivel'])) ? 0 : $params['nivel'];
-        $nodeAtual = (empty($params['nodeAtual'])) ? 0 : $params['nodeAtual'];
-        /**
-         * Precisa-se melhorar esta função. Infelizmente, PHP 5.2 ainda não suporte método dentro de método,
-         * portanto precisamos usar um método externo
-         */
-        $this->LeCategoriasFilhasCopy($categoriaChefe, $pai, $nivel, $nodeAtual); // gambiarra
-
-        if($pai >= 0) {
-            $this->AustCategorias[$pai] = '';
-        }
-        $resultado = $this->AustCategorias;
-        $this->LimpaVariavelCategorias();
-        return $resultado;
-    }
-
-    // gambiarra para que LeCategoriasFilhas possa rodar em loop e retornar $this->AustCategorias e limpando esta variÃ¡vel no final
-    function LeCategoriasFilhasCopy($categoriachefe, $parent=0, $level=0, $current_node=-1) {
-        /**
-         * Guarda qual o id do pai para carregar suas filhas
-         */
         $where = "lp.father_id = '$parent'";
-        /**
-         * Se não for especificada uma estrutura, carrega todas as categorias da categoria chefe
-         * especificada
-         */
-        if($parent == 0) {
-            if(is_int($categoriachefe)) {
-                $where = $where . " AND lp.id='".$categoriachefe."'";
-            } elseif(is_string($categoriachefe)) {
-                $where = $where . " AND lp.name='".$categoriachefe."'";
-            }
-        }
-        /**
-         * Monta o SQL
+
+        /*
+         * SQL fabrication
          */
         $sql="SELECT
 					lp.id, lp.father_id, lp.name, lp.class,
@@ -800,121 +759,13 @@ class Aust {
 
             $this->AustCategorias[$myrow['id']] = $myrow['name'];
 
-            //chamar recursivamente a função
-            $items.=$this->LeCategoriasFilhasCopy($categoriachefe, $myrow["id"], $level+1, $current_node);
+            /*
+			 * recursively calls itself, retrieving the children.
+			 */
+            $items.=$this->_getNodeChildrenEngine($myrow["id"], $level+1, $current_node);
 
         }
-    }
-
-    /**
-     * DEPRECIADO!!!!!
-     *
-     * Use categoriasFilhas() no lugar desta
-     *
-     * Retorna todas as filhas da categoria
-     *
-     * @author Alexandre de Oliveira (chavedomundo@gmail.com)
-     *
-     * @param string    $categoriachefe
-     * @param int       $parent
-     * @param int       $level
-     * @param int       $current_node
-     * @return array    retorna array com todas as filhas da categoria dita categorias requisitadas
-     */
-    function LeCategoriasFilhas($categoriachefe, $parent=0, $level=0, $current_node=-1) {
-        //trigger_error('Use categoriasFilhas() instead', E_USER_NOTICE);
-
-        $this->LeCategoriasFilhasCopy($categoriachefe, $parent, $level, $current_node); // gambiarra
-
-        if($parent >= 0) {
-            $this->AustCategorias[$parent] = 'tetesteste';
-        }
-        $resultado = $this->AustCategorias;
-        $this->LimpaVariavelCategorias();
-        return $resultado;
-    }
-
-    /**
-     * DEPRECIADO!!!!!
-     *
-     * Use categoriasFilhas() no lugar desta
-     *
-     * Retorna todas as filhas da categoria
-     *
-     * @author Alexandre de Oliveira (chavedomundo@gmail.com)
-     *
-     * @param string    $categoriachefe
-     * @param int       $parent
-     * @param int       $level
-     * @param int       $current_node
-     * @return array    retorna array com todas as filhas da categoria dita categorias requisitadas
-     */
-    // LISTAR: funÃ§Ã£o que retorna diretÃ³rio e arquivo para include da listagem do mÃ³dulo da estrutura com id $aust_node
-    function AustListar($aust_node = '0') {
-        $pasta_do_modulo = $this->structureModule($aust_node);
-        if(is_file(MODULES_DIR.$pasta_do_modulo.'/listar.php')) {
-            return MODULES_DIR.$pasta_do_modulo.'/listar.php';
-        } else {
-            return VIEWS_DIR.'content/listar.inc.php';
-        }
-    }
-
-    // Lê somente estruturas que não devem ter categorias e grava em uma $_SESSION
-    function EstruturasSemCategorias() {
-	
-		if( !empty($_SESSION['structure_only']) )
-        	unset( $_SESSION['structure_only']);
-		
-        $diretorio = MODULES_DIR; // pega o endereço do diretório
-        foreach (glob($diretorio."*", GLOB_ONLYDIR) as $pastas) {
-            if(is_file($pastas.'/config.php')) {
-                include($pastas.'/config.php');
-                if($modInfo['structure_only']) {
-
-                    $tmparray = array_reverse( explode("/", $pastas));
-                    $_SESSION['structure_only'][] = $tmparray[0];
-                }
-                //echo 'oi' ;
-            }
-        }
-
-
-    }
-
-
-    /**
-     * VERIFICAÇÕES
-     */
-
-    // verifica se existe alguma categoria instalada e retorna TRUE ou FALSE
-    public function Instalado() {
-        $sql = "SELECT
-                    id
-                FROM
-                    taxonomy";
-        return Connection::getInstance()->count($sql);
-    }
-
-    /*
-     *
-     * RENDERIZAÇÃO
-     *
-     */
-    /**
-     * getCategoryHtmlSelect()
-     *
-     * Retorna <select> com as categorias atuais
-     *
-     * @param <type> $austNode
-     * @param <type> $currentNode
-     * @return <string>
-     */
-    public function getCategoryHtmlSelect($austNode, $currentNode = ''){
-        $tmp = BuildDDList( Registry::read('austTable') ,'frmnode_id', User::getInstance()->tipo ,$austNode, $currentNode, false, true);
-        return $tmp;
     }
 
 }
-
-
 ?>

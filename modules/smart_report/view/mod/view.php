@@ -28,7 +28,7 @@
  * [Se novo conteúdo]
  */
     if($_GET['action'] == 'create'){
-        $tagh2 = "Criar: ". Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
+        $tagh2 = "Criar: ". Aust::getInstance()->getStructureNameById($_GET['aust_node']);
         $tagp = 'Crie um novo conteúdo abaixo.';
         $dados = array('id' => '');
     }

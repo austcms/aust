@@ -57,7 +57,6 @@ class Application {
 
 	        User::getInstance()->verifySession();
 	        User::getInstance()->redirectForbiddenSession();
-	        Aust::getInstance()->EstruturasSemCategorias();
 
 			$dispatcher = new Dispatcher;
 			$dispatcher->dispatch();

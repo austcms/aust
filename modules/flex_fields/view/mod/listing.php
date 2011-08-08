@@ -10,8 +10,8 @@ $tabela = $module->LeTabelaDeDados($_GET['aust_node']);
 $precisa_aprovacao = $module->pegaConfig(Array('estrutura'=>$_GET['aust_node'], 'chave'=>'aprovacao'));
 ?>
 
-<h2><?php echo Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);?></h2>
-<p>A seguir você vê a lista de registros sob o cadastro "<?php echo Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node'])?>".</p>
+<h2><?php echo Aust::getInstance()->getStructureNameById($_GET['aust_node']);?></h2>
+<p>A seguir você vê a lista de registros sob o cadastro "<?php echo Aust::getInstance()->getStructureNameById($_GET['aust_node'])?>".</p>
 
 
 <?php

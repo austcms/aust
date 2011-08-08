@@ -33,16 +33,6 @@ class PhotoGallery extends Module
         parent::__construct($param);
 	
     }
-
-    /**
-     * RESPONSER
-     *
-     * Carrega conteúdo para leitura externa. Retorna, geralmente, em array.
-     */
-
-    public function retornaResumo(){
-        return parent::retornaResumo();
-    }
    
 }
 ?>

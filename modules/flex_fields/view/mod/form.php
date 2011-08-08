@@ -33,7 +33,7 @@ if( !empty($_GET["w"]) ){
 //pr($infoCadastro);
 ?>
 
-<h2>Cadastro: <?php echo Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node'])?></h2>
+<h2>Cadastro: <?php echo Aust::getInstance()->getStructureNameById($_GET['aust_node'])?></h2>
 <?php
 if( $_GET['action'] == "edit" ){
     if( $module->getStructureConfig("has_printing_version") ){

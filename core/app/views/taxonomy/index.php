@@ -15,7 +15,7 @@ if(!empty($_POST['categoria_chefe']) AND $_POST['categoria_chefe'] <> ''){
 }
 
 
-if(Aust::getInstance()->Instalado()){
+if( Aust::getInstance()->anySiteExists() ){
 	?>
 	<h2>Taxonomia</h2>
 	<p>
@@ -38,32 +38,6 @@ if(Aust::getInstance()->Instalado()){
 		<strong>Atenção:</strong> Aqui você pode criar e editar as categorias do site. Se você não sabe o que está fazendo,
 		contacte um administrador. Qualquer erro poderá fazer o site parar de funcionar.
 	</p>
-
-	<?php
-} else {
-	?>
-	<h2>Taxonomia</h2>
-	<p>
-		Não foi encontrada nenhum site cadastrado. Provavelmente você está <strong>instalando</strong> o sistema.
-	</p>
-	<p>
-	Crie abaixo a <strong>categoria-chefe</strong> do site.
-	</p>
-
-	<form method="post" action="<?php echo $_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'];?>" class="simples">
-	<h3>Formulário</h3>
-	<div class="campo">
-	<label>Nome do site:</label>
-	<div class="input">
-	<input type="text" name="name" />
-	<p class="explanation">Não use maiúsculas nem espaços nem acentos.</p>
-	<p class="explanation">Ex.: site1; site2; juridico</p>
-	</div>
-	</div>
-	<input type="submit" name="categoria_chefe" value="Enviar" class="submit" />
-	</form>
-
-
 
 	<?php
 }

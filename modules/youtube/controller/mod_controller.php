@@ -12,7 +12,7 @@ class ModController extends ModActionController
 {
 
     public function listing(){
-        $this->set('h1', 'Listando conteúdo: '.Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']) );
+        $this->set('h1', 'Listando conteúdo: '.Aust::getInstance()->getStructureNameById($_GET['aust_node']) );
         
         $nome_modulo = Aust::getInstance()->structureModule($_GET['aust_node']);
         $sql = "SELECT
@@ -26,7 +26,7 @@ class ModController extends ModActionController
         $query = $this->module->connection->query($sql);
         $this->set('cat', $query[0]['nome'] );
 
-        $categorias = Aust::getInstance()->LeCategoriasFilhas('',$_GET['aust_node']);
+        $categorias = Aust::getInstance()->getNodeChildren($_GET['aust_node']);
         $categorias[$_GET['aust_node']] = 'Estrutura';
 
         /*

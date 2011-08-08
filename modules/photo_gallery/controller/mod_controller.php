@@ -12,10 +12,10 @@ class ModController extends ModActionController
 {
 
     public function listing(){
-        $this->set('title', Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']) );
+        $this->set('title', Aust::getInstance()->getStructureNameById($_GET['aust_node']) );
         $this->set('nome_modulo', Aust::getInstance()->structureModule($_GET['aust_node']) );
 
-		$categorias = Aust::getInstance()->LeCategoriasFilhas('',$_GET['aust_node']);
+		$categorias = Aust::getInstance()->getNodeChildren($_GET['aust_node']);
 		$categorias[$_GET['aust_node']] = 'Estrutura';
 
 		$params = array(

@@ -15,7 +15,7 @@ class ModController extends ModActionController
 
     function listing(){
 	
-		$categorias = Aust::getInstance()->LeCategoriasFilhas('',$_GET['aust_node']);
+		$categorias = Aust::getInstance()->getNodeChildren($_GET['aust_node']);
 		$categorias[$_GET['aust_node']] = 'Estrutura';
 
         /*

@@ -1,10 +1,5 @@
 <?php
-/*
- *
- * Categorias
- *
- */
-
-echo Aust::getInstance()->getCategoryHtmlSelect($_POST['node'], (int) $_POST['selected']);
-
+$austNode = $_POST['node'];
+$currentNode = (int) $_POST['selected'];
+echo BuildDDList( Registry::read('austTable') ,'frmnode_id', User::getInstance()->tipo ,$austNode, $currentNode, false, true);
 ?>

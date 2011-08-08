@@ -13,7 +13,7 @@
 ?>
 <div class="listagem">
 <?php
-$h1 = 'Listando conteúdo: '.Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
+$h1 = 'Listando conteúdo: '.Aust::getInstance()->getStructureNameById($_GET['aust_node']);
 $nome_modulo = Aust::getInstance()->structureModule($_GET['aust_node']);
 $sql = "SELECT
             id,nome
@@ -34,7 +34,7 @@ if((!empty($filter)) AND ($filter <> 'off')){
 	$addurl = "&filter=$filter&filterw=" . urlencode($filterw);
 }
 	
-$categorias = Aust::getInstance()->LeCategoriasFilhas('',$_GET['aust_node']);
+$categorias = Aust::getInstance()->getNodeChildren($_GET['aust_node']);
 $categorias[$_GET['aust_node']] = 'Estrutura';
 
 // itens de paginação

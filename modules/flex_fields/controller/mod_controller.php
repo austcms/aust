@@ -19,7 +19,7 @@ class ModController extends ModActionController
         $austNode = $_GET['aust_node'];
         $this->set('austNode', $austNode);
 
-        $categorias = Aust::getInstance()->LeCategoriasFilhas('',$_GET['aust_node']);
+        $categorias = Aust::getInstance()->getNodeChildren($_GET['aust_node']);
         $categorias[$_GET['aust_node']] = 'Estrutura';
         $param = array(
             'categorias' => array($_GET['aust_node'] => ""),

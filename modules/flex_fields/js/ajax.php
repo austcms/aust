@@ -120,7 +120,7 @@ elseif($_POST['action'] == 'search'){
     $aust = Aust::getInstance();
 
     $resultado = array();
-    $categorias = Aust::getInstance()->LeCategoriasFilhas('',$_GET['aust_node']);
+    $categorias = Aust::getInstance()->getNodeChildren($_GET['aust_node']);
     $categorias[$austNode] = 'Estrutura';
 
     $searchField = '';

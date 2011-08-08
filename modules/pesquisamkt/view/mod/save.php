@@ -82,7 +82,7 @@ if(!empty($_POST) AND !empty($_POST["perguntas"]) ){
             ";
 
 
-        $h1 = 'Criando: '.Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
+        $h1 = 'Criando: '.Aust::getInstance()->getStructureNameById($_GET['aust_node']);
     } else if($_POST['metodo'] == 'edit') {
             $sql = "UPDATE
                                     ".$this->module->useThisTable()."
@@ -91,7 +91,7 @@ if(!empty($_POST) AND !empty($_POST["perguntas"]) ){
                             WHERE
                                     id='".$_POST['w']."'
                                     ";
-            $h1 = 'Editando: '.Aust::getInstance()->leNomeDaEstrutura($_GET['aust_node']);
+            $h1 = 'Editando: '.Aust::getInstance()->getStructureNameById($_GET['aust_node']);
     }
     
     /*
