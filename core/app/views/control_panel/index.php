@@ -108,7 +108,7 @@ if(User::getInstance()->LeRegistro('group') == 'Webmaster'):
 	                            <label>Categoria-chefe: </label>
 	                                <select name="categoria_chefe">
 	                                    <?php
-	                                    Aust::getInstance()->getSite(Array('id', 'name'), '<option value="&%id">&%name</option>', '', '');
+	                                    Aust::getInstance()->getAllSites(Array('id', 'name'), '<option value="&%id">&%name</option>', '', '');
 	                                    ?>
 	                                </select>
 	                        </div>

@@ -1,8 +1,8 @@
 <?php
 /**
- * Whole application in one file
+ * Whole application in one file. This ignites the whole app, the dispatchers,
+ * controllers, views, modules, models, connection, everything.
  *
- * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @since v0.2.0, 17/06/2011
  */
 class Application {
@@ -26,15 +26,12 @@ class Application {
 		include_once(CORE_CONFIG_DIR."core.php");
 
 		/*
-		 * Configurações do core do sistema
+		 * Configuration about the core
 		 */
 		    include_once(CONFIG_DIR."core.php");
 
 		/*
-		 * Permissões de tipos de usuários relacionados à navegação
-		 */
-		/*
-		 * Carrega o CORE
+		 * Loads the whole core
 		 */
 		    include(CORE_DIR.'load_core.php');
 		
@@ -44,7 +41,6 @@ class Application {
 		if( !$this->showUi )
 			return true;
 
-	
 	    /*
 	     * Verifica se a conexão ou tabelas existem
 	     */

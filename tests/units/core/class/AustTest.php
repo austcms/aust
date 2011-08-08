@@ -14,17 +14,43 @@ class AustTest extends PHPUnit_Framework_TestCase
          * Informações de conexão com banco de dados
          */
         
-        $this->conexao = Connection::getInstance();
-        $this->obj = new Aust($this->conexao);
+        $this->connection = Connection::getInstance();
+        $this->obj = new Aust($this->connection);
     }
 
 	function tearDown(){
-		$this->obj->connection->query("DELETE FROM taxonomy WHERE name='Test777'");
-		$this->obj->connection->query("DELETE FROM taxonomy WHERE name='TestFather777'");
-		$this->obj->connection->query("DELETE FROM taxonomy WHERE name='Test777Hidden'");
-		$this->obj->connection->query("DELETE FROM config WHERE explanation='test'");
+		$this->obj->connection->query("DELETE FROM config");
+		$this->obj->connection->query("DELETE FROM taxonomy");
 	}
 
+	function testCreateStructure(){
+		$this->obj->connection->query("INSERT INTO taxonomy (name,father_id,class) VALUES ('My Site','0','categoria-chefe')");
+		$siteId = $this->obj->connection->lastInsertId();
+		
+		$params = array(
+            'name' => "News",
+            'site' => $siteId,
+            'module' => 'textual',
+            'author' => '1'
+        );
+        
+		$result = $this->obj->createStructure($params);
+		$query = Connection::getInstance()->query("SELECT * FROM taxonomy WHERE id='".$result."'");
+		$this->assertInternalType('array', $query);
+		$this->assertArrayHasKey('0', $query);
+		$query = $query[0];
+		$this->assertEquals('News', $query['name']);
+		$this->assertEquals('news', $query['name_encoded']);
+		$this->assertEquals('textual', $query['type']);
+		$this->assertEquals($siteId, $query['father_id']);
+		$this->assertEquals('1', $query['admin_id']);
+
+		$this->assertEquals($siteId, $query['site_id']);
+		$this->assertEquals('My Site', $query['site_name']);
+		$this->assertEquals('my_site', $query['site_name_encoded']);
+		
+	}
+	
     function testGetStructures(){
         $this->assertInternalType('array', $this->obj->getStructures() );
     }
@@ -52,10 +78,37 @@ class AustTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($structureId, $structure["id"]);
 	}
 
-    function testGetStructuresByFather(){
-        $this->assertInternalType('array', $this->obj->getStructuresByFather('1') );
-        $this->assertInternalType('array', $this->obj->getStructuresByFather('999') );
-        $this->assertFalse($this->obj->getStructuresByFather() );
+    function testGetStructuresBySite(){
+        $this->assertInternalType('array', $this->obj->getStructuresBySite('1') );
+        $this->assertInternalType('array', $this->obj->getStructuresBySite('999') );
+        $this->assertFalse($this->obj->getStructuresBySite() );
+    }
+
+    function testGetStructureByCategoryId(){
+
+		$this->obj->connection->exec("INSERT INTO taxonomy (name,class) VALUES ('My site','categoria-chefe')");
+		$siteLastInsert = $this->obj->connection->lastInsertId();
+
+		$sql = "INSERT INTO taxonomy (name, type, class, site_id, site_name, site_name_encoded) VALUES ('First node', 'textual', 'estrutura', '".$siteLastInsert."', 'My site', 'my_site')";
+		$this->obj->connection->exec($sql);
+		$structurelastInsert = $this->obj->connection->lastInsertId();
+
+		$result = $this->obj->getStructureByCategoryId($structurelastInsert);
+		$this->assertEquals($structurelastInsert, $result['id']);
+		$this->assertEquals('First node', $result['name']);
+
+		$this->obj->connection->exec("INSERT INTO taxonomy (name, type, class, father_id) VALUES ('Second node', 'textual', 'categoria', '$structurelastInsert')");
+		$lastInsert = $this->obj->connection->lastInsertId();
+
+		$this->obj->connection->exec("INSERT INTO taxonomy (name, type, class, father_id) VALUES ('Third node', 'textual', 'categoria', '$lastInsert')");
+		$lastInsert = $this->obj->connection->lastInsertId();
+
+		$result = $this->obj->getStructureByCategoryId($lastInsert);
+		$this->assertEquals($structurelastInsert, $result['id']);
+		$this->assertEquals('First node', $result['name']);
+
+		$this->assertFalse($this->obj->getStructureByCategoryId(''));
+
     }
 
 	function testGetInvisible(){
@@ -117,60 +170,96 @@ class AustTest extends PHPUnit_Framework_TestCase
 		$this->assertFalse($hasHiddenStructure);
 
 	}
+	
+	function testGetSiteByNodeId(){
 
-	function testCreateNewCategory(){
+		$this->assertFalse($this->obj->getSiteByCategoryId(''));
+		
+		$this->obj->connection->query("INSERT INTO taxonomy (name,class) VALUES ('My site','categoria-chefe')");
+		$siteLastInsert = $this->obj->connection->lastInsertId();
 
-		// TEST #1
-		$this->obj->connection->query("INSERT INTO taxonomy (name,class) VALUES ('TestFather777','categoria')");
+		$result = $this->obj->getSiteByCategoryId($siteLastInsert);
+		$this->assertEquals($siteLastInsert, $result['id']);
+		$this->assertEquals('My site', $result['name']);
+
+		$this->obj->connection->query("INSERT INTO taxonomy (name, type, class, site_id, site_name, site_name_encoded) VALUES ('First node', 'textual', 'categoria', '".$siteLastInsert."', 'My site', 'my_site')");
+		$lastInsertOne = $this->obj->connection->lastInsertId();
+		$different = ($lastInsertOne != $siteLastInsert);
+		$this->assertTrue($different);
+
+		$this->obj->connection->query("INSERT INTO taxonomy (name, type, class, father_id) VALUES ('Second node', 'textual', 'categoria', '$lastInsertOne')");
+		$lastInsertTwo = $this->obj->connection->lastInsertId();
+		$different = ($lastInsertTwo != $lastInsertOne);
+		$this->assertTrue($different);
+
+		$this->obj->connection->query("INSERT INTO taxonomy (name, type, class, father_id) VALUES ('Third node', 'textual', 'categoria', '$lastInsertTwo')");
+		$lastInsertThree = $this->obj->connection->lastInsertId();
+		$different = ($lastInsertThree != $lastInsertTwo);
+		$this->assertTrue($different);
+
+		$result = $this->obj->getSiteByCategoryId($lastInsertThree);
+		$this->assertEquals($siteLastInsert, $result['id']);
+		$this->assertEquals('My site', $result['name']);
+	}
+
+	function testCreateNewCategoryWithItsStructureHavingItsSitesData(){
+
+		$this->obj->connection->exec("INSERT INTO taxonomy (name,class) VALUES ('My site','categoria-chefe')");
+		$siteLastInsert = $this->obj->connection->lastInsertId();
+
+		$this->obj->connection->exec("INSERT INTO taxonomy (name, type, class, father_id, site_id, site_name, site_name_encoded) VALUES ('TestFather777', 'textual', 'estrutura', '".$siteLastInsert."', '".$siteLastInsert."', 'My site', 'my_site')");
 		$lastInsert = $this->obj->connection->lastInsertId();
 		
 	    $params = array(
 	        'father' => $lastInsert,
 	        'name' => 'Test777',
 	        'description' => 'Test777',
-	        'class' => 'categoria',
-	        'type' => 'modulo777',
 	        'author' => '1',
 	    );
 		
-		$result = $this->obj->create($params);
+		$result = $this->obj->createCategory($params);
 		$query = $this->obj->connection->query("SELECT * FROM taxonomy WHERE name='Test777' AND father_id='".$lastInsert."'");
 		$saved = reset( $query );
-		
-		$this->obj->connection->query("DELETE FROM taxonomy WHERE name='Test777'");
-		$this->obj->connection->query("DELETE FROM taxonomy WHERE name='TestFather777'");
+
+		$this->obj->connection->query("DELETE FROM taxonomy");
 		
 		$this->assertInternalType('int', $result);
 		$this->assertArrayHasKey('name', $saved);
 		$this->assertEquals('Test777', $saved['name']);
 		$this->assertEquals('categoria', $saved['class']);
-		$this->assertEquals('modulo777', $saved['type']);
+		$this->assertEquals('textual', $saved['type']);
 		$empty = empty($saved['description']);
 		$this->assertFalse( $empty );
 		
-		// TEST #2
-		$this->assertFalse( $this->obj->create( array() ) );
+		$this->assertEquals($siteLastInsert, $saved['site_id']);
+		$this->assertEquals('My site', $saved['site_name']);
+		$this->assertEquals('my_site', $saved['site_name_encoded']);
+		
+	}
+	
+	function testTryCreatingCategoryWithoutArguments(){
+		$this->assertFalse( $this->obj->createCategory( array() ) );
 	}
 	
 	function testGetStructureIdByName(){
-		$this->obj->connection->query("INSERT INTO taxonomy (name,class) VALUES ('TestFather777','categoria')");
+		$this->obj->connection->query("INSERT INTO taxonomy (name,class) VALUES ('TestFather777','categoria-chefe')");
 		$lastInsert = $this->obj->connection->lastInsertId();
 		
 	    $params = array(
 	        'father' => $lastInsert,
 	        'name' => 'Football',
 	        'description' => 'A Football section',
-	        'class' => 'estrutura',
-	        'type' => 'flex_fields',
+	        'site' => $lastInsert,
+	        'module' => 'flex_fields',
 	        'author' => '1',
 	    );
 		
-		$id = $this->obj->create($params);
+		$id = $this->obj->createStructure($params);
 		$result = $this->obj->getStructureIdByName("Football");
 		$this->assertArrayHasKey("0", $result);
 		$this->assertEquals($id, $result[0]);
 
-		$secondId = $this->obj->create($params);
+		$secondId = $this->obj->createStructure($params);
 		$secondResult = $this->obj->getStructureIdByName("Football");
 		$this->assertArrayHasKey("0", $secondResult);
 		$this->assertArrayHasKey("1", $secondResult);

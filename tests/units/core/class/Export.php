@@ -63,7 +63,7 @@ class ExportTest extends PHPUnit_Framework_TestCase
 	        'author' => '1',
 	    );
 		
-		$result = Aust::getInstance()->create($params);
+		$result = Aust::getInstance()->createCategory($params);
 		
 		$params = array(
             'name' => 'Teste777Cadastro',

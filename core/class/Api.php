@@ -2,11 +2,15 @@
 /**
  * API
  *
- * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @since v0.3, 17/06/2011
  */
 class Api {
 
+	/**
+	 * This prepares the environment for return data through the API.
+	 * 
+	 * The Dispatcher function is responsible for the other 50% of the process.
+	 */
     function __construct() {
 
 		require_once(CONFIG_DATABASE_FILE);
@@ -18,20 +22,17 @@ class Api {
 		include_once(CORE_CONFIG_DIR."core.php");
 
 		/*
-		 * Configurações do core do sistema
+		 * Configuration about the core
 		 */
-		    include_once(CONFIG_DIR."core.php");
+	    include_once(CONFIG_DIR."core.php");
 
 		/*
-		 * Permissões de tipos de usuários relacionados à navegação
-		 */
-		/*
-		 * Carrega o CORE
+		 * Loads the whole core functions
 		 */
 		    include(CORE_DIR.'load_core.php');
 		
 	    /*
-	     * Verifica se a conexão ou tabelas existem
+	     * How's the connection
 	     */
 	    if( !Connection::getInstance()->dbExists() ||
 			($this->installationDiagnostics() != 1) )
@@ -47,6 +48,9 @@ class Api {
 		}
     }
 	
+	/**
+	 * This methods ignites the process of mining for data and retrieving as JSON/XML
+	 */
 	public function dispatch($get){
 		$transaction = new ApiTransaction();
 		$solution = $transaction->perform($get);

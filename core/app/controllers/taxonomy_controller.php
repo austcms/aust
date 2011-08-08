@@ -17,7 +17,7 @@ class TaxonomyController extends ActionController {
 	        'author' => User::getInstance()->getId(),
 	    );
 
-	    $resultado = Aust::getInstance()->create($params);
+	    $resultado = Aust::getInstance()->createCategory($params);
 		
 		$lastInsertId = $resultado;
 		/**

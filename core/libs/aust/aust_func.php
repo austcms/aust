@@ -1,21 +1,6 @@
 <?php
-//	$aust = Array();
-	// funÃ§Ã£o que pega o patriarca de determinada categoria
 	$austsubnome = "";
 	$austpatriarca = "";
-	function getAustFather($table, &$austsubnome, &$austpatriarca, $w){
-		$sql = "SELECT
-					id, name, structure_name
-				FROM
-					$table
-				WHERE
-					id = '".$w."'";
-		
-		$mysql = mysql_query($sql);
-		$dados = mysql_fetch_array($mysql);
-		$austsubnome = $dados[name];
-		$austpatriarca = !empty($dados["structure_name"]) ? $dados["structure_name"] : $austsubnome;
-	}
 
 	// funÃ§Ã£o que monta as categorias em arrays e depois cria argumentos SQL
 	function BuildDDListItems($table, $area, &$aust2, $parent=0, $level=0, $current_node=-1){

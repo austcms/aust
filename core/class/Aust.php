@@ -2,16 +2,28 @@
 /**
  * AUST
  *
- * Controls the structures and its taxonomies.
+ * Responsible for the Taxonomies, in other words, structures and categories.
  *
- * @author Alexandre de Oliveira <chavedomundo@gmail.com>
- * @version 0.2
  * @since v0.1.5, 30/05/2009
  */
 
 class Aust {
 
     static $austTable = 'taxonomy';
+
+	/**
+	 * In the taxonomy table, the type value that represents sites is...
+	 */
+	static $austSiteType = 'categoria-chefe';
+	/**
+	 * In the taxonomy table, the type value that represents structures is...
+	 */
+	static $austStructureType = 'estrutura';
+	/**
+	 * In the taxonomy table, the type value that represents a category is...
+	 */
+	static $austCategoryType = 'categoria';
+
     protected $AustCategorias = Array();
     public $connection;
     protected $conexao;
@@ -22,7 +34,6 @@ class Aust {
 	public $_structureCache = array();
 
     function __construct(){
-        $this->conexao = Connection::getInstance();
         $this->connection = Connection::getInstance();
         unset($this->AustCategorias);
     }
@@ -37,33 +48,7 @@ class Aust {
         return $instance[0];
     }
 
-	function getStructureIdByName($string){
-		$string = strtolower($string);
-		$sql = "SELECT id
-				FROM taxonomy
-				WHERE
-					lower(name) LIKE '$string' AND
-					class = 'estrutura'
-				";
-		$query = Connection::getInstance()->query($sql);
-		if( empty($query) )
-			return false;
-		
-		$result = array();
-		if( count($query) == 1){
-			$result = reset($query);
-			$result = array($result["id"]);
-		} else {
-			foreach( $query as $record ){
-				$result[] = $record['id'];
-			}
-		}
-		return $result;
-	}
-
 	/**
-	 * getStructureInstance()
-	 *
 	 * Return the instance of a structure's model.
 	 *
 	 * @param $austNode (int)
@@ -87,189 +72,129 @@ class Aust {
 	}
 
     /**
-     * gravaEstrutura()
-     *
      * Creates a new structure.
      *
      * @param array $param Contém os seguintes índices:
-     *      string  [nome]              structure's name;
-     *      int     [categoriaChefe]    structure's father id
-     *      bool    [publico]           1, everyone has access; 0, only root has access
-     *      string  [modulo]            modules' name
-     *      string  [autor]             struture's author id
+     *      string  [name]              structure's name;
+     *      int     [site]			    structure's father id
+     *      bool    [public]           	1, everyone has access; 0, only root has access
+     *      string  [module_dir]        modules' name
+     *      string  [author]            struture's author id
      */
-    function gravaEstrutura($params) {
+    function createStructure($params) {
 
-        $nome = $params['nome'];
-        $nome_encoded = (empty($params['nome_encoded'])) ? encodeText($nome) : $params['nome_encoded'] ;
-        $categoria_chefe = $params['categoriaChefe'];
-        $estrutura = (empty($params['estrutura'])) ? 'estrutura' : $params['estrutura'] ;
-        $publico = (empty($params['publico'])) ? '1' : $params['publico'] ;
-        $modulo = $params['moduloPasta'];
-        $autor = $params['autor'];
+        $name = $params['name'];
+        $name_encoded = (empty($params['name_encoded'])) ? encodeText($name) : $params['name_encoded'] ;
+        $siteId = $params['site'];
+        $public = (empty($params['public'])) ? '1' : $params['public'] ;
+        $module = $params['module'];
+        $author = $params['author'];
 
-
-        if(is_file(MODULES_DIR.$modulo.'/config.php')) {
-            include(MODULES_DIR.$modulo.'/config.php');
-            $tipo_legivel = $modInfo['name'];
-        } else {
-            $tipo_legivel = NULL;
-        }
-
+		$query = Connection::getInstance()->query("SELECT * FROM ".Aust::$austTable." WHERE id='$siteId' AND class='categoria-chefe'");
+		if( empty($query) )
+			return false;
+		
+		$siteName = $query[0]['name'];
+		if( empty($query[0]['name_encoded']) )
+			$siteNameEncoded = encodeText($siteName);
+		else
+			$siteNameEncoded = $query[0]['name_encoded'];
+		
         $sql = "INSERT INTO
 	            taxonomy
 	            (
 		            name,father_id,class,type,public,admin_id,
-		            name_encoded
+		            name_encoded,
+					site_id, site_name, site_name_encoded
 	            )
 				VALUES
 	            (
-		            '$nome','$categoria_chefe','estrutura','$modulo',$publico,'$autor',
-		            '$nome_encoded'
+		            '$name','$siteId','estrutura','$module',$public,'$author',
+		            '$name_encoded',
+					'$siteId', '$siteName', '$siteNameEncoded'
 	            )
                 ";
         /**
-         * Retorna o id do registro feito
+         * Returns the last inserted id
          */
         if (Connection::getInstance()->exec($sql)) {
-            return Connection::getInstance()->conn->lastInsertId();
+            return (int) Connection::getInstance()->conn->lastInsertId();
         } else {
             return FALSE;
         }
     }
 	
 	/**
-	 * create()
-	 * 
 	 * Creates a new structure's category.
 	 *
-	 * @return int id criado
+	 * Automaticaly finds out what is the structure and what is the site.
+	 *
+	 * @return int id created
 	 */
-    public function create($params) {
+    public function createCategory($params) {
 
-        $catName = (empty($params['name'])) ? false : addslashes( str_replace("\n", "", $params['name']) );
-        $father = (empty($params['father'])) ? false : $params['father'];
-        $descricao = (empty($params['description'])) ? false : addslashes( $params['description'] );
-        $autor = (empty($params['author'])) ? false : $params['author'];
-        $permissao = (empty($params['permission'])) ? false : $params['permission'];
-        $classe = (empty($params['class'])) ? 'categoria' : $params['class'];
+		/*
+		 * Compulsory variables
+		 */
+        if( empty($params['father']) || !is_numeric($params['father']) ) return false;
+        if( empty($params['name']) ) return false;
 
-        $tipo = (empty($params['type'])) ? '' : $params['type'];
-        $tipoLegivel = (empty($params['type_name'])) ? '' : $params['type_name'];
+		/*
+		 * Sets up all used variables
+		 */
+        $name 			= addslashes( str_replace("\n", "", $params['name']) );
+        $nameEncoded 	= encodeText($name);
+        $father 		= $params['father'];
+        $description 	= (empty($params['description'])) ? '' : addslashes( $params['description'] );
+        $author 		= (empty($params['author'])) ? '' : $params['author'];
+        $class 			= Aust::$austCategoryType;
 
-        if( !$catName ) return false;
-        if( !$father ) return false;
+		$site = $this->getSiteByCategoryId($father);
+		$siteNameEncoded = $site['name_encoded'];
+		if( empty($siteNameEncoded) )
+			$siteNameEncoded = encodeText($site['name']);
 
-        /**
-         * Loops to find out who's the Patriarch of this new category
-         */
-        $i = 0;
-        $father_idtmp = $father;
+		$structure = $this->getStructureByCategoryId($father);
+		$structureNameEncoded = $structure['name_encoded'];
+		if( empty($structureNameEncoded) )
+			$structureNameEncoded = encodeText($structure['name']);
 
-        while( $i < 1 ) {
-            $sql = "SELECT
-                        id, name, father_id, class, name_encoded, type
-                    FROM
-                        taxonomy
-                    WHERE
-                        id='$father'
-                    ";
+        if( $father != $structure['id'] ) {
+            $sql = "SELECT 	name
+                    FROM 	taxonomy
+                    WHERE	id='$father'";
             $query = Connection::getInstance()->query($sql);
-
-			if( empty($query[0]) )
-				return false;
-				
-            $dados = $query[0];
-
-            if( empty($tipo) ) {
-                $tipo = $dados['type'];
-            }
-
-            /*
-             * Patriarch
-             */
-            if( !empty($dados['name']) )
-                $patriarca = $dados['name'];
-            else
-                $patriarca = $this->getPatriarch($dados['id']);
-
-            $catNameEncoded = encodeText( $catName );
-            $patriarcaEncoded = encodeText( $patriarca );
-            $subordinadoNomeEncoded = encodeText( $dados['name'] );
-
-            if($dados['class'] == "estrutura") {
-                $tipo = $this->structureModule($dados['id']);
-                $i++;
-            } else {
-                $father_idtmp = $dados['father_id'];
-                $i++;
-            }
-
-        }
+            $fatherNameEncoded = encodeText( $query[0]['name'] );
+        } else {
+			$fatherNameEncoded = $structure['name_encoded'];
+			if( empty($fatherNameEncoded) )
+            	$fatherNameEncoded = encodeText( $structure['name'] );
+		}
 
         $sql = "INSERT INTO
                     taxonomy
                     (
-                        name, name_encoded,
-                        description,
-                        structure_name, structure_name_encoded,
-                        father_id, father_name_encoded,
-                        class, type,
+                        name, 			name_encoded, 		description,
+                        father_id, 		father_name_encoded,
+                        structure_id, 	structure_name, 	structure_name_encoded,
+                        site_id, 		site_name, 			site_name_encoded,
+                        class, 			type,
                         admin_id
                     )
                 VALUES
                     (
-                        '{$catName}','{$catNameEncoded}',
-                        '$descricao',
-                        '$patriarca', '$patriarcaEncoded',
-                        '$father', '$subordinadoNomeEncoded',
-                        '$classe','$tipo',
-                        '".$autor."'
+                        '$name',				'$nameEncoded', 			'$description',
+                        '$father', 				'$fatherNameEncoded',
+                        '".$structure['id']."', '".$structure['name']."', 	'$structureNameEncoded',
+                        '".$site['id']."', 		'".$site['name']."', 		'$siteNameEncoded',
+                        '$class', 				'".$structure['type']."',
+                        '".$author."'
                     )";
 
-        if( Connection::getInstance()->exec($sql) ) {
+        if( Connection::getInstance()->exec($sql) ) 
             return (int) Connection::getInstance()->lastInsertId();
-        }
 
         return false;
-    }
-
-    public function getPatriarch($id) {
-
-        if( $this->_recursiveCurrent > $this->_recursiveLimit )
-            return false;
-
-        $sql = "SELECT
-                    id, name, structure_name, father_id, class
-                FROM
-                    taxonomy
-                WHERE
-                    id='$id'";
-		$query = Connection::getInstance()->query($sql);
-        $query = reset( $query );
-
-        /**
-         * Category without patriarch, go for its father's patriarch
-         */
-        if( empty($query['father_id'])
-                AND $query['class'] == 'categoria' ) {
-            $this->_recursiveCurrent++;
-            return $this->getPatriarch($query['father_id']);
-        }
-        /*
-         * No patriarch, but it's an structure, so it is itself
-         */
-        elseif( empty($query['father_id'])
-                AND $query['class'] == 'estrutura' ) {
-            return $query['name'];
-        }
-        /*
-         * A patriarch is already defined
-         */
-        else {
-            $this->_recursiveCurrent = 1;
-            return $query['father_id'];
-        }
     }
 
 	/**
@@ -310,13 +235,38 @@ class Aust {
         return Connection::getInstance()->exec($sql);
     }
 
+	public function createFirstSiteAutomatically(){
+		if( !$this->anySiteExists() )
+			if( $this->createSite("Site") )
+				return true;
+		return false;
+	}
+
     /*
+     *
      * READING
+     *
      */
+	
+	/*
+	 *
+	 * Site related
+	 *
+	 */
+
+	/**
+	 * Given a node in the taxonomy table, recursively find out who's site it
+	 * belongs to.
+	 */
+	public function getSiteByCategoryId($id = ''){
+		return $this->getSomethingByNodeId($id, 'site');
+	}
+		
+
     /**
      * returns a site's information
      */
-    public function getSite($columns, $formato, $chardivisor = '', $charend = '', $order = '') {
+    public function getAllSites($columns, $formato, $chardivisor = '', $charend = '', $order = '') {
 		
         $sql = "SELECT
                     *
@@ -357,12 +307,11 @@ class Aust {
 		return false;
 	}
 	
-	public function createFirstSiteAutomatically(){
-		if( !$this->anySiteExists() )
-			if( $this->createSite("Site") )
-				return true;
-		return false;
-	}
+	/*
+	 *
+	 * Category related
+	 *
+	 */
 
     /**
      * getStructures()
@@ -402,7 +351,7 @@ class Aust {
             /*
              * Get Structures of each site
             */
-            $structures = $this->getStructuresByFather($sites['id']);
+            $structures = $this->getStructuresBySite($sites['id']);
             if( is_array($structures) ) {
 
 				foreach( $structures as $stKey => $sts ){
@@ -450,6 +399,63 @@ class Aust {
         return $result;
 
     }
+
+	/**
+	 * It's used mainly by the API, e.g. ?query=news, this methods digs the
+	 * taxonomy table to get the ID of the structure, so we can find out
+	 * what's the module
+	 *
+	 * @param $austNode (int)
+	 */
+	function getStructureIdByName($string){
+		$string = strtolower($string);
+		$sql = "SELECT id
+				FROM taxonomy
+				WHERE
+					lower(name) LIKE '$string' AND
+					class = 'estrutura'
+				";
+		$query = Connection::getInstance()->query($sql);
+		if( empty($query) )
+			return false;
+		
+		$result = array();
+		if( count($query) == 1){
+			$result = reset($query);
+			$result = array($result["id"]);
+		} else {
+			foreach( $query as $record ){
+				$result[] = $record['id'];
+			}
+		}
+		return $result;
+	}
+
+    /**
+     * Returns information from the selected structure
+     *
+     * @param int $austNode
+     * @return array
+     */
+    public function getStructureById( $austNode ) {
+		
+		if( array_key_exists($austNode, $this->_structureCache) )
+			return $this->_structureCache[$austNode];
+	
+		$sql = "SELECT * FROM ".Aust::$austTable." WHERE id='".$austNode."'";
+        $result = Connection::getInstance()->query( $sql );
+
+		if( !empty($result) )
+			$result = reset($result);
+			
+		$this->_structureCache[$austNode] = $result;
+        return $result;
+    }
+
+    public function getStructureByCategoryId($id) {
+		return $this->getSomethingByNodeId($id, 'structure');
+    }
+
 
 	function getInvisibleStructures(){
         $sql = "SELECT
@@ -522,20 +528,20 @@ class Aust {
 		return $return;
 	}	
     /**
-     * getStructuresByFather()
+     * getStructuresBySite()
      *
-     * Fetch all structures of a given father
+     * Fetch all structures of a given site id.
      *
      * @param <int> $id
      * @return <array>
      */
-    public function getStructuresByFather($id='') {
+    public function getStructuresBySite($id='') {
         if( empty($id) )
             return false;
 
         /*
-         * Structures of given site
-        */
+         * Returns all structures of given site id
+         */
         $sql = "SELECT
                     lp.*, lp.name as name, lp.type as type,
                     ( SELECT COUNT(*)
@@ -558,27 +564,43 @@ class Aust {
         return $query;
     }
 
-    /**
-     * Returns information from the selected structure
-     *
-     * @param int $austNode
-     * @return array
-     */
-    public function getStructureById( $austNode ) {
+	/*
+	 *
+	 * GENERAL PURPOSE & SUPPORT METHODS
+	 * 
+	 */
+
+	function getSomethingByNodeId($id, $targetKeyword = ""){
 		
-		if( array_key_exists($austNode, $this->_structureCache) )
-			return $this->_structureCache[$austNode];
-	
-		$sql = "SELECT * FROM ".Aust::$austTable." WHERE id='".$austNode."'";
-        $result = Connection::getInstance()->query( $sql );
-
-		if( !empty($result) )
-			$result = reset($result);
+		if( empty($id) || !is_numeric($id) )
+			return false;
 			
-		$this->_structureCache[$austNode] = $result;
-        return $result;
-    }
+		if( $targetKeyword == 'site' )
+			$target = Aust::$austSiteType;
+		else if( $targetKeyword == 'structure' )
+			$target = Aust::$austStructureType;
+		else
+			return false;
+		
+		$sql = "SELECT * FROM ".Aust::$austTable." WHERE id='$id'";
+		$query = Connection::getInstance()->query($sql);
+		if( empty($query) )
+			return false;
+		
+		$query = reset($query);
+		$fatherId = $query['father_id'];
+		
+		if( $query['class'] == $target )
+			return $query;
+		
+		$fatherId = $query['father_id'];
+		if( $targetKeyword == 'site' && empty($query['father_id']) && !empty($query['site_id']) )
+			$fatherId = $query['site_id'];
 
+		return $this->getSomethingByNodeId($fatherId, $targetKeyword);
+		
+	}
+	
     /**
      * Retorna o nome de cada estrutura do sistema (notícias, artigos, etc) no formato ARRAY
      *
@@ -696,6 +718,11 @@ class Aust {
         }
     }
 
+	/*
+	 *
+	 * Category related
+	 *
+	 */
 
     /**
      * Retorna todas as filhas da categoria

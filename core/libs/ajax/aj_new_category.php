@@ -22,7 +22,7 @@ if( $_GET['lib'] == 'new_category'
         'author' => User::getInstance()->getId(),
     );
 
-    echo Aust::getInstance()->create($params);
+    echo Aust::getInstance()->createCategory($params);
 
 
 }

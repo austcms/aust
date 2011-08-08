@@ -121,9 +121,9 @@ class Fixture {
 		
 		$params = array(
             'name' => 'News',
-            'father' => $lastInsert,
+            'site' => $lastInsert,
             'class' => 'estrutura',
-            'type' => 'flex_fields',
+            'module' => 'flex_fields',
             'author' => 1,
 			'fields' => array(
 				array(

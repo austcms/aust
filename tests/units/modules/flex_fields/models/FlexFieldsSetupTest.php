@@ -597,29 +597,28 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 
 			// TEST #1
 		    $params = array(
-				'father' => $lastInsert,
+				'site' => $lastInsert,
 		        'name' => 'Teste777',
 		        'description' => 'Teste777',
-		        'class' => 'flex_fields',
+		        'module' => 'flex_fields',
 		        'type' => 'estrutura',
 		        'author' => '1',
 		    );
 
 			$result = $this->obj->saveStructure($params);
-			$query = Connection::getInstance()->query("SELECT * FROM taxonomy WHERE name='Teste777' AND class='flex_fields'");
+			$query = Connection::getInstance()->query("SELECT * FROM taxonomy WHERE name='Teste777' AND type='flex_fields'");
 			$saved = reset( $query );
 			$this->assertInternalType('array', $saved);
 
-			$this->obj->connection->query("DELETE FROM taxonomy WHERE name='Teste777'");
-			$this->obj->connection->query("DELETE FROM taxonomy WHERE id='".$lastInsert."'");
+			$this->obj->connection->query("DELETE FROM taxonomy");
 
 			$this->assertInternalType('int', $result);
 			$this->assertArrayHasKey('name', $saved);
 			$this->assertEquals('Teste777', $saved['name']);
-			$this->assertEquals('flex_fields', $saved['class']);
-			$this->assertEquals('estrutura', $saved['type']);
+			$this->assertEquals('flex_fields', $saved['type']);
+			$this->assertEquals('estrutura', $saved['class']);
 			$empty = empty($saved['description']);
-			$this->assertFalse( $empty );
+			$this->assertTrue( $empty );
 
 			// TEST #2
 			$this->assertFalse( $this->obj->saveStructure( array() ) );
@@ -1068,9 +1067,9 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 			
 			$params = array(
 	            'name' => 'TestUnit',
-	            'father' => $lastInsert,
+	            'site' => $lastInsert,
 	            'class' => 'estrutura',
-	            'type' => 'flex_fields',
+	            'module' => 'flex_fields',
 	            'author' => 1,
 				'fields' => array(
 					array(

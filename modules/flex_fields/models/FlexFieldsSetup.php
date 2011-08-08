@@ -198,7 +198,9 @@ class FlexFieldsSetup extends ModsSetup {
 		/*
 		 * Verifica o formato de $fields e transforma em array adequado
 		 */
-		if( !array_key_exists('0', $fields) AND !empty($fields['name']) ){
+		if( empty($fields) )
+			return false;
+		else if( !array_key_exists('0', $fields) AND !empty($fields['name']) ){
 			$fields = array(
 				0 => $fields,
 			);
@@ -994,7 +996,7 @@ class FlexFieldsSetup extends ModsSetup {
 	 *
 	 * É necessário os seguintes valores em $params:
 	 * 		'name': 	nome da categoria ou estrutura
-	 *		'father': 	quem é o pai da nova categoria
+	 *		'site': 	quem é o site da nova categoria
 	 *
 	 * @return bool
 	 */
@@ -1007,7 +1009,7 @@ class FlexFieldsSetup extends ModsSetup {
 		if( empty($params) )
 			return false;
 		$aust = Aust::getInstance();
-		$return = Aust::getInstance()->create($params);
+		$return = Aust::getInstance()->createStructure($params);
 		if( is_numeric($return) )
 			$this->austNode = (int) $return;
 			

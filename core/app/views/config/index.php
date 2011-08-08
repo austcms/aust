@@ -41,13 +41,12 @@ if( !empty($_POST['novaconfig']) && $_POST['novaconfig'] ){
 
 <?php
 if(!empty($_POST['inserirmodulo'])){
-	$status = Aust::getInstance()->gravaEstrutura(
+	$status = Aust::getInstance()->createStructure(
                                     array(
-                                        'nome' => $_POST['nome'],
-                                        'categoriaChefe' => $_POST['categoria_chefe'],
-                                        'estrutura' => 'estrutura',
-                                        'moduloPasta' => $_POST['modulo'],
-                                        'autor' => User::getInstance()->LeRegistro('id')
+                                        'name' => $_POST['nome'],
+                                        'site' => $_POST['categoria_chefe'],
+                                        'module' => $_POST['modulo'],
+                                        'author' => User::getInstance()->LeRegistro('id')
                                     )
                                 );
 }

@@ -79,9 +79,8 @@ class SetupController extends ModActionController
          */
         $params = array(
             'name' => $_POST['nome'],
-            'father' => $_POST['categoria_chefe'],
-            'class' => 'estrutura',
-            'type' => $_POST['modulo'],
+            'site' => $_POST['categoria_chefe'],
+            'module' => $_POST['modulo'],
             'author' => User::getInstance()->getId(),
 			'fields' => $fields,
 			'options' => array(
