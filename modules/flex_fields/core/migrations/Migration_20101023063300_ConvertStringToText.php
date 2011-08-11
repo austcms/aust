@@ -3,7 +3,7 @@ class Migration_20101023063300_ConvertStringToText extends Migrations
 {
     function up(){
 
-		$sql = "SELECT node_id, key, id
+		$sql = "SELECT node_id, property, id
 				FROM flex_fields_config
 				WHERE 
 					type='field' AND
@@ -21,7 +21,7 @@ class Migration_20101023063300_ConvertStringToText extends Migrations
 					WHERE 
 						type='estrutura' AND
 						(
-							key='tabela'
+							property='tabela'
 						)
 					";
 			$query = Connection::getInstance()->query($sql);
@@ -45,7 +45,7 @@ class Migration_20101023063300_ConvertStringToText extends Migrations
 
     function down(){
 
-		$sql = "SELECT node_id, key, id
+		$sql = "SELECT node_id, property, id
 				FROM flex_fields_config
 				WHERE 
 					type='campo' AND
@@ -63,7 +63,7 @@ class Migration_20101023063300_ConvertStringToText extends Migrations
 					WHERE 
 						type='estrutura' AND
 						(
-							key='tabela'
+							property='tabela'
 						)
 					";
 			$tableName = reset( Connection::getInstance()->query($sql) );

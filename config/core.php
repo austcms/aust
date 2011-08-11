@@ -42,7 +42,7 @@ date_default_timezone_set('America/Sao_Paulo');
      * Tipo de configuração padrão, visível a todos os usuários.
      */
 
-    Registry::write('configStandardType','Geral');
+    Registry::write('configStandardType','general');
     Registry::write('defaultTheme','classic_blue');
 
     /*
@@ -50,15 +50,15 @@ date_default_timezone_set('America/Sao_Paulo');
      */
         $neededConfig = array(
             array(
-                'type' => 'Geral',
+                'type' => 'general',
                 'local' => '',
                 'name' => 'Nome do site',
                 'property' => 'site_name',
-                'value' => 'Modifique o nome do site',
+                'value' => 'Nome do site',
                 'explanation' => 'Este nome aparecerá no título do gerenciador',
             ),
 		    array(
-		        'type' => 'Privado',
+		        'type' => 'private',
 		        'local' => '',
 		        'name' => 'Usuário tem imagem secundária?',
 		        'property' => 'user_has_secondary_image',
@@ -66,7 +66,7 @@ date_default_timezone_set('America/Sao_Paulo');
 		        'explanation' => 'Em alguns casos, pode ser necessário que administradores tenham uma imagem secundária.',
 		    ),
 		    array(
-		        'type' => 'Privado',
+		        'type' => 'private',
 		        'local' => '',
 		        'name' => 'Mostrar debug SQL',
 		        'property' => 'show_sql_debug_messages',

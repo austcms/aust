@@ -8,7 +8,7 @@ class Migration_20110205051700_InsertVisitants extends Migrations
 				WHERE 
 					type='estrutura' AND
 					(
-						key='tabela'
+						property='tabela'
 					)
 				";
 
@@ -34,7 +34,7 @@ class Migration_20110205051700_InsertVisitants extends Migrations
 				WHERE 
 					type='estrutura' AND
 					(
-						key='tabela'
+						property='tabela'
 					)
 				";
 		

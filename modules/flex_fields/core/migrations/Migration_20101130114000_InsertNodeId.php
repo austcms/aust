@@ -8,7 +8,7 @@ class Migration_20101130114000_InsertNodeId extends Migrations
 				WHERE 
 					type='estrutura' AND
 					(
-						key='tabela'
+						property='tabela'
 					)
 				";
 
@@ -33,7 +33,7 @@ class Migration_20101130114000_InsertNodeId extends Migrations
 				WHERE 
 					type='estrutura' AND
 					(
-						key='tabela'
+						property='tabela'
 					)
 				";
 		
