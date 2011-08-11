@@ -135,7 +135,7 @@ class SetupController extends ModActionController
             for($i = 0; $i < count($_POST['campo']); $i++) {
                 $ordem++;
 
-                $valor = ''; // Por segurança
+                $value = ''; // Por segurança
                 $_POST['campo_descricao'][$i] = addslashes( $_POST['campo_descricao'][$i] );
 
                 /**
@@ -215,19 +215,19 @@ class SetupController extends ModActionController
                      * Retira acentuação e caracteres indesejados para criar
                      * campos nas tabelas
                      */
-                    $valor = RetiraAcentos(mb_strtolower(str_replace(' ', '_', $_POST['campo'][$i]), 'UTF-8'));
+                    $value = RetiraAcentos(mb_strtolower(str_replace(' ', '_', $_POST['campo'][$i]), 'UTF-8'));
                     $campo = RetiraAcentos(mb_strtolower(str_replace(' ', '_', $_POST['campo'][$i]), 'UTF-8'));
 
                     $campoExiste = false;
-                    if( in_array( $valor, $camposExistentes ) )
+                    if( in_array( $value, $camposExistentes ) )
                         $campoExiste = true;
 
                     $adicionalAtual = 2;
                     while( $campoExiste ){
-                        $valor = $valor.'_'.$adicionalAtual;
+                        $value = $value.'_'.$adicionalAtual;
                         $campo = $campo.'_'.$adicionalAtual;
                         
-                        if( !in_array( $valor, $camposExistentes ) )
+                        if( !in_array( $value, $camposExistentes ) )
                             $campoExiste = false;
 
 
@@ -236,27 +236,27 @@ class SetupController extends ModActionController
                     }
                     unset($adicionalAtual);
 
-                    $camposExistentes[] = $valor;
-                    $valor = $valor.' '. $campo_tipo;
+                    $camposExistentes[] = $value;
+                    $value = $value.' '. $campo_tipo;
                     /**
                      * Se for data ou relacional, não tem charset
                      */
                     if($campo_tipo <> 'date' AND $campo_tipo <> 'int')
-                        $valor .= ' '. $cur_charset.' NOT NULL';
+                        $value .= ' '. $cur_charset.' NOT NULL';
 
                     /**
                      * Descrição: ajusta comentário do campo
                      */
                     if(!empty($_POST['campo_descricao'][$i]))
-                        $valor .=  ' COMMENT \''. $_POST['campo_descricao'][$i] .'\'';
+                        $value .=  ' COMMENT \''. $_POST['campo_descricao'][$i] .'\'';
 
                     /**
                      * Ajusta vírgulas (se for o primeiro campo, não tem vírgula)
                      */
                     if($i == 0){
-                        $campos = $valor;
+                        $campos = $value;
                     } else {
-                        $campos .= ', '.$valor;
+                        $campos .= ', '.$value;
                     }
                     
 
@@ -568,8 +568,8 @@ class SetupController extends ModActionController
 
                     // número de erros encontrados
                     $status_campos = 0;
-                    foreach ($sql_campos as $valor) {
-                        if(!$this->module->connection->exec($valor)){
+                    foreach ($sql_campos as $value) {
+                        if(!$this->module->connection->exec($value)){
                             $status_campos++;
                         }
                     }
@@ -588,8 +588,8 @@ class SetupController extends ModActionController
         }
 
         echo '<ul>';
-        foreach ($status_setup as $valor){
-            echo '<li>'.$valor.'</li>';
+        foreach ($status_setup as $value){
+            echo '<li>'.$value.'</li>';
         }
         echo '</ul>';
 

@@ -60,20 +60,20 @@ if( !empty($_GET["w"]) ){
      * O formulário é criado automaticamente
      *
      */
-    foreach( $camposForm as $chave=>$valor ){
+    foreach( $camposForm as $chave=>$value ){
 
         unset($inputType);
         $select = array();
         $checkbox = array();
 
-        if( array_key_exists($valor['nomeFisico'], $divisorTitles) ){
+        if( array_key_exists($value['nomeFisico'], $divisorTitles) ){
             ?>
             <tr valign="top">
                 <td class="divisor" colspan="2">
-                <h3><?php echo $divisorTitles[$valor['nomeFisico']]['valor']; ?></h3>
+                <h3><?php echo $divisorTitles[$value['nomeFisico']]['valor']; ?></h3>
                 <?php
-                if( !empty($divisorTitles[$valor['nomeFisico']]['comentario']) ){
-                    echo '<p>'.$divisorTitles[$valor['nomeFisico']]['comentario'].'</p>';
+                if( !empty($divisorTitles[$value['nomeFisico']]['comentario']) ){
+                    echo '<p>'.$divisorTitles[$value['nomeFisico']]['comentario'].'</p>';
                 }
                 ?>
                 </td>
@@ -84,14 +84,14 @@ if( !empty($_GET["w"]) ){
         /**
          * RELACIONAL UM PARA UM
          */
-        if( $valor["tipo"]["especie"] == "relacional_umparaum" ){
-            $sql = "SELECT id,".$valor["tipo"]["tabelaReferenciaCampo"]." FROM ".$valor["tipo"]["tabelaReferencia"];
+        if( $value["tipo"]["especie"] == "relacional_umparaum" ){
+            $sql = "SELECT id,".$value["tipo"]["tabelaReferenciaCampo"]." FROM ".$value["tipo"]["tabelaReferencia"];
             $selectValues = Connection::getInstance()->query($sql);
             //pr($sql);
             //$select["selected"] = "3";
             $inputType = "select";
             foreach($selectValues as $tabelaReferenciaResult){
-                $select["options"][ $tabelaReferenciaResult["id"] ] = $tabelaReferenciaResult[ $valor["tipo"]["tabelaReferenciaCampo"] ];
+                $select["options"][ $tabelaReferenciaResult["id"] ] = $tabelaReferenciaResult[ $value["tipo"]["tabelaReferenciaCampo"] ];
             }
 
         }
@@ -100,11 +100,11 @@ if( !empty($_GET["w"]) ){
          *
          * Monta checkboxes do campo que é do tipo relacional um-para-muitos
          */
-        else if($valor["tipo"]["especie"] == "relacional_umparamuitos") {
+        else if($value["tipo"]["especie"] == "relacional_umparamuitos") {
 
-            $referencia = $valor["tipo"]["tabelaReferencia"];
-            $tabelaRelacional = $valor["tipo"]["referencia"];
-            $campo = $valor["tipo"]["tabelaReferenciaCampo"];
+            $referencia = $value["tipo"]["tabelaReferencia"];
+            $tabelaRelacional = $value["tipo"]["referencia"];
+            $campo = $value["tipo"]["tabelaReferenciaCampo"];
             $sql = "SELECT
                         t.id, t.$campo
                     FROM
@@ -136,18 +136,18 @@ if( !empty($_GET["w"]) ){
                     $values = array();
                 } else {
                     foreach( $values as $id ){
-                        $valor["valor"][] = $id["referencia"];
+                        $value["valor"][] = $id["referencia"];
                     }
                 }
             }
-        } elseif( $valor['tipo']['tipoFisico'] == 'date' ){
+        } elseif( $value['tipo']['tipoFisico'] == 'date' ){
             $inputType = "date";
-        } elseif( $valor['tipo']['tipoFisico'] == 'text' ){
+        } elseif( $value['tipo']['tipoFisico'] == 'text' ){
             $inputType = "textarea";
         }
 
-        if( empty($valor["valor"]) ){
-            $valor["valor"] = "";
+        if( empty($value["valor"]) ){
+            $value["valor"] = "";
         }
 
 
@@ -164,25 +164,25 @@ if( !empty($_GET["w"]) ){
         <tr valign="top">
             <td class="label">
             <?php
-            echo $valor["label"];
+            echo $value["label"];
             ?>:
             </td>
             <td valign="top">
             <?php
-            if( empty($valor["valor"]) )
+            if( empty($value["valor"]) )
                 echo '-';
             else
-                echo $valor["valor"];
+                echo $value["valor"];
             ?>
             </td>
         </tr>
         <?php
         /*
         echo $form->input( $chave, array(
-                                        "label" => $valor["label"],
+                                        "label" => $value["label"],
                                         "select" => $select,
                                         "checkbox" => $checkbox,
-                                        "value" => $valor["valor"],
+                                        "value" => $value["valor"],
                                         "type" => $inputType,
                                     )
                             );

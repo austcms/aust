@@ -142,7 +142,7 @@ class dbSchema
          */
         $status = array();
 
-        foreach($this->dbSchema as $tabela=>$valor){
+        foreach($this->dbSchema as $tabela=>$value){
             /**
              * Se tabela não existe
              */
@@ -153,11 +153,11 @@ class dbSchema
                  * Se tabela existe, verifica campos
                  */
                 $status[$tabela] = 1;
-                if(is_array($valor)){
+                if(is_array($value)){
                     /**
                      * Loop por cada campo do Schema
                      */
-                    foreach($valor as $campo=>$propriedades){
+                    foreach($value as $campo=>$properties){
                         /**
                          * Se não for um dado especial (informações sobre associação, etc),
                          * é um campo normal
@@ -167,7 +167,7 @@ class dbSchema
                          */
                         if(!$this->verificaCampo($campo, $tabela)){
                             $status[$tabela] = -1;
-                            $this->camposInexistentes[$tabela][$campo] = $propriedades;
+                            $this->camposInexistentes[$tabela][$campo] = $properties;
                         }
                     }
                 }
@@ -339,17 +339,17 @@ class dbSchema
              * Executa Query por Query, criando cada tabela inexistente
              */
             if(is_array($sql)){
-                foreach($sql as $tabela=>$valor){
+                foreach($sql as $tabela=>$value){
                     /*
                      * SubSQLQueries, por exemplo
                      */
-                    if( !empty($valor) AND is_array($valor) ){
+                    if( !empty($value) AND is_array($value) ){
 
                         
                         /**
                          * subqueries
                          */
-                        foreach( $valor as $subTabelas ){
+                        foreach( $value as $subTabelas ){
 
                             foreach($subTabelas as $subSql){
                                 if(Connection::getInstance()->exec($subSql)){
@@ -364,7 +364,7 @@ class dbSchema
                      * SQLs simples, como TABLES
                      */
                     else {
-                        $mysql = Connection::getInstance()->exec($valor, 'CREATE_TABLE');
+                        $mysql = Connection::getInstance()->exec($value, 'CREATE_TABLE');
                         if($mysql){
                             $resultado[$tabela] = 1;
                             /**
@@ -429,31 +429,31 @@ class dbSchema
             /*
              * Só roda SQL se tabela não existe ainda.
              */
-            foreach($campos as $nome=>$propriedades){
+            foreach($campos as $nome=>$properties){
 
 	            if( !in_array( $nome, $this->camposEspeciais) ){
-					$camposSchema[] = $nome.' '.$propriedades;
+					$camposSchema[] = $nome.' '.$properties;
 				}
 				/*
 				 * Campo especial (Keys)
 	             */
 	            else {
-	                if(is_array($propriedades)){
+	                if(is_array($properties)){
 	                    /**
 	                     * Percorre os campos especiais (Keys)
 	                     */
-	                    foreach($propriedades as $key=>$propriedades2){
+	                    foreach($properties as $key=>$properties2){
 	                        /**
 	                         * Se for propriedades como Keys primárias, únicas, etc
 	                         */
 	                        if($nome == 'dbSchemaTableProperties'){
-	                            $camposSchema[] = $key.' '.$propriedades2;
+	                            $camposSchema[] = $key.' '.$properties2;
 	                        }
 	                        /**
 	                         * Se for SQLs que devem ser rodados na criação da tabela
 	                         */
 	                        elseif($nome == 'dbSchemaSQLQuery'){
-	                            $sqlsubquery[$tabela][] = $propriedades2;
+	                            $sqlsubquery[$tabela][] = $properties2;
 	                        }
 	                    }
 	                }

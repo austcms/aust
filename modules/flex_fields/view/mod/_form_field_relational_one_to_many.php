@@ -1,15 +1,15 @@
 <?php
-$referencia = $valor["tipo"]["tabelaReferencia"];
-$tabelaRelacional = $valor["tipo"]["referencia"];
-$campo = $valor["tipo"]["tabelaReferenciaCampo"];
+$referencia = $value["tipo"]["tabelaReferencia"];
+$tabelaRelacional = $value["tipo"]["referencia"];
+$campo = $value["tipo"]["tabelaReferenciaCampo"];
 
-if( !empty($valor["tipo"]["refParentField"]) )
-	$parentField = $valor["tipo"]["refParentField"];
+if( !empty($value["tipo"]["refParentField"]) )
+	$parentField = $value["tipo"]["refParentField"];
 else
 	$parentField = $referencia.'_id';
 
-if( !empty($valor["tipo"]["refChildField"]) )
-	$childField = $valor["tipo"]["refChildField"];
+if( !empty($value["tipo"]["refChildField"]) )
+	$childField = $value["tipo"]["refChildField"];
 else
 	$childField = $referencia.'_id';
 	
@@ -53,7 +53,7 @@ if( !empty($w) ){
         $values = array();
     } else {
         foreach( $values as $id ){
-            $valor["valor"][] = $id["referencia"];
+            $value["valor"][] = $id["referencia"];
         }
     }
 }
@@ -67,7 +67,7 @@ if( $module->getFieldConfig($chave, '1n_has_dragdrop') == '1' )
  */
 ?>
 <div class="input">
-	<label for="input-<?php echo $valor["chave"] ?>"><?php echo $valor["label"]; ?></label>
+	<label for="input-<?php echo $value["chave"] ?>"><?php echo $value["label"]; ?></label>
 	
 	<div class="input_field input_checkbox input_relacionamentos">
 		<div id="search1n_<?php echo $chave; ?>" class="search_1n">
@@ -117,12 +117,12 @@ if( $module->getFieldConfig($chave, '1n_has_dragdrop') == '1' )
  */
 /*
 echo $form->input( $chave, array(
-                                "label" => $valor["label"],
+                                "label" => $value["label"],
                                 "select" => $select,
                                 "checkbox" => $checkbox,
-                                "value" => $valor["valor"],
+                                "value" => $value["valor"],
                                 "type" => $inputType,
-								'after' => '<p class="explanation">'.$valor['comentario'].'</p>'
+								'after' => '<p class="explanation">'.$value['comentario'].'</p>'
                             )
                     );
 */

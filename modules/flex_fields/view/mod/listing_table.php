@@ -30,7 +30,7 @@ if($precisa_aprovacao['value'] == '1'){
         $total_td = 0;
         if( !empty($resultado) ){
             $cabecalhos = $resultado[0];
-            foreach($cabecalhos as $campo=>$valor){
+            foreach($cabecalhos as $campo=>$value){
 
                 if( strpos($campo, 'des_') === 0 ){
 
@@ -70,7 +70,7 @@ if(count($resultado) > 0){
         <tr class="list">
             <?php
             $total_td = 0;
-            foreach($dados as $campo=>$valor) {
+            foreach($dados as $campo=>$value) {
                 //$campo = 'teste';
                 if(strpos($campo, 'des_') === 0){
                     //echo $campo;

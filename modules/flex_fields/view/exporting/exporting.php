@@ -91,8 +91,8 @@ include(CORE_CONFIG_DIR."core.php");
 		
 		$emails = array();
         $email = Connection::getInstance()->query($sql);
-        foreach( $email as $valor ){
-            $emails[] = $valor[$filtroEspecial];
+        foreach( $email as $value ){
+            $emails[] = $value[$filtroEspecial];
         }
 
 		echo implode("<br />", $emails);

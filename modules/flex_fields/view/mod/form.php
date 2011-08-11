@@ -217,7 +217,7 @@ if( $module->getStructureConfig("category_selectable") ){
  * O formulário é criado automaticamente
  *
  */
-foreach( $camposForm as $chave=>$valor ){
+foreach( $camposForm as $chave=>$value ){
 
     unset($inputType);
     $select = array();
@@ -226,12 +226,12 @@ foreach( $camposForm as $chave=>$valor ){
 	$fieldClass = array();
 	$elementId = '';
 
-    if( array_key_exists($valor['nomeFisico'], $divisorTitles) ){
+    if( array_key_exists($value['nomeFisico'], $divisorTitles) ){
         ?>
-        <h3><?php echo $divisorTitles[$valor['nomeFisico']]['valor']; ?></h3>
+        <h3><?php echo $divisorTitles[$value['nomeFisico']]['valor']; ?></h3>
         <?php
-        if( !empty($divisorTitles[$valor['nomeFisico']]['commentary']) ){
-            echo '<p>'.$divisorTitles[$valor['nomeFisico']]['commentary'].'</p>';
+        if( !empty($divisorTitles[$value['nomeFisico']]['commentary']) ){
+            echo '<p>'.$divisorTitles[$value['nomeFisico']]['commentary'].'</p>';
         }
 		$useInput = true;
     }
@@ -239,14 +239,14 @@ foreach( $camposForm as $chave=>$valor ){
     /**
      * RELACIONAL UM PARA UM
      */
-    if( $valor["tipo"]["especie"] == "relacional_umparaum" ){
-        $sql = "SELECT id, ".$valor["tipo"]["tabelaReferenciaCampo"]." FROM ".$valor["tipo"]["tabelaReferencia"] ." ORDER BY ".$valor["tipo"]["tabelaReferenciaCampo"] ." LIMIT 50";
+    if( $value["tipo"]["especie"] == "relacional_umparaum" ){
+        $sql = "SELECT id, ".$value["tipo"]["tabelaReferenciaCampo"]." FROM ".$value["tipo"]["tabelaReferencia"] ." ORDER BY ".$value["tipo"]["tabelaReferenciaCampo"] ." LIMIT 50";
         $selectValues = Connection::getInstance()->query($sql);
 
         //$select["selected"] = "3";
         $inputType = "select";
         foreach($selectValues as $tabelaReferenciaResult){
-            $select["options"][ $tabelaReferenciaResult["id"] ] = $tabelaReferenciaResult[ $valor["tipo"]["tabelaReferenciaCampo"] ];
+            $select["options"][ $tabelaReferenciaResult["id"] ] = $tabelaReferenciaResult[ $value["tipo"]["tabelaReferenciaCampo"] ];
         }
 		$useInput = true;
 
@@ -256,7 +256,7 @@ foreach( $camposForm as $chave=>$valor ){
      *
      * Monta checkboxes do campo que é do tipo relacional um-para-muitos
      */
-    else if($valor["tipo"]["especie"] == "relacional_umparamuitos") {
+    else if($value["tipo"]["especie"] == "relacional_umparamuitos") {
 
         include($module->getIncludeFolder().'/view/mod/_form_field_relational_one_to_many.php');
 
@@ -266,7 +266,7 @@ foreach( $camposForm as $chave=>$valor ){
      *
      * Fields for images
      */
-    else if($valor["tipo"]["especie"] == "files") {
+    else if($value["tipo"]["especie"] == "files") {
 	
         include($module->getIncludeFolder().'/view/mod/_form_field_files.php');
 
@@ -276,14 +276,14 @@ foreach( $camposForm as $chave=>$valor ){
      *
      * Fields for files
      */
-    elseif( $valor["tipo"]["especie"] == "images" ){
+    elseif( $value["tipo"]["especie"] == "images" ){
 
         include($module->getIncludeFolder().'/view/mod/_form_field_images.php');
 
-    } elseif( $valor['tipo']['tipoFisico'] == 'date' ){
+    } elseif( $value['tipo']['tipoFisico'] == 'date' ){
         $inputType = "date";
 		$useInput = true;
-    } elseif( $valor['tipo']['tipoFisico'] == 'text' ){
+    } elseif( $value['tipo']['tipoFisico'] == 'text' ){
         $inputType = "textarea";
 		
 		if( $module->getFieldConfig($chave, 'text_has_editor') == "1" ){
@@ -296,7 +296,7 @@ foreach( $camposForm as $chave=>$valor ){
 		}
 		
 		$useInput = true;
-    } elseif( $valor["tipo"]["especie"] == "string" ){
+    } elseif( $value["tipo"]["especie"] == "string" ){
 
 		$currencyMask = $module->getFieldConfig($chave, 'currency_mask');
 		// Boolean, creates <select>
@@ -308,9 +308,9 @@ foreach( $camposForm as $chave=>$valor ){
 			);
 		} elseif ( !empty($currencyMask) && !is_numeric($currencyMask) ){
 			$fieldClass[] = "currency_field";
-			if( empty($valor["value"]) )
-				$valor["value"] = 0;
-			$valor["value"] = Resources::numberToCurrency($valor["value"], $this->module->language());
+			if( empty($value["value"]) )
+				$value["value"] = 0;
+			$value["value"] = Resources::numberToCurrency($value["value"], $this->module->language());
 		}
 	
 		$useInput = true;
@@ -318,8 +318,8 @@ foreach( $camposForm as $chave=>$valor ){
 		$useInput = true;
 	}
 
-    if( empty($valor["value"]) || $valor["value"] == '' ){
-        $valor["value"] = "";
+    if( empty($value["value"]) || $value["value"] == '' ){
+        $value["value"] = "";
     }
 
     if( empty($inputType) ){
@@ -331,18 +331,18 @@ foreach( $camposForm as $chave=>$valor ){
 	 * tipo images não precisa desta técnica, pois são diferentes.
 	 */
 	$after = false;
-	if( !empty($valor['commentary']) )
-		$after = '<p class="explanation">'.$valor['commentary'].'</p>';
+	if( !empty($value['commentary']) )
+		$after = '<p class="explanation">'.$value['commentary'].'</p>';
 
 	if( $useInput ){
 	    /**
 	     * Cria INPUT
 	     */
 	    echo $form->input( $chave, array(
-	                                    "label" => $valor["label"],
+	                                    "label" => $value["label"],
 	                                    "select" => $select,
 	                                    "checkbox" => $checkbox,
-	                                    "value" => (string) $valor["value"],
+	                                    "value" => (string) $value["value"],
 	                                    "type" => $inputType,
 										'after' => $after,
 										"class" => implode(" ", $fieldClass)

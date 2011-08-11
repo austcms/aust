@@ -12,8 +12,8 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
         <input type="hidden" name="deletar" value="deletar" />
         <?php
         $itens = $_POST['itens'];
-        foreach($itens as $key=>$valor){
-            echo '<input type="hidden" name="itens[]" value="'.$valor.'" />';
+        foreach($itens as $key=>$value){
+            echo '<input type="hidden" name="itens[]" value="'.$value.'" />';
         }
         $status['classe'] = 'pergunta';
         $status['mensagem'] = '<strong>
@@ -30,11 +30,11 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
     } elseif(($_GET['confirm'] == "delete") AND (count($_POST['itens']) > 0)){
         $itens = $_POST[itens];
         $c = 0;
-        foreach($itens as $key=>$valor){
+        foreach($itens as $key=>$value){
             if($c > 0){
-                $where = $where." OR id='".$valor."'";
+                $where = $where." OR id='".$value."'";
             } else {
-                $where = "id='".$valor."'";
+                $where = "id='".$value."'";
             }
             $c++;
         }

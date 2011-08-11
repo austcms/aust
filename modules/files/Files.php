@@ -385,7 +385,7 @@ class Files extends Module
             $order = ' ORDER BY created_on DESC, id DESC';
             $where = ' WHERE ';
             $c = 0;
-            foreach($categorias as $key=>$valor) {
+            foreach($categorias as $key=>$value) {
                 if($c == 0)
                     $where = $where . 'categoria_id=\''.$key.'\'';
                 else

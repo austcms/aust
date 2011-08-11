@@ -18,8 +18,8 @@
 /**
  * Escreve cada exPOST
  */
-foreach($exPOST as $chave=>$valor){
-    echo '<input type="hidden" name="'.$chave.'" value="'.$valor.'" />';
+foreach($exPOST as $chave=>$value){
+    echo '<input type="hidden" name="'.$chave.'" value="'.$value.'" />';
 }
 ?>
 <input type="hidden" name="setupAction" value="criarcampos" />

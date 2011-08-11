@@ -42,8 +42,8 @@ if( $fieldsCount > 0 ){
                 ORDER BY t.id DESC
                 ";
         $email = $module->connection->query($sql);
-        foreach( $email as $valor ){
-            $emails[] = $valor[$filtroEspecial];
+        foreach( $email as $value ){
+            $emails[] = $value[$filtroEspecial];
         }
 
         ?>

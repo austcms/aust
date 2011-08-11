@@ -86,16 +86,16 @@ class ModController extends ModActionController
          */
         $query = $this->module->connection->query($sql);
         $results = array();
-        foreach( $query as $valor ){
+        foreach( $query as $value ){
 
             /*
              * Ajusta variáveis
              */
-            $day = date("j", strtotime($valor['start_datetime']) ) * 1;
-            $endDay = date("j", strtotime($valor['end_datetime']) ) * 1;
+            $day = date("j", strtotime($value['start_datetime']) ) * 1;
+            $endDay = date("j", strtotime($value['end_datetime']) ) * 1;
 
-            if( empty($valor['title']) )
-                $valor['title'] = "Sem título";
+            if( empty($value['title']) )
+                $value['title'] = "Sem título";
 
             /*
              * Salva vários dias se necessário
@@ -105,12 +105,12 @@ class ModController extends ModActionController
                 $currentDay = $day;
                 while( $currentDay <= $endDay ){
 
-                    $results[$currentDay][] = $valor;
+                    $results[$currentDay][] = $value;
                     $currentDay++;
                     $i--;
                 }
             } else {
-                $results[$day][] = $valor;
+                $results[$day][] = $value;
             }
         }
         ksort($results);

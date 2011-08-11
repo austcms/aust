@@ -127,10 +127,10 @@
         $query = $module->connection->query($sql, "ASSOC");
         $respostasTmp = $query;
 
-        foreach( $respostasTmp as $chave=>$valor ){
-            if( empty($valor["prid"]) )
-                $valor["prid"] = 0;
-            $respostas[ $valor["id"] ][ $valor["prid"] ] = $valor;
+        foreach( $respostasTmp as $chave=>$value ){
+            if( empty($value["prid"]) )
+                $value["prid"] = 0;
+            $respostas[ $value["id"] ][ $value["prid"] ] = $value;
         }
 
         //pr($respostas);

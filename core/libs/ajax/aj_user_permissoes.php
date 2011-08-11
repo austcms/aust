@@ -83,9 +83,9 @@ if(empty($_GET['action'])){
     $actions = Registry::read('default_actions');
 
     $categoriasChecked = array();
-    foreach($permissoes as $valor){
-        if( !empty($valor['action']) )
-            $categoriasChecked[ $valor['node_id'] ][$valor['action']] = true;
+    foreach($permissoes as $value){
+        if( !empty($value['action']) )
+            $categoriasChecked[ $value['node_id'] ][$value['action']] = true;
     }
 
     //pr($categoriasChecked);
@@ -110,7 +110,7 @@ if(empty($_GET['action'])){
 
     }
 
-    foreach($categorias as $valor){
+    foreach($categorias as $value){
 
         /**
          * Se for estrutura, deixa negrito
@@ -118,7 +118,7 @@ if(empty($_GET['action'])){
         ?>
         <div class="structure">
         <div class="title">
-            <?php echo $valor['name']; ?>
+            <?php echo $value['name']; ?>
         </div>
         <div class="actions">
             <?php
@@ -134,10 +134,10 @@ if(empty($_GET['action'])){
                 ?>
                 <input
                     type="checkbox"
-                    id="<?php echo $valor['name'].'_'.$action; ?>"
-                     <?php echo isCheckedPermission($valor['id'], $action) ?>
-                    onchange="alteraPermissao('tipo=<?php echo $_POST['tipo']; ?>&agentid=<?php echo $agente['0']['id']; ?>&categoria=<?php echo $valor['id']; ?>&action=<?php echo $action; ?>', this)"
-                    value="<?php echo $valor['name']; ?>" />
+                    id="<?php echo $value['name'].'_'.$action; ?>"
+                     <?php echo isCheckedPermission($value['id'], $action) ?>
+                    onchange="alteraPermissao('tipo=<?php echo $_POST['tipo']; ?>&agentid=<?php echo $agente['0']['id']; ?>&categoria=<?php echo $value['id']; ?>&action=<?php echo $action; ?>', this)"
+                    value="<?php echo $value['name']; ?>" />
                     <?php echo $action_name; ?>
                 <?php
             }

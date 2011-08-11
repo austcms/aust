@@ -202,9 +202,9 @@ class StructurePermissions extends SQLObject {
 
 
         $permissoes = array();
-        foreach($query as $valor){
-            if( !empty($valor['action']) )
-                $permissoes[ $valor['categorias_id'] ][$valor['action']] = true;
+        foreach($query as $value){
+            if( !empty($value['action']) )
+                $permissoes[ $value['categorias_id'] ][$value['action']] = true;
         }
 
         $this->permissoes = $permissoes;

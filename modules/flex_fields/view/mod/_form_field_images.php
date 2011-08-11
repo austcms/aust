@@ -1,13 +1,13 @@
 <?php
 
 // nome físico do campo
-$fieldName = $valor['nomeFisico'];
+$fieldName = $value['nomeFisico'];
 
 // nome do input
 $inputName = "data[".$infoCadastro["estrutura"]["tabela"]["value"]."][".$fieldName."]";
 ?>
 <div class="input">
-    <label for="input-<?php echo $fieldName ?>"><?php echo $valor['label'] ?></label>
+    <label for="input-<?php echo $fieldName ?>"><?php echo $value['label'] ?></label>
 
     <div class="input_field input_images input_<?php echo $fieldName ?>">
 	
@@ -140,7 +140,7 @@ $inputName = "data[".$infoCadastro["estrutura"]["tabela"]["value"]."][".$fieldNa
 	?>
 
 	<br />
-	<p class="explanation"><?php echo $valor['comentario'] ?></p>
+	<p class="explanation"><?php echo $value['comentario'] ?></p>
 	<br />
 	</div>
 </div>

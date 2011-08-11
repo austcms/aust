@@ -491,11 +491,11 @@ class Aust {
         $sql = "SELECT
                     local
                 FROM
-                    config
+                    ".Config::getInstance()->table."
                 WHERE
-                    tipo='mod_conf' AND
-					propriedade='related_and_visible' AND
-					valor='0'
+                    type='structure' AND
+					property='related_and_visible' AND
+					value='0'
                 ";
         $query = Connection::getInstance()->query($sql);
 		$result = array();
@@ -706,7 +706,7 @@ class Aust {
 
     function cleanCategoryCache() {
         if(is_array($this->AustCategorias))
-            foreach($this->AustCategorias as $key=>$valor)
+            foreach($this->AustCategorias as $key=>$value)
                 array_pop($this->AustCategorias);
     }
 

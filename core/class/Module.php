@@ -368,12 +368,12 @@ class Module extends ActiveModule
     public function _organizesLoadedData($results){
 
         $result = array();
-        foreach($results as $valor){
-            if( !empty($valor['id']) ){
-                $result[$valor['id']] = $valor;
-                $this->loadedIds[] = $valor['id'];
+        foreach($results as $value){
+            if( !empty($value['id']) ){
+                $result[$value['id']] = $value;
+                $this->loadedIds[] = $value['id'];
             } else
-                $result[] = $valor;
+                $result[] = $value;
         }
 
         return $result;
@@ -707,33 +707,33 @@ class Module extends ActiveModule
         $c = 0;
 		
         $where = "";
-        foreach($post as $key=>$valor){
+        foreach($post as $key=>$value){
             /*
              * Verifica se $post contém algum 'frm' no início
              */
             if(strpos($key, 'frm') === 0){
-                $valor = addslashes( $valor );
+                $value = addslashes( $value );
                 $sqlcampo[] = str_replace('frm', '', $key);
-                $sqlvalor[] = $valor;
+                $sqlvalor[] = $value;
 
                 /*
                  * Ajusta os campos da tabela nos quais serão gravados dados
                  */
                 if($method == 'edit'){
                     if($c > 0){
-                        $sqlcampostr = $sqlcampostr.','.str_replace('frm', '', $key).'=\''.$valor.'\'';
+                        $sqlcampostr = $sqlcampostr.','.str_replace('frm', '', $key).'=\''.$value.'\'';
                     } else {
-                        $sqlcampostr = str_replace('frm', '', $key).'=\''.$valor.'\'';
+                        $sqlcampostr = str_replace('frm', '', $key).'=\''.$value.'\'';
                     }
                 } else {
                     if($c > 0){
                         $sqlcampostr = $sqlcampostr.','.str_replace('frm', '', $key);
-                        $sqlvalorstr = $sqlvalorstr.",'".$valor."'";
-                        $where .= " AND ".str_replace('frm', '', $key) ."='".$valor."'";
+                        $sqlvalorstr = $sqlvalorstr.",'".$value."'";
+                        $where .= " AND ".str_replace('frm', '', $key) ."='".$value."'";
                     } else {
                         $sqlcampostr = str_replace('frm', '', $key);
-                        $sqlvalorstr = "'".$valor."'";
-                        $where .= str_replace('frm', '', $key) ."='".$valor."'";
+                        $sqlvalorstr = "'".$value."'";
+                        $where .= str_replace('frm', '', $key) ."='".$value."'";
                     }
                 }
 
@@ -886,7 +886,7 @@ class Module extends ActiveModule
 		if( !in_array($viewmode, $this->viewModes) ) return false;
 		$user = User::getInstance();
 		$params = array(
-	        "conf_type" => "mod_conf",
+	        "conf_type" => "structure",
 	        "aust_node" => $this->austNode,
 			'author' => $user->getId(),
 			'data' => array(
@@ -1038,7 +1038,7 @@ class Module extends ActiveModule
 	 *
 	 * 		array(
 	 *			'aust_node' => int,
-	 *			'conf_type' => 'mod_conf',
+	 *			'conf_type' => 'structure',
 	 *			'data' => array(
 	 *				'propriedade_1' => 'valor_1',
 	 *				'propriedade_2' => 'valor_2'
@@ -1054,7 +1054,7 @@ class Module extends ActiveModule
          * Se for para configurar e tiver dados enviados
          */
         if( !empty($params['conf_type'])
-            AND $params['conf_type'] == "mod_conf"
+            AND $params['conf_type'] == "structure"
             AND !empty($params['data'])
             AND !empty($params['aust_node']) ) {
 
@@ -1094,29 +1094,29 @@ class Module extends ActiveModule
 			if( !empty($moduleConfig['relationalName']) )
 				$relationalName = $moduleConfig['relationalName'];
 
-            foreach( $data as $propriedade=>$valor ) {
+            foreach( $data as $property=>$value ) {
 	
 				/*
 				 * Quando o tipo de configuração é 'field', os dados vem
 				 * em um formato diferente, em array.
 				 */
 				if( $confClass == 'field' ){
-					$refField = $propriedade;
-					foreach( $valor as $propriedade=>$valor ){
+					$refField = $property;
+					foreach( $value as $property=>$value ){
 						
-						$deleteSQL = "DELETE FROM config WHERE tipo='mod_conf'  AND $classSearchStatement AND local='".$params["aust_node"]."' AND propriedade='$propriedade' AND ref_field='$refField' $whereAuthor";
+						$deleteSQL = "DELETE FROM ".Config::getInstance()->table." WHERE type='structure'  AND $classSearchStatement AND local='".$params["aust_node"]."' AND property='$property' AND ref_field='$refField' $whereAuthor";
 			            Connection::getInstance()->exec($deleteSQL);
 
 		                $paramsToSave = array(
-		                    "table" => "config",
+		                    "table" => "configurations",
 		                    "data" => array(
-			                    "tipo" => "mod_conf",
+			                    "type" => "structure",
 								'class' => $confClass,
 			                    "local" => $params["aust_node"],
-			                    "autor" => $user->LeRegistro("id"),
-			                    "propriedade" => $propriedade,
+			                    "admin_id" => $user->LeRegistro("id"),
+			                    "property" => $property,
 								'ref_field' => $refField,
-			                    "valor" => $valor
+			                    "value" => $value
 		                    )
 		                );
 		                Connection::getInstance()->exec(Connection::getInstance()->saveSql($paramsToSave));
@@ -1127,18 +1127,18 @@ class Module extends ActiveModule
 				 */
 				else {
 				
-					$deleteSQL = "DELETE FROM config WHERE tipo='mod_conf' AND $classSearchStatement AND local='".$params["aust_node"]."' AND propriedade='$propriedade' $whereAuthor";
+					$deleteSQL = "DELETE FROM ".Config::getInstance()->table." WHERE type='structure' AND $classSearchStatement AND local='".$params["aust_node"]."' AND property='$property' $whereAuthor";
 		            Connection::getInstance()->exec($deleteSQL);
 
 	                $paramsToSave = array(
-	                    "table" => "config",
+	                    "table" => "configurations",
 	                    "data" => array(
-		                    "tipo" => "mod_conf",
+		                    "type" => "structure",
 							'class' => $confClass,
 		                    "local" => $params["aust_node"],
-		                    "autor" => $user->LeRegistro("id"),
-		                    "propriedade" => $propriedade,
-		                    "valor" => $valor
+		                    "admin_id" => $user->LeRegistro("id"),
+		                    "property" => $property,
+		                    "value" => $value
 	                    )
 	                );
 	                Connection::getInstance()->exec(Connection::getInstance()->saveSql($paramsToSave));
@@ -1147,16 +1147,16 @@ class Module extends ActiveModule
 					 * No caso de relações entre estruturas, salva na devida tabela os dados
 					 * deste relacionamento.
 					 */
-					if( $moduleConfig['configurations'][$propriedade]['inputType'] == 'aust_selection' ){
+					if( $moduleConfig['configurations'][$property]['inputType'] == 'aust_selection' ){
 						
-						if( !empty($valor) ){
+						if( !empty($value) ){
 							$sql = "INSERT INTO
 							 			aust_relations
 							 		(slave_id, slave_name, master_id, created_on, updated_on)
 									VALUES
 									('".$params["aust_node"]."', 
 									(SELECT name FROM taxonomy WHERE id='".$params["aust_node"]."'), 
-									'".$valor."', '".$todayDateTime."', '".$todayDateTime."')";
+									'".$value."', '".$todayDateTime."', '".$todayDateTime."')";
 							Connection::getInstance()->exec($sql);
 						}
 					}
@@ -1242,7 +1242,7 @@ class Module extends ActiveModule
 			 * Carrega as configurações já salvas no DB. Pode haver
 			 * menos itens que as definidas estaticamente.
 			 */
-            $sql = "SELECT * FROM config WHERE tipo='mod_conf' AND $classSearchStatement AND local='".$params."' $whereAuthor LIMIT 300";
+            $sql = "SELECT * FROM ".Config::getInstance()->table." WHERE type='structure' AND $classSearchStatement AND local='".$params."' $whereAuthor LIMIT 300";
 			$queryTmp = Connection::getInstance()->query($sql, "ASSOC");
 			
             $query = array();
@@ -1257,10 +1257,10 @@ class Module extends ActiveModule
 				
 				if( empty($fields) )
 					return array();
-	            foreach($queryTmp as $valor) {
+	            foreach($queryTmp as $value) {
 		
 					// $prop: toma o nome da propriedade
-	                $prop = $valor["ref_field"]; // suas_fotos
+	                $prop = $value["ref_field"]; // suas_fotos
 
 					/*
 					 * Se não houver dados salvos no db, retorna o que está no
@@ -1283,37 +1283,37 @@ class Module extends ActiveModule
 	                }
 	
 	
-					if( !empty( $query[$prop][$valor['propriedade']] ) )
-	                	$query[$prop][$valor["propriedade"]] = array_merge( $query[$prop][$valor["propriedade"]] , $valor );
+					if( !empty( $query[$prop][$value['property']] ) )
+	                	$query[$prop][$value["property"]] = array_merge( $query[$prop][$value["property"]] , $value );
 					else
-                		$query[$prop][$valor["propriedade"]] = $valor;
+                		$query[$prop][$value["property"]] = $value;
 	                /**
 	                 * @todo - array $query tem 'value' e 'valor'. Deve-se
 	                 * tirar uma e ficar somente uma.
 	                 */
-	                $query[$prop][$valor["propriedade"]]['value'] = $valor["valor"];
+	                $query[$prop][$value["property"]]['value'] = $value["value"];
 	            }
 			} else {
 				/*
 				 * Loop pela configurações salvas para preparar a Array para mesclar
 				 * com as configurações estaticas.
 				 */
-	            foreach($queryTmp as $valor) {
+	            foreach($queryTmp as $value) {
 				
 					// $prop: toma o nome da propriedade
-	                $prop = $valor["propriedade"];
+	                $prop = $value["property"];
 	                $query[$prop] = array();
 
 	                if( !empty($staticConfig[$prop]) ){
 	                    $query[$prop] = $staticConfig[$prop];
 	                }
 
-	                $query[$prop] = array_merge( $query[$prop], $valor );
+	                $query[$prop] = array_merge( $query[$prop], $value );
 	                /**
 	                 * @todo - array $query tem 'value' e 'valor'. Deve-se
 	                 * tirar uma e ficar somente uma.
 	                 */
-	                $query[$valor["propriedade"]]['value'] = $valor['valor'];
+	                $query[$value["property"]]['value'] = $value['value'];
 	            }
 			}
 			/*
@@ -1365,11 +1365,11 @@ class Module extends ActiveModule
              * Verifica-se abaixo se não existe ainda, e busca-as.
              */
 			if( !empty($author) ){
-	            $sql = "SELECT * FROM config WHERE tipo='mod_conf' AND local='".$this->austNode."' AND autor='$author' AND propriedade='$params' LIMIT 1";
+	            $sql = "SELECT * FROM ".Config::getInstance()->table." WHERE type='structure' AND local='".$this->austNode."' AND admin_id='$author' AND property='$params' LIMIT 1";
 	            $queryTmp = Connection::getInstance()->query($sql, "ASSOC");
 
 				if( !empty($queryTmp) )
-					return $queryTmp[0]['valor'];
+					return $queryTmp[0]['value'];
 				else
 					return array();
 					

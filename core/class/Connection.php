@@ -196,8 +196,8 @@ class Connection extends SQLObject {
 
             if( !empty($query) ){
 
-                foreach($query as $chave=>$valor){
-                    $result[] = $valor;
+                foreach($query as $chave=>$value){
+                    $result[] = $value;
                 }
                 $query->closeCursor();
             }

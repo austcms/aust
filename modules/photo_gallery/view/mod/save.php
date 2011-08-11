@@ -66,26 +66,26 @@ if( !empty($_POST) AND $save  ) {
      * Prepara os campos que serão usados para gerar o SQL de INSERT
      */
 
-    foreach($_POST as $key=>$valor) {
+    foreach($_POST as $key=>$value) {
     // se o argumento $_POST contém 'frm' no início
         if(strpos($key, 'frm') === 0) {
             $sqlcampo[] = str_replace('frm', '', $key);
-            $sqlvalor[] = $valor;
+            $sqlvalor[] = $value;
             // ajusta os campos da tabela nos quais serão gravados dados
-            $valor = addslashes($valor);
+            $value = addslashes($value);
             if($_POST['metodo'] == 'create') {
                 if($c > 0) {
                     $sqlcampostr = $sqlcampostr.','.str_replace('frm', '', $key);
-                    $sqlvalorstr = $sqlvalorstr.",'".$valor."'";
+                    $sqlvalorstr = $sqlvalorstr.",'".$value."'";
                 } else {
                     $sqlcampostr = str_replace('frm', '', $key);
-                    $sqlvalorstr = "'".$valor."'";
+                    $sqlvalorstr = "'".$value."'";
                 }
             } else if($_POST['metodo'] == 'edit') {
                 if($c > 0) {
-                    $sqlcampostr = $sqlcampostr.','.str_replace('frm', '', $key).'=\''.$valor.'\'';
+                    $sqlcampostr = $sqlcampostr.','.str_replace('frm', '', $key).'=\''.$value.'\'';
                 } else {
-                    $sqlcampostr = str_replace('frm', '', $key).'=\''.$valor.'\'';
+                    $sqlcampostr = str_replace('frm', '', $key).'=\''.$value.'\'';
                 }
             }
 
@@ -137,14 +137,14 @@ if( !empty($_POST) AND $save  ) {
 			$austNode = $_POST["aust_node"];
 			$contentId = (empty($_POST["content_id"])) ? "" : $_POST["content_id"];
 
-            foreach( $imagem as $chave=>$valor ){
+            foreach( $imagem as $chave=>$value ){
 				
 				/*
 				 * PADRÃO : Salva imagem fisicamente.
 				 */
 				if( !$this->module->getStructureConfig('save_into_db') ){
 					
-					$finalName = $imageHandler->upload($valor);
+					$finalName = $imageHandler->upload($value);
 					
 					$finalName['systemPath'] = addslashes($finalName['systemPath']);
 					$finalName['webPath'] = addslashes($finalName['webPath']);
@@ -157,11 +157,11 @@ if( !empty($_POST) AND $save  ) {
 				                          WHERE g.gallery_id='".$_POST["w"]."'
 				                          GROUP BY g.order_nr ORDER BY gordem DESC LIMIT 1
 				                        ), '1'),
-				                        '".$valor["size"]."',
+				                        '".$value["size"]."',
 				                        '".$finalName['systemPath']."',
 				                        '".$finalName['webPath']."',
-				                        '".$valor["name"]."',
-				                        '".$valor["type"]."',
+				                        '".$value["name"]."',
+				                        '".$value["type"]."',
 				                        NOW(), '".$comments."'
 				                    )";
 					
@@ -185,16 +185,16 @@ if( !empty($_POST) AND $save  ) {
 	                                      WHERE g.gallery_id='".$_POST["w"]."'
 	                                      GROUP BY g.order_nr ORDER BY gordem DESC LIMIT 1
 	                                    ), '1'),
-	                                    '".$valor["size"]."',
-	                                    '".addslashes(file_get_contents($valor["tmp_name"]) )."',
-	                                    '".$valor["name"]."',
-	                                    '".$valor["type"]."',
+	                                    '".$value["size"]."',
+	                                    '".addslashes(file_get_contents($value["tmp_name"]) )."',
+	                                    '".$value["name"]."',
+	                                    '".$value["type"]."',
 	                                    NOW()
 	                                )
 	                                ";
                 
 	                if( ! $this->module->connection->exec($sqlImagem) )
-	                    $erroImg[] = $valor["tmp_name"];
+	                    $erroImg[] = $value["tmp_name"];
                     
 	                unset($sqlImagem);
 				}
@@ -220,8 +220,8 @@ if( !empty($_POST) AND $save  ) {
         if( !empty($erroImg) AND count($erroImg) > 0 ){
             echo "<p>As seguintes imagens não puderam ser salvas:</p>";
             echo "<ul>";
-            foreach($erroImg as $valor){
-                echo "<li>".$valor."</li>";
+            foreach($erroImg as $value){
+                echo "<li>".$value."</li>";
             }
             echo "</ul>";
             echo "<p>Esta falha pode ter ocorrido por defeito na imagem.</p>";

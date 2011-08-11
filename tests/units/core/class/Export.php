@@ -104,7 +104,7 @@ class ExportTest extends PHPUnit_Framework_TestCase
 		$st = reset(Aust::getInstance()->connection->query("SELECT id FROM taxonomy WHERE nome='Teste777Conteudo'"));
 		
 		$stId = $st['id'];
-		Aust::getInstance()->connection->exec("INSERT INTO config (tipo,local,propriedade,valor) VALUES('mod_conf','$stId','teste777777','teste777777')");
+		Aust::getInstance()->connection->exec("INSERT INTO ".Config::getInstance()->table." (type,local,property,value) VALUES('structure','$stId','teste777777','teste777777')");
 		
 		$result = $this->CadastroSetup->createStructure($params);		
     }
@@ -122,7 +122,7 @@ class ExportTest extends PHPUnit_Framework_TestCase
 				comentario='haha777' OR
 				nome='haha777' OR
 				valor IN ('haha777','teste777cadastro', 'Campo 1777', 'Campo 2777', 'Campo 3777')");
-		$this->obj->connection->exec("DELETE FROM config WHERE propriedade='teste777777'");
+		$this->obj->connection->exec("DELETE FROM ".Config::getInstance()->table." WHERE property='teste777777'");
 		$this->obj->connection->exec("DROP TABLE teste777cadastro");
 		$this->obj->connection->exec("DROP TABLE teste777cadastro_ref_field_ref_table");
 		
@@ -242,7 +242,7 @@ class ExportTest extends PHPUnit_Framework_TestCase
 			$conteudoId = $conf[0]['id'];
 		
 			// CONTEUDO MODCONFIG
-				$conf = $this->obj->connection->query("SELECT * FROM config WHERE local='$conteudoId' AND propriedade='teste777777' LIMIT 1");
+				$conf = $this->obj->connection->query("SELECT * FROM ".Config::getInstance()->table." WHERE local='$conteudoId' AND property='teste777777' LIMIT 1");
 				$this->assertEquals('teste777777', $conf[0]['valor'], 'Not importing modConfig.' );
 				
 		// CADASTRO

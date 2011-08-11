@@ -49,7 +49,7 @@ class Export
 	/**
 	 * getStructures()
 	 * 
-	 * Pega todos os sites, estruturas e suas configurações (mod_conf)
+	 * Pega todos os sites, estruturas e suas configurações
 	 * e retorna no formato Array.
 	 *
 	 * Os seguintes dados são exportados:
@@ -61,7 +61,7 @@ class Export
 	 *					  |---- 'Configurações específicas', como é o caso
 	 *					  |						do módulo Cadastro
 	 *					  |
-	 *					  \---- 'Configurações' contendo dados do tipo 'mod_conf'
+	 *					  \---- 'Configurações' contendo dados do tipo 'structure'
 	 *										    da tabela 'config'
 	 * 
 	 * @param $params Array Opcional, pode ter as seguintes chaves:
@@ -119,7 +119,7 @@ class Export
 				/*
 				 * EXPORT STRUCTURE CONFIGURATIONS
 				 */
-				$sqlConfig = "SELECT * FROM config WHERE tipo='mod_conf' AND local='$stId'";
+				$sqlConfig = "SELECT * FROM ".Config::getInstance()->table." WHERE type='structure' AND local='$stId'";
 //				print($sqlConfig."\n");
 				$configs = array();
 				$configs = Connection::getInstance()->query($sqlConfig);
@@ -345,9 +345,9 @@ class Export
 					$values[] = "('".implode("','", $fieldValues[$key])."')";
 				}
 
-				$sql = "DELETE FROM config WHERE tipo='mod_conf' AND local='$stId'";
+				$sql = "DELETE FROM ".Config::getInstance()->table." WHERE type='structure' AND local='$stId'";
 				Connection::getInstance()->exec($sql);
-				$sql = "INSERT INTO config (".$fieldsStr.") VALUES ".implode(",", $values);
+				$sql = "INSERT INTO ".Config::getInstance()->table." (".$fieldsStr.") VALUES ".implode(",", $values);
 				Connection::getInstance()->exec($sql);
 			}
 			

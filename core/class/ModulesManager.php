@@ -195,7 +195,7 @@ class ModulesManager
             return false;
         
         $schema = $this->modDbSchema;
-        foreach( $schema as $tabela=>$valor ) {
+        foreach( $schema as $tabela=>$value ) {
             $sql = "DESCRIBE ". $tabela;
             $query = Connection::getInstance()->query($sql);
             if(!$query) {
@@ -245,22 +245,22 @@ class ModulesManager
          * Se for para configurar e tiver dados enviados
          */
         if( !empty($params['conf_type'])
-            AND $params['conf_type'] == "mod_conf"
+            AND $params['conf_type'] == "structure"
             AND !empty($params['data'])
             AND !empty($params['aust_node']) ) {
 
             $data = $params["data"];
-            Connection::getInstance()->exec("DELETE FROM config WHERE tipo='mod_conf' AND local='".$params["aust_node"]."'");
-            foreach( $data as $propriedade=>$valor ) {
+            Connection::getInstance()->exec("DELETE FROM ".Config::getInstance()->table." WHERE type='structure' AND local='".$params["aust_node"]."'");
+            foreach( $data as $property=>$value ) {
 
                 $paramsToSave = array(
-                    "table" => "config",
+                    "table" => "configurations",
                     "data" => array(
-                    "tipo" => "mod_conf",
+                    "type" => "structure",
                     "local" => $params["aust_node"],
-                    "autor" => User::getInstance()->LeRegistro("id"),
-                    "propriedade" => $propriedade,
-                    "valor" => $valor
+                    "admin_id" => User::getInstance()->LeRegistro("id"),
+                    "property" => $property,
+                    "value" => $value
                     )
                 );
                 Connection::getInstance()->exec(Connection::getInstance()->saveSql($paramsToSave));
@@ -270,12 +270,12 @@ class ModulesManager
     }
 
     function loadModConf($params) {
-        $sql = "SELECT * FROM config WHERE tipo='mod_conf' AND local='".$params["aust_node"]."' LIMIT 200";
+        $sql = "SELECT * FROM ".Config::getInstance()->table." WHERE type='structure' AND local='".$params["aust_node"]."' LIMIT 200";
 
         $queryTmp = Connection::getInstance()->query($sql, "ASSOC");
 
-        foreach($queryTmp as $valor) {
-            $query[$valor["propriedade"]] = $valor;
+        foreach($queryTmp as $value) {
+            $query[$value["property"]] = $value;
         }
         return $query;
     }
@@ -303,27 +303,23 @@ class ModulesManager
      * @param array $param
      * @return bool
      */
-    function configuraModulo($param) {
+    function configureModule($param) {
 
     /**
      * Ajusta cada variável enviada como parâmetro
      */
-    /**
-     * $tipo:
-     */
-        $tipo = (empty($param['tipo'])) ? '' : $param['tipo'];
         /**
          * $chave:
          */
-        $chave = (empty($param['chave'])) ? '' : $param['chave'];
+        $property = (empty($param['property'])) ? '' : $param['property'];
         /**
-         * $valor:
+         * $value:
          */
-        $valor = (empty($param['valor'])) ? '' : $param['valor'];
+        $value = (empty($param['value'])) ? '' : $param['value'];
         /**
          * $pasta:
          */
-        $pasta = (empty($param['pasta'])) ? '' : MODULES_DIR.$param['pasta'];
+        $directory = (empty($param['directory'])) ? '' : MODULES_DIR.$param['directory'];
         /**
          * $modInfo:
          */
@@ -331,16 +327,20 @@ class ModulesManager
         /**
          * $autor:
          */
-        $autor = (empty($param['autor'])) ? '' : $param['autor'];
+        $adminId = (empty($param['admin_id'])) ? '' : $param['admin_id'];
 
+		
+		$structureOnly = '';
+		if( !empty($modInfo['structure_only']) )
+			$structureOnly = 1;
 
-        Connection::getInstance()->exec("DELETE from modules_installed WHERE directory='".$pasta."'");
+        Connection::getInstance()->exec("DELETE from modules_installed WHERE directory='".$directory."'");
 
         $sql = "INSERT INTO
                     modules_installed
                         (property,value,directory,name,description,structure_only,admin_id)
                 VALUES
-                    ('$chave','$valor','$pasta','".$modInfo['name']."','".$modInfo['description']."','".$modInfo['structure_only']."','$autor')
+                    ('$property','$value','$directory','".$modInfo['name']."','".$modInfo['description']."','".$structureOnly."','$adminId')
             ";
 
         if(Connection::getInstance()->exec($sql, 'CREATE_TABLE')) {

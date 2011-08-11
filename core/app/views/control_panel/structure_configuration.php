@@ -14,7 +14,7 @@ if( !empty($configurations) && is_array($configurations) ){
 
 	    <div class="header">Variáveis da estrutura</div>
 	    <form method="post" action="adm_main.php?section=control_panel&aust_node=<?php echo $_GET['aust_node']; ?>&action=structure_configuration">
-	    <input type="hidden" name="conf_type" value="mod_conf" />
+	    <input type="hidden" name="conf_type" value="structure" />
 	    <input type="hidden" name="aust_node" value="<?php echo $_GET['aust_node']; ?>" />
 	    <?php
 	    foreach( $configurations as $key=>$options ){

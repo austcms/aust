@@ -5,10 +5,10 @@
  */
 if( !empty($_POST['gravar']) && $_POST['gravar'] ){
     unset($_POST['gravar']);
-    foreach($_POST['data'] as $key=>$valor){
+    foreach($_POST['data'] as $key=>$value){
         $params = array(
             'id' => $key,
-            'valor' => $valor,
+            'value' => $value,
         );
 
         $msg = Config::getInstance()->updateOptions($params);
@@ -26,10 +26,10 @@ if( !empty($_POST['gravar']) && $_POST['gravar'] ){
 if( !empty($_POST['novaconfig']) && $_POST['novaconfig'] ){
     unset($_POST['novaconfig']);
     $params = array(
-        'propriedade' => $_POST['propriedade'],
-        'tipo' => $_POST['tipo'],
-        'valor' => $_POST['valor'],
-        'nome' => $_POST['nome'],
+        'property' => $_POST['property'],
+        'type' => $_POST['type'],
+        'value' => $_POST['value'],
+        'name' => $_POST['name'],
     );
 
     Config::getInstance()->adjustOptions($params);
@@ -40,16 +40,6 @@ if( !empty($_POST['novaconfig']) && $_POST['novaconfig'] ){
 ?>
 
 <?php
-if(!empty($_POST['inserirmodulo'])){
-	$status = Aust::getInstance()->createStructure(
-                                    array(
-                                        'name' => $_POST['nome'],
-                                        'site' => $_POST['categoria_chefe'],
-                                        'module' => $_POST['modulo'],
-                                        'author' => User::getInstance()->LeRegistro('id')
-                                    )
-                                );
-}
 
 /*
  * CONFIGURAÇÕES
@@ -82,7 +72,7 @@ $options = Config::getInstance()->getConfigs();
              * TIPOS DE CONFIGURAÇÕES
              */
             foreach($options as $type=>$conf){
-				if( !in_array($type, array("Geral", "Privado")) )
+				if( !in_array($type, array("general", "privat")) )
 					continue;
 
                 if( Config::getInstance()->hasPermission($type, User::getInstance()->type()) ){
@@ -120,7 +110,7 @@ $options = Config::getInstance()->getConfigs();
          * PANE - CONFIGURAÇÕES
          */
         foreach($options as $type=>$conf){
-			if( !in_array($type, array("Geral", "Privado")) )
+			if( !in_array($type, array("general", "private")) )
 				continue;
             /*
              * Usuário tem permissão para modificar estas permissões
@@ -134,9 +124,9 @@ $options = Config::getInstance()->getConfigs();
                     foreach( $conf as $properties ){
                         ?>
                         <tr>
-                            <td class="first"><?php echo $properties['nome']; ?></td>
+                            <td class="first"><?php echo $properties['name']; ?></td>
                             <td class="second">
-                                <input name="data[<?php echo $properties['id']; ?>]" value="<?php echo $properties['valor']; ?>" class="text" />
+                                <input name="data[<?php echo $properties['id']; ?>]" value="<?php echo $properties['value']; ?>" class="text" />
                                 <p class="explanation"><?php echo $properties['explanation']; ?></p>
                             </td>
                         </tr>
@@ -177,7 +167,7 @@ if( User::getInstance()->tipo == "Webmaster" AND 1==1 ){
 
     if( User::getInstance()->tipo != "Webmaster" ){
         $params = array(
-            'where' => "tipo='global'",
+            'where' => "type='global'",
         );
     }
 
@@ -190,21 +180,20 @@ if( User::getInstance()->tipo == "Webmaster" AND 1==1 ){
 
     <div class="campo">
         <label>Nome humano da configuração:</label>
-        <input type="text" name="nome" class="text" />
+        <input type="text" name="name" class="text" />
     </div>
     <div class="campo">
         <label>Nome da config. no DB:</label>
-        <input type="text" name="propriedade" class="text" />
+        <input type="text" name="property" class="text" />
     </div>
     <div class="campo">
         <label>Valor:</label>
-        <input type="text" name="valor" class="text" />
+        <input type="text" name="value" class="text" />
     </div>
     <div class="campo">
         <label>Tipo:</label>
-        <select name="tipo">
-            <option value="Geral">Geral (todos tem acesso)</option>
-            <option value="mod_conf">mod_conf - configuração de módulos</option>
+        <select name="type">
+            <option value="general">Geral (todos têm acesso)</option>
         </select>
     </div>
     <div class="campo">

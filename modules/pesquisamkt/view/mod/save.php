@@ -44,26 +44,26 @@ if(!empty($_POST) AND !empty($_POST["perguntas"]) ){
         unset($sql);
     }
 
-    foreach($_POST as $key=>$valor){
+    foreach($_POST as $key=>$value){
         // se o argumento $_POST contém 'frm' no início
         if(strpos($key, 'frm') === 0) {
             $sqlcampo[] = str_replace('frm', '', $key);
-            $sqlvalor[] = $valor;
+            $sqlvalor[] = $value;
             // ajusta os campos da tabela nos quais serão gravados dados
-            $valor = addslashes($valor);
+            $value = addslashes($value);
             if($_POST['metodo'] == 'create') {
                 if($c > 0) {
                     $sqlcampostr = $sqlcampostr.','.str_replace('frm', '', $key);
-                    $sqlvalorstr = $sqlvalorstr.",'".$valor."'";
+                    $sqlvalorstr = $sqlvalorstr.",'".$value."'";
                 } else {
                     $sqlcampostr = str_replace('frm', '', $key);
-                    $sqlvalorstr = "'".$valor."'";
+                    $sqlvalorstr = "'".$value."'";
                 }
             } else if($_POST['metodo'] == 'edit') {
                     if($c > 0) {
-                        $sqlcampostr = $sqlcampostr.','.str_replace('frm', '', $key).'=\''.$valor.'\'';
+                        $sqlcampostr = $sqlcampostr.','.str_replace('frm', '', $key).'=\''.$value.'\'';
                     } else {
-                        $sqlcampostr = str_replace('frm', '', $key).'=\''.$valor.'\'';
+                        $sqlcampostr = str_replace('frm', '', $key).'=\''.$value.'\'';
                     }
                 }
 
@@ -185,13 +185,13 @@ if(!empty($_POST) AND !empty($_POST["perguntas"]) ){
                 }
             }
             
-            foreach( $_POST["perguntas"] as $idPergunta=>$valor ){
+            foreach( $_POST["perguntas"] as $idPergunta=>$value ){
                 if( in_array($idPergunta, $perguntasExistentes) ){
 
                     /*
                      * DELETA A PERGUNTA
                      */
-                    if( empty($valor) ){
+                    if( empty($value) ){
 
                         $sqlrStart[] = "DELETE FROM pesqmkt_perguntas WHERE id='".$idPergunta."'";
                         $sqlrStart[] = "DELETE FROM pesqmkt_respostas WHERE pesqmkt_pergunta_id='".$idPergunta."'";
@@ -201,7 +201,7 @@ if(!empty($_POST) AND !empty($_POST["perguntas"]) ){
                         $sqlPergunta = "UPDATE
                                             pesqmkt_perguntas
                                         SET
-                                            texto='".$valor."',
+                                            texto='".$value."',
                                             tipo='".$_POST["resposta_tipo"][$idPergunta]."'
                                         WHERE
                                             id='".$idPergunta."'
@@ -222,11 +222,11 @@ if(!empty($_POST) AND !empty($_POST["perguntas"]) ){
                     /*
                      * Salva a pergunta principal
                      */
-                    if( !empty($valor) ){
+                    if( !empty($value) ){
                         $sqlp = "INSERT INTO pesqmkt_perguntas
                                     (pesqmkt_id, texto, tipo)
                                  VALUES
-                                    ('".$_POST["w"]."','".$valor."','".$_POST["resposta_tipo"][$idPergunta]."')
+                                    ('".$_POST["w"]."','".$value."','".$_POST["resposta_tipo"][$idPergunta]."')
                                 ";
 
                         $queryp = $this->module->connection->exec($sqlp);
@@ -266,7 +266,7 @@ if(!empty($_POST) AND !empty($_POST["perguntas"]) ){
 
             if( empty($_POST["resposta"]) )
                 $_POST["resposta"] = array();
-            foreach($_POST["resposta"] as $idPergunta=>$valor){
+            foreach($_POST["resposta"] as $idPergunta=>$value){
 
                 /*
                  * Pergunta existe, edita
@@ -298,7 +298,7 @@ if(!empty($_POST) AND !empty($_POST["perguntas"]) ){
                     /*
                      * Loop por cada resposta da pergunta de id $idPergunta
                      */
-                    foreach( $valor as $pChave=>$pValor ){
+                    foreach( $value as $pChave=>$pValor ){
 
                         /*
                          * Se a alternativa está vazia, sim é

@@ -118,7 +118,7 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 		$this->obj->connection->exec('DROP TABLE table_for_unittests_files', 'CREATE TABLE');
 		
 		$this->obj->connection->exec("DELETE FROM flex_fields_config WHERE node_id='7777'");
-		$this->obj->connection->exec("DELETE FROM config WHERE local='7777'");
+		$this->obj->connection->exec("DELETE FROM ".Config::getInstance()->table." WHERE local='7777'");
 	}
 
 
@@ -246,9 +246,9 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 
             $sqlDelete = "DELETE FROM ".$this->obj->useThisTable()."
                             WHERE
-                                tipo='divisor' AND
-                                valor='777titulo' AND
-                                comentario='777comentario'
+                                type='divisor' AND
+                                value='777titulo' AND
+                                commentary='777comentario'
                             ";
 
             $this->obj->connection->query($sqlDelete);
@@ -338,7 +338,7 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 
 	function testLoadModConf(){
 		/* FIELDS */
-        $this->obj->connection->query("DELETE FROM config WHERE local='777' AND name='teste7777'");
+        $this->obj->connection->query("DELETE FROM ".Config::getInstance()->table." WHERE local='777' AND name='teste7777'");
         $this->obj->connection->query("DELETE FROM flex_fields_config WHERE node_id='777' AND name='teste7777'");
 
 		$this->createTemporaryTable();
@@ -346,7 +346,7 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 			 * Criar o campo de cadastro
 			 */
 			$this->assertTrue( Connection::getInstance()->hasTable('flex_fields_config') );
-			$this->assertTrue( Connection::getInstance()->hasTable('config') );
+			$this->assertTrue( Connection::getInstance()->hasTable('configurations') );
 			
 		    $sql = "INSERT INTO flex_fields_config
 		                 (type,property,value,node_id,name, specie)
@@ -355,10 +355,10 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 		             ";
 		    Connection::getInstance()->exec($sql);
 			
-	        $sql = "INSERT INTO config
-	                    (tipo,local,nome,propriedade,valor, class, ref_field)
+	        $sql = "INSERT INTO ".Config::getInstance()->table."
+	                    (type, local, name, property, value,  class, ref_field)
 	                VALUES
-	                    ('mod_conf','777','teste7777','teste','1', 'field', 'campo_1')
+	                    ('structure','777','teste7777','teste','1', 'field', 'campo_1')
 	                ";
 	
 	        $this->obj->connection->query($sql);
@@ -378,7 +378,7 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 	                $result['campo_1']['teste']['value'],
 	                'Teste #4.2 falhou');
 	
-        $this->obj->connection->query("DELETE FROM config WHERE local='777' AND name='teste7777'");
+        $this->obj->connection->query("DELETE FROM ".Config::getInstance()->table." WHERE local='777' AND name='teste7777'");
         $this->obj->connection->query("DELETE FROM flex_fields_config WHERE node_id='777' AND name='teste7777'");
 
 		$this->deleteTemporaryTable();
@@ -393,7 +393,7 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 	
 	function testLoadModConfWithoutSavedData(){
 		/* FIELDS */
-        $this->obj->connection->query("DELETE FROM config WHERE local='777' AND name='teste7777'");
+        $this->obj->connection->query("DELETE FROM ".Config::getInstance()->table." WHERE local='777' AND name='teste7777'");
         $this->obj->connection->query("DELETE FROM flex_fields_config WHERE node_id='777' AND name='teste7777'");
 
 		$this->createTemporaryTable();
@@ -417,14 +417,14 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 	                $result['campo_1'],
 	                'Teste #1.1 falhou');
 
-        $this->obj->connection->query("DELETE FROM config WHERE local='777' AND name='teste7777'");
+        $this->obj->connection->query("DELETE FROM ".Config::getInstance()->table." WHERE local='777' AND name='teste7777'");
         $this->obj->connection->query("DELETE FROM flex_fields_config WHERE node_id='777' AND name='teste7777'");
 
 		$this->deleteTemporaryTable();
 	}
 	
 	function testGetFieldConfig(){
-        $this->obj->connection->query("DELETE FROM config WHERE local='777' AND name='teste7777'");
+        $this->obj->connection->query("DELETE FROM ".Config::getInstance()->table." WHERE local='777' AND name='teste7777'");
         $this->obj->connection->query("DELETE FROM flex_fields_config WHERE node_id='777' AND name='teste7777'");
 
 		$this->createTemporaryTable();
@@ -439,10 +439,10 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 	    $this->obj->connection->query($sql);
 		
 
-        $sql = "INSERT INTO config
-                    (tipo,local,nome,propriedade,valor, class, ref_field)
+        $sql = "INSERT INTO ".Config::getInstance()->table."
+                    (type, local, name, property, value,  class, ref_field)
                 VALUES
-                    ('mod_conf','777','teste7777','has_conf','1', 'field', 'campo_1')
+                    ('structure','777','teste7777','has_conf','1', 'field', 'campo_1')
                 ";
 
         $this->obj->connection->query($sql);
@@ -466,7 +466,7 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 		$result = $this->obj->getFieldConfig('campo_1', 'has_conf2');
 		$this->assertFalse($result);
 		
-        $this->obj->connection->query("DELETE FROM config WHERE local='777' AND name='teste7777'");
+        $this->obj->connection->query("DELETE FROM ".Config::getInstance()->table." WHERE local='777' AND name='teste7777'");
 	    $this->obj->connection->query("DELETE FROM flex_fields_config WHERE node_id='777' AND name='teste7777'");
 	
 		$this->deleteTemporaryTable();
@@ -515,10 +515,10 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 		             ";
 		    $this->obj->connection->query($sql);
 
-		    $sql = "INSERT INTO config
-		                (tipo,local,nome,propriedade,valor, class, ref_field)
+		    $sql = "INSERT INTO ".Config::getInstance()->table."
+		                (type, local, name, property, value,  class, ref_field)
 		            VALUES
-		                ('mod_conf','7777','teste7777','image_field_limit_quantity','1', 'field', 'test_field')
+		                ('structure','7777','teste7777','image_field_limit_quantity','1', 'field', 'test_field')
 		            ";
 		    $this->obj->connection->query($sql);
 
@@ -559,14 +559,14 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 		/*
 		 * Configura para ilimitadas imagens
 		 */
-			$this->obj->connection->exec("DELETE FROM config WHERE local='7777'");
+			$this->obj->connection->exec("DELETE FROM ".Config::getInstance()->table." WHERE local='7777'");
 			$this->obj->structureFieldsConfig = array();
 			$this->obj->config = array();
 			
-		    $sql = "INSERT INTO config
-		                (tipo,local,nome,propriedade,valor, class, ref_field)
+		    $sql = "INSERT INTO ".Config::getInstance()->table."
+		                (type, local, name, property, value,  class, ref_field)
 		            VALUES
-		                ('mod_conf','7777','teste7777','image_field_limit_quantity','0', 'field', 'test_field')
+		                ('structure','7777','teste7777','image_field_limit_quantity','0', 'field', 'test_field')
 		            ";
 		    $this->obj->connection->query($sql);
 

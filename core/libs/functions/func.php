@@ -289,10 +289,10 @@ function BomDiaTardeNoite($hora){
 }
 
 // faz verificações e escreve selected para <input>
-function makeselected($campo, $valor){ if(is_string($valor) OR !empty($valor)) { if($campo == $valor) echo 'selected="selected"'; } }
+function makeselected($campo, $value){ if(is_string($value) OR !empty($value)) { if($campo == $value) echo 'selected="selected"'; } }
 
 // faz verificações e escreve checked para <input>
-function makechecked($campo,$valor){ if($campo == $valor) echo 'checked'; }
+function makechecked($campo,$value){ if($campo == $value) echo 'checked'; }
 
 // escreve $str se não estiver vazia, senão escreve $else
 function ifisset($str,$else=''){

@@ -43,7 +43,7 @@ $setup->mainTable = $module->getTable();
 /*
  * MOD_CONF
  */
-if( !empty($_POST['conf_type']) AND $_POST['conf_type'] == "mod_conf" ){
+if( !empty($_POST['conf_type']) AND $_POST['conf_type'] == "structure" ){
     /**
      *
      */
@@ -100,10 +100,10 @@ if( !empty($_POST['conf_type']) AND $_POST['conf_type'] == "mod_conf" ){
  */
 if(!empty($_POST['configurar_opcoes'])){
 
-    foreach($_POST as $key=>$valor){
+    foreach($_POST as $key=>$value){
 
         if(!get_magic_quotes_gpc()){
-            $valor = addslashes($valor);
+            $value = addslashes($value);
         }
         // se o argumento $_POST contém 'frm' no início
         if(strpos($key, 'frm') === 0){
@@ -111,7 +111,7 @@ if(!empty($_POST['configurar_opcoes'])){
             $sql = "UPDATE
                         flex_fields_config
                     SET
-                        value='".$valor."'
+                        value='".$value."'
                     WHERE
                         property='".$key."' AND
                         type='config' AND
@@ -284,8 +284,8 @@ if(!empty($_GET['function'])){
                 if(is_string($status))
                     echo $status;
                 elseif(is_array($status)){
-                    foreach($status as $valor){
-                        echo '<span>'.$valor.'</span><br />';
+                    foreach($status as $value){
+                        echo '<span>'.$value.'</span><br />';
                     }
                 }
                 ?>
@@ -313,7 +313,7 @@ if(!empty($_GET['function'])){
             <?php
 			$fields = $module->getFields(false);
 
-            foreach($fields as $chave=>$valor){
+            foreach($fields as $chave=>$value){
                 /**
                  * Verifica se o campo é editável ou infra-estrutura (ex. de campos: id, adddate, aprovado)
                  */
@@ -479,7 +479,7 @@ if(!empty($_GET['function'])){
                         // pega o valor físico do campo da tabela
                         $fields = $module->getFields();
                         $i = 0;
-                        foreach($fields as $campo=>$valor){
+                        foreach($fields as $campo=>$value){
                             // verifica se o campo é editável ou infra-estrutura (ex. de campos: id, adddate, aprovado)
                             $sql = "SELECT
                                         value, property
@@ -504,7 +504,7 @@ if(!empty($_GET['function'])){
                         }
                         unset($campo);
                         unset($dados);
-                        unset($valor);
+                        unset($value);
                         ?>
                         
                     </select>
@@ -583,9 +583,9 @@ if(!empty($_GET['function'])){
                         /*
                          * Lista campos para criar título divisor
                          */
-                        foreach($dados as $valor){
+                        foreach($dados as $value){
                             ?>
-                            <option value="BEFORE <?php echo $valor["property"]?>"><?php echo $valor["value"]?></option>
+                            <option value="BEFORE <?php echo $value["property"]?>"><?php echo $value["value"]?></option>
                             <?php
                         }
                         ?>
@@ -703,7 +703,7 @@ if(!empty($_GET['function'])){
 
                 <p>Configure este módulo.</p>
                 <form method="post" action="adm_main.php?section=control_panel&aust_node=<?php echo $_GET['aust_node']; ?>&action=structure_configuration" class="simples pequeno">
-                <input type="hidden" name="conf_type" value="mod_conf" />
+                <input type="hidden" name="conf_type" value="structure" />
                 <input type="hidden" name="aust_node" value="<?php echo $_GET['aust_node']; ?>" />
                 <?php
 
@@ -774,7 +774,7 @@ if(!empty($_GET['function'])){
 
                 <p>Configure os campos abaixo:</p>
                 <form method="post" action="adm_main.php?section=control_panel&aust_node=<?php echo $_GET['aust_node']; ?>&action=structure_configuration" class="simples pequeno">
-                <input type="hidden" name="conf_type" value="mod_conf" />
+                <input type="hidden" name="conf_type" value="structure" />
                 <input type="hidden" name="conf_class" value="field" />
                 <input type="hidden" name="aust_node" value="<?php echo $_GET['aust_node']; ?>" />
                 <?php

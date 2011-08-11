@@ -329,11 +329,11 @@ class TextualTest extends PHPUnit_Framework_TestCase
 	 *
 	 */
     function testLoadModConf(){
-        $this->obj->connection->query("DELETE FROM config WHERE local='777' AND nome='teste7777'");
-        $sql = "INSERT INTO config
-                    (tipo,local,nome,propriedade,valor)
+        $this->obj->connection->query("DELETE FROM ".Config::getInstance()->table." WHERE local='777' AND nome='teste7777'");
+        $sql = "INSERT INTO ".Config::getInstance()->table."
+                    (type, local, name,property, value)
                 VALUES
-                    ('mod_conf','777','teste7777','working_test','1')
+                    ('structure','777','teste7777','working_test','1')
                 ";
         $this->obj->connection->query($sql);
         $catLastInsertId = $this->obj->connection->lastInsertId();
@@ -408,7 +408,7 @@ class TextualTest extends PHPUnit_Framework_TestCase
                     $this->obj->getStructureConfig('working_test', false)
                 );
 
-        $this->obj->connection->query("DELETE FROM config WHERE local='777' AND nome='teste7777'");
+        $this->obj->connection->query("DELETE FROM ".Config::getInstance()->table." WHERE local='777' AND nome='teste7777'");
     }
 
 	/*

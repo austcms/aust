@@ -22,15 +22,15 @@ class CategoryShortcuts extends Widget
         $query = Connection::getInstance()->query($sql);
 
         $est = array();
-        foreach( $query as $chave=>$valor ){
+        foreach( $query as $chave=>$value ){
 
-            if( !$this->envParams['permissoes']->verify($valor['id']) ){
+            if( !$this->envParams['permissoes']->verify($value['id']) ){
                 continue;
             }
 
-            $est[$valor['id']]['nome'] = $valor['nome'];
-            $est[$valor['id']]['tipo'] = $valor['tipo'];
-            $est[$valor['id']]['id'] = $valor['id'];
+            $est[$value['id']]['nome'] = $value['nome'];
+            $est[$value['id']]['tipo'] = $value['tipo'];
+            $est[$value['id']]['id'] = $value['id'];
         }
         return $est;
         

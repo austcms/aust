@@ -63,7 +63,7 @@ class YouTube extends Module
 			$order = ' ORDER BY id DESC';
 			$where = ' WHERE ';
 			$c = 0;
-			foreach($categorias as $key=>$valor){
+			foreach($categorias as $key=>$value){
 				if($c == 0)
 					$where = $where . 'categoria=\''.$key.'\'';
 				else

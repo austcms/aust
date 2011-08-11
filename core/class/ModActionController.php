@@ -84,15 +84,15 @@ class ModActionController extends ActionController
 	        /**
 	         * Loop por cada Helper a ser carregado
 	         */
-	        foreach($this->helpers as $valor){
-	            unset( $$valor );
+	        foreach($this->helpers as $value){
+	            unset( $$value );
 	            /**
 	             * Inclui o arquivo do helper
 	             */
-	            include_once( HELPERS_DIR.$valor.HELPER_CLASSNAME_SUFIX.".php" );
-	            $helperName = $valor.HELPER_CLASSNAME_SUFIX;
-	            $$valor = new $helperName();
-	            $this->set( strtolower($valor), $$valor);
+	            include_once( HELPERS_DIR.$value.HELPER_CLASSNAME_SUFIX.".php" );
+	            $helperName = $value.HELPER_CLASSNAME_SUFIX;
+	            $$value = new $helperName();
+	            $this->set( strtolower($value), $$value);
 	        }
 	    }
 

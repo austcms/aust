@@ -377,8 +377,8 @@
 		                        " and ", " as "
 		                    );
 		                    $boldSqlCommands = array();
-		                    foreach( $sqlCommands as $valor ){
-		                        $boldSqlCommands[] = "<strong>".$valor."</strong>";
+		                    foreach( $sqlCommands as $value ){
+		                        $boldSqlCommands[] = "<strong>".$value."</strong>";
 		                    }
 		                    $sql = str_replace($sqlCommands, $boldSqlCommands, $vars['sql'] );
 

@@ -107,17 +107,17 @@
 	                <option value="">-----</option>
 	                <?php
 	                $allUsers = $user->getAllUsers();
-	                foreach( $allUsers as $valor ){
+	                foreach( $allUsers as $value ){
 
-	                    if( $valor['id'] == $user->getId() )
+	                    if( $value['id'] == $user->getId() )
 	                        continue;
 
 	                    $selected = '';
 	                    if( !empty($dados['actor_admin_id']) AND
-	                        $valor['id'] == $dados['actor_admin_id'] )
+	                        $value['id'] == $dados['actor_admin_id'] )
 	                        $selected = 'selected="selected"';
 	                    ?>
-	                    <option value="<?php echo $valor['id'] ?>" <?php echo $selected; ?>><?php echo $valor['nome'] ?></option>
+	                    <option value="<?php echo $value['id'] ?>" <?php echo $selected; ?>><?php echo $value['nome'] ?></option>
 	                    <?php
 	                }
 	                ?>

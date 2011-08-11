@@ -69,19 +69,19 @@ class Themes {
         $themeName = $params['themeName'];
 
         $sql = "DELETE
-                FROM config
+                FROM ".Config::getInstance()->table."
                 WHERE
-                    tipo='Themes' AND
+                    type='themes' AND
                     local='".$userId."' AND
-                    propriedade='current_theme'
+                    property='current_theme'
                 ";
         Connection::getInstance()->exec($sql);
 
         $sql = "INSERT INTO
-                    config
-                    (tipo, local, nome, propriedade, valor, autor)
+                    ".Config::getInstance()->table()."
+                    (type, local, name, property, value, admin_id)
                 VALUES
-                    ('Themes', '".$userId."', 'Tema Atual', 'current_theme', '".$themeName."', '".$userId."')
+                    ('themes', '".$userId."', 'Tema Atual', 'current_theme', '".$themeName."', '".$userId."')
                 ";
         Connection::getInstance()->exec($sql);
 
@@ -90,21 +90,21 @@ class Themes {
     }
 
     public function currentTheme($userId){
-        $sql = "SELECT valor
-                FROM config
+        $sql = "SELECT value
+                FROM ".Config::getInstance()->table."
                 WHERE
-                    tipo='Themes' AND
+                    type='themes' AND
                     local='".$userId."' AND
-                    propriedade='current_theme'
+                    property='current_theme'
                 LIMIT 1
                 ";
 
         $tmp = Connection::getInstance()->query($sql);
 
-        if(empty($tmp[0]['valor']) || !is_dir(THEMES_DIR.$tmp[0]['valor']))
+        if(empty($tmp[0]['valor']) || !is_dir(THEMES_DIR.$tmp[0]['value']))
             return Registry::read('defaultTheme');
 
-        return $tmp[0]['valor'];
+        return $tmp[0]['value'];
     }
 }
 

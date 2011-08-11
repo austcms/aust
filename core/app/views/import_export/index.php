@@ -34,8 +34,8 @@ if( !empty($_GET['export']) ){
                 if(is_string($status))
                     echo $status;
                 elseif(is_array($status)){
-                    foreach($status as $valor){
-                        echo '<span>'.$valor.'</span><br />';
+                    foreach($status as $value){
+                        echo '<span>'.$value.'</span><br />';
                     }
                 }
                 ?>

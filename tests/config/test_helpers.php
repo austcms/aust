@@ -13,14 +13,13 @@ function installModule($moduleName){
 
 	MigrationsMods::getInstance()->updateMigration($moduleName);
     $param = array(
-        'tipo' => 'módulo',
-        'chave' => 'dir',
-        'valor' => $moduleName,
-        'pasta' => $moduleName,
+        'property' => 'dir',
+        'value' => $moduleName,
+        'directory' => $moduleName,
         'modInfo' => $modInfo,
-        'autor' => "1",
+        'admin_id' => "1",
     );
-    return ModulesManager::getInstance()->configuraModulo($param);	
+    return ModulesManager::getInstance()->configureModule($param);	
 }
 
 function getAdminId(){

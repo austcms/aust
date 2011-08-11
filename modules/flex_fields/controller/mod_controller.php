@@ -117,9 +117,9 @@ class ModController extends ModActionController
         /**
          * Loop para organizar a disposição dos campos
          */
-        foreach ( $campos as $chave=>$valor ){
+        foreach ( $campos as $chave=>$value ){
             
-            $dados['campos'] = $valor;
+            $dados['campos'] = $value;
             /*
              * Mostra inputs automaticamente.
              *
@@ -131,8 +131,8 @@ class ModController extends ModActionController
              *      de configuração.
              *
              */
-            $type  = $valor["specie"];
-            if( !empty($valor['value']) ){
+            $type  = $value["specie"];
+            if( !empty($value['value']) ){
 
                 /**
                  * LEVANTAMENTO DE INFORMAÇÕES SOBRE CAMPOS
@@ -145,26 +145,26 @@ class ModController extends ModActionController
                  * Se há valores carregados do DB para edição
                  */
                 if( !empty($dados) ){
-                    if( array_key_exists($valor["property"], $dados) ){
-                        $camposForm[ $valor["property"] ]["value"] = $dados[ $valor["property"] ];
+                    if( array_key_exists($value["property"], $dados) ){
+                        $camposForm[ $value["property"] ]["value"] = $dados[ $value["property"] ];
                     }
                 }
-                $camposForm[ $valor["property"] ]["label"] = $valor['value'];
-                $camposForm[ $valor["property"] ]["nomeFisico"] = $valor['property'];
-                $camposForm[ $valor["property"] ]["comentario"] = $valor['commentary'];
-                $camposForm[ $valor["property"] ]["tipo"]["especie"] = $valor["specie"];
-                $camposForm[ $valor["property"] ]["tipo"]["referencia"] = $valor["reference"];
-                $camposForm[ $valor["property"] ]["tipo"]["tabelaReferencia"] = $valor["ref_table"];
-                $camposForm[ $valor["property"] ]["tipo"]["refParentField"] = $valor["ref_parent_field"];
-                $camposForm[ $valor["property"] ]["tipo"]["refChildField"] = $valor["ref_child_field"];
-                $camposForm[ $valor["property"] ]["tipo"]["tabelaReferenciaCampo"] = $valor["ref_field"];
-                $camposForm[ $valor["property"] ]["tipo"]["tipoFisico"] = $infoTabelaFisica[ $valor["property"] ]["Type"];
+                $camposForm[ $value["property"] ]["label"] = $value['value'];
+                $camposForm[ $value["property"] ]["nomeFisico"] = $value['property'];
+                $camposForm[ $value["property"] ]["comentario"] = $value['commentary'];
+                $camposForm[ $value["property"] ]["tipo"]["especie"] = $value["specie"];
+                $camposForm[ $value["property"] ]["tipo"]["referencia"] = $value["reference"];
+                $camposForm[ $value["property"] ]["tipo"]["tabelaReferencia"] = $value["ref_table"];
+                $camposForm[ $value["property"] ]["tipo"]["refParentField"] = $value["ref_parent_field"];
+                $camposForm[ $value["property"] ]["tipo"]["refChildField"] = $value["ref_child_field"];
+                $camposForm[ $value["property"] ]["tipo"]["tabelaReferenciaCampo"] = $value["ref_field"];
+                $camposForm[ $value["property"] ]["tipo"]["tipoFisico"] = $infoTabelaFisica[ $value["property"] ]["Type"];
 
 				/*
 				 * Campo Images
 				 */
-				if( $valor['specie'] == 'images' ){
-	                $camposForm[ $valor["property"] ]["tipo"]["tabelaReferencia"] = $infoCadastro['estrutura']["table_images"]['value'];
+				if( $value['specie'] == 'images' ){
+	                $camposForm[ $value["property"] ]["tipo"]["tabelaReferencia"] = $infoCadastro['estrutura']["table_images"]['value'];
 				}
             }
 
@@ -362,7 +362,7 @@ class ModController extends ModActionController
                 unset($sql);
                 foreach( $relational as $field=>$dados ){
 					foreach( $dados as $tabela=>$dados ){
-	                    foreach($dados as $campo=>$valor){
+	                    foreach($dados as $campo=>$value){
 	
 							if( !empty($infoCadastro['campo'][$field]['ref_parent_field']) )
 								$ref_field = $infoCadastro['campo'][$field]['ref_parent_field'];
@@ -407,16 +407,16 @@ class ModController extends ModActionController
              	foreach( $relational as $field=>$dados ){
 	                foreach( $dados as $tabela=>$dados ){
 
-	                    foreach( $dados as $campo=>$valor ){
+	                    foreach( $dados as $campo=>$value ){
 
 	                        /*
 	                         * Múltiplos Inserts
 	                         */
 	                        if( is_int($campo) ){
-	                            //pr($valor);
-	                            foreach( $valor as $multipleInsertsCampo=>$multipleInsertsValor ){
+	                            //pr($value);
+	                            foreach( $value as $multipleInsertsCampo=>$multipleInsertsValor ){
 	                                $camposStrMultiplo[] = $multipleInsertsCampo;
-	                                $valorStrMultiplo[] = $multipleInsertsValor;
+	                                $valueStrMultiplo[] = $multipleInsertsValor;
 	                            }
 
 	                            /*
@@ -426,14 +426,14 @@ class ModController extends ModActionController
 	                                            ".$tabela."
 	                                                (".implode(",", $camposStrMultiplo).")
 	                                        VALUES
-	                                            ('".implode("','", $valorStrMultiplo)."')
+	                                            ('".implode("','", $valueStrMultiplo)."')
 	                                        ";
 	                            /**
 	                             * SQL deste campo
 	                             */
 	                            $sql[] = $tempSql;
 
-	                            unset($valorStrMultiplo);
+	                            unset($valueStrMultiplo);
 	                            unset($camposStrMultiplo);
 	                            unset($tempSql);
 

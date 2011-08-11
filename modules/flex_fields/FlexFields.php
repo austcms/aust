@@ -178,7 +178,7 @@ class FlexFields extends Module {
 		$relational = array();
 
 		foreach( $this->data as $tabela=>$dados ){
-	        foreach( $dados as $campo=>$valor ){
+	        foreach( $dados as $campo=>$value ){
 	            /*
 	             * Relational One to Many
 	             */
@@ -188,7 +188,7 @@ class FlexFields extends Module {
 					// prevents duplicated ids
 					$usedIds = array();
 	                $i = 0;
-	                foreach( $valor as $subArray ){
+	                foreach( $value as $subArray ){
 						if( in_array($subArray, $usedIds) )
 							continue;
 						
@@ -214,7 +214,7 @@ class FlexFields extends Module {
 	                unset($this->data[$tabela][$campo]);
 
 	                if( strlen($year) == '4' ){
-	                    $this->data[$tabela][$campo] = $valor['year'].'-'.$valor['month'].'-'.$valor['day'];
+	                    $this->data[$tabela][$campo] = $value['year'].'-'.$value['month'].'-'.$value['day'];
 	                }
 	            }
 	            /*
@@ -225,7 +225,7 @@ class FlexFields extends Module {
 				 * *não mexe em $relational*
 	             */
 	            else if( !empty($campos[$campo]) AND $campos[$campo]["specie"] == "images" ){
-					$this->images[$tabela][$campo] = $valor;
+					$this->images[$tabela][$campo] = $value;
 					unset($this->data[$tabela][$campo]);
 	            }
 	            /*
@@ -236,7 +236,7 @@ class FlexFields extends Module {
 				 * *não mexe em $relational*
 	             */
 	            else if( !empty($campos[$campo]) AND $campos[$campo]["specie"] == "files" ){
-					$this->files[$tabela][$campo] = $valor;
+					$this->files[$tabela][$campo] = $value;
 					unset($this->data[$tabela][$campo]);
 				}
 
@@ -700,10 +700,10 @@ class FlexFields extends Module {
          * campo após o título.
          */
         $result = array();
-        foreach( $tempResult as $valor ){
+        foreach( $tempResult as $value ){
 
-            $before = str_replace("BEFORE ", "", $valor['description']);
-            $result[$before] = $valor;
+            $before = str_replace("BEFORE ", "", $value['description']);
+            $result[$before] = $value;
         }
         
         return $result;
@@ -805,21 +805,21 @@ class FlexFields extends Module {
             PDO::FETCH_ASSOC
         );
 		$result = array();
-        foreach( $temp as $chave=>$valor ){
-            if( !empty($valor["property"]) ){
+        foreach( $temp as $chave=>$value ){
+            if( !empty($value["property"]) ){
 
 				/*
 				 * O usuário pode querer somente o nome do campo,
 				 * mas também pode querer a informação completa.
 				 */
-				$shouldBeKey = $valor["property"];
+				$shouldBeKey = $value["property"];
 				if( $humanNameAsKey === true )
-					$shouldBeKey = $valor["value"];
+					$shouldBeKey = $value["value"];
 				
 				if( $fieldNamesOnly === true )
-                	$result[ $shouldBeKey ] = $valor["value"];
+                	$result[ $shouldBeKey ] = $value["value"];
 				else
-                	$result[ $shouldBeKey ] = $valor;
+                	$result[ $shouldBeKey ] = $value;
 
 			}
         }
@@ -886,8 +886,8 @@ class FlexFields extends Module {
          * como índice.
          */
         if( !empty($params["by"]) ){
-            foreach($temp as $chave=>$valor){
-                $result[ $valor[ $params["by"] ] ] = $valor;
+            foreach($temp as $chave=>$value){
+                $result[ $value[ $params["by"] ] ] = $value;
             }
         } else {
             $result = $temp;
@@ -963,9 +963,9 @@ class FlexFields extends Module {
         );
 		$result = array();
 		
-        foreach( $temp as $chave=>$valor ){
-            if( !empty($valor["property"]) )
-                $result[ $valor["type"] ][ $valor["property"] ] = $valor;
+        foreach( $temp as $chave=>$value ){
+            if( !empty($value["property"]) )
+                $result[ $value["type"] ][ $value["property"] ] = $value;
         }
 		$this->configurations = $result;
         return $result;
@@ -995,7 +995,7 @@ class FlexFields extends Module {
 		$order = ' ORDER BY id ASC';
         $where = ' WHERE ';
         $c = 0;
-        foreach($categorias as $key=>$valor){
+        foreach($categorias as $key=>$value){
             if($c == 0)
                 $where = $where . 'node_id=\''.$key.'\'';
             else
@@ -1072,17 +1072,17 @@ class FlexFields extends Module {
 
             if( is_array($leftJoinTmp) ){
 
-                foreach( $leftJoinTmp as $chave=>$valor ){
+                foreach( $leftJoinTmp as $chave=>$value ){
                     /*
                      * Se há um LeftJOIN, elimina os campo destes do query
                      * principal
                      */
                     unset($mostrar[$chave]);
 
-                    $refTabela = $valor["ref_tabela"];
-                    $refCampo = $valor["ref_campo"];
+                    $refTabela = $value["ref_tabela"];
+                    $refCampo = $value["ref_campo"];
 
-                    $leftJoinCampos[$chave] = $refTabela.".".$refCampo." AS '".$valor["campoNome"]."'";
+                    $leftJoinCampos[$chave] = $refTabela.".".$refCampo." AS '".$value["campoNome"]."'";
                     $leftJoin[ $refTabela ] = "LEFT JOIN ".$refTabela." AS ".$refTabela." ON ".$tP.".".$chave."=".$refTabela.".id";
                 }
             }
@@ -1325,12 +1325,12 @@ class FlexFields extends Module {
     /*
      * Le informações do db
      */
-    function LeDadosDoDB($tabela, $campo, $valor_condicao, $campo_condicao=''){
+    function LeDadosDoDB($tabela, $campo, $value_condicao, $campo_condicao=''){
 
         if(empty($campo_condicao)){
-            $where = "WHERE id='".$valor_condicao."'";
+            $where = "WHERE id='".$value_condicao."'";
         } else {
-            $where = "WHERE ".$campo_condicao."='".$valor_condicao."'";
+            $where = "WHERE ".$campo_condicao."='".$value_condicao."'";
         }
         $sql = "SELECT
                     ".$campo."

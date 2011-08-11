@@ -122,11 +122,11 @@ class ModController extends ModActionController
 
 	            $itens = $_POST['itens'];
 	            $c = 0;
-	            foreach($itens as $key=>$valor){
+	            foreach($itens as $key=>$value){
 	                if($c > 0){
-	                    $where = $where." OR id='".$valor."'";
+	                    $where = $where." OR id='".$value."'";
 	                } else {
-	                    $where = "id='".$valor."'";
+	                    $where = "id='".$value."'";
 	                }
 	                $c++;
 	            }

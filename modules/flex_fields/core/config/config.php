@@ -4,9 +4,7 @@
  *
  * Arquivo contendo informações sobre este módulo
  *
-  * @name Config
  * @author Alexandre de Oliveira <chavedomundo@gmail.com>
- * @version 0.2
  * @since v0.1.6, 06/07/2009
  */
 /**

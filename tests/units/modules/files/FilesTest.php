@@ -20,14 +20,13 @@ class FilesTest extends PHPUnit_Framework_TestCase
 
 		MigrationsMods::getInstance()->updateMigration($moduleName);
 	    $param = array(
-            'tipo' => 'módulo',
-            'chave' => 'dir',
-            'valor' => $moduleName,
-            'pasta' => $moduleName,
+            'property' => 'dir',
+            'value' => $moduleName,
+            'directory' => $moduleName,
             'modInfo' => $modInfo,
-            'autor' => "1",
+            'admin_id' => "1",
         );
-        ModulesManager::getInstance()->configuraModulo($param);
+        ModulesManager::getInstance()->configureModule($param);
 		
         /*
          * MÓDULOS ATUAL

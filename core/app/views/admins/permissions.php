@@ -83,9 +83,9 @@
                                             'fields' => array('id', 'name'),
                                         ), 'all'
                 );
-                foreach($adminsTipos as $valor){
+                foreach($adminsTipos as $value){
                     ?>
-                    <input type="radio" name="agente" onclick="javascript: mostraPermissoes('<?php echo $valor['id']; ?>','userTipo')" id="<?php echo $valor['name']; ?>" name="<?php echo $valor['id']?>" /> <?php echo $valor['name']; ?><br />
+                    <input type="radio" name="agente" onclick="javascript: mostraPermissoes('<?php echo $value['id']; ?>','userTipo')" id="<?php echo $value['name']; ?>" name="<?php echo $value['id']?>" /> <?php echo $value['name']; ?><br />
                     <?php
                 }
             ?>
@@ -130,9 +130,9 @@
                                             'order' => array('admin_groups.name ASC', 'admins.name ASC')
                                         ), 'all'
                 );
-                foreach($adminsTipos as $valor){
+                foreach($adminsTipos as $value){
                     ?>
-                    <input type="radio" name="agente" onclick="mostraPermissoes('<?php echo $valor['id']; ?>','user')" id="<?php echo $valor['name']; ?>" name="<?php echo $valor['id']?>" /> <?php echo $valor['name']; ?><br />
+                    <input type="radio" name="agente" onclick="mostraPermissoes('<?php echo $value['id']; ?>','user')" id="<?php echo $value['name']; ?>" name="<?php echo $value['id']?>" /> <?php echo $value['name']; ?><br />
                     <?php
                 }
             ?>

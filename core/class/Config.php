@@ -5,7 +5,7 @@ class Config {
 
     public $options;
 
-	public $table = "config";
+	public $table = "configurations";
 
     /**
      * Permissions to access the configurations.
@@ -63,9 +63,9 @@ class Config {
 
             if( is_string($property) ){
                 $type = Registry::read('configStandardType');
-                $field = 'valor';
+                $field = 'value';
                 $params = array(
-                    'where' => "propriedade='".$property."'",
+                    'where' => "property='".$property."'",
                     'mode' => 'value_only',
 
                 );
@@ -119,7 +119,7 @@ class Config {
 				$tmpWhere[] = $properties;
 			}
 			if( !empty($tmpWhere) ){
-				$where.= " AND propriedade IN ('".implode("','", $tmpWhere)."')";
+				$where.= " AND property IN ('".implode("','", $tmpWhere)."')";
 			}
 		}
 		
@@ -129,7 +129,7 @@ class Config {
         $type = (empty($params["type"])) ? array() : $params["type"];
         if( is_string($type) )
             $type = array($type);
-        $type = (empty($type)) ? '' : ' AND tipo IN (\''. implode("','", $type) .'\')';
+        $type = (empty($type)) ? '' : ' AND type IN (\''. implode("','", $type) .'\')';
 
         $sql = "SELECT ".$fields." FROM
                     ".$this->table."
@@ -137,18 +137,18 @@ class Config {
                     1=1
                     $where
                     $type
-                ORDER BY tipo ASC
+                ORDER BY type ASC
                 ";
         $query = Connection::getInstance()->query($sql);
 
         $result = array();
 		if( $valueOnly && !empty($query) ){
-			foreach( $query as $valor ){
-				$result[$valor['propriedade']] = $valor["valor"];
+			foreach( $query as $value ){
+				$result[$value['property']] = $value["value"];
 			}
 		} else {
-	        foreach( $query as $valor ){
-	            $result[$valor['tipo']][] = $valor;
+	        foreach( $query as $value ){
+	            $result[$value['type']][] = $value;
 	        }
 		}
 
@@ -215,8 +215,8 @@ class Config {
 			$neededConfig = $this->neededConfig;
 
         if( !empty($neededConfig) AND is_array($neededConfig) ){
-            foreach( $neededConfig as $valor ){
-                $whereConfig[] = "(tipo='".$valor['tipo']."' AND propriedade='".$valor['propriedade']."')";
+            foreach( $neededConfig as $value ){
+                $whereConfig[] = "(type='".$value['type']."' AND property='".$value['property']."')";
             }
         } else {
             return true;
@@ -224,25 +224,26 @@ class Config {
 
         $qtdNeeded = count($neededConfig);
 
-        $sql = "SELECT tipo, propriedade FROM
+        $sql = "SELECT type, property FROM
                     ".$this->table."
                 WHERE
                     ".implode(" OR ", $whereConfig)."
                 ";
+
         $query = Connection::getInstance()->query($sql);
 
         if( $qtdNeeded != count($query) ){
 
             $actualConfig = array();
-            foreach( $query as $valor ){
-                $actualConfig[$valor['tipo']][] = $valor['propriedade'];
+            foreach( $query as $value ){
+                $actualConfig[$value['type']][] = $value['property'];
             }
             
-            foreach( $neededConfig as $valor ){
-                if( empty($actualConfig[$valor['tipo']]) OR
-                    !in_array($valor['propriedade'], $actualConfig[$valor['tipo']]) )
+            foreach( $neededConfig as $value ){
+                if( empty($actualConfig[$value['type']]) OR
+                    !in_array($value['property'], $actualConfig[$value['type']]) )
                 {
-                    $this->_missingConfig[] = $valor;
+                    $this->_missingConfig[] = $value;
                 }
             }
             
@@ -267,12 +268,12 @@ class Config {
             $i++;
         }
 
-        foreach( $fields as $i=>$valor ){
+        foreach( $fields as $i=>$value ){
             
             $sql =
                 "INSERT INTO
-                    config
-                    (".implode(', ', $valor).")
+                    ".$this->table."
+                    (".implode(', ', $value).")
                  VALUES
                     ('".implode("', '", $values[$i])."')";
             Connection::getInstance()->query($sql);
@@ -283,7 +284,7 @@ class Config {
 
     function updateOptions($params){
 		$params = sanitizeString($params);
-		$sql = "UPDATE ".$this->table." SET valor='".$params["valor"]."' WHERE id='".$params["id"]."'";
+		$sql = "UPDATE ".$this->table." SET value='".$params["value"]."' WHERE id='".$params["id"]."'";
         Connection::getInstance()->exec($sql);
 
         return '<span style="color: green;">Configuração salva com sucesso!</span>';
@@ -291,50 +292,50 @@ class Config {
     
     // Adjusts the configuration
     function adjustOptions($params){
-        $this->options[$params["tipo"]][$params["propriedade"]] = $params;
+        $this->options[$params["type"]][$params["property"]] = $params;
         return true;
     }
 
     // save into the configuration the DB
     public function save() {
 
-        foreach( $this->options as $tipo=>$valor ){
+        foreach( $this->options as $type=>$value ){
 
-            $sql = "SELECT id FROM ".$this->table." WHERE tipo='".$tipo."' AND propriedade='".key($valor)."'";
+            $sql = "SELECT id FROM ".$this->table." WHERE type='".$type."' AND property='".key($value)."'";
             $query = Connection::getInstance()->count($sql);
 
             if( $query ) {
-                $valores = reset($valor);
+                $values = reset($value);
                 $sql = "UPDATE
                             ".$this->table."
                         SET
-                            valor='".$valores["valor"]."'
+                            value='".$values["value"]."'
                         WHERE
-                            propriedade='".key($valor)."'
-                            AND tipo='".$tipo."'
+                            property='".key($value)."'
+                            AND type='".$type."'
                             ";
             } else {
 
-                $valores = reset($valor);
+                $values = reset($value);
 
-                foreach( $valores as $coluna=>$info ){
-                    $colunas[] = $coluna;
+                foreach( $values as $column=>$info ){
+                    $columns[] = $column;
                     $infos[] = $info;
                 }
 
                 $sql = "INSERT INTO
                             ".$this->table."
-                                (".implode(",", $colunas).")
+                                (".implode(",", $columns).")
                         VALUES
                             ('".implode("','", $infos)."')";
             }
 
             if( !Connection::getInstance()->exec($sql) ) {
-                $erro[] = key($valor);
+                $error[] = key($value);
             }
         }
 
-        if(count($erro) == 0) {
+        if(!empty($error) && count($error) == 0) {
             return array(
 				'classe' => 'sucesso',
 				'mensagem' => 'Configuração salva com sucesso!'

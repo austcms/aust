@@ -83,9 +83,9 @@ if($_POST['action'] == 'LeCadastros'){
     $arraytmp = Connection::getInstance()->query('SHOW TABLES');
     //$arraytmp = Connection::getInstance()->listaTabelasDoDBParaArray();
     
-    foreach($arraytmp AS $valor){
-        $valor = reset($valor);
-        echo '<option value="'.$valor.'">'.$valor.'</option>';
+    foreach($arraytmp AS $value){
+        $value = reset($value);
+        echo '<option value="'.$value.'">'.$value.'</option>';
     }
     
 }
@@ -99,8 +99,8 @@ elseif($_POST['action'] == 'LeCampos'){
      * escolher o relacionamento de tabelas
      */
     $query = Connection::getInstance()->query('DESCRIBE '.$_POST['tabela']);
-    foreach ( $query as $chave=>$valor ){
-        echo '<option value="'.$valor['Field'].'">'.$valor['Field'].'</option>';
+    foreach ( $query as $chave=>$value ){
+        echo '<option value="'.$value['Field'].'">'.$value['Field'].'</option>';
     }
 
 }
@@ -148,8 +148,8 @@ elseif($_POST['action'] == 'search'){
     include($module->getIncludeFolder().'/view/mod/listing_table.php');
 
     //$query = Connection::getInstance()->query('DESCRIBE '.$_POST['tabela']);
-    //foreach ( $query as $chave=>$valor ){
-        //echo '<option value="'.$valor['Field'].'">'.$valor['Field'].'</option>';
+    //foreach ( $query as $chave=>$value ){
+        //echo '<option value="'.$value['Field'].'">'.$value['Field'].'</option>';
     //}
 }
 /*

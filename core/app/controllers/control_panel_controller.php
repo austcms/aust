@@ -91,14 +91,13 @@ class Control_panelController extends ActionController {
             $isInstalled = MigrationsMods::getInstance()->isActualVersion($path);
 
             $param = array(
-                'tipo' => 'módulo',
-                'chave' => 'dir',
-                'valor' => $modName,
-                'pasta' => $path,
+                'property' => 'dir',
+                'value' => $modName,
+                'directory' => $path,
                 'modInfo' => $modInfo,
-                'autor' => User::getInstance()->LeRegistro('id'),
+                'admin_id' => User::getInstance()->LeRegistro('id'),
             );
-            ModulesManager::getInstance()->configuraModulo($param);
+            ModulesManager::getInstance()->configureModule($param);
 
             notice('Migrations executados com sucesso!');
         } else {
@@ -117,7 +116,7 @@ class Control_panelController extends ActionController {
 		$this->set("configurations", $configurations);
 
 		if( !empty($_POST['conf_type']) &&
-			$_POST['conf_type'] == "mod_conf" )
+			$_POST['conf_type'] == "structure" )
 		{
 			$saved = $module->saveModConf($_POST);
 		    if( $saved )

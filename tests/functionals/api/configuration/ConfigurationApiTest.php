@@ -11,9 +11,9 @@ class ConfigurationApiTest extends PHPUnit_Framework_TestCase
     }
 
 	function createContent(){
-		Connection::getInstance()->exec('DELETE FROM config');
-		$sql = "INSERT INTO config
-					(propriedade, valor)
+		Connection::getInstance()->exec('DELETE FROM '.Config::getInstance()->table);
+		$sql = "INSERT INTO ".Config::getInstance()->table."
+					(property, value)
 					VALUES
 						('site_title', 'Aust makes history'),
 						('slogan', 'Aust: water proof')

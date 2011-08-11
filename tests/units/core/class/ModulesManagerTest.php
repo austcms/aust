@@ -48,6 +48,34 @@ class ModulesManagerTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals('conteudo/', $obj->directory("conteudo"));
 	}
 
+	function testConfigureModule(){
+		
+		Connection::getInstance()->exec("DELETE FROM modules_installed");
+		
+		$modInfo['name'] = 'textuall';
+		$modInfo['description'] = 'desc';
+		
+        $param = array(
+            'property' => 'dir',
+            'value' => 'textual',
+            'directory' => 'textual',
+            'modInfo' => $modInfo,
+            'admin_id' => '7',
+        );
+		ModulesManager::getInstance()->configureModule($param);
+		
+		$result = Connection::getInstance()->query("SELECT * FROM modules_installed");
+		$this->assertArrayHasKey("0", $result);
+		
+		$result = reset($result);
+		$this->assertEquals('dir', $result['property']);
+		$this->assertEquals('textual', $result['value']);
+		$this->assertEquals('modules/textual', $result['directory']);
+		$this->assertEquals('textuall', $result['name']);
+		$this->assertEquals('desc', $result['description']);
+		$this->assertEquals('7', $result['admin_id']);
+	}
+
 	function testExists(){
 		$obj = new ModulesManager();
 		$this->assertTrue($obj->exists('agenda'));

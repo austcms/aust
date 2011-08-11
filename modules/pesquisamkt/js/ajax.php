@@ -77,8 +77,8 @@ if($_POST['action'] == 'leResultadosAbertos'){
                 pesqmkt_pergunta_id='".$_POST["id"]."'";
     $arraytmp = Connection::getInstance()->query($sql);
     $i = 1;
-    foreach($arraytmp AS $valor){
-        echo "<p><strong>".$i.".</strong> <em>".$valor["resposta"].'</em></p>';
+    foreach($arraytmp AS $value){
+        echo "<p><strong>".$i.".</strong> <em>".$value["resposta"].'</em></p>';
         $i++;
     }
 
@@ -96,8 +96,8 @@ elseif($_POST['action'] == 'LeCampos'){
      * escolher o relacionamento de tabelas
      */
     $query = Connection::getInstance()->listaCampos($_POST['tabela']);
-    foreach ( $query as $chave=>$valor ){
-        echo '<option value="'.$valor['campo'].'">'.$valor['campo'].'</option>';
+    foreach ( $query as $chave=>$value ){
+        echo '<option value="'.$value['campo'].'">'.$value['campo'].'</option>';
     }
 
 }

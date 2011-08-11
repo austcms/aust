@@ -16,8 +16,8 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 	
 	function populate(){
 		$sql = "INSERT INTO
-				config
-					(propriedade,tipo,valor,nome)
+				configurations
+					(property, type, value, name)
 				VALUES 
 					('forbidden_configuration','private','value!','Forbidden configuration'),
 					('second_test_configuration','general','value??','Second test configuration'),
@@ -29,19 +29,19 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 	function neededConfig(){
 		return array(
             array(
-                'tipo' => 'general',
+                'type' => 'general',
                 'local' => '',
-                'nome' => 'Site name',
-                'propriedade' => 'site_name',
-                'valor' => 'Modify the site name',
+                'name' => 'Site name',
+                'property' => 'site_name',
+                'value' => 'Modify the site name',
                 'explanation' => 'some explanation',
             ),
 		    array(
-		        'tipo' => 'private',
+		        'type' => 'private',
 		        'local' => '',
-		        'nome' => 'user can haz cookies?',
-		        'propriedade' => 'user_haz_cookies',
-		        'valor' => '0',
+		        'name' => 'user can haz cookies?',
+		        'property' => 'user_haz_cookies',
+		        'value' => '0',
 		        'explanation' => 'ha, nope!',
 		    )
         );
@@ -49,6 +49,10 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 	
 	/* tests */
 
+	function testTableExists(){
+		$this->assertTrue( Connection::getInstance()->hasTable("configurations") );
+	}
+	
     function testGetUserType(){
 		User::getInstance()->type('root');
         $this->obj = new Config;
@@ -66,6 +70,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 	
 	function testGetConfigWithSingleProperty(){
 		$this->populate();
+
 		$configuration = $this->obj->getConfig("test_configuration");
 		$this->assertEquals("value?", $configuration );
 	}
@@ -76,21 +81,21 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 		$configurations = $this->obj->getConfigs();
 		$this->assertArrayHasKey("general", $configurations);
 		$aValue = reset($configurations['general']);
-		$this->assertArrayHasKey("valor", $aValue );
+		$this->assertArrayHasKey("value", $aValue );
 		$this->assertContains("value??", $aValue );
 	}
 	
 	function testGetConfigsUsingParams(){
 		$this->populate();
         $params = array(
-        	'where' => "propriedade='test_configuration'",
+        	'where' => "property='test_configuration'",
             'mode' => 'single',
         );
 
 		$configurations = $this->obj->getConfigs($params);
 		
 		$this->assertArrayHasKey("general", $configurations);
-		$this->assertArrayHasKey("valor", $configurations['general'][0] );
+		$this->assertArrayHasKey("value", $configurations['general'][0] );
 		$this->assertContains("value?", $configurations['general'][0] );
 		$this->assertArrayNotHasKey("1", $configurations['general'] );
 	}
@@ -125,8 +130,8 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 		$this->assertFalse( empty($this->obj->_missingConfig) );
 
 		$sql = "INSERT INTO
-				config
-					(tipo,nome,propriedade,valor,explanation)
+				".$this->obj->table."
+					(type, name, property, value, explanation)
 				VALUES 
 					('general', 'Site name', 'site_name', 'Modify the site name', 'some explanation'),
 					('private', 'user can haz cookies?', 'user_haz_cookies', '0', 'ha, nope!')";
@@ -139,12 +144,12 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 	function test_InitConfig(){
 		$this->obj->_missingConfig = $this->neededConfig();
 		$this->obj->_initConfig();
-		$valueOne = Connection::getInstance()->query("SELECT * FROM ".$this->obj->table." WHERE tipo='general' AND propriedade='site_name'");
-		$valueTwo = Connection::getInstance()->query("SELECT * FROM ".$this->obj->table." WHERE tipo='private' AND propriedade='user_haz_cookies'");
+		$valueOne = Connection::getInstance()->query("SELECT * FROM ".$this->obj->table." WHERE type='general' AND property='site_name'");
+		$valueTwo = Connection::getInstance()->query("SELECT * FROM ".$this->obj->table." WHERE type='private' AND property='user_haz_cookies'");
 		$this->assertFalse( empty($valueTwo) );
 		$this->assertFalse( empty($valueOne) );
-		$this->assertArrayHasKey("tipo", reset($valueOne) );
-		$this->assertArrayHasKey("tipo", reset($valueTwo) );
+		$this->assertArrayHasKey("type", reset($valueOne) );
+		$this->assertArrayHasKey("type", reset($valueTwo) );
 	}
 	
 	function testUpdateOptions(){

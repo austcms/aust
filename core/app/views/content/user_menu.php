@@ -23,12 +23,12 @@ $siteQuery = Connection::getInstance()->query($sql);
 /**
  * Loop por cada site cadastrado, mostrando suas estruturas
  */
-foreach($siteQuery as $chave=>$valor){
+foreach($siteQuery as $chave=>$value){
 ?>
 
     <tr>
         <td colspan="1">
-            <h2><?php echo $valor['nome'];?></h2>
+            <h2><?php echo $value['nome'];?></h2>
         </td>
         <td>
         </td>
@@ -50,7 +50,7 @@ foreach($siteQuery as $chave=>$valor){
             FROM
                 $aust_table AS lp
             WHERE
-                lp.father_id = '".$valor['id']."' AND
+                lp.father_id = '".$value['id']."' AND
                 lp.class = 'estrutura'
             ORDER BY
                 lp.type DESC,
@@ -107,8 +107,8 @@ foreach($siteQuery as $chave=>$valor){
                          * Links para opções de gerenciamento de cada estrutura
                          */
                         $opt = (is_array($modInfo['actions'])) ? $modInfo['actions'] : Array();
-                        foreach ($opt as $chave=>$valor) {
-                            echo '<li><a href="adm_main.php?section='.$_GET['section'].'&action='.$chave.'&aust_node='.$estruturas['id'].'">'.$valor.'</a></li>';
+                        foreach ($opt as $chave=>$value) {
+                            echo '<li><a href="adm_main.php?section='.$_GET['section'].'&action='.$chave.'&aust_node='.$estruturas['id'].'">'.$value.'</a></li>';
                         }
                         ?>
                         </ul>

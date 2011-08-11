@@ -12,11 +12,11 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
     // se não estiver confirmada a exclusão
         $itens = $_POST['itens'];
         $c = 0;
-        foreach($itens as $key=>$valor){
+        foreach($itens as $key=>$value){
             if($c > 0){
-                $where = $where." OR id='".$valor."'";
+                $where = $where." OR id='".$value."'";
             } else {
-                $where = "id='".$valor."'";
+                $where = "id='".$value."'";
             }
             $c++;
         }
@@ -81,11 +81,11 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
      */
         $itens = $_POST['itens'];
         $c = 0;
-        foreach($itens as $key=>$valor){
+        foreach($itens as $key=>$value){
             if($c > 0){
-                $where = $where." OR id='".$valor."'";
+                $where = $where." OR id='".$value."'";
             } else {
-                $where = "id='".$valor."'";
+                $where = "id='".$value."'";
             }
             $c++;
         }

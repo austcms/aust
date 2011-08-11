@@ -93,8 +93,8 @@ class ModController extends ModActionController
 
 	        $itens = $_POST["itens"];
 	        $c = 0;
-	        foreach($itens as $key=>$valor){
-				$idsToDelete[] = $valor;
+	        foreach($itens as $key=>$value){
+				$idsToDelete[] = $value;
 	        }
 
 	        $sql = "SELECT

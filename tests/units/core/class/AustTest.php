@@ -19,7 +19,7 @@ class AustTest extends PHPUnit_Framework_TestCase
     }
 
 	function tearDown(){
-		$this->obj->connection->query("DELETE FROM config");
+		$this->obj->connection->query("DELETE FROM ".Config::getInstance()->table."");
 		$this->obj->connection->query("DELETE FROM taxonomy");
 	}
 
@@ -113,12 +113,12 @@ class AustTest extends PHPUnit_Framework_TestCase
 
 	function testGetInvisible(){
 		$this->obj->connection->query(
-			"INSERT INTO config
-				(tipo,local,propriedade,valor, explanation)
+			"INSERT INTO ".Config::getInstance()->table."
+				(type, local, property, value, explanation)
 			VALUES 
-				('mod_conf', '1', 'related_and_visible', '0', 'test'),
-				('mod_conf', '2', 'related_and_visible', '0', 'test'),
-				('mod_conf', '3', 'related_and_visible', '0', 'test')"
+				('structure', '1', 'related_and_visible', '0', 'test'),
+				('structure', '2', 'related_and_visible', '0', 'test'),
+				('structure', '3', 'related_and_visible', '0', 'test')"
 		);
 		
 		$invisibleStructures = $this->obj->getInvisibleStructures();
@@ -141,10 +141,10 @@ class AustTest extends PHPUnit_Framework_TestCase
 		$hiddenStId = $this->obj->connection->lastInsertId();
 
 		$this->obj->connection->query(
-			"INSERT INTO config
-				(tipo,local,propriedade,valor, explanation)
+			"INSERT INTO ".Config::getInstance()->table."
+				(type, local, property, value, explanation)
 			VALUES 
-				('mod_conf', '".$hiddenStId."', 'related_and_visible', '0', 'test')"
+				('structure', '".$hiddenStId."', 'related_and_visible', '0', 'test')"
 		);
 		
 		$aust = $this->obj->getStructures();

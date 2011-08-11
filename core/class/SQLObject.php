@@ -50,7 +50,7 @@ class SQLObject {
             /**
              * Chama conditions que monta a estrutura de regras SQL
              */
-            foreach($conditions as $chave=>$valor){
+            foreach($conditions as $chave=>$value){
                 $tempRule = $this->conditions($chave, $conditions[$chave]);
                 if(is_array($tempRule)){
                     $tempRule = implode(' AND ', $tempRule);
@@ -133,31 +133,31 @@ class SQLObject {
          * NOT
          */
         if($modo == 'NOT'){
-            foreach($conditions as $campo=>$valor){
+            foreach($conditions as $campo=>$value){
                 /**
                  * Se for uma array com vários valores
                  */
-                if(is_array($valor)){
-                    $rules[] = $campo .' NOT IN(\''. implode('\', \'', $valor) . '\')';
+                if(is_array($value)){
+                    $rules[] = $campo .' NOT IN(\''. implode('\', \'', $value) . '\')';
                 } else {
-                    $rules[] = $campo .' NOT IN(\''. $valor . '\')';
+                    $rules[] = $campo .' NOT IN(\''. $value . '\')';
                 }
             }
         /**
          * OR
          */
         } elseif($modo == 'OR'){
-            foreach($conditions as $campo=>$valor){
+            foreach($conditions as $campo=>$value){
                 /**
                  * Se for uma array com vários valores
                  */
                 //pr($conditions);
-                if(is_array($valor)){
+                if(is_array($value)){
                     //echo 'oi';
-                    $rules[] = $campo .' IN(\''. implode('\', \'', $valor) . '\')';
+                    $rules[] = $campo .' IN(\''. implode('\', \'', $value) . '\')';
                 } else {
                     //echo 'oi2';
-                    $rules[] = $campo .' IN(\''. $valor . '\')';
+                    $rules[] = $campo .' IN(\''. $value . '\')';
                 }
 
             }
@@ -173,19 +173,19 @@ class SQLObject {
              */
             $campo = $modo;
             if(is_array($conditions)){
-                foreach($conditions as $valor){
+                foreach($conditions as $value){
                     /**
                      * Vários valores para este campo
                      */
-                    if(is_array($valor)){
-                        foreach($valor as $cadaValor){
+                    if(is_array($value)){
+                        foreach($value as $cadaValor){
                             $tempRules[] = $campo.'=\''. $cadaValor . '\'';
                         }
                     /**
                      * Um único valor para este campo
                      */
                     } else {
-                        $tempRules[] = $campo.'=\''. $valor . '\'';
+                        $tempRules[] = $campo.'=\''. $value . '\'';
                     }
                 }
                 $rules[] = implode(' AND ', $tempRules);
@@ -219,13 +219,13 @@ class SQLObject {
             $sql = "INSERT INTO ".$params["table"];
 
             $data = $params["data"];
-            foreach( $data as $campo=>$valor ){
+            foreach( $data as $campo=>$value ){
                 $campos[] = $campo;
-                $valores[] = $valor;
+                $valuees[] = $value;
             }
 
             $sql.= " (".implode(",", $campos) .")";
-            $sql.= " VALUES ('".implode("','", $valores) ."')";
+            $sql.= " VALUES ('".implode("','", $valuees) ."')";
 
         }
 

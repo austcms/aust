@@ -65,8 +65,8 @@ class Widgets
             return $result;
         } else {
             if( is_array($query) ){
-                foreach( $query as $valor ){
-                    $result[$valor['column_nr']][$valor['position_nr']] = $this->_instanciateWidget($valor);
+                foreach( $query as $value ){
+                    $result[$value['column_nr']][$value['position_nr']] = $this->_instanciateWidget($value);
                 }
             }
             $this->installedWidgets = $result;
@@ -95,8 +95,8 @@ class Widgets
         $result = array();
         if( is_array($widgets) ){
 
-            foreach( $widgets as $position_nr=>$valor ){
-                $result[$position_nr] = $valor;
+            foreach( $widgets as $position_nr=>$value ){
+                $result[$position_nr] = $value;
             }
         }
         return $result;
@@ -161,13 +161,13 @@ class Widgets
      *
      * Instancia um Widget
      *
-     * @param <type> $valor
+     * @param <type> $value
      * @return class
      */
-    function _instanciateWidget($valor){
+    function _instanciateWidget($value){
         
-        if( is_file(WIDGETS_DIR.$valor['path'].'/core/conf.php') ){
-            include(WIDGETS_DIR.$valor['path'].'/core/conf.php');
+        if( is_file(WIDGETS_DIR.$value['path'].'/core/conf.php') ){
+            include(WIDGETS_DIR.$value['path'].'/core/conf.php');
 
             if( !empty($conf['class']) )
                 $class = $conf['class'];
@@ -177,7 +177,7 @@ class Widgets
          * Widget tem classe própria
          */
         if( !empty($class) ){
-            include_once(WIDGETS_DIR.$valor['path'].'/'.$class.'.php');
+            include_once(WIDGETS_DIR.$value['path'].'/'.$class.'.php');
         }
         /*
          * Widget NÃO tem classe própria
@@ -186,8 +186,8 @@ class Widgets
             $class = 'Widget';
         }
 
-        //$result[$valor['position_nr']] = ;
-        return new $class($this->envParams, $valor);
+        //$result[$value['position_nr']] = ;
+        return new $class($this->envParams, $value);
     }
 
     function getLastPositionOfGivenColumn($column_nr, $admin_id){

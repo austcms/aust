@@ -163,19 +163,19 @@ $dbSchema['aust_relations'] = array(
 );
 
 
-$dbSchema['config'] = array(
+$dbSchema['configurations'] = array(
     'id' => 'int NOT NULL auto_increment',
-    'tipo' => 'varchar(50)',
+    'name' => 'text',
+    'property' => 'varchar(100)',
+    'value' => 'text',
+    'type' => 'varchar(50)',
     'local' => 'varchar(50)',
-    'nome' => 'text',
-    'propriedade' => 'varchar(100)',
-    'valor' => 'text',
     'explanation' => 'text',
     'options_json' => 'text',
     'class' => 'varchar(100)',
     'ref_table' => 'varchar(100)',
     'ref_field' => 'varchar(100)',
-    'autor' => 'int',
+    'admin_id' => 'int',
     'dbSchemaTableProperties' => array(
         'PRIMARY KEY' => '(id)',
         'UNIQUE' => 'id (id)',

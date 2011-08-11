@@ -41,26 +41,26 @@ class AdminsController extends ActionController {
 				$_POST['frmcreated_on'] = date("Y-m-d H:i:s");
 			}
 			$c = 0;
-		    foreach($_POST as $key=>$valor) {
+		    foreach($_POST as $key=>$value) {
 		        // se o argumento $_POST contém 'frm' no início
 		        if(strpos($key, 'frm') === 0) {
 		            $sqlcampo[] = str_replace('frm', '', $key);
-		            $sqlvalor[] = $valor;
+		            $sqlvalor[] = $value;
 		            // ajusta os campos da tabela nos quais serão gravados dados
-		            $valor = addslashes($valor);
+		            $value = addslashes($value);
 		            if($_POST['metodo'] == 'criar') {
 		                if( !empty($c) && $c > 0 ) {
 		                    $sqlcampostr = $sqlcampostr.','.str_replace('frm', '', $key);
-		                    $sqlvalorstr = $sqlvalorstr.",'".$valor."'";
+		                    $sqlvalorstr = $sqlvalorstr.",'".$value."'";
 		                } else {
 		                    $sqlcampostr = str_replace('frm', '', $key);
-		                    $sqlvalorstr = "'".$valor."'";
+		                    $sqlvalorstr = "'".$value."'";
 		                }
 		            } else if($_POST['metodo'] == 'editar') {
 		                if( !empty($c) && $c > 0) {
-		                    $sqlcampostr = $sqlcampostr.','.str_replace('frm', '', $key).'=\''.$valor.'\'';
+		                    $sqlcampostr = $sqlcampostr.','.str_replace('frm', '', $key).'=\''.$value.'\'';
 		                } else {
-		                    $sqlcampostr = str_replace('frm', '', $key).'=\''.$valor.'\'';
+		                    $sqlcampostr = str_replace('frm', '', $key).'=\''.$value.'\'';
 		                }
 		            }
 

@@ -51,9 +51,9 @@ class FormHelper
          * INPUTS HIDDEN
          */
         if( !empty($options["hidden"]) ){
-            foreach( $options["hidden"] as $chave=>$valor){
-                if( is_string($valor) ){
-                    $conteudo.= $valor;
+            foreach( $options["hidden"] as $chave=>$value){
+                if( is_string($value) ){
+                    $conteudo.= $value;
                 }
             }
         }
@@ -248,7 +248,7 @@ class FormHelper
             /**
              * Loop pelo select criando <options>
              */
-            foreach($selectOptions as $chave=>$valor){
+            foreach($selectOptions as $chave=>$value){
                 /**
                  * Verifica se o <option> atual deve ser selecionado por
                  * padrão
@@ -258,7 +258,7 @@ class FormHelper
                 } else {
                     $selectThis = false;
                 }
-                $conteudo.= '<option '.$selectThis.' value="'.$chave.'">'.$valor.'</option>';
+                $conteudo.= '<option '.$selectThis.' value="'.$chave.'">'.$value.'</option>';
             }
 
             $conteudo.= '</select>';
@@ -289,7 +289,7 @@ class FormHelper
             /**
              * Loop para criar checkboxes
              */
-            foreach($selectOptions as $chave=>$valor){
+            foreach($selectOptions as $chave=>$value){
                 
                 /**
                  * Verifica se o valor atual está salvo no DB
@@ -303,7 +303,7 @@ class FormHelper
                     $selectThis = false;
                 }
                 $conteudo.= '<input type="hidden" name="'.$inputName.'[]" value="0" />';
-                $conteudo.= '<div class="input_checkbox_each"><input type="checkbox" name="'.$inputName.'[]" '.$selectThis.' value="'.$chave.'" /> '.$valor.'</div>';
+                $conteudo.= '<div class="input_checkbox_each"><input type="checkbox" name="'.$inputName.'[]" '.$selectThis.' value="'.$chave.'" /> '.$value.'</div>';
             }
 
         } // fim checkbox
