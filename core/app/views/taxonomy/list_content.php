@@ -14,8 +14,13 @@
 $w = (!empty($_GET['w'])) ? $_GET['w'] : 'NULL';
 ?>
 
-<span class="root_user_only">Apenas desenvolvedores acessam esta tela.</span>
-<h2>Taxonomia: visão geral</h2>
+
+<div class="title_column">
+	<h2>Taxonomia: visão geral</h2>
+	
+	<div class="root_user_only"><?php tt("Apenas desenvolvedores acessam esta tela.", "padlock") ?></div>
+</div>
+
 <p>
     Veja site, estruturas e categorias abaixo. O conceito é o mesmo de uma árvore
     genealógica, onde os filhos ficam abaixo dos pais em hierarquia.

@@ -4,9 +4,6 @@
     <?php tt('Uma estrutura é uma área do site,
         como <em>Notícias</em>, <em>Artigos</em> e outros, por exemplo.') ?>
 </p>
-<?php
-$sites = Aust::getInstance()->getStructures();
-?>
 <?php /* INICIO DO DIV PAINEL GERENCIAR  - É GLOBAL */ ?>
 <div class="painel">
 

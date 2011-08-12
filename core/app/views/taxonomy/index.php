@@ -1,4 +1,3 @@
-<span class="root_user_only">Apenas desenvolvedores acessam esta tela.</span>
 <?php
 if(!empty($_POST['categoria_chefe']) AND $_POST['categoria_chefe'] <> ''){
 	if(Aust::getInstance()->createSite($_POST['name'], '')){
@@ -17,13 +16,19 @@ if(!empty($_POST['categoria_chefe']) AND $_POST['categoria_chefe'] <> ''){
 
 if( Aust::getInstance()->anySiteExists() ){
 	?>
-	<h2>Taxonomia</h2>
+	<div class="title_column">
+		<h2>Taxonomia</h2>
+		
+		<div class="root_user_only"><?php tt("Apenas desenvolvedores acessam esta tela.", "padlock") ?></div>
+	</div>
 	<p>
 		Opções:
 	</p>
 	<p>
 		<ul>
-			<li><a href="adm_main.php?section=<?php echo $_GET['section'];?>&action=new">Inserir nova categoria</a></li>
+			<?php if( Aust::getInstance()->anyStructureExists() ){ ?>
+				<li><a href="adm_main.php?section=<?php echo $_GET['section'];?>&action=new">Inserir nova categoria</a></li>
+			<?php } ?>
 			<li><a href="adm_main.php?section=<?php echo $_GET['section'];?>&action=list_content">
 			Visualizar árvore taxonômica
 			</a></li>

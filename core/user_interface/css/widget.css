@@ -50,10 +50,20 @@
                 margin: 10px;
             }
                 div.widget_group div.widget div.content ul {
-                    list-style: circle;
-                    padding-left: 20px;
+                    list-style: none;
+                    padding-left: 0px;
+					margin-left: 0px;
                     line-height: 20px;
                 }
+
+				.widget .content .item {
+					margin: 0 0 0px 0;
+					padding: 7px 0;
+					border-bottom: 1px solid #eaeaea;
+					border-top: 1px solid #fefefe;
+				}
+				.widget .content .item:first-child { border-top: 0px; }
+				.widget .content .item:last-child { border-bottom: 0px; }
 
             div.widget_group div.widget div.footer {
                 width: 350px; /* Tamanho do rodapé - Footer */

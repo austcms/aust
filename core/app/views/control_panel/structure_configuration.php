@@ -1,12 +1,15 @@
 <div id="structure_configuration">
 
-<h2>
-	Configure: <?php echo $module->information["name"] ?>
-</h2>
+	<div class="title_column">
+		<h2>
+			Configure: <?php echo $module->information["name"] ?>
+		</h2>
+		
+		<div class="root_user_only"><?php tt("Apenas desenvolvedores acessam esta tela.", "padlock") ?></div>
+	</div>
 
 <?php
 $configurations = $module->loadModConf();
-//pr($configurations);
 if( !empty($configurations) && is_array($configurations) ){
     ?>
 

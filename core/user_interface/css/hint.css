@@ -11,25 +11,28 @@ h2 span.hint a {
     margin: 0 0 0px 0;
 }
     span.hint a.tooltip-trigger {
-        background: url(../img/interrogacao.png) no-repeat top;
+        background: url(../img/tooltips/question.png) no-repeat top;
         display: inline-block;
         position: relative;
-        top: -1px;
-        width: 20px;
-        height: 20px;
-        text-decoration: none;
+        top: -2px;
+        width: 22px;
+        height: 22px;
+        text-decoration: none !important;
         padding: 0; margin: 0;
 
     }
     
     span.hint a:hover {
-        background: url(../img/interrogacao.png) no-repeat;
         background-position: 0px -22px;
     }
 
     span.hint a:focus {
         outline: none;
     }
+
+    span.hint a.tooltip-trigger.padlock {
+        background-image: url(../img/tooltips/padlock.png);
+		}
 
 /*
  * TOOLTIP
@@ -42,7 +45,7 @@ div.tooltip {
     color: #646464;
     padding: 0;
     position: absolute;
-    font-size: 12px;
+    font-size: 1.0em !important;
     cursor: auto;
 }
 

@@ -322,7 +322,7 @@ class Aust {
 	
 	/*
 	 *
-	 * Category related
+	 * Structures related
 	 *
 	 */
 
@@ -608,6 +608,29 @@ class Aust {
 
         return $query;
     }
+
+    /**
+     * anyStructureExists()
+     *
+     * Return true if there is any structure.
+     *
+     * @return bool
+     */
+    public function anyStructureExists($sites = array()) {
+		
+		if( empty($sites) )
+			$sites = $this->getStructures();
+
+		if( empty($sites) )
+			return false;
+		
+		foreach( $sites as $site ){
+			if( !empty($site['Structures']) )
+				return true;
+		}
+		
+		return false;
+	}
 
 	/*
 	 *

@@ -1,5 +1,9 @@
-<span class="root_user_only">Apenas desenvolvedores acessam esta tela.</span>
-<h2>Taxonomia: nova categoria</h2>
+<div class="title_column">
+	<h2>Taxonomia: nova categoria</h2>
+	
+	<div class="root_user_only"><?php tt("Apenas desenvolvedores acessam esta tela.", "padlock") ?></div>
+</div>
+
 <p>
 	Para criar uma nova subcategoria, selecione abaixo uma estrutura ou categoria.
 </p>

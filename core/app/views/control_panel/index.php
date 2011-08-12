@@ -4,9 +4,7 @@
  */
 
 if(User::getInstance()->LeRegistro('group') == 'Webmaster'):
-?>
-	<span class="root_user_only">Apenas desenvolvedores acessam esta tela.</span>
-<?php
+
 /*
  * MIGRATIONS
  *
@@ -43,12 +41,12 @@ if(User::getInstance()->LeRegistro('group') == 'Webmaster'):
      */
     else {
         ?>
-        <h2>Configurar Módulos e Estruturas</h2>
-        <?php
-        if( !empty($status) AND is_array($status)){
-            EscreveBoxMensagem($status);
-        }
-        ?>
+        
+		<div class="title_column">
+			<h2>Configurar Módulos e Estruturas</h2>
+			
+			<div class="root_user_only"><?php tt("Apenas desenvolvedores acessam esta tela.", "padlock") ?></div>
+		</div>
 
         <div class="widget_group">
             <div class="widget">
@@ -61,28 +59,27 @@ if(User::getInstance()->LeRegistro('group') == 'Webmaster'):
                 <div class="content">
 					<?php if( $hasStructures ){ ?>
 	                    <p>Abaixo, as estruturas instaladas.</p>
-	                    <ul>
+						<div>
 	                    <?php
 						foreach( $sites as $site ){
 						
 							foreach( $site['Structures'] as $structure ){
 								?>
-								<li>
+								<div class="item">
 									<strong><?php echo $structure["name"] ?></strong>
 									(módulo <?php echo $structure["type"] ?>)
 									<a href="adm_main.php?section=<?php echo CONTROL_PANEL_DISPATCHER ?>&aust_node=<?php echo $structure["id"] ?>&action=structure_configuration">Configurar</a>
-								</li>
+								</div>
 								<?php
 							}
 						}
-
 	                    ?>
-	                    </ul>
+	
+	                    </div>
 					<?php } else { ?>
 						<p>Não há estruturas instaladas ainda.</p>
 					<?php } ?>
                 </div>
-                <div class="footer"></div>
             </div>
 
 
@@ -153,7 +150,6 @@ if(User::getInstance()->LeRegistro('group') == 'Webmaster'):
 						</p>
 					<?php } ?>
                 </div>
-                <div class="footer"></div>
             </div>
         </div>
 
@@ -178,60 +174,63 @@ if(User::getInstance()->LeRegistro('group') == 'Webmaster'):
                 <div class="content">
 
                     <div style="margin-bottom: 10px;">
-                    <?php
-                    foreach( $modulesStatus as $modulo) {
-                        $path = $modulo['path'];
-                        ?>
-                        <div>
+                        <div class="modules_available">
+	                    <?php
+	                    foreach( $modulesStatus as $modulo) {
+	                        $path = $modulo['path'];
+	                        ?>
+	                        <div class="item">
 
-                        <strong>
-                        	<?php echo $modulo['config']['name']; ?>
-                        </strong>
-                        <br />
-                        <?php echo $modulo['config']['description'];
-                        /*
-                         * Totalmente Atualizado.
-                         */
-                        if( MigrationsMods::getInstance()->isActualVersion($path)
-                            AND ModulesManager::getInstance()->verificaInstalacaoRegistro(array("pasta"=>$path)) )
-                        {
-                            echo '<br /><span class="green">Instalado</span><br />';
-                        } elseif( MigrationsMods::getInstance()->isActualVersion($path)
-                            AND !ModulesManager::getInstance()->verificaInstalacaoRegistro(array("pasta"=>$path)) )
-                        {
-                            echo '<div style="color: orange;">Migration atualizado, mas não há registro do módulo no DB.<br />';
-                            echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&instalar_modulo='.$path.'">Tentar registrar agora</a></div>';
-                        }
-                        /*
-                         * Não atualizado,
-                         * contém alguma versão no DB.
-                         */
-                        elseif( MigrationsMods::getInstance()->hasSomeVersion($path)
-                                AND ModulesManager::getInstance()->verificaInstalacaoRegistro(array("pasta"=>$path)) )
-                        {
-                            echo '<div style="color: orange;">Tabela instalada, mas requer atualização.<br />';
-                            echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&instalar_modulo='.$path.'">Rodar Migration</a></div>';
-                        } elseif( MigrationsMods::getInstance()->hasSomeVersion($path)
-                                AND !ModulesManager::getInstance()->verificaInstalacaoRegistro(array("pasta"=>$path)) )
-                        {
-                            echo '<div style="color: orange;">Tabela instalada, mas requer atualização e registro do módulo no DB.<br />';
-                            echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&instalar_modulo='.$path.'">Rodar Migration</a></div>';
-                        } else {
-                            echo '<br /><span class="red">Não Instalado,</span> ';
-                            echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&instalar_modulo='.$path.'">instalar agora</a><br />';
-                        }
+		                        <div class="title">
+		                        	<?php echo $modulo['config']['name']; ?>
+		                        </div>
+								<div class="description">
+		                        	<?php echo $modulo['config']['description']; ?>
+								</div>
+								<div class="status">
+								<?php
+		                        /*
+		                         * Totalmente Atualizado.
+		                         */
+		                        if( MigrationsMods::getInstance()->isActualVersion($path)
+		                            AND ModulesManager::getInstance()->verificaInstalacaoRegistro(array("pasta"=>$path)) )
+		                        {
+		                            echo '<span class="green">Instalado</span><br />';
+		                        } elseif( MigrationsMods::getInstance()->isActualVersion($path)
+		                            AND !ModulesManager::getInstance()->verificaInstalacaoRegistro(array("pasta"=>$path)) )
+		                        {
+		                            echo '<div style="color: orange;">Migration atualizado, mas não há registro do módulo no DB.<br />';
+		                            echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&instalar_modulo='.$path.'">Tentar registrar agora</a></div>';
+		                        }
+		                        /*
+		                         * Não atualizado,
+		                         * contém alguma versão no DB.
+		                         */
+		                        elseif( MigrationsMods::getInstance()->hasSomeVersion($path)
+		                                AND ModulesManager::getInstance()->verificaInstalacaoRegistro(array("pasta"=>$path)) )
+		                        {
+		                            echo '<div style="color: orange;">Tabela instalada, mas requer atualização.<br />';
+		                            echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&instalar_modulo='.$path.'">Rodar Migration</a></div>';
+		                        } elseif( MigrationsMods::getInstance()->hasSomeVersion($path)
+		                                AND !ModulesManager::getInstance()->verificaInstalacaoRegistro(array("pasta"=>$path)) )
+		                        {
+		                            echo '<div style="color: orange;">Tabela instalada, mas requer atualização e registro do módulo no DB.<br />';
+		                            echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&instalar_modulo='.$path.'">Rodar Migration</a></div>';
+		                        } else {
+		                            echo '<span class="red">Não Instalado,</span> ';
+		                            echo '<a href="'.$_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'].'&instalar_modulo='.$path.'">instalar agora</a><br />';
+		                        }
 
-                        ?>
-
-                        <br />
-                        </div>
-                        <?php
-                    }
-                    ?>
+		                        ?>
+								</div>
+	                        </div>
+	                        <?php
+	                    }
+	                    ?>
+						</div>
                     </div>
 
                 </div>
-                <div class="footer"></div>
             </div>
 
         </div>

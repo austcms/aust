@@ -15,12 +15,12 @@ class AustTest extends PHPUnit_Framework_TestCase
          */
         
         $this->connection = Connection::getInstance();
+		$this->connection->query("DELETE FROM taxonomy");
         $this->obj = new Aust($this->connection);
     }
 
 	function tearDown(){
 		$this->obj->connection->query("DELETE FROM ".Config::getInstance()->table."");
-		$this->obj->connection->query("DELETE FROM taxonomy");
 	}
 
 	function testCreateStructure(){
@@ -56,16 +56,25 @@ class AustTest extends PHPUnit_Framework_TestCase
     }
 
 	function testHasSite(){
-		$this->obj->connection->query("DELETE FROM taxonomy");
         $this->assertFalse($this->obj->anySiteExists() );
 		$this->obj->connection->query("INSERT INTO taxonomy (name,father_id,class) VALUES ('TestFather777','0','categoria-chefe')");
         $this->assertTrue($this->obj->anySiteExists() );
 	}
 
 	function testCreateFirstSiteAutomatically(){
-		$this->obj->connection->query("DELETE FROM taxonomy");
-        $this->assertTrue($this->obj->createFirstSiteAutomatically() );
-        $this->assertFalse($this->obj->createFirstSiteAutomatically() );
+        $this->assertTrue($this->obj->createFirstSiteAutomatically());
+        $this->assertFalse($this->obj->createFirstSiteAutomatically());
+	}
+	
+	function testAnyStructureExists(){
+		$this->obj->connection->query("INSERT INTO taxonomy (name,father_id,class) VALUES ('A site','0','categoria-chefe')");
+        $this->assertFalse($this->obj->anyStructureExists());
+
+		$siteId = $this->obj->connection->lastInsertId();
+		$this->obj->connection->query("INSERT INTO taxonomy (name,father_id,class) VALUES ('A structure', '".$siteId."', 'estrutura')");
+        $this->assertTrue($this->obj->anyStructureExists());
+
+		
 	}
 	
 	function testGetStructure(){

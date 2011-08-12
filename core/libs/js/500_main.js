@@ -17,7 +17,12 @@ var privilegio_escolhido = false;
 $(document).ready(function(){
     lightbox();
 
-
+	setTimeout(function(){
+		$('#notice, #failure').animate({
+				opacity: 0.4
+			}, 1000, 'linear');
+	}, 5000);
+	
 	// show sql debug messages
 	$('a#show_sql_debug_messages_button').click(function(){
 		var shouldShow = '0';

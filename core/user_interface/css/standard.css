@@ -35,8 +35,8 @@ table { border-spacing: 0px; padding: 0px; border-collapse: collapse; }
 .hidden { display: none !important; }
 
 #notice {
-	background: #B4F8A6;
-	color: #1C9800;
+	background-color: #C5F3AD;
+	color: #178400;
 	padding: 7px;
 	width: 705px;
 	font-style: italic;
@@ -54,4 +54,8 @@ table { border-spacing: 0px; padding: 0px; border-collapse: collapse; }
 	margin-bottom: 5px;
 }
 
-.root_user_only { color: #999; font-size: 0.9em; font-style: italic; text-shadow: 1px 1px 3px rgba(0, 0, 0, 0); }
+
+
+.title_column { display: block; }
+.title_column .root_user_only { float: right; margin: 6px 5px 0 0; }
+.title_column h2 { display: inline-block; }

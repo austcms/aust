@@ -7,14 +7,14 @@
  *
  * @param string $str
  */
-function tooltip($str = ''){
+function tooltip($str = '', $type = "question"){
     if( !empty($str) ){
         $random = substr( sha1( rand(0, 100) ), rand(5,20));
         ob_start();
         ?>
         <span class="hint">
 
-            <a href="javascript: void(0)" class="tooltip-trigger" name="<?php echo $random;?>">&nbsp;</a>
+            <a href="javascript: void(0)" class="tooltip-trigger <?php echo $type?>" name="<?php echo $random;?>">&nbsp;</a>
 
             <div class="tooltip" id="<?php echo $random;?>">
                 <div class="top"></div>
@@ -38,8 +38,8 @@ function tooltip($str = ''){
  * @param string $str
  * @return bool
  */
-function tt($str = ''){
-    return tooltip($str);
+function tt($str = '', $type = ''){
+    return tooltip($str, $type);
 }
 
 function lbCategoria($params){

@@ -49,29 +49,36 @@ div.body {
 #menu ul { margin: 0px 0 0 10px; }
 
 
-/* Structure Control Panel */
-#structure_configuration .structure_variables .header {
-	background: #ddd;
-	padding: 10px;
-	font-weight: bold;
-}
-
-	#structure_configuration .structure_variables .item {
-		background: #f4f4f4;
-		border-bottom: 1px solid white; padding: 0 10px;
-		margin: 0;
-		display: table;
-		width: 700px;
-	}
-		#structure_configuration .structure_variables .item:hover { background: #f6f6f6; }
-	#structure_configuration .structure_variables .item label {
-		float: left; width: 65%; cursor: pointer; padding: 10px 0px;
-	}
-	#structure_configuration .structure_variables .item div.input { 
-		float: left; width: 35%; padding: 10px 0px;
+/* Control Panel */
+	/* index */
+	.modules_available {}
+	.modules_available .item .title { font-weight: bold; margin-bottom: 2px; }
+	.modules_available .item .description { font-size: 1em; color: #777; margin-bottom: 2px; }
+	.modules_available .item .status { font-size: 1em; }
+	
+	/* structure */
+	#structure_configuration .structure_variables .header {
+		background: #ddd;
+		padding: 10px;
+		font-weight: bold;
 	}
 
-		#structure_configuration .structure_variables input[type=submit] { margin: 10px; }
+		#structure_configuration .structure_variables .item {
+			background: #f4f4f4;
+			border-bottom: 1px solid white; padding: 0 10px;
+			margin: 0;
+			display: table;
+			width: 700px;
+		}
+			#structure_configuration .structure_variables .item:hover { background: #f6f6f6; }
+		#structure_configuration .structure_variables .item label {
+			float: left; width: 65%; cursor: pointer; padding: 10px 0px;
+		}
+		#structure_configuration .structure_variables .item div.input { 
+			float: left; width: 35%; padding: 10px 0px;
+		}
+
+			#structure_configuration .structure_variables input[type=submit] { margin: 10px; }
 
 /* Users views */
 

@@ -8,6 +8,15 @@ class ContentController extends ActionController {
 	}
 	
 	function index(){
+
+		$aust = Aust::getInstance();
+		$sites = $aust->getStructures();
+		$this->set('sites', $sites);
+
+		if( $aust->anyStructureExists($sites) )
+			$this->render('index');
+		else
+			$this->render('no_structures');
 		
 	}
 	
@@ -24,7 +33,7 @@ class ContentController extends ActionController {
 	    } else if( !empty($_GET["aust_node"]) ){
 	        $aust_node = $_GET['aust_node'];
 	    }
-	    // @todo - Módulos devem procurar por $aust_node, não $_GET['aust_node']
+
 	    $_GET["aust_node"] = $aust_node;
 		$austNode = $aust_node;
 

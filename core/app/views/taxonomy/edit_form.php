@@ -7,9 +7,12 @@
 	$dados = Aust::getInstance()->getStructureById($_GET['w']);
 ?>
 
+<div class="title_column">
+	<h2>Taxonomia: editar categoria</h2>
+	
+	<div class="root_user_only"><?php tt("Apenas desenvolvedores acessam esta tela.", "padlock") ?></div>
+</div>
 
-<span class="root_user_only">Apenas desenvolvedores acessam esta tela.</span>
-<h2>Taxonomia: editar categoria</h2>
 <p>Você pode editar a categoria <?php echo $dados['name']?></p>
 
 <form method="post" action="adm_main.php?section=<?php echo $_GET['section'];?>&action=update" enctype="multipart/form-data">

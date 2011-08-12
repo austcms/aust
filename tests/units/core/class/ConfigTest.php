@@ -8,10 +8,10 @@ class ConfigTest extends PHPUnit_Framework_TestCase
     function setUp(){
 		User::getInstance()->type('root');
         $this->obj = new Config;
+		Connection::getInstance()->exec("DELETE FROM ".$this->obj->table."");
     }
 
 	function tearDown(){
-		Connection::getInstance()->exec("DELETE FROM ".$this->obj->table."");
 	}
 	
 	function populate(){
