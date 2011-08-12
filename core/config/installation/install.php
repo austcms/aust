@@ -1,11 +1,6 @@
 <?php
 /*
  *
- * ! Aqui está a página que avisa o que está faltando no banco de dados. !
- *
- */
-/*
- *
  * SETUP
  *
  * Devem ser carregadas configurações de banco de dados, além de classes e o schema das tabelas
@@ -72,7 +67,7 @@ if(Connection::getInstance()->dbExists()){
     if($dbSchema->schemaStatus == 1){
 
 		if( !User::getInstance()->hasUser() ){
-            require('criar_admin.inc.php');
+            require('create_admin.php');
         }
         /**
          * Está tudo ok, volta para a tela de login no root index.php

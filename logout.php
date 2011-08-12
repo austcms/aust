@@ -8,8 +8,8 @@
         $st = '?status='.$_GET['status'];
     
     if($_GET['action'] == 'instalar'){
-        if(is_file('instalar/instalar.php')){
-        	header("Location: instalar/instalar.php");
+        if(is_file('instalar/install.php')){
+        	header("Location: instalar/install.php");
         } elseif(is_file('instalar/instalar2.php')){
             header("Location: instalar/instalar2.php");
         } else {

@@ -63,18 +63,15 @@ if( Connection::getInstance()->dbExists() ){
 
     // verificação tabela por tabela quais existem ($db_tabelas é Array)
     if($dbSchema->schemaStatus == 1){
-
         /*
          * Há aqui uma série de verificações para fazer o devido include
          */
 
             // Se deve-se criar um admin no sistema (pois não há um)
-            if( !empty($_POST['configurar']) AND ($_POST['configurar'] == 'criar_admin') OR (!User::getInstance()->hasUser()) ){
-                require(INSTALLATION_DIR.'criar_admin.inc.php');
-
-            // Deve-se configurar o sistema
-            } elseif(isset($_GET['configurar'])){
-                require(INSTALLATION_DIR.'configurar.inc.php');
+            if( !empty($_POST['configurar']) &&
+				($_POST['configurar'] == 'criar_admin') ||
+				(!User::getInstance()->hasUser()) ){
+                require(INSTALLATION_DIR.'create_admin.php');
 
             // Verificar se usuário (username&password) existe para login
             } elseif(!empty($_GET['login']) AND $_GET['login'] == 'verify') {

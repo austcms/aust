@@ -1,6 +1,6 @@
 <?php
 $page_title = 'Criar o primeiro usuário';
-require 'cabecalho.inc.php';
+require 'header.php';
 
 ?>
 	<h1>Ops.. problemas...</h1>
@@ -28,5 +28,5 @@ else if( $errorStatus == "no_permission_create_uploads_editor" ){
 <?php
 
 
-require 'rodape.inc.php';
+require 'footer.php';
 ?>

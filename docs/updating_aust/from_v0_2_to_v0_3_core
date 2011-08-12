@@ -98,6 +98,12 @@ INSERT INTO
 		categorias
 		)
 		
+Updates some info:
+
+	UPDATE taxonomy SET class='site' WHERE class='categoria-chefe';
+	UPDATE taxonomy SET class='structure' WHERE class='estrutura';
+	UPDATE taxonomy SET class='category' WHERE class='categoria';
+	
 		
 Then, delete 'cadastros_conf' table:
 

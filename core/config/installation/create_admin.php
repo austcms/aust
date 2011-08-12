@@ -1,6 +1,6 @@
 <?php
 	$page_title = 'Criar o primeiro usuário';
-	require 'cabecalho.inc.php';
+	require 'header.php';
 $showForm = true;
 $formOk = false;
 $formError = false;
@@ -125,5 +125,5 @@ if( $showForm ){
 
 <?php
 }
- require 'rodape.inc.php';
+ require 'footer.php';
  ?>

@@ -269,10 +269,13 @@ class User {
         $sql = "SELECT
 					admins.id
                 FROM
-					admins, admin_groups
-                WHERE
+					admins
+				LEFT JOIN
+					admin_groups
+                ON
 					admins.admin_group_id=admin_groups.id
                 LIMIT 0,2";
+
 		return (Connection::getInstance()->count($sql) > 0) ? true : false;
 	}
 

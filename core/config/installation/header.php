@@ -4,6 +4,14 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title><?php echo $page_title; ?></title>
 <link rel="stylesheet" href="<?php echo INSTALLATION_DIR; ?>style.css" type="text/css" />
+
+<script type="text/javascript" src="<?php echo BASECODE_JS; ?>100_jquery.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('input:visible:enabled:first').focus();
+    });
+</script>
+
 </head>
 
 <body>
