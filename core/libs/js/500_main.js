@@ -23,6 +23,14 @@ $(document).ready(function(){
 			}, 1000, 'linear');
 	}, 5000);
 	
+	// tooltip design
+	$("a.tooltip-trigger").css({'opacity': 0.5})
+	$("a.tooltip-trigger").mouseenter(function(){
+		$(this).stop().animate({'opacity': 1}, 150);
+	}).mouseleave(function(){
+		$(this).stop().animate({'opacity': 0.5});
+	});
+	
 	// show sql debug messages
 	$('a#show_sql_debug_messages_button').click(function(){
 		var shouldShow = '0';

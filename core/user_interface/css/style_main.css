@@ -65,7 +65,9 @@ div.body {
 
 		#structure_configuration .structure_variables .item {
 			background: #f4f4f4;
-			border-bottom: 1px solid white; padding: 0 10px;
+			border-bottom: 1px solid #eaeaea;
+			border-top: 1px solid #fefefe;
+			padding: 0 10px;
 			margin: 0;
 			display: table;
 			width: 700px;

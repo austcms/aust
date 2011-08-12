@@ -21,8 +21,8 @@ h2 { font-size: 1.6em; }
 #outer {
 	width: 600px;
 	position: absolute;
-  left: 50%; margin-left: -300px;
-  top: 50%; margin-top: -280px; /* height de .inside -20px */
+	left: 50%; margin-left: -300px;
+	top: 50%; margin-top: -280px; /* height de .inside -20px */
   
 	background: url('installation_panel_background.jpg') white;
 	text-align: left;

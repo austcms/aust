@@ -1,0 +1,34 @@
+
+#no_structure {
+	display: table;
+	width: 720px;
+	margin: 10px 0 0 0;
+	border-radius: 10px;
+	height: 250px;
+	background: url('../img/bg_art/no_structure_bg.jpg') #f3f2f2 bottom no-repeat;
+	-webkit-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+	-moz-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+	box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+	#no_structure .containner {
+		margin: 20px;
+		display: table;
+		text-shadow: 2px 2px 1px white;
+	}
+
+	#no_structure h2 {
+		font-size: 4em;
+		margin-top: 0;
+		color: #c80000;
+	}
+
+	#no_structure p {
+		font-size: 1.2em;
+		font-weight: bold;
+	}
+
+	#no_structure a {
+		text-decoration: none;
+		color: #c80000;
+	}
