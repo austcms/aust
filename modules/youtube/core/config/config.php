@@ -33,13 +33,13 @@ $modInfo = array(
      */
     'className' => 'YouTube',
     /**
-     * 'descricao': Descrição que facilita compreender a função do módulo
+     * 'description'
      */
     'description' => 'Módulo gerenciador de vídeos do YouTube',
     /**
-     * 'estrutura': Se pode ser instalada como estrutura (Textos podem)
+     * 'structure': Se pode ser instalada como estrutura (Textos podem)
      */
-    'estrutura' => true,
+    'structure' => true,
     /**
      * 'structure_only': É uma estrutura somente, sem categorias? (cadastros,
      * por exemplo)
@@ -76,7 +76,7 @@ $modInfo = array(
 		    "label" => "Ordenado",
 		    "inputType" => "checkbox",
 		),
-		'resumo' => array(
+		'summary' => array(
 		    "value" => "",
 		    "label" => "Tem resumo?",
 		    "inputType" => "checkbox",
@@ -86,7 +86,7 @@ $modInfo = array(
 		    "label" => "Tem categorias?",
 		    "inputType" => "checkbox",
 		),
-		'descricao' => array(
+		'description' => array(
 		    "value" => "",
 		    "label" => "Tem descrição?",
 		    "inputType" => "checkbox",

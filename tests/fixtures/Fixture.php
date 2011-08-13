@@ -60,7 +60,7 @@ class Fixture {
 			"INSERT INTO ".$this->tables["aust"]."
 				(name, name_encoded, class, admin_id)
 			VALUES
-				('Site', 'site', 'categoria-chefe', '1')
+				('Site', 'site', 'site', '1')
 				";
 		Connection::getInstance()->exec($aust);
 		$this->siteId = Connection::getInstance()->lastInsertId();
@@ -77,7 +77,7 @@ class Fixture {
 			"INSERT INTO ".$this->tables["aust"]."
 				(name, name_encoded, class, type, father_id, admin_id)
 			VALUES
-				('News', 'news', 'estrutura', 'textual', ".$this->siteId.", '1')
+				('News', 'news', 'structure', 'textual', ".$this->siteId.", '1')
 				";
 		Connection::getInstance()->exec($aust);
 		$textsId = Connection::getInstance()->lastInsertId();
@@ -86,7 +86,7 @@ class Fixture {
 			"INSERT INTO ".$this->tables["aust"]."
 				(name, name_encoded, class, type, father_id, admin_id)
 			VALUES
-				('Calendar', 'calendar', 'estrutura', 'agenda', ".$this->siteId.", '1')
+				('Calendar', 'calendar', 'structure', 'agenda', ".$this->siteId.", '1')
 				";
 		Connection::getInstance()->exec($aust);
 	}
@@ -116,13 +116,13 @@ class Fixture {
         $flexFieldsSetup = new $modelName;
         $flexFields = new $mod;
 
-		Connection::getInstance()->query("INSERT INTO taxonomy (name,class) VALUES ('Website777','categoria-chefe')");
+		Connection::getInstance()->query("INSERT INTO taxonomy (name,class) VALUES ('Website777','site')");
 		$lastInsert = Connection::getInstance()->lastInsertId();
 		
 		$params = array(
             'name' => 'News',
             'site' => $lastInsert,
-            'class' => 'estrutura',
+            'class' => 'structure',
             'module' => 'flex_fields',
             'author' => 1,
 			'fields' => array(
@@ -169,7 +169,7 @@ class Fixture {
 			"INSERT INTO ".$this->tables["aust"]."
 				(name, name_encoded, class, type, father_id, admin_id)
 			VALUES
-				('Articles', 'articles', 'estrutura', 'textual', ".$this->siteId.", '1')
+				('Articles', 'articles', 'structure', 'textual', ".$this->siteId.", '1')
 				";
 		Connection::getInstance()->exec($aust);
 		return Connection::getInstance()->lastInsertId();

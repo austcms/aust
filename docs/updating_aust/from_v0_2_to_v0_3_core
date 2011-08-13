@@ -144,3 +144,6 @@ Update data:
 	UPDATE configurations SET type='general' WHERE type='Geral';
 	UPDATE configurations SET type='private' WHERE type='Privado';
 	UPDATE configurations SET type='structure' WHERE type='mod_conf';
+
+	UPDATE configurations SET property='description' WHERE property='descricao';
+	UPDATE configurations SET property='summary' WHERE property='resumo';

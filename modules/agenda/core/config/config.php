@@ -33,13 +33,9 @@ $modInfo = array(
      */
     'className' => 'Agenda',
     /**
-     * 'descricao': Descrição que facilita compreender a função do módulo
+     * 'description'
      */
     'description' => 'Módulo para cadastro de compromissos.',
-    /**
-     * 'estrutura': Se pode ser instalada como estrutura (Textos podem)
-     */
-    'estrutura' => true,
     /**
      * 'structure_only': É uma estrutura somente, sem categorias? (cadastros,
      * por exemplo)
@@ -81,7 +77,7 @@ $modInfo = array(
 	    /*
 	     * Resumo
 	     */
-	    'resumo' => array(
+	    'summary' => array(
 	        "value" => "",
 	        "label" => "Tem resumo?",
 	        "inputType" => "checkbox",
@@ -152,18 +148,6 @@ $modInfo = array(
             'help' => ''
 	    ),		
 	),
-
-    /**
-     * RESPONSER
-     *
-     * A seguir, as configurações do módulo para que este possa apresentar um
-     * resumo a qualquer requisitante (chamado responser).
-     */
-    'arquitetura' => array(
-        'table' => 'textos',
-        'foreignKey' => 'categoria',
-    ),
-
 
     /**
      * '': 

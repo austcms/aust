@@ -228,7 +228,7 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 	                    "flex_fields_config ".
 	                    "(type,property,value,node_id,created_on,deactivated,disabled,public,restricted,approved) ".
 	                    "VALUES ".
-	                    "('estrutura','table_files','minhatabela_files',777, '".date('Y-m-d H:i:s')."',0,0,1,0,1)";
+	                    "('structure','table_files','minhatabela_files',777, '".date('Y-m-d H:i:s')."',0,0,1,0,1)";
 
 					$this->assertEquals(
 						$sql,
@@ -436,7 +436,7 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 		                    "flex_fields_config ".
 		                    "(type,property,value,node_id,created_on,deactivated,disabled,public,restricted,approved) ".
 		                    "VALUES ".
-		                    "('estrutura','table_images','minhatabela_images',777, '".date('Y-m-d H:i:s')."',0,0,1,0,1)";
+		                    "('structure','table_images','minhatabela_images',777, '".date('Y-m-d H:i:s')."',0,0,1,0,1)";
 
 						$this->assertEquals(
 							$sql,
@@ -592,7 +592,7 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 		// salva dados da nova estrutura na tabela 'categorias'
 		function testSaveStructureIntoDatabase(){
 
-			$this->obj->connection->query("INSERT INTO taxonomy (name,class) VALUES ('TestePai777','categoria-chefe')");
+			$this->obj->connection->query("INSERT INTO taxonomy (name,class) VALUES ('TestePai777','site')");
 			$lastInsert = $this->obj->connection->lastInsertId();
 
 			// TEST #1
@@ -601,7 +601,7 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 		        'name' => 'Teste777',
 		        'description' => 'Teste777',
 		        'module' => 'flex_fields',
-		        'type' => 'estrutura',
+		        'type' => 'structure',
 		        'author' => '1',
 		    );
 
@@ -616,7 +616,7 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 			$this->assertArrayHasKey('name', $saved);
 			$this->assertEquals('Teste777', $saved['name']);
 			$this->assertEquals('flex_fields', $saved['type']);
-			$this->assertEquals('estrutura', $saved['class']);
+			$this->assertEquals('structure', $saved['class']);
 			$empty = empty($saved['description']);
 			$this->assertTrue( $empty );
 
@@ -645,7 +645,7 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 			
 			$saved = $this->obj->connection->hasTable('testunit');
 			
-			$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='tabela' AND type='estrutura' AND node_id='7777'");
+			$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='table' AND type='structure' AND node_id='7777'");
 			$this->assertArrayHasKey('0', $conf );
 			$this->assertArrayNotHasKey('1', $conf );
 			$this->assertEquals('testunit', $conf[0]['value'] );
@@ -1022,17 +1022,17 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 			
 			$this->obj->saveStructureConfiguration($params);
 			$this->obj->saveStructureConfiguration($params);
-			$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='aprovacao' AND type='config' AND node_id='777'");
+			$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='approval' AND type='config' AND node_id='777'");
 			$this->assertArrayHasKey('0', $conf );
 			$this->assertArrayNotHasKey('1', $conf );
 			$this->assertEquals('1', $conf[0]['value'] );
 
-			$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='pre_senha' AND type='config' AND node_id='777'");
+			$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='pre_password' AND type='config' AND node_id='777'");
 			$this->assertArrayHasKey('0', $conf );
 			$this->assertArrayNotHasKey('1', $conf );
 			$this->assertEquals('123', $conf[0]['value'] );
 
-			$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='descricao' AND type='config' AND node_id='777'");
+			$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='description' AND type='config' AND node_id='777'");
 			$this->assertArrayHasKey('0', $conf );
 			$this->assertArrayNotHasKey('1', $conf );
 			$this->assertEquals('descrição 777', $conf[0]['value'] );
@@ -1046,7 +1046,7 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 			);
 			
 			$this->obj->saveStructureConfiguration($params);
-			$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='aprovacao' AND type='config' AND node_id='777'");
+			$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='approval' AND type='config' AND node_id='777'");
 			$this->assertArrayHasKey('0', $conf );
 			$this->assertArrayNotHasKey('1', $conf );
 			$this->assertEquals('0', $conf[0]['value'] );
@@ -1062,13 +1062,13 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 			$this->obj->connection->exec("DELETE FROM flex_fields_config WHERE node_id='7777' OR commentary='haha777' OR value='testunit' OR value='haha777' ");
 			$this->obj->connection->exec("DELETE FROM taxonomy WHERE name='TestUnit' AND father_name_encoded='testepai777'");
 			$this->obj->connection->exec("DELETE FROM taxonomy WHERE name='testunit'");
-			$this->obj->connection->query("INSERT INTO taxonomy (name,class) VALUES ('TestePai777','categoria-chefe')");
+			$this->obj->connection->query("INSERT INTO taxonomy (name,class) VALUES ('TestePai777','site')");
 			$lastInsert = $this->obj->connection->lastInsertId();
 			
 			$params = array(
 	            'name' => 'TestUnit',
 	            'site' => $lastInsert,
-	            'class' => 'estrutura',
+	            'class' => 'structure',
 	            'module' => 'flex_fields',
 	            'author' => 1,
 				'fields' => array(
@@ -1114,26 +1114,26 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 			$conf = $this->obj->connection->query("SELECT * FROM taxonomy WHERE id='$austNode'");
 			$this->assertArrayHasKey('0', $conf, 'Not saving category.' );
 			$this->assertArrayNotHasKey('1', $conf );
-			$this->assertEquals('estrutura', $conf[0]['class'], 'Did not save as structure.' );
+			$this->assertEquals('structure', $conf[0]['class'], 'Did not save as structure.' );
 			
 			// verifica configurações da tabela
 				// test 3.1
-				$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='descricao' AND type='config' AND node_id='$austNode'");
+				$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='description' AND type='config' AND node_id='$austNode'");
 				$this->assertArrayHasKey('0', $conf );
 				$this->assertEquals('haha777', $conf[0]['value'], 'Did not save description. #3.1' );
 				$this->assertEquals($austNode, $conf[0]['node_id'], 'Did not save austNode.' );
 				// test 3.2
-				$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='pre_senha' AND type='config' AND node_id='$austNode'");
+				$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='pre_password' AND type='config' AND node_id='$austNode'");
 				$this->assertArrayHasKey('0', $conf );
 				$this->assertEquals('haha777', $conf[0]['value'], 'Did not save pre_password. #3.2' );
 				$this->assertEquals($austNode, $conf[0]['node_id'], 'Did not save austNode.' );
 				// test 3.3
-				$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='aprovacao' AND type='config' AND node_id='$austNode'");
+				$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='approval' AND type='config' AND node_id='$austNode'");
 				$this->assertArrayHasKey('0', $conf );
 				$this->assertEquals('haha777', $conf[0]['value'], 'Did not save approval. #3.3' );
 				$this->assertEquals($austNode, $conf[0]['node_id'], 'Did not save austNode.' );
 				// test 3.4
-				$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='tabela' AND type='estrutura' AND node_id='$austNode'");
+				$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='table' AND type='structure' AND node_id='$austNode'");
 				$this->assertArrayHasKey('0', $conf );
 				$this->assertEquals('testunit', $conf[0]['value'], 'Did not save table properties. #3.4' );
 				$this->assertEquals($austNode, $conf[0]['node_id'], 'Did not save austNode.' );

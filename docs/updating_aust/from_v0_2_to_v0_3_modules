@@ -40,6 +40,15 @@ query for all image and files tables related to a FlexField structure.
 
 	ALTER TABLE some_structure_images CHANGE categoria_id node_id int;
 
+Update some data:
+
+	UPDATE flex_fields_config SET type='structure' WHERE type='estrutura'
+	UPDATE flex_fields_config SET type='field' WHERE type='campo'
+	UPDATE flex_fields_config SET property='table' WHERE property='tabela'
+	UPDATE flex_fields_config SET property='approval' WHERE property='aprovacao'
+	UPDATE flex_fields_config SET property='pre_password' WHERE property='pre_senha'
+	UPDATE flex_fields_config SET property='description' WHERE property='descricao'
+
 
 Then, delete 'cadastros_conf' table:
 

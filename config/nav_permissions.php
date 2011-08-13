@@ -41,7 +41,7 @@ $configPermissoes = array(
 class NAVIGATION_PERMISSIONS_CONFIGURATIONS {
     
     static $navigation = array(
-        'categorias' =>
+        'taxonomy' =>
             array('new' =>
                 array(
                     'Webmaster', 'Administrador'

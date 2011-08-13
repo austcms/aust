@@ -163,7 +163,7 @@ class TextualApiTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals('New Service Offers Music in Quantity, Not by Song', $return[0]['title']);
 		$this->assertEquals('Articles', $return[0]['node']);
 		$this->assertEquals('textual', $return[0]['node_type']);
-		$this->assertEquals('estrutura', $return[0]['node_class']);
+		$this->assertEquals('structure', $return[0]['node_class']);
 	}
 	
 	// returns JSON

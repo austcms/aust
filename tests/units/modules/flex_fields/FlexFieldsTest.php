@@ -83,7 +83,7 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 			"INSERT INTO flex_fields_config
 				(type,property,value,node_id)
 				VALUES
-				('estrutura','tabela','table_for_unittests', '7777')
+				('structure','table','table_for_unittests', '7777')
 			"
 		);
 		
@@ -91,7 +91,7 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 			"INSERT INTO flex_fields_config
 				(type,property,value,node_id)
 				VALUES
-				('estrutura','table_images','table_for_unittests_images', '7777')
+				('structure','table_images','table_for_unittests_images', '7777')
 			"
 		);
 
@@ -99,7 +99,7 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 			"INSERT INTO flex_fields_config
 				(type,property,value,node_id)
 				VALUES
-				('estrutura','table_files','table_for_unittests_files', '7777')
+				('structure','table_files','table_for_unittests_files', '7777')
 			"
 		);
 		$this->obj->connection->exec(
@@ -320,7 +320,7 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 		    $sql = "INSERT INTO flex_fields_config
 		                 (type,key,value,node_id)
 		             VALUES
-		                 ('estrutura','tabela','tabela_1','777')
+		                 ('structure','table','tabela_1','777')
 		             ";
 		    $this->obj->connection->exec($sql);
 	

@@ -138,7 +138,7 @@
     /*
      * RESUMO
      */
-    if( $module->getStructureConfig('resumo') ){
+    if( $module->getStructureConfig('summary') ){
     ?>
     <tr>
         <td valign="top"><label>Resumo:</label></td>
@@ -187,7 +187,7 @@
     /*
      * DESCRIÇÃO
      */
- 	if( $module->getStructureConfig('descricao') ){
+ 	if( $module->getStructureConfig('description') ){
         ?>
         <tr>
             <td valign="top"><label>Descrição da galeria: </label>

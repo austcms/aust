@@ -33,13 +33,9 @@ $modInfo = array(
      */
     'className' => 'FlexFields',
     /**
-     * 'descricao': Descrição que facilita compreender a função do módulo
+     * 'description'
      */
     'description' => 'Campos flexíveis.',
-    /**
-     * 'estrutura': Se pode ser instalada como estrutura (Textos podem)
-     */
-    'estrutura' => true,
     /**
      * 'structure_only': É uma estrutura somente, sem categorias? (cadastros,
      * por exemplo)
@@ -260,17 +256,6 @@ $modInfo = array(
 				'help' => 'Campo aceita R$. Vazio é nenhum valor.',
 		    ),
     ),
-    /**
-     * RESPONSER
-     *
-     * A seguir, as configurações do módulo para que este possa apresentar um
-     * resumo a qualquer requisitante (chamado responser).
-     */
-    'arquitetura' => array(
-        'table' => 'flex_fields_config',
-        'foreignKey' => 'categoria',
-    ),
-
 
     /**
      * '': 

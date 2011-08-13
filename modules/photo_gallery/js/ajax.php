@@ -96,7 +96,7 @@ elseif($_POST['action'] == 'LeCampos'){
      * Lê os campos da tabela e depois mostra um html <select> para o usuário
      * escolher o relacionamento de tabelas
      */
-    $query = Connection::getInstance()->listaCampos($_POST['tabela']);
+    $query = Connection::getInstance()->listaCampos($_POST['table']);
     foreach ( $query as $chave=>$value ){
         echo '<option value="'.$value['campo'].'">'.$value['campo'].'</option>';
     }

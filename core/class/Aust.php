@@ -17,15 +17,15 @@ class Aust {
 	/**
 	 * In the taxonomy table, the type value that represents sites is...
 	 */
-	static $austSiteType = 'categoria-chefe';
+	static $austSiteType = 'site';
 	/**
 	 * In the taxonomy table, the type value that represents structures is...
 	 */
-	static $austStructureType = 'estrutura';
+	static $austStructureType = 'structure';
 	/**
 	 * In the taxonomy table, the type value that represents a category is...
 	 */
-	static $austCategoryType = 'categoria';
+	static $austCategoryType = 'category';
 
     protected $AustCategorias = Array();
     public $connection;
@@ -89,7 +89,7 @@ class Aust {
         $module = $params['module'];
         $author = $params['author'];
 
-		$query = Connection::getInstance()->query("SELECT * FROM ".Aust::$austTable." WHERE id='$siteId' AND class='categoria-chefe'");
+		$query = Connection::getInstance()->query("SELECT * FROM ".Aust::$austTable." WHERE id='$siteId' AND class='site'");
 		if( empty($query) )
 			return false;
 		
@@ -108,7 +108,7 @@ class Aust {
 	            )
 				VALUES
 	            (
-		            '$name','$siteId','estrutura','$module',$public,'$author',
+		            '$name','$siteId', '".Aust::$austStructureType."','$module',$public,'$author',
 		            '$name_encoded',
 					'$siteId', '$siteName', '$siteNameEncoded'
 	            )
@@ -135,7 +135,7 @@ class Aust {
 					taxonomy
 						(name, description, class, father_id)
 					VALUES
-						('$name', '$description', 'categoria-chefe', '0')";
+						('$name', '$description', 'site', '0')";
 		return Connection::getInstance()->exec($sql);
 	}
 	
@@ -286,7 +286,7 @@ class Aust {
                 FROM
                     taxonomy
                 WHERE
-                    class='categoria-chefe'
+                    class='site'
                 ";
         $query = Connection::getInstance()->query($sql);
         $t = count($query);
@@ -312,7 +312,7 @@ class Aust {
                 FROM
                     taxonomy
                 WHERE
-                    class='categoria-chefe'
+                    class='site'
                 ";
         $query = Connection::getInstance()->query($sql);
 		if( count($query) > 0 )
@@ -426,7 +426,7 @@ class Aust {
 				FROM taxonomy
 				WHERE
 					lower(name) LIKE '$string' AND
-					class = 'estrutura'
+					class = '".Aust::$austStructureType."'
 				";
 		$query = Connection::getInstance()->query($sql);
 		if( empty($query) )
@@ -599,7 +599,7 @@ class Aust {
                     ".self::$austTable." AS lp
                 WHERE
                     lp.father_id = '".$id."' AND
-                    lp.class = 'estrutura'
+                    lp.class = '".Aust::$austStructureType."'
                 ORDER BY
                     lp.type DESC,
                     lp.name ASC

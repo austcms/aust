@@ -6,9 +6,9 @@ class Migration_20110205051700_InsertVisitants extends Migrations
 		$sql = "SELECT node_id, value, id
 				FROM flex_fields_config
 				WHERE 
-					type='estrutura' AND
+					type='structure' AND
 					(
-						property='tabela'
+						property='table'
 					)
 				";
 
@@ -32,9 +32,9 @@ class Migration_20110205051700_InsertVisitants extends Migrations
 		$sql = "SELECT node_id, value, id
 				FROM flex_fields_config
 				WHERE 
-					type='estrutura' AND
+					type='structure' AND
 					(
-						property='tabela'
+						property='table'
 					)
 				";
 		

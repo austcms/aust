@@ -21,7 +21,7 @@ $(document).ready(function(){
 		$('#notice, #failure').animate({
 				opacity: 0.4
 			}, 1000, 'linear');
-	}, 5000);
+	}, 3000);
 	
 	// tooltip design
 	$("a.tooltip-trigger").css({'opacity': 0.5})
@@ -155,9 +155,6 @@ $(document).ready(function(){
 /*
  * MÓDULOS
  */
-//var privilegio_escolhido = false;
-
-
 /*
  * Lightbox para criação de categorias
  */
@@ -167,8 +164,6 @@ function newCategory(lbId){
     var urlAN = $.getURLParam('aust_node');
     var catName = $('#'+lbId+' input[name=lb[frmnode_id]]').val();
     var categoryInput = $('#'+lbId+' input[name=category_input]').val();
-
-    //updateCategorySelect('frmcategoria', givenAN, '');
 
     if( catName == '' ){
         alert('Você não especificou o título da categoria a ser criada.');

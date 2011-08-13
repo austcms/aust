@@ -33,13 +33,13 @@ $modInfo = array(
      */
     'className' => 'Orders',
     /**
-     * 'descricao': Descrição que facilita compreender a função do módulo
+     * 'description'
      */
     'description' => 'Módulo gerenciador de pedidos e transações.',
     /**
-     * 'estrutura': Se pode ser instalada como estrutura (Textos podem)
+     * 'structure': Se pode ser instalada como estrutura (Textos podem)
      */
-    'estrutura' => true,
+    'structure' => true,
     /**
      * 'structure_only': É uma estrutura somente, sem categorias? (cadastros,
      * por exemplo)
@@ -78,7 +78,7 @@ $modInfo = array(
         /*
          * Resumo
          */
-        'resumo' => array(
+        'summary' => array(
             "value" => "",
             "label" => "Tem resumo?",
             "inputType" => "checkbox",

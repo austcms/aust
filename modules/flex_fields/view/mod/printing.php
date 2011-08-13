@@ -51,7 +51,7 @@ if( !empty($_GET["w"]) ){
      * Campos
      */
     //pr($infoCadastro);
-    $tabelaCadastro = $infoCadastro["estrutura"]['tabela']["valor"];
+    $tabelaCadastro = $infoCadastro["structure"]['table']["valor"];
 
     /*
      *

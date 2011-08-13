@@ -1,25 +1,5 @@
 <?php
 /**
-* Mostrar estrutura do site
-*
-* @param String ID
-* @return String
-*/
-function ShowStructure($table){
-    $sql = "
-            SELECT
-                id, titulo, father_id, classe
-            FROM
-                $table
-            WHERE
-                classe='estrutura';
-    ";
-    $mysql = mysql_query($sql);
-
-}
-
-
-/**
 * Construir Multiple-Level Optgroup
 *
 * @param String ID

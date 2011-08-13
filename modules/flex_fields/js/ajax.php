@@ -98,7 +98,7 @@ elseif($_POST['action'] == 'LeCampos'){
      * Lê os campos da tabela e depois mostra um html <select> para o usuário
      * escolher o relacionamento de tabelas
      */
-    $query = Connection::getInstance()->query('DESCRIBE '.$_POST['tabela']);
+    $query = Connection::getInstance()->query('DESCRIBE '.$_POST['table']);
     foreach ( $query as $chave=>$value ){
         echo '<option value="'.$value['Field'].'">'.$value['Field'].'</option>';
     }
@@ -147,7 +147,7 @@ elseif($_POST['action'] == 'search'){
 
     include($module->getIncludeFolder().'/view/mod/listing_table.php');
 
-    //$query = Connection::getInstance()->query('DESCRIBE '.$_POST['tabela']);
+    //$query = Connection::getInstance()->query('DESCRIBE '.$_POST['table']);
     //foreach ( $query as $chave=>$value ){
         //echo '<option value="'.$value['Field'].'">'.$value['Field'].'</option>';
     //}

@@ -535,7 +535,7 @@ if(!empty($_GET['function'])){
                 Insira um novo título divisor no formulário de cadastro.
             </p>
             <form method="post" action="<?php echo Config::getInstance()->self;?>" class="simples pequeno">
-                <input type="hidden" name="tabela" value="<?php echo $tabela_da_estrutura?>" />
+                <input type="hidden" name="table" value="<?php echo $tabela_da_estrutura?>" />
 
                 <?php
                 /*
@@ -670,7 +670,7 @@ if(!empty($_GET['function'])){
 
             ?>
             <form method="post" action="<?php echo Config::getInstance()->self;?>" class="simples pequeno">
-                <input type="hidden" name="tabela" value="<?php echo $tabela_da_estrutura ?>" />
+                <input type="hidden" name="table" value="<?php echo $tabela_da_estrutura ?>" />
                 Campo de email? <input type="text" name="email" value="<?php echo $dados ?>" />
                 <br />
                 <input type="submit" name="filtro_especial_campo_email" value="Salvar" />

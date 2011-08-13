@@ -74,7 +74,7 @@ include(CORE_CONFIG_DIR."core.php");
     $filtroEspecial = Connection::getInstance()->query($sql);
 	
 	$module->configurations();
-	$tabela = $module->configurations['estrutura']['tabela']['valor'];
+	$tabela = $module->configurations['structure']['table']['valor'];
 	
     if( !empty($filtroEspecial[0]) )
         $filtroEspecial = $filtroEspecial[0]["valor"];

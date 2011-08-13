@@ -206,9 +206,9 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
      * DESCRICAO
      */
     $showDescricao = false; // por padrão, não mostra
-    if( !empty($moduloConfig["descricao"]) ){
-        if( !empty($moduloConfig["descricao"]["valor"])
-			&& $moduloConfig["descricao"]["valor"] == "1" )
+    if( !empty($moduloConfig["description"]) ){
+        if( !empty($moduloConfig["description"]["valor"])
+			&& $moduloConfig["description"]["valor"] == "1" )
             $showDescricao = true;
     }
     if( $showDescricao ){

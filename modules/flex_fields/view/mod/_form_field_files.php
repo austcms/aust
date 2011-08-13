@@ -4,7 +4,7 @@
 $fieldName = $value['nomeFisico'];
 
 // nome do input
-$inputName = "data[".$infoCadastro["estrutura"]["tabela"]["value"]."][".$fieldName."]";
+$inputName = "data[".$infoCadastro["structure"]["table"]["value"]."][".$fieldName."]";
 ?>
 <div class="input">
     <label for="input-<?php echo $fieldName ?>"><?php echo $value['label'] ?></label>

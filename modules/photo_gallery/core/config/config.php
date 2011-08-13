@@ -19,7 +19,7 @@ $modInfo = array(
      */
     'className' => 'PhotoGallery',
     /**
-     * 'descricao': Descrição que facilita compreender a função do módulo
+     * 'description'
      */
     'description' => 'Crie listas de galerias de fotos',
 
@@ -58,7 +58,7 @@ $modInfo = array(
 	    /*
 	     * Resumo
 	     */
-	    'resumo' => array(
+	    'summary' => array(
 	        "value" => "",
 	        "label" => "Tem resumo?",
 	        "inputType" => "checkbox",
@@ -74,7 +74,7 @@ $modInfo = array(
 	    /*
 	     * Descrição
 	     */
-	    'descricao' => array(
+	    'description' => array(
 	        "value" => "",
 	        "label" => "Tem descrição?",
 	        "inputType" => "checkbox",

@@ -152,8 +152,8 @@
      * RESUMO
      */
     $showResumo = false;
-    if( !empty($moduloConfig["resumo"]) ){
-        if( $moduloConfig["resumo"]["valor"] == "1" )
+    if( !empty($moduloConfig["summary"]) ){
+        if( $moduloConfig["summary"]["valor"] == "1" )
             $showResumo = true;
     }
     if( $showResumo ){
@@ -161,7 +161,7 @@
     <tr>
         <td valign="top"><label>Resumo:</label></td>
         <td>
-            <INPUT TYPE='text' NAME='frmresumo' class='text' value='<?php if( !empty($dados['resumo']) ) echo $dados['resumo'];?>' />
+            <INPUT TYPE='text' NAME='frmresumo' class='text' value='<?php if( !empty($dados['summary']) ) echo $dados['summary'];?>' />
             <p class="explanation">
 
             </p>
@@ -211,8 +211,8 @@
      * Texto
      */
     $showTexto = false; // por padrão, não mostra
-    if( !empty($moduloConfig["descricao"]) ){
-        if( $moduloConfig["descricao"]["valor"] == "1" )
+    if( !empty($moduloConfig["description"]) ){
+        if( $moduloConfig["description"]["valor"] == "1" )
             $showTexto = true;
     }
     if( $showTexto ){

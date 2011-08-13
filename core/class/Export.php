@@ -231,7 +231,7 @@ class Export
 				categorias
 			WHERE
 				nome LIKE '".$siteData['nome']."' AND
-				classe='categoria-chefe'
+				classe='site'
 			LIMIT
 				1
 			";
@@ -291,11 +291,11 @@ class Export
 			   "SELECT
 					id
 				FROM
-					categorias
+					taxonomy
 				WHERE
-					nome LIKE '".$st['nome']."' AND
-					classe='estrutura' AND
-					tipo = '".$st['tipo']."'
+					name LIKE '".$st['nome']."' AND
+					class='structure' AND
+					type = '".$st['tipo']."'
 				LIMIT
 					1
 				";
@@ -311,7 +311,7 @@ class Export
 
 				$sql = 
 				   "INSERT INTO
-						categorias (".implode(",", $stFields).") 
+						taxonomy (".implode(",", $stFields).") 
 					VALUES
 						('".implode("','", $stData)."')
 					";

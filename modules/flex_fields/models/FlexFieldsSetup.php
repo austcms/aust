@@ -565,7 +565,7 @@ class FlexFieldsSetup extends ModsSetup {
 		             "flex_fields_config ".
 		             "(type,property,value,node_id,created_on,deactivated,disabled,public,restricted,approved) ".
 		             "VALUES ".
-		             "('estrutura','table_images','".$this->imagesTableName."',".$this->austNode.", '".date('Y-m-d H:i:s')."',0,0,1,0,1)";
+		             "('structure','table_images','".$this->imagesTableName."',".$this->austNode.", '".date('Y-m-d H:i:s')."',0,0,1,0,1)";
 				return $sql;
 			}
 			/*
@@ -677,7 +677,7 @@ class FlexFieldsSetup extends ModsSetup {
                  "flex_fields_config ".
                  "(type,property,value,node_id,created_on,deactivated,disabled,public,restricted,approved) ".
                  "VALUES ".
-                 "('estrutura','table_files','".$this->filesTableName."',".$this->austNode.", '".date('Y-m-d H:i:s')."',0,0,1,0,1)";
+                 "('structure','table_files','".$this->filesTableName."',".$this->austNode.", '".date('Y-m-d H:i:s')."',0,0,1,0,1)";
 			return $sql;
 		}
 		/*
@@ -940,44 +940,44 @@ class FlexFieldsSetup extends ModsSetup {
 		foreach( $params as $key=>$value ){
 			
 			if( $key == 'approval' ){
-				Connection::getInstance()->exec("DELETE FROM flex_fields_config WHERE type='config' AND property='aprovacao' AND node_id='$austNode'");
+				Connection::getInstance()->exec("DELETE FROM flex_fields_config WHERE type='config' AND property='approval' AND node_id='$austNode'");
                 $sql =
 	                "INSERT INTO
 	                    flex_fields_config
 	                    (type,property,value,name,specie,node_id,created_on,admin_id,deactivated,disabled,public,restricted,approved)
 	                VALUES
-	                    ('config','aprovacao','".$value."','Aprovação','bool',".$austNode.", '".date('Y-m-d H:i:s')."', '".$this->user."',0,0,1,0,1)
+	                    ('config','approval','".$value."','Aprovação','bool',".$austNode.", '".date('Y-m-d H:i:s')."', '".$this->user."',0,0,1,0,1)
 	                ";
                 Connection::getInstance()->exec($sql);
 
 			} else if( $key == 'pre_password' ){
-				Connection::getInstance()->exec("DELETE FROM flex_fields_config WHERE type='config' AND property='pre_senha' AND node_id='$austNode'");
+				Connection::getInstance()->exec("DELETE FROM flex_fields_config WHERE type='config' AND property='pre_password' AND node_id='$austNode'");
                 $sql =
 	                "INSERT INTO
 	                    flex_fields_config
 	                    (type,property,value,name,specie,node_id,created_on,admin_id,deactivated,disabled,public,restricted,approved)
 	                VALUES
-	                    ('config','pre_senha','".$value."','Pré-Senha','string',".$austNode.", '".date('Y-m-d H:i:s')."', '".$this->user."',0,0,1,0,1)
+	                    ('config','pre_password','".$value."','Pré-Senha','string',".$austNode.", '".date('Y-m-d H:i:s')."', '".$this->user."',0,0,1,0,1)
 	                ";
                 Connection::getInstance()->exec($sql);
 			} else if( $key == 'description' ){
-				Connection::getInstance()->exec("DELETE FROM flex_fields_config WHERE type='config' AND property='descricao' AND node_id='$austNode'");
+				Connection::getInstance()->exec("DELETE FROM flex_fields_config WHERE type='config' AND property='description' AND node_id='$austNode'");
                 $sql =
 	                "INSERT INTO
 	                    flex_fields_config
 	                    (type,property,value,name,specie,node_id,created_on,admin_id,deactivated,disabled,public,restricted,approved)
 	                VALUES
-	                    ('config','descricao','".$value."','Descrição','blob',".$austNode.", '".date('Y-m-d H:i:s')."', '".$this->user."',0,0,1,0,1)
+	                    ('config','description','".$value."','Descrição','blob',".$austNode.", '".date('Y-m-d H:i:s')."', '".$this->user."',0,0,1,0,1)
 	                ";
                 Connection::getInstance()->exec($sql);
 			} else if( $key == 'table' ){
-				Connection::getInstance()->exec("DELETE FROM flex_fields_config WHERE type='estrutura' AND property='tabela' AND node_id='$austNode'");
+				Connection::getInstance()->exec("DELETE FROM flex_fields_config WHERE type='structure' AND property='table' AND node_id='$austNode'");
                 $sql =
 	                "INSERT INTO
 	                    flex_fields_config
 	                    (type,property,value,name,specie,node_id,created_on,admin_id,deactivated,disabled,public,restricted,approved)
 	                VALUES
-	                    ('estrutura','tabela','".$value."','Tabela Principal','blob',".$austNode.", '".date('Y-m-d H:i:s')."', '".$this->user."',0,0,1,0,1)
+	                    ('structure','table','".$value."','Tabela Principal','blob',".$austNode.", '".date('Y-m-d H:i:s')."', '".$this->user."',0,0,1,0,1)
 	                ";
                 Connection::getInstance()->exec($sql);
 			}

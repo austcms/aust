@@ -24,7 +24,7 @@ class AustTest extends PHPUnit_Framework_TestCase
 	}
 
 	function testCreateStructure(){
-		$this->obj->connection->query("INSERT INTO taxonomy (name,father_id,class) VALUES ('My Site','0','categoria-chefe')");
+		$this->obj->connection->query("INSERT INTO taxonomy (name,father_id,class) VALUES ('My Site','0','site')");
 		$siteId = $this->obj->connection->lastInsertId();
 		
 		$params = array(
@@ -57,7 +57,7 @@ class AustTest extends PHPUnit_Framework_TestCase
 
 	function testHasSite(){
         $this->assertFalse($this->obj->anySiteExists() );
-		$this->obj->connection->query("INSERT INTO taxonomy (name,father_id,class) VALUES ('TestFather777','0','categoria-chefe')");
+		$this->obj->connection->query("INSERT INTO taxonomy (name,father_id,class) VALUES ('TestFather777','0','site')");
         $this->assertTrue($this->obj->anySiteExists() );
 	}
 
@@ -67,11 +67,11 @@ class AustTest extends PHPUnit_Framework_TestCase
 	}
 	
 	function testAnyStructureExists(){
-		$this->obj->connection->query("INSERT INTO taxonomy (name,father_id,class) VALUES ('A site','0','categoria-chefe')");
+		$this->obj->connection->exec("INSERT INTO taxonomy (name,father_id,class) VALUES ('A site','0','site')");
+		$siteId = $this->obj->connection->lastInsertId();
         $this->assertFalse($this->obj->anyStructureExists());
 
-		$siteId = $this->obj->connection->lastInsertId();
-		$this->obj->connection->query("INSERT INTO taxonomy (name,father_id,class) VALUES ('A structure', '".$siteId."', 'estrutura')");
+		$this->obj->connection->exec("INSERT INTO taxonomy (name,father_id,class) VALUES ('A structure', '".$siteId."', 'structure')");
         $this->assertTrue($this->obj->anyStructureExists());
 
 		
@@ -79,7 +79,7 @@ class AustTest extends PHPUnit_Framework_TestCase
 	
 	function testGetStructure(){
 		Fixture::getInstance()->create();
-		$query = Connection::getInstance()->query("SELECT id FROM taxonomy WHERE type='textual' AND class='estrutura' LIMIT 1");
+		$query = Connection::getInstance()->query("SELECT id FROM taxonomy WHERE type='textual' AND class='structure' LIMIT 1");
 		$structureId = $query[0]["id"];
 		
 		$structure = $this->obj->getStructureById($structureId);
@@ -95,10 +95,10 @@ class AustTest extends PHPUnit_Framework_TestCase
 
     function testGetStructureByCategoryId(){
 
-		$this->obj->connection->exec("INSERT INTO taxonomy (name,class) VALUES ('My site','categoria-chefe')");
+		$this->obj->connection->exec("INSERT INTO taxonomy (name,class) VALUES ('My site','site')");
 		$siteLastInsert = $this->obj->connection->lastInsertId();
 
-		$sql = "INSERT INTO taxonomy (name, type, class, site_id, site_name, site_name_encoded) VALUES ('First node', 'textual', 'estrutura', '".$siteLastInsert."', 'My site', 'my_site')";
+		$sql = "INSERT INTO taxonomy (name, type, class, site_id, site_name, site_name_encoded) VALUES ('First node', 'textual', 'structure', '".$siteLastInsert."', 'My site', 'my_site')";
 		$this->obj->connection->exec($sql);
 		$structurelastInsert = $this->obj->connection->lastInsertId();
 
@@ -140,13 +140,13 @@ class AustTest extends PHPUnit_Framework_TestCase
 		$this->obj->connection->query("DELETE FROM taxonomy WHERE name='Test777'");
 		$this->obj->connection->query("DELETE FROM taxonomy WHERE name='TestFather777'");
 
-		$this->obj->connection->query("INSERT INTO taxonomy (name,father_id,class) VALUES ('TestFather777','0','categoria-chefe')");
+		$this->obj->connection->query("INSERT INTO taxonomy (name,father_id,class) VALUES ('TestFather777','0','site')");
 		$siteId = $this->obj->connection->lastInsertId();
 
-		$this->obj->connection->query("INSERT INTO taxonomy (name,father_id,class) VALUES ('Test777', '".$siteId."', 'estrutura')");
+		$this->obj->connection->query("INSERT INTO taxonomy (name,father_id,class) VALUES ('Test777', '".$siteId."', 'structure')");
 		$stId = $this->obj->connection->lastInsertId();
 
-		$this->obj->connection->query("INSERT INTO taxonomy (name,father_id,class) VALUES ('Test777Hidden', '".$siteId."', 'estrutura')");
+		$this->obj->connection->query("INSERT INTO taxonomy (name,father_id,class) VALUES ('Test777Hidden', '".$siteId."', 'structure')");
 		$hiddenStId = $this->obj->connection->lastInsertId();
 
 		$this->obj->connection->query(
@@ -184,7 +184,7 @@ class AustTest extends PHPUnit_Framework_TestCase
 
 		$this->assertFalse($this->obj->getSiteByCategoryId(''));
 		
-		$this->obj->connection->query("INSERT INTO taxonomy (name,class) VALUES ('My site','categoria-chefe')");
+		$this->obj->connection->query("INSERT INTO taxonomy (name,class) VALUES ('My site','site')");
 		$siteLastInsert = $this->obj->connection->lastInsertId();
 
 		$result = $this->obj->getSiteByCategoryId($siteLastInsert);
@@ -213,10 +213,10 @@ class AustTest extends PHPUnit_Framework_TestCase
 
 	function testCreateNewCategoryWithItsStructureHavingItsSitesData(){
 
-		$this->obj->connection->exec("INSERT INTO taxonomy (name,class) VALUES ('My site','categoria-chefe')");
+		$this->obj->connection->exec("INSERT INTO taxonomy (name,class) VALUES ('My site','site')");
 		$siteLastInsert = $this->obj->connection->lastInsertId();
 
-		$this->obj->connection->exec("INSERT INTO taxonomy (name, type, class, father_id, site_id, site_name, site_name_encoded) VALUES ('TestFather777', 'textual', 'estrutura', '".$siteLastInsert."', '".$siteLastInsert."', 'My site', 'my_site')");
+		$this->obj->connection->exec("INSERT INTO taxonomy (name, type, class, father_id, site_id, site_name, site_name_encoded) VALUES ('TestFather777', 'textual', 'structure', '".$siteLastInsert."', '".$siteLastInsert."', 'My site', 'my_site')");
 		$lastInsert = $this->obj->connection->lastInsertId();
 		
 	    $params = array(
@@ -235,7 +235,7 @@ class AustTest extends PHPUnit_Framework_TestCase
 		$this->assertInternalType('int', $result);
 		$this->assertArrayHasKey('name', $saved);
 		$this->assertEquals('Test777', $saved['name']);
-		$this->assertEquals('categoria', $saved['class']);
+		$this->assertEquals('category', $saved['class']);
 		$this->assertEquals('textual', $saved['type']);
 		$empty = empty($saved['description']);
 		$this->assertFalse( $empty );
@@ -251,7 +251,7 @@ class AustTest extends PHPUnit_Framework_TestCase
 	}
 	
 	function testGetStructureIdByName(){
-		$this->obj->connection->query("INSERT INTO taxonomy (name,class) VALUES ('TestFather777','categoria-chefe')");
+		$this->obj->connection->query("INSERT INTO taxonomy (name,class) VALUES ('TestFather777','site')");
 		$lastInsert = $this->obj->connection->lastInsertId();
 		
 	    $params = array(

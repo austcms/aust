@@ -50,7 +50,7 @@ class ExportTest extends PHPUnit_Framework_TestCase
 	}
 
 	function populate(){
-		Aust::getInstance()->connection->exec("INSERT INTO categorias (nome,classe,father_id) VALUES ('TestePai777','categoria-chefe','0')");
+		Aust::getInstance()->connection->exec("INSERT INTO categorias (nome,classe,father_id) VALUES ('TestePai777','site','0')");
 		$lastInsert = Aust::getInstance()->connection->lastInsertId();
 		$this->lastSite = $lastInsert;
 		
@@ -58,7 +58,7 @@ class ExportTest extends PHPUnit_Framework_TestCase
 	        'father' => $lastInsert,
 	        'name' => 'Teste777Conteudo',
 	        'description' => 'Teste777',
-	        'class' => 'estrutura',
+	        'class' => 'structure',
 	        'type' => 'conteudo',
 	        'author' => '1',
 	    );
@@ -68,7 +68,7 @@ class ExportTest extends PHPUnit_Framework_TestCase
 		$params = array(
             'name' => 'Teste777Cadastro',
             'father' => $lastInsert,
-            'class' => 'estrutura',
+            'class' => 'structure',
             'type' => 'cadastro',
             'author' => 1,
 			'fields' => array(
@@ -150,7 +150,7 @@ class ExportTest extends PHPUnit_Framework_TestCase
 				
 				if( in_array($structure['nome'], array('Teste777Cadastro') ) ){
 				
-					if( $structure['classe'] != 'estrutura' )
+					if( $structure['classe'] != 'structure' )
 						$this->fail('not a structure');
 					else
 						$hasCadastro = true;
@@ -238,7 +238,7 @@ class ExportTest extends PHPUnit_Framework_TestCase
 		// CONTEUDO
 			$conf = $this->obj->connection->query("SELECT * FROM taxonomy WHERE nome='Teste777Conteudo'");
 			$this->assertEquals($siteId, $conf[0]['father_id'], 'Did not save the conteudo.' );
-			$this->assertEquals('estrutura', $conf[0]['classe'], 'Did not save the conteudo.' );
+			$this->assertEquals('structure', $conf[0]['classe'], 'Did not save the conteudo.' );
 			$conteudoId = $conf[0]['id'];
 		
 			// CONTEUDO MODCONFIG
@@ -248,7 +248,7 @@ class ExportTest extends PHPUnit_Framework_TestCase
 		// CADASTRO
 			$conf = $this->obj->connection->query("SELECT * FROM taxonomy WHERE nome='Teste777Cadastro'");
 			$this->assertEquals($siteId, $conf[0]['father_id'], 'Did not save the cadastro.' );
-			$this->assertEquals('estrutura', $conf[0]['classe'], 'Did not save the cadastro.' );
+			$this->assertEquals('structure', $conf[0]['classe'], 'Did not save the cadastro.' );
 			
 			// criou tabelas tb?
 			$this->assertTrue( $this->obj->connection->hasTable('teste777cadastro'), 'Não criou tabelas do cadastro.' );
@@ -256,7 +256,7 @@ class ExportTest extends PHPUnit_Framework_TestCase
 			$stId = $conf[0]['id'];
 		
 		$conf = $this->Cadastro->pegaInformacoesCadastro($stId);
-		$this->assertEquals('teste777cadastro', $conf['estrutura']['tabela']['valor'], 'Did not save the cadastro\' conf.' );
+		$this->assertEquals('teste777cadastro', $conf['structure']['table']['valor'], 'Did not save the cadastro\' conf.' );
 		$this->assertEquals('campo_1777', $conf['campo']['campo_1777']['chave'], 'Did not save the cadastro\' field.' );
 		$this->assertEquals('campo_2777', $conf['campo']['campo_2777']['chave'], 'Did not save the cadastro\' field.' );
 		$this->assertEquals('campo_3777', $conf['campo']['campo_3777']['chave'], 'Did not save the cadastro\' field.' );
@@ -280,7 +280,7 @@ class ExportTest extends PHPUnit_Framework_TestCase
 		$this->obj->importSite(reset(json_decode($json, true)));
 		$this->obj->importSite(reset(json_decode($json, true)));
 
-		$conf = $this->obj->connection->query("SELECT * FROM taxonomy WHERE classe='estrutura'");
+		$conf = $this->obj->connection->query("SELECT * FROM taxonomy WHERE classe='structure'");
 		
 		$existentSt = array();
 		foreach( $conf as $value ){

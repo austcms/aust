@@ -7,7 +7,7 @@
 
 // configuração: ajusta variáveis
 $tabela = $module->LeTabelaDeDados($_GET['aust_node']);
-$precisa_aprovacao = $module->pegaConfig(Array('estrutura'=>$_GET['aust_node'], 'chave'=>'aprovacao'));
+$precisa_approval = $module->pegaConfig(Array('structure'=>$_GET['aust_node'], 'chave'=>'approval'));
 ?>
 
 <h2><?php echo Aust::getInstance()->getStructureNameById($_GET['aust_node']);?></h2>
@@ -121,7 +121,7 @@ if( $fieldsCount > 0 ){
             /*
              * Se este cadastro precisa de aprovação, mostra botão para aprovar usuário
              */
-            if($precisa_aprovacao['value'] == '1'){ ?>
+            if($precisa_approval['value'] == '1'){ ?>
                 <input type="submit" class="js_confirm" name="aprovar" value="Aprovar" />
                 <?php
             }

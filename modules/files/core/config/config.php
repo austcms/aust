@@ -14,7 +14,7 @@ $modInfo = array(
      */
     'className' => 'Files',
     /**
-     * 'descricao': Descrição que facilita compreender a função do módulo
+     * 'description'
      */
     'description' => 'Responsável pelo upload e gerenciamento de arquivos.',
 
@@ -62,7 +62,7 @@ $modInfo = array(
 		/*
 		 * Resumo
 		 */
-		'descricao' => array(
+		'description' => array(
 		    "value" => "",
 		    "label" => "Tem descrição?",
 		    "inputType" => "checkbox",

@@ -78,7 +78,7 @@ class FlexFields extends Module {
 		$austNode = $params['austNode'];
 		$field = $params['field'];
 		
-		$tableFiles = (empty($params['tableFiles'])) ? $this->configurations['estrutura']['table_files']['value'] : $params["tableFiles"];
+		$tableFiles = (empty($params['tableFiles'])) ? $this->configurations['structure']['table_files']['value'] : $params["tableFiles"];
 
 		$sql = "SELECT
 					*
@@ -116,7 +116,7 @@ class FlexFields extends Module {
 		$austNode = $params['austNode'];
 		$field = $params['field'];
 		
-		$tableImage = $this->configurations['estrutura']['table_images']['value'];
+		$tableImage = $this->configurations['structure']['table_images']['value'];
 		
 		$sql = "SELECT
 					*,
@@ -275,10 +275,10 @@ class FlexFields extends Module {
 			$files = $this->files;
 		}
 		
-		if( empty($this->configurations['estrutura']['table_files']['value']) )
+		if( empty($this->configurations['structure']['table_files']['value']) )
 			return false;
 		
-		$filesTable = $this->configurations['estrutura']['table_files']['value'];
+		$filesTable = $this->configurations['structure']['table_files']['value'];
 		foreach( $files as $table=>$filesField ){
 			
 			foreach( $filesField as $field=>$files ){
@@ -348,7 +348,7 @@ class FlexFields extends Module {
 	function deleteExtraFiles( $id, $files ){
 		
 		$this->configurations();
-		$filesTable = $this->configurations['estrutura']['table_files']['value'];
+		$filesTable = $this->configurations['structure']['table_files']['value'];
 		
 		if( empty($files) OR
 			!is_array($files) )
@@ -396,7 +396,7 @@ class FlexFields extends Module {
 			return false;
 		
 		$configurations = $this->configurations();
-		$filesTable = $configurations['estrutura']['table_files']['value'];
+		$filesTable = $configurations['structure']['table_files']['value'];
 		$sql = "SELECT
 					*
 				FROM
@@ -443,10 +443,10 @@ class FlexFields extends Module {
 			$images = $this->images;
 		}
 		
-		if( empty($this->configurations['estrutura']['table_images']['value']) )
+		if( empty($this->configurations['structure']['table_images']['value']) )
 			return false;
 		
-		$imageTable = $this->configurations['estrutura']['table_images']['value'];
+		$imageTable = $this->configurations['structure']['table_images']['value'];
 		foreach( $images as $table=>$imagesField ){
 			
 			foreach( $imagesField as $field=>$images ){
@@ -491,7 +491,7 @@ class FlexFields extends Module {
 							'".$finalName['new_filename']."',
 							'".$value['name']."', '".$value['type']."', '".$value['size']."', '".$imageHandler->getExtension($value['name'])."',
 							'$type',
-							'".$this->configurations['estrutura']['tabela']['value']."', '".$field."',
+							'".$this->configurations['structure']['table']['value']."', '".$field."',
 							'".$reference."',
 							'".$this->austNode."',
 							'".date("Y-m-d H:i:s")."', '".$userId."'
@@ -535,7 +535,7 @@ class FlexFields extends Module {
 		$string = addslashes($string);
 		
 		$this->configurations();
-		$imageTable = $this->configurations['estrutura']['table_images']['value'];
+		$imageTable = $this->configurations['structure']['table_images']['value'];
 		
 		$sql = "UPDATE $imageTable SET description='$string' WHERE id='$imageId'";
 		return Connection::getInstance()->exec($sql);
@@ -553,7 +553,7 @@ class FlexFields extends Module {
 		$string = addslashes($string);
 		
 		$this->configurations();
-		$imageTable = $this->configurations['estrutura']['table_images']['value'];
+		$imageTable = $this->configurations['structure']['table_images']['value'];
 		
 		$sql = "UPDATE $imageTable SET link='$string' WHERE id='$imageId'";
 		return Connection::getInstance()->exec($sql);
@@ -578,7 +578,7 @@ class FlexFields extends Module {
 		$references = $params['references'];
 		
 		$configurations = $this->configurations();
-		$imagesTable = $configurations['estrutura']['table_images']['value'];
+		$imagesTable = $configurations['structure']['table_images']['value'];
 		$sql = "SELECT
 					id, systempath
 				FROM
@@ -604,7 +604,7 @@ class FlexFields extends Module {
 			return false;
 		
 		$configurations = $this->configurations();
-		$imagesTable = $configurations['estrutura']['table_images']['value'];
+		$imagesTable = $configurations['structure']['table_images']['value'];
 		$sql = "SELECT
 					*
 				FROM
@@ -639,7 +639,7 @@ class FlexFields extends Module {
 	function deleteExtraImages( $id, $images ){
 		
 		$this->configurations();
-		$imageTable = $this->configurations['estrutura']['table_images']['value'];
+		$imageTable = $this->configurations['structure']['table_images']['value'];
 		
 		if( empty($images) OR
 			!is_array($images) )
@@ -854,7 +854,7 @@ class FlexFields extends Module {
      * tabela.
      *
      * @param array $params
-     *      'tabela': qual tabela deve ser analisada
+     *      'table': qual tabela deve ser analisada
      *      'by': indica qual o índice deve ser usado
      *          ex.: se 'Field', o índice de retorno é o nome do
      *          campo.
@@ -869,8 +869,8 @@ class FlexFields extends Module {
          *
          * Toma informações físicas sobre a tabela
          */
-        if ( !empty( $params["tabela"] ) )
-			$tabela = $params["tabela"];
+        if ( !empty( $params["table"] ) )
+			$tabela = $params["table"];
         else
 			$tabela = $this->getTable();
 
@@ -920,10 +920,10 @@ class FlexFields extends Module {
 	
 	function getTable(){
 		$this->configurations();
-		if( empty($this->configurations['estrutura']['tabela']['value']) )
+		if( empty($this->configurations['structure']['table']['value']) )
 			return false;
 		
-		$table = $this->configurations['estrutura']['tabela']['value'];
+		$table = $this->configurations['structure']['table']['value'];
 		return $table;
 	}
 	
@@ -932,7 +932,7 @@ class FlexFields extends Module {
 	
 	function imagesTable(){
 		$this->configurations();
-		$table = $this->configurations['estrutura']['table_images']['value'];
+		$table = $this->configurations['structure']['table_images']['value'];
 		return $table;
 	}
 	
@@ -1057,8 +1057,8 @@ class FlexFields extends Module {
                 if( !empty($dados['property']) )
                     $campos['chave'][] = $dados['property'];
 
-            } else if($dados['type'] == 'estrutura' AND $dados['property'] == 'tabela'){
-                $est['tabela'][] = $dados['value'];
+            } else if($dados['type'] == 'structure' AND $dados['property'] == 'table'){
+                $est['table'][] = $dados['value'];
                 $est['node'][] = $dados['node_id'];
             }
             $i++;
@@ -1194,7 +1194,7 @@ class FlexFields extends Module {
 			/* conditions */
             $conditions = "".
                     "FROM ".
-                        $est["tabela"][0]." AS ".$tP." ".
+                        $est["table"][0]." AS ".$tP." ".
 						implode(" ", $leftJoin)." ".
                     "WHERE ".
                         "1=1".$searchQuery.$where." ".
@@ -1222,7 +1222,7 @@ class FlexFields extends Module {
             $sql = "SELECT
                         id, ".implode(",", $campos["chave"])."
                     FROM
-                        ".$est["tabela"][0]."
+                        ".$est["table"][0]."
                     WHERE
                         id=".$w."
                     ";
@@ -1260,8 +1260,8 @@ class FlexFields extends Module {
                 WHERE
                     taxonomy.id=flex_fields_config.node_id AND
                     {$estrutura} AND
-                    flex_fields_config.tipo='estrutura' AND
-                    flex_fields_config.chave='tabela'
+                    flex_fields_config.tipo='structure' AND
+                    flex_fields_config.chave='table'
                 LIMIT 0,1";
                 //echo $sql;
                 
@@ -1287,13 +1287,13 @@ class FlexFields extends Module {
         $sql = "SELECT
                     id
                 FROM
-                    ".$param['tabela']."_arquivos
+                    ".$param['table']."_arquivos
                 LIMIT 0,1
                 ";
         $result = Connection::getInstance()->query($sql);
         if( count($result) == 0 ){
             $sql_arquivos =
-                            "CREATE TABLE ".$param['tabela']."_arquivos(
+                            "CREATE TABLE ".$param['table']."_arquivos(
                             id int auto_increment,
                             titulo varchar(120) {$charset},
                             descricao text {$charset},
@@ -1352,7 +1352,7 @@ class FlexFields extends Module {
 
     function PegaConfig($param){
         // ajusta variáveis
-        $estrutura = $param['estrutura'];
+        $estrutura = $param['structure'];
         $chave = $param['chave'];
         // se a categoria passada estiver em formato Integer
         if(is_int($estrutura) or $estrutura > 0){
@@ -1405,8 +1405,8 @@ class FlexFields extends Module {
                 WHERE
                     taxonomy.id=flex_fields_config.node_id AND
                 {$estrutura} AND
-                    flex_fields_config.type='estrutura' AND
-                    flex_fields_config.property='tabela'
+                    flex_fields_config.type='structure' AND
+                    flex_fields_config.property='table'
                 LIMIT 0,1";
         
 		$resultado = Connection::getInstance()->query($sql);

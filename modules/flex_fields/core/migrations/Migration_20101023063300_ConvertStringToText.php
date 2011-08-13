@@ -19,9 +19,9 @@ class Migration_20101023063300_ConvertStringToText extends Migrations
 			$sql = "SELECT value
 					FROM flex_fields_config
 					WHERE 
-						type='estrutura' AND
+						type='structure' AND
 						(
-							property='tabela'
+							property='table'
 						)
 					";
 			$query = Connection::getInstance()->query($sql);
@@ -48,7 +48,7 @@ class Migration_20101023063300_ConvertStringToText extends Migrations
 		$sql = "SELECT node_id, property, id
 				FROM flex_fields_config
 				WHERE 
-					type='campo' AND
+					type='field' AND
 					(
 						specie='text'
 					)
@@ -61,9 +61,9 @@ class Migration_20101023063300_ConvertStringToText extends Migrations
 			$sql = "SELECT value
 					FROM flex_fields_config
 					WHERE 
-						type='estrutura' AND
+						type='structure' AND
 						(
-							property='tabela'
+							property='table'
 						)
 					";
 			$tableName = reset( Connection::getInstance()->query($sql) );

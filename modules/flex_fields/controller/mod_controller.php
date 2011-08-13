@@ -79,7 +79,7 @@ class ModController extends ModActionController
          */
         $infoTabelaFisica = $this->module->getPhysicalFields(
             array(
-                "tabela" => $infoCadastro["estrutura"]["tabela"]["value"],
+                "table" => $infoCadastro["structure"]["table"]["value"],
                 "by" => "Field",
             )
         );
@@ -100,7 +100,7 @@ class ModController extends ModActionController
                 $sql = "SELECT
                             node_id, ".implode(",", array_keys($campos))."
                         FROM
-                            ".$infoCadastro["estrutura"]["tabela"]["value"]."
+                            ".$infoCadastro["structure"]["table"]["value"]."
                         WHERE
                             id=".$w."
                         ";
@@ -164,7 +164,7 @@ class ModController extends ModActionController
 				 * Campo Images
 				 */
 				if( $value['specie'] == 'images' ){
-	                $camposForm[ $value["property"] ]["tipo"]["tabelaReferencia"] = $infoCadastro['estrutura']["table_images"]['value'];
+	                $camposForm[ $value["property"] ]["tipo"]["tabelaReferencia"] = $infoCadastro['structure']["table_images"]['value'];
 				}
             }
 
@@ -178,7 +178,7 @@ class ModController extends ModActionController
          * Informações sobre o cadastro completo
          */
         $this->set('infoCadastro', $infoCadastro);
-        $this->set('formIntro', $infoCadastro["config"]["descricao"]["value"]);
+        $this->set('formIntro', $infoCadastro["config"]["description"]["value"]);
         /**
          * Lança as informações sobre campos para o view
          */
@@ -278,8 +278,8 @@ class ModController extends ModActionController
         /*
          * UPDATE?
          */
-        if( !empty($this->data[ $infoCadastro["estrutura"]["tabela"]["value"] ]["id"] ) ){
-            $w = $this->data[ $infoCadastro["estrutura"]["tabela"]["value"]] [ "id"];
+        if( !empty($this->data[ $infoCadastro["structure"]["table"]["value"] ]["id"] ) ){
+            $w = $this->data[ $infoCadastro["structure"]["table"]["value"]] [ "id"];
         }
 
         /**
@@ -287,7 +287,7 @@ class ModController extends ModActionController
          */
         $infoTabelaFisica = $this->module->getPhysicalFields(
             array(
-                "tabela" => $infoCadastro["estrutura"]["tabela"]["value"],
+                "table" => $infoCadastro["structure"]["table"]["value"],
                 "by" => "Field",
             )
         );
@@ -367,7 +367,7 @@ class ModController extends ModActionController
 							if( !empty($infoCadastro['campo'][$field]['ref_parent_field']) )
 								$ref_field = $infoCadastro['campo'][$field]['ref_parent_field'];
 							else
-								$ref_field = $infoCadastro["estrutura"]["tabela"]["value"]."_id";
+								$ref_field = $infoCadastro["structure"]["table"]["value"]."_id";
 						
 						
 	                        $relational[$field][$tabela][$campo][$ref_field] = $lastInsertId;
@@ -389,7 +389,7 @@ class ModController extends ModActionController
 						if( !empty($infoCadastro['campo'][$field]['ref_parent_field']) )
 							$ref_field = $infoCadastro['campo'][$field]['ref_parent_field'];
 						else
-							$ref_field = $infoCadastro["estrutura"]["tabela"]["value"]."_id";
+							$ref_field = $infoCadastro["structure"]["table"]["value"]."_id";
 
 	                    $sql = "DELETE FROM
 	                                $key

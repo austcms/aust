@@ -221,7 +221,7 @@ class StructurePermissions extends SQLObject {
      * retorna falso quando perguntado sobre uma estrutura
      *
      * @param array $austNode Informações para verificação de permissão
-     *      'estrutura'
+     *      'structure'
      *      'permissoes'
      * @return boolean True ou false, dependendo se o agente verificado tem acesso
      * à estrutura requerida
@@ -275,7 +275,7 @@ class StructurePermissions extends SQLObject {
             return false;
 
         } else if( is_array($params) ){
-            if(empty($austNode['estrutura'])){
+            if(empty($austNode['structure'])){
                 return true;
             } else {
                 if(empty($austNode['permissoes'])){
@@ -286,7 +286,7 @@ class StructurePermissions extends SQLObject {
 
                 if(empty($permissoes)){
                     return true;
-                } elseif(in_array($austNode['estrutura'], $permissoes)){
+                } elseif(in_array($austNode['structure'], $permissoes)){
                     return true;
                 }
             }

@@ -65,14 +65,14 @@ class SetupController extends ModActionController
 			$i++;
 		}
 		
-		if( empty($_POST['aprovacao']) )
-			$_POST['aprovacao'] = "";
+		if( empty($_POST['approval']) )
+			$_POST['approval'] = "";
 		
-		if( empty($_POST['pre_senha']) )
-			$_POST['pre_senha'] = "";
+		if( empty($_POST['pre_password']) )
+			$_POST['pre_password'] = "";
 		
-		if( empty($_POST['descricao']) )
-			$_POST['descricao'] = "";
+		if( empty($_POST['description']) )
+			$_POST['description'] = "";
 		
         /**
          * Parâmetros para gravar uma nova estrutura no DB.
@@ -84,9 +84,9 @@ class SetupController extends ModActionController
             'author' => User::getInstance()->getId(),
 			'fields' => $fields,
 			'options' => array(
-				'approval' => $_POST['aprovacao'],
-				'pre_password' => $_POST['pre_senha'],
-				'description' => $_POST['descricao'],
+				'approval' => $_POST['approval'],
+				'pre_password' => $_POST['pre_password'],
+				'description' => $_POST['description'],
 			),
         );
 
@@ -494,7 +494,7 @@ class SetupController extends ModActionController
                                     flex_fields_config
                                     (tipo,chave,valor,categorias_id,adddate,autor,desativado,desabilitado,publico,restrito,aprovado)
                                 VALUES
-                                    ('estrutura','tabela_arquivos','".$tabela."_arquivos',".$status_insert.", '".date('Y-m-d H:i:s')."', ".$this->administrador->LeRegistro('id').",0,0,1,0,1)
+                                    ('structure','tabela_arquivos','".$tabela."_arquivos',".$status_insert.", '".date('Y-m-d H:i:s')."', ".$this->administrador->LeRegistro('id').",0,0,1,0,1)
                                 ";
                     if($this->module->connection->exec($sql_conf_arquivos)){
                         $status_setup[] = 'Configuração da estrutura \''.$tabela.'_arquivos\' salva com sucesso!';
@@ -516,7 +516,7 @@ class SetupController extends ModActionController
                                     flex_fields_config
                                     (tipo,chave,valor,nome,especie,categorias_id,adddate,autor,desativado,desabilitado,publico,restrito,aprovado)
                                 VALUES
-                                    ('config','aprovacao','".$_SESSION['exPOST']['aprovacao']."','Aprovação','bool',".$status_insert.", '".date('Y-m-d H:i:s')."', ".$this->administrador->LeRegistro('id').",0,0,1,0,1)
+                                    ('config','approval','".$_SESSION['exPOST']['approval']."','Aprovação','bool',".$status_insert.", '".date('Y-m-d H:i:s')."', ".$this->administrador->LeRegistro('id').",0,0,1,0,1)
                                 ";
                     if($this->module->connection->exec($sql_conf_2)){
                         $status_setup[] = 'Configuração de aprovação salva com sucesso!';
@@ -530,7 +530,7 @@ class SetupController extends ModActionController
                                     flex_fields_config
                                     (tipo,chave,valor,nome,especie,categorias_id,adddate,autor,desativado,desabilitado,publico,restrito,aprovado)
                                 VALUES
-                                    ('config','descricao','".$_SESSION['exPOST']['descricao']."','Descrição','blob',".$status_insert.", '".date('Y-m-d H:i:s')."', ".$this->administrador->LeRegistro('id').",0,0,1,0,1)
+                                    ('config','description','".$_SESSION['exPOST']['description']."','Descrição','blob',".$status_insert.", '".date('Y-m-d H:i:s')."', ".$this->administrador->LeRegistro('id').",0,0,1,0,1)
                                 ";
                     if($this->module->connection->exec($sql_conf_2)){
                         $status_setup[] = 'Configuração de aprovação salva com sucesso!';
@@ -544,7 +544,7 @@ class SetupController extends ModActionController
                                     flex_fields_config
                                     (tipo,chave,valor,nome,especie,categorias_id,adddate,autor,desativado,desabilitado,publico,restrito,aprovado)
                                 VALUES
-                                    ('config','pre_senha','".$_SESSION['exPOST']['pre_senha']."','Pré-senha','string',".$status_insert.", '".date('Y-m-d H:i:s')."', ".$this->administrador->LeRegistro('id').",0,0,1,0,1)
+                                    ('config','pre_password','".$_SESSION['exPOST']['pre_password']."','Pré-senha','string',".$status_insert.", '".date('Y-m-d H:i:s')."', ".$this->administrador->LeRegistro('id').",0,0,1,0,1)
                                 ";
                     if($this->module->connection->exec($sql_conf_2)){
                         $status_setup[] = 'Configuração de pré-senha salva com sucesso!';
@@ -561,7 +561,7 @@ class SetupController extends ModActionController
                                 flex_fields_config
                                 (tipo,chave,valor,categorias_id,adddate,autor,desativado,desabilitado,publico,restrito,aprovado)
                             VALUES
-                                ('estrutura','tabela','".RetiraAcentos(mb_strtolower(str_replace(' ', '_', $_SESSION['exPOST']['nome']), 'UTF-8'))."',".$status_insert.", '".date('Y-m-d H:i:s')."', ".$this->administrador->LeRegistro('id').",0,0,1,0,1)
+                                ('structure','table','".RetiraAcentos(mb_strtolower(str_replace(' ', '_', $_SESSION['exPOST']['nome']), 'UTF-8'))."',".$status_insert.", '".date('Y-m-d H:i:s')."', ".$this->administrador->LeRegistro('id').",0,0,1,0,1)
                             ";
                 if($this->module->connection->exec($sql_conf)){
                     $status_setup[] = 'Configuração da estrutura \''.RetiraAcentos(mb_strtolower(str_replace(' ', '_', $_SESSION['exPOST']['nome']), 'UTF-8')).'\' salva com sucesso!';

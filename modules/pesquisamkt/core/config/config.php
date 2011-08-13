@@ -33,13 +33,13 @@ $modInfo = array(
      */
     'className' => 'PesquisaMkt',
     /**
-     * 'descricao': Descrição que facilita compreender a função do módulo
+     * 'description'
      */
     'description' => 'Módulo gerenciador Pesquisas de Marketing e Enquetes, possibilitando perguntas abertas e fechadas.',
     /**
-     * 'estrutura': Se pode ser instalada como estrutura (Textos podem)
+     * 'structure': Se pode ser instalada como estrutura (Textos podem)
      */
-    'estrutura' => true,
+    'structure' => true,
     /**
      * 'structure_only': É uma estrutura somente, sem categorias? (cadastros,
      * por exemplo)

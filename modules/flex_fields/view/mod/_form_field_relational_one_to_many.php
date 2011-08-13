@@ -22,7 +22,7 @@ $sql = "SELECT
 
 $checkboxes = $module->connection->query($sql);
 
-$inputName = "data[".$infoCadastro["estrutura"]["tabela"]["value"]."][".$chave."][]";
+$inputName = "data[".$infoCadastro["structure"]["table"]["value"]."][".$chave."][]";
 
 foreach($checkboxes as $tabelaReferenciaResult){
     $checkbox["options"][ $tabelaReferenciaResult["id"] ] = $tabelaReferenciaResult[ $campo ];
@@ -78,7 +78,7 @@ if( $module->getFieldConfig($chave, '1n_has_dragdrop') == '1' )
 				data-field="<?php echo $chave; ?>"
 				data-relational_table="<?php echo $tabelaRelacional; ?>"
 				data-w="<?php echo $w; ?>"
-				data_table="<?php echo $infoCadastro["estrutura"]["tabela"]["value"]?>"
+				data_table="<?php echo $infoCadastro["structure"]["table"]["value"]?>"
 				data-ref_field="<?php echo $campo; ?>"
 				data-ref_table="<?php echo $referencia; ?>"
 				data-input_name="<?php echo $inputName ?>"

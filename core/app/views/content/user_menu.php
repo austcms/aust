@@ -50,8 +50,8 @@ foreach($siteQuery as $chave=>$value){
             FROM
                 $aust_table AS lp
             WHERE
-                lp.father_id = '".$value['id']."' AND
-                lp.class = 'estrutura'
+                lp.father_id='".$value['id']."' AND
+                lp.class='structure'
             ORDER BY
                 lp.type DESC,
                 lp.name ASC

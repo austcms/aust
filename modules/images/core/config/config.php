@@ -20,7 +20,6 @@ $modInfo = array(
 	     * Salva arquivo no DB (por padrão, salva arquivos fisicamente)
 	     */
 	    'save_files_to_db' => array(
-	        "propriedade" => "save_files_to_db", // nome da propriedade
 	        "value" => "",
 	        "label" => "Salvar arquivo no Banco de Dados?",
 	        "inputType" => "checkbox",
@@ -37,8 +36,7 @@ $modInfo = array(
 	    /*
 	     * Resumo
 	     */
-	    'resumo' => array(
-	        "propriedade" => "resumo", // nome da propriedade
+	    'summary' => array(
 	        "value" => "",
 	        "label" => "Tem resumo?",
 	        "inputType" => "checkbox",
@@ -54,7 +52,7 @@ $modInfo = array(
 	    /*
 	     * Tem Descrição?
 	     */
-	    'descricao' => array(
+	    'description' => array(
 	        "value" => "",
 	        "label" => "Tem descrição?",
 	        "inputType" => "checkbox",

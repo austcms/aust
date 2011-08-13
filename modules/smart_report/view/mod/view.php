@@ -63,7 +63,7 @@
          * Se este cadastro precisa de aprovação, mostra botão para aprovar usuário
          */
 /*
-        if($precisa_aprovacao['valor'] == '1'){ ?>
+        if($precisa_approval['valor'] == '1'){ ?>
             <input type="submit" class="js_confirm" name="action[zero]" value="Zerar " />
             <?php
         }

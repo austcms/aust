@@ -66,7 +66,7 @@ class FlexFieldsExport extends ModuleExport {
 			$params['fields'][] = array(
 				'name' => $value['valor'],
 				'type' => $value['especie'],
-				'description' => $value['descricao'],
+				'description' => $value['description'],
 				'refTable' => $value['ref_tabela'],
 				'refField' => $value['ref_campo'],
 			);

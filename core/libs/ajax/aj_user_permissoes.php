@@ -52,7 +52,7 @@ if(empty($_GET['action'])){
                                     'table' => 'taxonomy',
                                     'conditions' => array(
                                         //'id' => $_POST['id'],
-                                        'class' => 'estrutura',
+                                        'class' => 'structure',
                                     ),
                                     'fields' => array('id', 'name', 'class', 'type'),
                                 ), 'all'
@@ -87,8 +87,6 @@ if(empty($_GET['action'])){
         if( !empty($value['action']) )
             $categoriasChecked[ $value['node_id'] ][$value['action']] = true;
     }
-
-    //pr($categoriasChecked);
 
     /*
      * HelperFunction

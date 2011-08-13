@@ -243,7 +243,7 @@
     /*
      * RESUMO
      */
-    if( $module->getStructureConfig("resumo") ){
+    if( $module->getStructureConfig("summary") ){
     ?>
     <tr>
         <td valign="top"><label>Resumo:</label></td>

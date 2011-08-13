@@ -16,7 +16,7 @@ class CategoryShortcuts extends Widget
                 FROM
                     categorias
                 WHERE
-                    classe='estrutura'
+                    classe='structure'
                 ";
         
         $query = Connection::getInstance()->query($sql);

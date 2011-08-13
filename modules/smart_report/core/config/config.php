@@ -33,13 +33,13 @@ $modInfo = array(
      */
     'className' => 'SmartReport',
     /**
-     * 'descricao': Descrição que facilita compreender a função do módulo
+     * 'description'
      */
     'description' => 'Crie relatórios com filtros individuais',
     /**
-     * 'estrutura': Se pode ser instalada como estrutura (Textos podem)
+     * 'structure': Se pode ser instalada como estrutura (Textos podem)
      */
-    'estrutura' => true,
+    'structure' => true,
     /**
      * 'structure_only': É uma estrutura somente, sem categorias? (cadastros,
      * por exemplo)

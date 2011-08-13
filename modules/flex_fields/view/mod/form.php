@@ -11,11 +11,11 @@
  * Informações deste cadastro
  */
 $infoCadastro = $module->pegaInformacoesCadastro($austNode);
-$tabelaCadastro = $infoCadastro["estrutura"]['tabela']["value"];
+$tabelaCadastro = $infoCadastro["structure"]['table']["value"];
 
 $tabelaImagens = null;
-if( !empty($infoCadastro["estrutura"]['table_images']["value"]) )
-	$tabelaImagens = $infoCadastro["estrutura"]['table_images']["value"];
+if( !empty($infoCadastro["structure"]['table_images']["value"]) )
+	$tabelaImagens = $infoCadastro["structure"]['table_images']["value"];
 
 /*
  * ...
@@ -63,7 +63,7 @@ if( $_GET['action'] == "edit" ){
 	$options = array(
 		'action' => 'edit&aust_node='.$austNode.'&w='.$w,
 	);
-	echo $form->create( $infoCadastro["estrutura"]["tabela"]["value"], $options );
+	echo $form->create( $infoCadastro["structure"]["table"]["value"], $options );
 	?>
 	<div id="lightbox-panel" class="window lb_images">
 		<input type="hidden" name="type" value="image_options" />
@@ -139,12 +139,12 @@ if( $_GET['action'] == "edit" ){
 	</form>
 
 <?php
-echo $form->create( $infoCadastro["estrutura"]["tabela"]["value"] );
+echo $form->create( $infoCadastro["structure"]["table"]["value"] );
 /*
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?<?php echo $_SERVER['QUERY_STRING'];?>&action=gravar">
  * 
  */
-$nodeIdFieldName = 'data['.$infoCadastro["estrutura"]["tabela"]["value"].'][node_id]';
+$nodeIdFieldName = 'data['.$infoCadastro["structure"]["table"]["value"].'][node_id]';
 ?>
 <input type="hidden" name="metodo" value="<?php echo $_GET["action"];?>" />
 <input type="hidden" name="frmcreated_on" value="<?php echo date("Y-m-d H:i:s"); ?>">

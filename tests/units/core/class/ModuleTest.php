@@ -14,7 +14,7 @@ class ModuleTest extends PHPUnit_Framework_TestCase
 		require_once MODULES_DIR.'textual/Textual.php';
 
 		if( empty($this->structureId) ){
-			$query = Connection::getInstance()->query("SELECT id FROM taxonomy WHERE type='textual' AND class='estrutura' LIMIT 1");
+			$query = Connection::getInstance()->query("SELECT id FROM taxonomy WHERE type='textual' AND class='structure' LIMIT 1");
 			$this->assertArrayHasKey(0, $query);
 			$this->structureId = $query[0]["id"];
 		}
