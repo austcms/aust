@@ -1,18 +1,5 @@
 <?php
-/*
- * To com dor de cabeça, o código está bagunçado, mas precisa ser terminado
- * rápido, senão o projeto pára.
- */
-/**********************************
-
-	GRAVAR
-	
-	Variáveis necessárias:
-	$_POST -> contendo dados provenientes de formulário
-
-**********************************/
-
-$c = 0;
+]$c = 0;
 
 if(!empty($_POST) AND !empty($_POST["perguntas"]) ){
 

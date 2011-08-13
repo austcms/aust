@@ -1,12 +1,5 @@
 <?php
-/**
- * CONTROLLER
- *
- * Descrição deste arquivo
- *
- * @package ModController
- * @name nome
- * @author Alexandre <chavedomundo@gmail.com>
+/*
  * @since v0.1.5 24/06/2009
  */
 
@@ -29,7 +22,6 @@ class ModController extends ModActionController
         }
 
         $categorias = Aust::getInstance()->getNodeChildren($_GET['aust_node']);
-        //pr($categorias);
         $categorias[$_GET['aust_node']] = 'Estrutura';
 
         /*
@@ -65,7 +57,7 @@ class ModController extends ModActionController
          * Resultados por página
          */
         $num_por_pagina = '20';
-        $this->set('numPorPagina', $num_por_pagina);//(Config::getInstance()->LeOpcao($nome_modulo.'_paginacao')) ? Config::getInstance()->LeOpcao($nome_modulo.'_paginacao') : '10';
+        $this->set('numPorPagina', $num_por_pagina);
 
         /*
          * SQL para listagem
@@ -114,10 +106,9 @@ class ModController extends ModActionController
             }
         }
         ksort($results);
-        //pr($results);
         $this->set('results', $results );
 
-    } // fim listar()
+    }
 
     public function create(){
         $this->render('form');

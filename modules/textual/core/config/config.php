@@ -5,6 +5,8 @@
  */
 $modInfo = array(
 
+	'state' => 'stable',
+	
     'name' => 'Textual',
     /**
      * 'className': the model's class name
@@ -66,9 +68,7 @@ $modInfo = array(
                       '</ul>'.
                       'Exemplo: http://meusite.com.br/noticias/%id.'
         ),
-        /*
-         * Há opção para selecionar o modo de visualização?
-         */
+
         'upload_inline_images' => array(
             "value" => "0",
             "label" => "Permitir upload de imagens no TinyMCE?",
@@ -89,15 +89,14 @@ $modInfo = array(
     ),
     
     /*
-     * Se não há valor, substitui campo vazio na listagem
-     * pelos valores abaixo
+     * The following fields are fullfilled if empty
      */
     'replaceFieldsValueIfEmpty' => array(
         'title' => '[Sem título]',
     ),
 
     /**
-     * CABEÇALHOS DE LISTAGEM
+     * Listing header
      */
     'contentHeader' => array(
         'campos' => array(

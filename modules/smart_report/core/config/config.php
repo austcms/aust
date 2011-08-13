@@ -123,7 +123,7 @@ $modInfo = array(
     '' => '',
 
     /**
-     * CABEÇALHOS DE LISTAGEM
+     * Listing header
      */
     'contentHeader' => array(
         'campos' => array(

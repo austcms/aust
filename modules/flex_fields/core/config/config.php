@@ -1,63 +1,30 @@
 <?php
 /**
- * Configurações
- *
- * Arquivo contendo informações sobre este módulo
- *
- * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @since v0.1.6, 06/07/2009
- */
-/**
- * Variável contendo as configurações deste módulo
- *
- * @global array $GLOBALS['modInfo']
- * @name $modInfo
  */
 
 $modInfo = array(
-    /**
-     * Cabeçalho
-     *
-     * Informações sobre o próprio módulo, como nome, descriçao, entre outros
-     */
-    /**
-     * É arquitetura MVC
-     */
-    'mvc' => true,
-    /**
-     * 'nome': Nome humano do módulo
-     */
+
+	'state' => 'stable',
+	
     'name' => 'Flexible Fields',
-    /**
-     * 'className': Classe oficial do módulo
+    /*
+     * The name of the model class
      */
     'className' => 'FlexFields',
-    /**
-     * 'description'
-     */
+
     'description' => 'Campos flexíveis.',
-    /**
-     * 'structure_only': É uma estrutura somente, sem categorias? (cadastros,
-     * por exemplo)
-     */
-    'structure_only' => true,
 
-    /**
-     * RESPONSER
+    /*
+     * actions available on the controller. The links to views are created accordingly.
      */
-    /**
-     * Se possui método de leitura de resumo
-     */
-    'responser' => array(
-        'actived' => false,
-    ),
-
     'actions' => array(
         'create' => 'Novo',
         'listing' => 'Listar',
     ),
+
     /*
-     * CONFIGURAÇÕES
+     * Possible configurations
      */
     'configurations' => array(
         /*
@@ -117,15 +84,15 @@ $modInfo = array(
     ),
 
     /*
-     * CONFIGURAÇÕES POR CAMPO INDIVIDUAL
+     * Specific fields configurations
      */
     'field_configurations' => array(
 	
 		/*
-		 * CAMPOS IMAGES
+		 * IMAGE FIELDS
 		 */
 	        /*
-	         * Múltiplas imagens ou apenas uma?
+	         * Multiple images allowed or only one?
 	         */
 	        'image_field_limit_quantity' => array(
 				'field_type' => 'images',
@@ -137,7 +104,7 @@ $modInfo = array(
 						  'inserida. Se definir 0, então não há limites.'
 	        ),
 	        /*
-	         * Imagem tem descrição
+	         * Image has description
 	         */
 	        'image_field_has_description' => array(
 				'field_type' => 'images',
@@ -156,7 +123,7 @@ $modInfo = array(
 						  'Neste exemplo, duas imagens serão cacheadas.'
 	        ),
 	        /*
-	         * Tem imagem secundária?
+	         * Has secondary image?
 	         */
 	        'image_field_has_secondary_image' => array(
 				'field_type' => 'images',
@@ -168,7 +135,7 @@ $modInfo = array(
 						  'ser inseridas.'
 	        ),
 	        /*
-	         * Tem link?
+	         * Has link?
 	         */
 	        'image_field_has_link' => array(
 				'field_type' => 'images',
@@ -182,7 +149,7 @@ $modInfo = array(
 		 * FILES
 		 */
 		    /*
-		     * Múltiplas imagens ou apenas uma?
+		     * Multiple files?
 		     */
 			'files_field_limit_quantity' => array(
 				'field_type' => 'files',
@@ -197,9 +164,6 @@ $modInfo = array(
 		/*
 		 * RELATIONAL ONE-TO-MANY
 		 */
-		    /*
-		     * Múltiplas imagens ou apenas uma?
-		     */
 			'1n_has_dragdrop' => array(
 				'field_type' => 'relacional_umparamuitos',
 		        "value" => "",
@@ -209,11 +173,8 @@ $modInfo = array(
 						  'dos itens selecionados.'
 		    ),
 		/*
-		 * CAMPOS TEXTOS GRANDE (textarea)
+		 * TEXTAREAS
 		 */
-		    /*
-		     * Tem editor?
-		     */
 			'text_has_editor' => array(
 				'field_type' => 'text',
 				"value" => "",
@@ -221,9 +182,7 @@ $modInfo = array(
 				"inputType" => "checkbox",
 				'help' => 'Inserir um editor de texto (negrito/itálico/etc) neste campo. ',
 		    ),
-		    /*
-		     * Pode inserir imagens via editor rico?
-		     */
+
 			'text_has_images' => array(
 				'field_type' => 'text',
 				"value" => "",
@@ -232,7 +191,7 @@ $modInfo = array(
 				'help' => 'Selecionar este item permitirá inserir imagens entre o texto.',
 		    ),
 		/*
-		 * CAMPOS STRING CURTO (254 char)
+		 * STRING FIELDS
 		 */
 		    /*
 		     * Boolean?
@@ -245,7 +204,7 @@ $modInfo = array(
 				'help' => 'Campo aceita somente 0 ou 1, portanto mostra select com opções "Sim" e "Não".',
 		    ),
 		    /*
-		     * Valor monetário
+		     * Currency
 		     */
 			'currency_mask' => array(
 				'field_type' => 'string',
@@ -257,13 +216,8 @@ $modInfo = array(
 		    ),
     ),
 
-    /**
-     * '': 
-     */
-    '' => '',
-
-    /**
-     * CABEÇALHOS DE LISTAGEM
+    /*
+     * Listing header
      */
     'contentHeader' => array(
         'campos' => array(

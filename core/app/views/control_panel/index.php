@@ -178,11 +178,23 @@ if(User::getInstance()->LeRegistro('group') == 'Webmaster'):
 	                    <?php
 	                    foreach( $modulesStatus as $modulo) {
 	                        $path = $modulo['path'];
-	                        ?>
-	                        <div class="item">
+							$stable = true;
+							
+							if( empty($modulo['config']['state']) ||
+								$modulo['config']['state'] != 'stable' )
+								$stable = false;
+							?>
+	                        <div class="item <?php if( !$stable ) echo "unstable"; ?>">
 
-		                        <div class="title">
+		                        <div class="header">
+									<span class="title">
 		                        	<?php echo $modulo['config']['name']; ?>
+									</span>
+		                        	<?php if( !$stable ){ ?>
+										<span class="state">
+										(não estável)
+										</span>
+									<?php } ?>
 		                        </div>
 								<div class="description">
 		                        	<?php echo $modulo['config']['description']; ?>

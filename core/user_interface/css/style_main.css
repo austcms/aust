@@ -52,9 +52,15 @@ div.body {
 /* Control Panel */
 	/* index */
 	.modules_available {}
-	.modules_available .item .title { font-weight: bold; margin-bottom: 2px; }
-	.modules_available .item .description { font-size: 1em; color: #777; margin-bottom: 2px; }
+ 
+	.modules_available .item .header { margin-bottom: 2px; }
+	.modules_available .item .header .title { font-weight: bold; }
+	.modules_available .item .description { font-size: 1em; color: #444; margin-bottom: 2px; }
 	.modules_available .item .status { font-size: 1em; }
+
+	.modules_available .item.unstable .title { font-weight: bold; color: #888; }
+	.modules_available .item.unstable .description { color: #aaa; }
+	.modules_available .item.unstable .header .state { font-style: italic; color: #aaa; }
 	
 	/* structure */
 	#structure_configuration .structure_variables .header {
