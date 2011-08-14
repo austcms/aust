@@ -11,17 +11,17 @@ class Migration_20100924144200_CreatePathFields extends Migrations
 
         $schema = array(
             'table' => 'images',
-            'field' => 'image_path',
+            'field' => 'file_path',
             'type' => 'text',
-            'position' => 'AFTER image_type'
+            'position' => 'AFTER file_type'
         );
         $this->addField($schema);
         
         $schema = array(
             'table' => 'images',
-            'field' => 'image_systempath',
+            'field' => 'file_systempath',
             'type' => 'text',
-            'position' => 'AFTER image_type'
+            'position' => 'AFTER file_type'
         );
         $this->addField($schema);
 
@@ -29,8 +29,8 @@ class Migration_20100924144200_CreatePathFields extends Migrations
     }
 
     function down(){
-        $this->dropField('images', 'image_path');
-        $this->dropField('images', 'image_systempath');
+        $this->dropField('images', 'file_path');
+        $this->dropField('images', 'file_systempath');
         return true;
     }
 }

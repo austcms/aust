@@ -49,7 +49,7 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 			"CREATE TABLE table_for_unittests_images
 			(
 				id int auto_increment,
-				systempath text,
+				file_systempath text,
 				type varchar(80),
 				maintable_id int,
 				reference varchar(120),

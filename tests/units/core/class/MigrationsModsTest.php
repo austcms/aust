@@ -80,7 +80,7 @@ class MigrationsModsTest extends PHPUnit_Framework_TestCase
 	
 	function testGetMissingMigrations(){
 		$this->uninstallModules();
-		$this->assertContains("Migration_20100406112000_CriarDB", $this->obj->getMissingMigrations('agenda') );
+		$this->assertContains("Migration_20100406112000_CreateTable", $this->obj->getMissingMigrations('agenda') );
 		$this->assertContains("Migration_20101224023400_CreateLocationField", $this->obj->getMissingMigrations('agenda') );
 	}
 	

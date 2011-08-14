@@ -49,9 +49,9 @@
                     description,
                     link,
                     order_nr,
-                    image_bytes,
-                    image_name,
-                    image_type,
+                    file_bytes,
+                    file_name,
+                    file_type,
                     reference,
                     reference_id,
                     local,
@@ -172,7 +172,7 @@
     /*
      * Mostra imagem preview
      */
-    if( !empty($dados["image_bytes"]) && $dados["image_bytes"] > 0 ){
+    if( !empty($dados["file_bytes"]) && $dados["file_bytes"] > 0 ){
         ?>
         <tr>
             <td valign="top">Imagem atual:</td>
@@ -192,7 +192,7 @@
         <td>
             <input type="file" name="frmarquivo" onchange="validateFile();" />
 			<script type="text/javascript">
-				var fileMimeType = '<?php echo $dados["image_type"] ?>';
+				var fileMimeType = '<?php echo $dados["file_type"] ?>';
 			</script>
             <p class="explanation">
             Selecione a imagem que será carregada.

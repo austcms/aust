@@ -22,7 +22,7 @@ if($fm == 'editar'){
                 admins.*,
 				admin_photos.id as pid,
 				(
-					SELECT id FROM admin_photos WHERE image_type='secondary' AND admin_id=admins.id
+					SELECT id FROM admin_photos WHERE file_type='secondary' AND admin_id=admins.id
 				) as sid
             FROM
                 admins
@@ -30,7 +30,7 @@ if($fm == 'editar'){
 				admin_photos
 			ON
 				admins.id=admin_photos.admin_id
-				AND admin_photos.image_type='primary'
+				AND admin_photos.file_type='primary'
             WHERE
                 admins.id='".$w."'";
     $query = Connection::getInstance()->query($sql);

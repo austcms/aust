@@ -305,7 +305,7 @@ class FlexFields extends Module {
 					 */
 					$sql = "INSERT INTO $filesTable
 							(
-							maintable_id,path,systempath,
+							maintable_id, file_path, file_systempath,
 							file_name,
 							original_file_name,file_type,file_size,file_ext,
 							type,
@@ -407,8 +407,8 @@ class FlexFields extends Module {
 		
 		$query = reset( Connection::getInstance()->query($sql) );
 		
-		if( file_exists($query['systempath']) )
-			unlink( $query['systempath'] );
+		if( file_exists($query['file_systempath']) )
+			unlink( $query['file_systempath'] );
 		$sqlDelete = "DELETE FROM $filesTable WHERE id='".$w."'";
 		Connection::getInstance()->exec($sqlDelete);
 		
@@ -476,7 +476,7 @@ class FlexFields extends Module {
 					 */
 					$sql = "INSERT INTO $imageTable
 							(
-							maintable_id,path,systempath,
+							maintable_id, file_path, file_systempath,
 							file_name,
 							original_file_name,file_type,file_size,file_ext,
 							type,
@@ -580,7 +580,7 @@ class FlexFields extends Module {
 		$configurations = $this->configurations();
 		$imagesTable = $configurations['structure']['table_images']['value'];
 		$sql = "SELECT
-					id, systempath
+					id, file_systempath
 				FROM
 					".$imagesTable."
 				WHERE
@@ -590,8 +590,8 @@ class FlexFields extends Module {
 		
 		$query = Connection::getInstance()->query($sql);
 		foreach( $query as $key=>$value ){
-			if( file_exists($value['systempath']) )
-				unlink( $value['systempath'] );
+			if( file_exists($value['file_systempath']) )
+				unlink( $value['file_systempath'] );
 			$sqlDelete = "DELETE FROM $imagesTable WHERE id='".$value['id']."'";
 			Connection::getInstance()->exec($sqlDelete);
 		}
@@ -616,8 +616,8 @@ class FlexFields extends Module {
 		$query = Connection::getInstance()->query($sql);
 		$query = reset( $query );
 		
-		if( file_exists($query['systempath']) )
-			unlink( $query['systempath'] );
+		if( file_exists($query['file_systempath']) )
+			unlink( $query['file_systempath'] );
 		$sqlDelete = "DELETE FROM $imagesTable WHERE id='".$w."'";
 		Connection::getInstance()->exec($sqlDelete);
 		

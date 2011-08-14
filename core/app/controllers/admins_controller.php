@@ -106,14 +106,14 @@ class AdminsController extends ActionController {
 				$value = $_FILES['photo'];
 
 				$sql = "SELECT * FROM admin_photos
-						WHERE admin_id='".$lastInsertId."' AND image_type='primary'
+						WHERE admin_id='".$lastInsertId."' AND file_type='primary'
 						";
 				$query = Connection::getInstance()->query($sql);
 				foreach( $query as $row ){
-					if( file_exists($row['systempath']) )
-						unlink($row['systempath']);
+					if( file_exists($row['file_systempath']) )
+						unlink($row['file_systempath']);
 				}
-				Connection::getInstance()->exec("DELETE FROM admin_photos WHERE admin_id='".$lastInsertId."' AND image_type='primary'");
+				Connection::getInstance()->exec("DELETE FROM admin_photos WHERE admin_id='".$lastInsertId."' AND file_type='primary'");
 
 
 				$imageHandler = Image::getInstance();
@@ -129,7 +129,7 @@ class AdminsController extends ActionController {
 				$sql = "INSERT INTO admin_photos
 						(
 							admin_id,
-							image_type,
+							file_type,
 							title,
 							file_systempath,
 							file_path,
@@ -162,14 +162,14 @@ class AdminsController extends ActionController {
 				$value = $_FILES['secondary_photo'];
 
 				$sql = "SELECT * FROM admin_photos
-						WHERE admin_id='".$lastInsertId."' AND image_type='secondary'
+						WHERE admin_id='".$lastInsertId."' AND file_type='secondary'
 						";
 				$query = Connection::getInstance()->query($sql);
 				foreach( $query as $row ){
-					if( file_exists($row['systempath']) )
-						unlink($row['systempath']);
+					if( file_exists($row['file_systempath']) )
+						unlink($row['file_systempath']);
 				}
-				Connection::getInstance()->exec("DELETE FROM admin_photos WHERE admin_id='".$lastInsertId."' AND image_type='secondary'");
+				Connection::getInstance()->exec("DELETE FROM admin_photos WHERE admin_id='".$lastInsertId."' AND file_type='secondary'");
 
 
 				$imageHandler = Image::getInstance();
@@ -185,7 +185,7 @@ class AdminsController extends ActionController {
 				$sql = "INSERT INTO admin_photos
 						(
 							admin_id,
-							image_type,
+							file_type,
 							title,
 							file_systempath,
 							file_path,

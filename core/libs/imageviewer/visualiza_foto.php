@@ -106,8 +106,8 @@ if (Connection::getInstance()->count($sql) > 0){
 	$type = '';
 	if( !empty($dados["file_type"]) )
 		$type = $dados["file_type"];
-	else if( !empty($dados["image_type"]) )
-		$type = $dados["image_type"];
+	else if( !empty($dados["file_type"]) )
+		$type = $dados["file_type"];
 	else if( !empty($dados["filetype"]) )
 		$type = $dados["filetype"];
 	else if( !empty($dados["tipo"]) )
@@ -117,14 +117,14 @@ if (Connection::getInstance()->count($sql) > 0){
 	
     $fileType = $type;
 
-	if( !empty($dados["image_systempath"]) )
-		$imageSystemPath = $dados["image_systempath"];
-	else if( !empty($dados["systempath"]) )
-		$imageSystemPath = $dados["systempath"];
+	if( !empty($dados["file_systempath"]) )
+		$imageSystemPath = $dados["file_systempath"];
+	else if( !empty($dados["file_systempath"]) )
+		$imageSystemPath = $dados["file_systempath"];
 	/*
 	 * Algumas imagens estão em arquivos, outros em DB
 	 */
-	if( !empty($dados["image_type"]) && $dados["image_type"] == 'application/x-shockwave-flash' ){
+	if( !empty($dados["file_type"]) && $dados["file_type"] == 'application/x-shockwave-flash' ){
 		
 		$noVisualizationFile = str_replace(
 			IMAGE_VIEWER_DIR.basename(__FILE__),
@@ -138,7 +138,7 @@ if (Connection::getInstance()->count($sql) > 0){
 	else if( !empty($imageSystemPath) )
 		$fileContent = file_get_contents($imageSystemPath);
 	else
-    	$fileContent = $dados["image_binary_data"];
+    	$fileContent = $dados["file_binary_data"];
 
     if($thumbs == "yes"){
         //header("Content-Type: ".$fileType);
@@ -217,14 +217,14 @@ if (Connection::getInstance()->count($sql) > 0){
         imagedestroy($nova);
     } else {
         header("Content-Type: ". $type);
-        echo $dados["image_binary_data"];
+        echo $dados["file_binary_data"];
     }
 } else {
-  $sql = "SELECT image_type, image_binary_data FROM $tabelaimg WHERE id='0'";
+  $sql = "SELECT file_type, file_binary_data FROM $tabelaimg WHERE id='0'";
   $r = mysql_query($sql);
 
-  Header("Content-Type: ".mysql_result($r,0,"image_type"));
-  echo mysql_result($r,0,"image_binary_data");
+  Header("Content-Type: ".mysql_result($r,0,"file_type"));
+  echo mysql_result($r,0,"file_binary_data");
 }
 
 ?>

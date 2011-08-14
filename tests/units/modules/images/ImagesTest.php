@@ -47,7 +47,7 @@ class ImagensTest extends PHPUnit_Framework_TestCase
          */
         $sql = $this->obj->loadSql( array('') );
         $sql = preg_replace('/\n|\t/Us', "", preg_replace('/\s{2,}/s', " ", $sql));
-        $this->assertEquals( trim("SELECT mainTable.id AS id, title, pageviews, image_systempath, node_id AS cat, ".
+        $this->assertEquals( trim("SELECT mainTable.id AS id, title, pageviews, file_systempath, node_id AS cat, ".
                         "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as created_on, ".
                         "(SELECT name FROM taxonomy AS c WHERE id=cat ) AS node ".
                         "FROM images AS mainTable ".
@@ -60,7 +60,7 @@ class ImagensTest extends PHPUnit_Framework_TestCase
         unset($sql);
         $sql = $this->obj->loadSql( array('page'=>3, 'id'=>'1') );
         $sql = preg_replace('/\n|\t/Us', "", preg_replace('/\s{2,}/s', " ", $sql));
-        $this->assertEquals( trim("SELECT mainTable.id AS id, title, pageviews, image_systempath, node_id AS cat, ".
+        $this->assertEquals( trim("SELECT mainTable.id AS id, title, pageviews, file_systempath, node_id AS cat, ".
                         "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as created_on, ".
                         "(SELECT name FROM taxonomy AS c WHERE id=cat ) AS node ".
                         "FROM images AS mainTable ".
@@ -73,7 +73,7 @@ class ImagensTest extends PHPUnit_Framework_TestCase
         unset($sql);
         $sql = $this->obj->loadSql( array('page'=>3, 'id'=>'1', 'austNode' => array('3'=>'categoria1','4'=>'categoria1')) );
         $sql = preg_replace('/\n|\t/Us', "", preg_replace('/\s{2,}/s', " ", $sql));
-        $this->assertEquals( trim("SELECT mainTable.id AS id, title, pageviews, image_systempath, node_id AS cat, ".
+        $this->assertEquals( trim("SELECT mainTable.id AS id, title, pageviews, file_systempath, node_id AS cat, ".
                         "DATE_FORMAT(".$this->obj->date['created_on'].", '".$this->obj->date['standardFormat']."') as created_on, ".
                         "(SELECT name FROM taxonomy AS c WHERE id=cat ) AS node ".
                         "FROM images AS mainTable ".
@@ -112,9 +112,9 @@ class ImagensTest extends PHPUnit_Framework_TestCase
         );
         
         $imagem = $this->obj->trataImagem($_FILES);
-        $_POST["frmimage_bytes"] = $imagem["filesize"];
-        $_POST["frmimage_name"] = $imagem["filename"];
-        $_POST["frmimage_type"] = $imagem["filetype"];
+        $_POST["frmfile_bytes"] = $imagem["filesize"];
+        $_POST["frmfile_name"] = $imagem["filename"];
+        $_POST["frmfile_type"] = $imagem["filetype"];
 
         $saveResult = $this->obj->save($_POST);
         $lastInsertId = $this->obj->connection->lastInsertId();

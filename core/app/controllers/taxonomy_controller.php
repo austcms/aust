@@ -45,7 +45,7 @@ class TaxonomyController extends ActionController {
 					austnode_images
 					(
 					node_id, 
-					file_size, systempath, file_name, original_file_name,
+					file_size, file_systempath, file_name, original_file_name,
 					file_type, file_ext, 
 					created_on, updated_on, admin_id
 					)

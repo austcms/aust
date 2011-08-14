@@ -7,6 +7,10 @@ queries to update from v0.2 to v0.3.
 You need to run these queries before running the v0.3. After everything is
 updated, then you run v0.3 and it'll update what's missing.
 
+Austnodes' Images
+====================================
+
+	ALTER TABLE austnode_images CHANGE systempath file_systempath text;
 
 Admin have fields and tables renamed
 ====================================

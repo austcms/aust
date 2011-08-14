@@ -172,9 +172,9 @@ if( !empty($_POST) AND $save  ) {
 									node_id
 									gallery_id,
 	                                order_nr,
-	                                image_bytes,
-	                                image_binary_data,
-	                                image_name,
+	                                file_bytes,
+	                                file_binary_data,
+	                                file_name,
 	                                image_tipo,
 	                                adddate)
 	                                VALUES
@@ -207,7 +207,7 @@ if( !empty($_POST) AND $save  ) {
 			$sql = "INSERT INTO photo_gallery_images
 					(
 						node_id, gallery_id, content_id, order_nr,
-						image_bytes, image_systempath, image_path, image_name, image_type, created_on, text
+						file_bytes, file_systempath, file_path, file_name, file_type, created_on, text
 					)
                     VALUES ".implode(",", $sqlBuffer);
 

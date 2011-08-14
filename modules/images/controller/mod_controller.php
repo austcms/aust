@@ -135,39 +135,39 @@ class ModController extends ModActionController
 						
 						if( $editing ){
 							$oldFile = reset( $this->module->load($id) );
-							if( !empty($oldFile['image_systempath']) ){
-								$oldFile = $oldFile['image_systempath'];
+							if( !empty($oldFile['file_systempath']) ){
+								$oldFile = $oldFile['file_systempath'];
 								if( file_exists($oldFile) ){
 									unlink($oldFile);
 								}
 							}
 						}
 						
-		                $_POST["frmimage_systempath"] = '';
-		                $_POST["frmimage_path"] = '';
+		                $_POST["frmfile_systempath"] = '';
+		                $_POST["frmfile_path"] = '';
 		
-		                $_POST["frmimage_bytes"] = $value["size"];
-		                $_POST["frmimage_binary_data"] = file_get_contents($value["tmp_name"]);
-		                $_POST["frmimage_name"] = $value["name"];
-		                $_POST["frmimage_type"] = $value["type"];
+		                $_POST["frmfile_bytes"] = $value["size"];
+		                $_POST["frmfile_binary_data"] = file_get_contents($value["tmp_name"]);
+		                $_POST["frmfile_name"] = $value["name"];
+		                $_POST["frmfile_type"] = $value["type"];
 					} else {
 						$paths = $imageHandler->upload($_FILES['frmarquivo']);
 						if( $editing ){
 							$oldFile = reset( $this->module->load($id) );
-							if( !empty($oldFile['image_systempath']) ){
-								$oldFile = $oldFile['image_systempath'];
+							if( !empty($oldFile['file_systempath']) ){
+								$oldFile = $oldFile['file_systempath'];
 								if( file_exists($oldFile) ){
 									unlink($oldFile);
 								}
 							}
 						}
 
-		                $_POST["frmimage_binary_data"] 	= '';
-						$_POST['frmimage_systempath'] 	= $paths['systemPath'];
-						$_POST['frmimage_path'] 		= $paths['webPath'];
-		                $_POST["frmimage_bytes"] 		= $value["size"];
-		                $_POST["frmimage_name"] 		= $value["name"];
-		                $_POST["frmimage_type"] 		= $value["type"];
+		                $_POST["frmfile_binary_data"] 	= '';
+						$_POST['frmfile_systempath'] 	= $paths['systemPath'];
+						$_POST['frmfile_path'] 		= $paths['webPath'];
+		                $_POST["frmfile_bytes"] 		= $value["size"];
+		                $_POST["frmfile_name"] 		= $value["name"];
+		                $_POST["frmfile_type"] 		= $value["type"];
 					}
 
 				} else if( $fileHandler->isFlash($_FILES['frmarquivo']['type']) AND 
@@ -177,8 +177,8 @@ class ModController extends ModActionController
 					$path = $fileHandler->upload($_FILES['frmarquivo']);
 					if( $editing ){
 						$oldFile = reset( $this->module->load($id) );
-						if( !empty($oldFile['image_systempath']) ){
-							$oldFile = $oldFile['image_systempath'];
+						if( !empty($oldFile['file_systempath']) ){
+							$oldFile = $oldFile['file_systempath'];
 							if( file_exists($oldFile) ){
 								unlink($oldFile);
 							}
@@ -188,12 +188,12 @@ class ModController extends ModActionController
 					// links não são permitidos em arquivos Flash
 					$_POST['frmlink'] 		= '';
 					
-	                $_POST["frmimage_binary_data"] 	= '';
-					$_POST['frmimage_systempath'] 	= $path['systemPath'];
-					$_POST['frmimage_path'] 		= $path['webPath'];
-	                $_POST["frmimage_bytes"] 		= $value["size"];
-	                $_POST["frmimage_name"] 		= $value["name"];
-	                $_POST["frmimage_type"] 		= $value["type"];
+	                $_POST["frmfile_binary_data"] 	= '';
+					$_POST['frmfile_systempath'] 	= $path['systemPath'];
+					$_POST['frmfile_path'] 		= $path['webPath'];
+	                $_POST["frmfile_bytes"] 		= $value["size"];
+	                $_POST["frmfile_name"] 		= $value["name"];
+	                $_POST["frmfile_type"] 		= $value["type"];
 					
 				} else {
 					/**

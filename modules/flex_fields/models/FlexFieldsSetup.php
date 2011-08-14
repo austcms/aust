@@ -534,8 +534,8 @@ class FlexFieldsSetup extends ModsSetup {
 		            'description text,'.
 		            'local varchar(180),'.
                     'link text,'.
-		            'systempath text,'.
-		            'path text,'.
+		            'file_systempath text,'.
+		            'file_path text,'.
 		            'file_name varchar(250),'.
 		            'original_file_name varchar(250),'.
 		            'file_type varchar(250),'.
@@ -646,8 +646,8 @@ class FlexFieldsSetup extends ModsSetup {
                 'description text,'.
                 'local varchar(180),'.
                 'link text,'.
-                'systempath text,'.
-                'path text,'.
+                'file_systempath text,'.
+                'file_path text,'.
                 'file_name varchar(250),'.
                 'original_file_name varchar(250),'.
                 'file_type varchar(250),'.

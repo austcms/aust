@@ -237,8 +237,8 @@ class Aust {
 		
 		$query = Connection::getInstance()->query($sql);
 		foreach( $query as $key=>$value ){
-			if( file_exists($value['systempath']) )
-				unlink( $value['systempath'] );
+			if( file_exists($value['file_systempath']) )
+				unlink( $value['file_systempath'] );
 			$sqlDelete = "DELETE FROM austnode_images WHERE id='".$value['id']."'";
 			Connection::getInstance()->exec($sqlDelete);
 		}

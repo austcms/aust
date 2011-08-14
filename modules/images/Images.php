@@ -22,7 +22,7 @@ class Images extends Module
     );
 
 	public $fieldsToLoad = array(
-	    'title', 'pageviews', 'image_systempath'
+	    'title', 'pageviews', 'file_systempath'
 	);
 
 	public $authorField = "admin_id";

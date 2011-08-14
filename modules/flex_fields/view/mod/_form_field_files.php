@@ -56,17 +56,12 @@ $inputName = "data[".$infoCadastro["structure"]["table"]["value"]."][".$fieldNam
 				?>
 				<td valign="top" class="icon">
 				
-				<a href="<?php echo retrieveFile($file['systempath'], $file['file_type'], $file['original_file_name']) ?>">
+				<a href="<?php echo retrieveFile($file['file_systempath'], $file['file_type'], $file['original_file_name']) ?>">
 				<img class="thumb" src="<?php echo getFileIcon($file['original_file_name']) ?>" />
 				</a>
 				<br clear="all" />
 				<span class="filename">
-				<?php
-				// $file['file_type'];
-//				 echo $file['file_ext'];
-//				 $file['file_size'];
-				echo $file['original_file_name'];
-				?>
+				<?php echo $file['original_file_name']; ?>
 				</span>
 				<br clear="all" />
 				

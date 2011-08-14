@@ -18,7 +18,7 @@ if(count($query) == 0){
 	foreach( $query as $key=>$value){
 		
 		$fromFile = '';
-		if( !empty($value['image_systempath']) )
+		if( !empty($value['file_systempath']) )
 			$fromFile = '&fromfile=1';
 		
 		if( $i == 0 ){

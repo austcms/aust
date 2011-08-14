@@ -102,7 +102,7 @@
     /*
      * Mostra imagem preview
      */
-    if( !empty($dados["image_bytes"]) && $dados["image_bytes"] > 0 ){
+    if( !empty($dados["file_bytes"]) && $dados["file_bytes"] > 0 ){
         ?>
         <tr>
             <td valign="top" class="first">Imagem atual:</td>
@@ -228,7 +228,7 @@
                     echo '<table width="99%" style="margin-bottom: 15px;">';
 
 
-                    $sql = "SELECT id, image_name, text FROM photo_gallery_images
+                    $sql = "SELECT id, file_name, text FROM photo_gallery_images
                             WHERE gallery_id='".$w."' ORDER BY order_nr ASC";
 
                     $query = $module->connection->query($sql, "ASSOC");
