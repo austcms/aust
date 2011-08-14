@@ -1,11 +1,5 @@
 <?php
-/**
- * MOD MIGRATION
- * 
- * Migration de um módulos
- * 
- */
-class Migration_20100120112800_CriarTabela extends Migrations
+class Migration_20100120112800_CreateTable extends Migrations
 {
     function up(){
 

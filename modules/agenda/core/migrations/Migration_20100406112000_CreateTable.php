@@ -5,7 +5,7 @@
  * Migration de um módulo
  * 
  */
-class Migration_20100406112000_CriarDB extends Migrations
+class Migration_20100406112000_CreateTable extends Migrations
 {
     function up(){
 

@@ -5,7 +5,7 @@
  * Migration de um módulos
  * 
  */
-class Migration_20100120105200_CriarTabela extends Migrations
+class Migration_20100120105200_CreateTable extends Migrations
 {
     function up(){
 

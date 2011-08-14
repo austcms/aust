@@ -1,5 +1,5 @@
 <?php
-class Migration_20101014011500_CriarCampoOrderEmManyToMany extends Migrations
+class Migration_20101014011500_CreateOrderFieldInManyToMany extends Migrations
 {
     function up(){
 

@@ -1,5 +1,5 @@
 <?php
-class Migration_20101014001000_CriarCamposUmParaMuitos extends Migrations
+class Migration_20101014001000_CreateOneToManyFields extends Migrations
 {
     function up(){
 

@@ -1,22 +1,16 @@
 <?php
-/**
- * MOD MIGRATION
- * 
- * Migration de um módulos
- * 
- */
-class Migration_20100120105600_CriarTabela extends Migrations
+class Migration_20100120105600_CreateTable extends Migrations
 {
     function up(){
 
         $schema['images'] = array(
             'id' => 'int NOT NULL auto_increment',
             'node_id' => "int",
-            "title" => "text COMMENT 'O título do registro que será mostrado para humanos.'",
-            "title_encoded" => "text COMMENT 'Título tratado para ser mostrado na barra de endereços.'",
+            "title" => "text",
+            "title_encoded" => "text",
             "subtitle" => "text",
             "summary" => "text",
-            "description" => "text COMMENT 'Texto ou descrição.'",
+            "description" => "text",
             "link" => "blob",
             'order_nr' => 'int',
             'image_bytes' => 'mediumint',
@@ -25,7 +19,7 @@ class Migration_20100120105600_CriarTabela extends Migrations
             'image_type' => 'varchar(120)',
             'reference' => 'varchar(50)',
             'reference_id' => 'int',
-            'local' => "varchar(60) COMMENT 'Caso seja necessário especificar um local, seja para amostragem ou não.'",
+            'local' => "varchar(60)",
             'class' => 'varchar(60)',
             'specie' => 'varchar(60)',
             'expire_on' => 'date not null',
