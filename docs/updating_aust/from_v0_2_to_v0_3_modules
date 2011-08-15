@@ -118,7 +118,7 @@ The images themselves:
 			gallery_id, content_id, node_id,
 			order_nr, title, title_encoded, subtitle,
 			summary, text, link,
-			image_path, file_systempath,
+			file_path, file_systempath,
 			file_bytes, file_binary_data, file_name, file_type,
 			ref, ref_id, is_cover,
 			local, class, specie, created_on, expire_on, pageviews,

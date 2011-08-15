@@ -32,17 +32,14 @@
  * [Se modo edição]
  */
     else if($_GET['action'] == 'edit'){
-
         $tagh2 = "Editar: ". Aust::getInstance()->getStructureNameById($_GET['aust_node']);
-        $tagp = 'Edite o conteúdo abaixo.';
-
     }
 ?>
 
 <h2><?php echo $tagh2;?></h2>
-<p><?php echo $tagp;?></p>
-
-
+<?php if( !empty($tagp) ){ ?>
+	<p><?php echo $tagp;?></p>
+<?php } ?>
 
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?section=<?php echo $_GET["section"] ?>&action=save" enctype="multipart/form-data" >
 <input type="hidden" name="metodo" value="<?php echo $_GET['action'];?>">
@@ -98,24 +95,6 @@
 		<?php
 	}
 	?>
-    <?php
-    /*
-     * Mostra imagem preview
-     */
-    if( !empty($dados["file_bytes"]) && $dados["file_bytes"] > 0 ){
-        ?>
-        <tr>
-            <td valign="top" class="first">Imagem atual:</td>
-            <td class="second">
-                <img src="core/libs/imageviewer/visualiza_foto.php?table=imagens&thumbs=yes&myid=<?php echo $dados["id"]; ?>&maxxsize=450&maxysize=400" />
-                <p class="explanation">
-                Imagem cadastrada atualmente. Para alterá-la, envie uma nova no formulário abaixo.
-                </p>
-            </td>
-        </tr>
-        <?php
-    }
-    ?>
 
 	<?php if( $module->getStructureConfig('has_title') ){ ?>
     <tr>
@@ -201,119 +180,109 @@
     }
     ?>
 
+    <?php if( $_GET["action"] != "create" ){ ?>
     <tr>
         <td colspan="2">
-            <h3>Fotos</h3>
+            <h3>Imagens</h3>
         </td>
     </tr>
     <tr>
         <td colspan="2">
-                <?php
-                if( !empty($_GET["delete"]) AND $_GET["delete"] > 0 ){
-                    $sql = "DELETE FROM photo_gallery_images
-                            WHERE id='".$_GET["delete"]."'";
-                    if( $module->connection->exec($sql) ){
-                        echo "<div style='color: green;'>";
-                        echo "<p>Imagem excluída com sucesso</p>";
-                        echo "</div>";
-                    }
-
-                }
-
-
-                if( $_GET["action"] != "create" ){
-
-
-                    $columns = 4;
-                    echo '<table width="99%" style="margin-bottom: 15px;">';
-
-
-                    $sql = "SELECT id, file_name, text FROM photo_gallery_images
-                            WHERE gallery_id='".$w."' ORDER BY order_nr ASC";
-
-                    $query = $module->connection->query($sql, "ASSOC");
-                    $c = 1;
-                    foreach($query as $dados){
-                        if($c == 1){
-                            echo '<tr>';
-                        }
-                        ?>
-                        <td valign="top">
-                            <center>
-                                <img src="core/libs/imageviewer/visualiza_foto.php?table=photo_gallery_images&thumbs=yes&myid=<?php echo $dados["id"]; ?>&maxxsize=160&maxysize=100" />
-                                <br clear="all" />
-                                <?php
-                                /*
-                                 * Editar comentário
-                                 */
-                                $commentedImages = false;
-                                if( !empty($moduloConfig["commented_images"]) && !empty($moduloConfig["commented_images"]["valor"]) ){
-                                    if( $moduloConfig["commented_images"]["valor"] == "1" )
-                                        $commentedImages = true;
-                                }
-                                if( $commentedImages ){
-                                    ?>
-                                    <div id="image_comment_text_<?php echo $dados["id"]; ?>">
-                                        <?php echo $dados["text"]; ?>
-                                    </div>
-                                    <a href="javascript: void(0);" id="image_comment_icon_<?php echo $dados["id"]; ?>" onclick="$('#image_comment_input_<?php echo $dados["id"]; ?>').show(); $('#comment_<?php echo $dados["id"]; ?>').focus(); $(this).hide()">
-                                        <img src="core/user_interface/img/icons/comment_15x15.png" alt="Comentar" border="0" />
-                                    </a>
-                                    <div class="image_comment_input" style="display: none;" id="image_comment_input_<?php echo $dados["id"]; ?>">
-                                        <textarea style="margin-top: 3px; width: 130px; display: block;" class="comment_textareas" id="comment_<?php echo $dados["id"]; ?>" name="<?php echo $dados["id"]; ?>" ><?php echo $dados["text"]; ?></textarea>
-                                        <input type="button" id="image_comment_button_<?php echo $dados["id"]; ?>" value="Salvar comentário" onclick="javascript: addCommentInImage(<?php echo $dados["id"]; ?>)" />
-                                    </div>
-
-                                    <?php
-                                }
-                                ?>
-                                <a href="javascript: void();" onclick="if( confirm('Você tem certeza que deseja excluir esta imagem?') ) window.open('adm_main.php?section=<?php echo $_GET["section"]; ?>&action=<?php echo $_GET["action"]; ?>&aust_node=<?php echo $_GET["aust_node"]; ?>&w=<?php echo $w;?>&delete=<?php echo $dados["id"]; ?>','_top');">
-                                    <img src="core/user_interface/img/icons/delete_15x15.png" alt="Excluir" border="0" />
-                                </a>
-
-                            </center>
-                        </td>
-                        <?php
-
-                        if($c >= $columns){
-                            echo '</tr>';
-                            $c = 1;
-                        } else {
-                            $c++;
-                        }
-                    }
-                    ?>
-                    <script type="text/javascript">
-                    $('.comment_textareas').bind('keypress', function(e) {
-                            if(e.keyCode==13){
-                                addCommentInImage( $(this).attr('name') );
-                            }
-                    });
-                    </script>
-                    <?php
-
-                    // se ficou faltando TDs
-                    if($c <= $columns AND $c > 0){
-                        for($o = 0; $o < (($columns+1)-$c); $o++){ ?>
-                            <td></td>
-                            <?php
-                        }
-                        echo '</tr>';
-
-                    }
-                    echo "</table>";
+            <table width="99%">
+			<?php
+			if( empty($images) ){
+				?>
+				<p class="explanation">
+				Sem imagens.
+				</p>
+				<?php
+			}
+			
+            $columns = 4;
+            $c = 1;
+            foreach($images as $dados){
+                if($c == 1){
+                    echo '<tr>';
                 }
                 ?>
+                <td valign="top">
+                    <center>
+                        <img src="core/libs/imageviewer/visualiza_foto.php?table=photo_gallery_images&thumbs=yes&myid=<?php echo $dados["id"]; ?>&maxxsize=160&maxysize=100" />
+                        <br clear="all" />
+                        <?php
+                        /*
+                         * Editar comentário
+                         */
+                        $commentedImages = false;
+                        if( !empty($moduloConfig["commented_images"]) && !empty($moduloConfig["commented_images"]["valor"]) ){
+                            if( $moduloConfig["commented_images"]["valor"] == "1" )
+                                $commentedImages = true;
+                        }
+                        if( $commentedImages ){
+                            ?>
+                            <div id="image_comment_text_<?php echo $dados["id"]; ?>">
+                                <?php echo $dados["text"]; ?>
+                            </div>
+                            <a href="javascript: void(0);" id="image_comment_icon_<?php echo $dados["id"]; ?>" onclick="$('#image_comment_input_<?php echo $dados["id"]; ?>').show(); $('#comment_<?php echo $dados["id"]; ?>').focus(); $(this).hide()">
+                                <img src="core/user_interface/img/icons/comment_15x15.png" alt="Comentar" border="0" />
+                            </a>
+                            <div class="image_comment_input" style="display: none;" id="image_comment_input_<?php echo $dados["id"]; ?>">
+                                <textarea style="margin-top: 3px; width: 130px; display: block;" class="comment_textareas" id="comment_<?php echo $dados["id"]; ?>" name="<?php echo $dados["id"]; ?>" ><?php echo $dados["text"]; ?></textarea>
+                                <input type="button" id="image_comment_button_<?php echo $dados["id"]; ?>" value="Salvar comentário" onclick="javascript: addCommentInImage(<?php echo $dados["id"]; ?>)" />
+                            </div>
+
+                            <?php
+                        }
+                        ?>
+                        <a href="javascript: void();" onclick="if( confirm('Você tem certeza que deseja excluir esta imagem?') ) window.open('adm_main.php?section=<?php echo $_GET["section"]; ?>&action=<?php echo $_GET["action"]; ?>&aust_node=<?php echo $_GET["aust_node"]; ?>&w=<?php echo $w;?>&delete=<?php echo $dados["id"]; ?>','_top');">
+                            <img src="core/user_interface/img/icons/delete_15x15.png" alt="Excluir" border="0" />
+                        </a>
+
+                    </center>
+                </td>
+                <?php
+
+                if($c >= $columns){
+                    echo '</tr>';
+                    $c = 1;
+                } else {
+                    $c++;
+                }
+            }
+            ?>
+            <script type="text/javascript">
+            $('.comment_textareas').bind('keypress', function(e) {
+                    if(e.keyCode==13){
+                        addCommentInImage( $(this).attr('name') );
+                    }
+            });
+            </script>
+            <?php
+
+            // se ficou faltando TDs
+            if($c <= $columns AND $c > 0){
+                for($o = 0; $o < (($columns+1)-$c); $o++){
+					?>
+                    <td></td>
+                    <?php
+                }
+                ?>
+                </tr>
+                <?php
+            }
+        	?>
+            </table>
 
 	</tr>
+	<?php } ?>
     <tr>
         <td colspan="3">
-            <h3>Inserir Imagens</h3>
+            <h3>Enviar imagens</h3>
         </td>
     </tr>
 	<tr>
 		<td colspan="3">
-           <p>Para inserir novas imagens, selecione-as abaixo.</p>
+           <p>Selecione mais arquivos abaixo.</p>
 		</td>
 	</tr>
     <tr>

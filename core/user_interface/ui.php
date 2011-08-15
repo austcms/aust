@@ -171,112 +171,114 @@
 
 
 	    <div class="body">
-	        <div class="content">
-			<?php if( notice() ){ ?>
-				<div id="notice">
-				<?php echo notice(); ?>
-				</div>
-			<?php } ?>
+			<div class="body_containner">
+	        	<div class="content">
+				<?php if( notice() ){ ?>
+					<div id="notice">
+					<?php echo notice(); ?>
+					</div>
+				<?php } ?>
 
-			<?php if( failure() ){ ?>
-				<div id="failure">
-				<?php echo failure(); ?>
-				</div>
-			<?php } ?>
+				<?php if( failure() ){ ?>
+					<div id="failure">
+					<?php echo failure(); ?>
+					</div>
+				<?php } ?>
 		
-			<?php
-			/* MODULE NAVIGATION BAR */
-		    if( !empty($_GET["aust_node"]) || !empty($_POST["aust_node"]) ){
-				if( !empty($_GET["aust_node"]) )
-					$austNode = $_GET["aust_node"];
-				elseif( !empty($_POST["aust_node"]) )
-					$austNode = $_POST["aust_node"];
+				<?php
+				/* MODULE NAVIGATION BAR */
+			    if( !empty($_GET["aust_node"]) || !empty($_POST["aust_node"]) ){
+					if( !empty($_GET["aust_node"]) )
+						$austNode = $_GET["aust_node"];
+					elseif( !empty($_POST["aust_node"]) )
+						$austNode = $_POST["aust_node"];
 		
 
-		     	include(MODULES_DIR.$modDir.MOD_CONFIG);
-		        $action = $_GET['action'];
+			     	include(MODULES_DIR.$modDir.MOD_CONFIG);
+			        $action = $_GET['action'];
 
-				/*
-				 * Navegação entre actions de um austNode
-				 */
+					/*
+					 * Navegação entre actions de um austNode
+					 */
 
-				$moreOptions = array();
-				foreach( $modInfo['actions'] as $actionName=>$humanName ){
-					if( $actionName == $action )
-						continue;
-					$moreOptions[] = '<a href="adm_main.php?section='.MODULES.'&action='.$actionName.'&aust_node='.$austNode.'">'.$humanName.'</a>';
-				}
-
-				$visibleNav = true;
-				$relatedMasters = Aust::getInstance()->getRelatedMasters(array($austNode));
-
-				if( !empty($relatedMasters) ){
-
-					$module = Aust::getInstance()->getStructureInstance($austNode);
-					if( !$module->getStructureConfig('related_and_visible') ){
-						$visibleNav = false;
+					$moreOptions = array();
+					foreach( $modInfo['actions'] as $actionName=>$humanName ){
+						if( $actionName == $action )
+							continue;
+						$moreOptions[] = '<a href="adm_main.php?section='.MODULES.'&action='.$actionName.'&aust_node='.$austNode.'">'.$humanName.'</a>';
 					}
 
-				}
+					$visibleNav = true;
+					$relatedMasters = Aust::getInstance()->getRelatedMasters(array($austNode));
 
-				if( !empty($moreOptions) && $visibleNav ){
-					?>
-					<div class="structure_nav_options">
-						Navegação: <?php echo implode(", ", $moreOptions); ?>
-					</div>
-					<?php
-				}
-			}		
-			?>
-	        <?php echo $content_for_layout; ?>
+					if( !empty($relatedMasters) ){
+
+						$module = Aust::getInstance()->getStructureInstance($austNode);
+						if( !$module->getStructureConfig('related_and_visible') ){
+							$visibleNav = false;
+						}
+
+					}
+
+					if( !empty($moreOptions) && $visibleNav ){
+						?>
+						<div class="structure_nav_options">
+							Navegação: <?php echo implode(", ", $moreOptions); ?>
+						</div>
+						<?php
+					}
+				}		
+				?>
+		        <?php echo $content_for_layout; ?>
         
-			<?php
-		    /*
-		     * Se for save, redireciona automaticamente
-		     */
-	     	$action = "";
-			if( !empty($_GET['action']) ){
-				$action = $_GET['action'];
-			}
-		    if( ( 
-					(!empty($_POST['force_redirect']) && $_POST['force_redirect']) || 
-					in_array($action, array(SAVE_ACTION, ACTIONS_ACTION))
-				) &&
-				(
-					empty($_SESSION['no_redirect']) ||
-					!$_SESSION['no_redirect']
-				)
-		 	)
-			{
+				<?php
+			    /*
+			     * Se for save, redireciona automaticamente
+			     */
+		     	$action = "";
+				if( !empty($_GET['action']) ){
+					$action = $_GET['action'];
+				}
+			    if( ( 
+						(!empty($_POST['force_redirect']) && $_POST['force_redirect']) || 
+						in_array($action, array(SAVE_ACTION, ACTIONS_ACTION))
+					) &&
+					(
+						empty($_SESSION['no_redirect']) ||
+						!$_SESSION['no_redirect']
+					)
+			 	)
+				{
 
-				unset($_SESSION['selected_items']);
-		        ?>
-		        <div class="loading_timer">
-		            <img src="<?php echo IMG_DIR ?>loading_timer.gif" /> Redirecionando Automaticamente
-		        </div>
-		        <?php
+					unset($_SESSION['selected_items']);
+			        ?>
+			        <div class="loading_timer">
+			            <img src="<?php echo IMG_DIR ?>loading_timer.gif" /> Redirecionando Automaticamente
+			        </div>
+			        <?php
 
-				if( !empty($_POST['redirect_to']) )
-					$goToUrl = $_POST['redirect_to'];
-				else if( !empty($_GET['redirect_to']) )
-					$goToUrl = $_GET['redirect_to'];
-				else
-	            	$goToUrl = "adm_main.php?section=".$_GET['section'].'&action=listing&aust_node='.$austNode;
-	            ?>
-	            <script type="text/javascript">
-	                var timeToRefresh = 2;
-	                setTimeout(function(){
-	                    window.location.href = "<?php echo $goToUrl ?>";
-	                }, 2000);
-	            </script>
-	            <?php
-	        }
+					if( !empty($_POST['redirect_to']) )
+						$goToUrl = $_POST['redirect_to'];
+					else if( !empty($_GET['redirect_to']) )
+						$goToUrl = $_GET['redirect_to'];
+					else
+		            	$goToUrl = "adm_main.php?section=".$_GET['section'].'&action=listing&aust_node='.$austNode;
+		            ?>
+		            <script type="text/javascript">
+		                var timeToRefresh = 2;
+		                setTimeout(function(){
+		                    window.location.href = "<?php echo $goToUrl ?>";
+		                }, 2000);
+		            </script>
+		            <?php
+		        }
 
-			$_SESSION['no_redirect'] = false;
+				$_SESSION['no_redirect'] = false;
 		
-			?>
+				?>
 
-	        </div>
+		        </div>
+			</div>
 	    </div>
 	</div>
 
@@ -354,20 +356,31 @@
 	                <table class="debug">
 	                <tr class="header">
 	                    <td class="sql">
-	                    <strong>SQLs</strong>
+	                    	<strong>SQLs</strong>
 	                    </td>
 	                    <td class="result">
-	                    <strong>Results</strong>
+	                    	<strong>Results</strong>
 	                    </td>
 	                    <td class="time">
-	                    <strong>Seconds</strong>
+	                    	<strong>Seconds</strong>
 	                    </td>
 	                </tr>
 	                <?php
 
 	                $debugVars = Registry::read('debug');
 					if( is_array($debugVars) ){
+						$totalMessages = count($debugVars);
+						$i = 0;
 		                foreach( $debugVars as $vars ){
+							$positionClass = "first";
+							if( $i > 0 )
+								$positionClass = "";
+								
+							if( $i == $totalMessages-1 )
+								$positionClass = "last";
+
+							$i++;
+
 		                    $sqlCommands = array(
 		                        "SELECT", "UPDATE", "DELETE", "INSERT", "REPLACE",
 		                        "FROM", "ASC", "WHERE", "ORDER BY", "LIMIT", "TABLES",
@@ -391,23 +404,13 @@
 		                    }
 		                    ?>
 		                    <tr class="list <?php echo $errorClass; ?>">
-		                    <td class="sql "  valign="top">
-		                        <?php echo $sql; ?>
-		                    </td>
-		                    <td class="result" valign="top">
-		                        <?php echo $vars['result']; ?>
-		                    </td>
-		                    <td class="time" valign="top">
-		                        <?php echo substr(number_format($vars['time'], 4, '.', ''), 0, 5); ?>
-		                    </td>
-		                    </tr>
-		                    <tr style="height: 1px;">
-		                        <td colspan="3" style="font-size: 0px; background: #eeeeee;">
-		                        </td>
-		                    </tr>
-		                    <tr style="height: 5px;">
-		                        <td colspan="3" style="font-size: 0px;">
-		                        </td>
+			                    <td valign="top" colspan="3">
+									<div class="td_containner <?php echo $positionClass ?>">
+				                        <div class="column sql"><?php echo $sql; ?></div>
+				                        <div class="column result"><?php echo $vars['result']; ?></div>
+				                        <div class="column time"><?php echo substr(number_format($vars['time'], 4, '.', ''), 0, 5); ?></div>
+									</div>
+			                    </td>
 		                    </tr>
 		                    <?php
 		                }

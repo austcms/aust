@@ -1,37 +1,23 @@
 <?php
 /**
- * Configurações
- *
- * Arquivo contendo informações sobre este módulo
- *
  * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @since v0.1.5, 30/05/2009
  */
-
 $modInfo = array(
-    /**
-     * 'nome': Nome humano do módulo
-     */
+	'state' => 'stable',
  	'name' => 'Photo Gallery',
     'relationalName' => 'Photo Gallery',
     /**
-     * 'className': Classe oficial do módulo
+     * 'className': Model's class name
      */
     'className' => 'PhotoGallery',
     /**
      * 'description'
      */
-    'description' => 'Crie listas de galerias de fotos',
+    'description' => 'Crie galerias com várias fotos.',
 
-    /**
-     * Opções de gerenciamento de conteúdo
-     *
-     * A opções a seguir dizem respeito a qualquer ação que envolva
-     * a interação do módulo com conteúdo.
-     */
-    /**
-     * Opções de gerenciamento deste módulo
-     *
+    /*
+     * Actions/views available
      */
     'actions' => array(
         'create' => 'Inserir',
@@ -107,20 +93,13 @@ $modInfo = array(
 	),
 
     /*
-     * Se não há valor, substitui campo vazio na listagem
-     * pelos valores abaixo
+     * These fields, if empty, are filled with text during the listing.
      */
     'replaceFieldsValueIfEmpty' => array(
         'title' => '[Sem título]',
     ),
 
-
-    /**
-     * '': 
-     */
-    '' => '',
-
-    /**
+    /*
      * Listing header
      */
     'contentHeader' => array(

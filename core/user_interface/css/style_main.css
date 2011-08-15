@@ -277,15 +277,43 @@ div#permissoesAtuais .structure {
 
 /* DEBUG */
 table.debug {
-    width: 96%;
+    width: 740px;
     margin: 15px auto;
-    font-size: 1em;
-    font-family: 'Monaco', 'System', Monospace;
+    font-size: 1.2em;
+    font-family: 'Corbel', 'Lucida Grande', 'Arial';
+	text-shadow: 0px 0px 0px #f9f9f9;
 }
     table.debug tr.header td { padding-right: 5px; }
     table.debug td.sql { padding-bottom: 5px; }
-    table.debug tr.list td.time,
-    table.debug tr.list td.result { text-align: center; }
+    table.debug tr.list td {
+		padding: 0px 0;
+	}
+
+	    table.debug tr.list td div.td_containner {
+			height: 100%;
+			display: table;
+			border-bottom: 1px solid #ddd;
+			border-top: 1px solid #f4f4f4;
+		}
+	    	table.debug tr.list td div.td_containner.first { border-top: 0px; }
+	    	table.debug tr.list td div.td_containner.last { border-bottom: 0px; }
+
+    	table.debug tr.list td div.column {
+			float: left;
+			padding: 7px 0;
+		}
+
+    table.debug td.sql { width: 590px; }
+    table.debug td.result { width: 80px; }
+    table.debug td.time { width: 70px; }
+
+    table.debug tr.list div.sql { width: 580px;}
+    table.debug tr.list div.result { margin-left: 10px; width: 80px;}
+    table.debug tr.list div.time { width: 70px; }
+
+
+    table.debug tr.list div.time,
+    table.debug tr.list div.result { text-align: left; }
 
     table.debug tr.error { color: red; font-style: italic; }
 
@@ -296,4 +324,3 @@ div.loading_timer {
     color: #666666;
 }
     div.loading_timer img { margin: 0px 3px 0px 0; }
-

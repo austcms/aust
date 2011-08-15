@@ -11,6 +11,17 @@
 class ModController extends ModActionController
 {
 
+	function beforeFilter(){
+        if( !empty($_GET["delete"]) AND $_GET["delete"] > 0 ){
+            $sql = "DELETE FROM photo_gallery_images
+                    WHERE id='".$_GET["delete"]."'";
+            if( $this->module->connection->exec($sql) ){
+				notice("Imagem excluída com sucesso.");
+            }
+
+        }
+	}
+
     public function listing(){
         $this->set('title', Aust::getInstance()->getStructureNameById($_GET['aust_node']) );
         $this->set('nome_modulo', Aust::getInstance()->structureModule($_GET['aust_node']) );
@@ -28,8 +39,6 @@ class ModController extends ModActionController
     }
 
     public function create(){
-
-
         $this->render('form');
     }
 
@@ -101,6 +110,12 @@ class ModController extends ModActionController
         $query = $this->module->connection->query($sql, "ASSOC");
         $dados = reset($query);
 
+        $sql = "SELECT id, file_name, text FROM photo_gallery_images
+                WHERE gallery_id='".$w."' ORDER BY order_nr ASC";
+
+        $images = $this->module->connection->query($sql, "ASSOC");
+
+		$this->set('images', $images);
 		$this->set('dados', $dados);
 		$this->set('w', $w);
         $this->render('form');
