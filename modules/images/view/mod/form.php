@@ -96,9 +96,7 @@
 <input type="hidden" name="w" value="<?php ifisset( $dados['id'] );?>">
 <input type="hidden" name="aust_node" value="<?php echo $austNode; ?>">
 <input type="hidden" name="frmnode_id" value="<?php echo $frmcategory; ?>">
-<table border=0 cellpadding=0 cellspacing=0 class="form">
-    <col width="200">
-    <col width="470">
+<table class="form">
 
 
     <?php
@@ -175,7 +173,7 @@
     if( !empty($dados["file_bytes"]) && $dados["file_bytes"] > 0 ){
         ?>
         <tr>
-            <td valign="top">Imagem atual:</td>
+            <td valign="top"><label>Imagem atual:</label></td>
             <td>
                 <img src="core/libs/imageviewer/visualiza_foto.php?table=images&thumbs=yes&myid=<?php echo $dados["id"]; ?>&maxxsize=450&maxysize=400" />
                 <p class="explanation">

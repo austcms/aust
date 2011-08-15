@@ -1,14 +1,7 @@
 <?php
-/**
- * MOD MIGRATION
- * 
- * Migration de um módulos
- * 
- */
 class Migration_20110128152000_AddOldFieldsToNewInstallation extends Migrations
 {
     function up(){
-
         $schema = array(
             'table' => 'files',
             'field' => 'title_encoded',
@@ -59,7 +52,6 @@ class Migration_20110128152000_AddOldFieldsToNewInstallation extends Migrations
         $this->dropField('files', 'created_on');
         $this->dropField('files', 'updated_on');
         return true;
-
     }
 }
 ?>

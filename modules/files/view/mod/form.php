@@ -55,14 +55,14 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
     <input type="hidden" name="aust_node" value="<?php echo $austNode;?>">
     <input type="hidden" name="frmnode_id" value="<?php echo $austNode;?>">
     <input type="hidden" name="frmcreated_on" value="<?php echo date("Y-m-d H:i:s"); ?>">
+	<input type="hidden" name="frmfile_name" value="<?php if( !empty($dados['file_name']) ) echo $dados['file_name'];?>">
+	<input type="hidden" name="frmfile_type" value="<?php if( !empty($dados['file_type']) ) echo $dados['file_type'];?>">
+	<input type="hidden" name="frmfile_size" value="<?php if( !empty($dados['file_size']) ) echo $dados['file_size']; ?>">
 
     <input type="hidden" name="frmurl" value="<?php if( !empty($dados['url']) ) echo $dados['url']; ?>">
-    <input type="hidden" name="frmfile_name" value="<?php if( !empty($dados['file_name']) ) echo $dados['file_name'];?>">
-    <input type="hidden" name="frmfile_type" value="<?php if( !empty($dados['file_type']) ) echo $dados['file_type'];?>">
-    <input type="hidden" name="frmfile_size" value="<?php if( !empty($dados['file_size']) ) echo $dados['file_size']; ?>">
     <input type="hidden" name="frmadmin_id" value="<?php if( !empty($dados['admin_id']) ) echo $dados['admin_id']; else echo User::getInstance()->LeRegistro('id');?>">
     
-    <table border=0 cellpadding=0 cellspacing=0 class="form">
+    <table class="form">
     <?php
     /*
      * CATEGORIA
@@ -85,7 +85,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
                 /*
                  * Nova_Categoria?
                  */
-                if( $module->getStructureConfig('nova_categoria') == 1 ){
+                if( $module->getStructureConfig('new_aust_node') == 1 ){
                     $param = array(
                         'austNode' => $austNode,
                         'categoryInput' => 'frmnode_id',
@@ -111,11 +111,13 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
 
     <tr>
         <td valign="top" class="first">
+			<label>
             <?php if($fm == "edit"){ ?>
                 Arquivo:
             <?php }else{ ?>
                 Selecione o arquivo:
             <?php } ?>
+			</label>
         </td>
         <td class="second">
             <?php
@@ -176,7 +178,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
             }
             ?>
             <tr>
-                <td valign="top" class="first">Endereço do arquivo: </td>
+                <td valign="top" class="first"><label>Endereço do arquivo:</label></td>
                 <td class="second">
                     <?php echo $url;?>
                     <p class="explanation">
@@ -189,12 +191,12 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
     }
     ?>
     <tr>
-        <td valign="top" class="first">Título: </td>
+        <td valign="top" class="first"><label>Título:</label></td>
         <td class="second">
             <input type="text" name="frmtitle" value="<?php if( !empty($dados['title']) ) echo $dados['title'];?>" class="text" />
             <?php tt('Digite um título. Lembre-se, títulos começam com letra maiúscula e não leva
                 ponto final.'); ?>
-            <p class="explanation_example">
+            <p class="explanation">
                 Exemplo: <em>Arquivo de exercícios segunda prova</em>
             </p>
             <p class="explanation" id="exists_titulo">
@@ -214,7 +216,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
     if( $showDescricao ){
         ?>
         <tr>
-            <td valign="top">Descrição: </td>
+            <td valign="top"><label>Descrição:</label></td>
             <td>
                 <textarea name="frmdescription" id="jseditor" rows="8" cols="45" style="font-size: 11px; font-family: verdana;"><?php ifisset( str_replace("\n","<br>",$dados['description']) ); // Para TinyMCE ?></textarea>
                 <p class="explanation">
@@ -233,7 +235,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
 </form>
 
 <br />
-<p>
+<p class="explanation">
     Os arquivos enviados poderão ter o tamanho limite de
     <strong><?php echo $maxSize ?>Mb</strong> neste servidor.
 </p>

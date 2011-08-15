@@ -5,29 +5,17 @@
  */
 
 $modInfo = array(
-    /**
-     * 'nome': Nome humano do módulo
-     */
+	'state' => 'stable',
     'name' => 'Files',
-    /**
-     * 'className': Classe oficial do módulo
+    /*
+     * 'className': the model's class name
      */
     'className' => 'Files',
-    /**
-     * 'description'
-     */
     'description' => 'Responsável pelo upload e gerenciamento de arquivos.',
 
-    /**
-     * Opções de gerenciamento de conteúdo
-     *
-     * A opções a seguir dizem respeito a qualquer ação que envolva
-     * a interação do módulo com conteúdo.
-     */
-    /**
-     * Opções de gerenciamento deste módulo
-     *
-     */
+	/*
+	 * Actions/views available
+	 */
     'actions' => array(
         'create' => 'Novo',
         'listing' => 'Listar',
@@ -42,34 +30,23 @@ $modInfo = array(
 		    "label" => "Qual path destino do upload?",
 		    "inputType" => "input",
 		),
-		/*
-		 * Ordenate
-		 */
 		'select_category' => array(
 		    "value" => "",
 		    "label" => "Permite selecionar categoria",
 		    "inputType" => "checkbox",
 		),
-		/*
-		 * Resumo
-		 */
-		'nova_categoria' => array(
+
+		'new_aust_node' => array(
 		    "value" => "",
 		    "label" => "Permite criar categoria?",
 		 	"inputType" => "checkbox",
 			'help' => 'Depende que a Seleção de Categoria esteja ligada.',
 		),
-		/*
-		 * Resumo
-		 */
 		'description' => array(
 		    "value" => "",
 		    "label" => "Tem descrição?",
 		    "inputType" => "checkbox",
 		),
-		/*
-		 * show_path_to_link
-		 */
 		'show_path_to_link' => array(
 		    "value" => "",
 		    "label" => "Mostrar path para link?",

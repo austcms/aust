@@ -1,53 +1,25 @@
-<?php
-$h1 = ''.Aust::getInstance()->getStructureNameById($_GET['aust_node']);
-$nome_modulo = Aust::getInstance()->structureModule($_GET['aust_node']);
-$sql = "SELECT
-            id,nome
-        FROM
-            ".Aust::$austTable."
-        WHERE
-            id='".$_GET['aust_node']."'";
-
-
-$catQuery = $module->connection->query($sql);
-
-$cat = $catQuery[0]['nome'];?>
+<?php $h1 = Aust::getInstance()->getStructureNameById($_GET['aust_node']); ?>
 <h2><?php echo $h1; ?></h2>
-<p>Abaixo você encontra a listagem dos últimos itens desta categoria.</p>
-<?php
+<p>
+	Abaixo você encontra a listagem dos últimos itens desta categoria.
+</p>
 
-if((!empty($filter)) AND ($filter <> 'off')){
-	$addurl = "&filter=$filter&filterw=" . urlencode($filterw);
-}
-
-/*********************************
-*
-*	Começa a listagem
-*
-*********************************/
-?>
 <form method="post" action="<?php echo $_SERVER['PHP_SELF']?>?section=<?php echo $_GET['section'];?>&action=actions&aust_node=<?php echo $_GET["aust_node"];?>">
 <a name="list"></a>
 <?php
 /*
- * Pode excluir conteúdo?
+ * Permission to delete the content?
  */
-if( StructurePermissions::getInstance()->canDelete($austNode) ){
-    ?>
+if( StructurePermissions::getInstance()->canDelete($austNode) ){ ?>
     <div class="painel_de_controle"><input type="submit" class="js_confirm" name="deletar" value="Deletar selecionados" />
     </div>
-    <?php
-}
-
-?>
+<?php } ?>
 
 <div id="listing_table">
 	<?php
 	include($module->getIncludeFolder().'/view/mod/_listing_thumbs_view.php');
 	?>
 </div>
-
-
 
 </form>
 
@@ -57,7 +29,6 @@ if( StructurePermissions::getInstance()->canDelete($austNode) ){
  * mostra painel de navegação para paginação
  */
 
-    //$sql = $module->getSQLForListing($categorias);
     $total_registros = $module->totalRows;
 
     $total_paginas = $total_registros/$numPorPagina;
@@ -100,7 +71,3 @@ if( StructurePermissions::getInstance()->canDelete($austNode) ){
     }
 
 ?>
-
-<p style="margin-top: 15px;">
-	<a href="adm_main.php?section=<?php echo MODULES?>"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
-</p>

@@ -18,7 +18,7 @@ p { margin-top: 0px; margin-bottom: 15px; line-height: 18px; }
 ul { margin-left: 40px; margin-bottom: 15px; }
 
 p.alerta { }
-p.explanation { color: silver; padding: 0; display:inline-block; margin:0; }
+p.explanation { color: #999; padding: 0; display:inline-block; margin:0; }
 
 h1, h2, h3, h4, h5, h6 { font-weight: normal; margin-bottom: 15px; }
 h1 { font-size: 3.0em; margin-top: 15px; }

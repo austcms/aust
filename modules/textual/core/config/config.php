@@ -8,7 +8,7 @@ $modInfo = array(
 	'state' => 'stable',
 	
     'name' => 'Textual',
-    /**
+    /*
      * 'className': the model's class name
      */
     'className' => 'Textual',
@@ -89,7 +89,7 @@ $modInfo = array(
     ),
     
     /*
-     * The following fields are fullfilled if empty
+     * The following fields are filled if empty
      */
     'replaceFieldsValueIfEmpty' => array(
         'title' => '[Sem título]',

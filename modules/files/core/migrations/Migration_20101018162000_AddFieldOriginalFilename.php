@@ -1,10 +1,4 @@
 <?php
-/**
- * MOD MIGRATION
- * 
- * Migration de um módulos
- * 
- */
 class Migration_20101018162000_AddFieldOriginalFilename extends Migrations
 {
     function up(){
@@ -23,7 +17,6 @@ class Migration_20101018162000_AddFieldOriginalFilename extends Migrations
     function down(){
         $this->dropField('files', 'original_filename');
         return true;
-
     }
 }
 ?>
