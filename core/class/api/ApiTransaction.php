@@ -18,6 +18,8 @@ class ApiTransaction {
 	
 	public function perform($get){
 		$result = array();
+
+		$get = $this->ensureArray($get);
 		
 		if( array_key_exists('version', $get) ){
 			$result = $this->version();

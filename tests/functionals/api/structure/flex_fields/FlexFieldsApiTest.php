@@ -5,6 +5,11 @@ require_once 'tests/config/auto_include.php';
 class FlexFieldsApiTest extends PHPUnit_Framework_TestCase
 {
 
+	/*
+	 * A id of any record in the News table
+	 */
+	public $newsId;
+
     public function setUp(){
         $this->obj = new ApiTransaction();
     }
@@ -26,6 +31,9 @@ class FlexFieldsApiTest extends PHPUnit_Framework_TestCase
 						)
 				";
 		Connection::getInstance()->exec($sql);
+
+		$news = Connection::getInstance()->query("SELECT id FROM news LIMIT 1");
+		$this->newsId = $news[0]['id'];
 	}
 	
     function testAskVersionJson(){
@@ -157,6 +165,23 @@ class FlexFieldsApiTest extends PHPUnit_Framework_TestCase
 		$this->assertContains('co-founder and public face', $return[0]['text']);
 	}
 	
+	// returns Array
+	function testGetDataById(){
+		$this->createContent();
+
+		$query = array(
+			'query' => 'News',
+			'fields' => 'id;title;text',
+			'id' => $this->newsId
+		);
+
+		$return = $this->obj->getData($query);
+		$this->assertInternalType('array', $return);
+		$this->assertEquals(1, count($return));
+		$this->assertArrayHasKey('text', $return[0]);
+		$this->assertContains($this->newsId, $return[0]['id']);
+
+	}	
 	// returns JSON
 	function testPerform(){
 		$this->createContent();
