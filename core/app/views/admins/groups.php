@@ -1,9 +1,9 @@
 <div class="pessoas">
-    <h2>Grupos</h2>
-    <p style="width: 500px">
-        Adicione grupos adicionais de usuários. Lembre-se, grupos não podem ser excluídos,
+	<h2>Grupos</h2>
+	<p style="width: 500px">
+		Adicione grupos adicionais de usuários. Lembre-se, grupos não podem ser excluídos,
 		pois senão deixarão usuários órfãos (sem grupo).
-    </p>
+	</p>
 <?php
 $admin = User::getInstance();
 
@@ -11,16 +11,16 @@ $admin = User::getInstance();
 if( !empty($_POST['new_group']) && !empty($_POST['name']) ){
 	
 	$sql = "SELECT id
-	        FROM admin_groups
-	        WHERE
-	            name LIKE '".$_POST['name']."'";
+			FROM admin_groups
+			WHERE
+				name LIKE '".$_POST['name']."'";
 	
 	$query = Connection::getInstance()->query($sql);
 	if( count($query) < 1 ){
 	
 		$sql = "INSERT INTO
 					admin_groups
-		        (name, description, public, created_on)
+				(name, description, public, created_on)
 				VALUES
 				('".$_POST['name']."', '".$_POST['description']."', '1', '".date('Y-m-d H:i:s')."')";
 		$query = Connection::getInstance()->query($sql);
@@ -61,22 +61,22 @@ if( !empty($_POST['edit_group']) &&
  */
 $w = (!empty($_GET['w'])) ? $_GET['w'] : 'NULL';
 $sql = "SELECT *
-        FROM admins
-        WHERE
-            id='$w'";
+		FROM admins
+		WHERE
+			id='$w'";
 $query = Connection::getInstance()->query($sql);
 if( !empty($query) ){
-    $dados = $query[0];
+	$dados = $query[0];
 }
 ?>
 
 <?php
 $sql = "SELECT
 			*
-        FROM
-            admin_groups
-        ORDER BY id ASC
-        ";
+		FROM
+			admin_groups
+		ORDER BY id ASC
+		";
 $query = Connection::getInstance()->query($sql);
 //echo $sql;
 
@@ -87,23 +87,23 @@ $query = Connection::getInstance()->query($sql);
 </script>
 <table class="listing pessoas">
 <tr class="header">
-    <td>
-        Nome
-    </td>
-    <td>
-        Tipo
-    </td>
-    <td>
-        Opções
-    </td>
+	<td>
+		Nome
+	</td>
+	<td>
+		Tipo
+	</td>
+	<td>
+		Opções
+	</td>
 </tr>
 <?php
 foreach($query as $dados){
 	if( in_array($dados['name'], array("Webmaster", "Root") ) )
 		continue;
 ?>
-    <tr class="list">
-        <td>
+	<tr class="list">
+		<td>
 			<script type="text/javascript">
 				groups[<?php echo $dados["id"]?>] = {
 					'name': '<?php echo $dados["name"]?>',
@@ -111,16 +111,16 @@ foreach($query as $dados){
 				};
 			</script>
 		
-            <?php echo $dados["name"]?>
-        </td>
+			<?php echo $dados["name"]?>
+		</td>
 
-        <td style="color: #666; font-size: 0.8em">
-            <?php echo $dados['description']; ?>
-        </td>
-        <td>
-            <a href="javascript: void(0)" onclick="editGroup('<?php echo $dados["id"]; ?>')" style="text-decoration: none;" title="Editar"><img src="<?php echo IMG_DIR?>edit.png" alt="Editar" border="0" /></a>
-        </td>
-    </tr>
+		<td style="color: #666; font-size: 0.8em">
+			<?php echo $dados['description']; ?>
+		</td>
+		<td>
+			<a href="javascript: void(0)" onclick="editGroup('<?php echo $dados["id"]; ?>')" style="text-decoration: none;" title="Editar"><img src="<?php echo IMG_DIR?>edit.png" alt="Editar" border="0" /></a>
+		</td>
+	</tr>
 <?php
 }
 ?>
@@ -166,7 +166,7 @@ foreach($query as $dados){
 </div>
 
 <p style="margin-top: 15px;">
-    <a href="adm_main.php?section=admins">Voltar</a>
+	<a href="adm_main.php?section=admins">Voltar</a>
 </p>
 
 </div>
@@ -174,41 +174,41 @@ foreach($query as $dados){
 <div class="divisoria">
 </div>
 <div class="mais_opcoes">
-    <h3>Mais opções</h3>
-    <?php
-    /*
-     * Verifica permissões
-     */
-    /*
-     * Nova pessoa
-     */
+	<h3>Mais opções</h3>
+	<?php
+	/*
+	 * Verifica permissões
+	 */
+	/*
+	 * Nova pessoa
+	 */
 // 	if( in_array( User::getInstance()->LeRegistro("group"), $navPermissoes['admins']['form'] ) ){
-    if( UiPermissions::getInstance()->isPermittedSection() ){
+	if( UiPermissions::getInstance()->isPermittedSection() ){
 
-        ?>
-        <div class="botao">
-            <div class="bt_novapessoa">
-                <a href="adm_main.php?section=admins&action=form&fm=criar"></a>
-            </div>
-        </div>
-        <?php
-    }
-    ?>
-    <div class="botao">
-        <div class="bt_grupos">
-            <a href="adm_main.php?section=admins&action=groups"></a>
-        </div>
-    </div>
-    <div class="botao">
-        <div class="bt_permissoes">
-            <a href="adm_main.php?section=permissoes"></a>
-        </div>
-    </div>
-    <div class="botao">
-        <div class="bt_dados">
-            <a href="adm_main.php?section=admins&action=edit&fm=editar"></a>
-        </div>
-    </div>
+		?>
+		<div class="botao">
+			<div class="bt_novapessoa">
+				<a href="adm_main.php?section=admins&action=form&fm=criar"></a>
+			</div>
+		</div>
+		<?php
+	}
+	?>
+	<div class="botao">
+		<div class="bt_grupos">
+			<a href="adm_main.php?section=admins&action=groups"></a>
+		</div>
+	</div>
+	<div class="botao">
+		<div class="bt_permissoes">
+			<a href="adm_main.php?section=permissoes"></a>
+		</div>
+	</div>
+	<div class="botao">
+		<div class="bt_dados">
+			<a href="adm_main.php?section=admins&action=edit&fm=editar"></a>
+		</div>
+	</div>
 
 
 </div>

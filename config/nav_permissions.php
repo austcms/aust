@@ -6,75 +6,75 @@
  * especificado.
  */
 $navPermissoes = array(
-                    'categorias' =>
-                        array('new' =>
-                            array(
-                                'Webmaster', 'Administrador'
-                            )
-                        ),
-                    'admins' =>
-                        array('form' =>
-                            array(
-                                'Webmaster',
-                                'Administrador',
-                                //'Moderador'
-                            )
-                        ),
-                        array('au-permissao' =>
-                            array(
-                                'Webmaster',
-                                'Administrador',
-                                //'Moderador'
-                            )
-                        ),
-                    'control_panel' =>
-                        array('au-permissao' =>
-                            array('Webmaster')
-                        )
+					'categorias' =>
+						array('new' =>
+							array(
+								'Webmaster', 'Administrador'
+							)
+						),
+					'admins' =>
+						array('form' =>
+							array(
+								'Webmaster',
+								'Administrador',
+								//'Moderador'
+							)
+						),
+						array('au-permissao' =>
+							array(
+								'Webmaster',
+								'Administrador',
+								//'Moderador'
+							)
+						),
+					'control_panel' =>
+						array('au-permissao' =>
+							array('Webmaster')
+						)
 
-    );
+	);
 
 $configPermissoes = array(
-    'Geral' => '*',
+	'Geral' => '*',
 );
 
 class NAVIGATION_PERMISSIONS_CONFIGURATIONS {
-    
-    static $navigation = array(
-        'taxonomy' =>
-            array('new' =>
-                array(
-                    'Webmaster', 'Administrador'
-                )
-            ),
-        'admins' => array(
-            'form' => array(
-                'Webmaster',
-                'Administrador',
-                //'Moderador'
-            )
-        ),
-        array(
-            'au-permissao' => array(
-                'Webmaster',
-                'Administrador',
-                //'Moderador'
-            )
-        ),
-        'control_panel' => array(
-            'au-permissao' => array(
-                'Webmaster'
-            )
-        ),
-    );
+	
+	static $navigation = array(
+		'taxonomy' =>
+			array('new' =>
+				array(
+					'Webmaster', 'Administrador'
+				)
+			),
+		'admins' => array(
+			'form' => array(
+				'Webmaster',
+				'Administrador',
+				//'Moderador'
+			)
+		),
+		array(
+			'au-permissao' => array(
+				'Webmaster',
+				'Administrador',
+				//'Moderador'
+			)
+		),
+		'control_panel' => array(
+			'au-permissao' => array(
+				'Webmaster'
+			)
+		),
+	);
 
-    static $configurations = array(
-        'Geral' => '*'
-    );
+	static $configurations = array(
+		'Geral' => '*'
+	);
 
-    static $widgets = array(
-        'Webmaster', 'Root', 'Administrador', 'Moderador', 'Colaborador'
-    );
+	static $widgets = array(
+		'Webmaster', 'Root', 'Administrador', 'Moderador', 'Colaborador'
+	);
 }
 
 

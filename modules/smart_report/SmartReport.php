@@ -1,58 +1,53 @@
 <?php
 /**
- * CLASSE DO MÓDULO
+ * Module's model class
  *
- * Classe contendo funcionalidades deste módulo
- *
-  * @name Conteúdos
- * @author Alexandre de Oliveira <chavedomundo@gmail.com>
- * @version 0.2
  * @since v0.1.5, 30/05/2009
  */
 class SmartReport extends Module
 {
-    public $mainTable = "textos";
+	public $mainTable = "textos";
 
-    public $date = array(
-        'standardFormat' => '%d/%m/%Y',
-        'created_on' => 'adddate',
-        'updated_on' => ''
-    );
+	public $date = array(
+		'standardFormat' => '%d/%m/%Y',
+		'created_on' => 'adddate',
+		'updated_on' => ''
+	);
 
-    function __construct(){
-        parent::__construct(array());
-    }
+	function __construct(){
+		parent::__construct(array());
+	}
 
-    /**
-     * getInstance()
-     *
-     * Para Singleton
-     *
-     * @staticvar <object> $instance
-     * @return <Conexao object>
-     */
-    static function getInstance(){
-        static $instance;
+	/**
+	 * getInstance()
+	 *
+	 * Para Singleton
+	 *
+	 * @staticvar <object> $instance
+	 * @return <Conexao object>
+	 */
+	static function getInstance(){
+		static $instance;
 
-        if( !$instance ){
-            $instance[0] = new get_class();
-        }
+		if( !$instance ){
+			$instance[0] = new get_class();
+		}
 
-        return $instance[0];
+		return $instance[0];
 
-    }
+	}
 
 	function runFilter($w){
 		
-        $sql = "
-                SELECT
-                    *
-                FROM
-                    smart_reports_filters
-                WHERE
-                    id='$w'
-                ";
-        $firstQuery = reset( Connection::getInstance()->query($sql) );
+		$sql = "
+				SELECT
+					*
+				FROM
+					smart_reports_filters
+				WHERE
+					id='$w'
+				";
+		$firstQuery = reset( Connection::getInstance()->query($sql) );
 
 		if( empty($firstQuery) )
 			return array();
@@ -77,15 +72,15 @@ class SmartReport extends Module
 		return $query;
 	}
 	
-    /**
-     * loadSql()
-     *
-     * Retorna um SQL para uma listagem genérica dos dados deste módulo.
-     *
-     * @param <array> $options
-     * @return <string>
-     */
-    public function loadSql($options = array()) {
+	/**
+	 * loadSql()
+	 *
+	 * Retorna um SQL para uma listagem genérica dos dados deste módulo.
+	 *
+	 * @param <array> $options
+	 * @return <string>
+	 */
+	public function loadSql($options = array()) {
 		$sql = "SELECT
 					*
 				FROM
@@ -93,9 +88,9 @@ class SmartReport extends Module
 				WHERE
 					node_id IN('". implode("','", array_keys($options['austNode']) ) ."')
 				LIMIT 1000";
-        return $sql;
+		return $sql;
 
-    } // fim getSQLForListing()
+	} // fim getSQLForListing()
 
 	public function load($params = array()){
 		$qry = parent::load($params);
@@ -104,23 +99,23 @@ class SmartReport extends Module
 		return $qry;
 	}
 
-    /**
-     * save()
-     *
-     * Salva dados da estrutura.
-     *
-     * @param <array> $post
-     * @return <bool>
-     */
-    public function save($post = array() ){
+	/**
+	 * save()
+	 *
+	 * Salva dados da estrutura.
+	 *
+	 * @param <array> $post
+	 * @return <bool>
+	 */
+	public function save($post = array() ){
 
-        if( empty($post) )
-            return false;
-        $post['frmtitulo_encoded'] = encodeText($post['frmtitulo']);
+		if( empty($post) )
+			return false;
+		$post['frmtitulo_encoded'] = encodeText($post['frmtitulo']);
 
 
-        return parent::save($post);
-        
-    }
+		return parent::save($post);
+		
+	}
 }
 ?>

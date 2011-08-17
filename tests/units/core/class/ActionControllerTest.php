@@ -5,12 +5,12 @@ require_once 'tests/config/auto_include.php';
 class ActionControllerTest extends PHPUnit_Framework_TestCase
 {
 
-    public function setUp(){
+	public function setUp(){
 
-    }
+	}
 
 	function testActionControllerInitialization(){
-        $controller = new ActionController(false);
+		$controller = new ActionController(false);
 		$this->assertTrue($controller->completedRequest);
 		$this->assertFalse($controller->isRendered);
 	}
@@ -18,7 +18,7 @@ class ActionControllerTest extends PHPUnit_Framework_TestCase
 	function testViewFile(){
 		$_GET["section"] = "content";
 		$_GET["action"] = "test_action";
-        $controller = new ActionController();
+		$controller = new ActionController();
 
 		$this->assertEquals("core/app/views/content/", $controller->_viewFile());
 	}
@@ -26,7 +26,7 @@ class ActionControllerTest extends PHPUnit_Framework_TestCase
 	function testCallingActionWithoutRendering(){
 		$_GET["section"] = "content";
 		$_GET["action"] = "test_action";
-        $controller = new ActionController();
+		$controller = new ActionController();
 
 		$this->assertEquals("test_action", $controller->_action());
 		
@@ -42,7 +42,7 @@ class ActionControllerTest extends PHPUnit_Framework_TestCase
 	function testRenderizationAndSettingParamsVariable(){
 		$_GET["section"] = "content";
 		$_GET["action"] = "test";
-        $controller = new ActionController();
+		$controller = new ActionController();
 
 		$this->assertRegExp('/View test from content controller./', $controller->render());
 		$this->assertTrue($controller->isRendered);
@@ -51,7 +51,7 @@ class ActionControllerTest extends PHPUnit_Framework_TestCase
 	function test_controllerPathName(){
 		$_GET["section"] = "content";
 		$_GET["action"] = "test";
-        $controller = new ActionController();
+		$controller = new ActionController();
 		
 		$this->assertEquals("action", $controller->_controllerPathName());
 	}

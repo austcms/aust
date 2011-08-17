@@ -11,7 +11,7 @@ class Api {
 	 * 
 	 * The Dispatcher function is responsible for the other 50% of the process.
 	 */
-    function __construct() {
+	function __construct() {
 
 		require_once(CONFIG_DATABASE_FILE);
 
@@ -24,29 +24,29 @@ class Api {
 		/*
 		 * Configuration about the core
 		 */
-	    include_once(CONFIG_DIR."core.php");
+		include_once(CONFIG_DIR."core.php");
 
 		/*
 		 * Loads the whole core functions
 		 */
-		    include(CORE_DIR.'load_core.php');
+			include(CORE_DIR.'load_core.php');
 		
-	    /*
-	     * How's the connection
-	     */
-	    if( !Connection::getInstance()->dbExists() ||
+		/*
+		 * How's the connection
+		 */
+		if( !Connection::getInstance()->dbExists() ||
 			($this->installationDiagnostics() != 1) )
 		{
-	        echo 'system error 002';
-	    }
-	    /*
-	     * Diagnostics show everything's fine
-	     */
-	    else {
+			echo 'system error 002';
+		}
+		/*
+		 * Diagnostics show everything's fine
+		 */
+		else {
 
 
 		}
-    }
+	}
 	
 	/**
 	 * This methods ignites the process of mining for data and retrieving as JSON/XML

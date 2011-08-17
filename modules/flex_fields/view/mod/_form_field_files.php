@@ -7,9 +7,9 @@ $fieldName = $value['nomeFisico'];
 $inputName = "data[".$infoCadastro["structure"]["table"]["value"]."][".$fieldName."]";
 ?>
 <div class="input">
-    <label for="input-<?php echo $fieldName ?>"><?php echo $value['label'] ?></label>
+	<label for="input-<?php echo $fieldName ?>"><?php echo $value['label'] ?></label>
 
-    <div class="input_field input_images input_<?php echo $fieldName ?>">
+	<div class="input_field input_images input_<?php echo $fieldName ?>">
 	
 	<div class="images">
 		<?php
@@ -65,9 +65,9 @@ $inputName = "data[".$infoCadastro["structure"]["table"]["value"]."][".$fieldNam
 				</span>
 				<br clear="all" />
 				
-                <a href="javascript: void(0);" onclick="if( confirm('Você tem certeza que deseja excluir este arquivo?') ) window.open('adm_main.php?section=<?php echo $_GET["section"]; ?>&action=<?php echo $_GET["action"]; ?>&aust_node=<?php echo $_GET["aust_node"]; ?>&w=<?php echo $_GET["w"];?>&deletefile=<?php echo $file["id"]; ?>','_top');">
-                    <img src="core/user_interface/img/icons/delete_15x15.png" alt="Excluir" title="Excluir" border="0" />
-                </a>
+				<a href="javascript: void(0);" onclick="if( confirm('Você tem certeza que deseja excluir este arquivo?') ) window.open('adm_main.php?section=<?php echo $_GET["section"]; ?>&action=<?php echo $_GET["action"]; ?>&aust_node=<?php echo $_GET["aust_node"]; ?>&w=<?php echo $_GET["w"];?>&deletefile=<?php echo $file["id"]; ?>','_top');">
+					<img src="core/user_interface/img/icons/delete_15x15.png" alt="Excluir" title="Excluir" border="0" />
+				</a>
 				</td>
 				
 				<?php
@@ -112,7 +112,7 @@ $inputName = "data[".$infoCadastro["structure"]["table"]["value"]."][".$fieldNam
 			break;
 		
 		?>
-        <input type="file" name="<?php echo $inputName ?>[]" value="<?php echo $inputValue ?>" id="input-<?php echo $fieldName ?>" <?php echo $multiple ?> />
+		<input type="file" name="<?php echo $inputName ?>[]" value="<?php echo $inputValue ?>" id="input-<?php echo $fieldName ?>" <?php echo $multiple ?> />
 		<?php
 	}
 	?>

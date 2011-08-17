@@ -1,7 +1,7 @@
 <?php
 class Migration_20110205051700_InsertVisitants extends Migrations
 {
-    function up(){
+	function up(){
 
 		$sql = "SELECT node_id, value, id
 				FROM flex_fields_config
@@ -14,20 +14,20 @@ class Migration_20110205051700_InsertVisitants extends Migrations
 
 		$fields = Connection::getInstance()->query($sql);
 		foreach( $fields as $field ){
-	        $schema = array(
-	            'table' => $field['value'],
-	            'field' => 'visitants',
-	            'type' => 'int',
-	            'position' => 'AFTER updated_on',
+			$schema = array(
+				'table' => $field['value'],
+				'field' => 'visitants',
+				'type' => 'int',
+				'position' => 'AFTER updated_on',
 				'default' => '0',
-	        );
-        	$this->addField($schema);
+			);
+			$this->addField($schema);
 		}
 		
-        return true;
-    }
+		return true;
+	}
 
-    function down(){
+	function down(){
 
 		$sql = "SELECT node_id, value, id
 				FROM flex_fields_config
@@ -42,11 +42,11 @@ class Migration_20110205051700_InsertVisitants extends Migrations
 		
 		$sqls = array();
 		foreach( $fields as $field ){
-	        $this->dropField($field['value'], 'visitants');
+			$this->dropField($field['value'], 'visitants');
 		}
 
-        return true;
-    }
+		return true;
+	}
 
 }
 ?>

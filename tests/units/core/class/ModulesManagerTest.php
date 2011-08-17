@@ -15,13 +15,13 @@ class ModulesManagerTest extends PHPUnit_Framework_TestCase
 	function tearDown(){
 	}
 	
-    public function testInitialization(){
-        $this->obj = new ModulesManager();
-    }
+	public function testInitialization(){
+		$this->obj = new ModulesManager();
+	}
 
 
-    public function testGetModuleInformation(){
-        $this->obj = new ModulesManager();
+	public function testGetModuleInformation(){
+		$this->obj = new ModulesManager();
 		
 		$modulesInstalled = array(
 			"textual",
@@ -32,7 +32,7 @@ class ModulesManagerTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals("Textual", $result["textual"]["config"]["className"]);
 		$this->assertEquals("textual", $result["textual"]["path"]);
 		
-    }
+	}
 
 	function testDirectory(){
 		$obj = new ModulesManager();
@@ -55,13 +55,13 @@ class ModulesManagerTest extends PHPUnit_Framework_TestCase
 		$modInfo['name'] = 'textuall';
 		$modInfo['description'] = 'desc';
 		
-        $param = array(
-            'property' => 'dir',
-            'value' => 'textual',
-            'directory' => 'textual',
-            'modInfo' => $modInfo,
-            'admin_id' => '7',
-        );
+		$param = array(
+			'property' => 'dir',
+			'value' => 'textual',
+			'directory' => 'textual',
+			'modInfo' => $modInfo,
+			'admin_id' => '7',
+		);
 		ModulesManager::getInstance()->configureModule($param);
 		
 		$result = Connection::getInstance()->query("SELECT * FROM modules_installed");

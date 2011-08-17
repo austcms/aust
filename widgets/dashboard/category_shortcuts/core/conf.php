@@ -12,7 +12,7 @@ $conf['class'] = 'CategoryShortcuts';
  * TOOLTIPS
  */
 $conf['tt']['title'] = 'Estas são as <em>estruturas instaladas</em> no site. Passe o mouse e'.
-                       ' acesse os formulários mais rapidamente.';
+					   ' acesse os formulários mais rapidamente.';
 
 
 ?>

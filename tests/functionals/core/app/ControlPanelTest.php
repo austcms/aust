@@ -5,9 +5,9 @@ require_once 'tests/config/auto_include.php';
 class ControlPanelTest extends PHPUnit_Framework_TestCase
 {
 
-    public function setUp(){
+	public function setUp(){
 		require_once(CONTROLLERS_DIR."control_panel_controller.php");
-    }
+	}
 
 	public function testIndex(){
 		
@@ -16,7 +16,7 @@ class ControlPanelTest extends PHPUnit_Framework_TestCase
 		$_GET['section'] = "control_panel";
 		$_GET['action'] = "index";
 
-        $this->obj = new Dispatcher;
+		$this->obj = new Dispatcher;
 		$this->obj->dispatch();
 		$rendered = $this->obj->controller->render();
 		
@@ -30,7 +30,7 @@ class ControlPanelTest extends PHPUnit_Framework_TestCase
 		/* we login and we should access the page */
 		login();
 
-        $this->obj = new Dispatcher;
+		$this->obj = new Dispatcher;
 		$this->obj->dispatch();
 		$rendered = $this->obj->controller->render();
 
@@ -39,7 +39,7 @@ class ControlPanelTest extends PHPUnit_Framework_TestCase
 		/* what about no modules installed? */
 		$this->assertTrue(Connection::getInstance()->hasTable('modules_installed'));
 		Connection::getInstance()->exec("DELETE FROM modules_installed");
-        $this->obj = new Dispatcher;
+		$this->obj = new Dispatcher;
 		$this->obj->dispatch();
 		$rendered = $this->obj->controller->render();
 

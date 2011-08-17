@@ -4,7 +4,6 @@
  *
  * Handles the requests, find out what structure was asked for and retrieves.
  *
- * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @since v0.3, 17/06/2011
  */
 class ApiTransaction {
@@ -12,9 +11,9 @@ class ApiTransaction {
 	public $dataFormat = 'json';
 	public $queryParser;
 
-    function __construct() {
+	function __construct() {
 		$this->queryParser = new ApiQueryParser();
-    }
+	}
 	
 	public function perform($get){
 		$result = array();

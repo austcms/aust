@@ -1,61 +1,61 @@
 /* CSS Document */
 * {
-    margin: 0;
-    padding: 0;
+	margin: 0;
+	padding: 0;
 }
 
 html { background: #f4f4f4; }
 
 body {
-    background: #f4f4f4;
-    font-family: 'Lucida Grande', 'Lucida Sans', Arial, 'Trebuchet MS', sans-serif;
-    height: 100%;
-    font-size: 76%;
-    color: #666666;
+	background: #f4f4f4;
+	font-family: 'Lucida Grande', 'Lucida Sans', Arial, 'Trebuchet MS', sans-serif;
+	height: 100%;
+	font-size: 76%;
+	color: #666666;
 }
 
 p { margin-bottom: 15px; text-align: center; font-size: 1em; line-height: 18px; }
 p.incorrect { font-style: italic; font-weight: bold; color: #f50079 }
 
 h1 {
-    text-align: center; margin: 0px auto; font-size: 2.2em;
-    font-family: 'Georgia';
-    padding: 10px;
+	text-align: center; margin: 0px auto; font-size: 2.2em;
+	font-family: 'Georgia';
+	padding: 10px;
 }
 h2.wait {
-    text-align: center;
-    padding: 70px 0;
-    color: #999999;
+	text-align: center;
+	padding: 70px 0;
+	color: #999999;
 }
 
-    .body {
-        width: 350px;
+	.body {
+		width: 350px;
 
-        position: absolute;
-        left: 50%; margin-left: -175px;
-        top: 50%; margin-top: -92px; /* height de .inside -20px */
+		position: absolute;
+		left: 50%; margin-left: -175px;
+		top: 50%; margin-top: -92px; /* height de .inside -20px */
 
-        background: #dddddd;
-    }
+		background: #dddddd;
+	}
 
-    .body .inside {
-        margin: 10px;
-        min-height: 165px;
-        background: white;
-    }
+	.body .inside {
+		margin: 10px;
+		min-height: 165px;
+		background: white;
+	}
 	
 td.label { text-align: right; color: #888888; }
 
 td.input { text-align: left; }
-    td.input input {
-        width: 160px; height: 22px;
-        font-size: 1.4em;
-        font-family: Verdana, 'Georgia';
-        border: solid 1px #eeeeee;
-        padding: 1px;
-    }
+	td.input input {
+		width: 160px; height: 22px;
+		font-size: 1.4em;
+		font-family: Verdana, 'Georgia';
+		border: solid 1px #eeeeee;
+		padding: 1px;
+	}
 
 td.submit { text-align: center; }
-    td.submit input { padding: 5px; margin: 5px 0 10px 0; font-style: italic; }
+	td.submit input { padding: 5px; margin: 5px 0 10px 0; font-style: italic; }
 	
 

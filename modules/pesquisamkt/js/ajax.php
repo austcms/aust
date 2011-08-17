@@ -2,9 +2,6 @@
 /**
  * Ajax do Módulo
  *
- * @package ModCadastro
- * @name adm_main.php
- * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @since v0.1.6 25/07/2009
  */
 /**
@@ -17,7 +14,7 @@ session_start();
  * Se não está definido o endereço deste arquivo até o root
  */
 if(!defined('THIS_TO_BASEURL')){
-    define('THIS_TO_BASEURL', '../../../');
+	define('THIS_TO_BASEURL', '../../../');
 }
 
 /**
@@ -47,17 +44,17 @@ $conexao = Connection::getInstance();
 /**
  * Configurações do core do sistema
  */
-    include(CONFIG_DIR."core.php");
+	include(CONFIG_DIR."core.php");
 /**
  * Permissões de tipos de usuários relacionados à navegação
  */
-    include(CONFIG_DIR."nav_permissions.php");
+	include(CONFIG_DIR."nav_permissions.php");
 /**
  * Carrega o CORE
  */
-    include(CORE_DIR.'load_core.php');
+	include(CORE_DIR.'load_core.php');
 
-    
+	
 include('../index.php');
 
 header("Content-Type: text/html; charset=".$aust_charset['view'],true);
@@ -69,36 +66,36 @@ header("Content-Type: text/html; charset=".$aust_charset['view'],true);
  * LER TABELAS
  */
 if($_POST['action'] == 'leResultadosAbertos'){
-    $sql = "SELECT
-                resposta
-            FROM
-                pesqmkt_respostas_textos
-            WHERE
-                pesqmkt_pergunta_id='".$_POST["id"]."'";
-    $arraytmp = Connection::getInstance()->query($sql);
-    $i = 1;
-    foreach($arraytmp AS $value){
-        echo "<p><strong>".$i.".</strong> <em>".$value["resposta"].'</em></p>';
-        $i++;
-    }
+	$sql = "SELECT
+				resposta
+			FROM
+				pesqmkt_respostas_textos
+			WHERE
+				pesqmkt_pergunta_id='".$_POST["id"]."'";
+	$arraytmp = Connection::getInstance()->query($sql);
+	$i = 1;
+	foreach($arraytmp AS $value){
+		echo "<p><strong>".$i.".</strong> <em>".$value["resposta"].'</em></p>';
+		$i++;
+	}
 
-    if( $i == 1 )
-        echo "<em>Não há respostas de usuários.</em>";
-    
+	if( $i == 1 )
+		echo "<em>Não há respostas de usuários.</em>";
+	
 }
 /**
  * Ler campos
  */
 elseif($_POST['action'] == 'LeCampos'){
 
-    /**
-     * Lê os campos da tabela e depois mostra um html <select> para o usuário
-     * escolher o relacionamento de tabelas
-     */
-    $query = Connection::getInstance()->listaCampos($_POST['table']);
-    foreach ( $query as $chave=>$value ){
-        echo '<option value="'.$value['campo'].'">'.$value['campo'].'</option>';
-    }
+	/**
+	 * Lê os campos da tabela e depois mostra um html <select> para o usuário
+	 * escolher o relacionamento de tabelas
+	 */
+	$query = Connection::getInstance()->listaCampos($_POST['table']);
+	foreach ( $query as $chave=>$value ){
+		echo '<option value="'.$value['campo'].'">'.$value['campo'].'</option>';
+	}
 
 }
 ?>

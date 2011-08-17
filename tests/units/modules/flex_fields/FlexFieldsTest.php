@@ -10,28 +10,28 @@ require_once 'core/config/variables.php';
 class FlexFieldsTest extends PHPUnit_Framework_TestCase
 {
 
-    public function setUp(){
+	public function setUp(){
 
 		Fixture::getInstance()->destroy();
 		installModule('flex_fields');
-    
-        /*
-         * MÓDULOS ATUAL
-         *
-         * Diretório do módulo
-         */
-        $this->mod = 'flex_fields';
+	
+		/*
+		 * MÓDULOS ATUAL
+		 *
+		 * Diretório do módulo
+		 */
+		$this->mod = 'flex_fields';
 
-        /*
-         * Informações de conexão com banco de dados
-         */
-        include MODULES_DIR.$this->mod.'/'.MOD_CONFIG;
-        include_once MODULES_DIR.$this->mod.'/'.$modInfo['className'].'.php';
-        
-        $_GET['aust_node'] = '777';
-        $this->obj = new $modInfo['className'](777);
+		/*
+		 * Informações de conexão com banco de dados
+		 */
+		include MODULES_DIR.$this->mod.'/'.MOD_CONFIG;
+		include_once MODULES_DIR.$this->mod.'/'.$modInfo['className'].'.php';
+		
+		$_GET['aust_node'] = '777';
+		$this->obj = new $modInfo['className'](777);
 
-    }
+	}
 
 	function createEnvironment(){
 		$this->destroyEnvironment();
@@ -148,112 +148,112 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 		
 		$this->destroyEnvironment();
 	}
-    /*
-     * TÍTULOS DIVISORES
-     */
-    function testSaveDivisor(){
+	/*
+	 * TÍTULOS DIVISORES
+	 */
+	function testSaveDivisor(){
 
-        /*
-         * Teste de validação
-         */
-        $params = array(
-            'title' => '',
-            'comment' => '',
-            'before' => '',
-        );
-        $this->assertFalse( $this->obj->saveDivisor($params) );
+		/*
+		 * Teste de validação
+		 */
+		$params = array(
+			'title' => '',
+			'comment' => '',
+			'before' => '',
+		);
+		$this->assertFalse( $this->obj->saveDivisor($params) );
 
-        /*
-         * Teste de gravação de dados
-         */
-        $params = array(
-            'title' => '777titulo',
-            'comment' => '777comentario',
-            'before' => 'BEFORE 777before',
-        );
-        $this->assertTrue( $this->obj->saveDivisor($params) );
+		/*
+		 * Teste de gravação de dados
+		 */
+		$params = array(
+			'title' => '777titulo',
+			'comment' => '777comentario',
+			'before' => 'BEFORE 777before',
+		);
+		$this->assertTrue( $this->obj->saveDivisor($params) );
 
-        $sqlFind = "SELECT id FROM ".$this->obj->useThisTable()."
-                WHERE
-                    type='divisor' AND
-                    value='777titulo' AND
-                    commentary='777comentario'
-                ";
+		$sqlFind = "SELECT id FROM ".$this->obj->useThisTable()."
+				WHERE
+					type='divisor' AND
+					value='777titulo' AND
+					commentary='777comentario'
+				";
 
-        /*
-         * Realiza operações. Teste vem no final.
-         */
-        $resultFind = $this->obj->connection->query($sqlFind);
+		/*
+		 * Realiza operações. Teste vem no final.
+		 */
+		$resultFind = $this->obj->connection->query($sqlFind);
 
-        $sqlDelete = "DELETE FROM ".$this->obj->useThisTable()."
-                        WHERE
-                            type='divisor' AND
-                            value='777titulo' AND
-                            commentary='777comentario'
-                        ";
-
-
-        $resultFindAfterDeleted = $this->obj->connection->exec($sqlDelete);
-
-        /*
-         * Teste.
-         */
-        $this->assertFalse( empty( $resultFind ),
-            'NÃO ENCONTROU DADOS.'
-        );
-        $this->assertGreaterThan(0,
-            $resultFindAfterDeleted,
-            'NÃO EXCLUIU DADOS.'
-        );
+		$sqlDelete = "DELETE FROM ".$this->obj->useThisTable()."
+						WHERE
+							type='divisor' AND
+							value='777titulo' AND
+							commentary='777comentario'
+						";
 
 
-    }
-    /**
-     * @depends testSaveDivisor
-     */
-    function testLoadDivisors(){
-        /*
-         * Cria dados pra tests.
-         */
-        $params = array(
-            'title' => '777titulo',
-            'comment' => '777comentario',
-            'before' => 'BEFORE 777before',
-        );
-        $this->obj->saveDivisor($params);
-        $params = array(
-            'title' => '777titulo',
-            'comment' => '777comentario',
-            'before' => 'BEFORE 777before777',
-        );
-        $this->obj->saveDivisor($params);
+		$resultFindAfterDeleted = $this->obj->connection->exec($sqlDelete);
 
-        /*
-         * Testa.
-         */
-        $divisors = $this->obj->loadDivisors();
-
-        $this->assertTrue( !empty($divisors) );
-        $this->assertArrayHasKey('777before', $divisors, $divisors);
-        $this->assertArrayHasKey('777before777', $divisors, $divisors);
-        $this->assertArrayHasKey('value', $divisors['777before777'], $divisors['777before777']);
-        $this->assertEquals('777titulo', $divisors['777before777']['value'], $divisors['777before777']['value']);
+		/*
+		 * Teste.
+		 */
+		$this->assertFalse( empty( $resultFind ),
+			'NÃO ENCONTROU DADOS.'
+		);
+		$this->assertGreaterThan(0,
+			$resultFindAfterDeleted,
+			'NÃO EXCLUIU DADOS.'
+		);
 
 
-        /*
-         * Exclui do DB dados testados
-         */
+	}
+	/**
+	 * @depends testSaveDivisor
+	 */
+	function testLoadDivisors(){
+		/*
+		 * Cria dados pra tests.
+		 */
+		$params = array(
+			'title' => '777titulo',
+			'comment' => '777comentario',
+			'before' => 'BEFORE 777before',
+		);
+		$this->obj->saveDivisor($params);
+		$params = array(
+			'title' => '777titulo',
+			'comment' => '777comentario',
+			'before' => 'BEFORE 777before777',
+		);
+		$this->obj->saveDivisor($params);
 
-            $sqlDelete = "DELETE FROM ".$this->obj->useThisTable()."
-                            WHERE
-                                type='divisor' AND
-                                value='777titulo' AND
-                                commentary='777comentario'
-                            ";
+		/*
+		 * Testa.
+		 */
+		$divisors = $this->obj->loadDivisors();
 
-            $this->obj->connection->query($sqlDelete);
+		$this->assertTrue( !empty($divisors) );
+		$this->assertArrayHasKey('777before', $divisors, $divisors);
+		$this->assertArrayHasKey('777before777', $divisors, $divisors);
+		$this->assertArrayHasKey('value', $divisors['777before777'], $divisors['777before777']);
+		$this->assertEquals('777titulo', $divisors['777before777']['value'], $divisors['777before777']['value']);
 
-    }
+
+		/*
+		 * Exclui do DB dados testados
+		 */
+
+			$sqlDelete = "DELETE FROM ".$this->obj->useThisTable()."
+							WHERE
+								type='divisor' AND
+								value='777titulo' AND
+								commentary='777comentario'
+							";
+
+			$this->obj->connection->query($sqlDelete);
+
+	}
 
 	/*
 	 * verifica se todas as configurações do arquivo config.php existem no método
@@ -261,7 +261,7 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 	 */
 	function testConfigurationsExists(){
 		
-        include MODULES_DIR.$this->mod.'/'.MOD_CONFIG;
+		include MODULES_DIR.$this->mod.'/'.MOD_CONFIG;
 		$configurations = $this->obj->loadModConf();
 		foreach( $modInfo['configurations'] as $key=>$value ){
 			$this->assertArrayHasKey($key, $configurations);
@@ -317,29 +317,29 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 		function createTemporaryTable(){
 			$this->deleteTemporaryTable();
 			// cria configuração da tabela
-		    $sql = "INSERT INTO flex_fields_config
-		                 (type,key,value,node_id)
-		             VALUES
-		                 ('structure','table','tabela_1','777')
-		             ";
-		    $this->obj->connection->exec($sql);
+			$sql = "INSERT INTO flex_fields_config
+						 (type,key,value,node_id)
+					 VALUES
+						 ('structure','table','tabela_1','777')
+					 ";
+			$this->obj->connection->exec($sql);
 	
 			// cria tabela física
-		    $sql = "CREATE TABLE tabela_1 (campo_1 varchar(250))";
-		    $this->obj->connection->exec($sql, 'CREATE_TABLE');
+			$sql = "CREATE TABLE tabela_1 (campo_1 varchar(250))";
+			$this->obj->connection->exec($sql, 'CREATE_TABLE');
 		
 		}
 	
 		function deleteTemporaryTable(){
-	        $this->obj->connection->query("DELETE FROM flex_fields_config WHERE node_id='777' OR node_id='7777'");
-	        $this->obj->connection->query("DROP TABLE tabela_1");
+			$this->obj->connection->query("DELETE FROM flex_fields_config WHERE node_id='777' OR node_id='7777'");
+			$this->obj->connection->query("DROP TABLE tabela_1");
 		
 		}
 
 	function testLoadModConf(){
 		/* FIELDS */
-        $this->obj->connection->query("DELETE FROM ".Config::getInstance()->table." WHERE local='777' AND name='teste7777'");
-        $this->obj->connection->query("DELETE FROM flex_fields_config WHERE node_id='777' AND name='teste7777'");
+		$this->obj->connection->query("DELETE FROM ".Config::getInstance()->table." WHERE local='777' AND name='teste7777'");
+		$this->obj->connection->query("DELETE FROM flex_fields_config WHERE node_id='777' AND name='teste7777'");
 
 		$this->createTemporaryTable();
 			/*
@@ -348,38 +348,38 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 			$this->assertTrue( Connection::getInstance()->hasTable('flex_fields_config') );
 			$this->assertTrue( Connection::getInstance()->hasTable('configurations') );
 			
-		    $sql = "INSERT INTO flex_fields_config
-		                 (type,property,value,node_id,name, specie)
-		             VALUES
-		                 ('campo','campo_1','Campo 1','777','teste7777', 'images')
-		             ";
-		    Connection::getInstance()->exec($sql);
+			$sql = "INSERT INTO flex_fields_config
+						 (type,property,value,node_id,name, specie)
+					 VALUES
+						 ('campo','campo_1','Campo 1','777','teste7777', 'images')
+					 ";
+			Connection::getInstance()->exec($sql);
 			
-	        $sql = "INSERT INTO ".Config::getInstance()->table."
-	                    (type, local, name, property, value,  class, ref_field)
-	                VALUES
-	                    ('structure','777','teste7777','teste','1', 'field', 'campo_1')
-	                ";
+			$sql = "INSERT INTO ".Config::getInstance()->table."
+						(type, local, name, property, value,  class, ref_field)
+					VALUES
+						('structure','777','teste7777','teste','1', 'field', 'campo_1')
+					";
 	
-	        $this->obj->connection->query($sql);
+			$this->obj->connection->query($sql);
 
-	        $catLastInsertId = $this->obj->connection->lastInsertId();
+			$catLastInsertId = $this->obj->connection->lastInsertId();
 
-        /* start test #4 */
-	        $result = $this->obj->loadModConf(777, 'field');
+		/* start test #4 */
+			$result = $this->obj->loadModConf(777, 'field');
 
-	        $this->assertArrayHasKey(
-	                'campo_1',
-	                $result,
-	                'Teste #4.1 falhou');
+			$this->assertArrayHasKey(
+					'campo_1',
+					$result,
+					'Teste #4.1 falhou');
 
-	        $this->assertEquals(
-	                '1',
-	                $result['campo_1']['teste']['value'],
-	                'Teste #4.2 falhou');
+			$this->assertEquals(
+					'1',
+					$result['campo_1']['teste']['value'],
+					'Teste #4.2 falhou');
 	
-        $this->obj->connection->query("DELETE FROM ".Config::getInstance()->table." WHERE local='777' AND name='teste7777'");
-        $this->obj->connection->query("DELETE FROM flex_fields_config WHERE node_id='777' AND name='teste7777'");
+		$this->obj->connection->query("DELETE FROM ".Config::getInstance()->table." WHERE local='777' AND name='teste7777'");
+		$this->obj->connection->query("DELETE FROM flex_fields_config WHERE node_id='777' AND name='teste7777'");
 
 		$this->deleteTemporaryTable();
 	}
@@ -393,72 +393,72 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 	
 	function testLoadModConfWithoutSavedData(){
 		/* FIELDS */
-        $this->obj->connection->query("DELETE FROM ".Config::getInstance()->table." WHERE local='777' AND name='teste7777'");
-        $this->obj->connection->query("DELETE FROM flex_fields_config WHERE node_id='777' AND name='teste7777'");
+		$this->obj->connection->query("DELETE FROM ".Config::getInstance()->table." WHERE local='777' AND name='teste7777'");
+		$this->obj->connection->query("DELETE FROM flex_fields_config WHERE node_id='777' AND name='teste7777'");
 
 		$this->createTemporaryTable();
 	
 		/*
 		 * Criar o campo de cadastro
 		 */
-	    $sql = "INSERT INTO flex_fields_config
-	                 (type,property,value,node_id,name,specie)
-	             VALUES
-	                 ('campo','campo_1','Campo 1','777','teste7777', 'images')
-	             ";
-	    $this->obj->connection->query($sql);
+		$sql = "INSERT INTO flex_fields_config
+					 (type,property,value,node_id,name,specie)
+				 VALUES
+					 ('campo','campo_1','Campo 1','777','teste7777', 'images')
+				 ";
+		$this->obj->connection->query($sql);
 
 		
-        /* start test #1 */
-	        $result = $this->obj->loadModConf(777, 'field');
-	        $this->assertArrayHasKey('campo_1', $result);
-	        $this->assertArrayHasKey(
-	                'image_field_limit_quantity',
-	                $result['campo_1'],
-	                'Teste #1.1 falhou');
+		/* start test #1 */
+			$result = $this->obj->loadModConf(777, 'field');
+			$this->assertArrayHasKey('campo_1', $result);
+			$this->assertArrayHasKey(
+					'image_field_limit_quantity',
+					$result['campo_1'],
+					'Teste #1.1 falhou');
 
-        $this->obj->connection->query("DELETE FROM ".Config::getInstance()->table." WHERE local='777' AND name='teste7777'");
-        $this->obj->connection->query("DELETE FROM flex_fields_config WHERE node_id='777' AND name='teste7777'");
+		$this->obj->connection->query("DELETE FROM ".Config::getInstance()->table." WHERE local='777' AND name='teste7777'");
+		$this->obj->connection->query("DELETE FROM flex_fields_config WHERE node_id='777' AND name='teste7777'");
 
 		$this->deleteTemporaryTable();
 	}
 	
 	function testGetFieldConfig(){
-        $this->obj->connection->query("DELETE FROM ".Config::getInstance()->table." WHERE local='777' AND name='teste7777'");
-        $this->obj->connection->query("DELETE FROM flex_fields_config WHERE node_id='777' AND name='teste7777'");
+		$this->obj->connection->query("DELETE FROM ".Config::getInstance()->table." WHERE local='777' AND name='teste7777'");
+		$this->obj->connection->query("DELETE FROM flex_fields_config WHERE node_id='777' AND name='teste7777'");
 
 		$this->createTemporaryTable();
 		/*
 		 * Criar os campos
 		 */
-	    $sql = "INSERT INTO flex_fields_config
-	                 (type,property,value,node_id,name,specie)
-	             VALUES
-	                 ('campo','campo_1','Campo 1','777','teste7777', 'images')
-	             ";
-	    $this->obj->connection->query($sql);
+		$sql = "INSERT INTO flex_fields_config
+					 (type,property,value,node_id,name,specie)
+				 VALUES
+					 ('campo','campo_1','Campo 1','777','teste7777', 'images')
+				 ";
+		$this->obj->connection->query($sql);
 		
 
-        $sql = "INSERT INTO ".Config::getInstance()->table."
-                    (type, local, name, property, value,  class, ref_field)
-                VALUES
-                    ('structure','777','teste7777','has_conf','1', 'field', 'campo_1')
-                ";
+		$sql = "INSERT INTO ".Config::getInstance()->table."
+					(type, local, name, property, value,  class, ref_field)
+				VALUES
+					('structure','777','teste7777','has_conf','1', 'field', 'campo_1')
+				";
 
-        $this->obj->connection->query($sql);
-        $catLastInsertId = $this->obj->connection->lastInsertId();
+		$this->obj->connection->query($sql);
+		$catLastInsertId = $this->obj->connection->lastInsertId();
 		$this->obj->austNode = '777';
 
-        $this->obj->config = array(
+		$this->obj->config = array(
 			'field_configurations' => array(
-			    'has_conf' => array(
+				'has_conf' => array(
 					'field_type' => 'images',
-			        "value" => "",
-			        "label" => "Working?",
-			        "inputType" => "checkbox",
-			    ),
+					"value" => "",
+					"label" => "Working?",
+					"inputType" => "checkbox",
+				),
 			)
-        );
+		);
 
 		$result = $this->obj->getFieldConfig('campo_1', 'has_conf');
 		$this->assertEquals('1', $result);
@@ -466,11 +466,11 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 		$result = $this->obj->getFieldConfig('campo_1', 'has_conf2');
 		$this->assertFalse($result);
 		
-        $this->obj->connection->query("DELETE FROM ".Config::getInstance()->table." WHERE local='777' AND name='teste7777'");
-	    $this->obj->connection->query("DELETE FROM flex_fields_config WHERE node_id='777' AND name='teste7777'");
+		$this->obj->connection->query("DELETE FROM ".Config::getInstance()->table." WHERE local='777' AND name='teste7777'");
+		$this->obj->connection->query("DELETE FROM flex_fields_config WHERE node_id='777' AND name='teste7777'");
 	
 		$this->deleteTemporaryTable();
-    }
+	}
 
 	/*
 	 * testDeleteExtraImages()
@@ -494,33 +494,33 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 				('main','table_for_unittests','test_field','7777','7777')
 			";
 		
-        $this->obj->config = array(
+		$this->obj->config = array(
 			'field_configurations' => array(
-			    'image_field_limit_quantity' => array(
+				'image_field_limit_quantity' => array(
 					'field_type' => 'images',
-			        "value" => "",
-			        "label" => "test",
-			    ),
+					"value" => "",
+					"label" => "test",
+				),
 			)
-        );
+		);
 
 		/*
 		 * Insere 4 imagens, mas deixa apenas 1 no db
 		 */
 
-		    $sql = "INSERT INTO flex_fields_config
-		                 (type,property,value,node_id,name,specie)
-		             VALUES
-		                 ('campo','test_field','Campo 1','7777','teste7777', 'images')
-		             ";
-		    $this->obj->connection->query($sql);
+			$sql = "INSERT INTO flex_fields_config
+						 (type,property,value,node_id,name,specie)
+					 VALUES
+						 ('campo','test_field','Campo 1','7777','teste7777', 'images')
+					 ";
+			$this->obj->connection->query($sql);
 
-		    $sql = "INSERT INTO ".Config::getInstance()->table."
-		                (type, local, name, property, value,  class, ref_field)
-		            VALUES
-		                ('structure','7777','teste7777','image_field_limit_quantity','1', 'field', 'test_field')
-		            ";
-		    $this->obj->connection->query($sql);
+			$sql = "INSERT INTO ".Config::getInstance()->table."
+						(type, local, name, property, value,  class, ref_field)
+					VALUES
+						('structure','7777','teste7777','image_field_limit_quantity','1', 'field', 'test_field')
+					";
+			$this->obj->connection->query($sql);
 
 			$limit = $this->obj->getFieldConfig('test_field', 'image_field_limit_quantity');
 
@@ -563,12 +563,12 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 			$this->obj->structureFieldsConfig = array();
 			$this->obj->config = array();
 			
-		    $sql = "INSERT INTO ".Config::getInstance()->table."
-		                (type, local, name, property, value,  class, ref_field)
-		            VALUES
-		                ('structure','7777','teste7777','image_field_limit_quantity','0', 'field', 'test_field')
-		            ";
-		    $this->obj->connection->query($sql);
+			$sql = "INSERT INTO ".Config::getInstance()->table."
+						(type, local, name, property, value,  class, ref_field)
+					VALUES
+						('structure','7777','teste7777','image_field_limit_quantity','0', 'field', 'test_field')
+					";
+			$this->obj->connection->query($sql);
 
 			$this->obj->connection->exec($sqlImages);
 			$this->obj->connection->exec($sqlImages);

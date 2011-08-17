@@ -1,11 +1,11 @@
 CREATE TABLE paises (
-    id int NOT NULL auto_increment,
+	id int NOT NULL auto_increment,
 	iso CHAR(2) NOT NULL,
 	iso3 char(3) NOT NULL,
 	numcode SMALLINT,
 	nome VARCHAR(255) NOT NULL,
-    PRIMARY KEY (id),
-    UNIQUE id (id)
+	PRIMARY KEY (id),
+	UNIQUE id (id)
 );
 
 INSERT INTO paises (iso, iso3, numcode, nome) VALUES ('AF', 'AFG', '004', 'Afeganistão');

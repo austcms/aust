@@ -1,7 +1,5 @@
 <?php
 /**
- * @author Alexandre de Oliveira <chavedomundo@gmail.com>
- * @version 0.1
  * @since v0.1.5, 22/06/2009
  */
 class ModActionController extends ActionController
@@ -16,7 +14,7 @@ class ModActionController extends ActionController
 	 * @param $param:array
 	 * 			'austNode':int
 	 */
-    function __construct($austNode = ""){
+	function __construct($austNode = ""){
 
 		if( $austNode === false )
 			return false;
@@ -33,17 +31,17 @@ class ModActionController extends ActionController
 			$this->shouldCallAction = false;
 		}
 		
-        /**
-         * $_POST e $_FILES:
-         *
-         * 'data': se alguma coisa for enviada para ser salva no DB
-         */
-        if( !empty($_POST["data"])){
-            if( is_array($_POST["data"]) ){
-                $this->{"data"} = $_POST["data"];
-            }
-        }
-        if( !empty($_FILES["data"]) AND is_array($_FILES["data"])){
+		/**
+		 * $_POST e $_FILES:
+		 *
+		 * 'data': se alguma coisa for enviada para ser salva no DB
+		 */
+		if( !empty($_POST["data"])){
+			if( is_array($_POST["data"]) ){
+				$this->{"data"} = $_POST["data"];
+			}
+		}
+		if( !empty($_FILES["data"]) AND is_array($_FILES["data"])){
 			// percorre os models
 			foreach( $_FILES["data"]['name'] as $model=>$fields ){
 				
@@ -73,31 +71,31 @@ class ModActionController extends ActionController
 				}
 			}
 	
-        }
+		}
 
 		/*
-	     * HELPERS
-	     * 
-	     * Cria helpers solicitados
-	     */
-	    if( count($this->helpers) ){
-	        /**
-	         * Loop por cada Helper a ser carregado
-	         */
-	        foreach($this->helpers as $value){
-	            unset( $$value );
-	            /**
-	             * Inclui o arquivo do helper
-	             */
-	            include_once( HELPERS_DIR.$value.HELPER_CLASSNAME_SUFIX.".php" );
-	            $helperName = $value.HELPER_CLASSNAME_SUFIX;
-	            $$value = new $helperName();
-	            $this->set( strtolower($value), $$value);
-	        }
-	    }
+		 * HELPERS
+		 * 
+		 * Cria helpers solicitados
+		 */
+		if( count($this->helpers) ){
+			/**
+			 * Loop por cada Helper a ser carregado
+			 */
+			foreach($this->helpers as $value){
+				unset( $$value );
+				/**
+				 * Inclui o arquivo do helper
+				 */
+				include_once( HELPERS_DIR.$value.HELPER_CLASSNAME_SUFIX.".php" );
+				$helperName = $value.HELPER_CLASSNAME_SUFIX;
+				$$value = new $helperName();
+				$this->set( strtolower($value), $$value);
+			}
+		}
 
 		$this->_trigger();
-    }
+	}
 
 	function austNode($int = ""){
 		if( empty($int) )
@@ -108,9 +106,9 @@ class ModActionController extends ActionController
 		return true;
 	}
 	
-    /*
-     * PRIVATE METHODS
-     */
+	/*
+	 * PRIVATE METHODS
+	 */
 	function _action(){
 		if( $this->customAction )
 			return $this->customAction;
@@ -127,7 +125,7 @@ class ModActionController extends ActionController
 	}
 	
 	function _actionExists(){
-        return method_exists($this, $this->_action());
+		return method_exists($this, $this->_action());
 	}
 
 	public function _setupParams(){
@@ -135,26 +133,26 @@ class ModActionController extends ActionController
 	}
 
 
-    protected function actions(){
-        $this->set('aust', $this->aust);
-        $this->render('actions', 'content_trigger');
-    }
+	protected function actions(){
+		$this->set('aust', $this->aust);
+		$this->render('actions', 'content_trigger');
+	}
 
 	public function _viewFile(){
 		$directory = ModulesManager::getInstance()->directory($this->austNode);
 		return MODULES_DIR.$directory.MOD_VIEW_DIR.$this->_controllerPathName()."/";
 	}
 	
-    public function test_action(){
+	public function test_action(){
 		$this->testVar = 	"Action ". $this->params["action"] .
 							" from module.";
 		$this->autoRender = false;
 	}
 	
-    /*
-     * Renders the view
-     */
-    public function render( $shouldRender = true ){
+	/*
+	 * Renders the view
+	 */
+	public function render( $shouldRender = true ){
 
 		$this->set("austNode", $this->austNode());
 		$this->set("module", ModulesManager::getInstance()->modelInstance($this->austNode()));
@@ -162,36 +160,36 @@ class ModActionController extends ActionController
 		return parent::render($shouldRender);
 	}
 
-    /*
-     *
-     * MODELS
-     *
-     */
-    /**
-     * loadModel()
-     *
-     * Carrega models especiais do módulo atual. O model é alocado
-     * em $this->{nome_do_model}.
-     *
-     * @param <string> $str
-     * @return <bool>
-     */
-    public function loadModel($str = ""){
+	/*
+	 *
+	 * MODELS
+	 *
+	 */
+	/**
+	 * loadModel()
+	 *
+	 * Carrega models especiais do módulo atual. O model é alocado
+	 * em $this->{nome_do_model}.
+	 *
+	 * @param <string> $str
+	 * @return <bool>
+	 */
+	public function loadModel($str = ""){
 
-        if( !empty($this->{$str}) )
-            return false;
+		if( !empty($this->{$str}) )
+			return false;
 
 		$modDir = ModulesManager::getInstance()->directory($this->austNode);
-        if( empty($str) )
-            return false;
-        if( !is_file(MODULES_DIR.$modDir.MOD_MODELS_DIR.$str.".php") )
-            return false;
+		if( empty($str) )
+			return false;
+		if( !is_file(MODULES_DIR.$modDir.MOD_MODELS_DIR.$str.".php") )
+			return false;
 
-        include_once MODULES_DIR.$modDir.MOD_MODELS_DIR.$str.".php";
-        $this->{$str} = new $str;
+		include_once MODULES_DIR.$modDir.MOD_MODELS_DIR.$str.".php";
+		$this->{$str} = new $str;
 
-        return true;
-    }
+		return true;
+	}
 
 }
 

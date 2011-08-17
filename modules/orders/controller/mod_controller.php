@@ -4,87 +4,85 @@
  *
  * Descrição deste arquivo
  *
- * @package ModController
- * @name nome
  * @author Alexandre <chavedomundo@gmail.com>
  * @since v0.1.5 24/06/2009
  */
 
 class ModController extends ModActionController
 {
-    /**
-     * listar()
-     *
-     * Listagem de Contéudos
-     */
-    public function listing(){
+	/**
+	 * listar()
+	 *
+	 * Listagem de Contéudos
+	 */
+	public function listing(){
 
-        /**
-         * <h2> HEADER
-         */
-        $this->set('h1', Aust::getInstance()->getStructureNameById($_GET['aust_node']) );
+		/**
+		 * <h2> HEADER
+		 */
+		$this->set('h1', Aust::getInstance()->getStructureNameById($_GET['aust_node']) );
 
-        if((!empty($filter)) AND ($filter <> 'off')){
-            $addurl = "&filter=$filter&filterw=" . urlencode($filterw);
-        }
+		if((!empty($filter)) AND ($filter <> 'off')){
+			$addurl = "&filter=$filter&filterw=" . urlencode($filterw);
+		}
 
-        $categorias = Aust::getInstance()->getNodeChildren($_GET['aust_node']);
-        $categorias[$_GET['aust_node']] = 'Estrutura';
+		$categorias = Aust::getInstance()->getNodeChildren($_GET['aust_node']);
+		$categorias[$_GET['aust_node']] = 'Estrutura';
 
 
-        /*
-         * PAGINAÇÃO
-         */
-        /*
-         * Página atual
-         */
-        $pagina = (empty($_GET['pagina'])) ? 1 : $_GET['pagina'];
-        /*
-         * Resultados por página
-         */
-        $num_por_pagina = '20';
-        $this->set('numPorPagina', $num_por_pagina);//(Config::getInstance()->LeOpcao($nome_modulo.'_paginacao')) ? Config::getInstance()->LeOpcao($nome_modulo.'_paginacao') : '10';
-        $this->set('page', $pagina);//(Config::getInstance()->LeOpcao($nome_modulo.'_paginacao')) ? Config::getInstance()->LeOpcao($nome_modulo.'_paginacao') : '10';
+		/*
+		 * PAGINAÇÃO
+		 */
+		/*
+		 * Página atual
+		 */
+		$pagina = (empty($_GET['pagina'])) ? 1 : $_GET['pagina'];
+		/*
+		 * Resultados por página
+		 */
+		$num_por_pagina = '20';
+		$this->set('numPorPagina', $num_por_pagina);//(Config::getInstance()->LeOpcao($nome_modulo.'_paginacao')) ? Config::getInstance()->LeOpcao($nome_modulo.'_paginacao') : '10';
+		$this->set('page', $pagina);//(Config::getInstance()->LeOpcao($nome_modulo.'_paginacao')) ? Config::getInstance()->LeOpcao($nome_modulo.'_paginacao') : '10';
 
-        /*
-         * SQL para listagem
-         */
-        $params = array(
-            'austNode' => $categorias,
-            'page' => $pagina,
-            'limit' => $num_por_pagina
-        );
+		/*
+		 * SQL para listagem
+		 */
+		$params = array(
+			'austNode' => $categorias,
+			'page' => $pagina,
+			'limit' => $num_por_pagina
+		);
 
-        /*
-         * Query com resultado
-         */
-        $query = $this->module->load($params);
+		/*
+		 * Query com resultado
+		 */
+		$query = $this->module->load($params);
 
-        $this->set('sql', $this->module->lastSql );
-        //$config = $this->module->loadConfig();
-        $query = $this->module->replaceFieldsValueIfEmpty($query);
+		$this->set('sql', $this->module->lastSql );
+		//$config = $this->module->loadConfig();
+		$query = $this->module->replaceFieldsValueIfEmpty($query);
 
-        $this->set('query', $query );
+		$this->set('query', $query );
 
-    } // fim listar()
+	} // fim listar()
 
-    public function create(){
-        $this->render('form');
-    }
+	public function create(){
+		$this->render('form');
+	}
 
-    public function edit(){
+	public function edit(){
 
 		$products = $this->module->getStructureConfig("aust_products");
-        $sql = "
-                SELECT
-                    *
-                FROM
-                    st_order_items
-                WHERE
-                    order_id='".$_GET['w']."'
-                ";
+		$sql = "
+				SELECT
+					*
+				FROM
+					st_order_items
+				WHERE
+					order_id='".$_GET['w']."'
+				";
 
-        $query = $this->module->connection->query($sql);
+		$query = $this->module->connection->query($sql);
 
 		$cartSql = $this->module->loadSql( array('id' => $_GET['w']) );
 		$cart = Connection::getInstance()->query($cartSql);
@@ -99,15 +97,15 @@ class ModController extends ModActionController
 		}
 
 
-        $this->set('cart', $cart );
-        $this->set('dados', $query );
-        
-        $this->render('form');
-    }
+		$this->set('cart', $cart );
+		$this->set('dados', $query );
+		
+		$this->render('form');
+	}
 
-    public function save(){
-        $this->set('resultado', $this->module->save($_POST));
-    }
-    
+	public function save(){
+		$this->set('resultado', $this->module->save($_POST));
+	}
+	
 }
 ?>

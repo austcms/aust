@@ -31,30 +31,30 @@ div.body { background: white; }
 
 /* TOPO */
 div#top {
-    background: #af220e;
+	background: #af220e;
 }
-    div#top h1 { color: #f5f5f5; }
-    div#top a { color: #f5f5f5; }
+	div#top h1 { color: #f5f5f5; }
+	div#top a { color: #f5f5f5; }
 
 /* NAVEGAÇÃO */
 div#navegacao {
-    background: #af220e;
+	background: #af220e;
 }
-    div#menu ul li a {
-        background: #f1f1f1;
-    }
-        div#menu ul li a:hover {
-            background: white;
-        }
+	div#menu ul li a {
+		background: #f1f1f1;
+	}
+		div#menu ul li a:hover {
+			background: white;
+		}
 	div#menu ul li a.selecionado {
-        background: white;
-        color: black;
-        font-weight: bold;
-    }
-    
+		background: white;
+		color: black;
+		font-weight: bold;
+	}
+	
 /* Links Configurar módulos e permissões */
 div#link_bottom {
-    background: white;
+	background: white;
 }
 
 
@@ -72,11 +72,11 @@ table.listing tr.header { background: #df6857; }
 
 /* TAB PANE -> table.listing - Painel Gerenciar e Configurações*/
 div.panes div.background { background: #fdfdfd; }
-    div.panes div.background .header { background: #fdfdfd; }
+	div.panes div.background .header { background: #fdfdfd; }
 
 ul.tabs a.current, ul.tabs a.current:hover, ul.tabs li.current a {
-    background: #d5604f;
-    color: white;
+	background: #d5604f;
+	color: white;
 }
 
 

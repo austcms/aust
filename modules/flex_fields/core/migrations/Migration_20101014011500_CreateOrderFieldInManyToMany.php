@@ -1,7 +1,7 @@
 <?php
 class Migration_20101014011500_CreateOrderFieldInManyToMany extends Migrations
 {
-    function up(){
+	function up(){
 
 		$sql = "SELECT *
 				FROM flex_fields_config
@@ -16,19 +16,19 @@ class Migration_20101014011500_CreateOrderFieldInManyToMany extends Migrations
 		$tables = Connection::getInstance()->query($sql);
 		
 		foreach( $tables as $table ){
-	        $schema = array(
-	            'table' => $table['reference'],
-	            'field' => 'order_nr',
-	            'type' => 'int',
-	            'position' => 'AFTER updated_on'
-	        );
-        	$this->addField($schema);
+			$schema = array(
+				'table' => $table['reference'],
+				'field' => 'order_nr',
+				'type' => 'int',
+				'position' => 'AFTER updated_on'
+			);
+			$this->addField($schema);
 		}
 
-        return true;
-    }
+		return true;
+	}
 
-    function down(){
+	function down(){
 
 		$sql = "SELECT *
 				FROM flex_fields_config
@@ -43,11 +43,11 @@ class Migration_20101014011500_CreateOrderFieldInManyToMany extends Migrations
 		$tables = Connection::getInstance()->query($sql);
 		
 		foreach( $tables as $table ){
-	        $this->dropField($table['reference'], 'order_nr');
+			$this->dropField($table['reference'], 'order_nr');
 		}
 
-        return true;
-    }
+		return true;
+	}
 
 }
 ?>

@@ -7,22 +7,22 @@
  */
 class Migration_20110615121200_AddObservationPaidOnField extends Migrations
 {
-    function up(){
+	function up(){
 
-        $schema = array(
-            'table' => "st_orders",
-            'field' => 'paid_on',
-            'type' => 'datetime',
-            'position' => 'AFTER scheduled_on'
-        );
-    		$this->addField($schema);
+		$schema = array(
+			'table' => "st_orders",
+			'field' => 'paid_on',
+			'type' => 'datetime',
+			'position' => 'AFTER scheduled_on'
+		);
+			$this->addField($schema);
 
-        return true;
-    }
+		return true;
+	}
 
-    function down(){
-        $this->dropField('st_orders', 'paid_on');
-        return true;
-    }
+	function down(){
+		$this->dropField('st_orders', 'paid_on');
+		return true;
+	}
 }
 ?>

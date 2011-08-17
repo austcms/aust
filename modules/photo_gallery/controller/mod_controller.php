@@ -2,8 +2,6 @@
 /**
  * Descrição deste arquivo
  *
- * @package ModController
- * @name nome
  * @author Alexandre <chavedomundo@gmail.com>
  * @since v0.1.5 24/06/2009
  */
@@ -12,19 +10,19 @@ class ModController extends ModActionController
 {
 
 	function beforeFilter(){
-        if( !empty($_GET["delete"]) AND $_GET["delete"] > 0 ){
-            $sql = "DELETE FROM photo_gallery_images
-                    WHERE id='".$_GET["delete"]."'";
-            if( $this->module->connection->exec($sql) ){
+		if( !empty($_GET["delete"]) AND $_GET["delete"] > 0 ){
+			$sql = "DELETE FROM photo_gallery_images
+					WHERE id='".$_GET["delete"]."'";
+			if( $this->module->connection->exec($sql) ){
 				notice("Imagem excluída com sucesso.");
-            }
+			}
 
-        }
+		}
 	}
 
-    public function listing(){
-        $this->set('title', Aust::getInstance()->getStructureNameById($_GET['aust_node']) );
-        $this->set('nome_modulo', Aust::getInstance()->structureModule($_GET['aust_node']) );
+	public function listing(){
+		$this->set('title', Aust::getInstance()->getStructureNameById($_GET['aust_node']) );
+		$this->set('nome_modulo', Aust::getInstance()->structureModule($_GET['aust_node']) );
 
 		$categorias = Aust::getInstance()->getNodeChildren($_GET['aust_node']);
 		$categorias[$_GET['aust_node']] = 'Estrutura';
@@ -35,14 +33,14 @@ class ModController extends ModActionController
 		
 		$query = $this->module->load($params);
 		
-        $this->set('query', $query);
-    }
+		$this->set('query', $query);
+	}
 
-    public function create(){
-        $this->render('form');
-    }
+	public function create(){
+		$this->render('form');
+	}
 
-    public function edit(){
+	public function edit(){
 		$w = '';
 		if( !empty($_GET['w']) ){
 			$w = $_GET['w'];
@@ -70,16 +68,16 @@ class ModController extends ModActionController
 				 */
 				else {
 					$master = Aust::getInstance()->getStructureInstance($_GET['related_master']);
-			        $sql = "
-			                SELECT
-			                    title
-			                FROM
-			                    ".$master->getContentTable()."
-			                WHERE
-			                    id='".$_GET['related_w']."'
-			                ";
+					$sql = "
+							SELECT
+								title
+							FROM
+								".$master->getContentTable()."
+							WHERE
+								id='".$_GET['related_w']."'
+							";
 
-			        $query = $master->connection->query($sql);
+					$query = $master->connection->query($sql);
 					$query = reset($query);
 
 					$ref = Aust::getInstance()->getField($_GET['related_master'], 'nome_encoded');
@@ -97,75 +95,75 @@ class ModController extends ModActionController
 			}
 		}
 
-        $sql = "
-                SELECT
-                    *
-                FROM
-                    ".$this->module->useThisTable()."
-                WHERE
-                    id='$w' AND
+		$sql = "
+				SELECT
+					*
+				FROM
+					".$this->module->useThisTable()."
+				WHERE
+					id='$w' AND
 					node_id='".$_GET['aust_node']."'
-                ";
+				";
 
-        $query = $this->module->connection->query($sql, "ASSOC");
-        $dados = reset($query);
+		$query = $this->module->connection->query($sql, "ASSOC");
+		$dados = reset($query);
 
-        $sql = "SELECT id, file_name, text FROM photo_gallery_images
-                WHERE gallery_id='".$w."' ORDER BY order_nr ASC";
+		$sql = "SELECT id, file_name, text FROM photo_gallery_images
+				WHERE gallery_id='".$w."' ORDER BY order_nr ASC";
 
-        $images = $this->module->connection->query($sql, "ASSOC");
+		$images = $this->module->connection->query($sql, "ASSOC");
 
 		$this->set('images', $images);
 		$this->set('dados', $dados);
 		$this->set('w', $w);
-        $this->render('form');
-    }
+		$this->render('form');
+	}
 
-    public function save(){
-        
-    }
+	public function save(){
+		
+	}
 
 	public function actions(){
 		if( empty($_POST['itens']) ){
-		    failure('Nenhum item selecionado.');
+			failure('Nenhum item selecionado.');
 		}
 
 		if( !empty($_POST['deletar']) ){
-	        /*
-	         * Identificar tabela que deve ser excluida
-	         */
+			/*
+			 * Identificar tabela que deve ser excluida
+			 */
 
-	            $itens = $_POST['itens'];
-	            $c = 0;
-	            foreach($itens as $key=>$value){
-	                if($c > 0){
-	                    $where = $where." OR id='".$value."'";
-	                } else {
-	                    $where = "id='".$value."'";
-	                }
-	                $c++;
-	            }
-	            $sql = "DELETE FROM
-	                        ".$this->module->LeTabelaDaEstrutura($_GET['aust_node'])."
-	                    WHERE
-	                        $where
-	                        ";
+				$itens = $_POST['itens'];
+				$c = 0;
+				foreach($itens as $key=>$value){
+					if($c > 0){
+						$where = $where." OR id='".$value."'";
+					} else {
+						$where = "id='".$value."'";
+					}
+					$c++;
+				}
+				$sql = "DELETE FROM
+							".$this->module->LeTabelaDaEstrutura($_GET['aust_node'])."
+						WHERE
+							$where
+							";
 
-	            if(Connection::getInstance()->exec($sql)){
-	                $resultado = TRUE;
-	            } else {
-	                $resultado = FALSE;
-	            }
+				if(Connection::getInstance()->exec($sql)){
+					$resultado = TRUE;
+				} else {
+					$resultado = FALSE;
+				}
 
-	            if($resultado){
-	                notice('Os dados foram excluídos com sucesso.');
-	            } else {
-	                failure('Ocorreu um erro ao excluir os dados.');
-	            }
+				if($resultado){
+					notice('Os dados foram excluídos com sucesso.');
+				} else {
+					failure('Ocorreu um erro ao excluir os dados.');
+				}
 
 		} 
 		
 	}
-    
+	
 }
 ?>

@@ -22,7 +22,7 @@ else if( $errorStatus == "no_permission_create_uploads_editor" ){
 	<?php
 }
 ?>
-    <p>
+	<p>
 		<a href="<?php echo THIS_TO_BASEURL ?>index.php">Atualizar esta página</a>
 	</p>
 <?php

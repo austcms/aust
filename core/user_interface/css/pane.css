@@ -4,67 +4,67 @@
  * - table.listing - Quando há uma listagem, esta é a classe
  *
  * - .background - Quando o contéudo é simples, .background no div filho de
- *                 div.pane
+ *				 div.pane
  */
 
 
 /* TABLE */
 /* TAB PANE -> table.listing */
 table.listing {
-    border: 0px solid;
-    width: 720px;
-    padding: 0;
-    float: left;
+	border: 0px solid;
+	width: 720px;
+	padding: 0;
+	float: left;
 }
-    table.listing tr.header {
-        border-bottom: 1px solid #eeeeee;
-        height: 30px;
-        margin: 0px; padding: 0;
-    }
+	table.listing tr.header {
+		border-bottom: 1px solid #eeeeee;
+		height: 30px;
+		margin: 0px; padding: 0;
+	}
 
-        table.listing tr td:first-child {  }
-        table.listing tr.header td {
-            text-transform: uppercase;
-            font-size: 0.9em;
-            padding: 0 0 0px 10px;
-        }
-        table.listing tr.header td.tipo { font-size: 0.9em; }
-        table.listing tr.header td.acesso { font-size: 0.9em; }
-    
-    table.listing tr.list {
-        width: 720px;
-    }
-        table.listing tr.list td {
-            color: #888888; text-transform: uppercase;
+		table.listing tr td:first-child {  }
+		table.listing tr.header td {
+			text-transform: uppercase;
+			font-size: 0.9em;
+			padding: 0 0 0px 10px;
+		}
+		table.listing tr.header td.tipo { font-size: 0.9em; }
+		table.listing tr.header td.acesso { font-size: 0.9em; }
+	
+	table.listing tr.list {
+		width: 720px;
+	}
+		table.listing tr.list td {
+			color: #888888; text-transform: uppercase;
 						border-bottom: 1px solid #f1f1f1;
-            font-size: 0.9em;
-            padding: 6px 0 6px 10px;
+			font-size: 0.9em;
+			padding: 6px 0 6px 10px;
 
-        }
-        /* Pane sem conteúdo */
-        div.panes .sem_conteudo {
-            display: inline-block; margin: 0 10px 10px 10px;
-        }
-        /* Colunas de conteúdos */
-        table.listing tr.list td.title span {
-            font-weight: bold;
-            display: inline;
-            float: left;
-            line-height: 20px;
-            margin-right: 5px;
-        }
-        table.listing tr.list td.options ul { list-style: none; margin: 0; }
-        table.listing tr.list td.options ul li {
-            display: inline; margin-right: 15px;
-            font-size: 0.8em;
-        }
-        table.listing tr.list td.tipo { font-size: 0.7em; }
-        table.listing tr.list td.acesso { font-size: 0.7em; }
+		}
+		/* Pane sem conteúdo */
+		div.panes .sem_conteudo {
+			display: inline-block; margin: 0 10px 10px 10px;
+		}
+		/* Colunas de conteúdos */
+		table.listing tr.list td.title span {
+			font-weight: bold;
+			display: inline;
+			float: left;
+			line-height: 20px;
+			margin-right: 5px;
+		}
+		table.listing tr.list td.options ul { list-style: none; margin: 0; }
+		table.listing tr.list td.options ul li {
+			display: inline; margin-right: 15px;
+			font-size: 0.8em;
+		}
+		table.listing tr.list td.tipo { font-size: 0.7em; }
+		table.listing tr.list td.acesso { font-size: 0.7em; }
 
-    table.listing tr.footer {
-        height: 1px;
-        border-bottom: 0px solid #f1f1f1;
-    }
+	table.listing tr.footer {
+		height: 1px;
+		border-bottom: 0px solid #f1f1f1;
+	}
 
 /* fim tab panes */
 
@@ -76,4 +76,4 @@ table.listing {
 div.panes div.background { padding: 10px 10px; border: 1px solid #f9f9f9; }
 
 /* Form */
-    div.panes div.background td.first { vertical-align: top; }
+	div.panes div.background td.first { vertical-align: top; }

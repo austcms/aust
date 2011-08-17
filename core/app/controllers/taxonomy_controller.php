@@ -10,14 +10,14 @@ class TaxonomyController extends ActionController {
 		$texto = str_replace("\"","\"", $texto);
 		$texto = str_replace("'","\'", $texto);
 
-	    $params = array(
-	        'father' => $_POST["frmfather_id"],
-	        'name' => $_POST['frmname'],
+		$params = array(
+			'father' => $_POST["frmfather_id"],
+			'name' => $_POST['frmname'],
 			'description' => $texto,
-	        'author' => User::getInstance()->getId(),
-	    );
+			'author' => User::getInstance()->getId(),
+		);
 
-	    $resultado = Aust::getInstance()->createCategory($params);
+		$resultado = Aust::getInstance()->createCategory($params);
 		
 		$lastInsertId = $resultado;
 		/**
@@ -57,18 +57,18 @@ class TaxonomyController extends ActionController {
 
 			// insere no DB
 			if (Connection::getInstance()->exec($sql)){
-			    $status_imagem = true;
+				$status_imagem = true;
 			} else {
-			    $status_imagem = false;
+				$status_imagem = false;
 			}
 
 		}
 
-        if( $resultado ){
-            notice('Informações salvas com sucesso!');
-        } else {
-            failure('Ocorreu um erro desconhecido, tente novamente.');
-        }
+		if( $resultado ){
+			notice('Informações salvas com sucesso!');
+		} else {
+			failure('Ocorreu um erro desconhecido, tente novamente.');
+		}
 		
 		$_POST['redirect_to'] = 'adm_main.php?section=taxonomy&list_content';
 

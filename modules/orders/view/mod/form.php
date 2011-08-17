@@ -1,6 +1,6 @@
 <?php
 $params = array(
-    "aust_node" => $_GET["aust_node"],
+	"aust_node" => $_GET["aust_node"],
 );
 $moduloConfig = $module->loadModConf($params);
 
@@ -89,5 +89,5 @@ foreach( $dados as $item ){
 </form>
 <br />
 <p>
-    <a href="javascript: history.back()"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
+	<a href="javascript: history.back()"><img src="<?php echo IMG_DIR?>layoutv1/voltar.gif" border="0" /></a>
 </p>

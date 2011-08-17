@@ -5,9 +5,9 @@ require_once 'tests/config/auto_include.php';
 class FlexFieldsApiTest extends PHPUnit_Framework_TestCase
 {
 
-    public function setUp(){
-        $this->obj = new ApiTransaction();
-    }
+	public function setUp(){
+		$this->obj = new ApiTransaction();
+	}
 
 	function createContent(){
 		Fixture::getInstance()->createApiData();
@@ -28,14 +28,14 @@ class FlexFieldsApiTest extends PHPUnit_Framework_TestCase
 		Connection::getInstance()->exec($sql);
 	}
 	
-    function testAskVersionJson(){
+	function testAskVersionJson(){
 		$params = array(
 			'data_format' => 'json',
 			'version' => 'true'
 		);
 		$return = $this->obj->perform($params);
 		$this->assertEquals('{"result":"0.0.1"}', $return);
-    }
+	}
 	
 	// returns Array
 	function testGetData(){

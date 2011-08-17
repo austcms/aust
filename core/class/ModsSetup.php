@@ -2,9 +2,6 @@
 /**
  * Controller principal deste módulo
  *
- * @package ModController
- * @name nome
- * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @since v0.1.6 06/07/2009
  */
 
@@ -20,15 +17,15 @@ class ModsSetup
 	 */
 	//public $user;
 
-    function __construct($param = array()){
-        $param['controllerName'] = 'setup';
+	function __construct($param = array()){
+		$param['controllerName'] = 'setup';
 
 		$user = User::getInstance();
-        $param['action'] = (empty($param['action'])) ? "" : $param['action'];
-        
+		$param['action'] = (empty($param['action'])) ? "" : $param['action'];
+		
 		$this->connection = Connection::getInstance();
-        $this->user = $user->getId();
-    }
+		$this->user = $user->getId();
+	}
 
 	function createStructure($params = array()){
 		
@@ -100,6 +97,6 @@ class ModsSetup
 		return $this->austNode;
 	}
 
-    
+	
 }
 ?>

@@ -2,9 +2,6 @@
 /**
  * Ajax do Módulo
  *
- * @package ModCadastro
- * @name adm_main.php
- * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @since v0.1.6 25/07/2009
  */
 /**
@@ -17,7 +14,7 @@ session_start();
  * Se não está definido o endereço deste arquivo até o root
  */
 if(!defined('THIS_TO_BASEURL')){
-    define('THIS_TO_BASEURL', '../../../');
+	define('THIS_TO_BASEURL', '../../../');
 }
 
 /**
@@ -47,17 +44,17 @@ $conexao = Connection::getInstance();
 /**
  * Configurações do core do sistema
  */
-    include(CONFIG_DIR."core.php");
+	include(CONFIG_DIR."core.php");
 /**
  * Permissões de tipos de usuários relacionados à navegação
  */
-    include(CONFIG_DIR."nav_permissions.php");
+	include(CONFIG_DIR."nav_permissions.php");
 /**
  * Carrega o CORE
  */
-    include(CORE_DIR.'load_core.php');
+	include(CORE_DIR.'load_core.php');
 
-    
+	
 include('../index.php');
 
 $modulo = new Cadastro;
@@ -73,35 +70,35 @@ header("Content-Type: text/html; charset=".$aust_charset['view'],true);
  * LER TABELAS
  */
 if($_POST['action'] == 'LeCadastros'){
-    $sql = "SELECT
-                *
-            FROM
-                categorias
-            WHERE
-                tipo='cadastro'";
-    //echo $sql;
-    $arraytmp = Connection::getInstance()->query('SHOW TABLES');
-    //$arraytmp = Connection::getInstance()->listaTabelasDoDBParaArray();
-    
-    foreach($arraytmp AS $value){
-        $value = reset($value);
-        echo '<option value="'.$value.'">'.$value.'</option>';
-    }
-    
+	$sql = "SELECT
+				*
+			FROM
+				categorias
+			WHERE
+				tipo='cadastro'";
+	//echo $sql;
+	$arraytmp = Connection::getInstance()->query('SHOW TABLES');
+	//$arraytmp = Connection::getInstance()->listaTabelasDoDBParaArray();
+	
+	foreach($arraytmp AS $value){
+		$value = reset($value);
+		echo '<option value="'.$value.'">'.$value.'</option>';
+	}
+	
 }
 /**
  * Ler campos
  */
 elseif($_POST['action'] == 'LeCampos'){
 
-    /**
-     * Lê os campos da tabela e depois mostra um html <select> para o usuário
-     * escolher o relacionamento de tabelas
-     */
-    $query = Connection::getInstance()->query('DESCRIBE '.$_POST['table']);
-    foreach ( $query as $chave=>$value ){
-        echo '<option value="'.$value['Field'].'">'.$value['Field'].'</option>';
-    }
+	/**
+	 * Lê os campos da tabela e depois mostra um html <select> para o usuário
+	 * escolher o relacionamento de tabelas
+	 */
+	$query = Connection::getInstance()->query('DESCRIBE '.$_POST['table']);
+	foreach ( $query as $chave=>$value ){
+		echo '<option value="'.$value['Field'].'">'.$value['Field'].'</option>';
+	}
 
 }
 
@@ -111,56 +108,56 @@ elseif($_POST['action'] == 'LeCampos'){
 
 elseif($_POST['action'] == 'search'){
 
-    /**
-     *
-     */
-    //print_r($_POST);
-    //exit();
-    $austNode = $_POST['austNode'];
-    $aust = Aust::getInstance();
+	/**
+	 *
+	 */
+	//print_r($_POST);
+	//exit();
+	$austNode = $_POST['austNode'];
+	$aust = Aust::getInstance();
 
-    $resultado = array();
-    $categorias = Aust::getInstance()->getNodeChildren($_GET['aust_node']);
-    $categorias[$austNode] = 'Estrutura';
+	$resultado = array();
+	$categorias = Aust::getInstance()->getNodeChildren($_GET['aust_node']);
+	$categorias[$austNode] = 'Estrutura';
 
-    $searchField = '';
-    if( !empty($_POST["field"]) AND
-        $_POST["field"] != "&all&" )
-    {
-        $searchField = $_POST["field"];
-    }
+	$searchField = '';
+	if( !empty($_POST["field"]) AND
+		$_POST["field"] != "&all&" )
+	{
+		$searchField = $_POST["field"];
+	}
 
 //	$_POST['query'] = str_replace(" ", "%", $_POST['query']);
-    $param = array(
-        'categorias' => $categorias,
-        'metodo' => 'listing',
-        'search' => $_POST['query'],
-        'search_field' => $searchField
-    );
+	$param = array(
+		'categorias' => $categorias,
+		'metodo' => 'listing',
+		'search' => $_POST['query'],
+		'search_field' => $searchField
+	);
 
-    $sql = $module->loadSql($param);
-//    echo '<br><br>'.$sql .'<br>';
+	$sql = $module->loadSql($param);
+//	echo '<br><br>'.$sql .'<br>';
 
-    $resultado = $module->connection->query($sql, "ASSOC");
+	$resultado = $module->connection->query($sql, "ASSOC");
 
-    $fields = count($resultado);
+	$fields = count($resultado);
 
-    include($module->getIncludeFolder().'/view/mod/listing_table.php');
+	include($module->getIncludeFolder().'/view/mod/listing_table.php');
 
-    //$query = Connection::getInstance()->query('DESCRIBE '.$_POST['table']);
-    //foreach ( $query as $chave=>$value ){
-        //echo '<option value="'.$value['Field'].'">'.$value['Field'].'</option>';
-    //}
+	//$query = Connection::getInstance()->query('DESCRIBE '.$_POST['table']);
+	//foreach ( $query as $chave=>$value ){
+		//echo '<option value="'.$value['Field'].'">'.$value['Field'].'</option>';
+	//}
 }
 /*
  * PESQUISA: relational one-to-many
  */
 elseif($_POST['action'] == 'search1n'){
 
-    /**
-     *
-     */
-    $austNode = $_POST['austNode'];
+	/**
+	 *
+	 */
+	$austNode = $_POST['austNode'];
 
 	// checked_boxes
 	$get = $_GET;
@@ -176,11 +173,11 @@ elseif($_POST['action'] == 'search1n'){
 		}
 	}
 
-    $sql = "SELECT
-                r.id AS ref_id,
+	$sql = "SELECT
+				r.id AS ref_id,
 				r.".$ref_field." as ref_value
-            FROM
-                ".$relational_table." AS t
+			FROM
+				".$relational_table." AS t
 			RIGHT JOIN
 				".$ref_table." AS r
 			ON
@@ -201,10 +198,10 @@ elseif($_POST['action'] == 'search1n'){
 				$queryCheckedBoxes
 			GROUP BY
 				r.id
-            ORDER BY
-                t.order_nr ASC, t.id ASC
+			ORDER BY
+				t.order_nr ASC, t.id ASC
 			LIMIT 10
-            ";
+			";
 
 	$results = $module->connection->query($sql);
 	

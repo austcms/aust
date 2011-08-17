@@ -17,11 +17,11 @@ if( !empty($query['results']) &&
 				Dados separados por ponto e vírgula
 			</td>
 		</tr>
-	    <tr class="list">
-	        <td colspan="1">
+		<tr class="list">
+			<td colspan="1">
 				<?php echo implode("; ", $eachData); ?>
-	        </td>
-	    </tr>
+			</td>
+		</tr>
 		</table>
 		
 		<?php

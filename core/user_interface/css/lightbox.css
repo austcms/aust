@@ -1,105 +1,105 @@
 #mask {
-    position: absolute;
-    z-index:9000;
-    background-color: black;
-    top: 0;
-    left: 0;
-    filter: alpha(opacity=30) !important;
-    opacity: 0.3;
-    display: none;
+	position: absolute;
+	z-index:9000;
+	background-color: black;
+	top: 0;
+	left: 0;
+	filter: alpha(opacity=30) !important;
+	opacity: 0.3;
+	display: none;
 }
 
 .window {
-    position: fixed;
-    width:350px;
-    /*height:394px;*/
-    display:none;
-    z-index:9999;
-    padding:0;
-    top: 0;
+	position: fixed;
+	width:350px;
+	/*height:394px;*/
+	display:none;
+	z-index:9999;
+	padding:0;
+	top: 0;
 }
 
 /**** Lightbox ****/
 
 /* Personalize a janela modal aqui. Você pode adicionar uma imagem de fundo. */
 .window {
-    background: white;
-    width: 342px;
-    /*height:394px;*/
-    padding: 10px;
+	background: white;
+	width: 342px;
+	/*height:394px;*/
+	padding: 10px;
 }
 .window .header {
-    width: 100%;
-    height: auto;
-    padding: 0px 0 0 0px;
-    display: table;
-    position: relative;
-    margin: 0 0 10px 0;
+	width: 100%;
+	height: auto;
+	padding: 0px 0 0 0px;
+	display: table;
+	position: relative;
+	margin: 0 0 10px 0;
 }
 	.window .header h2 {
 			width: auto;
-            float: left;
-            position: static;
-            display: block;
-            margin: 3px 0 0 0px;
+			float: left;
+			position: static;
+			display: block;
+			margin: 3px 0 0 0px;
 	}
 
 	.window .header a {
-            width: 28px;
-            height: 29px;
-            display: table;
-            position: absolute;
-            right: -20px;
-            top: -20px;
-            background: url(../img/fechar_lb.png) no-repeat top;
-            padding-right: 0px;
+			width: 28px;
+			height: 29px;
+			display: table;
+			position: absolute;
+			right: -20px;
+			top: -20px;
+			background: url(../img/fechar_lb.png) no-repeat top;
+			padding-right: 0px;
 	}
-        .window .header a:hover {
-            background-position: 0px -31px;
-            padding-right: 0px;
-        }
+		.window .header a:hover {
+			background-position: 0px -31px;
+			padding-right: 0px;
+		}
 
 .window .lb_content {
-    width: auto;
-    height: auto;
-    display: table;
-    background: transparent;
-    text-align: left;
-    padding: 0px 0px 0 0px;
-    margin: 0px 0;
+	width: auto;
+	height: auto;
+	display: table;
+	background: transparent;
+	text-align: left;
+	padding: 0px 0px 0 0px;
+	margin: 0px 0;
 }
-    .window .lb_content p {
-        padding: 5px 0 15px 0;
-        margin: 0;
-    }
+	.window .lb_content p {
+		padding: 5px 0 15px 0;
+		margin: 0;
+	}
 	
 .window .footer {
-    width: auto;
-    height: 5px;
-    background: white;
-    margin: 0;
-    padding: 0;
+	width: auto;
+	height: 5px;
+	background: white;
+	margin: 0;
+	padding: 0;
 }
 
 /** Link nova categoria **/
 	div.nova_categoria {
-        width: 109px;
-        height: 21px;
-        display: table;
+		width: 109px;
+		height: 21px;
+		display: table;
 	}
-     div.nova_categoria a {
-        width: 109px;
-        height: 21px;
-        background: url(../img/nova_categoria.png) no-repeat;
-        display: table;
-        padding: 0;
-        margin: 0;
-        float: left;
-    }
-         div.nova_categoria a:hover {
-            background-position: 0px -22px;
-            display: block;
-        }
+	 div.nova_categoria a {
+		width: 109px;
+		height: 21px;
+		background: url(../img/nova_categoria.png) no-repeat;
+		display: table;
+		padding: 0;
+		margin: 0;
+		float: left;
+	}
+		 div.nova_categoria a:hover {
+			background-position: 0px -22px;
+			display: block;
+		}
 
 /* LIGHTBOX-PANEL */
 #lightbox-panel {

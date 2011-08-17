@@ -8,7 +8,7 @@
 		$usuario = "root"; 
 		$password = "2104"; 
 		$con = mysql_connect("localhost", $usuario);
-	//    $con = mysql_connect("localhost", $usuario, $password);
+	//	$con = mysql_connect("localhost", $usuario, $password);
 		
 	} else {
 		$dbname = "razaoaurea"; 
@@ -101,61 +101,61 @@
 	/* Contrói a Tabela */
 	?>
 	<table border="0" cellpadding="0" cellspacing="0" width="130">
-    
-    <tr>
-        <td color=white colspan=7>
-        
-            <table border=0 cellpadding=0 cellspacing=0 width=130>
-            <tr>
-                <td width="4"><a href="javascript: MostraCalendario(<?php $incremento-1;?>,<?php $categoria;?>)" class="incremento">«</a></td>
-                <td class="titulo_mesano"><?php echo $mes_ .'/'. $year; ?></td>
-                <td width="4"><a href="javascript: MostraCalendario(<?php $incremento+1;?>,<?php $categoria;?>)" class="incremento">»</a></td>
-            </tr>
-            </table>
-        
-        </td>
+	
+	<tr>
+		<td color=white colspan=7>
+		
+			<table border=0 cellpadding=0 cellspacing=0 width=130>
+			<tr>
+				<td width="4"><a href="javascript: MostraCalendario(<?php $incremento-1;?>,<?php $categoria;?>)" class="incremento">«</a></td>
+				<td class="titulo_mesano"><?php echo $mes_ .'/'. $year; ?></td>
+				<td width="4"><a href="javascript: MostraCalendario(<?php $incremento+1;?>,<?php $categoria;?>)" class="incremento">»</a></td>
+			</tr>
+			</table>
+		
+		</td>
 	</tr>
-    <tr>
-        <?php
-        for ( $x = 0; $x < 7; $x++ ){
+	<tr>
+		<?php
+		for ( $x = 0; $x < 7; $x++ ){
 		?>
-        	<td class="semana">
-            	<center>
-                <b>
-                <?php echo $week_titles[$x]; ?>
-                </b>
-                </center>
+			<td class="semana">
+				<center>
+				<b>
+				<?php echo $week_titles[$x]; ?>
+				</b>
+				</center>
 			</td>
-        <?php
-        }
+		<?php
+		}
 		?>
 	</tr>
-    <tr>
-        <?php
-        
-        /* Verifica qual celula deverá ficar em branco */
-        $offset = date( "w", mktime( 0, 0, 0, $month, $day, $year ) ) + 1;
+	<tr>
+		<?php
+		
+		/* Verifica qual celula deverá ficar em branco */
+		$offset = date( "w", mktime( 0, 0, 0, $month, $day, $year ) ) + 1;
 
-        if ( $offset > 0 ){
-                if( $offset != 7){
-                    echo str_repeat( '<td class="dia_vazio">&nbsp;</td>', $offset);
-                }
-            /* Começa entrando as informações */
-            for ( $day = 1; $day <= $totaldays; $day++ ){
-                /* Se você está no último dia do mês, pula a linha */
-                if ( $offset > 6){
-                    $offset = 0;
-                    echo '</tr>';
-                    if ( $day < $totaldays )
-                        echo '<tr>';
-                }
-                if($offset == "0")
+		if ( $offset > 0 ){
+				if( $offset != 7){
+					echo str_repeat( '<td class="dia_vazio">&nbsp;</td>', $offset);
+				}
+			/* Começa entrando as informações */
+			for ( $day = 1; $day <= $totaldays; $day++ ){
+				/* Se você está no último dia do mês, pula a linha */
+				if ( $offset > 6){
+					$offset = 0;
+					echo '</tr>';
+					if ( $day < $totaldays )
+						echo '<tr>';
+				}
+				if($offset == "0")
 					$myclass = "domingo";
-                else
+				else
 					$myclass="dia";
-                if($day == date("d") AND $month == date("n") AND $year == date("Y")){
+				if($day == date("d") AND $month == date("n") AND $year == date("Y")){
 					$myclass = "hoje";
-                }
+				}
 				if($agenda[sprintf("%02d", $day)]["id"] <> ''){
 					?>
 					<td class="<?php $myclass;?>"><a href="index.php?section=content&austd=<?php $agenda[sprintf("%02d", $day)]["categorianome"];?>&dia=<?php sprintf("%02d", $day);?>&mes=<?php sprintf("%02d", $month);?>&ano=<?php sprintf("%04d", $year);?>"><?php $day;?></a></td>
@@ -165,26 +165,26 @@
 					<td class="<?php $myclass;?>"><?php $day;?></td>
 					<?php
 				}
-                $offset++;
-            }
-            
-            /* Preenche o resto das células vazias */
-            if ( $offset > 0 )
-                $offset = 7 - $offset;
-            
-            if ( $offset > 0 )
-                echo str_repeat( "<td bgcolor=white><font face=verdana size=1>&nbsp;</font></td>", $offset );
-            
-            ?>
+				$offset++;
+			}
+			
+			/* Preenche o resto das células vazias */
+			if ( $offset > 0 )
+				$offset = 7 - $offset;
+			
+			if ( $offset > 0 )
+				echo str_repeat( "<td bgcolor=white><font face=verdana size=1>&nbsp;</font></td>", $offset );
+			
+			?>
 	<?php } ?>
-    </tr>
+	</tr>
 	<tr height="10">
-        <td colspan=7 bgcolor="white">
-        </td>
+		<td colspan=7 bgcolor="white">
+		</td>
 	</tr>
 	<tr height=1>
-        <td colspan=7>
-        </td>
+		<td colspan=7>
+		</td>
 	</tr>
-    </table>
+	</table>
 </div>

@@ -6,25 +6,25 @@ require_once 'config/nav_permissions.php';
 class ImageTest extends PHPUnit_Framework_TestCase
 {
 
-    public $dbConfig = array();
+	public $dbConfig = array();
 
-    public $connection;
+	public $connection;
 
 	public $images = array(
 		
 	);
 
-    public function setUp(){
-    
-        /*
-         * Informações de conexão com banco de dados
-         */
-        
-        
-        $this->obj = Image::getInstance();
-    }
+	public function setUp(){
+	
+		/*
+		 * Informações de conexão com banco de dados
+		 */
+		
+		
+		$this->obj = Image::getInstance();
+	}
 
-    function testValidation(){
+	function testValidation(){
 		
 		$params = array(
 			array(
@@ -46,7 +46,7 @@ class ImageTest extends PHPUnit_Framework_TestCase
 		$this->assertFalse( $this->obj->validate($params[1]) );
 		$this->assertFalse( $this->obj->validate($params) );
 	
-    }
+	}
 
 	function testGetDimensions(){
 		$image = "tests/test_files/image_sample.jpg";

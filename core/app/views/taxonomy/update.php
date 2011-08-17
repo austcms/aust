@@ -13,9 +13,9 @@
  * excluir a variável que poderia ter informações sobre algum arquivo.
  */
 if(!empty($_FILES['arquivo'])){
-    if(empty($_FILES['arquivo']['name']) OR empty($_FILES['arquivo']['type'])){
-        $_FILES['arquivo'] = array();
-    }
+	if(empty($_FILES['arquivo']['name']) OR empty($_FILES['arquivo']['type'])){
+		$_FILES['arquivo'] = array();
+	}
 }
 
 /**
@@ -54,9 +54,9 @@ if( !empty($_FILES['arquivo']) ){
 
 	// insere no DB
 	if (Connection::getInstance()->exec($sql)){
-	    $status_imagem = true;
+		$status_imagem = true;
 	} else {
-	    $status_imagem = false;
+		$status_imagem = false;
 	}
 
 }
@@ -72,28 +72,28 @@ $texto = str_replace("'","\'", $texto);
 
 
 $sql = "UPDATE taxonomy
-        SET
-            name='".$_POST['frmname']."',
-            description='".$texto."'
-        WHERE
-            id='".$_POST['w']."'
-        ";
+		SET
+			name='".$_POST['frmname']."',
+			description='".$texto."'
+		WHERE
+			id='".$_POST['w']."'
+		";
 
 //							echo $sql;
 if(!empty($status_imagem) AND $status_imagem == true){
-    echo '<p>Nova imagem salva com sucesso!</p>';
+	echo '<p>Nova imagem salva com sucesso!</p>';
 } elseif( !empty($status_imagem) ) {
-    echo '<p>Houve um erro desconhecido ao salvar a imagem. Contate o administrador.</p>';
+	echo '<p>Houve um erro desconhecido ao salvar a imagem. Contate o administrador.</p>';
 }
 
 $result = Connection::getInstance()->exec($sql);
 
 if ( $result > 0 ){
-    notice('As informações foram salvas com sucesso!');
+	notice('As informações foram salvas com sucesso!');
 } elseif ( is_int($result) AND $result == 0 ){
-    notice('Os dados enviados são idênticos aos já existentes. Nenhuma alteração feita.');
+	notice('Os dados enviados são idênticos aos já existentes. Nenhuma alteração feita.');
 } else {
-    failure('Ocorreu um erro desconhecido ao salvar as informações. Tente novamente.');
+	failure('Ocorreu um erro desconhecido ao salvar as informações. Tente novamente.');
 	unset($_POST['force_redirect']);
 }
 

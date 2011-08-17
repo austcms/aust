@@ -1,10 +1,7 @@
 <?php
 /**
- * Classe do módulo
+ * Module's model class
  *
- * @package Módulos
- * @name Cadastro
- * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @since v0.1.6, 09/07/2009
  */
 class FlexFieldsExport extends ModuleExport {

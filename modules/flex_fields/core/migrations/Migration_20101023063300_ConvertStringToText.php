@@ -1,7 +1,7 @@
 <?php
 class Migration_20101023063300_ConvertStringToText extends Migrations
 {
-    function up(){
+	function up(){
 
 		$sql = "SELECT node_id, property, id
 				FROM flex_fields_config
@@ -40,10 +40,10 @@ class Migration_20101023063300_ConvertStringToText extends Migrations
 			Connection::getInstance()->exec($sql);
 		}
 		
-        return true;
-    }
+		return true;
+	}
 
-    function down(){
+	function down(){
 
 		$sql = "SELECT node_id, property, id
 				FROM flex_fields_config
@@ -80,8 +80,8 @@ class Migration_20101023063300_ConvertStringToText extends Migrations
 		foreach( $sqls as $sql ){
 			Connection::getInstance()->exec($sql);
 		}
-        return true;
-    }
+		return true;
+	}
 
 }
 ?>

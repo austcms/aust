@@ -8,20 +8,20 @@ include_once MODULES_DIR.'flex_fields/FlexFields.php';
 class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 {
 
-    function setUp(){
+	function setUp(){
 
 		Fixture::getInstance()->destroy();
 		installModule('flex_fields');
 		
-        $modelName = 'FlexFieldsSetup';
-        $modDir = 'flex_fields';
-        $mod = 'FlexFields';
-        include_once MODULES_DIR.$modDir.'/'.MOD_MODELS_DIR.$modelName.'.php';
-        
-        $this->obj = new $modelName;
-        $this->Cadastro = new $mod;
+		$modelName = 'FlexFieldsSetup';
+		$modDir = 'flex_fields';
+		$mod = 'FlexFields';
+		include_once MODULES_DIR.$modDir.'/'.MOD_MODELS_DIR.$modelName.'.php';
+		
+		$this->obj = new $modelName;
+		$this->Cadastro = new $mod;
 
-    }
+	}
 
 	/**
 	 * @dataProvider fieldTypesList
@@ -154,9 +154,9 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 				);
 
 				$expectedSql = "INSERT INTO flex_fields_config ".
-	                           "(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr) ".
-	                           "VALUES ".
-	                           "('campo','field_one','Field One','This is a comment',777,'777',0,0,1,0,1,'password',1)";
+							   "(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr) ".
+							   "VALUES ".
+							   "('campo','field_one','Field One','This is a comment',777,'777',0,0,1,0,1,'password',1)";
 
 				$this->assertEquals(
 					$expectedSql,
@@ -176,9 +176,9 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 				);
 
 				$expectedSql = "INSERT INTO flex_fields_config ".
-	                           "(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr) ".
-	                           "VALUES ".
-	                           "('campo','field_one','Field One','This is a comment',777,'777',0,0,1,0,1,'files',1)";
+							   "(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr) ".
+							   "VALUES ".
+							   "('campo','field_one','Field One','This is a comment',777,'777',0,0,1,0,1,'files',1)";
 
 				$this->assertEquals(
 					$expectedSql,
@@ -189,30 +189,30 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 				function testCreateSqlForFileTable(){
 					$this->assertEquals(
 						'CREATE TABLE minhatabela_files('.
-	                    'id int auto_increment,'.
-	                    'maintable_id int,'.
+						'id int auto_increment,'.
+						'maintable_id int,'.
 						'type varchar(80),'.
 						'order_nr int COMMENT "Contém o número da ordenação deste registro",'.
-	                    'title varchar(250),'.
-	                    'description text,'.
-	                    'local varchar(180),'.
-	                    'link text,'.
-	                    'file_systempath text,'.
-	                    'file_path text,'.
-	                    'file_name varchar(250),'.
-	                    'original_file_name varchar(250),'.
-	                    'file_type varchar(250),'.
-	                    'file_size varchar(250),'.
-	                    'file_ext varchar(10),'.
-	                    'reference varchar(120),'.
-	                    'reference_table varchar(120),'.
-	                    'reference_field varchar(120),'.
-	                    'node_id int,'.
-	                    'created_on datetime,'.
-	                    'updated_on datetime,'.
-	                    'admin_id int,'.
-	                    'PRIMARY KEY (id),'.
-	                    'UNIQUE id (id))',
+						'title varchar(250),'.
+						'description text,'.
+						'local varchar(180),'.
+						'link text,'.
+						'file_systempath text,'.
+						'file_path text,'.
+						'file_name varchar(250),'.
+						'original_file_name varchar(250),'.
+						'file_type varchar(250),'.
+						'file_size varchar(250),'.
+						'file_ext varchar(10),'.
+						'reference varchar(120),'.
+						'reference_table varchar(120),'.
+						'reference_field varchar(120),'.
+						'node_id int,'.
+						'created_on datetime,'.
+						'updated_on datetime,'.
+						'admin_id int,'.
+						'PRIMARY KEY (id),'.
+						'UNIQUE id (id))',
 						$this->obj->createSqlForFilesTable('minhatabela')
 					);
 
@@ -224,11 +224,11 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 					$this->obj->filesTableName = 'minhatabela_files';
 					$this->obj->austNode = '777';
 					$sql = 
-					    "INSERT INTO ".
-	                    "flex_fields_config ".
-	                    "(type,property,value,node_id,created_on,deactivated,disabled,public,restricted,approved) ".
-	                    "VALUES ".
-	                    "('structure','table_files','minhatabela_files',777, '".date('Y-m-d H:i:s')."',0,0,1,0,1)";
+						"INSERT INTO ".
+						"flex_fields_config ".
+						"(type,property,value,node_id,created_on,deactivated,disabled,public,restricted,approved) ".
+						"VALUES ".
+						"('structure','table_files','minhatabela_files',777, '".date('Y-m-d H:i:s')."',0,0,1,0,1)";
 
 					$this->assertEquals(
 						$sql,
@@ -294,9 +294,9 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 				);
 
 				$expectedSql = "INSERT INTO flex_fields_config ".
-	                           "(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr,ref_table,ref_field) ".
-	                           "VALUES ".
-	                           "('campo','field_one','Field One','This is a comment',777,'777',0,0,1,0,1,'relacional_umparaum',1,'categorias','nome')";
+							   "(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr,ref_table,ref_field) ".
+							   "VALUES ".
+							   "('campo','field_one','Field One','This is a comment',777,'777',0,0,1,0,1,'relacional_umparaum',1,'categorias','nome')";
 
 				$this->assertEquals(
 					$expectedSql,
@@ -325,9 +325,9 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 				);
 
 				$expectedSql = "INSERT INTO flex_fields_config ".
-	                           "(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr,ref_table,ref_field,reference,ref_parent_field,ref_child_field) ".
-	                           "VALUES ".
-	                           "('campo','field_one','Field One','This is a comment',777,'777',0,0,1,0,1,'relacional_umparamuitos',1,'categorias','nome','tabelaum_tabelarelacional_categorias','parent','child')";
+							   "(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr,ref_table,ref_field,reference,ref_parent_field,ref_child_field) ".
+							   "VALUES ".
+							   "('campo','field_one','Field One','This is a comment',777,'777',0,0,1,0,1,'relacional_umparamuitos',1,'categorias','nome','tabelaum_tabelarelacional_categorias','parent','child')";
 
 				$this->assertEquals(
 					$expectedSql,
@@ -355,17 +355,17 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 						'refChildField' => 'tabeladois_id',
 					);
 
-	            	$sql = 'CREATE TABLE tabelaum_campo_tabeladois('.
-	                       'id int auto_increment,'.
-	                       'tabelaum_id int,'.
-	                       'tabeladois_id int,'.
+					$sql = 'CREATE TABLE tabelaum_campo_tabeladois('.
+						   'id int auto_increment,'.
+						   'tabelaum_id int,'.
+						   'tabeladois_id int,'.
 						   'order_nr int,'.
-	                       'blocked varchar(120),'.
-	                       'approved int,'.
-	                       'created_on datetime,'.
-	                       'updated_on datetime,'.
-	                       'PRIMARY KEY (id), UNIQUE id (id)'.
-	                       ')';
+						   'blocked varchar(120),'.
+						   'approved int,'.
+						   'created_on datetime,'.
+						   'updated_on datetime,'.
+						   'PRIMARY KEY (id), UNIQUE id (id)'.
+						   ')';
 					$this->assertEquals($sql, $this->obj->createReferenceTableSql_RelationalOneToMany($params) );
 				}
 			
@@ -382,9 +382,9 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 				);
 
 				$expectedSql = "INSERT INTO flex_fields_config ".
-	                           "(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr) ".
-	                           "VALUES ".
-	                           "('campo','field_one','Field One','This is a comment',777,'777',0,0,1,0,1,'images',1)";
+							   "(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr) ".
+							   "VALUES ".
+							   "('campo','field_one','Field One','This is a comment',777,'777',0,0,1,0,1,'images',1)";
 
 				$this->assertEquals(
 					$expectedSql,
@@ -397,30 +397,30 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 					function testCreateSqlForImagesTable(){
 						$this->assertEquals(
 							'CREATE TABLE minhatabela_images('.
-		                    'id int auto_increment,'.
-		                    'maintable_id int,'.
+							'id int auto_increment,'.
+							'maintable_id int,'.
 							'type varchar(80) COMMENT "type=main são as imagens principais",'.
 							'order_nr int COMMENT "Contém o número da ordenação deste registro",'.
-		                    'title varchar(250),'.
-		                    'description text,'.
-		                    'local varchar(180),'.
-		                    'link text,'.
-		                    'file_systempath text,'.
-		                    'file_path text,'.
-		                    'file_name varchar(250),'.
-		                    'original_file_name varchar(250),'.
-		                    'file_type varchar(250),'.
-		                    'file_size varchar(250),'.
-		                    'file_ext varchar(10),'.
-		                    'reference varchar(120),'.
-		                    'reference_table varchar(120),'.
-		                    'reference_field varchar(120),'.
-		                    'node_id int,'.
-		                    'created_on datetime,'.
-		                    'updated_on datetime,'.
-		                    'admin_id int,'.
-		                    'PRIMARY KEY (id),'.
-		                    'UNIQUE id (id))',
+							'title varchar(250),'.
+							'description text,'.
+							'local varchar(180),'.
+							'link text,'.
+							'file_systempath text,'.
+							'file_path text,'.
+							'file_name varchar(250),'.
+							'original_file_name varchar(250),'.
+							'file_type varchar(250),'.
+							'file_size varchar(250),'.
+							'file_ext varchar(10),'.
+							'reference varchar(120),'.
+							'reference_table varchar(120),'.
+							'reference_field varchar(120),'.
+							'node_id int,'.
+							'created_on datetime,'.
+							'updated_on datetime,'.
+							'admin_id int,'.
+							'PRIMARY KEY (id),'.
+							'UNIQUE id (id))',
 							$this->obj->createSqlForImagesTable('minhatabela')
 						);
 
@@ -432,11 +432,11 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 						$this->obj->imagesTableName = 'minhatabela_images';
 						$this->obj->austNode = '777';
 						$sql = 
-						    "INSERT INTO ".
-		                    "flex_fields_config ".
-		                    "(type,property,value,node_id,created_on,deactivated,disabled,public,restricted,approved) ".
-		                    "VALUES ".
-		                    "('structure','table_images','minhatabela_images',777, '".date('Y-m-d H:i:s')."',0,0,1,0,1)";
+							"INSERT INTO ".
+							"flex_fields_config ".
+							"(type,property,value,node_id,created_on,deactivated,disabled,public,restricted,approved) ".
+							"VALUES ".
+							"('structure','table_images','minhatabela_images',777, '".date('Y-m-d H:i:s')."',0,0,1,0,1)";
 
 						$this->assertEquals(
 							$sql,
@@ -501,9 +501,9 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 				);
 
 				$expectedSql = "INSERT INTO flex_fields_config ".
-	                           "(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr) ".
-	                           "VALUES ".
-	                           "('campo','field_one','Field One','This is a comment','777','777',0,0,1,0,1,'string',1)";
+							   "(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr) ".
+							   "VALUES ".
+							   "('campo','field_one','Field One','This is a comment','777','777',0,0,1,0,1,'string',1)";
 
 				$this->assertEquals(
 					$expectedSql,
@@ -516,15 +516,15 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 			$params = $this->fieldsForCreation();
 			$this->obj->mainTable = 'testunit';
 
-	        $sql = 'CREATE TABLE testunit('.
-	                   'id int auto_increment,'.
-	                   'node_id int,'.
-	                   'blocked varchar(120),'.
-	                   'approved int,'.
-	                   'created_on datetime,'.
-	                   'updated_on datetime,'.
-	                   'PRIMARY KEY (id), UNIQUE id (id), INDEX (node_id)'.
-	                ')';
+			$sql = 'CREATE TABLE testunit('.
+					   'id int auto_increment,'.
+					   'node_id int,'.
+					   'blocked varchar(120),'.
+					   'approved int,'.
+					   'created_on datetime,'.
+					   'updated_on datetime,'.
+					   'PRIMARY KEY (id), UNIQUE id (id), INDEX (node_id)'.
+					')';
 
 			$this->assertEquals($sql, $this->obj->createMainTableSql($params));
 
@@ -596,14 +596,14 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 			$lastInsert = $this->obj->connection->lastInsertId();
 
 			// TEST #1
-		    $params = array(
+			$params = array(
 				'site' => $lastInsert,
-		        'name' => 'Teste777',
-		        'description' => 'Teste777',
-		        'module' => 'flex_fields',
-		        'type' => 'structure',
-		        'author' => '1',
-		    );
+				'name' => 'Teste777',
+				'description' => 'Teste777',
+				'module' => 'flex_fields',
+				'type' => 'structure',
+				'author' => '1',
+			);
 
 			$result = $this->obj->saveStructure($params);
 			$query = Connection::getInstance()->query("SELECT * FROM taxonomy WHERE name='Teste777' AND type='flex_fields'");
@@ -876,17 +876,17 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 							'refParentField' => 'parent_testunit_id',
 							'refChildField' => 'testunit_id',
 						);
-		            	$sql = 'CREATE TABLE testunit_id_testunit('.
-		                       'id int auto_increment,'.
-		                       'parent_testunit_id int,'.
-		                       'testunit_id int,'.
+						$sql = 'CREATE TABLE testunit_id_testunit('.
+							   'id int auto_increment,'.
+							   'parent_testunit_id int,'.
+							   'testunit_id int,'.
 							   'order_nr int,'.
-		                       'blocked varchar(120),'.
-		                       'approved int,'.
-		                       'created_on datetime,'.
-		                       'updated_on datetime,'.
-		                       'PRIMARY KEY (id), UNIQUE id (id)'.
-		                       ')';
+							   'blocked varchar(120),'.
+							   'approved int,'.
+							   'created_on datetime,'.
+							   'updated_on datetime,'.
+							   'PRIMARY KEY (id), UNIQUE id (id)'.
+							   ')';
 						$this->assertEquals($sql, $this->obj->createReferenceTableSql_RelationalOneToMany($relationalTableParams) );
 					
 					$result = $this->obj->addField($params);
@@ -1056,7 +1056,7 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 		
 		
 		// executa a criação de uma nova estrutura inteira
-	    function testCreateStructure(){
+		function testCreateStructure(){
 		
 			$this->obj->connection->exec("DROP TABLE testunit");
 			$this->obj->connection->exec("DELETE FROM flex_fields_config WHERE node_id='7777' OR commentary='haha777' OR value='testunit' OR value='haha777' ");
@@ -1066,11 +1066,11 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 			$lastInsert = $this->obj->connection->lastInsertId();
 			
 			$params = array(
-	            'name' => 'TestUnit',
-	            'site' => $lastInsert,
-	            'class' => 'structure',
-	            'module' => 'flex_fields',
-	            'author' => 1,
+				'name' => 'TestUnit',
+				'site' => $lastInsert,
+				'class' => 'structure',
+				'module' => 'flex_fields',
+				'author' => 1,
 				'fields' => array(
 					array(
 						'name' => 'Campo 1',
@@ -1194,7 +1194,7 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 			$this->obj->connection->exec("DROP TABLE testunit_files");
 			$this->obj->connection->exec("DROP TABLE testunit_images");
 			$this->obj->connection->exec("DROP TABLE testunit_ref_field_ref_table");
-	    }
+		}
 	
 }
 ?>

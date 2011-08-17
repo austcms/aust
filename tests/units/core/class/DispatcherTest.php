@@ -5,25 +5,25 @@ require_once 'tests/config/auto_include.php';
 class DispatcherTest extends PHPUnit_Framework_TestCase
 {
 
-    public function setUp(){
-        $this->obj = new Dispatcher();
-    }
+	public function setUp(){
+		$this->obj = new Dispatcher();
+	}
 
-    function testController(){
+	function testController(){
 		$_GET["section"] = "main";
 		$this->assertEquals( "main", $this->obj->controller());
 
 		$_GET["section"] = "";
 		$this->assertEquals( "content", $this->obj->controller());
-    }
+	}
 
-    function testAction(){
+	function testAction(){
 		$_GET["action"] = "my_action";
 		$this->assertEquals( "my_action", $this->obj->action());
 
 		$_GET["action"] = "";
 		$this->assertEquals( "index", $this->obj->action());
-    }
+	}
 
 	function testControllerFile(){
 		$_GET["action"] = "content";

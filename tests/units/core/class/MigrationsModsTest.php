@@ -7,7 +7,7 @@ class MigrationsModsTest extends PHPUnit_Framework_TestCase
 {
 	
 	function setUp(){
-        $this->obj = new MigrationsMods();
+		$this->obj = new MigrationsMods();
 	}
 	
 	function tearDown(){
@@ -26,15 +26,15 @@ class MigrationsModsTest extends PHPUnit_Framework_TestCase
 	
 	function moduleLatestVersion($modName){
 		$latestVersion = 0;
-        foreach (glob(MODULES_DIR.$modName."/".MIGRATION_MOD_DIR."Migration_*.php") as $filename) {
-            $regexp = "/([0-9]{14})/";
-            if ( preg_match( $regexp, $filename, $matches) ){
-                if( $matches[0] > $latestVersion )
-                    $latestVersion = $matches[0];
+		foreach (glob(MODULES_DIR.$modName."/".MIGRATION_MOD_DIR."Migration_*.php") as $filename) {
+			$regexp = "/([0-9]{14})/";
+			if ( preg_match( $regexp, $filename, $matches) ){
+				if( $matches[0] > $latestVersion )
+					$latestVersion = $matches[0];
 				
-                $latestVersion;
-            }
-        }
+				$latestVersion;
+			}
+		}
 		return $latestVersion;
 	}
 	
@@ -54,15 +54,15 @@ class MigrationsModsTest extends PHPUnit_Framework_TestCase
 		return $result;
 	}
 
-    function testInitialization(){
-        $this->obj = new MigrationsMods();
-    }
+	function testInitialization(){
+		$this->obj = new MigrationsMods();
+	}
 
 	function testGetModNameFromPath(){
 		$this->assertEquals("agenda", $this->obj->getModNameFromPath('agenda'));
 		$this->assertEquals("agenda", $this->obj->getModNameFromPath('modules/agenda'));
-    }
-    
+	}
+	
 
 	function testStatus(){
 		$this->assertInternalType("array", $this->obj->status());
@@ -121,13 +121,13 @@ class MigrationsModsTest extends PHPUnit_Framework_TestCase
 		
 	}
 
-    function testIsActualVersion(){
-        $this->obj = new MigrationsMods();
+	function testIsActualVersion(){
+		$this->obj = new MigrationsMods();
 		
 		$this->obj->updateMigration("agenda");
 		$result = $this->obj->isActualVersion("agenda");
 		$this->assertTrue($result);
-    }
+	}
 
 
 }

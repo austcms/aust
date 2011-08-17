@@ -16,16 +16,16 @@ class ModDispatcherTest extends PHPUnit_Framework_TestCase
 			$this->structureId = $query[0]["id"];
 		}
 		
-        $this->params = $this->structureId;
+		$this->params = $this->structureId;
 	}
 	
 	function testController(){
-        $dispatcher = new ModDispatcher($this->params);
+		$dispatcher = new ModDispatcher($this->params);
 		$this->assertEquals("mod", $dispatcher->controller());
 	}
 	
 	function testDirectory(){
-        $obj = new ModDispatcher($this->params);
+		$obj = new ModDispatcher($this->params);
 		$this->assertEquals("textual/", $obj->directory());
 	}
 	
@@ -36,12 +36,12 @@ class ModDispatcherTest extends PHPUnit_Framework_TestCase
 	}
 	
 	function testControllerFile(){
-        $obj = new ModDispatcher($this->params);
+		$obj = new ModDispatcher($this->params);
 		$this->assertEquals(MODULES_DIR."textual/".MOD_CONTROLLER_DIR."mod_controller.php", $obj->controllerFile());
 	}
 
 	function testSetupControllerWithoutStructure(){
-        $dispatcher = new ModDispatcher('agenda', 'setup');
+		$dispatcher = new ModDispatcher('agenda', 'setup');
 		$this->assertEquals("setup", $dispatcher->controller());
 	}	
 	

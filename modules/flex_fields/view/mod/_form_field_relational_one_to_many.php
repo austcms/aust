@@ -14,18 +14,18 @@ else
 	$childField = $referencia.'_id';
 	
 $sql = "SELECT
-            t.id, t.$campo
-        FROM
-            ".$referencia." AS t
-        ORDER BY t.$campo ASC
-        ";
+			t.id, t.$campo
+		FROM
+			".$referencia." AS t
+		ORDER BY t.$campo ASC
+		";
 
 $checkboxes = $module->connection->query($sql);
 
 $inputName = "data[".$infoCadastro["structure"]["table"]["value"]."][".$chave."][]";
 
 foreach($checkboxes as $tabelaReferenciaResult){
-    $checkbox["options"][ $tabelaReferenciaResult["id"] ] = $tabelaReferenciaResult[ $campo ];
+	$checkbox["options"][ $tabelaReferenciaResult["id"] ] = $tabelaReferenciaResult[ $campo ];
 }
 
 /*
@@ -33,29 +33,29 @@ foreach($checkboxes as $tabelaReferenciaResult){
  */
 $values = array();
 if( !empty($w) ){
-    $sql = "SELECT
-                t.id, t.".$childField." AS ref_id,
+	$sql = "SELECT
+				t.id, t.".$childField." AS ref_id,
 				r.".$campo." as ref_value
-            FROM
-                ".$tabelaRelacional." AS t
+			FROM
+				".$tabelaRelacional." AS t
 			LEFT JOIN
 				".$referencia." AS r
 			ON
 				r.id=t.".$childField."
 			WHERE
 				t.".$parentField."='".$w."'
-            ORDER BY
-                t.order_nr ASC, t.id ASC
-            ";
-    $values = $module->connection->query($sql);
+			ORDER BY
+				t.order_nr ASC, t.id ASC
+			";
+	$values = $module->connection->query($sql);
 
-    if( empty($values)){
-        $values = array();
-    } else {
-        foreach( $values as $id ){
-            $value["valor"][] = $id["referencia"];
-        }
-    }
+	if( empty($values)){
+		$values = array();
+	} else {
+		foreach( $values as $id ){
+			$value["valor"][] = $id["referencia"];
+		}
+	}
 }
 
 $dragdrop = '';
@@ -117,13 +117,13 @@ if( $module->getFieldConfig($chave, '1n_has_dragdrop') == '1' )
  */
 /*
 echo $form->input( $chave, array(
-                                "label" => $value["label"],
-                                "select" => $select,
-                                "checkbox" => $checkbox,
-                                "value" => $value["valor"],
-                                "type" => $inputType,
+								"label" => $value["label"],
+								"select" => $select,
+								"checkbox" => $checkbox,
+								"value" => $value["valor"],
+								"type" => $inputType,
 								'after' => '<p class="explanation">'.$value['comentario'].'</p>'
-                            )
-                    );
+							)
+					);
 */
 ?>

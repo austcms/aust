@@ -4,9 +4,6 @@
  *
  * Carrega dados necessário sobre o módulo
  *
-  * @name Index
- * @author Alexandre de Oliveira <chavedomundo@gmail.com>
- * @version 0.2
  * @since v0.1.5, 30/05/2009
  */
 /**
@@ -15,7 +12,7 @@
 include(MOD_CONFIG);
 
 if( is_file(MOD_DBSCHEMA) )
-    include(MOD_DBSCHEMA);
+	include(MOD_DBSCHEMA);
 
 /**
  * Classes
@@ -35,8 +32,8 @@ $moduloNome = (empty($modInfo['className'])) ? 'Classe' : $modInfo['className'];
 include($moduloNome.'.php');
 
 $param = array(
-    'conexao' => $conexao,
-    'config' => $modInfo,
+	'conexao' => $conexao,
+	'config' => $modInfo,
 );
 
 $modulo = new $moduloNome($param);

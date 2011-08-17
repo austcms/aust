@@ -14,10 +14,10 @@ div#view {
 }
 
 div.body {
-    width: 760px;
-    text-align: left;
-    margin: 0 auto;
-    font-size: 1.0em;
+	width: 760px;
+	text-align: left;
+	margin: 0 auto;
+	font-size: 1.0em;
 
 		-moz-border-radius-bottomleft: 4px;
 		-moz-border-radius-bottomright: 4px;
@@ -29,22 +29,22 @@ div.body {
 		-webkit-box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.1);
 		background: white;
 }
-    div.body div.content {
-        padding: 0px;
-        margin: 0px 20px 0px 20px;
-        padding: 10px 0;
-        padding-bottom: 20px;
-        display: block;
-        width: 720px;
-    }
+	div.body div.content {
+		padding: 0px;
+		margin: 0px 20px 0px 20px;
+		padding: 10px 0;
+		padding-bottom: 20px;
+		display: block;
+		width: 720px;
+	}
 
-    div.body div.content:after{
-        content: ".";
-        clear: both;
-        display: block;
-        font-size: 0;
-        visibility: hidden;
-    }
+	div.body div.content:after{
+		content: ".";
+		clear: both;
+		display: block;
+		font-size: 0;
+		visibility: hidden;
+	}
  
 #menu ul { margin: 0px 0 0 10px; }
 
@@ -114,74 +114,74 @@ div.structure_nav_options {
 	-webkit-border-radius: 5px;
 }
    /*
-    * HIGHLIGHTS: painel com informações importantes
-    */
+	* HIGHLIGHTS: painel com informações importantes
+	*/
 
-       div.highlights_painel {
-           background: #f0f0f0;
-           min-height: 80px;
-           width: 100%;
-           border: 1px solid silver;
-           padding: 0px;
-           margin-bottom: 20px;
-           display: table;
-       }
+	   div.highlights_painel {
+		   background: #f0f0f0;
+		   min-height: 80px;
+		   width: 100%;
+		   border: 1px solid silver;
+		   padding: 0px;
+		   margin-bottom: 20px;
+		   display: table;
+	   }
 
-       div.highlights_painel div.containner {
-           margin: 10px;
-           display: table;
-       }
+	   div.highlights_painel div.containner {
+		   margin: 10px;
+		   display: table;
+	   }
 
 
-    /*
-     * BOX DE MENSAGENS
-     *
-     * Painel onde encontram-se opções
-     */
-            /* Status */
-            div.body div.content div.box-metade {
-                    width: 340px;
-                    background: red;
-                    margin-right: 10px;
-                    float: left;
-            }
-            div.body div.content div.box-dois { margin: 0; }
+	/*
+	 * BOX DE MENSAGENS
+	 *
+	 * Painel onde encontram-se opções
+	 */
+			/* Status */
+			div.body div.content div.box-metade {
+					width: 340px;
+					background: red;
+					margin-right: 10px;
+					float: left;
+			}
+			div.body div.content div.box-dois { margin: 0; }
 
-            div.body div.content div.box-full {
-                    width: 100%;
-                    background: white;
-                    display: table;
-                    margin-right: 0px;
-                    margin-bottom: 10px;
-            }
-            div.box { width: 710px; background: #dddddd; padding-bottom: 1px; }
-            div.box div.titulo { padding: 5px; }
-            div.box div.titulo h2 { font-size: 1.2em; margin: 0; }
-            div.box div.corpo { margin: 1px; margin-bottom: 0; padding: 10px; background: white; }
-            div.box div.rodape { margin: 10px; padding: 10px; background: white; }
-            div.alerta { background: #ffee60; padding: 5px; border: 1px solid orange; margin-bottom: 10px; }
-            div.pergunta { background: yellow; padding: 15px 0; border: 0px solid yellow; text-align: center; }
-            div.sucesso { background: #D9FFD9; color: #006413; padding: 5px; border: 1px solid #009900 }
-            div.insucesso { background: #f68585; padding: 5px; border: 1px solid #db4343 }
+			div.body div.content div.box-full {
+					width: 100%;
+					background: white;
+					display: table;
+					margin-right: 0px;
+					margin-bottom: 10px;
+			}
+			div.box { width: 710px; background: #dddddd; padding-bottom: 1px; }
+			div.box div.titulo { padding: 5px; }
+			div.box div.titulo h2 { font-size: 1.2em; margin: 0; }
+			div.box div.corpo { margin: 1px; margin-bottom: 0; padding: 10px; background: white; }
+			div.box div.rodape { margin: 10px; padding: 10px; background: white; }
+			div.alerta { background: #ffee60; padding: 5px; border: 1px solid orange; margin-bottom: 10px; }
+			div.pergunta { background: yellow; padding: 15px 0; border: 0px solid yellow; text-align: center; }
+			div.sucesso { background: #D9FFD9; color: #006413; padding: 5px; border: 1px solid #009900 }
+			div.insucesso { background: #f68585; padding: 5px; border: 1px solid #db4343 }
 
-            /* Status em Lightbox */
+			/* Status em Lightbox */
 
-            .window .lb_content div.sucesso {
-                background: transparent;
-                border: 0px;
-                color: #27c702; font-weight: bold; font-style: italic;
-            }
+			.window .lb_content div.sucesso {
+				background: transparent;
+				border: 0px;
+				color: #27c702; font-weight: bold; font-style: italic;
+			}
 
-    /********* CATEGORIAS *********/
-            div.body div.content div.structure { background: url('../img/taxonomy/taxonomy_arrow.png') no-repeat 14px 0px; }
-            div#categoriacontainer { float: left; }
-            div#categoriacontainer select{ font-size: 1.0em }
-            div#categoriacontainer select option.node{ color: #990000; font-weight:normal; background-color: #D9ECFF; }
-            div.structure0 { font-weight: bold; text-transform: uppercase; color: #006600; background-image: none !important; }
-            div.structure1 { font-weight: normal; text-transform: uppercase; color:#009900; }
-            div.structure2 { font-weight: bold; color: #000099; }
-            div.structure3 { font-weight: normal; color: #0066FF; }
-            div.structure4, div.structure5, div.structure6, div.structure7, div.structure8 { font-weight: normal; font-style: italic; }
+	/********* CATEGORIAS *********/
+			div.body div.content div.structure { background: url('../img/taxonomy/taxonomy_arrow.png') no-repeat 14px 0px; }
+			div#categoriacontainer { float: left; }
+			div#categoriacontainer select{ font-size: 1.0em }
+			div#categoriacontainer select option.node{ color: #990000; font-weight:normal; background-color: #D9ECFF; }
+			div.structure0 { font-weight: bold; text-transform: uppercase; color: #006600; background-image: none !important; }
+			div.structure1 { font-weight: normal; text-transform: uppercase; color:#009900; }
+			div.structure2 { font-weight: bold; color: #000099; }
+			div.structure3 { font-weight: normal; color: #0066FF; }
+			div.structure4, div.structure5, div.structure6, div.structure7, div.structure8 { font-weight: normal; font-style: italic; }
 
 
 
@@ -199,17 +199,17 @@ div.structure_nav_options {
 			div.body div.content div.alert_box div.containner { margin:0 auto; text-align: center; padding: 15px; background: #FFFF99; }
 				div.body div.content div.alert_box div.containner p {  }
 
-    /* EST_OPTIONS
-     * Campos de opções rápidas
-     */
-        table tr td a.link_pai_do_est_options { text-decoration: none; }
-        table tr td a.link_pai_do_est_options:hover { text-decoration: none; }
+	/* EST_OPTIONS
+	 * Campos de opções rápidas
+	 */
+		table tr td a.link_pai_do_est_options { text-decoration: none; }
+		table tr td a.link_pai_do_est_options:hover { text-decoration: none; }
 
-        table tr td div.est_options a { color: orange; text-decoration: underline; }
-        table tr td div.est_options a:hover { color: #00b53c; text-decoration: none; }
-        table tr td div.est_options div.campooptions_tabela {  }
-        table tr td div.est_options div.campooptions_campo {  }
-        table tr td span.est_options_info { color: #666666; }
+		table tr td div.est_options a { color: orange; text-decoration: underline; }
+		table tr td div.est_options a:hover { color: #00b53c; text-decoration: none; }
+		table tr td div.est_options div.campooptions_tabela {  }
+		table tr td div.est_options div.campooptions_campo {  }
+		table tr td span.est_options_info { color: #666666; }
 
 /* Formatação em geral */
 .filesize { font-size: 0.85em; color: #666; }
@@ -247,15 +247,15 @@ div#footer_admin_dashboard div.borda {
   font-size: 0px;
 }
 div#footer_admin_dashboard div.links_admin {
-    text-align: left;
+	text-align: left;
 		
 }
 div#footer_admin_dashboard div.links_admin a {
-    padding-left: 0px;
+	padding-left: 0px;
 }
 div#footer_admin_dashboard span.para_webmaster {
-    padding-left: 15px;
-    color: silver;
+	padding-left: 15px;
+	color: silver;
 }
 
 /*
@@ -263,64 +263,64 @@ div#footer_admin_dashboard span.para_webmaster {
  */
 
 div#permissoesAtuais .structure {
-    border-bottom: 1px solid #efefef;
-    margin: 0 0 5px 0;
-    padding: 0 0 5px 0;
+	border-bottom: 1px solid #efefef;
+	margin: 0 0 5px 0;
+	padding: 0 0 5px 0;
 }
-    div#permissoesAtuais .title {
-        font-weight: bold;
-    }
-    div#permissoesAtuais .actions {
-        margin: 5px 0 0 15px;
-        color: #666666;
-    }
+	div#permissoesAtuais .title {
+		font-weight: bold;
+	}
+	div#permissoesAtuais .actions {
+		margin: 5px 0 0 15px;
+		color: #666666;
+	}
 
 /* DEBUG */
 table.debug {
-    width: 740px;
-    margin: 15px auto;
-    font-size: 1.2em;
-    font-family: 'Corbel', 'Lucida Grande', 'Arial';
+	width: 740px;
+	margin: 15px auto;
+	font-size: 1.2em;
+	font-family: 'Corbel', 'Lucida Grande', 'Arial';
 	text-shadow: 0px 0px 0px #f9f9f9;
 }
-    table.debug tr.header td { padding-right: 5px; }
-    table.debug td.sql { padding-bottom: 5px; }
-    table.debug tr.list td {
+	table.debug tr.header td { padding-right: 5px; }
+	table.debug td.sql { padding-bottom: 5px; }
+	table.debug tr.list td {
 		padding: 0px 0;
 	}
 
-	    table.debug tr.list td div.td_containner {
+		table.debug tr.list td div.td_containner {
 			height: 100%;
 			display: table;
 			border-bottom: 1px solid #ddd;
 			border-top: 1px solid #f4f4f4;
 		}
-	    	table.debug tr.list td div.td_containner.first { border-top: 0px; }
-	    	table.debug tr.list td div.td_containner.last { border-bottom: 0px; }
+			table.debug tr.list td div.td_containner.first { border-top: 0px; }
+			table.debug tr.list td div.td_containner.last { border-bottom: 0px; }
 
-    	table.debug tr.list td div.column {
+		table.debug tr.list td div.column {
 			float: left;
 			padding: 7px 0;
 		}
 
-    table.debug td.sql { width: 590px; }
-    table.debug td.result { width: 80px; }
-    table.debug td.time { width: 70px; }
+	table.debug td.sql { width: 590px; }
+	table.debug td.result { width: 80px; }
+	table.debug td.time { width: 70px; }
 
-    table.debug tr.list div.sql { width: 580px;}
-    table.debug tr.list div.result { margin-left: 10px; width: 80px;}
-    table.debug tr.list div.time { width: 70px; }
+	table.debug tr.list div.sql { width: 580px;}
+	table.debug tr.list div.result { margin-left: 10px; width: 80px;}
+	table.debug tr.list div.time { width: 70px; }
 
 
-    table.debug tr.list div.time,
-    table.debug tr.list div.result { text-align: left; }
+	table.debug tr.list div.time,
+	table.debug tr.list div.result { text-align: left; }
 
-    table.debug tr.error { color: red; font-style: italic; }
+	table.debug tr.error { color: red; font-style: italic; }
 
 /* ELEMENTOS MENORES */
 
 div.loading_timer {
-    margin: 15px 0 15px 0;
-    color: #666666;
+	margin: 15px 0 15px 0;
+	color: #666666;
 }
-    div.loading_timer img { margin: 0px 3px 0px 0; }
+	div.loading_timer img { margin: 0px 3px 0px 0; }

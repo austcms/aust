@@ -7,85 +7,85 @@ require_once 'tests/config/auto_include.php';
 class UserTest extends PHPUnit_Framework_TestCase
 {
 
-    public $dbConfig = array();
+	public $dbConfig = array();
 
-    public $conexao;
+	public $conexao;
 
-    public function setUp(){
-    	Fixture::getInstance()->create();
+	public function setUp(){
+		Fixture::getInstance()->create();
 
-        $this->conexao = Connection::getInstance();
-        $this->obj = new User;
-    }
+		$this->conexao = Connection::getInstance();
+		$this->obj = new User;
+	}
 
-    public function testRedirectForbiddenSession(){
-        $this->assertEquals($this->obj->forbiddenCode, '' );
-        $this->assertFalse($this->obj->redirectForbiddenSession() );
-    }
+	public function testRedirectForbiddenSession(){
+		$this->assertEquals($this->obj->forbiddenCode, '' );
+		$this->assertFalse($this->obj->redirectForbiddenSession() );
+	}
 
-    public function testVerifySession(){
-        $this->assertFalse($this->obj->verifySession() );
-        // user is not logged
-        $this->assertEquals($this->obj->forbiddenCode, '100' );
-    }
+	public function testVerifySession(){
+		$this->assertFalse($this->obj->verifySession() );
+		// user is not logged
+		$this->assertEquals($this->obj->forbiddenCode, '100' );
+	}
 
-    public function testBlockedLoggedUserOnRealTime(){
+	public function testBlockedLoggedUserOnRealTime(){
 
-        $_SESSION['login']['id'] = 1;
-        $_SESSION['login']['username'] = 'kurko';
-        $this->assertTrue($this->obj->isLogged() );
+		$_SESSION['login']['id'] = 1;
+		$_SESSION['login']['username'] = 'kurko';
+		$this->assertTrue($this->obj->isLogged() );
 
-        // bloqueia usuário
-        $_SESSION['login']['is_blocked'] = 1;
-        $this->assertFalse( $this->obj->verifySession() );
-        $this->assertEquals($this->obj->forbiddenCode, '103' );
-    }
+		// bloqueia usuário
+		$_SESSION['login']['is_blocked'] = 1;
+		$this->assertFalse( $this->obj->verifySession() );
+		$this->assertEquals($this->obj->forbiddenCode, '103' );
+	}
 
-    public function testIsLogged(){
-        $this->assertFalse($this->obj->isLogged() );
+	public function testIsLogged(){
+		$this->assertFalse($this->obj->isLogged() );
 
-        // vai logar
-        $_SESSION['login']['id'] = 1;
-        $_SESSION['login']['username'] = 'kurko';
-        $this->assertTrue($this->obj->isLogged() );
+		// vai logar
+		$_SESSION['login']['id'] = 1;
+		$_SESSION['login']['username'] = 'kurko';
+		$this->assertTrue($this->obj->isLogged() );
 
-        // algum erro no login
-        $_SESSION['login']['id'] = 0;
-        $this->assertFalse($this->obj->isLogged() );
-    }
+		// algum erro no login
+		$_SESSION['login']['id'] = 0;
+		$this->assertFalse($this->obj->isLogged() );
+	}
 
-    public function testLeRegistro(){
+	public function testLeRegistro(){
 		$query = Connection::getInstance()->query("SELECT id FROM admins LIMIT 1");
 		$query = reset($query);
 		$id = $query["id"];
 
-        // connect
-        $_SESSION['login']['id'] = $id;
-        $_SESSION['login']['login'] = 'test_user';
-        $this->assertTrue($this->obj->isLogged() );
+		// connect
+		$_SESSION['login']['id'] = $id;
+		$_SESSION['login']['login'] = 'test_user';
+		$this->assertTrue($this->obj->isLogged() );
 
-        $this->assertGreaterThan( 0, $this->obj->LeRegistro('id') );
+		$this->assertGreaterThan( 0, $this->obj->LeRegistro('id') );
 
-    }
+	}
 
  	function testReset(){
 		$query = Connection::getInstance()->query("SELECT id FROM admins LIMIT 1");
 		$query = reset($query);
 		$id = $query["id"];
 
-        // connect
-        $_SESSION['login']['id'] = $id;
-        $_SESSION['login']['username'] = 'test_user';
-        $this->assertTrue($this->obj->isLogged() );
+		// connect
+		$_SESSION['login']['id'] = $id;
+		$_SESSION['login']['username'] = 'test_user';
+		$this->assertTrue($this->obj->isLogged() );
 
-        $this->assertEquals($id, 			$this->obj->getId() 				);
-        $this->assertEquals("test_user",	$this->obj->LeRegistro("login") 	);
+		$this->assertEquals($id, 			$this->obj->getId() 				);
+		$this->assertEquals("test_user",	$this->obj->LeRegistro("login") 	);
 
 		$this->obj->reset();
 		
-        $this->assertFalse( $this->obj->getId() 				);
-        $this->assertFalse( $this->obj->type() 					);
-        $this->assertFalse( $this->obj->LeRegistro("username") 	);
+		$this->assertFalse( $this->obj->getId() 				);
+		$this->assertFalse( $this->obj->type() 					);
+		$this->assertFalse( $this->obj->LeRegistro("username") 	);
 	}
 	
 	function testType(){
@@ -103,18 +103,18 @@ class UserTest extends PHPUnit_Framework_TestCase
 		$query = reset($query);
 		$id = $query["id"];
 
-        // connect
-        $_SESSION['login']['id'] = $id;
-        $_SESSION['login']['username'] = 'test_user';
+		// connect
+		$_SESSION['login']['id'] = $id;
+		$_SESSION['login']['username'] = 'test_user';
 		$this->assertTrue( $this->obj->isRoot() );
 
 	}
 	
 	function testHasUser(){
 		$this->assertTrue($this->obj->hasUser());
-    	Fixture::getInstance()->destroy();
+		Fixture::getInstance()->destroy();
 		$this->assertFalse($this->obj->hasUser());
 	}
-    
+	
 }
 ?>

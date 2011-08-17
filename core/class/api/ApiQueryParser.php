@@ -1,6 +1,5 @@
 <?php
 /**
- * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @since v0.3, 17/06/2011
  */
 class ApiQueryParser {
@@ -8,9 +7,9 @@ class ApiQueryParser {
 	public $dataFormat = 'json';
 	public $queryParser;
 
-    function __construct() {
+	function __construct() {
 
-    }
+	}
 	
 	public function structureId($get){
 		

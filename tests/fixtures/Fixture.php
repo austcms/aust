@@ -107,24 +107,24 @@ class Fixture {
 		$this->destroy();
 		installModule('flex_fields');
 		
-        $modelName = 'FlexFieldsSetup';
-        $modDir = 'flex_fields';
-        $mod = 'FlexFields';
-        include_once MODULES_DIR.$modDir.'/'.$mod.'.php';
-        include_once MODULES_DIR.$modDir.'/'.MOD_MODELS_DIR.$modelName.'.php';
-        
-        $flexFieldsSetup = new $modelName;
-        $flexFields = new $mod;
+		$modelName = 'FlexFieldsSetup';
+		$modDir = 'flex_fields';
+		$mod = 'FlexFields';
+		include_once MODULES_DIR.$modDir.'/'.$mod.'.php';
+		include_once MODULES_DIR.$modDir.'/'.MOD_MODELS_DIR.$modelName.'.php';
+		
+		$flexFieldsSetup = new $modelName;
+		$flexFields = new $mod;
 
 		Connection::getInstance()->query("INSERT INTO taxonomy (name,class) VALUES ('Website777','site')");
 		$lastInsert = Connection::getInstance()->lastInsertId();
 		
 		$params = array(
-            'name' => 'News',
-            'site' => $lastInsert,
-            'class' => 'structure',
-            'module' => 'flex_fields',
-            'author' => 1,
+			'name' => 'News',
+			'site' => $lastInsert,
+			'class' => 'structure',
+			'module' => 'flex_fields',
+			'author' => 1,
 			'fields' => array(
 				array(
 					'name' => 'Title',
@@ -176,14 +176,14 @@ class Fixture {
 	}
 	
 	static function getInstance(){
-        static $instance;
+		static $instance;
 
-        if( !$instance ){
-            $instance[0] = new Fixture;
-        }
+		if( !$instance ){
+			$instance[0] = new Fixture;
+		}
 
-        return $instance[0];
-    }
-    
+		return $instance[0];
+	}
+	
 }
 ?>
