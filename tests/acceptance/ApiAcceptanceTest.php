@@ -89,18 +89,19 @@ class APIAcceptanceTest extends PHPUnit_Framework_TestCase
 
     function testSpecifyingAModule(){
 		$api = new Api();
-		$result = $api->dispatch("query=News&module=flex_fields&id=".$this->newsId."&fields=title", false);
+		$result = $api->dispatch("query=News&module=flex_fields&where_id=".$this->newsId."&fields=title", false);
 		$result = json_decode($result, true);
 		$this->assertEquals(1, count($result['result']));
-		$this->assertArrayHasKey('text', $result['result'][0]);
+		$this->assertArrayHasKey('title', $result['result'][0]);
 		$this->assertArrayNotHasKey('id', $result['result'][0]);
     }
 
 	    function testSpecifyingAWrongModule(){
 			$api = new Api();
-			$result = $api->dispatch("query=News&module=unknown_module&id=2&fields=title", false);
+			$result = $api->dispatch("query=News&module=unknown_module&where_id=2&fields=title", false);
 			$result = json_decode($result, true);
-			$this->assertEquals(0, count($result['result']));
+			$empty = empty($result['result']);
+			$this->assertTrue($empty);
 	    }
 
 	/*
@@ -110,30 +111,47 @@ class APIAcceptanceTest extends PHPUnit_Framework_TestCase
 	 */
     function testUsingWhere(){
 		$api = new Api();
-		$result = $api->dispatch("query=News&order=title;id&limit=2&fields=*", false);
+		$result = $api->dispatch("query=News&where_title=new+service+offers", false);
 		$result = json_decode($result, true);
-		$this->assertEquals(2, count($result['result']));
+		$this->assertEquals(1, count($result['result']));
+
+		$api = new Api();
+		$result = $api->dispatch("query=Articles&where_title=new+service+offers", false);
+		$result = json_decode($result, true);
+		$this->assertEquals(1, count($result['result']));
     }
 
     function testUsingMultipleWhereStatements(){
 		$api = new Api();
-		$result = $api->dispatch("query=News&order=title;id&limit=2&fields=*", false);
+		$result = $api->dispatch("query=News&where_title=new+service+offers&where_text=Google*", false);
 		$result = json_decode($result, true);
-		$this->assertEquals(2, count($result['result']));
+		$this->assertEquals(1, count($result['result']));
+
+		$api = new Api();
+		$result = $api->dispatch("query=News&where_title=new+service+offers&where_text=opsss*", false);
+		$result = json_decode($result, true);
+		$empty = empty($result['result']);
+		$this->assertTrue($empty);
     }
 
     function testByIdUsingWhere(){
 		$api = new Api();
-		$result = $api->dispatch("query=News&order=title;id&limit=2&fields=*", false);
+		$result = $api->dispatch("query=News&where_id=".$this->newsId, false);
 		$result = json_decode($result, true);
-		$this->assertEquals(2, count($result['result']));
+		$this->assertEquals(1, count($result['result']));
+		$this->assertEquals($this->newsId, $result['result'][0]['id'], "query=News&where_id=".$this->newsId);
     }
 
     function testTwoPossibleValuesForTheSameField(){
 		$api = new Api();
-		$result = $api->dispatch("query=News&order=title;id&limit=2&fields=*", false);
+		$result = $api->dispatch("query=News&where_title=*new+service+offers*;google*", false);
 		$result = json_decode($result, true);
 		$this->assertEquals(2, count($result['result']));
+
+		$api = new Api();
+		$result = $api->dispatch("query=News&where_title=*new+service+offers*;opssss*", false);
+		$result = json_decode($result, true);
+		$this->assertEquals(1, count($result['result']));
     }
 
 	/*
@@ -143,7 +161,7 @@ class APIAcceptanceTest extends PHPUnit_Framework_TestCase
 	 */
 	 function testFlexFieldsUseCaseLotsOfImages(){
 		$api = new Api();
-		$result = $api->dispatch("query=News&order=title;id&limit=2&fields=*", false);
+		$result = $api->dispatch("?", false);
 		$result = json_decode($result, true);
 		$this->assertEquals(2, count($result['result']));
 	 }
@@ -155,7 +173,7 @@ class APIAcceptanceTest extends PHPUnit_Framework_TestCase
 	 */
 	 function testRetrievingTheLastFourteenPhotosInsertedInFlexFields(){
 		$api = new Api();
-		$result = $api->dispatch("query=News&order=title;id&limit=2&fields=*", false);
+		$result = $api->dispatch("?", false);
 		$result = json_decode($result, true);
 		$this->assertEquals(2, count($result['result']));
 	 }
@@ -172,7 +190,7 @@ class APIAcceptanceTest extends PHPUnit_Framework_TestCase
 	 */
 	 function testGetConfigurationValueByProperty(){
 		$api = new Api();
-		$result = $api->dispatch("query=News&order=title;id&limit=2&fields=*", false);
+		$result = $api->dispatch("?", false);
 		$result = json_decode($result, true);
 		$this->assertEquals(2, count($result['result']));
 	 }

@@ -19,8 +19,12 @@ class ApiQueryParser {
 			$structure = $get['structure'];
 		else
 			return false;
+
+		$params = array();
+		if( !empty($get['module']) )
+			$params['module'] = $get['module'];
 		
-		return Aust::getInstance()->getStructureIdByName($structure);
+		return Aust::getInstance()->getStructureIdByName($structure, $params);
 	}
 	
 	public function fields($get){

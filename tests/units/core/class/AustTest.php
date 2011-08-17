@@ -282,5 +282,34 @@ class AustTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue(in_array($secondId, $secondResult));
 
 	}
+	
+	function testGetStructureIdByNameAndModule(){
+		$this->obj->connection->query("INSERT INTO taxonomy (name,class) VALUES ('TestFather777','site')");
+		$lastInsert = $this->obj->connection->lastInsertId();
+		
+		$params = array(
+			'father' => $lastInsert,
+			'name' => 'Football',
+			'description' => 'A Football section',
+			'site' => $lastInsert,
+			'module' => 'flex_fields',
+			'author' => '1',
+		);
+		
+		$id = $this->obj->createStructure($params);
+		
+		$params = array(
+			'module' => 'flex_fields'
+		);
+		$result = $this->obj->getStructureIdByName("Football", $params);
+		$this->assertArrayHasKey("0", $result);
+		$this->assertEquals($id, $result[0]);
+
+		$params = array(
+			'module' => 'unknown_module'
+		);
+		$result = $this->obj->getStructureIdByName("Football", $params);
+		$this->assertFalse($result);
+	}	
 }
 ?>

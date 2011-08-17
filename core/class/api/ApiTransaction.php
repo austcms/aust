@@ -58,7 +58,7 @@ class ApiTransaction {
 		} else if( $this->retrieveFrom($get) == "structure" ){
 		
 			$structureIds = $this->queryParser()->structureId($get);
-			if( !is_array($structureIds) || count($structureIds) == 0 )
+			if( !is_array($structureIds) || empty($structureIds) || count($structureIds) == 0 )
 				return false;
 
 			$where = $this->queryParser()->where($get);

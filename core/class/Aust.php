@@ -420,13 +420,24 @@ class Aust {
 	 *
 	 * @param $austNode (int)
 	 */
-	function getStructureIdByName($string){
+	function getStructureIdByName($string, $params = array()){
 		$string = strtolower($string);
+		
+		$additionalConditions = '';
+		if( !empty($params) ){
+			if( !empty($params['module']) ){
+				$additionalConditions[] = "type IN ('".addslashes($params['module'])."')";
+			}
+		}
+		if( !empty($additionalConditions) )
+			$additionalConditions = ' AND ('.implode(") AND (", $additionalConditions).')';
+		
 		$sql = "SELECT id
 				FROM taxonomy
 				WHERE
 					lower(name) LIKE '$string' AND
 					class = '".Aust::$austStructureType."'
+					$additionalConditions
 				";
 		$query = Connection::getInstance()->query($sql);
 		if( empty($query) )
