@@ -4,8 +4,6 @@
  *
  * Carrega dados necessário sobre o módulo
  *
-  * @name Index
- * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @since v0.1.6, 06/07/2009
  */
 /**
@@ -34,8 +32,8 @@ include($moduloNome.'.php');
  * Cria os argumentos para instanciar o objeto da classe do módulo
  */
 $param = array(
-    'conexao' => $conexao,
-    'config' => $modInfo,
+	'conexao' => $conexao,
+	'config' => $modInfo,
 );
 
 $modulo = new $moduloNome($param);

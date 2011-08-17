@@ -1,9 +1,9 @@
 tinyMCE.init({
 	theme : "advanced",
 	mode : "exact",
-	    relative_urls : false,
-	    convert_urls : 0, // default 1
-    elements : "jseditor"+elementsToLoad,
+		relative_urls : false,
+		convert_urls : 0, // default 1
+	elements : "jseditor"+elementsToLoad,
 	theme_advanced_buttons1 : "newdocument,|,bold,italic,underline,strikethrough,forecolor,|,justifyleft,justifycenter,justifyright,justifyfull,|,fontsizeselect",
 	theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,bullist,numlist,|,outdent,indent,|,undo,redo,|,link,unlink,cleanup,|,insertdate,inserttime,preview",
 	theme_advanced_buttons3_add : "pastetext,pasteword,selectall",

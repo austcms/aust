@@ -9,10 +9,10 @@ class Application {
 
 	public $showUi = true;
 
-    function __construct($showUi = true) {
+	function __construct($showUi = true) {
 
 		if( !file_exists(CONFIG_DATABASE_FILE) ){
-	        header("Location: index.php");
+			header("Location: index.php");
 			exit();
 		}
 			
@@ -28,12 +28,12 @@ class Application {
 		/*
 		 * Configuration about the core
 		 */
-		    include_once(CONFIG_DIR."core.php");
+			include_once(CONFIG_DIR."core.php");
 
 		/*
 		 * Loads the whole core
 		 */
-		    include(CORE_DIR.'load_core.php');
+			include(CORE_DIR.'load_core.php');
 		
 		Aust::getInstance()->createFirstSiteAutomatically();
 		
@@ -41,28 +41,28 @@ class Application {
 		if( !$this->showUi )
 			return true;
 
-	    /*
-	     * Verifica se a conexão ou tabelas existem
-	     */
-	    if( !Connection::getInstance()->dbExists() ||
+		/*
+		 * Verifica se a conexão ou tabelas existem
+		 */
+		if( !Connection::getInstance()->dbExists() ||
 			($this->installationDiagnostics() != 1) )
 		{
-	        header("Location: index.php");
+			header("Location: index.php");
 			exit();
-	    }
-	    /*
-	     * Diagnostics show everything's fine
-	     */
-	    else {
+		}
+		/*
+		 * Diagnostics show everything's fine
+		 */
+		else {
 
-	        User::getInstance()->verifySession();
-	        User::getInstance()->redirectForbiddenSession();
+			User::getInstance()->verifySession();
+			User::getInstance()->redirectForbiddenSession();
 
 			$dispatcher = new Dispatcher;
 			$dispatcher->dispatch();
 
 		}
-    }
+	}
 
 	public function installationDiagnostics(){
 		return dbSchema::getInstance()->verificaSchema();

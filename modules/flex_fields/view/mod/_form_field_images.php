@@ -7,9 +7,9 @@ $fieldName = $value['nomeFisico'];
 $inputName = "data[".$infoCadastro["structure"]["table"]["value"]."][".$fieldName."]";
 ?>
 <div class="input">
-    <label for="input-<?php echo $fieldName ?>"><?php echo $value['label'] ?></label>
+	<label for="input-<?php echo $fieldName ?>"><?php echo $value['label'] ?></label>
 
-    <div class="input_field input_images input_<?php echo $fieldName ?>">
+	<div class="input_field input_images input_<?php echo $fieldName ?>">
 	
 	<div class="images">
 		<?php
@@ -75,9 +75,9 @@ $inputName = "data[".$infoCadastro["structure"]["table"]["value"]."][".$fieldNam
 				<input type="hidden" name="image_link_<?php echo $image['id'] ?>" value="<?php echo $image['link'] ?>" />
 				<input type="hidden" name="image_secondaryid_<?php echo $image['id'] ?>" value="<?php echo $image['secondaryid'] ?>" />
 				<br clear="all" />
-                <a href="javascript: void(0);" onclick="if( confirm('Você tem certeza que deseja excluir esta imagem?') ) window.open('adm_main.php?section=<?php echo $_GET["section"]; ?>&action=<?php echo $_GET["action"]; ?>&aust_node=<?php echo $_GET["aust_node"]; ?>&w=<?php echo $_GET["w"];?>&deleteimage=<?php echo $image["id"]; ?>','_top');">
-                    <img src="core/user_interface/img/icons/delete_15x15.png" alt="Excluir" title="Excluir" border="0" />
-                </a>
+				<a href="javascript: void(0);" onclick="if( confirm('Você tem certeza que deseja excluir esta imagem?') ) window.open('adm_main.php?section=<?php echo $_GET["section"]; ?>&action=<?php echo $_GET["action"]; ?>&aust_node=<?php echo $_GET["aust_node"]; ?>&w=<?php echo $_GET["w"];?>&deleteimage=<?php echo $image["id"]; ?>','_top');">
+					<img src="core/user_interface/img/icons/delete_15x15.png" alt="Excluir" title="Excluir" border="0" />
+				</a>
 				<?php
 				if( $module->getFieldConfig($fieldName, 'image_field_has_description') OR
 					$module->getFieldConfig($fieldName, 'image_field_has_link') OR
@@ -85,7 +85,7 @@ $inputName = "data[".$infoCadastro["structure"]["table"]["value"]."][".$fieldNam
 				{
 					?>
 					<a href="javascript: void(0)" class="lightbox-panel" id="image_<?php echo $image['id'] ?>" name="modal" onclick="editImageInLightbox(this, <?php echo $image['id'] ?>, '<?php echo $fieldName ?>')">
-                    	<img src="core/user_interface/img/icons/add_thumb_16x16.png" alt="Editar Informações" title="Editar Informações" border="0" />
+						<img src="core/user_interface/img/icons/add_thumb_16x16.png" alt="Editar Informações" title="Editar Informações" border="0" />
 					</a>
 					<?php
 				}
@@ -134,7 +134,7 @@ $inputName = "data[".$infoCadastro["structure"]["table"]["value"]."][".$fieldNam
 			break;
 		
 		?>
-        <input type="file" name="<?php echo $inputName ?>[]" value="<?php echo $inputValue ?>" id="input-<?php echo $fieldName ?>" <?php echo $multiple ?> />
+		<input type="file" name="<?php echo $inputName ?>[]" value="<?php echo $inputValue ?>" id="input-<?php echo $fieldName ?>" <?php echo $multiple ?> />
 		<?php
 	}
 	?>

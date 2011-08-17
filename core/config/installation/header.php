@@ -7,9 +7,9 @@
 
 <script type="text/javascript" src="<?php echo BASECODE_JS; ?>100_jquery.js"></script>
 <script type="text/javascript">
-    $(document).ready(function(){
-        $('input:visible:enabled:first').focus();
-    });
+	$(document).ready(function(){
+		$('input:visible:enabled:first').focus();
+	});
 </script>
 
 </head>
@@ -18,5 +18,5 @@
 
 <div id="outer" class="<?php if( !empty($errorStatus) ) echo 'error_message'; ?>">
   <div id="conteudo">
-        
+		
 

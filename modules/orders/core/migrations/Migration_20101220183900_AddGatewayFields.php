@@ -7,56 +7,56 @@
  */
 class Migration_20101220183900_AddGatewayFields extends Migrations
 {
-    function up(){
+	function up(){
 
-        $schema = array(
-            'table' => "st_orders",
-            'field' => 'gateway_analysing',
-            'type' => 'int',
-            'position' => 'AFTER client_id',
+		$schema = array(
+			'table' => "st_orders",
+			'field' => 'gateway_analysing',
+			'type' => 'int',
+			'position' => 'AFTER client_id',
 			'default' => '0'
-        );
-    	$this->addField($schema);
+		);
+		$this->addField($schema);
 
-        $schema = array(
-            'table' => "st_orders",
-            'field' => 'gateway_waiting',
-            'type' => 'int',
-            'position' => 'AFTER client_id',
+		$schema = array(
+			'table' => "st_orders",
+			'field' => 'gateway_waiting',
+			'type' => 'int',
+			'position' => 'AFTER client_id',
 			'default' => '0'
-        );
-    	$this->addField($schema);
+		);
+		$this->addField($schema);
 
-        $schema = array(
-            'table' => "st_orders",
-            'field' => 'gateway_complete',
-            'type' => 'int',
-            'position' => 'AFTER client_id',
+		$schema = array(
+			'table' => "st_orders",
+			'field' => 'gateway_complete',
+			'type' => 'int',
+			'position' => 'AFTER client_id',
 			'default' => '0'
-        );
-    	$this->addField($schema);
+		);
+		$this->addField($schema);
 
-        $schema = array(
-            'table' => "st_orders",
-            'field' => 'gateway_cancelled',
-            'type' => 'int',
-            'position' => 'AFTER client_id',
+		$schema = array(
+			'table' => "st_orders",
+			'field' => 'gateway_cancelled',
+			'type' => 'int',
+			'position' => 'AFTER client_id',
 			'default' => '0'
-        );
-    	$this->addField($schema);
+		);
+		$this->addField($schema);
 
-        return true;
-    }
+		return true;
+	}
 
-    function down(){
+	function down(){
 
-        $this->dropField('st_orders', 'gateway_analysing');
-        $this->dropField('st_orders', 'gateway_waiting');
-        $this->dropField('st_orders', 'gateway_cancelled');
-        $this->dropField('st_orders', 'gateway_complete');
+		$this->dropField('st_orders', 'gateway_analysing');
+		$this->dropField('st_orders', 'gateway_waiting');
+		$this->dropField('st_orders', 'gateway_cancelled');
+		$this->dropField('st_orders', 'gateway_complete');
 		
-        return true;
+		return true;
 
-    }
+	}
 }
 ?>

@@ -2,9 +2,9 @@
 	
 <?php
 if(count($query) == 0){
-    ?>
+	?>
 	<strong>Nenhum registro encontrado.</strong>
-    <?php
+	<?php
 } else {
 	?>	
 	<table width="100%">

@@ -1,9 +1,9 @@
 /*
-    Document   : forms.css
-    Created on : 17/07/2009, 10:28:20
-    Author     : Alexandre
-    Description:
-        Purpose of the stylesheet follows.
+	Document   : forms.css
+	Created on : 17/07/2009, 10:28:20
+	Author	 : Alexandre
+	Description:
+		Purpose of the stylesheet follows.
 */
 
 /*
@@ -14,122 +14,122 @@
 /*
  * STANDARDS
  */
-    form {
-        margin-bottom: 15px;
-    }
-    form div.input { display: inline; width: 100%; float: left; }
-    form input.text { width: 470px; font-size: 1.3em; height: 22px; padding: 0px 2px; } /* standard */
-    form select { font-size: 1.0em; height: 22px; display: inline-block; }
-    form textarea { margin-bottom: 10px; min-height: 90px; width: 100%; }
-    form input.submit { }
+	form {
+		margin-bottom: 15px;
+	}
+	form div.input { display: inline; width: 100%; float: left; }
+	form input.text { width: 470px; font-size: 1.3em; height: 22px; padding: 0px 2px; } /* standard */
+	form select { font-size: 1.0em; height: 22px; display: inline-block; }
+	form textarea { margin-bottom: 10px; min-height: 90px; width: 100%; }
+	form input.submit { }
 
 		form div.currency_field input { width: 120px; text-align: right; }
 
 
-    form p.explanation { margin: 3px 0 0 0; font-size: 0.9em; color: #999999; }
-    form p.explanation_example { margin: 0; margin-bottom: 15px; font-size: 12px; color: #FF9900; }
+	form p.explanation { margin: 3px 0 0 0; font-size: 0.9em; color: #999999; }
+	form p.explanation_example { margin: 0; margin-bottom: 15px; font-size: 12px; color: #FF9900; }
 
 /* Classes 'simples' & 'pequeno' são de forms do core não, não de modulso */
-    form.simples label { float: left; width: 240px; font-size: 1.0em; font-weight: normal; color: #333333; }
-    form.simples div.input { display: inline; width: 420px; float: left; }
-    form.simples input.text { font-size: 1.0em; height: 20px; width: 300px; }
-    form.simples input.submit { }
-    form.simples select { font-size: 1em; height: 24px;  }
+	form.simples label { float: left; width: 240px; font-size: 1.0em; font-weight: normal; color: #333333; }
+	form.simples div.input { display: inline; width: 420px; float: left; }
+	form.simples input.text { font-size: 1.0em; height: 20px; width: 300px; }
+	form.simples input.submit { }
+	form.simples select { font-size: 1em; height: 24px;  }
 
-    form.pequeno div.input { display: inline; width: 150px; float: left; }
-    form.pequeno label { width: 130px;  }
-    form .campo { display: block; padding-bottom: 5px; }
+	form.pequeno div.input { display: inline; width: 150px; float: left; }
+	form.pequeno label { width: 130px;  }
+	form .campo { display: block; padding-bottom: 5px; }
 
-    form div.input_painel {
-        background: #efefef;
-        min-height: 80px;
-        width: 100%;
-        border: 1px solid silver;
-        padding: 0px;
-        margin-bottom: 20px;
-        display: table;
-    }
+	form div.input_painel {
+		background: #efefef;
+		min-height: 80px;
+		width: 100%;
+		border: 1px solid silver;
+		padding: 0px;
+		margin-bottom: 20px;
+		display: table;
+	}
 
-    form div.input_painel div.containner {
-        margin: 10px;
-        padding: 0px;
-        display: table;
-    }
+	form div.input_painel div.containner {
+		margin: 10px;
+		padding: 0px;
+		display: table;
+	}
 
-        form div.input_painel div.containner div.options { display: table; }
+		form div.input_painel div.containner div.options { display: table; }
 
 select.aust_node { display: inline; float: left; }
 
 /* Lightbox */
-    .window .lb_content table.form td label { line-height: 24px; width: 80px; display: inline-block; margin: 0 5px 0 0; }
-    .window .lb_content table.form td input.text { font-size: 1.3em; font-weight: bold; width: 240px; }
+	.window .lb_content table.form td label { line-height: 24px; width: 80px; display: inline-block; margin: 0 5px 0 0; }
+	.window .lb_content table.form td input.text { font-size: 1.3em; font-weight: bold; width: 240px; }
 
 
 /* MÓDULOS */
 /* Table de forms de módulos */
 table.form {
-     width: 100%;
-     margin: 0 0 10px 0;
+	 width: 100%;
+	 margin: 0 0 10px 0;
 }
 	table.form > tbody > tr > td { padding-bottom: 10px; }
-    table.form tr td.label { padding-top: 5px; vertical-align: top; }
-    table.form > tbody > tr > td:first-child { width: 160px; }
-    table.form label { font-weight: bold; color: #444444; }
-    table.form input.text { font-size: 1.3em; font-weight: bold; width: 420px; }
-    table.form input.date_text { font-size: 1.3em; font-weight: bold; width: 120px; }
+	table.form tr td.label { padding-top: 5px; vertical-align: top; }
+	table.form > tbody > tr > td:first-child { width: 160px; }
+	table.form label { font-weight: bold; color: #444444; }
+	table.form input.text { font-size: 1.3em; font-weight: bold; width: 420px; }
+	table.form input.date_text { font-size: 1.3em; font-weight: bold; width: 120px; }
 
 /* Table Listagem */
-    div.content_search {
-        margin-bottom: 10px; padding: 0; float: left;
-        margin-left: 20px;
-    }
-        div.content_search input {
-            width: 130px;
-        }
-    /* Acima de cada listagem há um painel de controle para excluir, bloquear itens, etc */
-    div.painel_de_controle { margin-bottom: 10px; padding: 0; float: right; }
-    /* Tabela para listagem, seja de conteúdo ou usuários */
+	div.content_search {
+		margin-bottom: 10px; padding: 0; float: left;
+		margin-left: 20px;
+	}
+		div.content_search input {
+			width: 130px;
+		}
+	/* Acima de cada listagem há um painel de controle para excluir, bloquear itens, etc */
+	div.painel_de_controle { margin-bottom: 10px; padding: 0; float: right; }
+	/* Tabela para listagem, seja de conteúdo ou usuários */
 table.listing { width: 100%; margin: 0px; clear: both; border-collapse: collapse;}
-    table.listing tr td { padding: 5px; }
-    table.listing tr td { padding: 5px; margin: 0px;}
+	table.listing tr td { padding: 5px; }
+	table.listing tr td { padding: 5px; margin: 0px;}
 
-    
+	
 
-    table.listing tr.header {
-            color: #cccccc;
-            font-weight: bold;
-            background: #333333;
-        }
-    /* table.listing tr.conteudo { height: 20px; } */
-    table.listing tr.conteudo td {
-        background: #fafafa;/*#FFF0E1;*/
-        border-top: 1px solid white;
-        border-bottom: 1px solid #f5f5f5;
-    }
-    table.listing tr.conteudo td a {  }
+	table.listing tr.header {
+			color: #cccccc;
+			font-weight: bold;
+			background: #333333;
+		}
+	/* table.listing tr.conteudo { height: 20px; } */
+	table.listing tr.conteudo td {
+		background: #fafafa;/*#FFF0E1;*/
+		border-top: 1px solid white;
+		border-bottom: 1px solid #f5f5f5;
+	}
+	table.listing tr.conteudo td a {  }
 
-    /* CAMPOOPTION
-     * Campos de opções Ajax em formulários de setup
-     */
-        table.listing tr.conteudo td div.campooptions { background: #f1f1f1; padding: 10px; margin-top: 3px; border: 1px solid silver;  background: red; }
-        table.listing tr.conteudo td div.campooptions div.campooptions_tabela {  }
-        table.listing tr.conteudo td div.campooptions div.campooptions_campo {  }
+	/* CAMPOOPTION
+	 * Campos de opções Ajax em formulários de setup
+	 */
+		table.listing tr.conteudo td div.campooptions { background: #f1f1f1; padding: 10px; margin-top: 3px; border: 1px solid silver;  background: red; }
+		table.listing tr.conteudo td div.campooptions div.campooptions_tabela {  }
+		table.listing tr.conteudo td div.campooptions div.campooptions_campo {  }
 
 table.listing td.adddate { width: 110px; }
 
 /* FormHelper (cadastros) */
 form.formHelper { }
 
-    form.formHelper div.input { margin-bottom: 5px; }
-    form.formHelper label { width: 160px; margin: 7px 5px 0 0; float: left; }
+	form.formHelper div.input { margin-bottom: 5px; }
+	form.formHelper label { width: 160px; margin: 7px 5px 0 0; float: left; }
 		form.formHelper label.select_category { margin-top: 0; }
-    form.formHelper div.input_field { width: 540px; float: left; }
-    form.formHelper div.input_textarea textarea { width: 500px; height: 90px; margin: 0; }
-    form.formHelper div.input_date input { width: 18px; }
-        form.formHelper div.input_date .input_date_year { width: 35px; }
-    form.formHelper div.input_checkbox { display: table; }
-    form.formHelper div.input_images { display: table; }
-    form.formHelper div.after { margin: 0 0 10px 0; }
+	form.formHelper div.input_field { width: 540px; float: left; }
+	form.formHelper div.input_textarea textarea { width: 500px; height: 90px; margin: 0; }
+	form.formHelper div.input_date input { width: 18px; }
+		form.formHelper div.input_date .input_date_year { width: 35px; }
+	form.formHelper div.input_checkbox { display: table; }
+	form.formHelper div.input_images { display: table; }
+	form.formHelper div.after { margin: 0 0 10px 0; }
 
 /*
  * Listagem de Pessoas - table com a class listagem e pessoas
@@ -138,55 +138,55 @@ table.pessoas { width: 505px !important; margin: 0px; border-collapse: collapse;
 table.pessoas tr.conteudo td a img { padding-right: 5px; }
 
 div.pessoas {
-    float: left;
-    display: table;
-    margin-right: 20px;
+	float: left;
+	display: table;
+	margin-right: 20px;
 }
 div.divisoria {
-    border-left: 1px solid #f4f4f4;
-    width: 1px;
-    float: left;
-    height: 290px;
-    margin: 10px 0 0 0;
+	border-left: 1px solid #f4f4f4;
+	width: 1px;
+	float: left;
+	height: 290px;
+	margin: 10px 0 0 0;
 }
 
 div.mais_opcoes {
-    float: left;
-    display: table;
-    width: 170px;
-    margin-left: 20px;
+	float: left;
+	display: table;
+	width: 170px;
+	margin-left: 20px;
 }
-    div.mais_opcoes h3 {
-        color: #b1b1b1;
-        font-size: 1.1em;
-        margin: 10px 0 15px 0;
-    }
-
-    /* BOTÕES */
-    .botao { margin: 13px 0 13px 0; }
-    div.mais_opcoes .botao a {
-        width: 120px;
-        height: 26px;
-        display: block;
-        padding: 0;
-        margin: 0;
+	div.mais_opcoes h3 {
+		color: #b1b1b1;
+		font-size: 1.1em;
+		margin: 10px 0 15px 0;
 	}
-	    div.mais_opcoes .botao a:hover {
-	        background-position: 0px -26px !important;
-	    }
 
-        div.mais_opcoes .botao .bt_novapessoa a {
-            background: url(../img/bt_novapessoa.png) no-repeat;
-        }
+	/* BOTÕES */
+	.botao { margin: 13px 0 13px 0; }
+	div.mais_opcoes .botao a {
+		width: 120px;
+		height: 26px;
+		display: block;
+		padding: 0;
+		margin: 0;
+	}
+		div.mais_opcoes .botao a:hover {
+			background-position: 0px -26px !important;
+		}
+
+		div.mais_opcoes .botao .bt_novapessoa a {
+			background: url(../img/bt_novapessoa.png) no-repeat;
+		}
 
 		div.mais_opcoes .botao .bt_permissoes a {
-		    background: url(../img/bt_permissoes.png) no-repeat;
+			background: url(../img/bt_permissoes.png) no-repeat;
 		}
 
 		div.mais_opcoes .botao .bt_dados a {
-		    background: url(../img/bt_dados.png) no-repeat;
+			background: url(../img/bt_dados.png) no-repeat;
 		}
 		div.mais_opcoes .botao .bt_grupos a {
-		    background: url(../img/bt_grupos.png) no-repeat;
+			background: url(../img/bt_grupos.png) no-repeat;
 		}
 

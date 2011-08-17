@@ -4,20 +4,20 @@ require_once 'tests/config/auto_include.php';
 class AustTest extends PHPUnit_Framework_TestCase
 {
 
-    public $dbConfig = array();
+	public $dbConfig = array();
 
-    public $conexao;
+	public $conexao;
 
-    function setUp(){
-    
-        /*
-         * Informações de conexão com banco de dados
-         */
-        
-        $this->connection = Connection::getInstance();
+	function setUp(){
+	
+		/*
+		 * Informações de conexão com banco de dados
+		 */
+		
+		$this->connection = Connection::getInstance();
 		$this->connection->query("DELETE FROM taxonomy");
-        $this->obj = new Aust($this->connection);
-    }
+		$this->obj = new Aust($this->connection);
+	}
 
 	function tearDown(){
 		$this->obj->connection->query("DELETE FROM ".Config::getInstance()->table."");
@@ -28,12 +28,12 @@ class AustTest extends PHPUnit_Framework_TestCase
 		$siteId = $this->obj->connection->lastInsertId();
 		
 		$params = array(
-            'name' => "News",
-            'site' => $siteId,
-            'module' => 'textual',
-            'author' => '1'
-        );
-        
+			'name' => "News",
+			'site' => $siteId,
+			'module' => 'textual',
+			'author' => '1'
+		);
+		
 		$result = $this->obj->createStructure($params);
 		$query = Connection::getInstance()->query("SELECT * FROM taxonomy WHERE id='".$result."'");
 		$this->assertInternalType('array', $query);
@@ -51,28 +51,28 @@ class AustTest extends PHPUnit_Framework_TestCase
 		
 	}
 	
-    function testGetStructures(){
-        $this->assertInternalType('array', $this->obj->getStructures() );
-    }
+	function testGetStructures(){
+		$this->assertInternalType('array', $this->obj->getStructures() );
+	}
 
 	function testHasSite(){
-        $this->assertFalse($this->obj->anySiteExists() );
+		$this->assertFalse($this->obj->anySiteExists() );
 		$this->obj->connection->query("INSERT INTO taxonomy (name,father_id,class) VALUES ('TestFather777','0','site')");
-        $this->assertTrue($this->obj->anySiteExists() );
+		$this->assertTrue($this->obj->anySiteExists() );
 	}
 
 	function testCreateFirstSiteAutomatically(){
-        $this->assertTrue($this->obj->createFirstSiteAutomatically());
-        $this->assertFalse($this->obj->createFirstSiteAutomatically());
+		$this->assertTrue($this->obj->createFirstSiteAutomatically());
+		$this->assertFalse($this->obj->createFirstSiteAutomatically());
 	}
 	
 	function testAnyStructureExists(){
 		$this->obj->connection->exec("INSERT INTO taxonomy (name,father_id,class) VALUES ('A site','0','site')");
 		$siteId = $this->obj->connection->lastInsertId();
-        $this->assertFalse($this->obj->anyStructureExists());
+		$this->assertFalse($this->obj->anyStructureExists());
 
 		$this->obj->connection->exec("INSERT INTO taxonomy (name,father_id,class) VALUES ('A structure', '".$siteId."', 'structure')");
-        $this->assertTrue($this->obj->anyStructureExists());
+		$this->assertTrue($this->obj->anyStructureExists());
 
 		
 	}
@@ -87,13 +87,13 @@ class AustTest extends PHPUnit_Framework_TestCase
 		$this->assertEquals($structureId, $structure["id"]);
 	}
 
-    function testGetStructuresBySite(){
-        $this->assertInternalType('array', $this->obj->getStructuresBySite('1') );
-        $this->assertInternalType('array', $this->obj->getStructuresBySite('999') );
-        $this->assertFalse($this->obj->getStructuresBySite() );
-    }
+	function testGetStructuresBySite(){
+		$this->assertInternalType('array', $this->obj->getStructuresBySite('1') );
+		$this->assertInternalType('array', $this->obj->getStructuresBySite('999') );
+		$this->assertFalse($this->obj->getStructuresBySite() );
+	}
 
-    function testGetStructureByCategoryId(){
+	function testGetStructureByCategoryId(){
 
 		$this->obj->connection->exec("INSERT INTO taxonomy (name,class) VALUES ('My site','site')");
 		$siteLastInsert = $this->obj->connection->lastInsertId();
@@ -118,7 +118,7 @@ class AustTest extends PHPUnit_Framework_TestCase
 
 		$this->assertFalse($this->obj->getStructureByCategoryId(''));
 
-    }
+	}
 
 	function testGetInvisible(){
 		$this->obj->connection->query(
@@ -219,12 +219,12 @@ class AustTest extends PHPUnit_Framework_TestCase
 		$this->obj->connection->exec("INSERT INTO taxonomy (name, type, class, father_id, site_id, site_name, site_name_encoded) VALUES ('TestFather777', 'textual', 'structure', '".$siteLastInsert."', '".$siteLastInsert."', 'My site', 'my_site')");
 		$lastInsert = $this->obj->connection->lastInsertId();
 		
-	    $params = array(
-	        'father' => $lastInsert,
-	        'name' => 'Test777',
-	        'description' => 'Test777',
-	        'author' => '1',
-	    );
+		$params = array(
+			'father' => $lastInsert,
+			'name' => 'Test777',
+			'description' => 'Test777',
+			'author' => '1',
+		);
 		
 		$result = $this->obj->createCategory($params);
 		$query = $this->obj->connection->query("SELECT * FROM taxonomy WHERE name='Test777' AND father_id='".$lastInsert."'");
@@ -254,14 +254,14 @@ class AustTest extends PHPUnit_Framework_TestCase
 		$this->obj->connection->query("INSERT INTO taxonomy (name,class) VALUES ('TestFather777','site')");
 		$lastInsert = $this->obj->connection->lastInsertId();
 		
-	    $params = array(
-	        'father' => $lastInsert,
-	        'name' => 'Football',
-	        'description' => 'A Football section',
-	        'site' => $lastInsert,
-	        'module' => 'flex_fields',
-	        'author' => '1',
-	    );
+		$params = array(
+			'father' => $lastInsert,
+			'name' => 'Football',
+			'description' => 'A Football section',
+			'site' => $lastInsert,
+			'module' => 'flex_fields',
+			'author' => '1',
+		);
 		
 		$id = $this->obj->createStructure($params);
 		$result = $this->obj->getStructureIdByName("Football");

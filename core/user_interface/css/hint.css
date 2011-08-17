@@ -2,80 +2,80 @@
  * INTERROGAÇÃO
  */
 span.hint {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
+	display: inline-block;
+	width: 20px;
+	height: 20px;
 }
 h2 span.hint a {
-    line-height: 14px;
-    margin: 0 0 0px 0;
+	line-height: 14px;
+	margin: 0 0 0px 0;
 }
-    span.hint a.tooltip-trigger {
-        background: url(../img/tooltips/question.png) no-repeat top;
-        display: inline-block;
-        position: relative;
-        background-position: 0px -22px;
-        top: -2px;
-        width: 22px;
-        height: 22px;
-        text-decoration: none !important;
-        padding: 0; margin: 0;
+	span.hint a.tooltip-trigger {
+		background: url(../img/tooltips/question.png) no-repeat top;
+		display: inline-block;
+		position: relative;
+		background-position: 0px -22px;
+		top: -2px;
+		width: 22px;
+		height: 22px;
+		text-decoration: none !important;
+		padding: 0; margin: 0;
 
-    }
-    
-    span.hint a:hover {
-        background-position: 0px -22px;
-    }
+	}
+	
+	span.hint a:hover {
+		background-position: 0px -22px;
+	}
 
-    span.hint a:focus {
-        outline: none;
-    }
+	span.hint a:focus {
+		outline: none;
+	}
 
-    span.hint a.tooltip-trigger.padlock {
-        background-image: url(../img/tooltips/padlock.png);
+	span.hint a.tooltip-trigger.padlock {
+		background-image: url(../img/tooltips/padlock.png);
 		}
 
 /*
  * TOOLTIP
  */
 div.tooltip {
-    display: none;
-    background: transparent;
-    margin: 0 0 0 80px;
-    width: 255px;
-    color: #646464;
-    padding: 0;
-    position: absolute;
-    font-size: 1.0em !important;
-    cursor: auto;
+	display: none;
+	background: transparent;
+	margin: 0 0 0 80px;
+	width: 255px;
+	color: #646464;
+	padding: 0;
+	position: absolute;
+	font-size: 1.0em !important;
+	cursor: auto;
 }
 
-    div.tooltip div.top {
-        background: url(../img/top_tooltip.png);
-        margin: 0px;
-        width: 255px;
-        height: 16px;
-        margin-left: 1px;
-    }
+	div.tooltip div.top {
+		background: url(../img/top_tooltip.png);
+		margin: 0px;
+		width: 255px;
+		height: 16px;
+		margin-left: 1px;
+	}
 
-    div.tooltip div.text {
-        background: url(../img/meio_tooltip.png) repeat-y;
-        margin: 0;
-        width: 215px;
-        padding: 5px 20px 5px 20px;
-        color: #646464;
-    }
-        div.tooltip div.text p {
-            margin: 0 5px 0 5px;
-            padding-top: 0;
+	div.tooltip div.text {
+		background: url(../img/meio_tooltip.png) repeat-y;
+		margin: 0;
+		width: 215px;
+		padding: 5px 20px 5px 20px;
+		color: #646464;
+	}
+		div.tooltip div.text p {
+			margin: 0 5px 0 5px;
+			padding-top: 0;
 						font-weight: normal !important;
-        }
+		}
 
-    div.tooltip div.bottom {
-        background: url(../img/bottom_tooltip.png);
-        margin: 0px;
-        width: 255px;
-        height: 25px;
-        margin-left: 1px;
-    }
-    
+	div.tooltip div.bottom {
+		background: url(../img/bottom_tooltip.png);
+		margin: 0px;
+		width: 255px;
+		height: 25px;
+		margin-left: 1px;
+	}
+	

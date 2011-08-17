@@ -5,9 +5,9 @@ require_once 'tests/config/auto_include.php';
 class ApiTransactionTest extends PHPUnit_Framework_TestCase
 {
 
-    public function setUp(){
-        $this->obj = new ApiTransaction();
-    }
+	public function setUp(){
+		$this->obj = new ApiTransaction();
+	}
 
 	function createContent(){
 		Fixture::getInstance()->createApiData();
@@ -65,24 +65,24 @@ class ApiTransactionTest extends PHPUnit_Framework_TestCase
 		
 	}
 
-    function testRetrieveConfiguration(){
+	function testRetrieveConfiguration(){
 		$params = array(
 			'configuration' => 'site_title',
 			'query' => 'News'
 		);
 		$return = $this->obj->retrieveFrom($params);
 		$this->assertEquals('configuration', $return);
-    }
+	}
 
-    function testRetrieveStructureData(){
+	function testRetrieveStructureData(){
 		$params = array(
 			'query' => 'News'
 		);
 		$return = $this->obj->retrieveFrom($params);
 		$this->assertEquals('structure', $return);
-    }
+	}
 
-    function testGetConfigurationFields(){
+	function testGetConfigurationFields(){
 		$params = array(
 			'configuration' => 'site_title'
 		);
@@ -95,16 +95,16 @@ class ApiTransactionTest extends PHPUnit_Framework_TestCase
 		$return = $this->obj->getConfigurationFields($params);
 		$this->assertContains('site_title', $return);
 		$this->assertContains('other_field', $return);
-    }
+	}
 		
-    function testAskVersionJson(){
+	function testAskVersionJson(){
 		$params = array(
 			'data_format' => 'json',
 			'version' => 'true'
 		);
 		$return = $this->obj->perform($params);
 		$this->assertEquals('{"result":"0.0.1"}', $return);
-    }
+	}
 	
 	// returns Array
 	function testGetDataIsArray(){

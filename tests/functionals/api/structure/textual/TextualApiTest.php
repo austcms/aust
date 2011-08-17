@@ -5,11 +5,11 @@ require_once 'tests/config/auto_include.php';
 class TextualApiTest extends PHPUnit_Framework_TestCase
 {
 
-    public function setUp(){
+	public function setUp(){
 		installModule('textual');
 		$this->createContent();
-        $this->obj = new ApiTransaction();
-    }
+		$this->obj = new ApiTransaction();
+	}
 
 	function createContent(){
 		$nodeId = Fixture::getInstance()->createApiTextualData();

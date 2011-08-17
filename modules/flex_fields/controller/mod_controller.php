@@ -2,201 +2,198 @@
 /**
  * Controller principal deste módulo
  *
- * @package ModController
- * @name nome
- * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @since v0.1.6 06/07/2009
  */
 
 class ModController extends ModActionController
 {
 
-    public $helpers = array('Form');
+	public $helpers = array('Form');
 	public $doRender = true;
 
-    public function listing(){
+	public function listing(){
 
-        $austNode = $_GET['aust_node'];
-        $this->set('austNode', $austNode);
+		$austNode = $_GET['aust_node'];
+		$this->set('austNode', $austNode);
 
-        $categorias = Aust::getInstance()->getNodeChildren($_GET['aust_node']);
-        $categorias[$_GET['aust_node']] = 'Estrutura';
-        $param = array(
-            'categorias' => array($_GET['aust_node'] => ""),
-            'metodo' => 'listing',
-        );
+		$categorias = Aust::getInstance()->getNodeChildren($_GET['aust_node']);
+		$categorias[$_GET['aust_node']] = 'Estrutura';
+		$param = array(
+			'categorias' => array($_GET['aust_node'] => ""),
+			'metodo' => 'listing',
+		);
 	
-        $sql = $this->module->loadSql($param);
+		$sql = $this->module->loadSql($param);
 
-        $resultado = $this->module->connection->query($sql, "ASSOC");
-        $this->set('resultado', $resultado);
+		$resultado = $this->module->connection->query($sql, "ASSOC");
+		$this->set('resultado', $resultado);
 
-        $fieldsCount = count($resultado);
-        $this->set('fieldsCount', $fieldsCount);
+		$fieldsCount = count($resultado);
+		$this->set('fieldsCount', $fieldsCount);
 
 		$fieldsConfiguration = $this->module->getFields(null, true);
-        $this->set('fieldsConfiguration', $fieldsConfiguration);
+		$this->set('fieldsConfiguration', $fieldsConfiguration);
 
-        if( $this->module->getStructureConfig("has_search") ){
-            $this->set("search_fields", $this->module->getFields(false));
-        }
-    }
+		if( $this->module->getStructureConfig("has_search") ){
+			$this->set("search_fields", $this->module->getFields(false));
+		}
+	}
 
-    public function actions(){
+	public function actions(){
 
-    }
+	}
 
-    public function form(){
+	public function form(){
 
-    }
+	}
 
-    /**
-     * Create Form
-     */
-    public function create($params = array() ){
-        /**
-         * Verifica se há parâmetros
-         */
+	/**
+	 * Create Form
+	 */
+	public function create($params = array() ){
+		/**
+		 * Verifica se há parâmetros
+		 */
 		$this->module->{"teste"} = "hey";
-        if( !empty($params) ){
-            $w = ( empty($params["w"]) ? "" : $params["w"] );
-        }
+		if( !empty($params) ){
+			$w = ( empty($params["w"]) ? "" : $params["w"] );
+		}
 
-        /**
-         * COLETA DE INFORMAÇÕES
-         */
-        /**
-         * Pega todas as informações sobre a estrutura (austNode) atual
-         * em formato array
-         */
-        $estrutura = Aust::getInstance()->getStructureById( $this->austNode );
-        /**
-         * Pega informações sobre o cadastro na tabela cadastro_conf
-         */
-        $infoCadastro = $this->module->pegaInformacoesCadastro( $this->austNode );
-        /**
-         * Toma informações sobre a tabela física do cadastro
-         */
-        $infoTabelaFisica = $this->module->getPhysicalFields(
-            array(
-                "table" => $infoCadastro["structure"]["table"]["value"],
-                "by" => "Field",
-            )
-        );
+		/**
+		 * COLETA DE INFORMAÇÕES
+		 */
+		/**
+		 * Pega todas as informações sobre a estrutura (austNode) atual
+		 * em formato array
+		 */
+		$estrutura = Aust::getInstance()->getStructureById( $this->austNode );
+		/**
+		 * Pega informações sobre o cadastro na tabela cadastro_conf
+		 */
+		$infoCadastro = $this->module->pegaInformacoesCadastro( $this->austNode );
+		/**
+		 * Toma informações sobre a tabela física do cadastro
+		 */
+		$infoTabelaFisica = $this->module->getPhysicalFields(
+			array(
+				"table" => $infoCadastro["structure"]["table"]["value"],
+				"by" => "Field",
+			)
+		);
 
-        $divisorTitles = $this->module->loadDivisors();
-        $this->set('divisorTitles', $divisorTitles);
-        
-        $campos = $infoCadastro["campo"];
-        /**
-         * SE $W EXISTE
-         *
-         * Se $W existe, significa que esta instancia é uma edição de conteúdo.
-         * Agora será feita uma busca na respectiva tabela para tomar os
-         * dados gravados e escrevê-los nos respectivos inputs.
-         */
+		$divisorTitles = $this->module->loadDivisors();
+		$this->set('divisorTitles', $divisorTitles);
+		
+		$campos = $infoCadastro["campo"];
+		/**
+		 * SE $W EXISTE
+		 *
+		 * Se $W existe, significa que esta instancia é uma edição de conteúdo.
+		 * Agora será feita uma busca na respectiva tabela para tomar os
+		 * dados gravados e escrevê-los nos respectivos inputs.
+		 */
 			$nodeId = $this->austNode;
-            if( !empty($w) ){
-                $sql = "SELECT
-                            node_id, ".implode(",", array_keys($campos))."
-                        FROM
-                            ".$infoCadastro["structure"]["table"]["value"]."
-                        WHERE
-                            id=".$w."
-                        ";
-                $dados = Connection::getInstance()->query($sql, "ASSOC");
-                $dados = $dados[0];
-		        $this->set('w', $w);
+			if( !empty($w) ){
+				$sql = "SELECT
+							node_id, ".implode(",", array_keys($campos))."
+						FROM
+							".$infoCadastro["structure"]["table"]["value"]."
+						WHERE
+							id=".$w."
+						";
+				$dados = Connection::getInstance()->query($sql, "ASSOC");
+				$dados = $dados[0];
+				$this->set('w', $w);
 				$this->set('nodeId', $dados['node_id']);
 
-            } else {
-		        $this->set('w', false);
+			} else {
+				$this->set('w', false);
 			}
-            
-        $i = 0;
-        /**
-         * Loop para organizar a disposição dos campos
-         */
-        foreach ( $campos as $chave=>$value ){
-            
-            $dados['campos'] = $value;
-            /*
-             * Mostra inputs automaticamente.
-             *
-             * Engine:
-             *      Pega os registros da tabela do cadastro e os registros
-             *      da tabela flex_fields_config e verifica cada um, tentando
-             *      coincindi-los. Se algum campo não consta na tabela flex_fields_config
-             *      não é mostrado seu input, pois provavelmente é um campo
-             *      de configuração.
-             *
-             */
-            $type  = $value["specie"];
-            if( !empty($value['value']) ){
+			
+		$i = 0;
+		/**
+		 * Loop para organizar a disposição dos campos
+		 */
+		foreach ( $campos as $chave=>$value ){
+			
+			$dados['campos'] = $value;
+			/*
+			 * Mostra inputs automaticamente.
+			 *
+			 * Engine:
+			 *	  Pega os registros da tabela do cadastro e os registros
+			 *	  da tabela flex_fields_config e verifica cada um, tentando
+			 *	  coincindi-los. Se algum campo não consta na tabela flex_fields_config
+			 *	  não é mostrado seu input, pois provavelmente é um campo
+			 *	  de configuração.
+			 *
+			 */
+			$type  = $value["specie"];
+			if( !empty($value['value']) ){
 
-                /**
-                 * LEVANTAMENTO DE INFORMAÇÕES SOBRE CAMPOS
-                 *
-                 * Guarda todos os dados importantes sobre os campos
-                 * para envio à view
-                 */
-                 
-                /**
-                 * Se há valores carregados do DB para edição
-                 */
-                if( !empty($dados) ){
-                    if( array_key_exists($value["property"], $dados) ){
-                        $camposForm[ $value["property"] ]["value"] = $dados[ $value["property"] ];
-                    }
-                }
-                $camposForm[ $value["property"] ]["label"] = $value['value'];
-                $camposForm[ $value["property"] ]["nomeFisico"] = $value['property'];
-                $camposForm[ $value["property"] ]["comentario"] = $value['commentary'];
-                $camposForm[ $value["property"] ]["tipo"]["especie"] = $value["specie"];
-                $camposForm[ $value["property"] ]["tipo"]["referencia"] = $value["reference"];
-                $camposForm[ $value["property"] ]["tipo"]["tabelaReferencia"] = $value["ref_table"];
-                $camposForm[ $value["property"] ]["tipo"]["refParentField"] = $value["ref_parent_field"];
-                $camposForm[ $value["property"] ]["tipo"]["refChildField"] = $value["ref_child_field"];
-                $camposForm[ $value["property"] ]["tipo"]["tabelaReferenciaCampo"] = $value["ref_field"];
-                $camposForm[ $value["property"] ]["tipo"]["tipoFisico"] = $infoTabelaFisica[ $value["property"] ]["Type"];
+				/**
+				 * LEVANTAMENTO DE INFORMAÇÕES SOBRE CAMPOS
+				 *
+				 * Guarda todos os dados importantes sobre os campos
+				 * para envio à view
+				 */
+				 
+				/**
+				 * Se há valores carregados do DB para edição
+				 */
+				if( !empty($dados) ){
+					if( array_key_exists($value["property"], $dados) ){
+						$camposForm[ $value["property"] ]["value"] = $dados[ $value["property"] ];
+					}
+				}
+				$camposForm[ $value["property"] ]["label"] = $value['value'];
+				$camposForm[ $value["property"] ]["nomeFisico"] = $value['property'];
+				$camposForm[ $value["property"] ]["comentario"] = $value['commentary'];
+				$camposForm[ $value["property"] ]["tipo"]["especie"] = $value["specie"];
+				$camposForm[ $value["property"] ]["tipo"]["referencia"] = $value["reference"];
+				$camposForm[ $value["property"] ]["tipo"]["tabelaReferencia"] = $value["ref_table"];
+				$camposForm[ $value["property"] ]["tipo"]["refParentField"] = $value["ref_parent_field"];
+				$camposForm[ $value["property"] ]["tipo"]["refChildField"] = $value["ref_child_field"];
+				$camposForm[ $value["property"] ]["tipo"]["tabelaReferenciaCampo"] = $value["ref_field"];
+				$camposForm[ $value["property"] ]["tipo"]["tipoFisico"] = $infoTabelaFisica[ $value["property"] ]["Type"];
 
 				/*
 				 * Campo Images
 				 */
 				if( $value['specie'] == 'images' ){
-	                $camposForm[ $value["property"] ]["tipo"]["tabelaReferencia"] = $infoCadastro['structure']["table_images"]['value'];
+					$camposForm[ $value["property"] ]["tipo"]["tabelaReferencia"] = $infoCadastro['structure']["table_images"]['value'];
 				}
-            }
+			}
 
-            $i++;
-        } // Fim do loop
+			$i++;
+		} // Fim do loop
 
-        /**
-         * ENVIA DADOS PARA O VIEW
-         */
-        /**
-         * Informações sobre o cadastro completo
-         */
-        $this->set('infoCadastro', $infoCadastro);
-        $this->set('formIntro', $infoCadastro["config"]["description"]["value"]);
-        /**
-         * Lança as informações sobre campos para o view
-         */
-        $this->set('camposForm', $camposForm);
+		/**
+		 * ENVIA DADOS PARA O VIEW
+		 */
+		/**
+		 * Informações sobre o cadastro completo
+		 */
+		$this->set('infoCadastro', $infoCadastro);
+		$this->set('formIntro', $infoCadastro["config"]["description"]["value"]);
+		/**
+		 * Lança as informações sobre campos para o view
+		 */
+		$this->set('camposForm', $camposForm);
 
 		if( $this->doRender )
 			$this->render('form');
 		else
 			$this->render(false);
 
-    }
+	}
 
-    public function edit(){
+	public function edit(){
 
 		$w = $_GET["w"];
-        $params = array(
-            "w" => $_GET["w"]
-        );
+		$params = array(
+			"w" => $_GET["w"]
+		);
 
 		// IMAGES
 		if( !empty($_POST['type']) AND $_POST['type'] = 'image_options' ){
@@ -241,28 +238,28 @@ class ModController extends ModActionController
 		
 		$this->doRender = false;
 		$this->autoRender = false;
-        $this->create($params);
-        $this->render('form');
-    }
+		$this->create($params);
+		$this->render('form');
+	}
 
-    public function printing(){
+	public function printing(){
 
-        $params = array(
-            "w" => $_GET["w"]
-        );
+		$params = array(
+			"w" => $_GET["w"]
+		);
 		$this->doRender = false;
-        $this->create($params);
-        $this->render('printing');
-        //$this->render('form');
-    }
+		$this->create($params);
+		$this->render('printing');
+		//$this->render('form');
+	}
 
-    /**
-     * save()
-     *
-     * Salva os dados enviados de um formulário do módulo Cadastro
-     *
-     * Campos Images são inseridos ao final, pois eles precisam saber qual
-     * é o lastInsertId.
+	/**
+	 * save()
+	 *
+	 * Salva os dados enviados de um formulário do módulo Cadastro
+	 *
+	 * Campos Images são inseridos ao final, pois eles precisam saber qual
+	 * é o lastInsertId.
 	 *
 	 * O processo acontece na seguinte ordem:
 	 *
@@ -271,35 +268,35 @@ class ModController extends ModActionController
 	 *		3) Salva dados físicos (como arquivos).
 	 *		4) Salva dados relacionados no DB.
 	 */
-    public function save(){
+	public function save(){
 
-        $infoCadastro = $this->module->pegaInformacoesCadastro( $this->austNode );
+		$infoCadastro = $this->module->pegaInformacoesCadastro( $this->austNode );
 
-        /*
-         * UPDATE?
-         */
-        if( !empty($this->data[ $infoCadastro["structure"]["table"]["value"] ]["id"] ) ){
-            $w = $this->data[ $infoCadastro["structure"]["table"]["value"]] [ "id"];
-        }
+		/*
+		 * UPDATE?
+		 */
+		if( !empty($this->data[ $infoCadastro["structure"]["table"]["value"] ]["id"] ) ){
+			$w = $this->data[ $infoCadastro["structure"]["table"]["value"]] [ "id"];
+		}
 
-        /**
-         * Toma informações sobre a tabela física do cadastro
-         */
-        $infoTabelaFisica = $this->module->getPhysicalFields(
-            array(
-                "table" => $infoCadastro["structure"]["table"]["value"],
-                "by" => "Field",
-            )
-        );
+		/**
+		 * Toma informações sobre a tabela física do cadastro
+		 */
+		$infoTabelaFisica = $this->module->getPhysicalFields(
+			array(
+				"table" => $infoCadastro["structure"]["table"]["value"],
+				"by" => "Field",
+			)
+		);
 
-        $campos = $infoCadastro["campo"];
+		$campos = $infoCadastro["campo"];
 		$this->module->austNode = $this->austNode;
 		$this->module->fields = $campos;
-        $relational = array();
+		$relational = array();
 		$images = array();
 
 
-        if( $this->data ){
+		if( $this->data ){
 			$this->module->data = $this->data;
 			/*
 			 * PREPARA DADOS PARA POSTERIOR SALVAMENTO DE DADOS
@@ -334,11 +331,11 @@ class ModController extends ModActionController
 			 *		2) Salva dados principais (não relacionados);
 			 */
 			# Model
-            $resultado = Model::getInstance()->save($this->data);
-            if( !empty($w) AND $w > 0 )
-                $lastInsertId = $w;
-            else
-                $lastInsertId = $this->module->connection->lastInsertId();
+			$resultado = Model::getInstance()->save($this->data);
+			if( !empty($w) AND $w > 0 )
+				$lastInsertId = $w;
+			else
+				$lastInsertId = $this->module->connection->lastInsertId();
 
 			/*
 		 	 *		3) Salva dados físicos (como arquivos).
@@ -352,17 +349,17 @@ class ModController extends ModActionController
 			$relational = $this->module->relationalData;
 			
 
-            if( (
+			if( (
 				!empty($relational) ||
 				!empty($this->module->toDeleteTables)
 				)
 				AND
  				!empty($lastInsertId) ){
 
-                unset($sql);
-                foreach( $relational as $field=>$dados ){
+				unset($sql);
+				foreach( $relational as $field=>$dados ){
 					foreach( $dados as $tabela=>$dados ){
-	                    foreach($dados as $campo=>$value){
+						foreach($dados as $campo=>$value){
 	
 							if( !empty($infoCadastro['campo'][$field]['ref_parent_field']) )
 								$ref_field = $infoCadastro['campo'][$field]['ref_parent_field'];
@@ -370,88 +367,88 @@ class ModController extends ModActionController
 								$ref_field = $infoCadastro["structure"]["table"]["value"]."_id";
 						
 						
-	                        $relational[$field][$tabela][$campo][$ref_field] = $lastInsertId;
-	                    }
+							$relational[$field][$tabela][$campo][$ref_field] = $lastInsertId;
+						}
 					}
-                }
+				}
 				
-                /*
-                 * Exclui todos os dados expecificados em $toDeleteTables para salvá-los novamente
-                 * 
-                 * No caso de Checkboxes, só devem existir os que foram selecionados
+				/*
+				 * Exclui todos os dados expecificados em $toDeleteTables para salvá-los novamente
+				 * 
+				 * No caso de Checkboxes, só devem existir os que foram selecionados
 				 * no formulário. Assim, é necessário excluir todos os registros antes de 
-                 * começar a salvar o que foi enviado.
+				 * começar a salvar o que foi enviado.
 				 *
-                 */
-             	foreach( $this->module->toDeleteTables as $field=>$value ){
-                	foreach( $value as $key=>$value ){
+				 */
+			 	foreach( $this->module->toDeleteTables as $field=>$value ){
+					foreach( $value as $key=>$value ){
 					
 						if( !empty($infoCadastro['campo'][$field]['ref_parent_field']) )
 							$ref_field = $infoCadastro['campo'][$field]['ref_parent_field'];
 						else
 							$ref_field = $infoCadastro["structure"]["table"]["value"]."_id";
 
-	                    $sql = "DELETE FROM
-	                                $key
-	                            WHERE
-	                                ".$ref_field."='$w'
-	                                ";
+						$sql = "DELETE FROM
+									$key
+								WHERE
+									".$ref_field."='$w'
+									";
 						Connection::getInstance()->exec($sql);
-	                    unset($sql);
+						unset($sql);
 					}
-                }
+				}
 
 				/*
 				 * Começa a salvar cada um
 				 */
-             	foreach( $relational as $field=>$dados ){
-	                foreach( $dados as $tabela=>$dados ){
+			 	foreach( $relational as $field=>$dados ){
+					foreach( $dados as $tabela=>$dados ){
 
-	                    foreach( $dados as $campo=>$value ){
+						foreach( $dados as $campo=>$value ){
 
-	                        /*
-	                         * Múltiplos Inserts
-	                         */
-	                        if( is_int($campo) ){
-	                            //pr($value);
-	                            foreach( $value as $multipleInsertsCampo=>$multipleInsertsValor ){
-	                                $camposStrMultiplo[] = $multipleInsertsCampo;
-	                                $valueStrMultiplo[] = $multipleInsertsValor;
-	                            }
+							/*
+							 * Múltiplos Inserts
+							 */
+							if( is_int($campo) ){
+								//pr($value);
+								foreach( $value as $multipleInsertsCampo=>$multipleInsertsValor ){
+									$camposStrMultiplo[] = $multipleInsertsCampo;
+									$valueStrMultiplo[] = $multipleInsertsValor;
+								}
 
-	                            /*
-	                             * Insere no DB os Checkboxes marcados
-	                             */
-	                            $tempSql = "INSERT INTO
-	                                            ".$tabela."
-	                                                (".implode(",", $camposStrMultiplo).")
-	                                        VALUES
-	                                            ('".implode("','", $valueStrMultiplo)."')
-	                                        ";
-	                            /**
-	                             * SQL deste campo
-	                             */
-	                            $sql[] = $tempSql;
+								/*
+								 * Insere no DB os Checkboxes marcados
+								 */
+								$tempSql = "INSERT INTO
+												".$tabela."
+													(".implode(",", $camposStrMultiplo).")
+											VALUES
+												('".implode("','", $valueStrMultiplo)."')
+											";
+								/**
+								 * SQL deste campo
+								 */
+								$sql[] = $tempSql;
 
-	                            unset($valueStrMultiplo);
-	                            unset($camposStrMultiplo);
-	                            unset($tempSql);
+								unset($valueStrMultiplo);
+								unset($camposStrMultiplo);
+								unset($tempSql);
 
-	                        }
-	                    }
-	                }
+							}
+						}
+					}
 				}
-            }
+			}
 
-            if( !empty($sql) ){
-                if( is_array($sql) ){
-                    foreach( $sql as $uniqueSql ){
-                        $this->module->connection->exec($uniqueSql);
-                    }
-                }
-            }
-            
-        }
+			if( !empty($sql) ){
+				if( is_array($sql) ){
+					foreach( $sql as $uniqueSql ){
+						$this->module->connection->exec($uniqueSql);
+					}
+				}
+			}
+			
+		}
 
 		/*
 		 * EXCLUI IMAGENS EXTRAS
@@ -480,9 +477,9 @@ class ModController extends ModActionController
 				$this->module->deleteExtraFiles($lastInsertId, $postedFileFields);
 		}
 		
-        $this->set('resultado', $resultado);
+		$this->set('resultado', $resultado);
 
-    }
-    
+	}
+	
 }
 ?>

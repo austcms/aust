@@ -3,15 +3,15 @@ class AdminsController extends ActionController {
 	
 	function beforeFilter(){
 		if(	$this->_action() == 'edit' ){
-        	$this->customAction = 'form';
+			$this->customAction = 'form';
 		}
 		
 		if( !empty($_GET['block'])
-		    AND $_GET['block'] == "block")
+			AND $_GET['block'] == "block")
 			$this->changeBlockStatus(true);
 
 		if( !empty($_GET['block'])
-		    AND $_GET['block'] == "unblock")
+			AND $_GET['block'] == "unblock")
 			$this->changeBlockStatus(false);
 		
 	}
@@ -33,65 +33,65 @@ class AdminsController extends ActionController {
 		$resultado = false;
 		if(!empty($_POST)) {
 
-		    if( empty($_POST['frmpassword']))
-		        unset($_POST['frmpassword']);
+			if( empty($_POST['frmpassword']))
+				unset($_POST['frmpassword']);
 
 			if( $_POST['metodo'] == 'criar' ){
 				$_POST['frmadmin_id'] = User::getInstance()->LeRegistro('id');
 				$_POST['frmcreated_on'] = date("Y-m-d H:i:s");
 			}
 			$c = 0;
-		    foreach($_POST as $key=>$value) {
-		        // se o argumento $_POST contém 'frm' no início
-		        if(strpos($key, 'frm') === 0) {
-		            $sqlcampo[] = str_replace('frm', '', $key);
-		            $sqlvalor[] = $value;
-		            // ajusta os campos da tabela nos quais serão gravados dados
-		            $value = addslashes($value);
-		            if($_POST['metodo'] == 'criar') {
-		                if( !empty($c) && $c > 0 ) {
-		                    $sqlcampostr = $sqlcampostr.','.str_replace('frm', '', $key);
-		                    $sqlvalorstr = $sqlvalorstr.",'".$value."'";
-		                } else {
-		                    $sqlcampostr = str_replace('frm', '', $key);
-		                    $sqlvalorstr = "'".$value."'";
-		                }
-		            } else if($_POST['metodo'] == 'editar') {
-		                if( !empty($c) && $c > 0) {
-		                    $sqlcampostr = $sqlcampostr.','.str_replace('frm', '', $key).'=\''.$value.'\'';
-		                } else {
-		                    $sqlcampostr = str_replace('frm', '', $key).'=\''.$value.'\'';
-		                }
-		            }
+			foreach($_POST as $key=>$value) {
+				// se o argumento $_POST contém 'frm' no início
+				if(strpos($key, 'frm') === 0) {
+					$sqlcampo[] = str_replace('frm', '', $key);
+					$sqlvalor[] = $value;
+					// ajusta os campos da tabela nos quais serão gravados dados
+					$value = addslashes($value);
+					if($_POST['metodo'] == 'criar') {
+						if( !empty($c) && $c > 0 ) {
+							$sqlcampostr = $sqlcampostr.','.str_replace('frm', '', $key);
+							$sqlvalorstr = $sqlvalorstr.",'".$value."'";
+						} else {
+							$sqlcampostr = str_replace('frm', '', $key);
+							$sqlvalorstr = "'".$value."'";
+						}
+					} else if($_POST['metodo'] == 'editar') {
+						if( !empty($c) && $c > 0) {
+							$sqlcampostr = $sqlcampostr.','.str_replace('frm', '', $key).'=\''.$value.'\'';
+						} else {
+							$sqlcampostr = str_replace('frm', '', $key).'=\''.$value.'\'';
+						}
+					}
 
-		            $c++;
-		        }
-		    }
+					$c++;
+				}
+			}
 
 
 
-		    if($_POST['metodo'] == 'criar') {
-		        $sql = "INSERT INTO
-		                    admins
-		                    ($sqlcampostr)
-		              VALUES
-		                    ($sqlvalorstr)
-		                ";
+			if($_POST['metodo'] == 'criar') {
+				$sql = "INSERT INTO
+							admins
+							($sqlcampostr)
+					  VALUES
+							($sqlvalorstr)
+						";
 
-		    } else if($_POST['metodo'] == 'editar') {
-		        $sql = "UPDATE
-		                    admins
-		                SET
-		                    $sqlcampostr
-		                WHERE
-		                    id='".$_POST['w']."'";
-		    }
+			} else if($_POST['metodo'] == 'editar') {
+				$sql = "UPDATE
+							admins
+						SET
+							$sqlcampostr
+						WHERE
+							id='".$_POST['w']."'";
+			}
 
-		    if(Connection::getInstance()->exec($sql) !== false) {
-		        $resultado = true;
-		    } else {
-		        $resultado = false;
-		    }
+			if(Connection::getInstance()->exec($sql) !== false) {
+				$resultado = true;
+			} else {
+				$resultado = false;
+			}
 
 			$connLastId = Connection::getInstance()->lastInsertId();
 			$lastInsertId = '';
@@ -215,12 +215,12 @@ class AdminsController extends ActionController {
 
 		}
 
-	    if( $resultado )
-	        notice('<strong>Sucesso: </strong> Informações salvas com sucesso!');
-	    else {
-	        failure('Ocorreu um erro desconhecido. Tente novamente. '.
-	            'Se o problema prosseguir, contacte um administrador.');
-	    }
+		if( $resultado )
+			notice('<strong>Sucesso: </strong> Informações salvas com sucesso!');
+		else {
+			failure('Ocorreu um erro desconhecido. Tente novamente. '.
+				'Se o problema prosseguir, contacte um administrador.');
+		}
 	
 		$_POST['redirect_to'] = "adm_main.php?section=admins";
 		$this->render(false);
@@ -240,13 +240,13 @@ class AdminsController extends ActionController {
 		$sql = "UPDATE
   					admins
 				SET
-				    is_blocked='".$blockValue."'
+					is_blocked='".$blockValue."'
 				WHERE
-				    id='".$_GET["w"]."' AND
-				    admin_group_id!=( SELECT id FROM admin_groups WHERE name IN ('Webmaster', 'Root') )
+					id='".$_GET["w"]."' AND
+					admin_group_id!=( SELECT id FROM admin_groups WHERE name IN ('Webmaster', 'Root') )
 				";
 
-	    if( Connection::getInstance()->exec($sql) !== false )
+		if( Connection::getInstance()->exec($sql) !== false )
 			notice('Usuário alterado com sucesso!');
 		else
 			failure('Erro ao alterar usuário.');

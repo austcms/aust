@@ -1,35 +1,35 @@
 
 body {
-    font-weight: bold;
-    font-size: 1em;
+	font-weight: bold;
+	font-size: 1em;
 }
 
 p {
-    font: 1em serif;
+	font: 1em serif;
 }
 
 h2 {
-    font-size: 2em;
+	font-size: 2em;
 }
 
 div#print {
-    width: auto;
+	width: auto;
 }
 
 td.divisor h3 {
-    font-size: 1.4em;
-    margin: 15px 0 0 0;
+	font-size: 1.4em;
+	margin: 15px 0 0 0;
 }
-    td.divisor p {
-        margin: 0px 0 15px 0;
-    }
+	td.divisor p {
+		margin: 0px 0 15px 0;
+	}
 
 td.label {
-    font-size: 1em;
-    font-weight: bold;
-    width: 155px;
-    text-align: right;
-    padding-right: 5px;
-    /* border-right: 1px solid #dddddd; */
+	font-size: 1em;
+	font-weight: bold;
+	width: 155px;
+	text-align: right;
+	padding-right: 5px;
+	/* border-right: 1px solid #dddddd; */
 }
 

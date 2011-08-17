@@ -44,7 +44,7 @@
 				echo $charend;
 			}
 			$c++;
-        }
+		}
 	}
 	
 

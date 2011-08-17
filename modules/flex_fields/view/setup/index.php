@@ -2,9 +2,6 @@
 /**
  * Controller principal deste módulo
  *
- * @package SetupController
- * @name nome
- * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @since v0.1.6 06/07/2009
  */
 
@@ -19,31 +16,31 @@
  * Escreve cada exPOST
  */
 foreach($exPOST as $chave=>$value){
-    echo '<input type="hidden" name="'.$chave.'" value="'.$value.'" />';
+	echo '<input type="hidden" name="'.$chave.'" value="'.$value.'" />';
 }
 ?>
 <input type="hidden" name="setupAction" value="criarcampos" />
 
 
 <div class="campo">
-    <label>Quantos campos terá sua nova estrutura?</label>
-    <div class="input">
-    <select name="qtd_campos" style="width: 70px;">
-        <?php
-        // cria um select com 20 números
-        for($i = 1; $i <= 100; $i++){
-        ?>
-            <option value="<?php echo $i;?>"><?php echo $i;?></option>
-        <?php
-        }
-        ?>
-    </select>
-    </div>
+	<label>Quantos campos terá sua nova estrutura?</label>
+	<div class="input">
+	<select name="qtd_campos" style="width: 70px;">
+		<?php
+		// cria um select com 20 números
+		for($i = 1; $i <= 100; $i++){
+		?>
+			<option value="<?php echo $i;?>"><?php echo $i;?></option>
+		<?php
+		}
+		?>
+	</select>
+	</div>
 </div>
 <br />
 <br />
 <div class="campo">
-    <input type="submit" value="Enviar" class="submit" />
+	<input type="submit" value="Enviar" class="submit" />
 </div>
 
 </form>

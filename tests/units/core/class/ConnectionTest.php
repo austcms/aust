@@ -6,46 +6,46 @@ require_once 'tests/config/auto_include.php';
 class ConnectionTest extends PHPUnit_Framework_TestCase
 {
 
-    public $dbConfig = array();
+	public $dbConfig = array();
 
-    public $conexao;
+	public $conexao;
 
 	public $standardTableName = 'mytest';
 
-    public function setUp(){
-    
-        /*
-         * Informações de conexão com banco de dados
-         */
-        
-        
-        $this->conexao = Connection::getInstance();
+	public function setUp(){
+	
+		/*
+		 * Informações de conexão com banco de dados
+		 */
+		
+		
+		$this->conexao = Connection::getInstance();
 		Connection::getInstance()->exec('create table '.$this->standardTableName.'(id int)');
-    }
+	}
 
 	function tearDown(){
 		Connection::getInstance()->exec('drop table '.$this->standardTableName.'');
 	}
 	
 	function testDbExists(){
-        $this->assertTrue( $this->conexao->dbExists() );
+		$this->assertTrue( $this->conexao->dbExists() );
 	}
 
-    function testConexaoWithPdoInit(){
-        $this->assertObjectHasAttribute('conn', Connection::getInstance() );
-    }
+	function testConexaoWithPdoInit(){
+		$this->assertObjectHasAttribute('conn', Connection::getInstance() );
+	}
 
-    /**
-     * @depends testConexaoWithPdoInit
-     */
-    function testQuery(){
-        $this->assertArrayHasKey('0', Connection::getInstance()->query('SHOW TABLES'));
-    }
+	/**
+	 * @depends testConexaoWithPdoInit
+	 */
+	function testQuery(){
+		$this->assertArrayHasKey('0', Connection::getInstance()->query('SHOW TABLES'));
+	}
 
 
-    function testWrongQuery(){
-        $this->assertInternalType('array', Connection::getInstance()->query('blabla'));
-    }
+	function testWrongQuery(){
+		$this->assertInternalType('array', Connection::getInstance()->query('blabla'));
+	}
 
 	function test_acquireTablesList(){
 		$this->assertInternalType('array', Connection::getInstance()->_acquireTablesList() );

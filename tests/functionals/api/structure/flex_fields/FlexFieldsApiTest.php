@@ -36,14 +36,14 @@ class FlexFieldsApiTest extends PHPUnit_Framework_TestCase
 		$this->newsId = $news[0]['id'];
 	}
 	
-    function testAskVersionJson(){
+	function testAskVersionJson(){
 		$params = array(
 			'data_format' => 'json',
 			'version' => 'true'
 		);
 		$return = $this->obj->perform($params);
 		$this->assertEquals('{"result":"0.0.1"}', $return);
-    }
+	}
 	
 	// returns Array
 	function testGetData(){

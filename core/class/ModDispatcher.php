@@ -2,7 +2,6 @@
 /**
  * Dispatches requests to the appropriated place.
  *
- * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @since v0.2.0, 17/06/2011
  */
 class ModDispatcher
@@ -20,23 +19,23 @@ class ModDispatcher
 		$this->module = ModulesManager::getInstance()->modelInstance($austNode);
 	}
 	
-    /**
-     * getInstance()
-     *
-     * Para Singleton
-     *
-     * @staticvar <object> $instance
-     * @return <Conexao object>
-     */
-    static function getInstance(){
-        static $instance;
+	/**
+	 * getInstance()
+	 *
+	 * Para Singleton
+	 *
+	 * @staticvar <object> $instance
+	 * @return <Conexao object>
+	 */
+	static function getInstance(){
+		static $instance;
 
-        if( !$instance ){
-            $instance[0] = new ModDispatcher;
-        }
+		if( !$instance ){
+			$instance[0] = new ModDispatcher;
+		}
 
-        return $instance[0];
-    }
+		return $instance[0];
+	}
 
 	public function directory(){
 		return ModulesManager::getInstance()->directory($this->austNode);
@@ -54,7 +53,7 @@ class ModDispatcher
 	}
 	
 	public function dispatch(){
-        $_GET['action'] = $this->action();
+		$_GET['action'] = $this->action();
 
 		return $this->callController();
 	}
@@ -74,8 +73,8 @@ class ModDispatcher
 	}
 	
 	function sectionFile(){
-        if( UiPermissions::getInstance()->isPermittedSection() )
-            return INC_DIR . $this->controller() . '.inc.php';
+		if( UiPermissions::getInstance()->isPermittedSection() )
+			return INC_DIR . $this->controller() . '.inc.php';
 
 		return MSG_DENIED_ACCESS;
 	}

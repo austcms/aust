@@ -8,16 +8,16 @@ require_once 'tests/config/auto_include.php';
 
 class ModulesAcceptanceTest extends PHPUnit_Framework_TestCase
 {
-    
+	
 	public $modulesDirs = array();
-    function setUp(){
+	function setUp(){
 		
-	    $this->modulesDirs = array();
+		$this->modulesDirs = array();
 		foreach (glob(MODULES_DIR."*", GLOB_ONLYDIR) as $filename) {
-		    $this->modulesDirs[] = $filename."/";
+			$this->modulesDirs[] = $filename."/";
 		}
 
-    }
+	}
 
 	function testDirectoryNamingShouldNotBeUppercase(){
 		foreach( $this->modulesDirs as $module ){

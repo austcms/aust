@@ -16,12 +16,12 @@ class TextualModControllerTest extends PHPUnit_Framework_TestCase
 			$this->structureId = $query[0]["id"];
 		}
 		
-        $this->params = $this->structureId;
+		$this->params = $this->structureId;
 
 		include_once(MODULES_DIR."textual/".MOD_CONTROLLER_DIR."mod_controller.php");
 		
 		$this->addTexts();
-    }
+	}
 
 	function tearDown(){
 		Connection::getInstance()->exec("DELETE FROM textual");
@@ -32,38 +32,38 @@ class TextualModControllerTest extends PHPUnit_Framework_TestCase
 		Connection::getInstance()->exec("INSERT INTO textual (title,node_id) VALUES ('My second text', '".$this->params."')");
 	}
 
-    function testListing(){
+	function testListing(){
 		$_GET["action"] = "listing";
 		$_GET["aust_node"] = $this->params;
 		
 		
-        $this->obj = new ModController($this->params);
+		$this->obj = new ModController($this->params);
 		$rendered = $this->obj->render();
 
 		$this->assertRegExp('/My first text/', $rendered);
-    }
+	}
 
-    function testCreateAsNormalUser(){
+	function testCreateAsNormalUser(){
 		$_GET["action"] = "create";
 		$_GET["aust_node"] = $this->params;
 
-        $this->obj = new ModController($this->params);
+		$this->obj = new ModController($this->params);
 		$rendered = $this->obj->renderized;
 		
 		$this->assertRegExp('/Criar:/', $rendered);
 		$this->assertNotRegExp('/<div class="nova_categoria">/', $rendered);
-    }
+	}
 
-    function testCreateAsRootUser(){
+	function testCreateAsRootUser(){
 		$_SESSION["login"]["id"] = getAdminId();
 		$_GET["action"] = "create";
 		$_GET["aust_node"] = $this->params;
 
-        $this->obj = new ModController($this->params);
+		$this->obj = new ModController($this->params);
 		$rendered = $this->obj->renderized;
 		
 		$this->assertRegExp('/Criar:/', $rendered);
-    }
+	}
 
 }
 ?>

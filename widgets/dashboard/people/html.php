@@ -3,11 +3,11 @@ $users = Connection::getInstance()->query("SELECT nome FROM admins WHERE is_bloc
 ?>
 
 <ul>
-    <?php
-    foreach( $users as $user ){
-        ?>
-        <li><?php echo $user['nome']?></li>
-        <?php
-    }
-    ?>
+	<?php
+	foreach( $users as $user ){
+		?>
+		<li><?php echo $user['nome']?></li>
+		<?php
+	}
+	?>
 </ul>

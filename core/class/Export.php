@@ -4,47 +4,44 @@
  *
  * Responsible for exporting structure datas.
  *
- * @package Classes
- * @name Export
- * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @since v0.2, 19/10/2010
  */
 class Export
 {
 
-    /*
-     * OPÇÕES
-     */
-	    /**
-	     * Endereço onde serão salvos os arquivos. Por padrão, uploads/.
-	     * 
-	     * @var string
-	     */
-	    public $path = '';
+	/*
+	 * OPÇÕES
+	 */
+		/**
+		 * Endereço onde serão salvos os arquivos. Por padrão, uploads/.
+		 * 
+		 * @var string
+		 */
+		public $path = '';
 
 
 	function __construct(){
-        $this->connection = Connection::getInstance();
+		$this->connection = Connection::getInstance();
 	}
 	
-    /**
-     * getInstance()
-     *
-     * Para Singleton
-     *
-     * @staticvar <object> $instance
-     * @return <Conexao object>
-     */
-    static function getInstance(){
-        static $instance;
+	/**
+	 * getInstance()
+	 *
+	 * Para Singleton
+	 *
+	 * @staticvar <object> $instance
+	 * @return <Conexao object>
+	 */
+	static function getInstance(){
+		static $instance;
 
-        if( !$instance ){
-            $instance[0] = new Export;
-        }
+		if( !$instance ){
+			$instance[0] = new Export;
+		}
 
-        return $instance[0];
+		return $instance[0];
 
-    }
+	}
 
 	/**
 	 * getStructures()
@@ -62,7 +59,7 @@ class Export
 	 *					  |						do módulo Cadastro
 	 *					  |
 	 *					  \---- 'Configurações' contendo dados do tipo 'structure'
-	 *										    da tabela 'config'
+	 *											da tabela 'config'
 	 * 
 	 * @param $params Array Opcional, pode ter as seguintes chaves:
 	 *		- 'site' int: id do site único e específico que deseja-se exportar
@@ -102,12 +99,12 @@ class Export
 					if( file_exists(MODULES_DIR.$st['tipo'].'/'.MOD_MODELS_DIR.''.$modInfo['className'].'Export.php') ){
 					
 						require_once MODULES_DIR.$st['tipo'].'/'.MOD_MODELS_DIR.''.$modInfo['className'].'Export.php';
-				        include_once MODULES_DIR.$st['tipo'].'/'.$modInfo['className'].'.php';
+						include_once MODULES_DIR.$st['tipo'].'/'.$modInfo['className'].'.php';
 
 						require(MODULES_DIR.$st['tipo'].'/'.MOD_CONFIG);
 					
 						$exportModel = $modInfo['className']."Export";
-				        $modExport = new $exportModel($modInfo['className'], $st['id']);
+						$modExport = new $exportModel($modInfo['className'], $st['id']);
 		
 						$exportData = $modExport->export();
 						if( $exportData ){
@@ -361,12 +358,12 @@ class Export
 					if( file_exists(MODULES_DIR.$st['tipo'].'/'.MOD_MODELS_DIR.''.$modInfo['className'].'Export.php') ){
 					
 						require_once MODULES_DIR.$st['tipo'].'/'.MOD_MODELS_DIR.''.$modInfo['className'].'Export.php';
-				        include_once MODULES_DIR.$st['tipo'].'/'.$modInfo['className'].'.php';
+						include_once MODULES_DIR.$st['tipo'].'/'.$modInfo['className'].'.php';
 
 						require(MODULES_DIR.$st['tipo'].'/'.MOD_CONFIG);
 					
 						$exportModel = $modInfo['className']."Export";
-				        $modExport = new $exportModel($modInfo['className'], $stId);
+						$modExport = new $exportModel($modInfo['className'], $stId);
 						$st['id'] = $stId;
 						$modExport->import($exportData, $st);
 					}

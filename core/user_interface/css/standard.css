@@ -1,10 +1,10 @@
 * { margin: 0px; padding: 0px; }
 
 body {
-    font-family: 'Lucida Grande', 'Lucida Unicode', Verdana, 'Arial', sans-serif;
-    text-align: center;
-    margin: 0;
-    font-size: 76%;
+	font-family: 'Lucida Grande', 'Lucida Unicode', Verdana, 'Arial', sans-serif;
+	text-align: center;
+	margin: 0;
+	font-size: 76%;
 }
 
 a { text-decoration: underline; outline: none; }
@@ -24,11 +24,11 @@ h1, h2, h3, h4, h5, h6 { font-weight: normal; margin-bottom: 15px; }
 h1 { font-size: 3.0em; margin-top: 15px; }
 h2 { font-size: 1.7em; margin-bottom: 15px; margin-top: 5px; }
 h3 { font-size: 1.4em; }
-    form h3 {
-        margin: 15px 0 0px 0;
-        display: block;
-        clear: both;
-    }
+	form h3 {
+		margin: 15px 0 0px 0;
+		display: block;
+		clear: both;
+	}
 
 table { border-spacing: 0px; padding: 0px; border-collapse: collapse; }
 

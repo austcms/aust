@@ -11,9 +11,9 @@ require_once 'config/nav_permissions.php';
 class ExportTest extends PHPUnit_Framework_TestCase
 {
 
-    public $dbConfig = array();
+	public $dbConfig = array();
 
-    public $connection;
+	public $connection;
 
 	public $populate = false;
 
@@ -23,29 +23,29 @@ class ExportTest extends PHPUnit_Framework_TestCase
 	
 	public $lastSite;
 
-    public function setUp(){
-    
-        /*
-         * Informações de conexão com banco de dados
-         */
+	public function setUp(){
+	
+		/*
+		 * Informações de conexão com banco de dados
+		 */
 
-        // Conteúdos
-        include MODULES_DIR.'conteudo/'.MOD_CONFIG;
-        include_once MODULES_DIR.'conteudo/'.$modInfo['className'].'.php';
-        $this->Conteudo = new Conteudo;
+		// Conteúdos
+		include MODULES_DIR.'conteudo/'.MOD_CONFIG;
+		include_once MODULES_DIR.'conteudo/'.$modInfo['className'].'.php';
+		$this->Conteudo = new Conteudo;
 
 		// Cadastro Setup
-        $modelName = 'CadastroSetup';
-        include_once MODULES_DIR.'Cadastro/'.MOD_MODELS_DIR.$modelName.'.php';
-        $this->CadastroSetup = new $modelName;
+		$modelName = 'CadastroSetup';
+		include_once MODULES_DIR.'Cadastro/'.MOD_MODELS_DIR.$modelName.'.php';
+		$this->CadastroSetup = new $modelName;
 
-        // Cadastro
-        include MODULES_DIR.'cadastro/'.MOD_CONFIG;
-        include_once MODULES_DIR.'cadastro/'.$modInfo['className'].'.php';
-        $this->Cadastro = new Cadastro;
+		// Cadastro
+		include MODULES_DIR.'cadastro/'.MOD_CONFIG;
+		include_once MODULES_DIR.'cadastro/'.$modInfo['className'].'.php';
+		$this->Cadastro = new Cadastro;
 
-        $this->obj = Export::getInstance();
-        $this->aust = Aust::getInstance();
+		$this->obj = Export::getInstance();
+		$this->aust = Aust::getInstance();
 
 	}
 
@@ -54,23 +54,23 @@ class ExportTest extends PHPUnit_Framework_TestCase
 		$lastInsert = Aust::getInstance()->connection->lastInsertId();
 		$this->lastSite = $lastInsert;
 		
-	    $params = array(
-	        'father' => $lastInsert,
-	        'name' => 'Teste777Conteudo',
-	        'description' => 'Teste777',
-	        'class' => 'structure',
-	        'type' => 'conteudo',
-	        'author' => '1',
-	    );
+		$params = array(
+			'father' => $lastInsert,
+			'name' => 'Teste777Conteudo',
+			'description' => 'Teste777',
+			'class' => 'structure',
+			'type' => 'conteudo',
+			'author' => '1',
+		);
 		
 		$result = Aust::getInstance()->createCategory($params);
 		
 		$params = array(
-            'name' => 'Teste777Cadastro',
-            'father' => $lastInsert,
-            'class' => 'structure',
-            'type' => 'cadastro',
-            'author' => 1,
+			'name' => 'Teste777Cadastro',
+			'father' => $lastInsert,
+			'class' => 'structure',
+			'type' => 'cadastro',
+			'author' => 1,
 			'fields' => array(
 				array(
 					'name' => 'Campo 1777',
@@ -107,7 +107,7 @@ class ExportTest extends PHPUnit_Framework_TestCase
 		Aust::getInstance()->connection->exec("INSERT INTO ".Config::getInstance()->table." (type,local,property,value) VALUES('structure','$stId','teste777777','teste777777')");
 		
 		$result = $this->CadastroSetup->createStructure($params);		
-    }
+	}
 
 	function resetTables(){
 		$this->obj->connection->exec("DELETE FROM taxonomy WHERE nome='Teste777Cadastro'");

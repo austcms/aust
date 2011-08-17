@@ -5,10 +5,10 @@ require_once 'tests/config/auto_include.php';
 class ConfigurationApiTest extends PHPUnit_Framework_TestCase
 {
 
-    public function setUp(){
+	public function setUp(){
 		$this->createContent();
-        $this->obj = new ApiTransaction();
-    }
+		$this->obj = new ApiTransaction();
+	}
 
 	function createContent(){
 		Connection::getInstance()->exec('DELETE FROM '.Config::getInstance()->table);

@@ -7,8 +7,8 @@
  */
 //função que tira todos os acentos
 function encodeString($str){
-    $str = str_replace(' ', '_', $str );
-    $str = mb_strtolower(  $str, "UTF-8" );
+	$str = str_replace(' ', '_', $str );
+	$str = mb_strtolower(  $str, "UTF-8" );
 
 	$unwantedChars = array(
 		'!','@','#','$','%','^','&',
@@ -22,21 +22,21 @@ function encodeString($str){
 	$str = str_replace($unwantedChars, "", $str);
 	$str = str_replace($useUnderline, "_", $str);
 
-    $str = str_replace(array('à','á','â','ã','ä'), "a", $str);
-    $str = str_replace(array('è','é','ê','ë'), "e", $str);
-    $str = str_replace(array('ì','í','î','ï'), "i", $str);
-    $str = str_replace(array('ò','ó','ô','ö','õ'), "o", $str);
-    $str = str_replace(array('ú','ù','û','ü'), "u", $str);
+	$str = str_replace(array('à','á','â','ã','ä'), "a", $str);
+	$str = str_replace(array('è','é','ê','ë'), "e", $str);
+	$str = str_replace(array('ì','í','î','ï'), "i", $str);
+	$str = str_replace(array('ò','ó','ô','ö','õ'), "o", $str);
+	$str = str_replace(array('ú','ù','û','ü'), "u", $str);
 
-    $str = str_replace(array('À','Á','Â','Ä','Ã'), "A", $str);
-    $str = str_replace(array('È','É','Ê','Ë'), "E", $str);
-    $str = str_replace(array('Ì','Í','Î','Ï'), "I", $str);
-    $str = str_replace(array('Ò','Ó','Ô','Ö','Õ'), "O", $str);
-    $str = str_replace(array('Ù','Ú','Û','Ü'), "U", $str);
-    $str = str_replace(array('ç'), "c", $str);
-    $str = str_replace(array('Ç'), "C", $str);
-    $str = str_replace(array('ñ'), "n", $str);
-    $str = str_replace(array('Ñ'), "N", $str);
+	$str = str_replace(array('À','Á','Â','Ä','Ã'), "A", $str);
+	$str = str_replace(array('È','É','Ê','Ë'), "E", $str);
+	$str = str_replace(array('Ì','Í','Î','Ï'), "I", $str);
+	$str = str_replace(array('Ò','Ó','Ô','Ö','Õ'), "O", $str);
+	$str = str_replace(array('Ù','Ú','Û','Ü'), "U", $str);
+	$str = str_replace(array('ç'), "c", $str);
+	$str = str_replace(array('Ç'), "C", $str);
+	$str = str_replace(array('ñ'), "n", $str);
+	$str = str_replace(array('Ñ'), "N", $str);
 
 	return $str;
 }

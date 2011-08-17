@@ -4,8 +4,6 @@
  *
  * Descrição deste arquivo
  *
- * @package ModController
- * @name nome
  * @author Alexandre <chavedomundo@gmail.com>
  * @since v0.1.5 24/06/2009
  */
@@ -15,57 +13,57 @@ class ModController extends ModActionController
 	public $query = array();
 	
 	public $showControls = true;
-    /**
-     * listar()
-     *
-     * Listagem de Contéudos
-     */
-    public function listing(){
+	/**
+	 * listar()
+	 *
+	 * Listagem de Contéudos
+	 */
+	public function listing(){
 
-        /**
-         * <h2> HEADER
-         */
-        $this->set('h1', Aust::getInstance()->getStructureNameById($_GET['aust_node']) );
+		/**
+		 * <h2> HEADER
+		 */
+		$this->set('h1', Aust::getInstance()->getStructureNameById($_GET['aust_node']) );
 
-        $categorias = Aust::getInstance()->getNodeChildren($_GET['aust_node']);
-        $categorias[$_GET['aust_node']] = 'Estrutura';
+		$categorias = Aust::getInstance()->getNodeChildren($_GET['aust_node']);
+		$categorias[$_GET['aust_node']] = 'Estrutura';
 
-        /*
-         * SQL para listagem
-         */
-        $params = array(
-            'austNode' => $categorias,
-        );
+		/*
+		 * SQL para listagem
+		 */
+		$params = array(
+			'austNode' => $categorias,
+		);
 
-        /*
-         * Query com resultado
-         */
-        $query = $this->module->load($params);
+		/*
+		 * Query com resultado
+		 */
+		$query = $this->module->load($params);
 
-        $this->set('sql', $this->module->lastSql );
-        //$config = $this->module->loadConfig();
-//        $query = $this->module->replaceFieldsValueIfEmpty($query);
+		$this->set('sql', $this->module->lastSql );
+		//$config = $this->module->loadConfig();
+//		$query = $this->module->replaceFieldsValueIfEmpty($query);
 //		pr($query);
 		
-        $this->set('query', $query );
+		$this->set('query', $query );
 
-    } // fim listar()
+	} // fim listar()
 
-    public function create(){
-        $this->render('form');
-    }
+	public function create(){
+		$this->render('form');
+	}
 
-    public function view($param = array()){
+	public function view($param = array()){
 
-        $this->set('tagh2', Aust::getInstance()->getStructureNameById($_GET['aust_node']) );
+		$this->set('tagh2', Aust::getInstance()->getStructureNameById($_GET['aust_node']) );
 
 		$this->showControls = false;
 		if( $this->module->getStructureConfig('activate_actions') == '1' )
 			$this->showControls = true;
 
-        $w = (!empty($_POST['w'])) ? $_POST['w'] : '';
-        $w = (empty($w) && !empty($_GET['w'])) ? $_GET['w'] : $w;
-        $this->set('w', $w);
+		$w = (!empty($_POST['w'])) ? $_POST['w'] : '';
+		$w = (empty($w) && !empty($_GET['w'])) ? $_GET['w'] : $w;
+		$this->set('w', $w);
 
 		if( empty($this->query) ){
 			$query = $this->module->runFilter($w);
@@ -73,21 +71,21 @@ class ModController extends ModActionController
 			$query = $this->query;
 		}
 
-        $this->set('query', $query );
-        
+		$this->set('query', $query );
+		
 		$viewType = 'normal';
 		if( !empty($param) &&
 		 	$param['view'] )
 			$viewType = $param['view'];
 		
 		$this->set('viewType', $viewType);
-        
+		
 		$this->render('view');
-    }
+	}
 
-    public function save(){
-        $this->set('resultado', $this->module->save($_POST));
-    }
+	public function save(){
+		$this->set('resultado', $this->module->save($_POST));
+	}
 
 	function actions(){
 		
@@ -160,6 +158,6 @@ class ModController extends ModActionController
 		
 		$this->autoRender = false;
 	}
-    
+	
 }
 ?>

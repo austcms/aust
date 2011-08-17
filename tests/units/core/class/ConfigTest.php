@@ -5,11 +5,11 @@ require_once 'tests/config/auto_include.php';
 class ConfigTest extends PHPUnit_Framework_TestCase
 {
 
-    function setUp(){
+	function setUp(){
 		User::getInstance()->type('root');
-        $this->obj = new Config;
+		$this->obj = new Config;
 		Connection::getInstance()->exec("DELETE FROM ".$this->obj->table."");
-    }
+	}
 
 	function tearDown(){
 	}
@@ -28,23 +28,23 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 	
 	function neededConfig(){
 		return array(
-            array(
-                'type' => 'general',
-                'local' => '',
-                'name' => 'Site name',
-                'property' => 'site_name',
-                'value' => 'Modify the site name',
-                'explanation' => 'some explanation',
-            ),
-		    array(
-		        'type' => 'private',
-		        'local' => '',
-		        'name' => 'user can haz cookies?',
-		        'property' => 'user_haz_cookies',
-		        'value' => '0',
-		        'explanation' => 'ha, nope!',
-		    )
-        );
+			array(
+				'type' => 'general',
+				'local' => '',
+				'name' => 'Site name',
+				'property' => 'site_name',
+				'value' => 'Modify the site name',
+				'explanation' => 'some explanation',
+			),
+			array(
+				'type' => 'private',
+				'local' => '',
+				'name' => 'user can haz cookies?',
+				'property' => 'user_haz_cookies',
+				'value' => '0',
+				'explanation' => 'ha, nope!',
+			)
+		);
 	}
 	
 	/* tests */
@@ -53,11 +53,11 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue( Connection::getInstance()->hasTable("configurations") );
 	}
 	
-    function testGetUserType(){
+	function testGetUserType(){
 		User::getInstance()->type('root');
-        $this->obj = new Config;
+		$this->obj = new Config;
 		$this->assertEquals( "root", $this->obj->_userType );
-    }
+	}
 
 	function testRootType(){
 		$this->assertEquals( "Webmaster", $this->obj->_rootType );
@@ -87,10 +87,10 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 	
 	function testGetConfigsUsingParams(){
 		$this->populate();
-        $params = array(
-        	'where' => "property='test_configuration'",
-            'mode' => 'single',
-        );
+		$params = array(
+			'where' => "property='test_configuration'",
+			'mode' => 'single',
+		);
 
 		$configurations = $this->obj->getConfigs($params);
 		
@@ -102,9 +102,9 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 
 	function testGetConfigsWithSpecificProperties(){
 		$this->populate();
-        $params = array(
-        	'test_configuration', 'second_test_configuration', 'forbidden_configuration', 
-        );
+		$params = array(
+			'test_configuration', 'second_test_configuration', 'forbidden_configuration', 
+		);
 
 		$configurations = $this->obj->getConfigs($params, true);
 		
@@ -124,7 +124,7 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 	}
 	
 	function testCheckIntegrity(){
-        $this->obj->neededConfig = $this->neededConfig();
+		$this->obj->neededConfig = $this->neededConfig();
 		
 		$this->assertFalse($this->obj->checkIntegrity());
 		$this->assertFalse( empty($this->obj->_missingConfig) );

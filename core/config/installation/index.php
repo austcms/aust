@@ -5,7 +5,6 @@
  * Este arquivo é o centralizador da instalação, carregando outros arquivos
  * responsáveis por verificações e instalação do sistema.
  *
- * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @since v0.1.5 25/07/2009
  */
 /**

@@ -34,46 +34,46 @@ body { background: #efefef url('background.jpg'); }
 
 /* TOPO */
 div#top {
-    /* background: #065796; */
+	/* background: #065796; */
 }
-    div#top h1 {
+	div#top h1 {
 			color: #f5f5f5;
 			text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
 			
 	 	}
-    div#top a { color: #f5f5f5; }
+	div#top a { color: #f5f5f5; }
 
 /* NAVEGAÇÃO */
 div#navegacao {
-    /*  background: #065796; */
+	/*  background: #065796; */
 }
-    div#menu ul li a {
-        background: #efefef url('tabs_background.png');
+	div#menu ul li a {
+		background: #efefef url('tabs_background.png');
 				border-bottom: 1px solid #e8e8e8;
 				-moz-border-radius-topleft: 3px;
 				-moz-border-radius-topright: 3px;
 				-webkit-border-top-left-radius: 3px;
 				-webkit-border-top-right-radius: 3px;
-    }
-        div#menu ul li a:hover {
-            background: white;
+	}
+		div#menu ul li a:hover {
+			background: white;
 						border-bottom: 1px solid #fff;
-        }
+		}
 		div#menu ul li a.selecionado {
 				border-bottom: 1px solid #fff;
-        background: white;
-        color: black;
-        font-weight: bold;
-    }
+		background: white;
+		color: black;
+		font-weight: bold;
+	}
 
 /* where content shows up */
 div.body { background: url('post-bg.png') repeat-x #fbfbfb; }
 
 
-    
+	
 /* Links Configurar módulos e permissões */
 div#link_bottom {
-    background: white;
+	background: white;
 }
 
 .arrow { font-size: 0.8em; }
@@ -109,13 +109,13 @@ table.listing tr.header { background: url('top.jpg') #025d96; /* #edf6ff */ }
 
 /* TAB PANE -> table.listing - Painel Gerenciar e Configurações*/
 div.panes div.background { background: #fdfdfd; }
-    div.panes div.background .header { background: #edf6ff; }
+	div.panes div.background .header { background: #edf6ff; }
 
 /* tabs */
 ul.tabs a {
-    text-decoration: none;
-    color: #2d88cf;
-    background-color: #eee;
+	text-decoration: none;
+	color: #2d88cf;
+	background-color: #eee;
 		-moz-border-radius-topleft: 3px;
 		-moz-border-radius-topright: 3px;
 		-webkit-border-top-left-radius: 3px;
@@ -125,8 +125,8 @@ ul.tabs a {
 	ul.tabs a:hover { color: white; background: #2d88cf; }
 
 ul.tabs a.current, ul.tabs a.current:hover, ul.tabs li.current a {
-    background: #2d88cf;/* #edf6ff; #d8d8d8 */
-    color: #eaeaea;/* #17486E; */
+	background: #2d88cf;/* #edf6ff; #d8d8d8 */
+	color: #eaeaea;/* #17486E; */
 }
 
 

@@ -4,8 +4,6 @@
  *
  * Aust's Toolbox. Responsible for string treatments, parsing files etc.
  *
- * @package Classes
- * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @since v0.1.9, 11/06/2011
  */
 class Resources

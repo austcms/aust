@@ -20,7 +20,7 @@ class ModActionControllerTest extends PHPUnit_Framework_TestCase
 		if( !defined('DO_ACT') )
 			define('DO_ACT', false);
 		
-        $this->params = $this->structureId;
+		$this->params = $this->structureId;
 	}
 	function tearDown(){
 		Fixture::getInstance()->destroy();
@@ -33,7 +33,7 @@ class ModActionControllerTest extends PHPUnit_Framework_TestCase
 	
 	function testViewFile(){
 		$_GET["action"] = "listing";
-#        $controller = new ModActionController($this->params);
+#		$controller = new ModActionController($this->params);
 
 #		$this->assertEquals(MODULES_DIR."conteudo/view/mod/listing.php", $controller->_viewFile());
 	}

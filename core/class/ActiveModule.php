@@ -2,7 +2,6 @@
 /**
  * ACTIVE MODULE
  *
- * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @since v0.2, 17/06/2011
  */
 class ActiveModule

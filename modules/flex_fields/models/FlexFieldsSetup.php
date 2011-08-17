@@ -80,23 +80,23 @@ class FlexFieldsSetup extends ModsSetup {
 	public $createTable = false;
 	
 	/**
-     * getInstance()
-     *
-     * Para Singleton
-     *
-     * @staticvar <object> $instance
-     * @return <object>
-     */
-    static function getInstance(){
-        static $instance;
+	 * getInstance()
+	 *
+	 * Para Singleton
+	 *
+	 * @staticvar <object> $instance
+	 * @return <object>
+	 */
+	static function getInstance(){
+		static $instance;
 
-        if( !$instance ){
-            $instance[0] = new CadastroSetup;
-        }
+		if( !$instance ){
+			$instance[0] = new CadastroSetup;
+		}
 
-        return $instance[0];
+		return $instance[0];
 
-    }
+	}
 
 	/*
 	 * SUPER METHODS
@@ -488,11 +488,11 @@ class FlexFieldsSetup extends ModsSetup {
 		if( empty($params['order']) )
 			$params['order'] = $this->getFieldOrder();
 
-        $sql =
-            "INSERT INTO flex_fields_config ".
-            "(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr) ".
-            "VALUES ".
-            "('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",'".$params['author']."',0,0,1,0,1,'$class',".$params['order'].")";
+		$sql =
+			"INSERT INTO flex_fields_config ".
+			"(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr) ".
+			"VALUES ".
+			"('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",'".$params['author']."',0,0,1,0,1,'$class',".$params['order'].")";
 		return $sql;
 	}
 
@@ -506,11 +506,11 @@ class FlexFieldsSetup extends ModsSetup {
 		if( empty($params['order']) )
 			$params['order'] = $this->getFieldOrder();
 
-        $sql =
-            "INSERT INTO flex_fields_config ".
-            "(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr) ".
-            "VALUES ".
-            "('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",'".$params['author']."',0,0,1,0,1,'$class',".$params['order'].")";
+		$sql =
+			"INSERT INTO flex_fields_config ".
+			"(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr) ".
+			"VALUES ".
+			"('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",'".$params['author']."',0,0,1,0,1,'$class',".$params['order'].")";
 		return $sql;
 	}
 	
@@ -524,32 +524,32 @@ class FlexFieldsSetup extends ModsSetup {
 					return false;
 		
 				$this->imagesTableName = $mainTable.'_images';
-		        $sql =
-		            'CREATE TABLE '.$this->imagesTableName.'('.
-		            'id int auto_increment,'.
-		            'maintable_id int,'.
-		            'type varchar(80) COMMENT "type=main são as imagens principais",'.
+				$sql =
+					'CREATE TABLE '.$this->imagesTableName.'('.
+					'id int auto_increment,'.
+					'maintable_id int,'.
+					'type varchar(80) COMMENT "type=main são as imagens principais",'.
 					'order_nr int COMMENT "Contém o número da ordenação deste registro",'.
-		            'title varchar(250),'.
-		            'description text,'.
-		            'local varchar(180),'.
-                    'link text,'.
-		            'file_systempath text,'.
-		            'file_path text,'.
-		            'file_name varchar(250),'.
-		            'original_file_name varchar(250),'.
-		            'file_type varchar(250),'.
-		            'file_size varchar(250),'.
-		            'file_ext varchar(10),'.
-		            'reference varchar(120),'.
-		            'reference_table varchar(120),'.
-		            'reference_field varchar(120),'.
-		            'node_id int,'.
-		            'created_on datetime,'.
-		            'updated_on datetime,'.
-		            'admin_id int,'.
-		            'PRIMARY KEY (id),'.
-		            'UNIQUE id (id))';
+					'title varchar(250),'.
+					'description text,'.
+					'local varchar(180),'.
+					'link text,'.
+					'file_systempath text,'.
+					'file_path text,'.
+					'file_name varchar(250),'.
+					'original_file_name varchar(250),'.
+					'file_type varchar(250),'.
+					'file_size varchar(250),'.
+					'file_ext varchar(10),'.
+					'reference varchar(120),'.
+					'reference_table varchar(120),'.
+					'reference_field varchar(120),'.
+					'node_id int,'.
+					'created_on datetime,'.
+					'updated_on datetime,'.
+					'admin_id int,'.
+					'PRIMARY KEY (id),'.
+					'UNIQUE id (id))';
 				return $sql;
 			}
 			
@@ -560,12 +560,12 @@ class FlexFieldsSetup extends ModsSetup {
 				if( empty($this->imagesTableName) ) return false;
 				if( empty($this->austNode) ) return false;
 	
-		        $sql =
-		             "INSERT INTO ".
-		             "flex_fields_config ".
-		             "(type,property,value,node_id,created_on,deactivated,disabled,public,restricted,approved) ".
-		             "VALUES ".
-		             "('structure','table_images','".$this->imagesTableName."',".$this->austNode.", '".date('Y-m-d H:i:s')."',0,0,1,0,1)";
+				$sql =
+					 "INSERT INTO ".
+					 "flex_fields_config ".
+					 "(type,property,value,node_id,created_on,deactivated,disabled,public,restricted,approved) ".
+					 "VALUES ".
+					 "('structure','table_images','".$this->imagesTableName."',".$this->austNode.", '".date('Y-m-d H:i:s')."',0,0,1,0,1)";
 				return $sql;
 			}
 			/*
@@ -615,11 +615,11 @@ class FlexFieldsSetup extends ModsSetup {
 		if( empty($params['order']) )
 			$params['order'] = $this->getFieldOrder();
 
-        $sql =
-            "INSERT INTO flex_fields_config ".
-            "(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr) ".
-            "VALUES ".
-            "('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",'".$params['author']."',0,0,1,0,1,'$class',".$params['order'].")";
+		$sql =
+			"INSERT INTO flex_fields_config ".
+			"(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr) ".
+			"VALUES ".
+			"('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",'".$params['author']."',0,0,1,0,1,'$class',".$params['order'].")";
 		return $sql;
 	}
 		
@@ -636,32 +636,32 @@ class FlexFieldsSetup extends ModsSetup {
 				return false;
 			
 			$this->filesTableName = $mainTable.'_files';
-	        $sql =
-	            'CREATE TABLE '.$this->filesTableName.'('.
-                'id int auto_increment,'.
-                'maintable_id int,'.
+			$sql =
+				'CREATE TABLE '.$this->filesTableName.'('.
+				'id int auto_increment,'.
+				'maintable_id int,'.
 				'type varchar(80),'.
 				'order_nr int COMMENT "Contém o número da ordenação deste registro",'.
-                'title varchar(250),'.
-                'description text,'.
-                'local varchar(180),'.
-                'link text,'.
-                'file_systempath text,'.
-                'file_path text,'.
-                'file_name varchar(250),'.
-                'original_file_name varchar(250),'.
-                'file_type varchar(250),'.
-                'file_size varchar(250),'.
-                'file_ext varchar(10),'.
-                'reference varchar(120),'.
-                'reference_table varchar(120),'.
-                'reference_field varchar(120),'.
-                'node_id int,'.
-                'created_on datetime,'.
-                'updated_on datetime,'.
-                'admin_id int,'.
-	            'PRIMARY KEY (id),'.
-	            'UNIQUE id (id))';
+				'title varchar(250),'.
+				'description text,'.
+				'local varchar(180),'.
+				'link text,'.
+				'file_systempath text,'.
+				'file_path text,'.
+				'file_name varchar(250),'.
+				'original_file_name varchar(250),'.
+				'file_type varchar(250),'.
+				'file_size varchar(250),'.
+				'file_ext varchar(10),'.
+				'reference varchar(120),'.
+				'reference_table varchar(120),'.
+				'reference_field varchar(120),'.
+				'node_id int,'.
+				'created_on datetime,'.
+				'updated_on datetime,'.
+				'admin_id int,'.
+				'PRIMARY KEY (id),'.
+				'UNIQUE id (id))';
 			return $sql;
 		}
 	
@@ -672,12 +672,12 @@ class FlexFieldsSetup extends ModsSetup {
 			if( empty($this->filesTableName) ) return false;
 			if( empty($this->austNode) ) return false;
 			
-            $sql =
-                 "INSERT INTO ".
-                 "flex_fields_config ".
-                 "(type,property,value,node_id,created_on,deactivated,disabled,public,restricted,approved) ".
-                 "VALUES ".
-                 "('structure','table_files','".$this->filesTableName."',".$this->austNode.", '".date('Y-m-d H:i:s')."',0,0,1,0,1)";
+			$sql =
+				 "INSERT INTO ".
+				 "flex_fields_config ".
+				 "(type,property,value,node_id,created_on,deactivated,disabled,public,restricted,approved) ".
+				 "VALUES ".
+				 "('structure','table_files','".$this->filesTableName."',".$this->austNode.", '".date('Y-m-d H:i:s')."',0,0,1,0,1)";
 			return $sql;
 		}
 		/*
@@ -731,11 +731,11 @@ class FlexFieldsSetup extends ModsSetup {
 		if( empty($params['order']) )
 			$params['order'] = $this->getFieldOrder();
 
-        $sql =
+		$sql =
 			"INSERT INTO flex_fields_config ".
-            "(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr,ref_table,ref_field) ".
-            "VALUES ".
-            "('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",'".$params['author']."',0,0,1,0,1,'$class',".$params['order'].",'".$params['refTable']."','".$params['refField']."')";
+			"(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr,ref_table,ref_field) ".
+			"VALUES ".
+			"('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",'".$params['author']."',0,0,1,0,1,'$class',".$params['order'].",'".$params['refTable']."','".$params['refField']."')";
 		return $sql;
 	}
 	
@@ -752,75 +752,75 @@ class FlexFieldsSetup extends ModsSetup {
 		if( empty($params['refChildField']) ) $params['refChildField'] = '';
 		if( empty($params['refParentField']) ) $params['refParentField'] = '';
 
-        $sql =
+		$sql =
 			"INSERT INTO flex_fields_config ".
-            "(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr,".
+			"(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr,".
 				"ref_table,ref_field,reference,ref_parent_field,ref_child_field) ".
-            "VALUES ".
-            "('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",'".$params['author']."',0,0,1,0,1,'$class',".$params['order'].",'".
+			"VALUES ".
+			"('campo','".$params['name']."','".$params['label']."','".$params['comment']."',".$params['austNode'].",'".$params['author']."',0,0,1,0,1,'$class',".$params['order'].",'".
 				$params['refTable']."','".$params['refField']."','".$params['referenceTable']."','".$params['refParentField']."','".$params['refChildField']."')";
 		return $sql;
 	}
 		function createReferenceTableName_RelationalOneToMany($params){
-            /*
-             * CRIA TABELA RELACIONAL
-             *
-             * Será criada agora uma tabela relacional.
-             *
-             * O nome da nova tabela será no formato
-             * tabelacadastro_camporelacional_tabelareferenciada
-             *
-             */
+			/*
+			 * CRIA TABELA RELACIONAL
+			 *
+			 * Será criada agora uma tabela relacional.
+			 *
+			 * O nome da nova tabela será no formato
+			 * tabelacadastro_camporelacional_tabelareferenciada
+			 *
+			 */
 		
-            $tabelaReferencia = $params['mainTable'];
-            $tabelaRelacionada = $params['secondaryTable'];
-            $campo = $params['referenceField'];
-            /*
-             * verifica tamanho total do nome da nova tabela
-             * MYSQL máximo 64 caracteres
-             */
-            $tMySQL = 63;
+			$tabelaReferencia = $params['mainTable'];
+			$tabelaRelacionada = $params['secondaryTable'];
+			$campo = $params['referenceField'];
+			/*
+			 * verifica tamanho total do nome da nova tabela
+			 * MYSQL máximo 64 caracteres
+			 */
+			$tMySQL = 63;
 
-            /*
-             * Fora o tamanho do nome das tabelas, leva-se em consideração os sublinhados
-             */
-            $tamanhoRestante = $tMySQL - strlen($tabelaReferencia) - strlen($tabelaRelacionada) - 2;
+			/*
+			 * Fora o tamanho do nome das tabelas, leva-se em consideração os sublinhados
+			 */
+			$tamanhoRestante = $tMySQL - strlen($tabelaReferencia) - strlen($tabelaRelacionada) - 2;
 
-            /*
-             * Se só o nome das tabelas já foi maior que o total
-             * de 64 caracteres aceitos no MySQL, cria tabela sem
-             * o nome do campo, somente tabela_tabela
-             */
-            if($tamanhoRestante == 0){
-                $tabelasRelacionadasNome = RetiraAcentos(mb_strtolower(str_replace(' ', '_', $tabelaReferencia."_".$tabelaRelacionada ), 'UTF-8'));
-            }
-            /*
-             * Se só o nome das tabelas já foi maior que 64
-             * caracteres, cria a string tabela_tabela e retira
-             * caracteres do final da string até ficar com 64
-             * caracteres.
-             */
-            else if($tamanhoRestante < 0){
-                $tabelasRelacionadasNome = RetiraAcentos(mb_strtolower(str_replace(' ', '_', $tabelaReferencia."_".$tabelaRelacionada ), 'UTF-8'));
-                $tabelasRelacionadasNome = substr($tabelasRelacionadasNome, 0, strlen($tabelasRelacionadasNome)-$tamanhoRestante);
-            }
-            /*
-             * Se tem espaço para o nome da tabela, mas o tamanho
-             * do nome do cmpo é maior que o possível, diminui
-             * o tamanho doo nome do campo.
-             */
-            else if( strlen($campo) > $tamanhoRestante ) {
-                $campoRelacionado = substr($campo, 0, $tamanhoRestante);
-                $tabelasRelacionadasNome = RetiraAcentos(mb_strtolower(str_replace(' ', '_', $tabelaReferencia."_".$campoRelacionado."_".$tabelaRelacionada ), 'UTF-8'));
-            }
-            /*
-             * Tudo está normal. Cria o nome da tabela sem
-             * problemas.
-             */
-            else {
-                $tabelasRelacionadasNome = RetiraAcentos(mb_strtolower(str_replace(' ', '_', $tabelaReferencia."_".$campo."_".$tabelaRelacionada ), 'UTF-8'));
+			/*
+			 * Se só o nome das tabelas já foi maior que o total
+			 * de 64 caracteres aceitos no MySQL, cria tabela sem
+			 * o nome do campo, somente tabela_tabela
+			 */
+			if($tamanhoRestante == 0){
+				$tabelasRelacionadasNome = RetiraAcentos(mb_strtolower(str_replace(' ', '_', $tabelaReferencia."_".$tabelaRelacionada ), 'UTF-8'));
+			}
+			/*
+			 * Se só o nome das tabelas já foi maior que 64
+			 * caracteres, cria a string tabela_tabela e retira
+			 * caracteres do final da string até ficar com 64
+			 * caracteres.
+			 */
+			else if($tamanhoRestante < 0){
+				$tabelasRelacionadasNome = RetiraAcentos(mb_strtolower(str_replace(' ', '_', $tabelaReferencia."_".$tabelaRelacionada ), 'UTF-8'));
+				$tabelasRelacionadasNome = substr($tabelasRelacionadasNome, 0, strlen($tabelasRelacionadasNome)-$tamanhoRestante);
+			}
+			/*
+			 * Se tem espaço para o nome da tabela, mas o tamanho
+			 * do nome do cmpo é maior que o possível, diminui
+			 * o tamanho doo nome do campo.
+			 */
+			else if( strlen($campo) > $tamanhoRestante ) {
+				$campoRelacionado = substr($campo, 0, $tamanhoRestante);
+				$tabelasRelacionadasNome = RetiraAcentos(mb_strtolower(str_replace(' ', '_', $tabelaReferencia."_".$campoRelacionado."_".$tabelaRelacionada ), 'UTF-8'));
+			}
+			/*
+			 * Tudo está normal. Cria o nome da tabela sem
+			 * problemas.
+			 */
+			else {
+				$tabelasRelacionadasNome = RetiraAcentos(mb_strtolower(str_replace(' ', '_', $tabelaReferencia."_".$campo."_".$tabelaRelacionada ), 'UTF-8'));
 				
-            }	
+			}	
 			return $tabelasRelacionadasNome;
 		}
 		
@@ -832,16 +832,16 @@ class FlexFieldsSetup extends ModsSetup {
 				$tableOne = 'parent_'.$tableOne;
 			}
 			
-	        $sql = 'CREATE TABLE '.$params['referenceTable'].'('.
-	               'id int auto_increment,'.
-	               $tableOne.' int,'.
-	               $tableTwo.' int,'.
+			$sql = 'CREATE TABLE '.$params['referenceTable'].'('.
+				   'id int auto_increment,'.
+				   $tableOne.' int,'.
+				   $tableTwo.' int,'.
 				   'order_nr int,'.
-	               'blocked varchar(120),'.
-	               'approved int,'.
-	               'created_on datetime,'.
-	               'updated_on datetime,'.
-	               'PRIMARY KEY (id), UNIQUE id (id))';
+				   'blocked varchar(120),'.
+				   'approved int,'.
+				   'created_on datetime,'.
+				   'updated_on datetime,'.
+				   'PRIMARY KEY (id), UNIQUE id (id))';
 			
 			return $sql;
 		}
@@ -856,11 +856,11 @@ class FlexFieldsSetup extends ModsSetup {
 		if( empty($params['order']) )
 			$params['order'] = $this->getFieldOrder();
 
-        $sql =
+		$sql =
 			"INSERT INTO flex_fields_config ".
-            "(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr) ".
-            "VALUES ".
-            "('campo','".$params['name']."','".$params['label']."','".$params['comment']."','".$params['austNode']."','".$params['author']."',0,0,1,0,1,'$class',".$params['order'].")";
+			"(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr) ".
+			"VALUES ".
+			"('campo','".$params['name']."','".$params['label']."','".$params['comment']."','".$params['austNode']."','".$params['author']."',0,0,1,0,1,'$class',".$params['order'].")";
 		return $sql;
 	}
 	
@@ -874,11 +874,11 @@ class FlexFieldsSetup extends ModsSetup {
 		if( empty($params['order']) )
 			$params['order'] = $this->getFieldOrder();
 
-        $sql =
+		$sql =
 			"INSERT INTO flex_fields_config ".
-            "(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr) ".
-            "VALUES ".
-            "('campo','".$params['name']."','".$params['label']."','".$params['comment']."','".$params['austNode']."','".$params['author']."',0,0,1,0,1,'$class',".$params['order'].")";
+			"(type,property,value,commentary,node_id,admin_id,deactivated,disabled,public,restricted,approved,specie,order_nr) ".
+			"VALUES ".
+			"('campo','".$params['name']."','".$params['label']."','".$params['comment']."','".$params['austNode']."','".$params['author']."',0,0,1,0,1,'$class',".$params['order'].")";
 		return $sql;
 	}
 	/*
@@ -906,15 +906,15 @@ class FlexFieldsSetup extends ModsSetup {
 		}
 		*/
 		
-        $sql = 'CREATE TABLE '.$this->mainTable.'('.
-                   'id int auto_increment,'.
-                   'node_id int,'.
-                   'blocked varchar(120),'.
-                   'approved int,'.
-                   'created_on datetime,'.
-                   'updated_on datetime,'.
-                   'PRIMARY KEY (id), UNIQUE id (id), INDEX (node_id)'.
-                ')';
+		$sql = 'CREATE TABLE '.$this->mainTable.'('.
+				   'id int auto_increment,'.
+				   'node_id int,'.
+				   'blocked varchar(120),'.
+				   'approved int,'.
+				   'created_on datetime,'.
+				   'updated_on datetime,'.
+				   'PRIMARY KEY (id), UNIQUE id (id), INDEX (node_id)'.
+				')';
 		return $sql;
 	}
 	
@@ -941,45 +941,45 @@ class FlexFieldsSetup extends ModsSetup {
 			
 			if( $key == 'approval' ){
 				Connection::getInstance()->exec("DELETE FROM flex_fields_config WHERE type='config' AND property='approval' AND node_id='$austNode'");
-                $sql =
-	                "INSERT INTO
-	                    flex_fields_config
-	                    (type,property,value,name,specie,node_id,created_on,admin_id,deactivated,disabled,public,restricted,approved)
-	                VALUES
-	                    ('config','approval','".$value."','Aprovação','bool',".$austNode.", '".date('Y-m-d H:i:s')."', '".$this->user."',0,0,1,0,1)
-	                ";
-                Connection::getInstance()->exec($sql);
+				$sql =
+					"INSERT INTO
+						flex_fields_config
+						(type,property,value,name,specie,node_id,created_on,admin_id,deactivated,disabled,public,restricted,approved)
+					VALUES
+						('config','approval','".$value."','Aprovação','bool',".$austNode.", '".date('Y-m-d H:i:s')."', '".$this->user."',0,0,1,0,1)
+					";
+				Connection::getInstance()->exec($sql);
 
 			} else if( $key == 'pre_password' ){
 				Connection::getInstance()->exec("DELETE FROM flex_fields_config WHERE type='config' AND property='pre_password' AND node_id='$austNode'");
-                $sql =
-	                "INSERT INTO
-	                    flex_fields_config
-	                    (type,property,value,name,specie,node_id,created_on,admin_id,deactivated,disabled,public,restricted,approved)
-	                VALUES
-	                    ('config','pre_password','".$value."','Pré-Senha','string',".$austNode.", '".date('Y-m-d H:i:s')."', '".$this->user."',0,0,1,0,1)
-	                ";
-                Connection::getInstance()->exec($sql);
+				$sql =
+					"INSERT INTO
+						flex_fields_config
+						(type,property,value,name,specie,node_id,created_on,admin_id,deactivated,disabled,public,restricted,approved)
+					VALUES
+						('config','pre_password','".$value."','Pré-Senha','string',".$austNode.", '".date('Y-m-d H:i:s')."', '".$this->user."',0,0,1,0,1)
+					";
+				Connection::getInstance()->exec($sql);
 			} else if( $key == 'description' ){
 				Connection::getInstance()->exec("DELETE FROM flex_fields_config WHERE type='config' AND property='description' AND node_id='$austNode'");
-                $sql =
-	                "INSERT INTO
-	                    flex_fields_config
-	                    (type,property,value,name,specie,node_id,created_on,admin_id,deactivated,disabled,public,restricted,approved)
-	                VALUES
-	                    ('config','description','".$value."','Descrição','blob',".$austNode.", '".date('Y-m-d H:i:s')."', '".$this->user."',0,0,1,0,1)
-	                ";
-                Connection::getInstance()->exec($sql);
+				$sql =
+					"INSERT INTO
+						flex_fields_config
+						(type,property,value,name,specie,node_id,created_on,admin_id,deactivated,disabled,public,restricted,approved)
+					VALUES
+						('config','description','".$value."','Descrição','blob',".$austNode.", '".date('Y-m-d H:i:s')."', '".$this->user."',0,0,1,0,1)
+					";
+				Connection::getInstance()->exec($sql);
 			} else if( $key == 'table' ){
 				Connection::getInstance()->exec("DELETE FROM flex_fields_config WHERE type='structure' AND property='table' AND node_id='$austNode'");
-                $sql =
-	                "INSERT INTO
-	                    flex_fields_config
-	                    (type,property,value,name,specie,node_id,created_on,admin_id,deactivated,disabled,public,restricted,approved)
-	                VALUES
-	                    ('structure','table','".$value."','Tabela Principal','blob',".$austNode.", '".date('Y-m-d H:i:s')."', '".$this->user."',0,0,1,0,1)
-	                ";
-                Connection::getInstance()->exec($sql);
+				$sql =
+					"INSERT INTO
+						flex_fields_config
+						(type,property,value,name,specie,node_id,created_on,admin_id,deactivated,disabled,public,restricted,approved)
+					VALUES
+						('structure','table','".$value."','Tabela Principal','blob',".$austNode.", '".date('Y-m-d H:i:s')."', '".$this->user."',0,0,1,0,1)
+					";
+				Connection::getInstance()->exec($sql);
 			}
 			
 		}

@@ -32,7 +32,7 @@ include(CONFIG_DATABASE_FILE);
  * Carrega classes automaticamente
  *
  */
-    include_once(CLASS_LOADER);
+	include_once(CLASS_LOADER);
 
 
 /**
@@ -52,11 +52,11 @@ $administrador = User::getInstance();
 $aust = new Aust($conexao);
 
 if( is_file('ajax/aj_'.$_GET['lib'].'.php') ){
-    include('ajax/aj_'.$_GET['lib'].'.php');
+	include('ajax/aj_'.$_GET['lib'].'.php');
 } else {
-    echo '';
+	echo '';
 }
 
 //print_r($_POST);
 
-?>                                                                                                           
+?>																										   

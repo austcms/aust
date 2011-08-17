@@ -17,19 +17,19 @@ class ActiveModuleTest extends PHPUnit_Framework_TestCase
 			$this->structureId = $query[0]["id"];
 		}
 		
-        $this->params = $this->structureId;
+		$this->params = $this->structureId;
 	}
 	function tearDown(){
 		Fixture::getInstance()->destroy();
 	}
 	
 	function testSaveAustNode(){
-        $module = new ActiveModule($this->params);
+		$module = new ActiveModule($this->params);
 		$this->assertEquals( $this->params, $module->austNode);
 	}
 	
 	function testViewFile(){
-        $module = new ActiveModule($this->params);
+		$module = new ActiveModule($this->params);
 		$this->assertEquals("textual/", $module->directory());
 	}
 

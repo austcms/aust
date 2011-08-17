@@ -1,6 +1,6 @@
 <?php
 if(!defined('THIS_TO_BASEURL')){
-    define('THIS_TO_BASEURL', '../');
+	define('THIS_TO_BASEURL', '../');
 }
 
 include_once(THIS_TO_BASEURL."core/config/variables.php");

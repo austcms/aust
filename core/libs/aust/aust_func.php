@@ -5,7 +5,7 @@
 	// funÃ§Ã£o que monta as categorias em arrays e depois cria argumentos SQL
 	function BuildDDListItems($table, $area, &$aust2, $parent=0, $level=0, $current_node=-1){
 
-    	$where = "lp.father_id = '$parent'";
+		$where = "lp.father_id = '$parent'";
 		if($parent == 0){
 			$where = $where . " AND lp.name='".$area."'";
 		}
@@ -37,6 +37,6 @@
 			$items.=BuildDDListItems($table, $area, $aust2, $myrow["id"], $level+1, $current_node);
 
 		}
-    }
+	}
 
 ?>

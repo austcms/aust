@@ -8,13 +8,13 @@ include_once CONFIG_DATABASE_FILE;
 require_once("core/config/variables.php");
 
 if( !defined('UPLOAD_DIR') )
-    define('UPLOAD_DIR', 'tests/support/test_files/uploaded_files/');
+	define('UPLOAD_DIR', 'tests/support/test_files/uploaded_files/');
 
 if( !defined('TEST_FILES_DIR') )
-    define('TEST_FILES_DIR', 'tests/support/test_files/');
+	define('TEST_FILES_DIR', 'tests/support/test_files/');
 
 if( !defined('THIS_TO_BASEURL') )
-    define('THIS_TO_BASEURL', '');
+	define('THIS_TO_BASEURL', '');
 
 define('TESTING', true);
 
@@ -30,16 +30,16 @@ function autoload($className) {
 	if( in_array($className, array("array","int", "integer","string","bool","float")) )
 		return false;
 	
-    if( is_file('core/class/'.$className.'.php') )
-        require 'core/class/'.$className.'.php';
-    elseif( is_file('core/class/helpers/'.$className.'.php') )
-        require 'core/class/helpers/'.$className.'.php';
-    elseif( is_file('core/class/helpers/'.$className.'.class.php') )
-        require 'core/class/helpers/'.$className.'.class.php';
-    elseif( is_file('core/class/api/'.$className.'.php') )
-        require 'core/class/api/'.$className.'.php';
-    else
-        require 'core/class/'.$className.'.class.php';
+	if( is_file('core/class/'.$className.'.php') )
+		require 'core/class/'.$className.'.php';
+	elseif( is_file('core/class/helpers/'.$className.'.php') )
+		require 'core/class/helpers/'.$className.'.php';
+	elseif( is_file('core/class/helpers/'.$className.'.class.php') )
+		require 'core/class/helpers/'.$className.'.class.php';
+	elseif( is_file('core/class/api/'.$className.'.php') )
+		require 'core/class/api/'.$className.'.php';
+	else
+		require 'core/class/'.$className.'.class.php';
 }
 
 spl_autoload_register('autoload');

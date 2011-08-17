@@ -2,7 +2,6 @@
 /**
  * ACTIVE CONTROLLER
  *
- * @author Alexandre de Oliveira <chavedomundo@gmail.com>
  * @since v0.2, 17/06/2011
  */
 class ActionController
@@ -17,7 +16,7 @@ class ActionController
 	public $customAction = false;
 	public $params = array();
 
-    public $globalVars = array();
+	public $globalVars = array();
 
 	public $shouldCallAction = true;
 	public $beforeFiltered = false;
@@ -26,23 +25,23 @@ class ActionController
 	
 	public $testVar;
 
-    function __construct($shouldCallAction = true){
-        $this->shouldCallAction = $shouldCallAction;
-        /**
-         * _trigger() is responsible for triggering methods as actions
-         */
-        $this->_trigger($shouldCallAction);
+	function __construct($shouldCallAction = true){
+		$this->shouldCallAction = $shouldCallAction;
+		/**
+		 * _trigger() is responsible for triggering methods as actions
+		 */
+		$this->_trigger($shouldCallAction);
 		$this->completedRequest = true;
-    }
+	}
 
 	
-    public function set($varName, $varValue){
-        $this->globalVars[$varName] = $varValue;
-    }
+	public function set($varName, $varValue){
+		$this->globalVars[$varName] = $varValue;
+	}
 
-    /*
-     * PRIVATE METHODS
-     */
+	/*
+	 * PRIVATE METHODS
+	 */
 	function _action(){
 		if( $this->customAction )
 			return $this->customAction;
@@ -57,7 +56,7 @@ class ActionController
 	}
 	
 	function _actionExists(){
-        return method_exists($this, $this->_action());
+		return method_exists($this, $this->_action());
 	}
 
 	public function _setupParams(){
@@ -65,52 +64,52 @@ class ActionController
 		$this->params["action"] = $this->_action();
 	}
 	
-    /**
-     * _TRIGGER()
-     *
-     * Responsible for calling actions, preppending beforeFilter() and appending
+	/**
+	 * _TRIGGER()
+	 *
+	 * Responsible for calling actions, preppending beforeFilter() and appending
 	 * afterFilter() and calling render().
 	 *
-     * @param array $param
-     *      'ation': which method should be called
-     */
-    public function _trigger($shouldCallAction = true){
-        $this->beforeFilter();
+	 * @param array $param
+	 *	  'ation': which method should be called
+	 */
+	public function _trigger($shouldCallAction = true){
+		$this->beforeFilter();
 		
 		$this->_setupParams();
-        /*
-         * Action time!
-         */
-        if( $this->_actionExists() && $shouldCallAction ){
-            call_user_func_array( array($this, $this->_action() ), array() );
+		/*
+		 * Action time!
+		 */
+		if( $this->_actionExists() && $shouldCallAction ){
+			call_user_func_array( array($this, $this->_action() ), array() );
 		}
 
-	    $this->afterFilter();
+		$this->afterFilter();
 
-        if( !$this->isRendered AND $this->autoRender && $this->_action() && $this->shouldCallAction )
-            $this->render( $this->_action() );
-        else if( !$this->isRendered && $this->autoRender )
-            $this->render( false );
+		if( !$this->isRendered AND $this->autoRender && $this->_action() && $this->shouldCallAction )
+			$this->render( $this->_action() );
+		else if( !$this->isRendered && $this->autoRender )
+			$this->render( false );
 
-    }
+	}
 
 	public function _viewFile(){
 		return VIEWS_DIR."".Dispatcher::getInstance()->controller()."/";
 	}
 	
-    /*
-     * Renders the view
-     */
-    public function render( $shouldRender = true ){
+	/*
+	 * Renders the view
+	 */
+	public function render( $shouldRender = true ){
 
-        /*
-         * Variables for views
-         */
-        foreach( $this->globalVars as $key=>$value ){
-            $$key = $value;
-        }
-        
-        $content_for_layout = "";
+		/*
+		 * Variables for views
+		 */
+		foreach( $this->globalVars as $key=>$value ){
+			$$key = $value;
+		}
+		
+		$content_for_layout = "";
 		
 		if( empty($this->params) )
 			$this->_setupParams();
@@ -130,15 +129,15 @@ class ActionController
 
 		if( $shouldRender && file_exists($viewFile) ){
 
-            ob_start();
-            include($viewFile);
-            $content_for_layout = ob_get_contents();
-            ob_end_clean();
+			ob_start();
+			include($viewFile);
+			$content_for_layout = ob_get_contents();
+			ob_end_clean();
 
-            ob_start();
+			ob_start();
 			include(UI_STANDARD_FILE);
-            $content = ob_get_contents();
-            ob_end_clean();
+			$content = ob_get_contents();
+			ob_end_clean();
 			
 			$this->renderized = $content;
 			
@@ -147,18 +146,18 @@ class ActionController
 				if( !defined('TESTING') || !TESTING )
 					echo $content;
 				
-	        	$this->isRendered = true;
+				$this->isRendered = true;
 			}
 			
 			return $content;
-        }
+		}
 
-        return false;
-    }
+		return false;
+	}
 
-    public function beforeFilter(){ $this->beforeFiltered = true; return true; }
-    public function afterFilter(){ $this->afterFiltered = true; return true; }
-    public function test_action(){
+	public function beforeFilter(){ $this->beforeFiltered = true; return true; }
+	public function afterFilter(){ $this->afterFiltered = true; return true; }
+	public function test_action(){
 		$this->testVar = 	"Action ". $this->params["action"] .
 							" from controller ".$this->params["controller"]." working.";
 		$this->autoRender = false;

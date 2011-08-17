@@ -5,9 +5,9 @@ require_once 'tests/config/auto_include.php';
 class ApiQueryParserTest extends PHPUnit_Framework_TestCase
 {
 
-    public function setUp(){
-        $this->obj = new ApiQueryParser();
-    }
+	public function setUp(){
+		$this->obj = new ApiQueryParser();
+	}
 
 	function testOrder(){
 		$query['order'] = 'name;id';

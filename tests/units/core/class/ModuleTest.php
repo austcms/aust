@@ -20,12 +20,12 @@ class ModuleTest extends PHPUnit_Framework_TestCase
 		}
 	}
 	
-    function testInitialization(){
-        $this->obj = new Textual($this->structureId);
-    }
+	function testInitialization(){
+		$this->obj = new Textual($this->structureId);
+	}
 
 	function testLoadAustDataOnModule(){
-        $this->obj = new Textual($this->structureId);
+		$this->obj = new Textual($this->structureId);
 
 		$this->assertEquals("News", $this->obj->name);
 		$this->assertInternalType("array", $this->obj->information);
