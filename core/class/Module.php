@@ -740,10 +740,10 @@ class Module extends ActiveModule
 
 		if($method == 'edit' OR !empty($post['w'])){
 			$total = 0;
-			$sql = "UPDATE ".$this->useThisTable()." SET $sqlcampostr
+			$sql = "UPDATE ".$this->useThisTable()." SET $sqlcampostr 
 					WHERE id='".$post['w']."'";
 		} else {
-			$sql = "INSERT INTO ".$this->useThisTable()." ($sqlcampostr)
+			$sql = "INSERT INTO ".$this->useThisTable()." ($sqlcampostr) 
 					VALUES ({$sqlvalorstr})";
 		}
 
