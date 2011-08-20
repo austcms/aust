@@ -103,7 +103,7 @@ class Fixture {
 		Connection::getInstance()->exec($sql);
 	}
 	
-	public function createApiData(){
+	public function createApiData($paramsToInstall = array()){
 		$this->destroy();
 		installModule('flex_fields');
 		
@@ -119,45 +119,53 @@ class Fixture {
 		Connection::getInstance()->query("INSERT INTO taxonomy (name,class) VALUES ('Website777','site')");
 		$lastInsert = Connection::getInstance()->lastInsertId();
 		
-		$params = array(
-			'name' => 'News',
-			'site' => $lastInsert,
-			'class' => 'structure',
-			'module' => 'flex_fields',
-			'author' => 1,
-			'fields' => array(
-				array(
-					'name' => 'Title',
-					'type' => 'string',
-					'description' => 'Description',
+		if( !empty($paramsToInstall) )
+			$params = $paramsToInstall;
+		else
+			$params = array(
+				'name' => 'News',
+				'site' => $lastInsert,
+				'class' => 'structure',
+				'module' => 'flex_fields',
+				'author' => 1,
+				'fields' => array(
+					array(
+						'name' => 'Title',
+						'type' => 'string',
+						'description' => 'Description',
+					),
+					array(
+						'name' => 'Text',
+						'type' => 'text',
+						'description' => 'Description',
+					),
+					array(
+						'name' => 'Images',
+						'type' => 'images',
+						'description' => 'A field for images :)',
+					),
+					array(
+						'name' => 'Relational 1-n-1',
+						'type' => 'relational_onetoone',
+						'description' => 'haha777',
+						'refTable' => 'ref_table',
+						'refField' => 'ref_field',
+					),
+					array(
+						'name' => 'Relational 1-to-n',
+						'type' => 'relational_onetomany',
+						'description' => 'haha777',
+						'refTable' => 'ref_table',
+						'refField' => 'ref_field',
+					),
 				),
-				array(
-					'name' => 'Text',
-					'type' => 'text',
-					'description' => 'Description',
+				'options' => array(
+					'approval' => '',
+					'pre_password' => '',
+					'description' => '',
 				),
-				array(
-					'name' => 'Relational 1-n-1',
-					'type' => 'relational_onetoone',
-					'description' => 'haha777',
-					'refTable' => 'ref_table',
-					'refField' => 'ref_field',
-				),
-				array(
-					'name' => 'Relational 1-to-n',
-					'type' => 'relational_onetomany',
-					'description' => 'haha777',
-					'refTable' => 'ref_table',
-					'refField' => 'ref_field',
-				),
-			),
-			'options' => array(
-				'approval' => '',
-				'pre_password' => '',
-				'description' => '',
-			),
 			
-		);
+			);
 		
 		$result = $flexFieldsSetup->createStructure($params);
 		return $result;

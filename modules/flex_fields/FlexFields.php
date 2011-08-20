@@ -1203,6 +1203,7 @@ class FlexFields extends Module {
 			$this->totalRows = $this->_getTotalRows($countSql);
 			
 			$sql = "SELECT $fields ".$conditions;
+
 			/* limit */
 			$limit = null;
 			if( !empty($param['limit']) )
@@ -1226,7 +1227,7 @@ class FlexFields extends Module {
 		}
 
 		return $sql;
-	} // fim SQLParaListagem()
+	}
 
 
 	/**

@@ -84,5 +84,19 @@ class ApiQueryParser {
 		return ( empty($get['limit']) ) ? '100' : $get['limit'];
 	}
 	
+	public function includeFields($get){
+		if( empty($get['include_fields']) )
+			return false;
+
+		if( $get['include_fields'] == "*" )
+			return "*";
+		
+		$fields = explode(';', $get['include_fields']);
+		if( empty($fields) )
+			return false;
+			
+		return $fields;
+	}
+	
 }
 ?>
