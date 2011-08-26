@@ -9,6 +9,8 @@ require_once 'core/config/variables.php';
 
 class FlexFieldsTest extends PHPUnit_Framework_TestCase
 {
+	
+	public $structureId;
 
 	public function setUp(){
 
@@ -27,38 +29,38 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 		 */
 		include MODULES_DIR.$this->mod.'/'.MOD_CONFIG;
 		include_once MODULES_DIR.$this->mod.'/'.$modInfo['className'].'.php';
-		
-		$_GET['aust_node'] = '777';
-		$this->obj = new $modInfo['className'](777);
 
+		$lastSiteId = Aust::getInstance()->createSite('site', '');
+		$this->structureId = Aust::getInstance()->createStructure(
+						array(
+							'name'		=> 'flex_structure',
+							'site'		=> $lastSiteId,
+							'public'	=> '1',
+							'module'	=> 'flex_fields',
+							'author'	=> '1'
+						)
+					);
+
+		$_GET['aust_node'] = $this->structureId;
+		$this->obj = new $modInfo['className']($this->structureId);
+		$this->createEnvironment();
 	}
 
 	function createEnvironment(){
 		$this->destroyEnvironment();
+		
 		$this->obj->connection->exec(
 			'CREATE TABLE table_for_unittests
 			(
 				id int auto_increment,
 				title varchar(200),
+				images varchar(200),
+				approved int,
+				public int,
+				admin_id int,
 				PRIMARY KEY (id)
 			)',
-			'CREATE TABLE'
-		);
-		
-		$this->obj->connection->exec(
-			"CREATE TABLE table_for_unittests_images
-			(
-				id int auto_increment,
-				file_systempath text,
-				type varchar(80),
-				maintable_id int,
-				reference varchar(120),
-				reference_table varchar(120),
-				reference_field varchar(120),
-				node_id int,
-				PRIMARY KEY (id)
-			)",
-			'CREATE TABLE'
+			'CREATE_TABLE'
 		);
 
 		$this->obj->connection->exec(
@@ -76,14 +78,14 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 				admin_id int,
 				PRIMARY KEY (id)
 			)",
-			'CREATE TABLE'
+			'CREATE_TABLE'
 		);
 		
 		$this->obj->connection->exec(
 			"INSERT INTO flex_fields_config
 				(type,property,value,node_id)
 				VALUES
-				('structure','table','table_for_unittests', '7777')
+				('structure','table','table_for_unittests', '".$this->structureId."')
 			"
 		);
 		
@@ -91,7 +93,7 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 			"INSERT INTO flex_fields_config
 				(type,property,value,node_id)
 				VALUES
-				('structure','table_images','table_for_unittests_images', '7777')
+				('structure','table_images','table_for_unittests_images', '".$this->structureId."')
 			"
 		);
 
@@ -99,43 +101,164 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 			"INSERT INTO flex_fields_config
 				(type,property,value,node_id)
 				VALUES
-				('structure','table_files','table_for_unittests_files', '7777')
+				('structure','table_files','table_for_unittests_files', '".$this->structureId."')
 			"
 		);
 		$this->obj->connection->exec(
 			"INSERT INTO flex_fields_config
-				(type,property,value,node_id)
+				(type,property,value, specie, node_id)
 				VALUES
-				('campo','file','File', 'files','7777')
+				('campo','images','Images', 'images','".$this->structureId."')
 			"
 		);
-		
+
+		$this->obj->connection->exec(
+			"INSERT INTO flex_fields_config
+				(type,property,value, specie, node_id)
+				VALUES
+				('campo','title','Title', 'string','".$this->structureId."')
+			"
+		);
+	
+		$this->obj->connection->exec("INSERT INTO table_for_unittests (title) VALUES ('My first text')");
+		$newsId = $this->obj->connection->lastInsertId();
+
+		/* images table */
+		$this->obj->connection->exec(
+			"CREATE TABLE table_for_unittests_images
+			(
+				id int auto_increment,
+				maintable_id int,
+				type varchar(80),
+				order_nr int,
+				title varchar(250),
+				description text,
+				local varchar(180),
+				link text,
+				file_systempath text,
+				file_path text,
+				file_name varchar(250),
+				original_file_name varchar(250),
+				file_type varchar(250),
+				file_size varchar(250),
+				file_ext varchar(10),
+				reference varchar(120),
+				reference_table varchar(120),
+				reference_field varchar(120),
+				node_id int,
+				created_on datetime,
+				updated_on datetime,
+				admin_id int,
+				PRIMARY KEY (id)
+			)",
+			'CREATE_TABLE'
+		);
+	
+		/* insert news' images */
+		$sql = "INSERT INTO table_for_unittests_images
+					(maintable_id, type, title,
+					file_systempath,
+					file_path,
+					file_name, file_type, reference_field, node_id)
+					VALUES
+						('".$newsId."', 'main', NULL,
+						'~/code/aust/uploads/2011/08/123.jpg',
+						'uploads/2011/08/123.jpg',
+						'123.jpg', 'image/jpeg', 'images', '".$this->structureId."'
+						),
+						('".$newsId."', 'main', NULL,
+						'~/code/aust/uploads/2011/08/456.jpg',
+						'uploads/2011/08/456.jpg',
+						'456.jpg', 'image/jpeg', 'images', '".$this->structureId."'
+						),
+						('".$newsId."', 'main', NULL,
+						'~/code/aust/uploads/2011/08/789.jpg',
+						'uploads/2011/08/789.jpg',
+						'789.jpg', 'image/jpeg', 'images', '".$this->structureId."'
+						),
+						('".($newsId+1)."', 'main', NULL,
+						'~/code/aust/uploads/2011/08/???.jpg',
+						'uploads/2011/08/???.jpg',
+						'???.jpg', 'image/jpeg', 'images', '".$this->structureId."'
+						)
+				";
+		Connection::getInstance()->exec($sql);
+
 	}
 	
 	function destroyEnvironment(){
-		$this->obj->connection->exec('DROP TABLE table_for_unittests', 'CREATE TABLE');
-		$this->obj->connection->exec('DROP TABLE table_for_unittests_images', 'CREATE TABLE');
-		$this->obj->connection->exec('DROP TABLE table_for_unittests_files', 'CREATE TABLE');
+		if( Connection::getInstance()->hasTable('table_for_unittests') )
+			$this->obj->connection->exec('DROP TABLE table_for_unittests', 'CREATE_TABLE');
+
+		if( Connection::getInstance()->hasTable('table_for_unittests_images') )
+			$this->obj->connection->exec('DROP TABLE table_for_unittests_images', 'CREATE_TABLE');
+
+		if( Connection::getInstance()->hasTable('table_for_unittests_files') )
+			$this->obj->connection->exec('DROP TABLE table_for_unittests_files', 'CREATE_TABLE');
 		
-		$this->obj->connection->exec("DELETE FROM flex_fields_config WHERE node_id='7777'");
-		$this->obj->connection->exec("DELETE FROM ".Config::getInstance()->table." WHERE local='7777'");
+		$this->obj->connection->exec("DELETE FROM flex_fields_config");
+		$this->obj->connection->exec("DELETE FROM ".Config::getInstance()->table."");
+	}
+	
+	function testConfigurations(){
+		$configurations = $this->obj->configurations();
+		$this->assertArrayHasKey("campo", $configurations);
+		$this->assertEquals("title", $configurations['campo']['title']['property']);
+	}
+	
+	function testLoad(){
+		$this->assertTrue(Connection::getInstance()->hasTable('table_for_unittests'));
+		
+		$result = $this->obj->load(array('fields' => '*'));
+		$empty = empty($result);
+		$this->assertFalse($empty);
+		$this->assertArrayHasKey("title", $result[0]);
+		$this->assertArrayHasKey("images", $result[0]);
+		$this->assertEquals("My first text", $result[0]['title']);
+		$emptyImages = empty($result[0]['images']);
+		$this->assertTrue($emptyImages);
+	}
+	
+	function testLoadParamsIncludeFieldsImage(){
+		$this->assertTrue(Connection::getInstance()->hasTable('table_for_unittests'));
+		
+		/* with include_fields */
+		$result = $this->obj->load(
+			array(
+				'aust_node' => '777',
+				'fields' => '*',
+				'include_fields' => array('images')
+			)
+		);
+		$empty = empty($result);
+		$this->assertFalse($empty);
+		$this->assertArrayHasKey("title", $result[0]);
+		$this->assertEquals("My first text", $result[0]['title']);
+
+		$emptyImages = empty($result[0]['images']);
+		$this->assertFalse($emptyImages);
+		$this->assertArrayHasKey(0, $result[0]['images']);
+		$this->assertArrayHasKey(1, $result[0]['images']);
+		$this->assertArrayHasKey(2, $result[0]['images']);
+		$this->assertArrayNotHasKey(3, $result[0]['images']);
+		
+		$this->assertEquals("image/jpeg", $result[0]['images'][0]['file_type']);
+
 	}
 
-
 	function testGetFiles(){
-		$this->createEnvironment();
 		$this->obj->connection->exec(
 			"INSERT INTO table_for_unittests_files
 				(maintable_id,title,node_id,reference_field, type)
 				VALUES
-				('777','title', '7777', 'file', 'main')
+				('777','title', '777', 'file', 'main')
 			"
 		);
 
 		$params = array(
 			'w' => '777',
 			'field' => 'file',
-			'austNode' => '7777',
+			'austNode' => '777',
 			'tableFiles' => 'table_for_unittests_files'
 		);
 
@@ -331,57 +454,28 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 		}
 	
 		function deleteTemporaryTable(){
-			$this->obj->connection->query("DELETE FROM flex_fields_config WHERE node_id='777' OR node_id='7777'");
+			$this->obj->connection->query("DELETE FROM flex_fields_config");
 			$this->obj->connection->query("DROP TABLE tabela_1");
-		
 		}
 
 	function testLoadModConf(){
-		/* FIELDS */
-		$this->obj->connection->query("DELETE FROM ".Config::getInstance()->table." WHERE local='777' AND name='teste7777'");
-		$this->obj->connection->query("DELETE FROM flex_fields_config WHERE node_id='777' AND name='teste7777'");
-
-		$this->createTemporaryTable();
-			/*
-			 * Criar o campo de cadastro
-			 */
-			$this->assertTrue( Connection::getInstance()->hasTable('flex_fields_config') );
-			$this->assertTrue( Connection::getInstance()->hasTable('configurations') );
-			
-			$sql = "INSERT INTO flex_fields_config
-						 (type,property,value,node_id,name, specie)
-					 VALUES
-						 ('campo','campo_1','Campo 1','777','teste7777', 'images')
-					 ";
-			Connection::getInstance()->exec($sql);
-			
 			$sql = "INSERT INTO ".Config::getInstance()->table."
-						(type, local, name, property, value,  class, ref_field)
+						(type, local, property, value,  class, ref_field)
 					VALUES
-						('structure','777','teste7777','teste','1', 'field', 'campo_1')
+						('structure','".$this->structureId."', 'teste','1', 'field', 'images')
 					";
-	
 			$this->obj->connection->query($sql);
 
-			$catLastInsertId = $this->obj->connection->lastInsertId();
-
-		/* start test #4 */
-			$result = $this->obj->loadModConf(777, 'field');
-
+			$result = $this->obj->loadModConf($this->structureId, 'field');
 			$this->assertArrayHasKey(
-					'campo_1',
+					'images',
 					$result,
-					'Teste #4.1 falhou');
+					'No information about the field');
 
 			$this->assertEquals(
 					'1',
-					$result['campo_1']['teste']['value'],
-					'Teste #4.2 falhou');
-	
-		$this->obj->connection->query("DELETE FROM ".Config::getInstance()->table." WHERE local='777' AND name='teste7777'");
-		$this->obj->connection->query("DELETE FROM flex_fields_config WHERE node_id='777' AND name='teste7777'");
-
-		$this->deleteTemporaryTable();
+					$result['images']['teste']['value'],
+					'Value is not being loaded');
 	}
 	
 	function testAustNode(){
@@ -392,40 +486,19 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 	}
 	
 	function testLoadModConfWithoutSavedData(){
-		/* FIELDS */
-		$this->obj->connection->query("DELETE FROM ".Config::getInstance()->table." WHERE local='777' AND name='teste7777'");
-		$this->obj->connection->query("DELETE FROM flex_fields_config WHERE node_id='777' AND name='teste7777'");
 
-		$this->createTemporaryTable();
-	
-		/*
-		 * Criar o campo de cadastro
-		 */
-		$sql = "INSERT INTO flex_fields_config
-					 (type,property,value,node_id,name,specie)
-				 VALUES
-					 ('campo','campo_1','Campo 1','777','teste7777', 'images')
-				 ";
-		$this->obj->connection->query($sql);
-
-		
 		/* start test #1 */
-			$result = $this->obj->loadModConf(777, 'field');
-			$this->assertArrayHasKey('campo_1', $result);
-			$this->assertArrayHasKey(
-					'image_field_limit_quantity',
-					$result['campo_1'],
-					'Teste #1.1 falhou');
-
-		$this->obj->connection->query("DELETE FROM ".Config::getInstance()->table." WHERE local='777' AND name='teste7777'");
-		$this->obj->connection->query("DELETE FROM flex_fields_config WHERE node_id='777' AND name='teste7777'");
-
-		$this->deleteTemporaryTable();
+		$result = $this->obj->loadModConf($this->structureId, 'field');
+		$this->assertArrayHasKey('images', $result);
+		$this->assertArrayHasKey(
+				'image_field_limit_quantity',
+				$result['images'],
+				'Field configuration not being loaded.');
 	}
 	
 	function testGetFieldConfig(){
-		$this->obj->connection->query("DELETE FROM ".Config::getInstance()->table." WHERE local='777' AND name='teste7777'");
-		$this->obj->connection->query("DELETE FROM flex_fields_config WHERE node_id='777' AND name='teste7777'");
+		$this->obj->connection->query("DELETE FROM ".Config::getInstance()->table." WHERE local='777' AND name='teste777'");
+		$this->obj->connection->query("DELETE FROM flex_fields_config WHERE node_id='777' AND name='teste777'");
 
 		$this->createTemporaryTable();
 		/*
@@ -434,7 +507,7 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 		$sql = "INSERT INTO flex_fields_config
 					 (type,property,value,node_id,name,specie)
 				 VALUES
-					 ('campo','campo_1','Campo 1','777','teste7777', 'images')
+					 ('campo','campo_1','Campo 1','777','teste777', 'images')
 				 ";
 		$this->obj->connection->query($sql);
 		
@@ -442,7 +515,7 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 		$sql = "INSERT INTO ".Config::getInstance()->table."
 					(type, local, name, property, value,  class, ref_field)
 				VALUES
-					('structure','777','teste7777','has_conf','1', 'field', 'campo_1')
+					('structure','777','teste777','has_conf','1', 'field', 'campo_1')
 				";
 
 		$this->obj->connection->query($sql);
@@ -466,8 +539,8 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 		$result = $this->obj->getFieldConfig('campo_1', 'has_conf2');
 		$this->assertFalse($result);
 		
-		$this->obj->connection->query("DELETE FROM ".Config::getInstance()->table." WHERE local='777' AND name='teste7777'");
-		$this->obj->connection->query("DELETE FROM flex_fields_config WHERE node_id='777' AND name='teste7777'");
+		$this->obj->connection->query("DELETE FROM ".Config::getInstance()->table." WHERE local='777' AND name='teste777'");
+		$this->obj->connection->query("DELETE FROM flex_fields_config WHERE node_id='777' AND name='teste777'");
 	
 		$this->deleteTemporaryTable();
 	}
@@ -482,16 +555,15 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 	 * próxima, ele terá 2. Este método excluir a(s) imagem(ns) anterior(es).
 	 */
 	function testDeleteExtraImages(){
-		$this->createEnvironment();
 		$this->obj->connection->exec('DELETE FROM table_for_unittests_images');
 
-		$this->obj->austNode = '7777';
+		$this->obj->austNode = $this->structureId;
 
 		$sqlImages =
 			"INSERT INTO table_for_unittests_images
 				(type,reference_table,reference_field,node_id,maintable_id)
 				VALUES
-				('main','table_for_unittests','test_field','7777','7777')
+				('main','table_for_unittests','test_field','".$this->structureId."','".$this->structureId."')
 			";
 		
 		$this->obj->config = array(
@@ -509,16 +581,16 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 		 */
 
 			$sql = "INSERT INTO flex_fields_config
-						 (type,property,value,node_id,name,specie)
+						 (type,property,value,node_id,specie)
 					 VALUES
-						 ('campo','test_field','Campo 1','7777','teste7777', 'images')
+						 ('campo','test_field','Campo 1','".$this->structureId."', 'images')
 					 ";
 			$this->obj->connection->query($sql);
 
 			$sql = "INSERT INTO ".Config::getInstance()->table."
-						(type, local, name, property, value,  class, ref_field)
+						(type, local, property, value,  class, ref_field)
 					VALUES
-						('structure','7777','teste7777','image_field_limit_quantity','1', 'field', 'test_field')
+						('structure','".$this->structureId."', 'image_field_limit_quantity','1', 'field', 'test_field')
 					";
 			$this->obj->connection->query($sql);
 
@@ -547,7 +619,7 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 			$this->assertEquals('4', count($allIds) );
 
 			$params = array('test_field');
-			$this->obj->deleteExtraImages('7777', $params );
+			$this->obj->deleteExtraImages($this->structureId, $params );
 		
 			// verifica se ids foram relamente excluidos como deveriam
 			$images = $this->obj->connection->query('SELECT id FROM table_for_unittests_images');
@@ -559,14 +631,14 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 		/*
 		 * Configura para ilimitadas imagens
 		 */
-			$this->obj->connection->exec("DELETE FROM ".Config::getInstance()->table." WHERE local='7777'");
+			$this->obj->connection->exec("DELETE FROM ".Config::getInstance()->table." WHERE local='777'");
 			$this->obj->structureFieldsConfig = array();
 			$this->obj->config = array();
 			
 			$sql = "INSERT INTO ".Config::getInstance()->table."
 						(type, local, name, property, value,  class, ref_field)
 					VALUES
-						('structure','7777','teste7777','image_field_limit_quantity','0', 'field', 'test_field')
+						('structure','777','teste777','image_field_limit_quantity','0', 'field', 'test_field')
 					";
 			$this->obj->connection->query($sql);
 
@@ -579,16 +651,14 @@ class FlexFieldsTest extends PHPUnit_Framework_TestCase
 			$oldCount = count($images);
 
 			$params = array('test_field');
-			$this->obj->deleteExtraImages( '7777', $params );
+			$this->obj->deleteExtraImages( '777', $params );
 			$images = $this->obj->connection->query('SELECT id FROM table_for_unittests_images');
 			$newCount = count($images);
 
 			$this->assertEquals( $oldCount, $newCount);
 			
-			
 		$this->destroyEnvironment();
 	}
-
 
 }
 ?>

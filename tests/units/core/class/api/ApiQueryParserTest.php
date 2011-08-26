@@ -124,6 +124,6 @@ class ApiQueryParserTest extends PHPUnit_Framework_TestCase
 		$query['include_fields'] = 'images;files';
 		$this->assertEquals(array('images', 'files'), $this->obj->includeFields($query));
 	}
-	
+
 }
 ?>

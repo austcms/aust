@@ -88,6 +88,17 @@ class Module extends ActiveModule
 		 * @var <array> Último resultado de query executado.
 		 */
 		public $lastQuery;
+		
+		/**
+		 * The result from load() will have keys incremental, i.e.
+		 *
+		 * 		array('0' => result_1, '1' => result_2, etc)
+		 *
+		 * If it is set to true, the key will be the id of the record, i.e.
+		 *
+		 * 		array('346' => result_1, '490' => result_2, etc)
+		 */
+		public $idAsKeyResult = false;
 	
 	/**
 	 * VARIÁVEIS DO MÓDULO
@@ -321,8 +332,10 @@ class Module extends ActiveModule
 			return array();
 
 		$qry = $this->_organizesLoadedData($qry);
-
-		$qry = serializeArray($qry);
+		
+		if( !$this->idAsKeyResult )
+			$qry = serializeArray($qry);
+		
 		$this->lastQuery = $qry;
 		return $qry;
 	}
@@ -1269,8 +1282,9 @@ class Module extends ActiveModule
 							/*
 							 * Tipo do campo bate com o field_type da configuração?
 							 */
-							if( !empty($configValue['field_type'])
-								AND $configValue['field_type'] == $fields[$prop]['specie'] )
+							if( !empty($configValue['field_type']) &&
+								!empty($fields[$prop]) &&
+								$configValue['field_type'] == $fields[$prop]['specie'] )
 							{
 								if( empty($query[$prop][$configName]) ){
 									$query[$prop][$configName] = $configValue;

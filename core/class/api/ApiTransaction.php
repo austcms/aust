@@ -10,6 +10,11 @@ class ApiTransaction {
 	
 	public $dataFormat = 'json';
 	public $queryParser;
+	
+	/**
+	 * var Contains the GET in string format.
+	 */
+	public $getString = '';
 
 	function __construct() {
 		$this->queryParser = new ApiQueryParser();
@@ -17,7 +22,8 @@ class ApiTransaction {
 	
 	public function perform($get){
 		$result = array();
-
+		
+		$this->getString = $get;
 		$get = $this->ensureArray($get);
 		
 		if( array_key_exists('version', $get) ){
@@ -65,13 +71,16 @@ class ApiTransaction {
 			$order = $this->queryParser()->order($get);
 			$limit = $this->queryParser()->limit($get);
 			$fields = $this->queryParser()->fields($get);
+			$includeFields = $this->queryParser()->includeFields($get);
 			$result = array();
 		
 			$queryParameters = array(
-				'fields' => $fields,
-				'where' => $where,
-				'order' => $order,
-				'limit' => $limit
+				'fields' 			=> $fields,
+				'where' 			=> $where,
+				'order' 			=> $order,
+				'limit' 			=> $limit,
+				'include_fields' 	=> $includeFields,
+				'api_query'			=> $get,
 			);
 
 			foreach( $structureIds as $structureId ){

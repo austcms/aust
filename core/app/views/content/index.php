@@ -26,21 +26,22 @@
 			foreach( $sites as $site ): ?>
 			<div>
 				<table border="0" class="pane_listing listing">
-				<?php if( count($site['Structures']) ): ?>
+				<?php if( !empty($site['Structures']) ){ ?>
 					<tr class="header">
 						<td class="secoes">Conteúdos</td>
 						<td class="acao">Opções</td>
 						<td class="tipo">Tipo</td>
 					</tr>
-				<?php else: ?>
+				<?php } else { ?>
 					<tr class="list">
 						<td class="sem_conteudo">Não há conteúdos nesta área.</td>
 					</tr>
 					</table>
+					</div>
 					<?php
 					continue;
-				endif; ?>
-				<?php
+				}
+				
 				/*
 				 * LOOP POR CADA ESTRUTURA
 				 */

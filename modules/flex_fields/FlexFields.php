@@ -98,18 +98,35 @@ class FlexFields extends Module {
 	/**
 	 * getImages()
 	 * 
+	 * Given an image field, returns all images with the given options ($params)
 	 * 
-	 * @param $params array É onde contém o id, austNode e campo a qual a imagem
-	 * se refere
-	 * @return array imagens, com path e id
+	 * @param $params array Contains the id, austNode and the fields which is the image
+	 * @return array with images
 	 */
 	public function getImages($params){
 		
-		if( empty($params['w']) ) return false;
+		$mainTable = '';
+		$conditions = '';
+		$limit = '';
+
+		if( !empty($params['w']) ){
+			$w = $params['w'];
+			$mainTable = "maintable_id='".$w."' AND";
+		}
+
+		if( !empty($params['maintable_ids']) && is_array($params['maintable_ids']) ){
+			$conditions[] = "(maintable_id IN ('".implode("','", $params['maintable_ids'])."'))";
+		}
+		
+		if( is_array($conditions) )
+			$conditions = " AND (".implode(' AND ', $conditions).")";
+
+		if( !empty($params['limit']) )
+			$limit = "LIMIT ".$params['limit'];
+		
 		if( empty($params['austNode']) ) return false;
 		if( empty($params['field']) ) return false;
 		
-		$w = $params['w'];
 		$austNode = $params['austNode'];
 		$field = $params['field'];
 		
@@ -122,17 +139,17 @@ class FlexFields extends Module {
 				FROM
 					".$tableImage." as t
 				WHERE
-					maintable_id='".$w."' AND
+					$mainTable
 					reference_field='".$field."' AND
-					node_id='".$austNode."' AND
 					type='main'
+					$conditions
 				ORDER BY t.id DESC
-				";
+				$limit
+		";
 		$query = Connection::getInstance()->query($sql);
-		
 		return $query;
 		
-	} // fim getImages()
+	}
 	
 	/*
 	 * SAVING PROCESS
@@ -973,6 +990,100 @@ class FlexFields extends Module {
 	 * VERIFICAÇÕES E LEITURAS AUTOMÁTICAS DO DB
 	 * 
 	 */
+
+	/**
+	 * load()
+	 *
+	 * We're overwriting the default parent's load() method because
+	 * sometimes we need to load further data, like images from a field.
+	 *
+	 * This post-processing is made in this method.
+	 *
+	 * @return <array>
+	 */
+	public function load($params = ''){
+
+		/* Start configuration */
+		/* Load will not happen if any of these keys are present */
+		$notLoadIfApiQueryKey = array('last_fields');
+		$this->idAsKeyResult = true;
+		$mainQuery = array();
+		$configurations = $this->configurations();
+		
+		
+		/* api: starts verifying if there are special keys */
+		require_once(MODULES_DIR.$this->directory().MOD_MODELS_DIR.'FlexFieldsApiSpecificsParser.php');
+		
+		if( !empty($params['api_query']) )
+			$params = array_merge($params, FlexFieldsApiSpecificsParser::parseQuery($params['api_query']));
+		
+		/* Loads data from the data, expect if a special request was made (usually by the API) */
+		if( !array_intersect($notLoadIfApiQueryKey, array_keys($params)) )
+			$mainQuery = parent::load($params);
+
+		/* special queries */
+		if( !empty($params['last_fields']) ){
+			
+			foreach( $params['last_fields'] as $fieldToLoad=>$properties ){
+
+				if( empty($configurations['campo'][$fieldToLoad]) ||
+				 	empty($configurations['campo'][$fieldToLoad]['specie']) )
+					continue;
+
+				$specie = $configurations['campo'][$fieldToLoad]['specie'];
+
+				if( $specie == 'images' ){
+					$fieldParams = array(
+						'field' => $fieldToLoad,
+						'austNode' => $this->austNode,
+					);
+					
+					if( array_key_exists('limit', $properties) )
+						$fieldParams['limit'] = $properties['limit'];
+
+					$mainQuery = $this->getImages($fieldParams);
+				}
+			}
+
+		}
+		
+		/*
+		 * by default, are loaded only fields of type string, text, bool, date
+		 * for performance issues. If the user wants more, like images, it needs
+		 * to specify.
+		 */
+		/* include_fields */
+		if( array_key_exists('include_fields', $params) && !empty($params['include_fields']) ){
+			$configurations = $this->configurations();
+			
+			foreach( $params['include_fields'] as $fieldToLoad ){
+				if( empty($configurations['campo'][$fieldToLoad]) ||
+				 	empty($configurations['campo'][$fieldToLoad]['specie']) )
+					continue;
+
+				$specie = $configurations['campo'][$fieldToLoad]['specie'];
+
+				if( $specie == 'images' ){
+					$fieldParams = array(
+						'field' => $fieldToLoad,
+						'austNode' => $this->austNode,
+						'maintable_ids' => array_keys($mainQuery),
+					);
+
+					$results = $this->getImages($fieldParams);
+					foreach( $results as $image ){
+						/* the main field for this image was loaded. */
+						$imageMainTable = $image['maintable_id'];
+						$mainQuery[$imageMainTable][$fieldToLoad][] = $image;
+					}
+				}
+			}
+			
+		}
+
+		$mainQuery = serializeArray($mainQuery);
+		return $mainQuery;
+	}
 	
 	public function loadSql($param = array()){
 		// configura e ajusta as variáveis
@@ -1093,7 +1204,6 @@ class FlexFields extends Module {
 			$leftJoin = array();
 			$virgula = "";
 		}
-
 
 		/*
 		 * SEARCH?

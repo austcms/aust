@@ -98,5 +98,6 @@ class ApiQueryParser {
 		return $fields;
 	}
 	
+	
 }
 ?>

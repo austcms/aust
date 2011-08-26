@@ -136,7 +136,8 @@ class Aust {
 						(name, description, class, father_id)
 					VALUES
 						('$name', '$description', 'site', '0')";
-		return Connection::getInstance()->exec($sql);
+		Connection::getInstance()->exec($sql);
+		return Connection::getInstance()->lastInsertId();
 	}
 	
 	/**

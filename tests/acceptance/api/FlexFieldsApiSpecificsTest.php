@@ -4,7 +4,7 @@
  */
 require_once 'tests/config/auto_include.php';
 
-class FlexFieldsSpecificAPITest extends PHPUnit_Framework_TestCase
+class FlexFieldsApiSpecificsTest extends PHPUnit_Framework_TestCase
 {
 	
 	/*
@@ -12,6 +12,11 @@ class FlexFieldsSpecificAPITest extends PHPUnit_Framework_TestCase
 	 */
 	public $newsId;
 
+	/*
+	 * We're creating a News structure, then inserting some data and 
+	 * saving some images within a record.
+	 * 
+	 */
     public function setUp(){
 		installModule('textual');
 		
@@ -37,7 +42,6 @@ class FlexFieldsSpecificAPITest extends PHPUnit_Framework_TestCase
 
 		$news = Connection::getInstance()->query("SELECT id FROM news LIMIT 1");
 		$this->newsId = $news[0]['id'];
-
 		/* insert news' images */
 		$sql = "INSERT INTO news_images
 					(maintable_id, type, title,
@@ -60,7 +64,7 @@ class FlexFieldsSpecificAPITest extends PHPUnit_Framework_TestCase
 						'uploads/2011/08/789.jpg',
 						'789.jpg', 'image/jpeg', 'images'
 						)
-				";
+		";
 		Connection::getInstance()->exec($sql);
 		
 		$site = Connection::getInstance()->query("SELECT id FROM taxonomy WHERE class='site' LIMIT 1");
@@ -76,7 +80,6 @@ class FlexFieldsSpecificAPITest extends PHPUnit_Framework_TestCase
 		$api = new Api();
 		$result = $api->dispatch("query=news&include_fields=images", false);
 		$result = json_decode($result, true);
-		//pr($result);
 		$this->assertEquals(3, count($result['result']));
 		$this->assertEquals($this->newsId, $result['result'][0]['id']);
 		$this->assertEquals("New Service Offers Music in Quantity, Not by Song", $result['result'][0]['title']);
@@ -88,9 +91,10 @@ class FlexFieldsSpecificAPITest extends PHPUnit_Framework_TestCase
 
 	 function testRetrievingTheLastFourteenPhotosInsertedInFlexFields(){
 		$api = new Api();
-		$result = $api->dispatch("?", false);
+		$result = $api->dispatch("query=news&last_images=2", false);
 		$result = json_decode($result, true);
-//		$this->assertEquals(2, count($result['result']));
+		$this->assertEquals(2, count($result['result']));
+		$this->assertEquals('image/jpeg', $result['result'][0]['file_type']);
 	 }
 
 }
