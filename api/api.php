@@ -12,7 +12,10 @@ if(!defined('THIS_TO_BASEURL')){
 include_once(THIS_TO_BASEURL."core/config/variables.php");
 include(CLASS_LOADER);
 
+if( empty($austApiQueryString) )
+	$austApiQueryString = $_GET;
+
 $application = new Api();
-$application->dispatch($_GET);
+$application->dispatch($austApiQueryString);
 
 ?>
