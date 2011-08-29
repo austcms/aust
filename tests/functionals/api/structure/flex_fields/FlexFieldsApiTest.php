@@ -5,9 +5,14 @@ require_once 'tests/config/auto_include.php';
 class FlexFieldsApiTest extends PHPUnit_Framework_TestCase
 {
 
-	public function setUp(){
-		$this->obj = new ApiTransaction();
-	}
+	/*
+	 * A id of any record in the News table
+	 */
+	public $newsId;
+
+    public function setUp(){
+        $this->obj = new ApiTransaction();
+    }
 
 	function createContent(){
 		Fixture::getInstance()->createApiData();
@@ -26,6 +31,9 @@ class FlexFieldsApiTest extends PHPUnit_Framework_TestCase
 						)
 				";
 		Connection::getInstance()->exec($sql);
+
+		$news = Connection::getInstance()->query("SELECT id FROM news LIMIT 1");
+		$this->newsId = $news[0]['id'];
 	}
 	
 	function testAskVersionJson(){

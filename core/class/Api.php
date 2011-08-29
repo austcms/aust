@@ -51,10 +51,12 @@ class Api {
 	/**
 	 * This methods ignites the process of mining for data and retrieving as JSON/XML
 	 */
-	public function dispatch($get){
+	public function dispatch($get, $print = true){
 		$transaction = new ApiTransaction();
 		$solution = $transaction->perform($get);
-		echo $solution;
+		if( $print )
+			echo $solution;
+		return $solution;
 	}
 	
 	public function installationDiagnostics(){

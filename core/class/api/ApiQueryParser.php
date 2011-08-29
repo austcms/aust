@@ -19,8 +19,12 @@ class ApiQueryParser {
 			$structure = $get['structure'];
 		else
 			return false;
+
+		$params = array();
+		if( !empty($get['module']) )
+			$params['module'] = $get['module'];
 		
-		return Aust::getInstance()->getStructureIdByName($structure);
+		return Aust::getInstance()->getStructureIdByName($structure, $params);
 	}
 	
 	public function fields($get){
@@ -79,6 +83,21 @@ class ApiQueryParser {
 	public function limit($get){
 		return ( empty($get['limit']) ) ? '100' : $get['limit'];
 	}
+	
+	public function includeFields($get){
+		if( empty($get['include_fields']) )
+			return false;
+
+		if( $get['include_fields'] == "*" )
+			return "*";
+		
+		$fields = explode(';', $get['include_fields']);
+		if( empty($fields) )
+			return false;
+			
+		return $fields;
+	}
+	
 	
 }
 ?>

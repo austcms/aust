@@ -362,50 +362,6 @@ class Files extends Module
 
 		return false;
 	}
-	/**
-	 * loadSql($params)
-	 *
-	 * @param <array> $param
-	 * @return <bool>
-	 */
-	public function loadSqltest($param) {
-
-		/*
-		 * Configura e ajusta as variáveis
-		 */
-		$categorias = $param;
-		$limit = (empty($param['limit']) ) ? ' LIMIT 30' : ' LIMIT '.$param['limit'];
-		/*
-		 * Se $categorias estiver vazio (nunca deverá acontecer)
-		 */
-		if(!empty($categorias)) {
-			$order = ' ORDER BY created_on DESC, id DESC';
-			$where = ' WHERE ';
-			$c = 0;
-			foreach($categorias as $key=>$value) {
-				if($c == 0)
-					$where = $where . 'categoria_id=\''.$key.'\'';
-				else
-					$where = $where . ' OR categoria_id=\''.$key.'\'';
-				$c++;
-			}
-		}
-		// SQL para verificar na tabela CADASTRO_CONF quais campos existem
-		$sql = "SELECT
-					*, DATE_FORMAT(created_on, '%d/%m/%Y %H:%i') as data, categoria_id AS cat,
-					(	SELECT
-						nome
-				FROM
-					categorias AS c
-				WHERE
-					id=cat
-					) AS node
-				FROM
-					arquivos AS conf
-				".$where.$order.$limit;
-
-		return $sql;
-	}
 
 }
 ?>

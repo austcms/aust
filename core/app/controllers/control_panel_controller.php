@@ -49,11 +49,11 @@ class Control_panelController extends ActionController {
 	function install_structure(){
 		$result = Aust::getInstance()->createStructure(
 						array(
-							'name'			 => $_POST['nome'],
-							'site'			   => $_POST['categoria_chefe'],
-							'public'		   => $_POST['publico'],
-							'module'		   => $_POST['modulo'],
-							'author'		   => User::getInstance()->LeRegistro('id')
+							'name'		=> $_POST['nome'],
+							'site'		=> $_POST['categoria_chefe'],
+							'public'	=> $_POST['publico'],
+							'module'	=> $_POST['modulo'],
+							'author'	=> User::getInstance()->LeRegistro('id')
 						)
 					);
 
