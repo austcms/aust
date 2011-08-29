@@ -154,11 +154,12 @@ ul.tabs a.current, ul.tabs a.current:hover, ul.tabs li.current a {
 	width: 720px;
 	margin: 10px 0 0 0;
 	border-radius: 10px;
-	height: 250px;
-	background: url('../../img/bg_art/no_structure_bg.jpg') #f3f2f2 bottom no-repeat;
-	-webkit-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
-	-moz-box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
-	box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+	height: 170px;
+	/* background: url('../../img/bg_art/no_structure_bg.jpg') #f3f2f2 bottom no-repeat; */
+	background: #f3f2f2 bottom no-repeat;
+	-webkit-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+	-moz-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+	box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 	#no_structure .containner {
