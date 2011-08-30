@@ -9,6 +9,8 @@ class SetupController extends ModActionController
 {
 
 	function beforeFilter(){
+		
+		$_POST['name'] = trim($_POST['name']);
 		$_SESSION['exPOST'] = $_POST;
 		$this->set('exPOST', $_SESSION['exPOST']);
 		
