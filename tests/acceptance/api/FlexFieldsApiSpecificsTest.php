@@ -23,6 +23,8 @@ class FlexFieldsApiSpecificsTest extends PHPUnit_Framework_TestCase
 		Connection::getInstance()->exec('DELETE FROM flex_fields_config');
 		Fixture::getInstance()->createApiData();
 		Connection::getInstance()->exec('DELETE FROM news');
+		Connection::getInstance()->exec('DELETE FROM news_files');
+		Connection::getInstance()->exec('DELETE FROM news_images');
 		Connection::getInstance()->exec('DELETE FROM textual');
 		/* insert news */
 		$sql = "INSERT INTO news
@@ -42,6 +44,7 @@ class FlexFieldsApiSpecificsTest extends PHPUnit_Framework_TestCase
 
 		$news = Connection::getInstance()->query("SELECT id FROM news LIMIT 1");
 		$this->newsId = $news[0]['id'];
+
 		/* insert news' images */
 		$sql = "INSERT INTO news_images
 					(maintable_id, type, title,
@@ -67,8 +70,39 @@ class FlexFieldsApiSpecificsTest extends PHPUnit_Framework_TestCase
 		";
 		Connection::getInstance()->exec($sql);
 		
-		$site = Connection::getInstance()->query("SELECT id FROM taxonomy WHERE class='site' LIMIT 1");
+		/* insert news' images */
+		$sql = "INSERT INTO news_files
+					(maintable_id, type, title,
+					file_systempath,
+					file_path,
+					file_name, file_type, reference_field)
+					VALUES
+						('".$this->newsId."', 'main', NULL,
+						'~/code/aust/uploads/2011/08/123.mp3',
+						'uploads/2011/08/123.mp3',
+						'123.mp3', 'image/mp3', 'a_song'
+						),
+						('".$this->newsId."', 'main', NULL,
+						'~/code/aust/uploads/2011/08/456.mp3',
+						'uploads/2011/08/456.mp3',
+						'456.mp3', 'image/mp3', 'a_song'
+						),
+						('".$this->newsId."', 'main', NULL,
+						'~/code/aust/uploads/2011/08/789.mp3',
+						'uploads/2011/08/789.mp3',
+						'789.mp3', 'image/mp3', 'a_song'
+						)
+		";
+		Connection::getInstance()->exec($sql);		
     	
+	}
+	
+	function testExpectations(){
+		$this->assertTrue( Connection::getInstance()->hasTable('news_files') );
+		$filesResult = Connection::getInstance()->query('select * from news_files');
+		$empty = empty( $filesResult );
+		$this->assertFalse( $empty );
+		$this->assertEquals( 3, count($filesResult) );
 	}
 	
 	/*
@@ -88,6 +122,19 @@ class FlexFieldsApiSpecificsTest extends PHPUnit_Framework_TestCase
 		
 		$this->assertEquals(3, count($result['result'][0]['images']), 'FlexFields\' images are not being loaded.');
 	 }
+
+		 function testFlexFieldsUseCaseLotsOfFiles(){
+			$api = new Api();
+			$result = $api->dispatch("query=news&include_fields=a_song", false);
+			$result = json_decode($result, true);
+			$this->assertEquals(3, count($result['result']));
+			$this->assertEquals($this->newsId, $result['result'][0]['id']);
+			$this->assertEquals("New Service Offers Music in Quantity, Not by Song", $result['result'][0]['title']);
+		
+			$item = $result['result'][0];
+		
+			$this->assertEquals(3, count($result['result'][0]['a_song']), 'FlexFields\' files are not being loaded.');
+		 }
 
 	 function testRetrievingTheLastFourteenPhotosInsertedInFlexFields(){
 		$api = new Api();

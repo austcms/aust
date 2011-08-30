@@ -145,6 +145,11 @@ class Fixture {
 						'description' => 'A field for images :)',
 					),
 					array(
+						'name' => 'A song',
+						'type' => 'files',
+						'description' => 'A field for songs',
+					),
+					array(
 						'name' => 'Relational 1-n-1',
 						'type' => 'relational_onetoone',
 						'description' => 'haha777',
