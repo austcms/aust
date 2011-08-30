@@ -36,11 +36,11 @@ table.listing {
 	}
 		table.listing tr.list td {
 			color: #888888; text-transform: uppercase;
-						border-bottom: 1px solid #f1f1f1;
+			border-bottom: 1px solid #f1f1f1;
 			font-size: 0.9em;
 			padding: 6px 0 6px 10px;
-
 		}
+
 		/* Pane sem conteúdo */
 		div.panes .sem_conteudo {
 			display: inline-block; margin: 0 10px 10px 10px;

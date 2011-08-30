@@ -113,7 +113,7 @@ span.viewmode {
 	}
 	#mod_imagens #thumbs_view span.item div.image img { border: none; }
 
-/* mod_cadastro */
+/* mod_flex_fields */
 	#lightbox-panel img {
 		border: 1px solid #ddd;
 	}
@@ -146,6 +146,22 @@ span.viewmode {
 			margin: 0px 0 5px 12px;
 		}
 
+	/* installation */
+	#installation div.listing .fields_setup { width: 720px; background: #eee; display: table; }
+	#installation div.listing .fields_setup .fields_setup_container { margin: 10px; }
+
+		#installation div.listing .fields_setup .field {
+			width: 100%; display: table;
+			padding: 5px 0;
+		}
+		#installation div.listing .fields_setup .column { float: left; }
+		
+		#installation div.field_number { width: 15px; text-align: center; }
+		#installation div.field_name { width: 180px; }
+		#installation div.field_type { width: 300px; }
+		#installation div.field_description { width: 200px; }
+		
+		#installation #new_field_button { margin: 10px; text-align: right; }
 	
 /* MOD_CART */
 .listagem div.transaction {

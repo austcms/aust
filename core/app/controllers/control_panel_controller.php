@@ -4,10 +4,10 @@ class Control_panelController extends ActionController {
 	public $directory;
 	
 	function beforeFilter(){
-		if( !empty($_POST['inserirestrutura']) &&
+		if( !empty($_POST['new_structure']) &&
 			(
-				is_file( MODULES_DIR.$_POST['modulo'].'/'.MOD_SETUP_CONTROLLER )
-				OR is_file( MODULES_DIR.$_POST['modulo'].'/setup.php' )
+				is_file( MODULES_DIR.$_POST['module'].'/'.MOD_SETUP_CONTROLLER )
+				OR is_file( MODULES_DIR.$_POST['module'].'/setup.php' )
 			)
 		){
 			$this->customAction = "setup";
@@ -32,7 +32,7 @@ class Control_panelController extends ActionController {
 		 *
 		 * Se instalar uma estrutura a partir de um módulo com setup.php próprio, faz include neste arquivo para configuração
 		 */
-		if(!empty($_POST['inserirestrutura'])  AND !is_file(MODULES_DIR.$_POST['modulo'].'/setup.php')) {
+		if(!empty($_POST['new_structure'])  AND !is_file(MODULES_DIR.$_POST['module'].'/setup.php')) {
 			$this->install_structure();
 		}
 		
@@ -49,10 +49,10 @@ class Control_panelController extends ActionController {
 	function install_structure(){
 		$result = Aust::getInstance()->createStructure(
 						array(
-							'name'		=> $_POST['nome'],
-							'site'		=> $_POST['categoria_chefe'],
-							'public'	=> $_POST['publico'],
-							'module'	=> $_POST['modulo'],
+							'name'		=> $_POST['name'],
+							'site'		=> $_POST['site'],
+							'public'	=> $_POST['public'],
+							'module'	=> $_POST['module'],
 							'author'	=> User::getInstance()->LeRegistro('id')
 						)
 					);
@@ -129,9 +129,9 @@ class Control_panelController extends ActionController {
 	}
 	
 	function setup(){
-		if( is_file( MODULES_DIR.$_POST['modulo'].'/'.MOD_SETUP_CONTROLLER ) ){
+		if( is_file( MODULES_DIR.$_POST['module'].'/'.MOD_SETUP_CONTROLLER ) ){
 
-			$modDir = $_POST['modulo'].'/';
+			$modDir = $_POST['module'].'/';
 			include(MODULES_DIR.$modDir.MOD_CONFIG);
 			/**
 			 * Carrega classe do módulo e cria objeto
@@ -154,7 +154,7 @@ class Control_panelController extends ActionController {
 			//	$include_baseurl = MODULES_DIR.$_POST['modulo']; // necessário para o arquivo jsloader.php saber onde está fisicamente
 			//	include_once(MODULES_DIR.$_POST['modulo'].'/js/jsloader.php');
 			//}
-			include(MODULES_DIR.$_POST['modulo'].'/'.MOD_SETUP_CONTROLLER);
+			include(MODULES_DIR.$_POST['module'].'/'.MOD_SETUP_CONTROLLER);
 
 			$setupAction = ( empty( $_POST['setupAction'] ) ) ? '' : $_POST['setupAction'];
 			/**
@@ -162,13 +162,13 @@ class Control_panelController extends ActionController {
 			 * 'exPOST': possui $_POST enviados anteriormente.
 			 */
 			$params = array(
-				'modDir' => $_POST['modulo'],
+				'modDir' => $_POST['module'],
 				'action' => $setupAction,
 				'exPOST' => $_POST,
 			);
 			$this->autoRender = false;
 			
-			$setup = new ModDispatcher( $_POST['modulo'], "setup");
+			$setup = new ModDispatcher( $_POST['module'], "setup");
 			$setup->dispatch();
 
 			unset($modulo);

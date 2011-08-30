@@ -99,13 +99,19 @@ div#link_bottom {
 	}
 
 /* PANES */
-table.listing tr.list { background: #f6f6f6; }
-table.listing tr.footer { background: #fdfdfd; }
-table.listing tr.header { background: url('top.jpg') #025d96; /* #edf6ff */ }
-	table.listing tr.header td {
-		color: #dadada; font-weight: bold; /* #888888; */
-		text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-	}
+	table.listing tr.list { background: #f6f6f6; }
+	table.listing tr.footer { background: #fdfdfd; }
+	
+	table.listing tr.header,
+		div.listing div.header {
+			background: url('top.jpg') #025d96 !important; /* #edf6ff */
+		}
+	
+		table.listing tr.header td,
+		 	div.listing div.header {
+				color: #dadada; font-weight: bold; /* #888888; */
+				text-shadow: 1px 1px 0px rgba(0, 0, 0, 0.5);
+			}
 
 /* TAB PANE -> table.listing - Painel Gerenciar e Configurações*/
 div.panes div.background { background: #fdfdfd; }

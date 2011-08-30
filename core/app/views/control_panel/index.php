@@ -100,10 +100,10 @@ if(User::getInstance()->LeRegistro('group') == 'Webmaster'):
 							Selecione abaixo o site, o módulo adequado e o nome da estrutura (ex.: Notícias, Artigos, Arquivos).
 						</p>
 						<form action="adm_main.php?section=<?php echo $_GET['section'];?>" method="post" class="simples pequeno">
-							<input type="hidden" value="1" name="publico" />
+							<input type="hidden" value="1" name="public" />
 							<div class="campo">
 								<label>Categoria-chefe: </label>
-									<select name="categoria_chefe">
+									<select name="site">
 										<?php
 										Aust::getInstance()->getAllSites(Array('id', 'name'), '<option value="&%id">&%name</option>', '', '');
 										?>
@@ -112,7 +112,7 @@ if(User::getInstance()->LeRegistro('group') == 'Webmaster'):
 							<br />
 							<div class="campo">
 								<label>Módulo: </label>
-									<select name="modulo">
+									<select name="module">
 										<?php									
 										foreach( $modulesList as $moduloDB ){
 
@@ -130,12 +130,12 @@ if(User::getInstance()->LeRegistro('group') == 'Webmaster'):
 							<div class="campo">
 								<label>Nome da estrutura:</label>
 								<div class="input">
-									<input type="text" name="nome" class="input" />
+									<input type="text" name="name" class="input" />
 									<p class="explanation">Ex.: Notícias, Artigos</p>
 								</div>
 							</div>
 							<div class="campo">
-								<input type="submit" name="inserirestrutura" value="Criar estrutura" class="submit" />
+								<input type="submit" name="new_structure" value="Criar estrutura" class="submit" />
 							</div>
 
 						</form>

@@ -88,7 +88,8 @@ table.form {
 		}
 	/* Acima de cada listagem há um painel de controle para excluir, bloquear itens, etc */
 	div.painel_de_controle { margin-bottom: 10px; padding: 0; float: right; }
-	/* Tabela para listagem, seja de conteúdo ou usuários */
+
+/* TABLE.LISTING */
 table.listing { width: 100%; margin: 0px; clear: both; border-collapse: collapse;}
 	table.listing tr td { padding: 5px; }
 	table.listing tr td { padding: 5px; margin: 0px;}
@@ -115,7 +116,21 @@ table.listing { width: 100%; margin: 0px; clear: both; border-collapse: collapse
 		table.listing tr.conteudo td div.campooptions div.campooptions_tabela {  }
 		table.listing tr.conteudo td div.campooptions div.campooptions_campo {  }
 
-table.listing td.adddate { width: 110px; }
+	table.listing td.adddate { width: 110px; }
+
+/* DIV.LISTING - same as table.listing */
+	div.listing { width: 100%; margin: 0px; clear: both; }
+		div.listing .column { float: left; }
+
+		div.listing div.header {
+			color: #333;
+			font-weight: bold;
+			background: #ddd;
+			display: table;
+			width: 720px; 
+		}
+		div.listing .header .header_container { margin: 10px; width: 700px; display: table; }
+
 
 /* FormHelper (cadastros) */
 form.formHelper { }

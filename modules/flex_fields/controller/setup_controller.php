@@ -11,6 +11,7 @@ class SetupController extends ModActionController
 	function beforeFilter(){
 		$_SESSION['exPOST'] = $_POST;
 		$this->set('exPOST', $_SESSION['exPOST']);
+		
 		if( !empty($_POST) && !empty($_POST['setupAction']) ){
 			$this->customAction = $_POST['setupAction'];
 		}
@@ -18,7 +19,7 @@ class SetupController extends ModActionController
 	}
 
 	function index(){
-
+		$this->set('fieldsQuantity', 2);
 	}
 	/**
 	 * setuppronto()
@@ -75,9 +76,9 @@ class SetupController extends ModActionController
 		 * Parâmetros para gravar uma nova estrutura no DB.
 		 */
 		$params = array(
-			'name' => $_POST['nome'],
-			'site' => $_POST['categoria_chefe'],
-			'module' => $_POST['modulo'],
+			'name' => $_POST['name'],
+			'site' => $_POST['site'],
+			'module' => $_POST['module'],
 			'author' => User::getInstance()->getId(),
 			'fields' => $fields,
 			'options' => array(
