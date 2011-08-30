@@ -1008,53 +1008,6 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 			}
 
 
-		function testSaveStructureConfiguration(){
-			// testa as configurações sobre o flex_fields que não
-			// tem a ver com os campos.
-			$this->obj->connection->exec("DELETE FROM flex_fields_config WHERE node_id='777'");
-			
-			$this->obj->austNode = 777;
-			$params = array(
-				'approval' => 1,
-				'pre_password' => '123',
-				'description' => 'descrição 777',
-			);
-			
-			$this->obj->saveStructureConfiguration($params);
-			$this->obj->saveStructureConfiguration($params);
-			$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='approval' AND type='config' AND node_id='777'");
-			$this->assertArrayHasKey('0', $conf );
-			$this->assertArrayNotHasKey('1', $conf );
-			$this->assertEquals('1', $conf[0]['value'] );
-
-			$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='pre_password' AND type='config' AND node_id='777'");
-			$this->assertArrayHasKey('0', $conf );
-			$this->assertArrayNotHasKey('1', $conf );
-			$this->assertEquals('123', $conf[0]['value'] );
-
-			$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='description' AND type='config' AND node_id='777'");
-			$this->assertArrayHasKey('0', $conf );
-			$this->assertArrayNotHasKey('1', $conf );
-			$this->assertEquals('descrição 777', $conf[0]['value'] );
-			
-			$this->obj->connection->exec("DELETE FROM flex_fields_config WHERE node_id='777'");
-			// test PARÂMETROS
-			$params = array(
-				'options' => array(
-					'approval' => 0,
-				),
-			);
-			
-			$this->obj->saveStructureConfiguration($params);
-			$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='approval' AND type='config' AND node_id='777'");
-			$this->assertArrayHasKey('0', $conf );
-			$this->assertArrayNotHasKey('1', $conf );
-			$this->assertEquals('0', $conf[0]['value'] );
-			
-			$this->obj->connection->exec("DELETE FROM flex_fields_config WHERE node_id='777'");
-		}
-		
-		
 		// executa a criação de uma nova estrutura inteira
 		function testCreateStructure(){
 		
@@ -1092,11 +1045,6 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 						'refField' => 'ref_field',
 					),
 				),
-				'options' => array(
-					'approval' => 'haha777',
-					'pre_password' => 'haha777',
-					'description' => 'haha777',
-				),
 				
 			);
 			
@@ -1118,21 +1066,6 @@ class FlexFieldsSetupTest extends PHPUnit_Framework_TestCase
 			
 			// verifica configurações da tabela
 				// test 3.1
-				$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='description' AND type='config' AND node_id='$austNode'");
-				$this->assertArrayHasKey('0', $conf );
-				$this->assertEquals('haha777', $conf[0]['value'], 'Did not save description. #3.1' );
-				$this->assertEquals($austNode, $conf[0]['node_id'], 'Did not save austNode.' );
-				// test 3.2
-				$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='pre_password' AND type='config' AND node_id='$austNode'");
-				$this->assertArrayHasKey('0', $conf );
-				$this->assertEquals('haha777', $conf[0]['value'], 'Did not save pre_password. #3.2' );
-				$this->assertEquals($austNode, $conf[0]['node_id'], 'Did not save austNode.' );
-				// test 3.3
-				$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='approval' AND type='config' AND node_id='$austNode'");
-				$this->assertArrayHasKey('0', $conf );
-				$this->assertEquals('haha777', $conf[0]['value'], 'Did not save approval. #3.3' );
-				$this->assertEquals($austNode, $conf[0]['node_id'], 'Did not save austNode.' );
-				// test 3.4
 				$conf = $this->obj->connection->query("SELECT * FROM flex_fields_config WHERE property='table' AND type='structure' AND node_id='$austNode'");
 				$this->assertArrayHasKey('0', $conf );
 				$this->assertEquals('testunit', $conf[0]['value'], 'Did not save table properties. #3.4' );

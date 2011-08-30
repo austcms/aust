@@ -139,7 +139,7 @@ ul.tabs a.current, ul.tabs a.current:hover, ul.tabs li.current a {
 /* Structure Control Panel */
 #structure_configuration .structure_variables .header {
 	background: #686868;
-	color: #d5d5d5;
+	color: #e1e1e1;
 	padding: 10px;
 	font-weight: bold;
 	-moz-border-radius-topleft: 3px;

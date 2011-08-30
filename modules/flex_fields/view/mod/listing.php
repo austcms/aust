@@ -7,7 +7,7 @@
 
 // configuração: ajusta variáveis
 $tabela = $module->LeTabelaDeDados($_GET['aust_node']);
-$precisa_approval = $module->pegaConfig(Array('structure'=>$_GET['aust_node'], 'chave'=>'approval'));
+$precisa_approval = $module->getStructureConfig("new_record_requires_approval");
 ?>
 
 <h2><?php echo Aust::getInstance()->getStructureNameById($_GET['aust_node']);?></h2>

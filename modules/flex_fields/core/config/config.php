@@ -81,6 +81,13 @@ $modInfo = array(
 			"label" => "Categoria criável?",
 			"inputType" => "checkbox",
 		),
+		'new_record_requires_approval' => array(
+			"value" => "0",
+			"label" => "Novos registros requerem aprovação",
+			"inputType" => "checkbox",
+			"help" => 'Por padrão, novos registros são colocados como'.
+					  '<em>Aprovação Pendente</em>, dependendo que um admin aceite.',
+		),
 	),
 
 	/*

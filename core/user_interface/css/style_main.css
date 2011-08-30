@@ -79,12 +79,39 @@ div.body {
 			width: 700px;
 		}
 			#structure_configuration .structure_variables .item:hover { background: #f6f6f6; }
-		#structure_configuration .structure_variables .item label {
-			float: left; width: 65%; cursor: pointer; padding: 10px 0px;
+		#structure_configuration .structure_variables .item .configuration_variable_label {
+			float: left; width: 45%; cursor: pointer; padding: 10px 0px;
 		}
 		#structure_configuration .structure_variables .item div.input { 
-			float: left; width: 35%; padding: 10px 0px;
+			float: left; width: 55%; padding: 10px 0px;
 		}
+
+		#structure_configuration .structure_variables .item .input .sub_item {
+			display: table;
+			width: 99%;
+			padding: 5px 0 5px 0;
+			border-bottom: 1px solid #eaeaea;
+			border-top: 1px solid #fefefe;
+		}
+			.input .sub_item:first-child {
+				border-top: 0 !important;
+			}
+			.input .sub_item:last-child {
+				border-bottom: 0 !important;
+			}
+				
+			#structure_configuration .structure_variables .item .sub_labels {
+				float: left; width: 50%;
+				text-align: right;
+				margin: 0 5px 5px 0;
+			}
+			#structure_configuration .structure_variables .item .sub_inputs {
+				float: left; width: 40%;
+			}
+			.item .sub_item span.hint {
+				float: right !important;
+				opacity: 0.5;
+			}
 
 			#structure_configuration .structure_variables input[type=submit] { margin: 10px; }
 

@@ -164,11 +164,6 @@ class Fixture {
 						'refField' => 'ref_field',
 					),
 				),
-				'options' => array(
-					'approval' => '',
-					'pre_password' => '',
-					'description' => '',
-				),
 			
 			);
 		

@@ -939,38 +939,7 @@ class FlexFieldsSetup extends ModsSetup {
 
 		foreach( $params as $key=>$value ){
 			
-			if( $key == 'approval' ){
-				Connection::getInstance()->exec("DELETE FROM flex_fields_config WHERE type='config' AND property='approval' AND node_id='$austNode'");
-				$sql =
-					"INSERT INTO
-						flex_fields_config
-						(type,property,value,name,specie,node_id,created_on,admin_id,deactivated,disabled,public,restricted,approved)
-					VALUES
-						('config','approval','".$value."','Aprovação','bool',".$austNode.", '".date('Y-m-d H:i:s')."', '".$this->user."',0,0,1,0,1)
-					";
-				Connection::getInstance()->exec($sql);
-
-			} else if( $key == 'pre_password' ){
-				Connection::getInstance()->exec("DELETE FROM flex_fields_config WHERE type='config' AND property='pre_password' AND node_id='$austNode'");
-				$sql =
-					"INSERT INTO
-						flex_fields_config
-						(type,property,value,name,specie,node_id,created_on,admin_id,deactivated,disabled,public,restricted,approved)
-					VALUES
-						('config','pre_password','".$value."','Pré-Senha','string',".$austNode.", '".date('Y-m-d H:i:s')."', '".$this->user."',0,0,1,0,1)
-					";
-				Connection::getInstance()->exec($sql);
-			} else if( $key == 'description' ){
-				Connection::getInstance()->exec("DELETE FROM flex_fields_config WHERE type='config' AND property='description' AND node_id='$austNode'");
-				$sql =
-					"INSERT INTO
-						flex_fields_config
-						(type,property,value,name,specie,node_id,created_on,admin_id,deactivated,disabled,public,restricted,approved)
-					VALUES
-						('config','description','".$value."','Descrição','blob',".$austNode.", '".date('Y-m-d H:i:s')."', '".$this->user."',0,0,1,0,1)
-					";
-				Connection::getInstance()->exec($sql);
-			} else if( $key == 'table' ){
+			if( $key == 'table' ){
 				Connection::getInstance()->exec("DELETE FROM flex_fields_config WHERE type='structure' AND property='table' AND node_id='$austNode'");
 				$sql =
 					"INSERT INTO

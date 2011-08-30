@@ -294,6 +294,112 @@ if(!empty($_GET['function'])){
 	</div>
 <?php } ?>
 
+<div class="structure_variables config_items">
+
+	<div class="header">
+		Configurações dos campos
+		<?php tt('Configure cada um dos campos individualmente.'); ?>
+	</div>
+	<form method="post" action="adm_main.php?section=control_panel&aust_node=<?php echo $_GET['aust_node']; ?>&action=structure_configuration">
+		<input type="hidden" name="conf_type" value="structure" />
+		<input type="hidden" name="conf_class" value="field" />
+		<input type="hidden" name="aust_node" value="<?php echo $_GET['aust_node']; ?>" />
+
+		<?php
+		$configurations = $module->loadModConf(null,'field');
+		$fields = $module->getFields(false);
+		if( !empty($fields) && is_array($fields) ){
+
+			foreach( $fields as $fieldName=>$fieldOptions ){
+				if( empty($fieldOptions["value"]) )
+					continue;
+				?>
+
+				<div class="item">
+					<label class="configuration_variable_label" for="<?php echo $fieldName ?>_input">
+						<?php echo $fieldOptions['value']; ?>
+					</label>
+					<div class="input">
+						<?php
+						if( empty($configurations[$fieldName]) )
+							$configurations[$fieldName] = array();
+
+						foreach( $configurations[$fieldName] as $key=>$options ){
+						
+							if( !empty($options['field_type']) AND
+								$options['field_type'] != $fieldOptions['specie']
+							)
+								continue;
+							
+							?>
+							<div class="sub_item">
+								<div class="sub_labels">
+									<?php
+									if( !empty($options['label']) ){
+										?>
+											<label for="<?php echo $fieldName ?>_<?php echo $key; ?>"><?php echo $options['label']; ?></label>
+										<?php
+									} else {
+										echo "não possui label.";
+									}
+									?>
+								</div>
+								<div class="sub_input">
+									<?php
+									if( !empty($options["inputType"]) &&
+										$options["inputType"] == "checkbox" )
+									{
+
+										/*
+										 * Verifica valores no banco de dados.
+										 */
+
+										$checked = "";
+										if( !empty($options['value'])
+											AND $options['ref_field'] == $fieldName
+			 								)
+										{
+											if( $options["value"] == "1" ){
+												$checked = 'checked="checked"';
+											}
+										}
+										?>
+										<input type="hidden" name="data[<?php echo $fieldName ?>][<?php echo $key; ?>]" value="0" />
+
+										<input type="checkbox" id="<?php echo $fieldName ?>_<?php echo $key; ?>" name="data[<?php echo $fieldName ?>][<?php echo $key; ?>]" <?php echo $checked; ?> value="1" class="input" />
+				
+										<?php
+									}
+
+									else {
+										$size = '';
+										if( !empty($options['size']) &&
+										 	$options['size'] == 'small' )
+											$size = '2';
+										?>
+										<input type="text" id="<?php echo $fieldName ?>_<?php echo $key; ?>" size="<?php echo $size?>" name="data[<?php echo $fieldName ?>][<?php echo $key; ?>]" value="<?php echo $options['value'] ?>" class="input" />
+										<?php
+									}
+									if( !empty($options["help"]) )
+										tt($options["help"]);
+									?>
+								</div>
+							</div>
+							<?php
+						}
+						?>
+
+					</div>
+				</div>
+				<?php
+			}
+		}
+		?>
+		<input type="submit" name="submit" value="Salvar configurações dos campos" />
+	</form>
+
+</div>
+
 <div class="widget_group">
 
 	<?php
@@ -385,134 +491,6 @@ if(!empty($_GET['function'])){
 			?>
 			</ul>
 
-		</div>
-		<div class="footer"></div>
-	</div>
-
-	<?php
-	/**
-	 * NOVOS CAMPOS
-	 *
-	 * Form para inserir novos campos em um cadastro
-	 */
-	?>
-	<div class="widget">
-		<div class="titulo">
-			<h3>Novo Campo</h3>
-		</div>
-		<div class="content">
-			<p>Insira um novo campo.</p>
-			<form method="post" action="<?php echo Config::getInstance()->self;?>" class="simples pequeno">
-				<input type="hidden" name="add_field" value="1" />
-
-				<?php
-				/*
-				 * Input CAMPO: Contém o nome do campo
-				 */
-				?>
-				<div class="campo">
-					<label>Nome:</label>
-					<div class="input">
-						<input type="text" name="data[name]" class="input" />
-					</div>
-				</div>
-				<br clear="both" />
-				<?php
-				/*
-				 * Input CAMPO_TIPO: Contém o tipo do campo
-				 */
-				?>
-				<div class="campo">
-					<label>Tipo: </label>
-					<select name="data[type]" onchange="javascript: SetupCampoRelacionalTabelas(this, '<?php echo 'campooption0'?>', '0')">
-						<option value="string">Texto pequeno</option>
-						<option value="text">Texto médio ou grande</option>
-						<option value="date">Data</option>
-						<option value="pw">Senha</option>
-						<option value="images">Imagens</option>
-						<option value="files">Arquivo</option>
-						<option value="relational_onetoone">Relacional 1-para-1 (tabela)</option>
-						<option value="relational_onetomany">Relacional 1-para-muitos (tabela)</option>
-						<?php
-						/*
-						 * faltam os campos relacionais
-						 */
-						?>
-					</select>
-				</div>
-				<?php // <select> em ajax ?>
-				<div class="campooptions" id="<?php echo 'campooption0'?>">
-					<?php
-					/*
-					 * Se <select campo_tipo> for relacional, então cria dois campos <select>
-					 *
-					 * -<select relacionado_tabela_<n> onde n é igual a $i (sequencia numérica dos campos)
-					 * -<select relacionado_campo_<n> onde n é igual a $i (sequencia numérica dos campos)
-					 */
-					?>
-					<div class="campooptions_tabela" id="<?php echo 'campooption0'?>_tabela"></div>
-					<div class="campooptions_campo" id="<?php echo 'campooption0'?>_campo"></div>
-				</div>
-
-				<?php
-				/*
-				 * Input CAMPO_DESCRICAO: Contém uma descrição do campo
-				 */
-				?>
-				<br clear="both" />
-				<div class="campo_descricao">
-					<label>Descrição: </label>
-					<input type="text" name="data[description]" />
-				</div>
-				<br clear="both" />
-				<?php
-				/*
-				 * Input CAMPO_LOCAL: Indica onde será inserido o novo campo
-				 */
-				?>
-				<div class="campo">
-					<label>Local de inserção do novo campo: </label>
-					<select name="data[order]">
-						<?php
-
-
-						// pega o valor físico do campo da tabela
-						$fields = $module->getFields();
-						$i = 0;
-						foreach($fields as $campo=>$value){
-							// verifica se o campo é editável ou infra-estrutura (ex. de campos: id, adddate, aprovado)
-							$sql = "SELECT
-										value, property
-									FROM
-										flex_fields_config
-									WHERE
-										property='".$campo."' AND
-										node_id='".$_GET['aust_node']."'
-									LIMIT 0,2
-									";
-							$result = $module->connection->query($sql,"ASSOC");
-							$result = $result[0];
-							if( count($result) > 0 ){
-								$i++;
-								// se for primeiro registro, escreve <option> com opção de "ANTES DE <campo>"
-								if($i == "1"){
-									echo '<option value="first_field">Antes de '.$result["value"].'</option>';
-								}
-								echo '<option value="'.$result["property"].'">Depois de '.$result["value"].'</option>';
-							}
-
-						}
-						unset($campo);
-						unset($dados);
-						unset($value);
-						?>
-						
-					</select>
-				</div>
-				<br />
-				<input type="submit" name="novo_campo" value="Criar!" />
-
-			</form>
 		</div>
 		<div class="footer"></div>
 	</div>
@@ -684,238 +662,134 @@ if(!empty($_GET['function'])){
 </div>
 
 <div class="widget_group">
+
 	<?php
 	/**
-	 * CONFIGURAÇÕES
+	 * NOVOS CAMPOS
 	 *
-	 * Listagem dos campos deste cadastro e configuração destes
+	 * Form para inserir novos campos em um cadastro
 	 */
 	?>
 	<div class="widget">
 		<div class="titulo">
-			<h3>Configurações</h3>
+			<h3>Novo Campo</h3>
 		</div>
 		<div class="content">
-			<?php
-			$configurations = $module->loadModConf();
-			if( !empty($configurations) && is_array($configurations) ){
-				?>
-
-				<p>Configure este módulo.</p>
-				<form method="post" action="adm_main.php?section=control_panel&aust_node=<?php echo $_GET['aust_node']; ?>&action=structure_configuration" class="simples pequeno">
-				<input type="hidden" name="conf_type" value="structure" />
-				<input type="hidden" name="aust_node" value="<?php echo $_GET['aust_node']; ?>" />
-				<?php
-
-				foreach( $configurations as $key=>$options ){
-					?>
-
-					<div class="campo">
-						<label><?php echo $options["label"] ?></label>
-						<div class="input">
-							<?php
-							if( $options["inputType"] == "checkbox" ){
-
-								/*
-								 * Verifica valores no banco de dados.
-								 */
-								$checked = "";
-								if( !empty($options['value']) ){
-									if( $options["value"] == "1" ){
-										$checked = 'checked="checked"';
-									}
-								}
-								?>
-								<input type="hidden" name="data[<?php echo $key; ?>]" value="0" />
-
-								<input type="checkbox" name="data[<?php echo $key; ?>]" <?php echo $checked; ?> value="1" class="input" />
-								<?php
-							}
-
-							else {
-								?>
-								<input type="text" name="data[<?php echo $key; ?>]" value="<?php echo $options['value'] ?>" class="input" />
-								<?php
-							}
-							?>
-
-						</div>
-					</div>
-					<br clear="both" />
-
-					<?php
-				}
-				?>
-				<input type="submit" name="submit" value="Salvar" />
-				</form>
-				<?php
-			}
-			?>
-
-		</div>
-		<div class="footer"></div>
-	</div>
-
-	<?php
-	/**
-	 * CONFIGURAÇÕES ESPECÍFICAS DE CAMPOS
-	 */
-	?>
-	<div class="widget">
-		<div class="titulo">
-			<h3>Configurações de Campos</h3>
-		</div>
-		<div class="content">
-			<?php
-			$configurations = $module->loadModConf(null,'field');
-			$fields = $module->getFields(false);
-			if( !empty($configurations) && is_array($configurations) ){
-				?>
-
-				<p>Configure os campos abaixo:</p>
-				<form method="post" action="adm_main.php?section=control_panel&aust_node=<?php echo $_GET['aust_node']; ?>&action=structure_configuration" class="simples pequeno">
-				<input type="hidden" name="conf_type" value="structure" />
-				<input type="hidden" name="conf_class" value="field" />
-				<input type="hidden" name="aust_node" value="<?php echo $_GET['aust_node']; ?>" />
-				<?php
-
-				foreach( $fields as $fieldName=>$fieldOptions ){
-					if( empty($fieldOptions["value"]) )
-						continue;
-					?>
-
-					<div class="campo">
-						<div><?php echo $fieldOptions["value"] ?></div>
-						<div style="margin-left: 15px">
-							<?php
-							if( empty($configurations[$fieldName]) )
-								$configurations[$fieldName] = array();
-
-							foreach( $configurations[$fieldName] as $key=>$options ){
-								
-								if( !empty($options['field_type']) AND
-									$options['field_type'] != $fieldOptions['specie']
-								)
-									continue;
-									
-								?>
-								<div>
-								<?php
-								if( !empty($options["inputType"]) &&
-									$options["inputType"] == "checkbox" )
-								{
-
-									/*
-									 * Verifica valores no banco de dados.
-									 */
-		
-									$checked = "";
-									if( !empty($options['value'])
-										AND $options['ref_field'] == $fieldName
-		 								)
-									{
-										if( $options["value"] == "1" ){
-											$checked = 'checked="checked"';
-										}
-									}
-									?>
-									<input type="hidden" name="data[<?php echo $fieldName ?>][<?php echo $key; ?>]" value="0" />
-
-									<input type="checkbox" name="data[<?php echo $fieldName ?>][<?php echo $key; ?>]" <?php echo $checked; ?> value="1" class="input" />
-						
-									<?php
-								}
-
-								else {
-									$size = '';
-									if( !empty($options['size']) &&
-									 	$options['size'] == 'small' )
-										$size = '5';
-									?>
-									<input type="text" size="<?php echo $size?>" name="data[<?php echo $fieldName ?>][<?php echo $key; ?>]" value="<?php echo $options['value'] ?>" class="input" />
-									<?php
-								}
-								if( !empty($options['label']) ){
-									echo $options['label'];
-								} else {
-									echo "não possui label.";
-								}
-								if( !empty($options["help"]) )
-									tt($options["help"]);
-								?>
-								
-								</div>
-								<?php
-							}
-							?>
-						</div>
-					</div>
-					<?php
-				}
-				?>
-				<input type="submit" name="submit" value="Salvar" />
-				</form>
-				<?php
-			}
-			?>
-
-		</div>
-		<div class="footer"></div>
-	</div>
-
-	<?php
-	/*
-	 * Opções gerais do cadastro
-	 */
-	?>
-	<div class="widget">
-		<div class="titulo">
-			<h3>Opções do cadastro</h3>
-		</div>
-		<div class="content">
-			<p>A seguir, você configurar as principais opções deste cadastro.</p>
+			<p>Insira um novo campo.</p>
 			<form method="post" action="<?php echo Config::getInstance()->self;?>" class="simples pequeno">
+				<input type="hidden" name="add_field" value="1" />
+
 				<?php
-				// busca todos os campos da tabela do cadastro
-				$sql = "SELECT
-							*
-						FROM
-							flex_fields_config
-						WHERE
-							type='config' AND
-							node_id='".$_GET['aust_node']."'
-						";
-				$result = $module->connection->query($sql);
-				foreach($result as $dados){
-					?>
-						<div class="campo">
-							<label><?php echo $dados['name']?>:</label>
-							<?php
-							/*
-							 * Mostra o campo de acordo
-							 */
-							if($dados['specie'] == 'bool'){ ?>
-								<select name="frm<?php echo $dados['property']?>">
-									<option <?php makeselected($dados['value'], '1') ?> value="1">Sim</option>
-									<option <?php makeselected($dados['value'], '0') ?> value="0">Não</option>
-								</select>
-							<?php } elseif($dados['specie'] == 'string') { ?>
-								<input type="text" name="frm<?php echo $dados['property']?>" value="<?php echo $dados['value']?>" />
-							<?php } elseif($dados['specie'] == 'blob') { ?>
-								<textarea name="frm<?php echo $dados['property']?>" cols="35" rows="3"><?php echo $dados['value']?></textarea>
-
-							<?php } else { ?>
-								<textarea name="frm<?php echo $dados['property']?>" cols="30" rows="3"><?php echo $dados['value']?></textarea>
-							<?php } ?>
-						</div>
-					<?php
-				}
+				/*
+				 * Input CAMPO: Contém o nome do campo
+				 */
 				?>
-				<br />
-				<input type="submit" name="configurar_opcoes" value="Enviar" />
-			</form>
+				<div class="campo">
+					<label>Nome:</label>
+					<div class="input">
+						<input type="text" name="data[name]" class="input" />
+					</div>
+				</div>
+				<br clear="both" />
+				<?php
+				/*
+				 * Input CAMPO_TIPO: Contém o tipo do campo
+				 */
+				?>
+				<div class="campo">
+					<label>Tipo: </label>
+					<select name="data[type]" onchange="javascript: SetupCampoRelacionalTabelas(this, '<?php echo 'campooption0'?>', '0')">
+						<option value="string">Texto pequeno</option>
+						<option value="text">Texto médio ou grande</option>
+						<option value="date">Data</option>
+						<option value="pw">Senha</option>
+						<option value="images">Imagens</option>
+						<option value="files">Arquivo</option>
+						<option value="relational_onetoone">Relacional 1-para-1 (tabela)</option>
+						<option value="relational_onetomany">Relacional 1-para-muitos (tabela)</option>
+						<?php
+						/*
+						 * faltam os campos relacionais
+						 */
+						?>
+					</select>
+				</div>
+				<?php // <select> em ajax ?>
+				<div class="campooptions" id="<?php echo 'campooption0'?>">
+					<?php
+					/*
+					 * Se <select campo_tipo> for relacional, então cria dois campos <select>
+					 *
+					 * -<select relacionado_tabela_<n> onde n é igual a $i (sequencia numérica dos campos)
+					 * -<select relacionado_campo_<n> onde n é igual a $i (sequencia numérica dos campos)
+					 */
+					?>
+					<div class="campooptions_tabela" id="<?php echo 'campooption0'?>_tabela"></div>
+					<div class="campooptions_campo" id="<?php echo 'campooption0'?>_campo"></div>
+				</div>
 
+				<?php
+				/*
+				 * Input CAMPO_DESCRICAO: Contém uma descrição do campo
+				 */
+				?>
+				<br clear="both" />
+				<div class="campo_descricao">
+					<label>Descrição: </label>
+					<input type="text" name="data[description]" />
+				</div>
+				<br clear="both" />
+				<?php
+				/*
+				 * Input CAMPO_LOCAL: Indica onde será inserido o novo campo
+				 */
+				?>
+				<div class="campo">
+					<label>Local de inserção do novo campo: </label>
+					<select name="data[order]">
+						<?php
+
+
+						// pega o valor físico do campo da tabela
+						$fields = $module->getFields();
+						$i = 0;
+						foreach($fields as $campo=>$value){
+							// verifica se o campo é editável ou infra-estrutura (ex. de campos: id, adddate, aprovado)
+							$sql = "SELECT
+										value, property
+									FROM
+										flex_fields_config
+									WHERE
+										property='".$campo."' AND
+										node_id='".$_GET['aust_node']."'
+									LIMIT 0,2
+									";
+							$result = $module->connection->query($sql,"ASSOC");
+							$result = $result[0];
+							if( count($result) > 0 ){
+								$i++;
+								// se for primeiro registro, escreve <option> com opção de "ANTES DE <campo>"
+								if($i == "1"){
+									echo '<option value="first_field">Antes de '.$result["value"].'</option>';
+								}
+								echo '<option value="'.$result["property"].'">Depois de '.$result["value"].'</option>';
+							}
+
+						}
+						unset($campo);
+						unset($dados);
+						unset($value);
+						?>
+						
+					</select>
+				</div>
+				<br />
+				<input type="submit" name="novo_campo" value="Criar!" />
+
+			</form>
 		</div>
 		<div class="footer"></div>
 	</div>
+
+
 </div>

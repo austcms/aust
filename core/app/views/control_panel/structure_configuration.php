@@ -24,7 +24,7 @@ if( !empty($configurations) && is_array($configurations) ){
 			?>
 
 			<div class="item">
-				<label for="<?php echo $key ?>_input"><?php echo $options["label"] ?></label>
+				<label class="configuration_variable_label" for="<?php echo $key ?>_input"><?php echo $options["label"] ?></label>
 				<div class="input">
 					<?php
 					if( $options["inputType"] == "checkbox" ){
@@ -54,7 +54,7 @@ if( !empty($configurations) && is_array($configurations) ){
 			<?php
 		}
 		?>
-		<input type="submit" name="submit" value="Salvar" />
+		<input type="submit" name="submit" value="Salvar configuração" />
 		</form>
 	
 	</div>
@@ -66,6 +66,6 @@ if( !empty($configurations) && is_array($configurations) ){
 <?php
 include($this->directory.MOD_VIEW_DIR.CONTROL_PANEL_DISPATCHER.'/structure_configuration.php');
 ?>
-
+	<br clear="all" />
 	<a href="adm_main.php?section=<?php echo CONTROL_PANEL_DISPATCHER ?>">Voltar ao painel de configurações</a>
 </div>
