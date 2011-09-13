@@ -53,7 +53,7 @@ class ModController extends ModsController
     /**
      * Create Form
      */
-    public function create($params = array() ){
+    public function create($params){
         /**
          * Verifica se há parâmetros
          */

@@ -1078,7 +1078,8 @@ class Cadastro extends Module {
                      * Se há um LeftJOIN, elimina os campo destes do query
                      * principal
                      */
-                    unset($mostrar[$chave]);
+					if( !empty($mostrar) )
+                    	unset($mostrar[$chave]);
 
                     $refTabela = $valor["ref_tabela"];
                     $refCampo = $valor["ref_campo"];

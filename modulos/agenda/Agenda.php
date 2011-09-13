@@ -70,6 +70,8 @@ class Agenda extends Module
         if( empty($options['where']) )
             $options['where'] = "";
 
+        $options['limit'] = 100;
+
         return parent::loadSql($options);
 
     } // fim getSQLForListing()
