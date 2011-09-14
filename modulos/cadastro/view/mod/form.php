@@ -240,10 +240,16 @@ foreach( $camposForm as $chave=>$valor ){
      * RELACIONAL UM PARA UM
      */
     if( $valor["tipo"]["especie"] == "relacional_umparaum" ){
-        $sql = "SELECT id, ".$valor["tipo"]["tabelaReferenciaCampo"]." FROM ".$valor["tipo"]["tabelaReferencia"] ." ORDER BY ".$valor["tipo"]["tabelaReferenciaCampo"] ." LIMIT 50";
+		if( $_GET['action'] == EDIT_ACTION ){
+			$where = 'WHERE id >= "'.$valor['valor'].'" OR id <= "'.$valor['valor'].'"';
+		}
+	
+        $sql = "SELECT id, ".$valor["tipo"]["tabelaReferenciaCampo"]." 
+				FROM ".$valor["tipo"]["tabelaReferencia"] ."
+				$where
+				ORDER BY id DESC LIMIT 150";
         $selectValues = $conexao->query($sql);
 
-        //$select["selected"] = "3";
         $inputType = "select";
         foreach($selectValues as $tabelaReferenciaResult){
             $select["options"][ $tabelaReferenciaResult["id"] ] = $tabelaReferenciaResult[ $valor["tipo"]["tabelaReferenciaCampo"] ];
