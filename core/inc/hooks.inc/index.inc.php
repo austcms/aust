@@ -51,10 +51,19 @@ if( !empty($hooksList) && is_array($hooksList) ){
 
 			<div class="item">
 				<label class="configuration_variable_label" for="<?php echo $key ?>_input">
-					<?php echo $attributes["hook_engine"] ?>
+					<?php
+					echo "<strong>".$attributes["hook_engine"]."</strong>";
+					if( !empty($attributes["node_id"]) ){
+						echo ', '.$hooksClass->getStructureName( $attributes["node_id"] );
+					}
+					if( !empty($attributes["when_action"]) ){
+						echo ', when '.$attributes["when_action"];
+					}
+					
+					?>
 				</label>
 				<div class="input">
-					
+					<a href="adm_main.php?section=hooks&action=edit&hook_engine=<?php echo $hook ?>&id=<?php echo $attributes["id"] ?>">Editar</a>
 				</div>
 			</div>
 

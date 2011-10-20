@@ -640,7 +640,7 @@ class Aust {
         /**
          * Busca na tabela do Aust onde o id é igual à estrutura requisitada.
          */
-        $result = $this->conexao->query("SELECT * FROM ".Registry::read("austTable")." WHERE id='".$austNode."'" );
+        $result = $this->conexao->query("SELECT * FROM categorias WHERE id='".$austNode."'" );
         return $result;
     }
 

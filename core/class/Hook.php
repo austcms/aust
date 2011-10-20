@@ -30,6 +30,10 @@ class Hook
 		return $result;
 	}
 	
+	/*
+	 * Each HookEngine has a class. This method return its
+	 * instantiation.
+	 */
 	function instantiateHookEngine($engineName = ''){
 		if( empty($engineName) )
 			return false;
@@ -41,6 +45,9 @@ class Hook
 		return $object;
 	}
 	
+	/*
+	 * Saves a hook, be it new or update.
+	 */
 	function save($post){
 		$new = false;
 		if( empty($post['id']) )
@@ -68,8 +75,22 @@ class Hook
 			return false;
 	}
 	
+	/*
+	 * Returns all the Hooks created.
+	 */
 	function allHooks(){
 		$sql = 'SELECT * FROM hooks ORDER BY hook_engine';
+		return Connection::getInstance()->query($sql);
+	}
+	
+	function getStructureName($nodeId){
+		$st = Aust::getInstance()->pegaInformacoesDeEstrutura($nodeId);
+		$st = reset($st);
+		return $st["nome"];
+	}
+	
+	function find($id){
+		$sql = "SELECT * FROM hooks WHERE id='{$id}'";
 		return Connection::getInstance()->query($sql);
 	}
 }
