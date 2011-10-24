@@ -991,6 +991,9 @@ class Cadastro extends Module {
         $searchField = (empty($param['search_field'])) ? '' : $param['search_field'];
         $w = (empty($param['id'])) ? '' : $param['id'];
 
+		if( !empty($categorias) && !is_array($categorias) )
+			$categorias = array($categorias => '');
+		
         /**
          * Se $categorias estiver vazio (nunca deverá acontecer)
          */

@@ -36,7 +36,7 @@
 	</div>
 	<div class="field">
 		<label for="perform">Realizar seguinte ação</label>
-		<textarea name="perform" id="perform" rows="12"><?php echo @$data['perform'] ?></textarea>
+		<textarea name="perform" id="perform" rows="17"><?php echo @$data['perform'] ?></textarea>
 		<span class="explanation">
 			Campo <em>Perform</em>.
 		</span>

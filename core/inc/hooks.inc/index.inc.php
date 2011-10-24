@@ -52,6 +52,7 @@ if( !empty($hooksList) && is_array($hooksList) ){
 			<div class="item">
 				<label class="configuration_variable_label" for="<?php echo $key ?>_input">
 					<?php
+					echo $attributes["description"]."<br>";
 					echo "<strong>".$attributes["hook_engine"]."</strong>";
 					if( !empty($attributes["node_id"]) ){
 						echo ', '.$hooksClass->getStructureName( $attributes["node_id"] );

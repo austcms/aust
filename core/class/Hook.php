@@ -10,26 +10,39 @@ class Hook
 		
 	}
 	
-	/*
-	 * Returns a list of engines available for usage.
+	/* 
+	 * PERFORM
 	 */
-	function loadHookEngines(){
-		$result = array();
-		foreach( glob(HOOKS_DIR."*") as $folder ){
-			if( !file_exists($folder."/configuration.php") )
-				continue;
-			
-			include($folder."/configuration.php");
-			$result = array(
-				basename($folder) => array(
-					"configuration" => $configuration
-				),
-			);
+	/**
+	 * perform()
+	 *
+	 */
+	function perform($params = array()){
+		if( empty($params['when']) ) return false;
+		if( $params['when'] == 'approve_record' &&
+			!is_array($params['self']) ){
+			return false;
 		}
 		
-		return $result;
+		$austNode = $_GET['aust_node'];
+		
+		$sql = "SELECT * FROM hooks WHERE node_id='".$austNode."' AND when_action='".$params['when']."'";
+		$hooks = Connection::getInstance()->query($sql);
+		
+		if( is_array($params['self']) ){
+			foreach( $params['self'] as $self ){
+				$this->performInEachSelf($self, $hooks);
+			}
+		}
 	}
 	
+	function performInEachSelf($self, $hooks){
+		foreach( $hooks as $hook ){
+			$hookObject = $this->instantiateHookEngine($hook['hook_engine']);
+			$hookObject->perform($self, $hook);
+		}
+	}
+
 	/*
 	 * Each HookEngine has a class. This method return its
 	 * instantiation.
@@ -40,9 +53,29 @@ class Hook
 			
 		include(HOOKS_DIR.$engineName."/configuration.php");
 		$className = $configuration["className"];
-		include(HOOKS_DIR.$engineName."/".$className.".php");
+		include_once(HOOKS_DIR.$engineName."/".$className.".php");
 		$object = new $className();
 		return $object;
+	}	
+	/*
+	 * Reading and Saving
+	 */
+	/*
+	 * Returns a list of engines available for usage.
+	 */
+	function loadHookEngines(){
+		$result = array();
+		foreach( glob(HOOKS_DIR."*") as $folder ){
+			if( !file_exists($folder."/configuration.php") )
+				continue;
+
+			include($folder."/configuration.php");
+			$result[basename($folder)] = array(
+				"configuration" => $configuration
+			);
+		}
+		
+		return $result;
 	}
 	
 	/*
@@ -52,6 +85,11 @@ class Hook
 		$new = false;
 		if( empty($post['id']) )
 			$new = true;
+		
+		$post['hook_engine'] = addslashes($post['hook_engine']);
+		$post['when_action'] = addslashes($post['when_action']);
+		$post['description'] = addslashes($post['description']);
+		$post['perform'] 	 = addslashes($post['perform']);
 		
 		if( $new ){
 			$sql = "INSERT INTO hooks

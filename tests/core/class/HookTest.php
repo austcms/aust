@@ -17,5 +17,11 @@ class HookTest extends PHPUnit_Framework_TestCase
 		$stId = Connection::getInstance()->lastInsertId();
 		$this->assertEquals( 'Test777', $this->obj->getStructureName($stId) );
 	}
+	
+	function testWhenAndSelf(){
+		$this->assertFalse( $this->obj->perform() );
+		$this->assertFalse( $this->obj->perform(array()) );
+		$this->assertFalse( $this->obj->perform(array('when' => 'approve_record', 'self' => 'hey')) );
+	}
 }
 ?>
