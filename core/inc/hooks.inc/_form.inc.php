@@ -4,6 +4,13 @@
 		<input type="hidden" name="id" value="<?php echo $data["id"] ?>" />
 	<?php } ?>
 	<input type="hidden" name="hook_engine" value="<?php echo $_GET["hook_engine"] ?>" />
+
+	<?php if( !empty($data) ){ ?>
+		<div class="field" style="margin-bottom: 10px">
+			<label for="when_action">Engine</label>
+			<?php echo $data['hook_engine']; ?>
+		</div>
+	<?php } ?>
 	
 	<div class="field">
 		<label for="when_action">Quando o usuário: </label>
