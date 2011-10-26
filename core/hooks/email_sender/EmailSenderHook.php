@@ -2,7 +2,18 @@
 class EmailSenderHook
 {
 	function perform($self, $options){
+		
+		$austNode = $options['node_id'];
+		if( $options['when_action'] == "approve_record" ){
+			$selfObject = Aust::getInstance()->getStructureInstance($austNode);
+			$sql = "SELECT approved FROM ".$selfObject->LeTabelaDaEstrutura($austNode)." WHERE id='".$self."'";
+			$query = Connection::getInstance()->query($sql);
 
+			if( empty($query) )
+				return false;
+			if( $query[0]['approved'] == "1" )
+				return true;
+		}
 		
 		$options['perform'] = $this->getSelfData($self, $options['node_id'], $options['perform']);
 		$options['perform'] = $this->getSqlFunction($options['perform']);
@@ -12,7 +23,7 @@ class EmailSenderHook
 		$from = $this->from($options['perform']);
 
 		$options['perform'] = $this->cleanUpText($options['perform']);
-		
+		$options['perform'] = nl2br($options['perform']);
 		if( empty($to) ) return false;
 		if( empty($from) ) $from = "";
 		if( empty($subject) ) $subject = "";
@@ -23,7 +34,6 @@ class EmailSenderHook
 			if( !mail($email, $subject, $options['perform'],  "MIME-Version: 1.1\nContent-type: text/html; charset=utf-8\nFrom: ".$from."\nReply-To: ".$from."", "-r".$from) ){
 				mail( $email, $subject, $options['perform'],  "MIME-Version: 1.1\nContent-type: text/html; charset=utf-8\nFrom: ".$from."\nReply-To: ".$from."\nReturn-Path: ".$from);
 			}
-			sleep(1);
 		}
 
 		return true;
