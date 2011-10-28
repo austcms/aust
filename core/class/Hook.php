@@ -1,7 +1,10 @@
 <?php
 /**
-* Manage Hooks
-*/
+ * Manage Hooks
+ *
+ * This class manages installation of hooks, not performing the Hooks.
+ * See HookBase for the hooks' superclass.
+ */
 class Hook
 {
 	
@@ -106,6 +109,7 @@ class Hook
 					WHERE
 						id = '".$_POST['id']."'";
 		}
+		
 		$connection = Connection::getInstance();
 		if( $connection->exec($sql) )
 			return true;

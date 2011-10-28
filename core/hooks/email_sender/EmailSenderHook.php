@@ -1,5 +1,5 @@
 <?php
-class EmailSenderHook
+class EmailSenderHook extends HookBase
 {
 	function perform($self, $options){
 		
@@ -17,7 +17,8 @@ class EmailSenderHook
 		
 		$options['perform'] = $this->getSelfData($self, $options['node_id'], $options['perform']);
 		$options['perform'] = $this->getSqlFunction($options['perform']);
-
+		
+		
 		$to = $this->to($options['perform']);
 		$subject = $this->subject($options['perform']);
 		$from = $this->from($options['perform']);
@@ -27,7 +28,7 @@ class EmailSenderHook
 		if( empty($to) ) return false;
 		if( empty($from) ) $from = "";
 		if( empty($subject) ) $subject = "";
-
+		
 		$to = explode(";", $to);
 		
 		foreach( $to as $email ){
@@ -37,11 +38,6 @@ class EmailSenderHook
 		}
 
 		return true;
-	}
-	
-	function cleanUpText($perform){
-		$perform = preg_replace('/\{.*?\}/', '', $perform);
-		return $perform;
 	}
 	
 	function to($options){
@@ -71,65 +67,6 @@ class EmailSenderHook
 		}
 		return false;
 	}
-	/**
-	 * Parses everything sql()
-	 */
-	function getSqlFunction($perform){
 
-		/*
-		 * matches everything {self.field_name}
-		 */
-		preg_match_all('/sql\((.*?)\)/', $perform, $data);
-		
-		foreach( $data[1] as $sql ){
-			$query = Connection::getInstance()->query($sql);
-			$queryResults = array();
-			foreach( $query as $field ){
-				$queryResults[] = reset($field);
-			}
-			
-			$resultString = implode(';', $queryResults);
-			
-			$perform = str_replace('sql('.$sql.')', $resultString, $perform);
-		}
-		
-		$result = $perform;
-		return $result;
-	}
-		
-	/**
-	 * Parses everything {self.field_name}
-	 */
-	function getSelfData($self, $austNode, $perform){
-
-		$selfObject = Aust::getInstance()->getStructureInstance($austNode);
-		$selfQuery = $selfObject->load(
-			array(
-				'metodo' => 'edit',
-				'categorias' => $austNode,
-				'austNode' => $austNode,
-				'id' => $self
-			)
-		);
-		if( empty($selfQuery) )
-			return false;
-		
-		$selfQuery = reset($selfQuery);
-		
-		/*
-		 * matches everything {self.field_name}
-		 */
-		preg_match_all('/\{self.(.*?)}/', $perform, $selfData);
-		
-		foreach( $selfData[1] as $field ){
-			if( !array_key_exists($field, $selfQuery) )
-				continue;
-			
-			$perform = str_replace('{self.'.$field.'}', $selfQuery[$field], $perform);
-		}
-		
-		$result = $perform;
-		return $result;
-	}
 }
 ?>
