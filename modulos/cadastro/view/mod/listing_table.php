@@ -1,5 +1,4 @@
 <?php
-
 if( empty($_GET['section']) )
     $_GET['section'] = 'conteudo';
 
