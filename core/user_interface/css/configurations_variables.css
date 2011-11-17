@@ -1,0 +1,52 @@
+
+.configuration_variables .header {
+	background: #ddd;
+	padding: 10px;
+	font-weight: bold;
+}
+
+	.configuration_variables .item {
+		background: #f4f4f4;
+		border-bottom: 1px solid #eaeaea;
+		border-top: 1px solid #fefefe;
+		padding: 0 10px;
+		margin: 0;
+		display: table;
+		width: 700px;
+	}
+		.configuration_variables .item:hover { background: #f6f6f6; }
+	.configuration_variables .item .configuration_variable_label {
+		float: left; width: 45%; cursor: pointer; padding: 10px 0px;
+	}
+	.configuration_variables .item div.input { 
+		float: left; width: 55%; padding: 10px 0px;
+	}
+
+	.configuration_variables .item .input .sub_item {
+		display: table;
+		width: 99%;
+		padding: 5px 0 5px 0;
+		border-bottom: 1px solid #eaeaea;
+		border-top: 1px solid #fefefe;
+	}
+		.input .sub_item:first-child {
+			border-top: 0 !important;
+		}
+		.input .sub_item:last-child {
+			border-bottom: 0 !important;
+		}
+			
+		.configuration_variables .item .sub_labels {
+			float: left; width: 50%;
+			text-align: right;
+			margin: 0 5px 5px 0;
+		}
+		.configuration_variables .item .sub_inputs {
+			float: left; width: 40%;
+		}
+		.item .sub_item span.hint {
+			float: right !important;
+			opacity: 0.5;
+		}
+
+		.configuration_variables input[type=submit] { margin: 10px; }

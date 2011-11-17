@@ -96,6 +96,25 @@ $dbSchema['admins_tipos'] = array(
 );
 
 
+$dbSchema['hooks'] = array(
+    'id' => 'int NOT NULL auto_increment',
+    'hook_engine' 	=> 'varchar(240)',
+    'when_action' 	=> 'varchar(240)',
+    'node_id' 		=> 'int',
+	'configuration' => 'text', // key-value configuration in json format
+    'description' 	=> 'text',
+    'perform' 		=> 'text',
+    'public' 		=> 'bool default "0"',
+    'admin_id' 		=> 'varchar(120)',
+    'order_nr' 		=> 'int',
+    'dbSchemaTableProperties' => array(
+        'PRIMARY KEY' => '(id)',
+        'UNIQUE' => 'id (id)',
+        'INDEX' => '(when_action)',
+        'INDEX' => '(node_id)',
+    )
+);
+
 $dbSchema['categorias'] = array(
     'id' => 'int NOT NULL auto_increment',
     'nome' => 'varchar(240)',

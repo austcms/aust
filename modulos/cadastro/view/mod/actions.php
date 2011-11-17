@@ -76,6 +76,14 @@ if(!empty($_POST['deletar']) and !empty($_POST['itens'])){
  * APROVAR usuário
  */
 } elseif(!empty($_POST['aprovar']) and !empty($_POST['itens'])){
+	
+	$hookParams = array(
+		'when' => 'approve_record',
+		'self' => $_POST['itens'],
+	);
+	$hook = new Hook;
+	$hook->perform($hookParams);
+	
     /*
      * Identificar tabela que deve ser excluida
      */

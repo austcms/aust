@@ -154,7 +154,10 @@
                 <br />
                     <span class="para_webmaster">Para Webmasters:</span><a href="adm_main.php?section=conf_modulos" class="restrito">Configurar Módulos</a>
                     <a href="adm_main.php?section=categorias" class="restrito">Categorias</a>
-                    <a href="adm_main.php?section=import_export_structures" class="restrito">Importar/Exportar Estruturas</a>
+					<a href="adm_main.php?section=hooks" class="restrito">Hooks</a>
+					<!--
+					<a href="adm_main.php?section=import_export_structures" class="restrito">Importar/Exportar Estruturas</a>
+					-->
                 <?php
                 if( Registry::read('debugLevel') > 1 ){
 

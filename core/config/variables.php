@@ -79,6 +79,10 @@ define("CORE_DIR", THIS_TO_BASEURL."core/");
      */
     define("BASECODE_JS", LIB_DIR."js/");
     /**
+     * Diretório dos Hooks
+     */
+	 define('HOOKS_DIR', CORE_DIR.'hooks/');
+    /**
      * Diretório dos módu1os
      */
 	 define('MODULES_DIR', THIS_TO_BASEURL.'modulos/');

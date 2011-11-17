@@ -103,7 +103,7 @@ class CadastroSetup extends ModsSetup {
 	 *
 	 * Métodos que executam todas as funções de instalação
 	 */
-	function createStructure($params){
+	function createStructure($params = array()){
 		$this->start();
 		
 		if( !empty($params['austNode']) )
@@ -428,7 +428,8 @@ class CadastroSetup extends ModsSetup {
 			$sql = "SELECT MAX(ordem) as ordem
 					FROM cadastros_conf
 					WHERE categorias_id='".$this->austNode."'";
-			$query = reset($this->connection->query($sql));
+			$conn = $this->connection->query($sql);
+			$query = reset($conn);
 
 			if( empty($query['ordem']) )
 				$this->fieldOrder = 1;
