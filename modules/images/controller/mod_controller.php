@@ -46,7 +46,7 @@ class ModController extends ModActionController
 		$this->set('h1', $h1);
 
 		$sql = "SELECT
-					id, nome
+					*
 				FROM
 					".Aust::$austTable."
 				WHERE
@@ -54,7 +54,7 @@ class ModController extends ModActionController
 
 		$query = $this->module->connection->query($sql);
 
-		$cat = $query[0]['nome'];
+		$cat = $query[0]['name'];
 
 		/*
 		 * VIEW MODE
@@ -104,7 +104,7 @@ class ModController extends ModActionController
 			 */
 			if( !empty($_FILES) AND
 				$_FILES["frmarquivo"]["size"] > 0 AND
-				$this->testMode == false )
+				( empty($this->testMode) || $this->testMode == false) )
 			{
 				$file = $_FILES['frmarquivo'];
 

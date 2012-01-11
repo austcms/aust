@@ -85,6 +85,11 @@ $modInfo = array(
 			"label" => "Mostrar contador de visitas",
 			"inputType" => "checkbox",
 		),
+		'has_cover_image' => array(
+			"value" => "",
+			"label" => "Tem imagem de capa",
+			"inputType" => "checkbox",
+		),
 	),
 	
 	/*

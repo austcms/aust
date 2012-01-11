@@ -86,7 +86,7 @@
 <input type="hidden" name="metodo" value="<?php echo $_GET['action'];?>">
 <?php if($_GET['action'] == 'create'){ ?>
 	<input type="hidden" name="frmcreated_on" value="<?php echo date("Y-m-d"); ?>">
-	<input type="hidden" name="frmaadmin_id" value="<?php echo $_SESSION['loginid'];?>">
+	<input type="hidden" name="frmadmin_id" value="<?php echo $_SESSION['loginid'];?>">
 <?php } else { ?>
 
 	<input type="hidden" name="frmupdated_on" value="<?php date("Y-m-d H:i:s"); ?>">

@@ -60,17 +60,19 @@ $conexao = Connection::getInstance();
  * - maxxsize: largura máxima. É necessário especificar maxysize também.
  *
  */
-$myid	   = (empty($_GET['myid']))		? ''		: $_GET['myid'];		// id da imagem a ser aberta
-$path	   = (empty($_GET['path']))		? ''		: $_GET['path'];		// id da imagem a ser aberta
-$table	  = (empty($_GET['table']))	   ? 'imagens' : $_GET['table'];	   // tabela onde a imagem se encontra
-$thumbs	 = (empty($_GET['thumbs']))	  ? ''		: $_GET['thumbs'];	  // yes|no: diz se deve ser tratada a imagem
+$myid	   		= (empty($_GET['myid']))		? ''		: $_GET['myid'];		// id da imagem a ser aberta
+$path	   		= (empty($_GET['path']))		? ''		: $_GET['path'];		// id da imagem a ser aberta
+$table	  	= (empty($_GET['table']))	   ? 'imagens' : $_GET['table'];	   // tabela onde a imagem se encontra
+$thumbs	 		= (empty($_GET['thumbs']))	  ? ''		: $_GET['thumbs'];	  // yes|no: diz se deve ser tratada a imagem
 $fromfile   = (empty($_GET['fromfile']))	? false	 : $_GET['fromfile'];	  // yes|no: diz se deve ser tratada a imagem
-$xsize	  = (empty($_GET['xsize']))	   ? ''		: $_GET['xsize'];	   // xsize: tamanho X
+$xsize	  	= (empty($_GET['xsize']))	   ? ''		: $_GET['xsize'];	   // xsize: tamanho X
 $maxxsize   = (empty($_GET['maxxsize']))	? ''		: $_GET['maxxsize'];	//
-$ysize	  = (empty($_GET['ysize']))	   ? ''		: $_GET['ysize'];	   // ysize: tamanho Y
+$ysize	  	= (empty($_GET['ysize']))	   ? ''		: $_GET['ysize'];	   // ysize: tamanho Y
 $maxysize   = (empty($_GET['maxysize']))	? ''		: $_GET['maxysize'];	//
 $minxsize   = (empty($_GET['minxsize']))	? ''		: $_GET['minxsize'];	   // ysize: tamanho Y
 $minysize   = (empty($_GET['minysize']))	? ''		: $_GET['minysize'];	//
+
+$fieldPrefix   	= (empty($_GET['field_prefix']))	? 'file' : $_GET['field_prefix'];	//
 
 if (!empty($myid)){
 	if (empty($myordem))
@@ -104,10 +106,10 @@ $dados = $query[0];
 if (Connection::getInstance()->count($sql) > 0){
 
 	$type = '';
-	if( !empty($dados["file_type"]) )
-		$type = $dados["file_type"];
-	else if( !empty($dados["file_type"]) )
-		$type = $dados["file_type"];
+	if( !empty($dados[$fieldPrefix."_type"]) )
+		$type = $dados[$fieldPrefix."_type"];
+	else if( !empty($dados[$fieldPrefix."_type"]) )
+		$type = $dados[$fieldPrefix."_type"];
 	else if( !empty($dados["filetype"]) )
 		$type = $dados["filetype"];
 	else if( !empty($dados["tipo"]) )
@@ -117,14 +119,14 @@ if (Connection::getInstance()->count($sql) > 0){
 	
 	$fileType = $type;
 
-	if( !empty($dados["file_systempath"]) )
-		$imageSystemPath = $dados["file_systempath"];
-	else if( !empty($dados["file_systempath"]) )
-		$imageSystemPath = $dados["file_systempath"];
+	if( !empty($dados[$fieldPrefix."_systempath"]) )
+		$imageSystemPath = $dados[$fieldPrefix."_systempath"];
+	else if( !empty($dados[$fieldPrefix."_systempath"]) )
+		$imageSystemPath = $dados[$fieldPrefix."_systempath"];
 	/*
 	 * Algumas imagens estão em arquivos, outros em DB
 	 */
-	if( !empty($dados["file_type"]) && $dados["file_type"] == 'application/x-shockwave-flash' ){
+	if( !empty($dados[$fieldPrefix."_type"]) && $dados[$fieldPrefix."_type"] == 'application/x-shockwave-flash' ){
 		
 		$noVisualizationFile = str_replace(
 			IMAGE_VIEWER_DIR.basename(__FILE__),
@@ -138,7 +140,7 @@ if (Connection::getInstance()->count($sql) > 0){
 	else if( !empty($imageSystemPath) )
 		$fileContent = file_get_contents($imageSystemPath);
 	else
-		$fileContent = $dados["file_binary_data"];
+		$fileContent = $dados[$fieldPrefix."_binary_data"];
 
 	if($thumbs == "yes"){
 		//header("Content-Type: ".$fileType);
@@ -217,7 +219,7 @@ if (Connection::getInstance()->count($sql) > 0){
 		imagedestroy($nova);
 	} else {
 		header("Content-Type: ". $type);
-		echo $dados["file_binary_data"];
+		echo $dados[$fieldPrefix."_binary_data"];
 	}
 } else {
   $sql = "SELECT file_type, file_binary_data FROM $tabelaimg WHERE id='0'";

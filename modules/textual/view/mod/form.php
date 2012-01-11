@@ -151,8 +151,30 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
 			</p>
 		</td>
 	</tr>
-	
+	<?php if( $this->module->getStructureConfig("has_cover_image") ){ ?>
+		<tr>
+			<td valign="top"><label>Imagem de capa:</label></td>
+			<td>
+				<?php 
+				if( !empty($dados["cover_image_file_size"]) && $dados["cover_image_file_size"] > 0 ){
+					?>
+					<img src="core/libs/imageviewer/visualiza_foto.php?table=textual&field_prefix=cover_image_file&thumbs=yes&myid=<?php echo $dados["id"]; ?>&maxxsize=450&maxysize=400" />
+					<p class="explanation">
+					Imagem cadastrada atualmente. Para alterá-la, envie uma nova no formulário abaixo.
+					</p>
+					<br />
+					<?php
+				}
+				?>
+
+				<input type="file" name="frmcover_image" />
+				<p class="explanation">
+				Selecione a imagem que será carregada.
+				</p>
+			</td>
+		</tr>
 	<?php
+	}
 	/*
 	 * PREVIEW URL
 	 */

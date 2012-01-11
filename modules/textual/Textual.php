@@ -74,24 +74,21 @@ class Textual extends Module
 		/*
 		 * Checks if there are files to be uploaded
 		 */
-		if( !empty($files) && !empty($files['file']['size']) ){
+		if( !empty($files) && !empty($files['frmcover_image']['size']) && $this->getStructureConfig("has_cover_image")){
 
 			$fileHandler = File::getInstance();
-			$value = $files['file'];
+			$value = $files['frmcover_image'];
 			
 			$finalName = $fileHandler->upload($value);
 			
 			$finalName['systemPath'] = addslashes($finalName['systemPath']);
 			$finalName['webPath'] = addslashes($finalName['webPath']);
 
-			$post['frmfile_path'] 			= $finalName['webPath'];
-			$post['frmfile_systempath'] 	= $finalName['systemPath'];
-			$post['frmfile_name'] 			= $finalName['new_filename'];
-			$post['frmoriginal_file_name'] = $value['name'];
-			$post['frmfile_size'] 			= $value['size'];
-			$post['frmfile_ext'] 			= $fileHandler->getExtension($value['name']);
-			$post['frmfile_type'] 			= $value['type'];
-
+			$post['frmcover_image_file_path'] 			= $finalName['webPath'];
+			$post['frmcover_image_file_systempath'] = $finalName['systemPath'];
+			$post['frmcover_image_file_name'] 			= $finalName['new_filename'];
+			$post['frmcover_image_file_size'] 			= $value['size'];
+			$post['frmcover_image_file_type'] 						= $value['type'];
 		}
 		
 		return parent::save($post);
