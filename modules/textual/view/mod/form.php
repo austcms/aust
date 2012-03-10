@@ -147,7 +147,7 @@ if( (int) str_replace('M','', ini_get('post_max_size') ) < $maxSize )
 		<td>
 			<INPUT TYPE='text' NAME='frmtitle' class='text' value='<?php if( !empty($dados['title']) ) echo $dados['title'];?>' />
 			<p class="explanation">
-
+        Evite títulos extensos para que o layout do site não quebre.
 			</p>
 		</td>
 	</tr>
