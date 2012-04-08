@@ -224,6 +224,63 @@ elseif($_POST['action'] == 'search1n'){
 		</div>
 		<?php
 	}
+}
+
+/*
+ * PESQUISA: relational one-to-one
+ */
+elseif($_POST['action'] == 'search1_1'){
+
+    /**
+     *
+     */
+    $austNode = $_POST['austNode'];
+    $ref_field = $_POST['ref_field'];
+    $ref_table = $_POST['ref_table'];
+    $relational_table = $_POST['relational_table'];
+    $childField = $_POST['childField'];
+    $parentField = $_POST['parentField'];
+    $query = $_POST['query'];
+    $w = $_POST['w'];
+
+	// checked_boxes
+	$get = $_GET;
+	$ids = array();
+	$queryCheckedBoxes = '';
+	if( !empty($get['data']) ){
+		$get = reset($_GET['data'] );
+		if( !empty($get) ){
+			$get = reset($get);
+			$ids = $get;
+			$queryCheckedBoxes = " AND r.id NOT IN ('".implode("','", $ids)."')";
+			
+		}
+	}
+
+
+    $sql = "SELECT
+              r.id AS ref_id,
+              r.".$ref_field." as ref_value
+        FROM
+          ".$ref_table." AS r
+        WHERE
+          r.".$ref_field." LIKE '%".$query."%'
+        GROUP BY
+          r.id
+              ORDER BY
+                  r.id ASC
+        LIMIT 10
+            ";
+
+	$results = $modulo->connection->query($sql);
+	
+	foreach( $results as $result ){
+		?>
+		<div class="result">
+      <a href="javascript: void(0);" data-id="<?php echo $result['ref_id'] ?>"><?php echo $result['ref_value'] ?></a>
+		</div>
+		<?php
+	}
 
 }
 

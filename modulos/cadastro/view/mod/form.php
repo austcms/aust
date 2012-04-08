@@ -243,7 +243,11 @@ foreach( $camposForm as $chave=>$valor ){
 		if( $_GET['action'] == EDIT_ACTION ){
 			$where = 'WHERE id >= "'.$valor['valor'].'" OR id <= "'.$valor['valor'].'"';
 		}
-	
+      if( $modulo->getFieldConfig($chave, '1_to_1_has_search') == '1' ){
+        include($modulo->getIncludeFolder().'/view/mod/_form_field_relational_one_to_one.php');
+        $useInput = false;
+      } else {
+
         $sql = "SELECT id, ".$valor["tipo"]["tabelaReferenciaCampo"]." 
 				FROM ".$valor["tipo"]["tabelaReferencia"] ."
 				$where
@@ -254,7 +258,8 @@ foreach( $camposForm as $chave=>$valor ){
         foreach($selectValues as $tabelaReferenciaResult){
             $select["options"][ $tabelaReferenciaResult["id"] ] = $tabelaReferenciaResult[ $valor["tipo"]["tabelaReferenciaCampo"] ];
         }
-		$useInput = true;
+        $useInput = true;
+      }
 
     }
     /*

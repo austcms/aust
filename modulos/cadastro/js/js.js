@@ -148,3 +148,46 @@ function search1n(_this){
         }
 	);
 }
+
+function search1_1(_this){
+	var field = $(_this).attr('data-field');
+	var austNode = $(_this).attr('data-austnode');
+	
+    $.post(
+		include_baseurl+"/js/ajax.php?",
+		{
+      query: $(_this).val(),
+      field: field,
+			austNode: austNode,
+			w: $(_this).attr('data-w'),
+			relational_table: $(_this).attr('data-relational_table'),
+			table: $(_this).attr('data-table'),
+			ref_table: $(_this).attr('data-ref_table'),
+			ref_field: $(_this).attr('data-ref_field'),
+			inputName: $(_this).attr('data-input_name'),
+			childField: $(_this).attr('data-child_field'),
+			parentField: $(_this).attr('data-parent_field'),
+			action: 'search1_1'
+        },
+		function(response){
+			$('#search1n_'+field+'_result p.explanation').remove();
+				
+			if( response == '' ){
+				$('#search1_1_'+field+'_result').html('<p class="explanation">Termo não encontrado</p>');
+			} else {
+				$('#search1_1_'+field+'_result').html(response);
+			}
+      bindSearchOneToOneResults('#search1_1_'+field);
+				
+    }
+	);
+}
+
+function bindSearchOneToOneResults(results){
+  $(results+'_result').find("a[data-id]").bind('click', function(){
+    console.log(results);
+    $(results+"_id").val($(this).attr('data-id'));
+    $(results+'_result').html('Atual: '+ $(this).html());
+    $("input[name='search']").val('');
+  });
+}

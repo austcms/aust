@@ -234,6 +234,19 @@ $modInfo = array(
 						  'dos itens selecionados.'
 		    ),
 		/*
+		 * RELATIONAL ONE-TO-ONE
+		 */
+        /*
+         * Tem busca?
+         */
+        '1_to_1_has_search' => array(
+          'field_type' => 'relacional_umparaum',
+          "value" => "",
+          "label" => "Tem busca?",
+          "inputType" => "checkbox",
+          'help' => 'Mostra um campo de busca em vez de select',
+        ),
+    /*
 		 * CAMPOS TEXTOS GRANDE (textarea)
 		 */
 		    /*
